@@ -54,6 +54,14 @@ export function setupInitCommand(program: Command) {
                 }
 
                 // 3. Generate initial package.json mapping
+                const frameworkRoot = path.resolve(__dirname, '../../../../');
+                const coreApiPath = path.join(frameworkRoot, 'packages/core-api');
+                let relativeCoreApi = path.relative(targetPath, coreApiPath).replace(/\\/g, '/');
+                if (!relativeCoreApi.startsWith('.')) {
+                    relativeCoreApi = './' + relativeCoreApi;
+                }
+                relativeCoreApi = 'file:' + relativeCoreApi;
+
                 const pkgJson = {
                     name: targetDir,
                     version: '0.1.0',
@@ -63,14 +71,37 @@ export function setupInitCommand(program: Command) {
                         start: 'node dist/index.js'
                     },
                     dependencies: {
-                        '@easycf/core-api': 'workspace:*',
+                        '@easycf/core-api': relativeCoreApi,
                         'fastify': '^4.26.0'
+                    },
+                    devDependencies: {
+                        'tsx': '^4.21.0'
                     }
                 };
                 fs.writeFileSync(
                     path.join(targetPath, 'package.json'),
                     JSON.stringify(pkgJson, null, 2)
                 );
+
+                // 4. Create default src/index.ts
+                const srcPath = path.join(targetPath, 'src');
+                if (!fs.existsSync(srcPath)) fs.mkdirSync(srcPath, { recursive: true });
+                const indexTsContent = `import { createApp } from '@easycf/core-api';
+
+async function main() {
+    const app = await createApp();
+    try {
+        await app.listen({ port: 3000, host: '0.0.0.0' });
+        console.log('Server is running at http://localhost:3000');
+    } catch (err) {
+        app.log.error(err);
+        process.exit(1);
+    }
+}
+
+main();
+`;
+                fs.writeFileSync(path.join(srcPath, 'index.ts'), indexTsContent);
 
                 spinner.succeed(chalk.green('Project scaffolded successfully!'));
 

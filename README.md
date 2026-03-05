@@ -8,6 +8,23 @@ O EasyCodeFramework (ECF) é a fundação para criação e gestão de APIs trans
 2. **@easycf/cli e templates:** Orquestração declarativa e injeção do DOC-DEV-001 e arquiteturas base.
 3. **@easycf/agent-skills:** Conjunto de workflows de IA que geram código aderente às regras de arquitetura automaticamente.
 
+## Pré-requisitos
+
+Certifique-se de ter o Node.js instalado (versão recomendada: >= 20.0.0).
+
+Este projeto utiliza o `pnpm` como gerenciador de pacotes. Caso o comando `pnpm` não seja reconhecido no seu sistema (comum devido a restrições de permissão no Windows), você pode contornar ativando o binário via Corepack e usando o `npx`:
+
+```bash
+# Prepara e ativa a versão correta do pnpm para o projeto
+corepack prepare pnpm@9.0.0 --activate
+```
+
+Após executar o comando acima, você pode rodar os comandos do pnpm através do `npx` de forma segura (sem exigir privilégios de administrador):
+
+```bash
+npx pnpm -v
+```
+
 ## Inicializando novo projeto
 
 \`\`\`bash
@@ -19,8 +36,8 @@ cd EasyCodeFramework
 
 # 2. Instale as dependências e faça o build inicial do monorepo
 
-pnpm install
-pnpm build
+npx pnpm install
+npx pnpm build
 
 # 3. Inicialize seu novo projeto no diretório desejado (ex: uma pasta acima)
 
@@ -29,8 +46,8 @@ npx tsx tooling/cli/src/index.ts init ../meu-super-app
 # 4. Entre no seu novo projeto
 
 cd ../meu-super-app
-pnpm install
-pnpm dev
+npx pnpm install
+npx pnpm dev
 \`\`\`
 
 ## Mais comandos

@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-02-27T22:27:39.335108+00:00",
+  "root": "docs/",
+  "files": [
+    {
+      "path": "docs/INDEX.md",
+      "bytes": 980,
+      "sha256": "7009681a5344659bded125ba27f1091b9a5f2e7e1d7dd6b6ee1b00e161669274"
+    },
+    {
+      "path": "docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md",
+      "bytes": 19750,
+      "sha256": "1ce54aba60940201af89c21eacc1f89fa98ba7f5e9e5688fea20e370a9d8328e"
+    },
+    {
+      "path": "docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md",
+      "bytes": 3283,
+      "sha256": "ce4ac5a8e98896aea14b7c55ae3f6ca43d5117f1b979097ab48608564589fad3"
+    },
+    {
+      "path": "docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md",
+      "bytes": 10216,
+      "sha256": "65cf01b715f2ab08f303dbf201a68bffb0489d8f173dc41f74026ba6901dcb78"
+    },
+    {
+      "path": "docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md",
+      "bytes": 6844,
+      "sha256": "61b4da34d1261c62cc2fda1aaf8d79e0134b4b8cfb9d2898704f1f6bd89d072f"
+    },
+    {
+      "path": "docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md",
+      "bytes": 13110,
+      "sha256": "09d6b35c1c4bd3bee22bd5906628a8cd4a1e9c7a78e38966be481d086be55880"
+    },
+    {
+      "path": "docs/03_especificacoes/template/DOC-DEV-001.template.md",
+      "bytes": 35603,
+      "sha256": "113df25c783428f2b8ded37c0eca788a4b79cd82360b2d076e68ed1e13578af3"
+    },
+    {
+      "path": "docs/03_especificacoes/DOC-DEV-001__Documento_de_Especificacao_Executavel.md",
+      "bytes": 28137,
+      "sha256": "9fef72b42dc90f8f5a486c038cd50d63c1c30ebde95b2c7d9d448dba1060192d"
+    },
+    {
+      "path": "docs/DOC-DEV-001__Documento_de_Especificacao_Executavel.md",
+      "bytes": 28137,
+      "sha256": "9fef72b42dc90f8f5a486c038cd50d63c1c30ebde95b2c7d9d448dba1060192d"
+    },
+    {
+      "path": "docs/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md",
+      "bytes": 3283,
+      "sha256": "ce4ac5a8e98896aea14b7c55ae3f6ca43d5117f1b979097ab48608564589fad3"
+    },
+    {
+      "path": "docs/INDEX.md",
+      "bytes": 42,
+      "sha256": "e8390bdb329423cc0a029121013d11f657c0e07d10b1410d90438ca602e04eb1"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+screen_id: "UX-USER-002"
+entity_type: "user"
+telemetry_defaults:
+  propagate_headers:
+    - "X-Correlation-ID"
+actions:
+  - action: "view"
+    client_only: false
+    operation_ids:
+      - "users_get"
+    permissions:
+      - "users:read"
+    error_mapping:
+      http_status: [401, 403, 404, 500]
+
+  - action: "update"
+    client_only: false
+    operation_ids:
+      - "users_update"
+    permissions:
+      - "users:write"
+    error_mapping:
+      http_status: [401, 403, 404, 409, 422, 500]
+
+  - action: "activate"
+    client_only: false
+    operation_ids:
+      - "users_activate"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            - field: "status"
+              operator: "=="
+              value: "INACTIVE"
+    error_mapping:
+      http_status: [401, 403, 409, 422, 500]
+
+  - action: "deactivate"
+    client_only: false
+    operation_ids:
+      - "users_deactivate"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            - field: "status"
+              operator: "=="
+              value: "ACTIVE"
+    error_mapping:
+      http_status: [401, 403, 409, 422, 500]
+
+  - action: "view_history"
+    client_only: false
+    operation_ids:
+      - "domain_events_list_by_entity"
+    permissions:
+      - "users:read"
+    error_mapping:
+      http_status: [401, 403, 500]

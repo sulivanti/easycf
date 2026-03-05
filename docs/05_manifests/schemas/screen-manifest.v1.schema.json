@@ -1,0 +1,604 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://easy-a1.dev/schemas/screen-manifest.v1.schema.json",
+    "title": "Screen Manifest v1",
+    "type": "object",
+    "required": [
+        "manifest_version",
+        "screen_id",
+        "name",
+        "entity_type",
+        "routes",
+        "telemetry_defaults",
+        "permissions",
+        "actions",
+        "ui_rules",
+        "error_mapping"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "manifest_version": {
+            "type": "integer",
+            "const": 1
+        },
+        "screen_id": {
+            "type": "string",
+            "pattern": "^UX-[A-Z0-9]+-[0-9]{3}$",
+            "description": "Ex: UX-USER-001"
+        },
+        "name": {
+            "type": "string",
+            "minLength": 2
+        },
+        "entity_type": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "Ex: user, invoice, project"
+        },
+        "routes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "$ref": "#/$defs/route"
+            }
+        },
+        "telemetry_defaults": {
+            "$ref": "#/$defs/telemetry_defaults"
+        },
+        "permissions": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*:[a-z][a-z0-9_]*$",
+                "description": "Formato sugerido: recurso:acao (ex: users:read)"
+            }
+        },
+        "actions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "$ref": "#/$defs/action_entry"
+            }
+        },
+        "ui_rules": {
+            "$ref": "#/$defs/ui_rules"
+        },
+        "error_mapping": {
+            "$ref": "#/$defs/error_mapping"
+        }
+    },
+    "$defs": {
+        "route": {
+            "type": "object",
+            "required": [
+                "path",
+                "method"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "method": {
+                    "type": "string",
+                    "enum": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE"
+                    ]
+                }
+            }
+        },
+        "telemetry_defaults": {
+            "type": "object",
+            "required": [
+                "event_name",
+                "required_fields",
+                "propagate_headers"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "event_name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "required_fields": {
+                    "type": "array",
+                    "minItems": 3,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "propagate_headers": {
+                    "type": "array",
+                    "minItems": 0,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "contains": {
+                        "const": "X-Correlation-ID"
+                    }
+                }
+            }
+        },
+        "action_entry": {
+            "type": "object",
+            "required": [
+                "action",
+                "operation_ids",
+                "permission"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "enum": [
+                        "view",
+                        "filter",
+                        "search",
+                        "sort",
+                        "paginate",
+                        "create",
+                        "update",
+                        "delete",
+                        "import",
+                        "download_template",
+                        "export",
+                        "export_selected",
+                        "print",
+                        "view_kanban",
+                        "view_gantt",
+                        "bulk_select",
+                        "bulk_update",
+                        "bulk_create",
+                        "clone",
+                        "archive",
+                        "unarchive",
+                        "activate",
+                        "deactivate",
+                        "restore",
+                        "comment",
+                        "attachment_add",
+                        "attachment_remove",
+                        "attachment_download",
+                        "attachment_list",
+                        "share_manage",
+                        "view_history",
+                        "approve",
+                        "reject",
+                        "submit",
+                        "publish",
+                        "cancel",
+                        "reprocess"
+                    ]
+                },
+                "operation_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "description": "Pode ser vazio quando client_only=true"
+                },
+                "permission": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*:[a-z][a-z0-9_]*$",
+                    "description": "Ex: users:read"
+                },
+                "client_only": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "meta_schema": {
+                    "$ref": "#/$defs/meta_schema"
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "client_only": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "client_only"
+                        ]
+                    },
+                    "then": {},
+                    "else": {
+                        "properties": {
+                            "operation_ids": {
+                                "minItems": 1
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "meta_schema": {
+            "type": "object",
+            "required": [
+                "fields"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/meta_field"
+                    }
+                }
+            }
+        },
+        "meta_field": {
+            "type": "object",
+            "required": [
+                "name",
+                "type",
+                "pii"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*$"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "string",
+                        "number",
+                        "boolean",
+                        "enum",
+                        "object"
+                    ]
+                },
+                "pii": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "sensitivity_level": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1,
+                        2
+                    ],
+                    "default": 0
+                },
+                "allowed": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "fixed": {
+                    "type": [
+                        "string",
+                        "number",
+                        "boolean"
+                    ]
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "enum"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "allowed"
+                        ]
+                    }
+                }
+            ]
+        },
+        "ui_rules": {
+            "type": "object",
+            "required": [
+                "action_visibility",
+                "action_enablement"
+            ],
+            "additionalProperties": true,
+            "properties": {
+                "action_visibility": {
+                    "type": "object",
+                    "required": [
+                        "strategy"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "strategy": {
+                            "type": "string",
+                            "enum": [
+                                "hide_if_no_permission",
+                                "disable_if_no_permission"
+                            ]
+                        }
+                    }
+                },
+                "action_enablement": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/enablement_rule"
+                    }
+                },
+                "jobs_ui": {
+                    "$ref": "#/$defs/jobs_ui"
+                },
+                "history_ui": {
+                    "$ref": "#/$defs/history_ui"
+                }
+            }
+        },
+        "jobs_ui": {
+            "type": "object",
+            "properties": {
+                "tracking": {
+                    "type": "object",
+                    "required": [
+                        "poll_operation_id",
+                        "poll_interval_ms",
+                        "terminal_states"
+                    ],
+                    "properties": {
+                        "poll_operation_id": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "poll_interval_ms": {
+                            "type": "integer",
+                            "minimum": 500
+                        },
+                        "terminal_states": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "completion": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "patternProperties": {
+                        "^[a-z_]+_operation_id$": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "history_ui": {
+            "type": "object",
+            "required": [
+                "source",
+                "query_defaults",
+                "masking"
+            ],
+            "properties": {
+                "source": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "query_defaults": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "masking": {
+                    "type": "object",
+                    "required": [
+                        "sensitivity_level_block_above",
+                        "mask_fields_by_level"
+                    ],
+                    "properties": {
+                        "sensitivity_level_block_above": {
+                            "type": "integer"
+                        },
+                        "mask_fields_by_level": {
+                            "type": "object",
+                            "patternProperties": {
+                                "^[0-9]+$": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "enablement_rule": {
+            "type": "object",
+            "required": [
+                "action",
+                "enabled_when"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "enabled_when": {
+                    "$ref": "#/$defs/condition_group"
+                }
+            }
+        },
+        "condition_group": {
+            "type": "object",
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "required": [
+                        "all"
+                    ],
+                    "properties": {
+                        "all": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "#/$defs/condition"
+                            }
+                        }
+                    }
+                },
+                {
+                    "required": [
+                        "any"
+                    ],
+                    "properties": {
+                        "any": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "#/$defs/condition"
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "condition": {
+            "type": "object",
+            "required": [
+                "field",
+                "op"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "field": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "op": {
+                    "type": "string",
+                    "enum": [
+                        "==",
+                        "!=",
+                        "in",
+                        "not_in",
+                        "is_null",
+                        "is_not_null"
+                    ]
+                },
+                "value": {
+                    "type": [
+                        "string",
+                        "number",
+                        "boolean",
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "op": {
+                                "enum": [
+                                    "==",
+                                    "!=",
+                                    "in",
+                                    "not_in"
+                                ]
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "value"
+                        ]
+                    }
+                }
+            ]
+        },
+        "error_mapping": {
+            "type": "object",
+            "required": [
+                "default_user_message",
+                "http_status"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "default_user_message": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "http_status": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "additionalProperties": {
+                        "$ref": "#/$defs/error_case"
+                    }
+                }
+            }
+        },
+        "error_case": {
+            "type": "object",
+            "required": [
+                "user_message",
+                "ui"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "user_message": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "ui": {
+                    "type": "object",
+                    "required": [
+                        "type",
+                        "level"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "toast",
+                                "form_validation",
+                                "modal",
+                                "inline"
+                            ]
+                        },
+                        "level": {
+                            "type": "string",
+                            "enum": [
+                                "info",
+                                "warning",
+                                "error",
+                                "success"
+                            ]
+                        }
+                    }
+                },
+                "invalid_fields_path": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,140 @@
+screen_id: "UX-USER-001"
+entity_type: "user"
+telemetry_defaults:
+  propagate_headers:
+    - "X-Correlation-ID"
+actions:
+  - action: "view"
+    client_only: false
+    operation_ids:
+      - "users_list"
+    permissions:
+      - "users:read"
+    error_mapping:
+      http_status: [401, 403, 500]
+
+  - action: "search"
+    client_only: false
+    operation_ids:
+      - "users_list"
+    permissions:
+      - "users:read"
+    error_mapping:
+      http_status: [401, 403, 500]
+
+  - action: "filter"
+    client_only: false
+    operation_ids:
+      - "users_list"
+    permissions:
+      - "users:read"
+    error_mapping:
+      http_status: [401, 403, 500]
+
+  - action: "create"
+    client_only: false
+    operation_ids:
+      - "users_create"
+    permissions:
+      - "users:write"
+    error_mapping:
+      http_status: [401, 403, 409, 422, 500]
+
+  - action: "activate"
+    client_only: false
+    operation_ids:
+      - "users_activate"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            - field: "status"
+              operator: "=="
+              value: "INACTIVE"
+            - field: "deleted_at"
+              operator: "=="
+              value: null
+    error_mapping:
+      http_status: [401, 403, 409, 422, 500]
+
+  - action: "deactivate"
+    client_only: false
+    operation_ids:
+      - "users_deactivate"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            - field: "status"
+              operator: "=="
+              value: "ACTIVE"
+            - field: "deleted_at"
+              operator: "=="
+              value: null
+    error_mapping:
+      http_status: [401, 403, 409, 422, 500]
+
+  - action: "archive"
+    client_only: false
+    operation_ids:
+      - "users_archive"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            - field: "deleted_at"
+              operator: "=="
+              value: null
+    error_mapping:
+      http_status: [401, 403, 409, 500]
+
+  - action: "restore"
+    client_only: false
+    operation_ids:
+      - "users_restore"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            - field: "deleted_at"
+              operator: "!="
+              value: null
+    error_mapping:
+      http_status: [401, 403, 409, 500]
+
+  - action: "bulk_select"
+    client_only: true
+    operation_ids: []
+    telemetry_defaults:
+      ui_only: true
+
+  - action: "bulk_update"
+    client_only: false
+    operation_ids:
+      - "users_bulk_update"
+    permissions:
+      - "users:write"
+    error_mapping:
+      http_status: [401, 403, 422, 500]
+
+  - action: "import"
+    client_only: false
+    operation_ids:
+      - "users_import_job_create"
+    permissions:
+      - "users:import"
+    error_mapping:
+      http_status: [401, 403, 422, 500]
+
+  - action: "export"
+    client_only: false
+    operation_ids:
+      - "users_export_job_create"
+    permissions:
+      - "users:export"
+    error_mapping:
+      http_status: [401, 403, 500]

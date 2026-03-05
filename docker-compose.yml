@@ -1,0 +1,56 @@
+services:
+  # Banco de Dados
+  postgres:
+    image: postgres:17-alpine
+    container_name: ${PROJECT_NAME:-easya1}-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+      POSTGRES_DB: ${POSTGRES_DB:-easya1}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Cache e Fila
+  redis:
+    image: redis:7-alpine
+    container_name: ${PROJECT_NAME:-easya1}-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  # API
+  api:
+    image: node:20-alpine
+    container_name: ${PROJECT_NAME:-easya1}-api
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "${API_PORT:-3000}:3000"
+    command: pnpm dev
+    depends_on:
+      - postgres
+      - redis
+    profiles:
+      - full
+
+  # Worker
+  worker:
+    image: node:20-alpine
+    container_name: ${PROJECT_NAME:-easya1}-worker
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    command: pnpm dev:worker
+    depends_on:
+      - postgres
+      - redis
+    profiles:
+      - full
+
+volumes:
+  pg-data:
+    driver: local

@@ -1,0 +1,5 @@
+packages:
+  - "apps/*"
+  - "!apps/template-project"
+  - "packages/*"
+  - "tooling/*"

@@ -1,0 +1,6 @@
+{
+    "name": "@easycf/agent-skills",
+    "version": "0.1.0",
+    "description": "Antigravity Agent Skills for EasyCodeFramework",
+    "private": true
+}

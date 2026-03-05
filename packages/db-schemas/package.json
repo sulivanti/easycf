@@ -1,0 +1,30 @@
+{
+    "name": "@easycf/db-schemas",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Multi-tenant baseline schemas for Drizzle ORM",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "lint": "eslint src/"
+    },
+    "dependencies": {
+        "drizzle-orm": "^0.30.0",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@easycf/tsconfig": "workspace:*",
+        "@easycf/eslint-config": "workspace:*",
+        "drizzle-zod": "^0.5.1",
+        "typescript": "^5.4.0"
+    }
+}

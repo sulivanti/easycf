@@ -11,8 +11,24 @@ O EasyCodeFramework (ECF) é a fundação para criação e gestão de APIs trans
 ## Inicializando novo projeto
 
 \`\`\`bash
-npx easycf init meu-super-app
-cd meu-super-app
+
+# 1. Clone o repositório base
+
+git clone <https://github.com/sulivanti/EasyCodeFramework.git>
+cd EasyCodeFramework
+
+# 2. Instale as dependências e faça o build inicial do monorepo
+
+pnpm install
+pnpm build
+
+# 3. Inicialize seu novo projeto no diretório desejado (ex: uma pasta acima)
+
+npx tsx tooling/cli/src/index.ts init ../meu-super-app
+
+# 4. Entre no seu novo projeto
+
+cd ../meu-super-app
 pnpm install
 pnpm dev
 \`\`\`

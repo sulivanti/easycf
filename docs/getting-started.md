@@ -2,12 +2,24 @@
 
 ## Instalando o framework
 
-Você deve usar o CLI do EasyCodeFramework (ECF) para preparar um novo servidor com governança pronta:
+Você deve clonar o repositório base e usar o CLI local para preparar um novo servidor com governança pronta:
 
 \`\`\`bash
-npx easycf init minha-api
-\`\`\`
 
+# 1. Clone o repositório
+
+git clone <https://github.com/sulivanti/EasyCodeFramework.git>
+cd EasyCodeFramework
+
+# 2. Instale as dependências do monorepo e gere o build do CLI
+
+pnpm install
+pnpm build
+
+# 3. Execute o CLI apontando para o diretório de destino do seu novo projeto
+
+npx tsx tooling/cli/src/index.ts init ../minha-api
+\`\`\`
 O wizard interativo criará o diretório `minha-api` com a fundação pronta contendo:
 
 - Dependências resolvidas

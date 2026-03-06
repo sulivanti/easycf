@@ -1,0 +1,24 @@
+{
+    "name": "{{project_name}}",
+    "version": "1.0.0",
+    "description": "API baseada no Enterprise EasyCodeFramework",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "tsx watch src/index.ts",
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "lint": "eslint src/"
+    },
+    "dependencies": {
+        "@easycf/core-api": "^0.1.0",
+        "@easycf/db-schemas": "^0.1.0",
+        "drizzle-orm": "^0.30.0",
+        "fastify": "^4.26.0",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "tsx": "^4.7.1",
+        "typescript": "^5.4.0",
+        "@types/node": "^20.0.0"
+    }
+}

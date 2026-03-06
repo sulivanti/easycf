@@ -1,13 +1,16 @@
 {
     "name": "@easycf/monorepo",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "private": true,
     "description": "The Enterprise-Grade Agnostic Code Framework",
     "scripts": {
         "build": "turbo run build",
         "dev": "turbo run dev",
         "lint": "turbo run lint",
-        "format": "turbo run format"
+        "format": "turbo run format",
+        "release": "node scripts/release.mjs patch",
+        "release:minor": "node scripts/release.mjs minor",
+        "release:major": "node scripts/release.mjs major"
     },
     "devDependencies": {
         "turbo": "^2.0.0",

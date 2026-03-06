@@ -230,4 +230,27 @@ npx @easycf/cli add
 
 ---
 
+## Para o Mantenedor do Framework (Release)
+
+O ECF possui um processo automatizado de release que sincroniza arquivos, faz bump de versão, altera o `package.json`, cria o commit `"release: vX.Y.Z"` e também cria a Git Tag correspondente.
+
+```bash
+# Lançar nova versão patch (ex: 0.1.0 -> 0.1.1)
+pnpm run release
+
+# Lançar nova versão minor (ex: 0.1.0 -> 0.2.0)
+pnpm run release:minor
+
+# Lançar nova versão major (ex: 0.1.0 -> 1.0.0)
+pnpm run release:major
+```
+
+Após rodar o script e tudo der certo, o release e as tags devem ser enviados:
+
+```bash
+git push && git push --tags
+```
+
+---
+
 *Consulte `docs/01_normativos/` no seu app gerado para a documentação normativa completa do framework.*

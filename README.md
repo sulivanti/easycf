@@ -18,32 +18,30 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 
 ## Passo 1: Inicialização AI-First (Criando seu App)
 
-O processo de inicialização do EasyCodeFramework é **100% focado em Inteligência Artificial (AI-First)**. A sua IA (como Cursor, Claude ou Copilot) atuará como a construtora principal do projeto, consumindo o motor de habilidades do framework para gerar código seguindo nossas leis arquiteturais.
+O processo de inicialização do EasyCodeFramework é **100% focado em Inteligência Artificial (AI-First)**. Nós não usamos instaladores complexos, CLIs de pacote ou ferramentas tradicionais.
 
-Crie uma nova subpasta vazia e siga os passos básicos abaixo:
+A sua IA (como Cursor, Claude ou Copilot) atuará como a construtora principal do projeto, consumindo o motor de habilidades e regras arquiteturais do framework para gerar código.
 
-**1. Instale o Motor de Skills da IA:**
-Abra o seu terminal na pasta do novo projeto e utilize o gerenciador oficial da comunidade para instalar todas as nossas *Agent Skills* (e trazer a pasta `.agents/skills/`) diretamente do GitHub, sem precisar clonar o projeto inteiro:
+Siga os passos básicos abaixo para iniciar o seu ambiente perfeitamente:
+
+**1. Clone o Cérebro do Framework (Instalação Limpa):**
+Em vez de usar `git clone` e trazer o histórico de desenvolvimento, usamos a ferramenta oficial da comunidade (`degit`) para baixar uma cópia pura e fresca de todas as *Agent Skills*, *Documentações Normativas* e da estrutura base do monorepo, desaguando em uma pasta nova (ex: `ceasy`):
 
 ```bash
-npx skills add https://github.com/sulivanti/EasyCodeFramework.git
+npx degit sulivanti/EasyCodeFramework ceasy
 ```
 
-Isso garante que a sua IA terá superpoderes como o utilitário `scaffold-module` e as regras de `validate-drizzle-schemas` prontas para operar localmente.
+Este comando já criará a pasta `ceasy` contendo toda a inteligência do projeto (`.agents/`, `docs/`, `.cursorrules`, etc.) prontas para a sua IA consumir localmente.
 
-**2. Traga os Normativos:**
-Além das habilidades operacionais, a IA precisa de memória descritiva (`DOC-DEV-001`). Copie manualmente do repositório principal as pastas e arquivos constitucionais para a sua nova pasta:
+**2. Instale as Dependências e Ignição:**
+Agora, entre na sua nova pasta recém-criada e conecte as dependências base do seu novo projeto:
 
-- A pasta completa `docs/` *(que contém as leis arquiteturais)*
-- O arquivo `.cursorrules` *(que guia o comportamento contínuo da sua IDE)*
+```bash
+cd ceasy
+pnpm install
+```
 
-**3. Ignição da API por Prompt:**
-Agora, basta você abrir o Editor de código e fazer uma solicitação direta ao Chat/Composer da sua Inteligência Artificial:
-
-> **Comando IA (Copie e Cole):**
-> ✨ *"Eu acabei de configurar nossos .agents e docs. Inicie nossa aplicação! Crie um arquivo `package.json` fechado para este projeto com '@easycf/core-api' e 'fastify' como dependência. Adicione também um script de dev apontando para 'tsx watch src/index.ts' e crie o arquivo base com uma inicialização padrão fastify usando `createApp()`. Por fim, rode o comando pnpm install localmente."*
-
-A infraestrutura inicial está erguida, os motores de agência configurados, as leis documentadas. Você já pode usar `pnpm dev`! 🎉
+A infraestrutura inicial está erguida, os motores de agência configurados e as leis documentadas. Você já pode usar `pnpm dev` ou solicitar para a IA começar a ler as documentações e gerar as User Stories! 🎉
 
 ---
 

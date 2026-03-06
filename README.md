@@ -23,30 +23,16 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 > 
 > Por favor, molde o ambiente Node.js com Fastify efetuando os seguintes passos rigorosamente:
 > 
-> 1. **Faxina Inicial:** Exclua as pastas `apps/`, `packages/`, `scripts/`, `tooling/` (se houver), e os arquivos `turbo.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, `package.json` atual e `skills-lock.json`. Quero preservar apenas `.agents/`, `docs/`, `.cursorrules` e `.gitignore`.
+> 1. **Faxina Inicial:** Exclua as pastas `apps/`, `packages/`, `scripts/`, `tooling/` (se houver), e os arquivos `turbo.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, `package.json` atual e `skills-lock.json`. Quero preservar apenas `.agents/`, `docs/`, `.cursorrules`, `.env.example` e `.gitignore`.
 > 2. **Novo App:** Crie um `package.json` privado do zero usando `@easycf/core-api` e `fastify` como dependências. O nome do projeto é o nome do diretório atual. Adicione como devDependencies o `tsx` e o `@types/node`.
 > 3. **Configuração:** Defina os scripts: `"dev": "tsx watch src/index.ts"` e `"start": "node dist/index.js"`.
 > 4. **Código Inicial:** Crie a estrutura com a pasta `src/` e um arquivo `src/index.ts` contendo um servidor Fastify básico pronto para uso, que instancia a aplicação importando `createApp` do pacote `@easycf/core-api`.
-> 5. **Finalização:** Instale as dependências com no final (ex: `pnpm install`).
+> 5. **Finalização:** Rode silenciosamente a instalação das dependências (ex: `pnpm install` ou `npm install`).
 > 
 > Avise quando a ignição for concluída para que eu possa testar o ambiente.
-> ``` clone` e trazer o histórico de desenvolvimento, usamos a ferramenta oficial da comunidade (`degit`) para baixar uma cópia pura e fresca de todas as *Agent Skills*, *Documentações Normativas* e da estrutura base do monorepo, desaguando em uma pasta nova (ex: `ceasy`):
+> ```
 
-```bash
-npx degit sulivanti/EasyCodeFramework ceasy
-```
-
-Este comando já criará a pasta `ceasy` contendo toda a inteligência do projeto (`.agents/`, `docs/`, `.cursorrules`, etc.) prontas para a sua IA consumir localmente.
-
-**2. Instale as Dependências e Ignição:**
-Agora, entre na sua nova pasta recém-criada e conecte as dependências base do seu novo projeto:
-
-```bash
-cd ceasy
-pnpm install
-```
-
-A infraestrutura inicial está erguida, os motores de agência configurados e as leis documentadas. Você já pode usar `pnpm dev` ou solicitar para a IA começar a ler as documentações e gerar as User Stories! 🎉
+A infraestrutura inicial estará erguida, limpa, e os motores de agência configurados. Você já pode usar seu ambiente! 🎉
 
 ---
 

@@ -16,46 +16,45 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 
 ---
 
-## Passo 1: O Scaffold Inicial (Criando seu App)
+## Passo 1: Inicialização AI-First (Criando seu App)
 
-O processo de inicialização do EasyCodeFramework é **100% focado em Inteligência Artificial (AI-First)**. Nós não usamos comandos `npx`, instaladores globais ou scripts complexos para provisionar seu projeto inicial.
+O processo de inicialização do EasyCodeFramework é **100% focado em Inteligência Artificial (AI-First)**. Nós não usamos instaladores complexos, CLIs de pacote ou ferramentas tradicionais.
 
-No EasyCodeFramework, **seu agente de IA (como Cursor, Claude, ou Copilot)** é quem molda a estrutura, copiando as leis arquiteturais e as próprias Agent Skills para dentro da sua pasta, "ensinando" a si mesmo como construir a aplicação.
+Neste ecosistema, **seu agente de IA (como Cursor, Claude, ou Copilot)** é quem constrói a aplicação a partir de um "cérebro" inicial composto por regras e *skills*.
 
-Para criar o projeto `meu-super-app`:
+Para criar o seu projeto `meu-super-app`:
 
-1. Crie uma pasta vazia e abra no seu editor de código (Cursor, Windsurf, etc.).
-2. Abra o Chat do seu Assistente IA.
-3. **Copie e cole exatamente o prompt abaixo no seu assistente:**
+**1. Traga o "Cérebro" do Framework:**
+Crie uma pasta vazia para o seu novo projeto. Em seguida, copie as seguintes estruturas **do repositório principal do EasyCodeFramework** para dentro da sua nova pasta:
 
-> **Prompt Mestre de Inicialização** 🤖
+- Pasta `.agents/` *(contém as Agent Skills que vão gerar o código)*
+- Pasta `docs/` *(contém o DOC-DEV-001 e as leis arquiteturais)*
+- Arquivo `.cursorrules` *(regras base de comportamento para o editor inteligente)*
+
+**2. Dê a Ignição na IA:**
+Abra a sua pasta nova no seu editor de código com suporte a agentes (Cursor, Windsurf, etc.). Abra o Chat/Composer do assistente e **copie e cole exatamente o prompt abaixo**:
+
+> **Prompt de Ignição** 🚀
 >
 > ```text
-> Você é um arquiteto especialista. Eu quero começar um novo projeto usando o EasyCodeFramework nesta pasta vazia.
+> Você atua como o Arquiteto do EasyCodeFramework. Eu acabei de trazer as pastas vitais (.agents/ e docs/) para este projeto vazio.
 > 
-> Por favor, faça exatamente os passos a seguir usando suas ferramentas de terminal e arquivos:
+> Por favor, inicie o projeto Node.js e Fastify:
+> 1. Crie um `package.json` privado usando `@easycf/core-api` e `fastify` como dependências. O nome do projeto é o nome do diretório atual. Adicione devDependencies como `tsx`.
+> 2. Adicione os scripts: `"dev": "tsx watch src/index.ts"` e `"start": "node dist/index.js"`.
+> 3. Crie a estrutura inicial com a pasta `src/` e um arquivo `src/index.ts` contendo um servidor Fastify básico que instancia a aplicação com `createApp` de `@easycf/core-api`.
+> 4. Instale as dependências.
 > 
-> 1. Clone ou baixe o repositório público `https://github.com/sulivanti/EasyCodeFramework.git` em uma pasta temporária (ex: `/tmp/ecf-temp`).
-> 2. Copie as pastas `.agents/` e `docs/`, além do arquivo `.cursorrules`, da pasta temporária para a raiz deste meu projeto atual.
-> 3. Crie um arquivo `package.json` privado básico na raiz com:
->    - `name` igual ao nome da pasta atual.
->    - `scripts` contendo `"dev": "tsx watch src/index.ts"` e `"start": "node dist/index.js"`.
->    - `dependencies` contendo `"@easycf/core-api": "^0.1.0"` e `"fastify": "^4.26.0"`.
->    - `devDependencies` contendo `"tsx": "^4.21.0"`.
-> 4. Crie a pasta `src/` e um arquivo `index.ts` inicial e básico com Fastify, importando `createApp` de `@easycf/core-api`.
-> 5. Instale as dependências usando `pnpm install`. Se falhar por causa da versão do core-api, apague a versão exata do `package.json` e faça o link/install relativo de acordo com seu julgamento.
-> 6. Remova a pasta temporária clonada.
-> 
-> Após concluir, me avise que o Scaffold puro foi realizado com sucesso.
+> Avise quando a ignição for concluída para que eu possa testar o ambiente.
 > ```
 
-Isso é tudo! A sua IA vai:
+Isso é tudo! Com este simples passo, a sua IA vai:
 
-- ✅ Copiar os arquivos normativos (`docs/01_normativos/`) ensinando a si mesma as regras.
-- ✅ Injetar todas as Agent Skills (`.agents/skills/`) para gerarem o código futuro.
-- ✅ Configurar as regras de terminal e editor (`.cursorrules`).
+- ✅ Ler os arquivos normativos (`docs/01_normativos/`), ensinando a si mesma as regras do jogo.
+- ✅ Ter acesso ao motor de *Agent Skills* (`.agents/skills/`) para arquitetar o código adequadamente daqui pra frente.
+- ✅ Levantar o servidor base pronto para uso.
 
-Agora você está pronto para rodar `pnpm dev` na sua máquina. 🎉
+Agora basta rodar `pnpm dev` no terminal para iniciar e construir sobre suas *User Stories*. 🎉
 
 ---
 
@@ -65,7 +64,7 @@ No ECF, o seu foco é o **design e a regra de negócio**. O trabalho repetitivo 
 
 **Exemplos práticos:**
 
-- **Gerar um Novo Módulo (`scaffold-module`):** Você tem uma _User Story_ para Gestão de Usuários? Peça para a IA rodar a skill `scaffold-module`. Ela cria rotas, schemas Drizzle e repositórios no padrão do framework.
+- **Gerar um Novo Módulo (`scaffold-module`):** Você tem uma *User Story* para Gestão de Usuários? Peça para a IA rodar a skill `scaffold-module`. Ela cria rotas, schemas Drizzle e repositórios no padrão do framework.
 
   - **O Gate de Aprovação:** A IA só gera código se a US estiver com `Status: aprovada`. Com `draft` ou `em revisao`, ela recusa e para o processo.
 
@@ -91,8 +90,8 @@ No ECF, o seu foco é o **design e a regra de negócio**. O trabalho repetitivo 
 
 Foque apenas nos **campos de negócio**:
 
-> ✅ **Correto:** _"A entidade `user` tem `email`, `senha` e `mfa_secret`."_
-> ❌ **Errado:** _"A entidade `user` tem `id`, `tenant_id`, `email`, `created_at`, `deleted_at`..."_
+> ✅ **Correto:** *"A entidade `user` tem `email`, `senha` e `mfa_secret`."*
+> ❌ **Errado:** *"A entidade `user` tem `id`, `tenant_id`, `email`, `created_at`, `deleted_at`..."*
 
 Os campos `id`, `codigo`, `status`, `tenant_id`, `created_at`, `updated_at` e `deleted_at` são **gerados automaticamente** pelo framework. Incluí-los na US gera ruído.
 
@@ -130,7 +129,7 @@ As violações mais comuns detectadas:
 ## Passo 4: Regras de Ouro Inegociáveis
 
 1. **Português Sempre**: Conversações, documentações e discussões sempre em português do Brasil (exceto nomes de variáveis/arquivos de código com regras em inglês).
-2. **UTF-8 de Ponta a Ponta**: Nunca salve arquivos, banco ou dados em formato não-UTF-8. Toda falha de mojibake começa aí. Garanta: _Origem → API → Banco → Tela_.
+2. **UTF-8 de Ponta a Ponta**: Nunca salve arquivos, banco ou dados em formato não-UTF-8. Toda falha de mojibake começa aí. Garanta: *Origem → API → Banco → Tela*.
 
 ---
 
@@ -225,7 +224,7 @@ Acione a skill `create-amendment` quando precisar de alterações. Os tipos de e
 | `M` (ex: `FR-001-M01.md`) | Melhoria | Adição de funcionalidade nova a requisito existente |
 | `R` (ex: `BR-001-R01.md`) | Revisão | Mudança de regra de negócio (lei nova, diretriz da empresa) |
 
-**Exemplo prático:** Aprove a US da alteração e peça: _"Execute a skill `create-amendment` no pilar `fr` baseada na US aprovada"_. A IA gera o anexo `FR-001-M01` sem destruir o histórico original.
+**Exemplo prático:** Aprove a US da alteração e peça: *"Execute a skill `create-amendment` no pilar `fr` baseada na US aprovada"*. A IA gera o anexo `FR-001-M01` sem destruir o histórico original.
 
 ---
 
@@ -240,4 +239,4 @@ npx @easycf/cli add
 
 ---
 
-_Consulte `docs/01_normativos/` no seu app gerado para a documentação normativa completa do framework._
+*Consulte `docs/01_normativos/` no seu app gerado para a documentação normativa completa do framework.*

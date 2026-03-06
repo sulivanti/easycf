@@ -18,43 +18,32 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 
 ## Passo 1: Inicialização AI-First (Criando seu App)
 
-O processo de inicialização do EasyCodeFramework é **100% focado em Inteligência Artificial (AI-First)**. Nós não usamos instaladores complexos, CLIs de pacote ou ferramentas tradicionais.
+O processo de inicialização do EasyCodeFramework é **100% focado em Inteligência Artificial (AI-First)**. A sua IA (como Cursor, Claude ou Copilot) atuará como a construtora principal do projeto, consumindo o motor de habilidades do framework para gerar código seguindo nossas leis arquiteturais.
 
-Neste ecosistema, **seu agente de IA (como Cursor, Claude, ou Copilot)** é quem constrói a aplicação a partir de um "cérebro" inicial composto por regras e *skills*.
+Crie uma nova subpasta vazia e siga os passos básicos abaixo:
 
-Para criar o seu projeto `meu-super-app`:
+**1. Instale o Motor de Skills da IA:**
+Abra o seu terminal na pasta do novo projeto e utilize o gerenciador oficial da comunidade para instalar todas as nossas *Agent Skills* (e trazer a pasta `.agents/skills/`) diretamente do GitHub, sem precisar clonar o projeto inteiro:
 
-**1. Traga o "Cérebro" do Framework:**
-Crie uma pasta vazia para o seu novo projeto. Em seguida, copie as seguintes estruturas **do repositório principal do EasyCodeFramework** para dentro da sua nova pasta:
+```bash
+npx skills add https://github.com/sulivanti/EasyCodeFramework.git
+```
 
-- Pasta `.agents/` *(contém as Agent Skills que vão gerar o código)*
-- Pasta `docs/` *(contém o DOC-DEV-001 e as leis arquiteturais)*
-- Arquivo `.cursorrules` *(regras base de comportamento para o editor inteligente)*
+Isso garante que a sua IA terá superpoderes como o utilitário `scaffold-module` e as regras de `validate-drizzle-schemas` prontas para operar localmente.
 
-**2. Dê a Ignição na IA:**
-Abra a sua pasta nova no seu editor de código com suporte a agentes (Cursor, Windsurf, etc.). Abra o Chat/Composer do assistente e **copie e cole exatamente o prompt abaixo**:
+**2. Traga os Normativos:**
+Além das habilidades operacionais, a IA precisa de memória descritiva (`DOC-DEV-001`). Copie manualmente do repositório principal as pastas e arquivos constitucionais para a sua nova pasta:
 
-> **Prompt de Ignição** 🚀
->
-> ```text
-> Você atua como o Arquiteto do EasyCodeFramework. Eu acabei de trazer as pastas vitais (.agents/ e docs/) para este projeto vazio.
-> 
-> Por favor, inicie o projeto Node.js e Fastify:
-> 1. Crie um `package.json` privado usando `@easycf/core-api` e `fastify` como dependências. O nome do projeto é o nome do diretório atual. Adicione devDependencies como `tsx`.
-> 2. Adicione os scripts: `"dev": "tsx watch src/index.ts"` e `"start": "node dist/index.js"`.
-> 3. Crie a estrutura inicial com a pasta `src/` e um arquivo `src/index.ts` contendo um servidor Fastify básico que instancia a aplicação com `createApp` de `@easycf/core-api`.
-> 4. Instale as dependências.
-> 
-> Avise quando a ignição for concluída para que eu possa testar o ambiente.
-> ```
+- A pasta completa `docs/` *(que contém as leis arquiteturais)*
+- O arquivo `.cursorrules` *(que guia o comportamento contínuo da sua IDE)*
 
-Isso é tudo! Com este simples passo, a sua IA vai:
+**3. Ignição da API por Prompt:**
+Agora, basta você abrir o Editor de código e fazer uma solicitação direta ao Chat/Composer da sua Inteligência Artificial:
 
-- ✅ Ler os arquivos normativos (`docs/01_normativos/`), ensinando a si mesma as regras do jogo.
-- ✅ Ter acesso ao motor de *Agent Skills* (`.agents/skills/`) para arquitetar o código adequadamente daqui pra frente.
-- ✅ Levantar o servidor base pronto para uso.
+> **Comando IA (Copie e Cole):**
+> ✨ *"Eu acabei de configurar nossos .agents e docs. Inicie nossa aplicação! Crie um arquivo `package.json` fechado para este projeto com '@easycf/core-api' e 'fastify' como dependência. Adicione também um script de dev apontando para 'tsx watch src/index.ts' e crie o arquivo base com uma inicialização padrão fastify usando `createApp()`. Por fim, rode o comando pnpm install localmente."*
 
-Agora basta rodar `pnpm dev` no terminal para iniciar e construir sobre suas *User Stories*. 🎉
+A infraestrutura inicial está erguida, os motores de agência configurados, as leis documentadas. Você já pode usar `pnpm dev`! 🎉
 
 ---
 

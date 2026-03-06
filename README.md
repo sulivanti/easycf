@@ -16,13 +16,17 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 
 ---
 
-## Passo 1: Criando seu App
+## Passo 1: O Scaffold Inicial (Criando seu App)
+
+O processo de criação é um **scaffold puro**. O framework não precisa executar Node.js complexo ou transpilações nesse momento; ele apenas estrutura a base da sua aplicação importando as documentações normativas e os agentes de IA.
 
 Abra o terminal na pasta onde você quer criar seu projeto e rode:
 
 ```bash
 npx @easycf/cli init meu-super-app
 ```
+
+> **Atenção:** Se você estiver testando o repositório fonte do framework antes da sua publicação oficial no NPM, precisará cloná-lo, rodar `pnpm install` e `pnpm build` nele, e só então usar a raiz para executar o `index.ts` do CLI (`npx tsx tooling/cli/src/index.ts init ...`). Depois de publicado, o comando acima é a única coisa que você precisará.
 
 Isso é tudo. O CLI vai:
 

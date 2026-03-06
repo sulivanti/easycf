@@ -18,41 +18,44 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 
 ## Passo 1: O Scaffold Inicial (Criando seu App)
 
-O processo de criação é um **scaffold puro**. O framework não precisa executar Node.js complexo ou transpilações nesse momento; ele apenas estrutura a base da sua aplicação importando as documentações normativas e os agentes de IA.
+O processo de inicialização do EasyCodeFramework é **100% focado em Inteligência Artificial (AI-First)**. Nós não usamos comandos `npx`, instaladores globais ou scripts complexos para provisionar seu projeto inicial.
 
-Abra o terminal na pasta onde você quer criar seu projeto e rode:
+No EasyCodeFramework, **seu agente de IA (como Cursor, Claude, ou Copilot)** é quem molda a estrutura, copiando as leis arquiteturais e as próprias Agent Skills para dentro da sua pasta, "ensinando" a si mesmo como construir a aplicação.
 
-```bash
-npx @easycf/cli init meu-super-app
-```
+Para criar o projeto `meu-super-app`:
 
-> **Atenção:** Se você estiver testando o repositório fonte do framework antes da sua publicação oficial no NPM, precisará cloná-lo, rodar `pnpm install` e `pnpm build` nele, e só então usar a raiz para executar o `index.ts` do CLI (`npx tsx tooling/cli/src/index.ts init ...`). Depois de publicado, o comando acima é a única coisa que você precisará.
+1. Crie uma pasta vazia e abra no seu editor de código (Cursor, Windsurf, etc.).
+2. Abra o Chat do seu Assistente IA.
+3. **Copie e cole exatamente o prompt abaixo no seu assistente:**
 
-Isso é tudo. O CLI vai:
-
-- ✅ Criar a pasta `meu-super-app/` com a estrutura base
-- ✅ Gerar o `package.json` já com `@easycf/core-api` como dependência
-- ✅ Criar o `src/index.ts` inicial com o servidor Fastify configurado
-- ✅ Copiar todos os normativos (`docs/01_normativos/`) para o seu projeto
-- ✅ Copiar todas as Agent Skills (`.agents/skills/`) para o seu projeto
-- ✅ Copiar o `.cursorrules` com as regras do framework para o editor
-
-Agora entre no projeto, instale as dependências e rode:
-
-```bash
-cd meu-super-app
-pnpm install
-pnpm dev
-```
-
-Seu servidor estará disponível em `http://localhost:3000`. 🎉
-
-> **Nota sobre PNPM no Windows:** Se `pnpm` não for reconhecido, rode primeiro:
+> **Prompt Mestre de Inicialização** 🤖
 >
-> ```bash
-> corepack prepare pnpm@9.15.2 --activate
-> pnpm -v  # confirmar instalação
+> ```text
+> Você é um arquiteto especialista. Eu quero começar um novo projeto usando o EasyCodeFramework nesta pasta vazia.
+> 
+> Por favor, faça exatamente os passos a seguir usando suas ferramentas de terminal e arquivos:
+> 
+> 1. Clone ou baixe o repositório público `https://github.com/sulivanti/EasyCodeFramework.git` em uma pasta temporária (ex: `/tmp/ecf-temp`).
+> 2. Copie as pastas `.agents/` e `docs/`, além do arquivo `.cursorrules`, da pasta temporária para a raiz deste meu projeto atual.
+> 3. Crie um arquivo `package.json` privado básico na raiz com:
+>    - `name` igual ao nome da pasta atual.
+>    - `scripts` contendo `"dev": "tsx watch src/index.ts"` e `"start": "node dist/index.js"`.
+>    - `dependencies` contendo `"@easycf/core-api": "^0.1.0"` e `"fastify": "^4.26.0"`.
+>    - `devDependencies` contendo `"tsx": "^4.21.0"`.
+> 4. Crie a pasta `src/` e um arquivo `index.ts` inicial e básico com Fastify, importando `createApp` de `@easycf/core-api`.
+> 5. Instale as dependências usando `pnpm install`. Se falhar por causa da versão do core-api, apague a versão exata do `package.json` e faça o link/install relativo de acordo com seu julgamento.
+> 6. Remova a pasta temporária clonada.
+> 
+> Após concluir, me avise que o Scaffold puro foi realizado com sucesso.
 > ```
+
+Isso é tudo! A sua IA vai:
+
+- ✅ Copiar os arquivos normativos (`docs/01_normativos/`) ensinando a si mesma as regras.
+- ✅ Injetar todas as Agent Skills (`.agents/skills/`) para gerarem o código futuro.
+- ✅ Configurar as regras de terminal e editor (`.cursorrules`).
+
+Agora você está pronto para rodar `pnpm dev` na sua máquina. 🎉
 
 ---
 

@@ -16,16 +16,21 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 
 ---
 
-## Passo 1: Inicialização AI-First (Criando seu App)
-
-O processo de inicialização do EasyCodeFramework é **100% focado em Inteligência Artificial (AI-First)**. Nós não usamos instaladores complexos, CLIs de pacote ou ferramentas tradicionais.
-
-A sua IA (como Cursor, Claude ou Copilot) atuará como a construtora principal do projeto, consumindo o motor de habilidades e regras arquiteturais do framework para gerar código.
-
-Siga os passos básicos abaixo para iniciar o seu ambiente perfeitamente:
-
-**1. Clone o Cérebro do Framework (Instalação Limpa):**
-Em vez de usar `git clone` e trazer o histórico de desenvolvimento, usamos a ferramenta oficial da comunidade (`degit`) para baixar uma cópia pura e fresca de todas as *Agent Skills*, *Documentações Normativas* e da estrutura base do monorepo, desaguando em uma pasta nova (ex: `ceasy`):
+## Passo 1: Inicialização AI-First> **Prompt de Ignição** 🚀
+>
+> ```text
+> Você atua como o Arquiteto do EasyCodeFramework. Acabei de baixar a estrutura bruta do repositório mãe (Monorepo) para esta pasta, mas preciso limpá-la para iniciar minha nova aplicação isolada.
+> 
+> Por favor, molde o ambiente Node.js com Fastify efetuando os seguintes passos rigorosamente:
+> 
+> 1. **Faxina Inicial:** Exclua as pastas `apps/`, `packages/`, `scripts/`, `tooling/` (se houver), e os arquivos `turbo.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, `package.json` atual e `skills-lock.json`. Quero preservar apenas `.agents/`, `docs/`, `.cursorrules` e `.gitignore`.
+> 2. **Novo App:** Crie um `package.json` privado do zero usando `@easycf/core-api` e `fastify` como dependências. O nome do projeto é o nome do diretório atual. Adicione como devDependencies o `tsx` e o `@types/node`.
+> 3. **Configuração:** Defina os scripts: `"dev": "tsx watch src/index.ts"` e `"start": "node dist/index.js"`.
+> 4. **Código Inicial:** Crie a estrutura com a pasta `src/` e um arquivo `src/index.ts` contendo um servidor Fastify básico pronto para uso, que instancia a aplicação importando `createApp` do pacote `@easycf/core-api`.
+> 5. **Finalização:** Instale as dependências com no final (ex: `pnpm install`).
+> 
+> Avise quando a ignição for concluída para que eu possa testar o ambiente.
+> ``` clone` e trazer o histórico de desenvolvimento, usamos a ferramenta oficial da comunidade (`degit`) para baixar uma cópia pura e fresca de todas as *Agent Skills*, *Documentações Normativas* e da estrutura base do monorepo, desaguando em uma pasta nova (ex: `ceasy`):
 
 ```bash
 npx degit sulivanti/EasyCodeFramework ceasy

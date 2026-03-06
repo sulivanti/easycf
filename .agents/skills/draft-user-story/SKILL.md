@@ -105,4 +105,12 @@ Antes de formatar a saída final para o arquivo, você **DEVE LER OBRIGATORIAMEN
 
 Utilize rigorosamente a estrutura lida deste template base para construir e preencher o arquivo da nova User Story, evitando criar ou duplicar seções que não existam nele.
 
-Após o salvamento físico, avise o usuário que a entrevista acabou, que a US-MOD-XXX física nasceu como `para aprovação` e está pronta pra review manual.
+### REGRA ANTI-ENCADEAMENTO E AUTOAPROVAÇÃO (HUMAN-IN-THE-LOOP)
+
+Você é TERMINANTEMENTE PROIBIDO de avançar o status da US gerada para "aprovada" por conta própria ou iniciar as tarefas da skill `scaffold-module` (gerar o código/documentação do módulo) na mesma interação.
+
+O fluxo obrigatório é o seguinte:
+
+1. Salve o arquivo da User Story fisicamente (O status da US DEVE vir como `para aprovação`).
+2. **INTERROMPA SUA EXECUÇÃO IMEDIATAMENTE.**
+3. Devolva o controle para o usuário (ex: "*A US-MOD-XXX nasceu em DRAFT e está pronta para review manual. Por favor, leia, altere o status para 'aprovada' e então solicite a criação do módulo.*").

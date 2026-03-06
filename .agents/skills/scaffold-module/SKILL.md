@@ -32,6 +32,9 @@ Se o usuário não a fornecer no prompt de origem, você **deve questioná-lo an
 Você deve ler o arquivo da User Story informada. Verifique o campo `Status:`.
 Se o status **não for** `aprovada`, você **ESTÁ PROIBIDO** de gerar qualquer arquivo. Interrompa a execução e informe ao usuário que a US precisa estar aprovada (ela pode estar `em desenvolvimento`, `em revisao`, `para aprovação`, ou `reprovada`). Apenas proceda se estiver `aprovada`.
 
+**REGRA ANTI-ENCADEAMENTO (HUMAN-IN-THE-LOOP):**
+Se VOCÊ MESMO (agente de IA) acabou de terminar de escrever e salvar o arquivo da US na mesma interação (comportamento "agent chaining"), você **ESTÁ PROIBIDO** de realizar o Scaffold ou trocar o status para "aprovada" no meio do caminho. O processo deve parar após gerar a US e ficar aguardando nova validação estrita do Usuário Humano.
+
 ---
 
 ## 3. PASSO 1: Ingestão de Contexto Normativo (Obrigatório)
@@ -90,7 +93,11 @@ Para a escrita de CADA UM dos arquivos que estão dentro das sub-pastas `/requir
    ```
 
    Isso não é delegado à leitura do `DOC-DEV-001` — é uma regra de execução desta skill. Nenhum arquivo gerado pelo scaffold pode nascer sem esse aviso. Essa tag é o contrato de rastreabilidade e proteção do arquivo desde o nascimento (conforme `DOC-DEV-001`).
-4. Aplique as informações extraídas logicamente da **User Story fornecida**.
+4. **INJEÇÃO ATIVA DOS DADOS (PROIBIDO PLACEHOLDERS):** É expressamente PROIBIDO gerar arquivos copiando os placeholders vazios do template (como `- Regra: ...`, `<Nome>`, `<titulo>`, `[ ] Sim [ ] Não`). Você DEVE ativamente aplicar as informações lidas da **User Story fornecida** e preencher os artefatos com conteúdo rico e deduzido:
+   - No **BR-{ID}.md**: Inverta o texto genérico pela Regra de Negócio real da US. Inclua os Critérios de Aceite em (Gherkin) listados de fato na US.
+   - No **FR-{ID}.md**: Detalhe os Endpoints REST ou telas que serão impactados (conforme US) e defina explicitamente "Done Funcional".
+   - No **DATA-{ID}.md**: Descreva ou infira as colunas que nascerão no banco e os possíveis Eventos de Domínio (`domain_events`) requeridos pela feature.
+   - No **SEC-{ID}.md**: Preencha políticas de auditoria, restrição de rotas ou rate-limits citados explicitamente na US.
 5. No campo `rastreia_para` presente no rodapé de cada arquivo (estipulado pelo DOC-DEV-001), amarre a todos os outros arquivos irmãos do mesmo nó e **inclua a referência à US de origem**.
 6. No campo `referencias_exemplos`, preencha com o link relativo para a User Story de aprovação (ex: `[US-MOD-101](../../user-stories/US-MOD-101.md)`).
 7. Conforme o `DOC-DEV-001` (fonte da verdade normativa), o estado inicial de todo arquivo gerado deve ser rigorosamente **DRAFT**. Os arquivos base **não devem ser editados diretamente** após a geração — qualquer evolução deve passar pela skill `create-amendment`.

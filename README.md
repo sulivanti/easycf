@@ -19,13 +19,19 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 ## Passo 1: Inicialização AI-First
 
 **1. Clone o Cérebro do Framework (Instalação Limpa):**
-Usamos a ferramenta oficial da comunidade (`degit`) para baixar uma cópia pura e fresca das nossas *Agent Skills* e *Documentações Normativas* a partir do nosso repositório de template dedicado, desaguando em uma pasta nova (ex: `ceasy`):
+Usamos a ferramenta oficial da comunidade (`degit`) para baixar uma cópia pura e fresca das nossas *Agent Skills* e *Documentações Normativas* a partir do nosso repositório de template dedicado, desaguando em uma pasta nova (ex: `ceasy`).
+
+Nós fornecemos versões garantidas. Você pode usar a mais recente ou fixar em uma versão específica:
 
 ```bash
-npx degit sulivanti/easycf-template ceasy
+# ÚLTIMA VERSÃO: Baixa a branch main do repositório público
+npx degit sulivanti/easycf ceasy
+
+# VERSÃO FIXA: Seguranca de imutabilidade (exatamente a v0.0.2 — exemplo)
+npx degit sulivanti/easycf#v0.0.2 ceasy
 ```
 
-Este comando já criará a pasta `ceasy` perfeitamente limpa, contendo apenas a inteligência bruta do projeto (`.agents/`, `docs/`, `.cursorrules`, etc.) pronta para a sua IA consumir.
+Este comando já criará a pasta `ceasy` perfeitamente limpa, contendo apenas a inteligência bruta do projeto (`.agents/`, `docs/`, `.cursorrules`, etc.) pronta para a sua IA consumir — sem o histórico do Git do repositório original.
 
 **2. Dê a Ignição na IA:**
 Abra a sua pasta recém-extraída (`ceasy`) no seu editor de código com suporte a agentes (Cursor, Windsurf, etc.). Abra o Chat/Composer do assistente e **copie e cole exatamente o prompt abaixo**:

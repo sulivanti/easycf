@@ -48,44 +48,43 @@ pnpm run release:major
 
 O script irá automaticamente:
 
-1. Calcular a nova versão e atualizar o `package.json`
-2. Popular `easyCF/` com os arquivos corretos do template
-3. Fazer o commit `"release: vX.Y.Z"`
-4. Criar o Git tag `vX.Y.Z`
+1. Fazer o bump da versão no `package.json` do monorepo privado.
+2. Clonar silenciosamente o repositório público `easycf-template` na pasta `dist/`.
+3. Sincronizar o conteúdo atualizado para essa pasta.
+4. Fazer o commit `"release: vX.Y.Z"` e criar a tag no repositório de distribuição.
 
-## Publicar no GitHub
+## Publicar a Versão
 
-Após o script concluir com sucesso:
+O script não faz o push automático por segurança. Para efetivar o release:
+
+### 1. No Repositório de Distribuição (Público)
 
 ```powershell
+cd dist/easycf
 git push && git push --tags
+cd ../..
 ```
 
-## Testar Localmente Antes do Push
+### 2. No Seu Monorepo (Privado)
 
-Antes de publicar, valide que o template funciona:
+```powershell
+git push
+```
+
+## Testar o Scaffolding
+
+Após o push, valide que o usuário final consegue baixar:
 
 ```powershell
 # Em uma pasta temporária fora do repositório
-cd ..
-npx degit sulivanti/EasyCodeFramework/easyCF teste-release
-ls teste-release
+npx degit sulivanti/easycf ceasy
 ```
 
-Verifique que a pasta contém:
+## Manutenção de Versões Passadas (Hotfix)
 
-- `.agents/skills/` com todas as skills
-- `docs/01_normativos/` com os normativos
-- `package.json` com `{{project_name}}`
-- `.cursorrules`
-- `RELEASE.md` com a versão correta
+Se precisar corrigir a `v1.0.0` enquanto está na `v2.0.0`:
 
-## Após o Push — O que o Usuário Vê
-
-```bash
-# Versão mais recente (branch main)
-npx degit sulivanti/EasyCodeFramework/easyCF meu-app
-
-# Versão específica (via Git tag)
-npx degit sulivanti/EasyCodeFramework/easyCF#v0.2.0 meu-app
-```
+1. `git checkout -b fix-v1.0 v1.0.0`
+2. Aplique a correção.
+3. `pnpm run release` (ele gerará a `v1.0.1`).
+4. `git checkout main`.

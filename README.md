@@ -62,13 +62,13 @@ No ECF, o seu foco é o **design e a regra de negócio**. O trabalho repetitivo 
 
   - **O Gate de Aprovação:** A IA só gera código se a US estiver com `Status: aprovada`. Com `draft` ou `em revisao`, ela recusa e para o processo.
 
-  - **A Árvore Gerada:** Os artefatos de especificação ficam em `docs/04_modules/mod-XXX/requirements/` organizados em:
-    - `/br/` — Regras de Negócio
-    - `/fr/` — Requisitos Funcionais
-    - `/data/` — Modelos de Dados e Eventos
-    - `/sec/` — Políticas de Segurança
-    - `/ux/` — Jornadas de Experiência
-    - `/nfr/` — Requisitos Não Funcionais
+  - **A Estrutura Unificada de Módulos:** Todo e qualquer módulo gerado (do Foundation Nível 0 até Features Nível 1) obedece à rigorosa e idêntica arquitetura de pastas em `docs/04_modules/mod-NNN-nome/`:
+    - `mod.md` e `permissions.yaml` — O manifesto do módulo e os escopos de ACL (acesso) que ele expõe.
+    - `README.md`, `CHANGELOG.md`, `CONVENTIONS.md` — Arquivos de utilidade com visão geral, o histórico auditável de mudanças (amendments) e convenções locais de IDs.
+    - `requirements/` — A fonte da verdade canônica. Subdividida em 9 pilares vitais: Regras (`br`), Funcionais (`fr`), Dados (`data`), Segurança (`sec`), UX (`ux`), Integrações (`int`), Não-Funcionais (`nfr`), Implementação (`imp`) e Testes (`tst`).
+    - `amendments/` — A base da rastreabilidade. Para não destruir a história de um requisito, todo ajuste ou correção é primeiro desenhado aqui como arquivos delta (`M` de melhoria, `C` de correção ou `R` de revisão).
+    - `adr/` — Decisões Arquiteturais Registradas que afetam o módulo.
+    - `diagrams/` e `snippets/` — Para apoios visuais Mermaid (Sequence/C4) e trechos de código recorrentes.
 
 - **Validar o Banco de Dados (`validate-drizzle-schemas`):** Criou ou editou um schema? A IA varre o código verificando conformidade com as regras de multi-tenant.
 
@@ -88,6 +88,14 @@ Foque apenas nos **campos de negócio**:
 > ❌ **Errado:** _"A entidade `user` tem `id`, `tenant_id`, `email`, `created_at`, `deleted_at`..."_
 
 Os campos `id`, `codigo`, `status`, `tenant_id`, `created_at`, `updated_at` e `deleted_at` são **gerados automaticamente** pelo framework. Incluí-los na US gera ruído.
+
+#### A Árvore de User Stories (Onde salvar)
+
+As US no framework não ficam jogadas. Após redigir a história usando o modelo em `user-stories/templates/TEMPLATE-USER-STORY.md`, salve-a de acordo com sua finalidade na pasta `docs/04_modules/user-stories/`:
+
+- `epics/`: US balizadora (ex: `US-MOD-000.md`). Serve como índice agregador de funcionalidades.
+- `features/`: A fundação (Baseline). O que está sendo feito do zero (ex: `US-MOD-000-F01`).
+- `amendments/`: Evoluções e intervenções pós-criação. Subdividida em `improvements/`, `corrections/` e `revisions/`.
 
 ### Na Geração do Módulo (`scaffold-module`)
 

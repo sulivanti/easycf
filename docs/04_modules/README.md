@@ -22,37 +22,42 @@ A pasta segue o princípio de **rastreabilidade**: qualquer mudança de especifi
 │
 ├── mod-000-foundation/        ← Módulo Nível 0 (núcleo/alicerce)
 │   ├── mod.md                 ← manifesto do módulo
-│   ├── permissions.yaml       ← escopos de permissão declarados
+│   ├── README.md              ← visão geral e links rápidos
+│   ├── CHANGELOG.md           ← histórico auditável de mudanças (amendments integrados)
+│   ├── CONVENTIONS.md         ← convenções específicas do módulo (nomenclatura, padrões)
+│   ├── permissions.yaml       ← escopos expostos
 │   ├── requirements/          ← especificações canônicas por tipo
 │   │   ├── br/                ← Regras de Negócio
 │   │   ├── fr/                ← Requisitos Funcionais
-│   │   ├── data/              ← Dados / Entidades / Contratos de Persistência
-│   │   ├── int/               ← Integrações e Contratos Externos
+│   │   ├── data/              ← Dados / Entidades
+│   │   ├── int/               ← Integrações e Contratos
 │   │   ├── sec/               ← Segurança e Compliance
-│   │   ├── ux/                ← UX / Jornadas / Mensagens
+│   │   ├── ux/                ← UX / Jornadas
 │   │   ├── nfr/               ← Requisitos Não-Funcionais
 │   │   ├── imp/               ← Decisões de Implementação e Anti-Patterns
-│   │   └── tst/               ← Especificação de Testes (casos, cobertura, fixtures)
-│   └── adr/                   ← Decisões Arquiteturais (ADR)
-│
-├── mod-001-backoffice-admin/  ← Módulo Backoffice/Admin
-│   ├── mod.md
-│   ├── README.md              ← README específico do módulo
-│   ├── CHANGELOG.md           ← Histórico auditável de mudanças
-│   ├── CONVENTIONS.md         ← Convenções de IDs e nomenclatura
-│   ├── permissions.yaml
-│   ├── requirements/          ← (mesma estrutura + tst/)
+│   │   └── tst/               ← Especificação de Testes
 │   ├── amendments/            ← Deltas (melhorias, revisões, correções)
 │   │   ├── br/
 │   │   ├── fr/
-│   │   └── sec/
-│   ├── adr/
-│   ├── diagrams/
-│   └── snippets/
+│   │   ├── data/
+│   │   ├── int/
+│   │   ├── sec/
+│   │   ├── ux/
+│   │   ├── nfr/
+│   │   ├── imp/
+│   │   └── tst/
+│   ├── adr/                   ← Decisões arquiteturais do módulo local
+│   ├── diagrams/              ← Diagramas Mermaid, C4, de Sequência
+│   └── snippets/              ← Trechos de código úteis, configs parciais
+│
+├── mod-001-backoffice-admin/  ← Módulo Nível 1 (exemplo)
+│   ├── mod.md                 ← manifesto do módulo
+│   ├── README.md              ← mesma estrutura canônica completa do mod-000...
+│   └── ...                    
 │
 ├── TESTING-STRATEGY.md        ← Estratégia global de testes (ferramentas, cobertura, pirâmide)
 │
-└── mod-NNN-nome/              ← padrão para módulos futuros
+└── mod-NNN-nome/              ← padrão para módulos futuros (estrutura completa)
 ```
 
 ### Convenção de nomenclatura de pastas

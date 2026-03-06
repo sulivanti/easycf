@@ -23,7 +23,7 @@ Esta skill instrui o agente a gerar corretamente o anexo e atar os links nos arq
 
 Antes de agir, o agente deve garantir que obteve com o usuário:
 
-- **Caminho da User Story**: O arquivo na pasta `user-stories` contendo o incremento.
+- **Caminho da User Story**: O arquivo na pasta `user-stories/features` contendo o incremento.
 - **Pilar (Tipo)** onde a mudança afeta: `br`, `fr`, `data`, `int`, `sec`, `ux`, `nfr`.
 - **Natureza da Alteração**:
   - `M` (Melhoria)

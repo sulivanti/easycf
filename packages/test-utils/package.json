@@ -15,7 +15,7 @@
     "scripts": {
         "build": "tsc",
         "dev": "tsc --watch",
-        "lint": "eslint src/"
+        "lint": "eslint \"src/**/*.ts\""
     },
     "peerDependencies": {
         "vitest": "^1.4.0",

@@ -96,7 +96,7 @@ main();
                 fs.writeFileSync(path.join(srcPath, 'index.ts'), indexTsContent);
 
                 // 5. Copy .cursorrules
-                const cursorRulesPath = path.join(frameworkRoot, '.cursorrules');
+                const cursorRulesPath = path.join(path.resolve(__dirname, '../../../../'), '.cursorrules');
                 if (fs.existsSync(cursorRulesPath)) {
                     fs.copyFileSync(cursorRulesPath, path.join(targetPath, '.cursorrules'));
                 }

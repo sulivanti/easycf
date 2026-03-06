@@ -26,7 +26,7 @@ O agente deve invocar mentalmente esta skill se o usuário solicitar:
 
 Se o usuário não a fornecer no prompt de origem, você **deve questioná-lo antes de criar os arquivos**:
 
-- **Caminho da User Story**: O caminho para o arquivo Markdown localizado em `docs/04_modules/user-stories/US-MOD-XXX.md`.
+- **Caminho da User Story**: O caminho para o arquivo Markdown localizado em `docs/04_modules/user-stories/features/US-MOD-XXX.md` (ou `epics`, `amendments`).
 
 **REGRA DE BLOQUEIO (GATE DE APROVAÇÃO) — COMPARAÇÃO EXATA DE STRING:**
 
@@ -72,7 +72,10 @@ Você deve criar um diretório em `docs/04_modules/mod-{ID}-{nome}/` simulando a
 ```text
 docs/04_modules/mod-{ID}-{nome}/
 ├── mod.md                          ← Índice e overview descritivo do módulo
-├── CHANGELOG.md                    ← Tabela inicial (Versão | Data | Responsável | Descrição)
+├── README.md                       ← Visão geral rápida e links principais
+├── CHANGELOG.md                    ← Tabela temporal de mudanças do módulo
+├── CONVENTIONS.md                  ← Convenções específicas de nomenclatura e IDs do módulo
+├── permissions.yaml                ← Escopos de permissões expostos pelo módulo
 ├── requirements/
 │   ├── br/
 │   │   └── BR-{ID}.md              ← Regra de Negócio base
@@ -86,10 +89,26 @@ docs/04_modules/mod-{ID}-{nome}/
 │   │   └── SEC-{ID}.md             ← Segurança e compliance
 │   ├── ux/
 │   │   └── UX-{ID}.md              ← UX e jornadas
-│   └── nfr/
-│       └── NFR-{ID}.md             ← Requisitos não-funcionais
-└── adr/
-    └── ADR-{ID}.md                 ← Placeholder de Decisão (opcional/base)
+│   ├── nfr/
+│   │   └── NFR-{ID}.md             ← Requisitos não-funcionais
+│   ├── imp/
+│   │   └── IMP-{ID}.md             ← Decisões de Implementação (Opcional/base)
+│   └── tst/
+│       └── TST-{ID}.md             ← Especificação de Testes (Casos Mapeados)
+├── amendments/                     ← Pastas para as sub-emendas
+│   ├── br/
+│   ├── fr/
+│   ├── data/
+│   ├── int/
+│   ├── sec/
+│   ├── ux/
+│   ├── nfr/
+│   ├── imp/
+│   └── tst/
+├── adr/
+│   └── ADR-{ID}.md                 ← Placeholder de Decisão (opcional/base)
+├── diagrams/                       ← Diagramas C4, Sequence e Contextos visuais
+└── snippets/                       ← Trechos de código ou queries importantes do módulo
 ```
 
 ---
@@ -131,7 +150,7 @@ Para a escrita de CADA UM dos arquivos que estão dentro das sub-pastas `/requir
    - No **UX-{ID}.md**: Referencie o catálogo `DOC-UX-010` para mensagens de erro e ações de UI padronizadas.
 
 6. No campo `rastreia_para` presente no rodapé de cada arquivo (estipulado pelo DOC-DEV-001), amarre a todos os outros arquivos irmãos do mesmo nó e **inclua a referência à US de origem**.
-7. No campo `referencias_exemplos`, preencha com o link relativo para a User Story de aprovação (ex: `[US-MOD-101](../../user-stories/US-MOD-101.md)`).
+7. No campo `referencias_exemplos`, preencha com o link relativo para a User Story de aprovação (ex: `[US-MOD-101](../../user-stories/features/US-MOD-101.md)`).
 8. Conforme o `DOC-DEV-001` (fonte da verdade normativa), o estado inicial de todo arquivo gerado deve ser rigorosamente **DRAFT**. Os arquivos base **não devem ser editados diretamente** após a geração — qualquer evolução deve passar pela skill `create-amendment`.
 9. Salve o arquivo em disco.
 

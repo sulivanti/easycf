@@ -26,7 +26,7 @@ O agente deve invocar mentalmente esta skill se o usuário solicitar:
 
 Se o usuário não a fornecer no prompt de origem, você **deve questioná-lo antes de criar os arquivos**:
 
-- **Caminho da User Story**: O caminho para o arquivo Markdown localizado em `docs/04_modules/user-stories/US-MOD-XXX.md`.
+- **Caminho da User Story**: O caminho para o arquivo Markdown localizado em `docs/04_modules/user-stories/features/US-MOD-XXX.md`.
 
 **REGRA DE BLOQUEIO (GATE DE APROVAÇÃO):**
 Você deve ler o arquivo da User Story informada. Verifique o campo `Status:`.
@@ -92,7 +92,7 @@ Para a escrita de CADA UM dos arquivos que estão dentro das sub-pastas `/requir
    Isso não é delegado à leitura do `DOC-DEV-001` — é uma regra de execução desta skill. Nenhum arquivo gerado pelo scaffold pode nascer sem esse aviso. Essa tag é o contrato de rastreabilidade e proteção do arquivo desde o nascimento (conforme `DOC-DEV-001`).
 4. Aplique as informações extraídas logicamente da **User Story fornecida**.
 5. No campo `rastreia_para` presente no rodapé de cada arquivo (estipulado pelo DOC-DEV-001), amarre a todos os outros arquivos irmãos do mesmo nó e **inclua a referência à US de origem**.
-6. No campo `referencias_exemplos`, preencha com o link relativo para a User Story de aprovação (ex: `[US-MOD-101](../../user-stories/US-MOD-101.md)`).
+6. No campo `referencias_exemplos`, preencha com o link relativo para a User Story de aprovação (ex: `[US-MOD-101](../../user-stories/features/US-MOD-101.md)`).
 7. Conforme o `DOC-DEV-001` (fonte da verdade normativa), o estado inicial de todo arquivo gerado deve ser rigorosamente **DRAFT**. Os arquivos base **não devem ser editados diretamente** após a geração — qualquer evolução deve passar pela skill `create-amendment`.
 8. Salve o arquivo em disco.
 

@@ -39,7 +39,7 @@ Se o usuário confirmar, siga para o Passo 2.
 
 ## 4. PASSO 2: A Reversão da User Story
 
-1. Encontre a User Story correspondente na pasta `docs/04_modules/user-stories/` (ex: `US-MOD-{ID}-*.md`).
+1. Encontre a User Story correspondente (ex: `docs/04_modules/user-stories/features/US-MOD-{ID}-*.md`).
 2. Altere o metadado **Status:** de `aprovada` para `em revisao` (ou `reprovada`, caso o usuário tenha exigido).
 3. Adicione uma nota simples no final da US: `> Rollback executado em {Data}: {Motivo do Rollback}`.
 

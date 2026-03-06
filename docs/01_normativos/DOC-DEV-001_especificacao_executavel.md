@@ -1248,8 +1248,8 @@ Cole ou preencha a estrutura abaixo ao acionar as automações (Skills) de cria�
 A arquitetura agora exige um **Gate de Aprovação** antes da geração de código ou documentos.
 Você **não deve** mais passar prompts longos diretamente para as skills `scaffold-module` ou `create-amendment`. O fluxo correto é:
 
-1. Duplique o `docs/04_modules/user-stories/TEMPLATE-USER-STORY.md`.
-2. Renomeie para a sua necessidade (ex: `US-MOD-105-novo-relatorio.md`).
+1. Duplique o `docs/04_modules/user-stories/templates/TEMPLATE-USER-STORY.md`.
+2. Renomeie para a sua necessidade (ex: `US-MOD-105-novo-relatorio.md`) salvando em `docs/04_modules/user-stories/features/`.
 3. Preencha o negócio e mova o status durante as conversas (em desenvolvimento -> em revisao -> para aprovação).
 4. Apenas quando o arquivo estiver escrito como **`Status: aprovada`**, chame o Agente:
 

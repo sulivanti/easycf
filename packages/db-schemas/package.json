@@ -15,7 +15,7 @@
     "scripts": {
         "build": "tsc",
         "dev": "tsc --watch",
-        "lint": "eslint src/"
+        "lint": "eslint \"src/**/*.ts\""
     },
     "dependencies": {
         "drizzle-orm": "^0.30.0",

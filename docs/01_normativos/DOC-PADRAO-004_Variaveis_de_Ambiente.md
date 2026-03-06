@@ -1,80 +1,218 @@
-# Padrões de Variáveis de Ambiente e Configuração
+# DOC-PADRAO-004 — Padrões de Variáveis de Ambiente e Configuração
+
+**Versão:** 2.0 | **Última revisão:** 2026-03-06
+
+---
 
 ## 1. Visão Geral
 
-Este documento estabelece o padrão arquitetural para gerenciamento e tipagem de variáveis de ambiente no ecossistema Node.js do projeto **EasyA1**, aplicável a todos os módulos e ambientes (desenvolvimento, homologação, testes e produção).
+Este documento estabelece o padrão arquitetural para gerenciamento e tipagem de variáveis de ambiente no ecossistema Node.js do **EasyCodeFramework**, aplicável a todos os projetos gerados pelo framework e a todos os ambientes (desenvolvimento, testes, homologação e produção).
+
+O arquivo `.env.example` na raiz do projeto é a **fonte de verdade imutável** do catálogo de variáveis. Todo agente ou desenvolvedor deve consultá-lo como referência primária.
+
+---
 
 ## 2. Separação de Preocupações (SoC)
 
-As seguintes categorias de dados devem **obrigatória e exclusivamente** residir em variáveis de ambiente (arquivo `.env` em modo de desenvolvimento local, secret managers ou injetadas no container em produção):
+As seguintes categorias de dados devem **obrigatória e exclusivamente** residir em variáveis de ambiente (`.env` local, secret managers ou injeção de container em produção):
 
-- URLs base de integração (ex.: APIs externas, URL da própria API, domínio do front-end)
-- Credenciais sensíveis (senhas de banco de dados, chaves de API, segredos de JWT)
-- Strings de conexão de serviços como PostgreSQL, Redis, etc.
-- Flags de ambiente puramente ligadas à infraestrutura ou depuração.
-- **Configurações de Comunicação**: Chaves de API de serviços de e-mail (ex: `RESEND_API_KEY`).
-- **Branding Dinâmico**: Variáveis que ditam a identidade visual nos templates de e-mail e UI (ex: `BRAND_NAME`, `BRAND_PRIMARY_COLOR`).
-- **Integração SSO (Google/Microsoft)**: Configurações obrigatórias para que provedores de autenticação externa funcionem (ex: `SSO_GOOGLE_ENABLED`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALLBACK_URI`). Sempre adicione o esqueleto de novas variáveis de integração no `.env.example`.
+| Categoria | Exemplos |
+|---|---|
+| **Identidade e Ambiente** | `NODE_ENV`, `PROJECT_NAME` |
+| **Endpoints e URLs** | `API_BASE_URL`, `FRONTEND_URL` |
+| **Credenciais sensíveis** | `POSTGRES_PASSWORD`, `JWT_SECRET`, `RESEND_API_KEY` |
+| **Strings de conexão** | `DATABASE_URL`, `REDIS_URL` |
+| **Configurações de rede** | `API_PORT`, `CORS_ORIGIN` |
+| **Observabilidade** | `LOG_LEVEL` |
+| **Branding dinâmico** | `BRAND_NAME`, `BRAND_PRIMARY_COLOR` |
+| **Integrações SSO** | `SSO_GOOGLE_ENABLED`, `GOOGLE_CLIENT_ID`, etc. |
+| **Controle de acesso** | `PUBLIC_REGISTRATION_ENABLED` |
 
-*(Feature flags que ditam comportamentos de negócio granulares **não** devem estar em variáveis de ambiente globais, a menos que versem sobre disponibilidade de serviços de terceiros, ex: `SSO_GOOGLE_ENABLED`).*
+> **Regra:** Feature flags que ditam comportamentos de negócio granulares **não** devem estar em variáveis de ambiente globais, salvo quando versam sobre disponibilidade de serviços externos (ex: `SSO_GOOGLE_ENABLED`).
 
-## 3. Validação Rigorosa no Boot (Fail-Fast)
+---
 
-É imperativo que qualquer variável requerida pelo serviço seja validada durante a subida (boot) da aplicação.
+## 3. Catálogo de Variáveis
 
-- O projeto exige a verificação via schema Zod de todas as variáveis vitais no ponto de entrada (ex: `server.ts` ou num arquivo `env.ts` isolado).
-- Caso o processo detecte ausência ou má-formatação em `process.env.NOME`, ele deve lançar uma exceção e encerrar a subida (`process.exit(1)`) imediatamente, ao invés de prosseguir de forma instável até apresentar erro em runtime retardado.
+O catálogo abaixo mapeia todas as variáveis do `.env.example`. A coluna **Obrigatória** indica se a ausência da variável impede o boot da aplicação.
 
-## 4. Problem Details e Conformidade RFC 9457
+### 3.1. Projeto e Ambiente
 
-A arquitetura do Fastify adota a padronização das respostas de erro conforme a [RFC 9457 (Problem Details for HTTP APIs)](https://www.rfc-editor.org/rfc/rfc9457.html).
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `NODE_ENV` | ✅ | `development` | Modo de execução: `development`, `test`, `production` |
+| `PROJECT_NAME` | ✅ | — | Nome do projeto; usado para nomear containers Docker |
+| `COMPOSE_PROJECT_NAME` | ✅ | — | Prefixo dos containers no Docker Compose (idêntico ao `PROJECT_NAME`) |
 
-- O campo `type` retornado nesses JSONs de erro nunca deve ter um link "hardcoded" de produção (ex.: *não* usar `https://easya1.com/problems/bad-request` fixo no código fonte).
-- **Em vez disso**, a base da URL deve vir da variável de ambiente `API_BASE_URL`. Assim:
-  - Em desenvolvimento: `http://localhost:3000/problems/bad-request`
-  - Em staging: `https://staging-api.easya1.com/problems/bad-request`
-  - Em produção: `https://api.easya1.com/problems/bad-request`
-- Links de documentação ou terminos de fallback que remetem ao sistema frontend devem ser referenciados à variável `FRONTEND_URL`.
+### 3.2. Aplicação (API e Frontend)
 
-## 5. Arquivos de Ambiente Locais
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `API_PORT` | ✅ | `3000` | Porta de binding da API |
+| `API_BASE_URL` | ✅ | `http://localhost:3000` | URL pública da API; usada em respostas RFC 9457 e OAS |
+| `FRONTEND_URL` | ✅ | `http://localhost:5173` | URL pública do frontend; usada em redirects, cookies e e-mails |
+| `CORS_ORIGIN` | ✅ | `http://localhost:5173` | Origens CORS permitidas (múltiplas separadas por vírgula) |
+| `LOG_LEVEL` | — | `info` | Granularidade do log: `trace` \| `debug` \| `info` \| `warn` \| `error` \| `fatal` |
 
-Seguir a padronização de nomenclatura para variáveis locais (nunca expor no GitHub):
+### 3.3. Banco de Dados (PostgreSQL)
 
-- `.env` e `.env.local` (Desenvolvimento principal, não comitado)
-- `.env.test` (Mock e rotinas de testes e2e)
-- `.env.example` (Arquivo **obrigatório** no repositório. O template deve conter as chaves sem segredos reais expostos. *Regra crítica:* sempre que uma nova variável for criada na aplicação — como chaves de testes de SSO ou novos provedores — o `.env.example` deve ser atualizado imediatamente em sincronia).
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `POSTGRES_USER` | ✅ | `admin` | Usuário do PostgreSQL |
+| `POSTGRES_PASSWORD` | ✅ | — | Senha do PostgreSQL |
+| `POSTGRES_DB` | ✅ | — | Nome do banco de dados |
+| `DATABASE_URL` | ✅ | — | String de conexão Drizzle ORM (`postgresql://user:pass@host:port/db`) |
 
-## 6. Referências no Código
+### 3.4. Cache e Fila (Redis)
 
-Módulos não devem inferir se uma URL é HTTPS ou HTTP diretamente por inferência indireta; o link montado com template variables `${process.env.API_BASE_URL}` garante o esquema protocolar correto definido pela área de DevOps.
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `REDIS_URL` | ✅ | `redis://localhost:6379` | URL de conexão com o Redis |
 
-## 7. Alinhamento com Contratos (OpenAPI)
+### 3.5. Segurança (JWT)
 
-As especificações de contrato (ex: `v1.yaml`) devem refletir esse comportamento dinâmico.
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `JWT_SECRET` | ✅ | — | Chave secreta JWT. Mínimo 32 caracteres. Gere com: `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"` |
+| `JWT_EXPIRES_IN` | — | `15m` | Duração do token de acesso (ex: `15m`, `1h`) |
+| `JWT_REFRESH_EXPIRES_IN` | — | `7d` | Duração do refresh token |
 
-- Nos exemplos de respostas de erro, deve-se usar o placeholder `{{API_BASE_URL}}` para indicar que a URI do problema é montada dinamicamente pelo servidor.
-- Isso evita a percepção de URLs "irreais" ou hardcoded na documentação que não correspondem ao ambiente em que o desenvolvedor ou o cliente está operando.
+### 3.6. E-mail (Resend)
 
-## 8. Estratégia de `.env` no Monorepo (Regra Crítica)
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `RESEND_API_KEY` | ✅* | — | Chave da API do Resend. Obrigatória se o módulo de e-mail estiver ativo. Obtenha em [resend.com](https://resend.com/api-keys) |
+| `MAIL_FROM` | — | — | Endereço remetente padrão (ex: `noreply@seudominio.com`) |
 
-### 8.1. Fonte Única de Verdade
+### 3.7. Branding
 
-No monorepo **EasyA2**, existe **um único `.env` na raiz** do projeto. Ele é a fonte de verdade para todos os apps (`api`, `web`, workers):
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `BRAND_NAME` | — | — | Nome da marca exibido em templates de e-mail e UI |
+| `BRAND_PRIMARY_COLOR` | — | `#1A56DB` | Cor primária em hex para templates |
+
+### 3.8. SSO — Google (INT-000-01)
+
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `SSO_GOOGLE_ENABLED` | ✅ | `false` | Habilita autenticação via Google |
+| `GOOGLE_CLIENT_ID` | ✅* | — | Client ID do Google OAuth 2.0 |
+| `GOOGLE_CLIENT_SECRET` | ✅* | — | Client Secret do Google OAuth 2.0 |
+| `GOOGLE_CALLBACK_URI` | ✅* | — | URI de callback registrada no Google Console |
+
+> ✅* = Obrigatória apenas quando `SSO_GOOGLE_ENABLED=true`.
+
+### 3.9. SSO — Microsoft / Azure AD (INT-000-02)
+
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `SSO_MICROSOFT_ENABLED` | ✅ | `false` | Habilita autenticação via Microsoft |
+| `MICROSOFT_CLIENT_ID` | ✅* | — | Client ID do App Registration no Azure |
+| `MICROSOFT_CLIENT_SECRET` | ✅* | — | Client Secret do Azure AD |
+| `MICROSOFT_TENANT_ID` | ✅* | — | Tenant ID do Azure AD |
+| `MICROSOFT_CALLBACK_URI` | ✅* | — | URI de callback registrada no Azure Portal |
+
+> ✅* = Obrigatória apenas quando `SSO_MICROSOFT_ENABLED=true`.
+
+### 3.10. Controle de Acesso
+
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `PUBLIC_REGISTRATION_ENABLED` | — | `true` | Permite que novos usuários se cadastrem sem convite |
+
+---
+
+## 4. Validação Rigorosa no Boot (Fail-Fast)
+
+É imperativo que qualquer variável requerida seja validada durante a subida (boot) da aplicação.
+
+- O projeto exige validação via **schema Zod** de todas as variáveis vitais no ponto de entrada (ex: `server.ts` ou num arquivo dedicado `env.ts`).
+- Caso o processo detecte ausência ou má-formatação, deve lançar exceção e encerrar com `process.exit(1)` **imediatamente** — nunca prosseguir de forma instável.
+
+```typescript
+// Exemplo: packages/core-api/src/env.ts
+import { z } from 'zod';
+
+const envSchema = z.object({
+  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  DATABASE_URL: z.string().url(),
+  JWT_SECRET: z.string().min(32),
+  REDIS_URL: z.string().url().default('redis://localhost:6379'),
+  // ...
+});
+
+export const env = envSchema.parse(process.env);
+```
+
+---
+
+## 5. Problem Details e Conformidade RFC 9457
+
+A arquitetura Fastify adota a padronização de erros conforme a [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html).
+
+- O campo `type` dos erros **nunca** deve ter URL hardcoded de produção.
+- A base da URL deve vir de `API_BASE_URL`:
+  - Dev: `http://localhost:3000/problems/bad-request`
+  - Produção: `https://api.seudominio.com/problems/bad-request`
+- Links de referência ao frontend devem usar `FRONTEND_URL`.
+
+---
+
+## 6. Arquivos de Ambiente Locais
+
+| Arquivo | Commitado? | Propósito |
+|---|---|---|
+| `.env` | ❌ | Ambiente de desenvolvimento local com segredos reais |
+| `.env.example` | ✅ | Template obrigatório no repositório — sem segredos |
+| `.env.test` | ❌ | Configurações para testes automatizados (e2e, integração) |
+| `.env.local` | ❌ | Sobrescrita local de qualquer valor |
+
+> **Regra crítica:** Sempre que uma nova variável for adicionada ao `.env`, o `.env.example` **deve ser atualizado imediatamente** no mesmo commit/PR.
+
+---
+
+## 7. Referências no Código
+
+Módulos não devem inferir protocolo (`http`/`https`) diretamente. Sempre use template com a variável:
+
+```typescript
+// ✅ Correto
+const problemUrl = `${env.API_BASE_URL}/problems/bad-request`;
+
+// ❌ Errado — hardcoded
+const problemUrl = 'https://api.easya1.com/problems/bad-request';
+```
+
+---
+
+## 8. Alinhamento com Contratos (OpenAPI)
+
+Nas especificações de contrato (`v1.yaml`), use o placeholder `{{API_BASE_URL}}` nos exemplos de resposta de erro para indicar que a URI é montada dinamicamente.
+
+---
+
+## 9. Estratégia de `.env` no Monorepo
+
+### 9.1. Fonte Única de Verdade
+
+No monorepo existe **um único `.env` na raiz**. Ele é a fonte de verdade para todos os apps:
 
 ```text
-EasyA2/
+EasyCodeFramework/
 ├── .env              ← ✅ ÚNICO arquivo de variáveis (não commitado)
 ├── .env.example      ← ✅ Template obrigatório no repositório (sem segredos)
 ├── apps/
 │   ├── api/          ← ❌ NÃO deve ter .env próprio
 │   └── web/          ← ❌ NÃO deve ter .env próprio
+├── packages/
+│   └── core-api/     ← ❌ NÃO deve ter .env próprio
 ```
 
-> **Regra:** Nunca crie um `.env` dentro de `apps/api/` ou `apps/web/`. Todo `.env` local dentro de um app indica duplicação e risco de divergência de configuração.
+> **Regra:** Nunca crie `.env` dentro de `apps/` ou `packages/`. Todo `.env` local dentro de um pacote indica duplicação e risco de divergência.
 
-### 8.2. Como as Variáveis chegam aos Apps (Node.js v20+)
+### 9.2. Como as Variáveis chegam aos Apps (Node.js v20+)
 
-Os scripts `dev`, `start`, `db:migrate` etc. no `apps/api/package.json` usam a flag `--env-file` nativa do Node.js v20+:
+Os scripts `dev`, `start`, `db:migrate` etc. usam a flag `--env-file` nativa do Node.js v20+:
 
 ```json
 {
@@ -86,13 +224,13 @@ Os scripts `dev`, `start`, `db:migrate` etc. no `apps/api/package.json` usam a f
 }
 ```
 
-O flag `--env-file` injeta as variáveis **antes** de qualquer módulo ESM ser carregado. Isso é fundamental porque em ESM os `import` estáticos são *hoisted* e executados antes do código do módulo — portanto, soluções baseadas em `dotenv.config()` no meio do `server.ts` **não funcionam** quando há módulos como `db/index.ts` que leem `process.env` durante sua inicialização.
+A flag `--env-file` injeta as variáveis **antes** de qualquer módulo ESM ser carregado — fundamental em ESM porque `import` estáticos são *hoisted* e executados antes do código do módulo.
 
-> **Atenção:** Não substitua `--env-file` por `dotenv.config()` inline no `server.ts`. A ordem de execução do ESM não garante que o dotenv rode antes dos imports.
+> **Atenção:** Não substitua `--env-file` por `dotenv.config()` inline. A ordem de execução ESM não garante que o dotenv rode antes dos imports.
 
-### 8.3. Scripts do Drizzle-kit
+### 9.3. Scripts do Drizzle-kit
 
-O `drizzle-kit` não é um script tsx, por isso usa `node --env-file` explicitamente com o caminho do binário:
+O `drizzle-kit` não é um script tsx, portanto usa `node --env-file` explicitamente:
 
 ```json
 {
@@ -102,27 +240,22 @@ O `drizzle-kit` não é um script tsx, por isso usa `node --env-file` explicitam
 }
 ```
 
-### 8.4. Obrigatoriedade do `.env.example`
+### 9.4. Configurando um Novo Ambiente
 
-O arquivo `.env.example` na raiz **deve sempre ser atualizado** quando uma nova variável for adicionada ao `.env`. Ele serve como a documentação viva das variáveis necessárias para novos integrantes do projeto configurarem o ambiente local.
-
-O `.env.example` deve conter todas as chaves com valores fictícios (sem segredos reais):
-
-```env
-DATABASE_URL=postgresql://usuario:senha@localhost:5432/nome_do_banco
-JWT_SECRET=coloque-aqui-sua-chave-secreta-com-minimo-32-caracteres
-RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
-...
+```powershell
+# Na raiz do projeto
+cp .env.example .env
+# Editar .env com as credenciais reais — veja as marcações <PREENCHER>
 ```
 
-### 8.5. Registro de Correção (2026-03-03)
+---
 
-**Problema identificado:** `apps/api/.env` não existia (estava no `.gitignore`). A API falhava no boot com `[FATAL] DATABASE_URL não definida` porque o `tsx watch src/server.ts` procurava variáveis no ambiente do processo e não encontrava nada.
+## 10. Checklist para Agentes e Desenvolvedores
 
-**Causa raiz:** Falta de documentação clara sobre onde deve existir o `.env` e como os scripts devem carregá-lo.
+Ao adicionar uma nova variável de ambiente ao projeto:
 
-**Solução aplicada:**
-
-1. Confirmado que o `.env` **único** fica na raiz `EasyA2/`
-2. Scripts de `apps/api/package.json` atualizados para usar `--env-file=../../.env`
-3. Esta seção adicionada para prevenir recorrência
+- [ ] Adicionar a variável ao `.env` local com valor real
+- [ ] Adicionar a chave (sem segredo) ao `.env.example` com comentário descritivo no bloco correto
+- [ ] Adicionar a variável ao schema Zod de validação (`env.ts`)
+- [ ] Atualizar a tabela do catálogo neste documento (Seção 3)
+- [ ] Se for variável de integração SSO/terceiros: adicionar skeletons das variáveis relacionadas no `.env.example`

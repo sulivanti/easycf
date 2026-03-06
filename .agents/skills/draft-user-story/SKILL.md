@@ -101,10 +101,10 @@ Atuar como o "Entrevistador Normativo" do projeto. Seu papel é fazer perguntas 
 
 Somente quando a entrevista acabar e o checklist mental estiver perfeito, **NÃO devolva a saída apenas no console em texto**.
 Em vez disso, use sua ferramenta `write_to_file` para criar imediatamente o arquivo formatado no disco sob o padrão:
-`docs/04_modules/user-stories/US-MOD-{ID}-{NomeCurto}.md`
+`docs/04_modules/user-stories/features/US-MOD-{ID}-{NomeCurto}.md`
 
 Antes de formatar a saída final para o arquivo, você **DEVE LER OBRIGATORIAMENTE** o arquivo de template canônico localizado em:
-`docs/04_modules/user-stories/TEMPLATE-USER-STORY.md`
+`docs/04_modules/user-stories/templates/TEMPLATE-USER-STORY.md`
 
 Utilize rigorosamente a estrutura lida deste template base para construir e preencher o arquivo da nova User Story, evitando criar ou duplicar seções que não existam nele.
 

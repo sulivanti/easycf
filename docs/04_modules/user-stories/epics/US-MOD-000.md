@@ -100,4 +100,37 @@ Cenário: Padrões de execução, dependências e configuração são respeitado
 
 ---
 
+## 5. Sub-Histórias do MOD-000 (Épico)
+
+Esta US é o **épico balizador** do módulo Foundation. As funcionalidades concretas são detalhadas nas sub-histórias abaixo, localizadas na pasta `../features/`:
+
+```text
+US-MOD-000  (este arquivo) ← Épico / Governança / Índice
+  ├── US-MOD-000-F01  ← Autenticação Nativa (Login, Logout, Sessões, Kill-Switch, Refresh)
+  ├── US-MOD-000-F02  ← MFA / TOTP (Google Authenticator, Authy — RFC 6238)
+  ├── US-MOD-000-F03  ← SSO OAuth2 (Google + Microsoft / Azure AD)
+  ├── US-MOD-000-F04  ← Recuperação de Senha (Forgot / Reset — token UUID, TTL 1h)
+  ├── US-MOD-000-F05  ← Gestão de Usuários (CRUD + Soft Delete + Auto-Registro)
+  ├── US-MOD-000-F06  ← Roles / RBAC por Escopos (módulo:recurso:ação + cache Redis)
+  ├── US-MOD-000-F07  ← Filiais Multi-Tenant (CRUD + Soft Delete + Bloqueio)
+  ├── US-MOD-000-F08  ← Perfil do Usuário Autenticado (/auth/me + edição)
+  └── US-MOD-000-F09  ← Vinculação Usuário-Filial com Role (tenant_users + RBAC completo)
+```
+
+| Sub-História | Tema | Status |
+| --- | --- | --- |
+| [US-MOD-000-F01](../features/US-MOD-000-F01.md) | Autenticação nativa + gerenciamento de sessões | `para aprovação` |
+| [US-MOD-000-F02](../features/US-MOD-000-F02.md) | MFA / TOTP (RFC 6238) | `para aprovação` |
+| [US-MOD-000-F03](../features/US-MOD-000-F03.md) | SSO OAuth2 — Google + Microsoft | `para aprovação` |
+| [US-MOD-000-F04](../features/US-MOD-000-F04.md) | Recuperação de senha por e-mail | `para aprovação` |
+| [US-MOD-000-F05](../features/US-MOD-000-F05.md) | Gestão de usuários (CRUD + soft delete) | `para aprovação` |
+| [US-MOD-000-F06](../features/US-MOD-000-F06.md) | Roles / RBAC por escopos + cache Redis | `para aprovação` |
+| [US-MOD-000-F07](../features/US-MOD-000-F07.md) | Filiais multi-tenant (CRUD + soft delete) | `para aprovação` |
+| [US-MOD-000-F08](../features/US-MOD-000-F08.md) | Perfil do usuário autenticado | `para aprovação` |
+| [US-MOD-000-F09](../features/US-MOD-000-F09.md) | Vinculação usuário-filial com role | `para aprovação` |
+
+> 📌 **Regra de aprovação em cascata:** Esta US-MOD-000 deve ser aprovada **antes** de qualquer sub-história. Cada sub-história F01–F09 deve ser aprovada individualmente antes de ter seu código scaffoldado ou alterado por automação.
+
+---
+
 > ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.

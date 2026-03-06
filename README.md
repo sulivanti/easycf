@@ -16,18 +16,31 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 
 ---
 
-## Passo 1: Inicialização AI-First> **Prompt de Ignição** 🚀
+## Passo 1: Inicialização AI-First
+
+**1. Clone o Cérebro do Framework (Instalação Limpa):**
+Usamos a ferramenta oficial da comunidade (`degit`) para baixar uma cópia pura e fresca das nossas *Agent Skills* e *Documentações Normativas* a partir do nosso repositório de template dedicado, desaguando em uma pasta nova (ex: `ceasy`):
+
+```bash
+npx degit sulivanti/easycf-template ceasy
+```
+
+Este comando já criará a pasta `ceasy` perfeitamente limpa, contendo apenas a inteligência bruta do projeto (`.agents/`, `docs/`, `.cursorrules`, etc.) pronta para a sua IA consumir.
+
+**2. Dê a Ignição na IA:**
+Abra a sua pasta recém-extraída (`ceasy`) no seu editor de código com suporte a agentes (Cursor, Windsurf, etc.). Abra o Chat/Composer do assistente e **copie e cole exatamente o prompt abaixo**:
+
+> **Prompt de Ignição** 🚀
 >
 > ```text
-> Você atua como o Arquiteto do EasyCodeFramework. Acabei de baixar a estrutura bruta do repositório mãe (Monorepo) para esta pasta, mas preciso limpá-la para iniciar minha nova aplicação isolada.
+> Você atua como o Arquiteto do EasyCodeFramework. Acabei de baixar a estrutura base vital (.agents e docs) para esta pasta.
 > 
-> Por favor, molde o ambiente Node.js com Fastify efetuando os seguintes passos rigorosamente:
+> Por favor, inicie minha nova aplicação Node.js com Fastify efetuando os seguintes passos rigorosamente:
 > 
-> 1. **Faxina Inicial:** Exclua as pastas `apps/`, `packages/`, `scripts/`, `tooling/` (se houver), e os arquivos `turbo.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, `package.json` atual e `skills-lock.json`. Quero preservar apenas `.agents/`, `docs/`, `.cursorrules`, `.env.example` e `.gitignore`.
-> 2. **Novo App:** Crie um `package.json` privado do zero usando `@easycf/core-api` e `fastify` como dependências. O nome do projeto é o nome do diretório atual. Adicione como devDependencies o `tsx` e o `@types/node`.
-> 3. **Configuração:** Defina os scripts: `"dev": "tsx watch src/index.ts"` e `"start": "node dist/index.js"`.
-> 4. **Código Inicial:** Crie a estrutura com a pasta `src/` e um arquivo `src/index.ts` contendo um servidor Fastify básico pronto para uso, que instancia a aplicação importando `createApp` do pacote `@easycf/core-api`.
-> 5. **Finalização:** Rode silenciosamente a instalação das dependências (ex: `pnpm install` ou `npm install`).
+> 1. **Novo App:** Crie um `package.json` privado do zero usando `@easycf/core-api` e `fastify` como dependências. O nome do projeto é o nome do diretório atual. Adicione como devDependencies o `tsx` e o `@types/node`.
+> 2. **Configuração:** Defina os scripts: `"dev": "tsx watch src/index.ts"` e `"start": "node dist/index.js"`.
+> 3. **Código Inicial:** Crie a estrutura com a pasta `src/` e um arquivo `src/index.ts` contendo um servidor Fastify básico pronto para uso, que instancia a aplicação importando `createApp` do pacote `@easycf/core-api`.
+> 4. **Finalização:** Rode silenciosamente a instalação das dependências (ex: `pnpm install`).
 > 
 > Avise quando a ignição for concluída para que eu possa testar o ambiente.
 > ```

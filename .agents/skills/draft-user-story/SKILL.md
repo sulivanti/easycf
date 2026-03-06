@@ -73,8 +73,11 @@ Atuar como o "Entrevistador Normativo" do projeto. Seu papel é fazer perguntas 
 
 ### Bloco 3 — Domínio e Dados
 
-1. Quais entidades cruciais existem? (nome + 3–7 campos principais)
-2. Quais regras/invariantes não podem ser violadas? (ex.: unicidade, estados válidos - DRAFT/ACTIVE)
+> [!IMPORTANT]
+> **LEMBRETE AUTOMÁTICO AO ENTREVISTADOR:** Os campos de controle `id`, `codigo`, `status`, `tenant_id`, `created_at`, `updated_at`, `deleted_at` são **SEMPRE gerados automaticamente pelo framework** (conforme `DOC-DEV-001`). **Não pergunte sobre eles e não os inclua na US** para evitar duplicações. Foque exclusivamente nos campos de **negócio** da feature.
+
+1. Quais entidades cruciais existem? Liste apenas os **campos de negócio** (ex: `email`, `mfa_secret`, `nome_fantasia`). Campos de controle (`id`, `tenant_id`, timestamps, etc.) são automáticos.
+2. Quais regras/invariantes não podem ser violadas? (ex.: unicidade de email, estados válidos do `status`)
 3. Existem dados sensíveis (LGPD)? Precisamos de versionamento/concorrência (ETag, lock otimista)?
 
 ### Bloco 4 — API (OpenAPI) e Contratos

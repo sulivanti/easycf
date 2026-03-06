@@ -1,8 +1,10 @@
 {
     "name": "@easycf/core-api",
-    "version": "0.0.0",
-    "private": true,
+    "version": "0.1.0",
     "description": "Fastify framework abstraction and shared enterprise tooling",
+    "publishConfig": {
+        "access": "public"
+    },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "exports": {

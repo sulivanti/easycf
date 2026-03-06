@@ -54,14 +54,6 @@ export function setupInitCommand(program: Command) {
                 }
 
                 // 3. Generate initial package.json mapping
-                const frameworkRoot = path.resolve(__dirname, '../../../../');
-                const coreApiPath = path.join(frameworkRoot, 'packages/core-api');
-                let relativeCoreApi = path.relative(targetPath, coreApiPath).replace(/\\/g, '/');
-                if (!relativeCoreApi.startsWith('.')) {
-                    relativeCoreApi = './' + relativeCoreApi;
-                }
-                relativeCoreApi = 'file:' + relativeCoreApi;
-
                 const pkgJson = {
                     name: targetDir,
                     version: '0.1.0',
@@ -71,7 +63,7 @@ export function setupInitCommand(program: Command) {
                         start: 'node dist/index.js'
                     },
                     dependencies: {
-                        '@easycf/core-api': relativeCoreApi,
+                        '@easycf/core-api': '^0.1.0',
                         'fastify': '^4.26.0'
                     },
                     devDependencies: {
@@ -103,12 +95,18 @@ main();
 `;
                 fs.writeFileSync(path.join(srcPath, 'index.ts'), indexTsContent);
 
+                // 5. Copy .cursorrules
+                const cursorRulesPath = path.join(frameworkRoot, '.cursorrules');
+                if (fs.existsSync(cursorRulesPath)) {
+                    fs.copyFileSync(cursorRulesPath, path.join(targetPath, '.cursorrules'));
+                }
+
                 spinner.succeed(chalk.green('Project scaffolded successfully!'));
 
                 console.log(`\nNext steps:`);
                 console.log(chalk.cyan(`  cd ${targetDir}`));
-                console.log(chalk.cyan(`  pnpm install`));
-                console.log(chalk.cyan(`  pnpm dev`));
+                console.log(chalk.cyan(`  npx pnpm install  # (ou apenas pnpm install)`));
+                console.log(chalk.cyan(`  npx pnpm dev      # (ou apenas pnpm dev)`));
 
             } catch (error: any) {
                 spinner.fail(chalk.red('Failed to scaffold project'));

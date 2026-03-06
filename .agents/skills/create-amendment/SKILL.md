@@ -62,7 +62,14 @@ Crie o arquivo na respectiva subpasta (`/amendments/...`). O esqueleto deste arq
 {O conteúdo descritivo, regras, tabelas ou fluxos que o usuário forneceu, formatado estritamente conforme a norma para este pilar).
 ```
 
----
+> [!CAUTION]
+> **VALIDAÇÃO OBRIGATÓRIA PARA EMENDAS DO PILAR `data`:** Se o pilar for `data`, antes de criar o arquivo, verifique se a alteração proposta na US **não viola** os campos constitucionais definidos no `DOC-DEV-001`:
+>
+> - **Proibido remover ou renomear:** `id` (uuid), `codigo`, `status`, `tenant_id`, `created_at`, `updated_at`, `deleted_at`
+> - **Proibido converter:** `id` de `uuid` para qualquer outro tipo (integer, varchar, etc.)
+> - **Proibido alterar:** FKs existentes de `ON DELETE RESTRICT` para `CASCADE`
+>
+> Se a US de emenda propor qualquer uma dessas violações, você DEVE **recusar a execução**, alertar o usuário sobre o conflito com o `DOC-DEV-001` e sugerir uma ADR como caminho governado para exceções fundamentadas.
 
 ## 5. PASSO 3: Amarração Ascendente (Link no Arquivo Base)
 

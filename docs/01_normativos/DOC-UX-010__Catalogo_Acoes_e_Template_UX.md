@@ -567,10 +567,66 @@ Quando `kind=command|workflow|integration` e houver **mudança de estado**, regi
 
 ---
 
+---
+
+## Screen Manifest — Artefato de Contrato Obrigatório por Tela UX
+
+Todo `UX-XXX` definido neste catálogo **DEVE** ter um arquivo de Screen Manifest correspondente em `docs/05_manifests/screens/`.
+
+### O que é o Screen Manifest
+
+O Screen Manifest é um arquivo YAML declarativo que formaliza o **contrato da tela**: quais ações ela suporta, quais endpoints da API cada ação chama, quais permissões RBAC são exigidas, quando botões devem ser habilitados/desabilitados e como o frontend deve reagir a cada código de erro HTTP.
+
+### Schema e Localização
+
+| Artefato         | Caminho                                                            |
+|------------------|--------------------------------------------------------------------|
+| Schema JSON v1   | `docs/05_manifests/schemas/screen-manifest.v1.schema.json`        |
+| Manifestos       | `docs/05_manifests/screens/ux-{entity}-{seq}.{type}.yaml`         |
+| Skill de suporte | `.agents/skills/validate-screen-manifest/SKILL.md`                |
+
+### Convenção de nomenclatura do arquivo
+
+```text
+ux-{entity_type}-{seq}.{context}.yaml
+```
+
+Exemplos:
+
+- `ux-user-001.users-list.yaml`
+- `ux-invoice-002.invoice-detail.yaml`
+
+### Campos obrigatórios (resumo)
+
+| Campo               | Regra                                                             |
+|---------------------|-------------------------------------------------------------------|
+| `manifest_version`  | Sempre `1`                                                        |
+| `screen_id`         | Padrão `UX-[ENTITY]-[SEQ]`, ex.: `UX-USER-001`                   |
+| `name`              | Nome descritivo da tela                                           |
+| `entity_type`       | `snake_case` singular                                             |
+| `routes`            | Rotas HTTP que a tela consome                                     |
+| `telemetry_defaults`| DEVE conter `X-Correlation-ID` em `propagate_headers` (DOC-ARC-003) |
+| `permissions`       | Objeto raiz com chaves `read`, `write`, etc.                      |
+| `actions`           | Array de ações do catálogo UX-010                                 |
+| `ui_rules`          | `action_visibility` + `action_enablement` globais                |
+| `error_mapping`     | `default_user_message` + mapeamento de status HTTP               |
+
+### Geração e Validação
+
+Use a skill **`validate-screen-manifest`** para:
+
+- Gerar um novo manifesto a partir de um `UX-XXX.md` ou descrição de tela
+- Validar um manifesto existente contra o schema v1 e as regras do projeto
+- Integração automática durante o `scaffold-module` (gerado após o `UX-{ID}.md`)
+
+> **Regra:** nenhum módulo pode ser considerado especificado para desenvolvimento se o `UX-{ID}.md` existir mas o manifesto correspondente em `docs/05_manifests/screens/` estiver ausente.
+
+---
+
 ## Metadados
 
 - id: UX-010
 - title: Catálogo de Ações Padrão (UI Events) + Reutilizáveis
-- version: 1.0.0
+- version: 1.1.0
 - status: READY
 - owner: design

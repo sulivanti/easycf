@@ -56,6 +56,32 @@ When working with Drizzle ORM schemas in this project, you must enforce the foll
 
 ---
 
+## 6. Validação de Campos Constitucionais (DOC-DEV-001)
+
+**Regra:** Todo schema de entidade de negócio gerado ou editado neste projeto DEVE conter os campos arquiteturais obrigatórios definidos em `DOC-DEV-001 § DATA-XXX — Campos Obrigatórios Padrão`. A ausência de qualquer um destes campos é uma **Violação Crítica**.
+
+**Enforcement — Checklist obrigatório:**
+
+| Campo | Tipo esperado (Drizzle) | Regra |
+|---|---|---|
+| `id` | `uuid('id').primaryKey().defaultRandom()` | **NUNCA** usar `varchar`, `integer` ou outro tipo para a PK principal |
+| `codigo` | `varchar('codigo', { length: 100 }).notNull().unique()` | Identificador amigável de negócio — NUNCA omitir |
+| `status` | `text('status', { enum: [...] }).notNull()` | Deve ser enum tipado com os estados válidos do negócio |
+| `tenant_id` | `uuid('tenant_id').notNull().references(...)` | Obrigatório em B2B — FK com `{ onDelete: 'restrict' }` |
+| `created_at` | `timestamp(..., { withTimezone: true }).defaultNow().notNull()` | Obrigatório, com fuso UTC |
+| `updated_at` | `timestamp(..., { withTimezone: true }).defaultNow().notNull()` | Obrigatório, com fuso UTC |
+| `deleted_at` | `timestamp(..., { withTimezone: true })` (nullable) | Soft-Delete — ausência é considerada bug arquitetural |
+
+**Violações específicas a reportar:**
+
+- `onDelete: 'cascade'` em qualquer FK → **Violação Crítica** (MUST usar `'restrict'`)
+- `id` como `varchar`, `serial` ou `integer` → **Violação Crítica** (MUST ser `uuid`)
+- Ausência de `deleted_at` em tabela de negócio → **Violação Alta** (hard delete proibido)
+- Ausência de `codigo` → **Violação Média** (identificador amigável obrigatório)
+- `timestamp` sem `{ withTimezone: true }` → **Violação Média** (UTC obrigatório)
+
+---
+
 ## Output Format
 
 If the validation passes, output a short success message.

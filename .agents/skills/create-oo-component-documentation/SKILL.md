@@ -214,6 +214,7 @@ export const itemsRepository = {
 | **RFC 9457 (Problem Details)** | Todos os erros retornam no formato `{ type, title, status, detail, correlationId }`. Nenhum erro retorna stack trace bruto ou shape não padronizado. | `DOC-ARC-002` |
 | **`Idempotency-Key`** | Escritas com efeito colateral (POST, PATCH com side-effects) suportam reenvio idempotente via header `Idempotency-Key`. | `DOC-DEV-001` |
 | **Multi-Tenant** | Toda query ao banco injeta e filtra por `tenant_id` na camada de repositório. Nenhuma query retorna dados cross-tenant. | `validate-drizzle-schemas §2` |
+| **Campos Constitucionais (Drizzle)** | Se o componente for um **repositório Drizzle**, verificar se o schema da entidade base possui os campos obrigatórios do `DOC-DEV-001`: `id` (uuid nativo), `codigo`, `status` (enum), `tenant_id`, `created_at` (timestamptz), `updated_at` (timestamptz), `deleted_at` (nullable). FKs DEVEM usar `{ onDelete: 'restrict' }` — **nunca** `cascade`. | `DOC-DEV-001 § DATA-XXX`, `validate-drizzle-schemas §6` |
 
 ## 7. Reference Information
 

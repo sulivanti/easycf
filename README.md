@@ -1,65 +1,228 @@
 # EasyCodeFramework 🚀
 
-O EasyCodeFramework (ECF) é a fundação para criação e gestão de APIs transacionais escaláveis com Node.js, empoderado por skills nativas de Inteligência Artificial usando Antigravity.
+O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs transacionais escaláveis com Node.js, empoderado por skills nativas de Inteligência Artificial usando Antigravity.
 
-## Pilares
+> **Princípio de produto:** Você **nunca precisa clonar ou baixar o repositório do ECF**. O framework é consumido inteiramente via `npx` e `npm`. Seu único repositório local é o **seu app**.
 
-1. **@easycf/core-api:** Runtime de API configurado (Fastify, pino, RFC 9457).
-2. **@easycf/cli e templates:** Orquestração declarativa e injeção do DOC-DEV-001 e arquiteturas base.
-3. **@easycf/agent-skills:** Conjunto de workflows de IA que geram código aderente às regras de arquitetura automaticamente.
+---
 
-## Pré-requisitos
+## Os 3 Pilares do ECF
 
-Certifique-se de ter o Node.js instalado (versão recomendada: >= 20.0.0).
+| Pilar | Descrição |
+|---|---|
+| **`@easycf/core-api`** | Runtime de alta performance configurado com Fastify, pino e padronização de erros rígida (RFC 9457). Publicado no npm e instalado como dependência do seu app. |
+| **`@easycf/cli`** | Ferramenta de linha de comando para scaffolding. Usada via `npx` — sem instalação global necessária. |
+| **Agent Skills (`.agents/skills`)** | O coração da filosofia **AI-First**. Copiadas automaticamente para o seu app pelo CLI. Geram código aderente às regras arquiteturais sem esforço manual. |
 
-Este projeto utiliza o `pnpm` como gerenciador de pacotes. Caso o comando `pnpm` não seja reconhecido no seu sistema (comum devido a restrições de permissão no Windows), você pode contornar ativando o binário via Corepack e usando o `npx`:
+---
+
+## Passo 1: Criando seu App
+
+Abra o terminal na pasta onde você quer criar seu projeto e rode:
 
 ```bash
-# Prepara e ativa a versão correta do pnpm para o projeto
-corepack prepare pnpm@9.0.0 --activate
+npx @easycf/cli init meu-super-app
 ```
 
-Após executar o comando acima, você pode rodar os comandos do pnpm através do `npx` de forma segura (sem exigir privilégios de administrador):
+Isso é tudo. O CLI vai:
+
+- ✅ Criar a pasta `meu-super-app/` com a estrutura base
+- ✅ Gerar o `package.json` já com `@easycf/core-api` como dependência
+- ✅ Criar o `src/index.ts` inicial com o servidor Fastify configurado
+- ✅ Copiar todos os normativos (`docs/01_normativos/`) para o seu projeto
+- ✅ Copiar todas as Agent Skills (`.agents/skills/`) para o seu projeto
+- ✅ Copiar o `.cursorrules` com as regras do framework para o editor
+
+Agora entre no projeto, instale as dependências e rode:
 
 ```bash
-npx pnpm -v
+cd meu-super-app
+pnpm install
+pnpm dev
 ```
 
-## Inicializando novo projeto
+Seu servidor estará disponível em `http://localhost:3000`. 🎉
 
-\`\`\`bash
+> **Nota sobre PNPM no Windows:** Se `pnpm` não for reconhecido, rode primeiro:
+>
+> ```bash
+> corepack prepare pnpm@9.15.2 --activate
+> pnpm -v  # confirmar instalação
+> ```
 
-# 1. Clone o repositório base
+---
 
-git clone <https://github.com/sulivanti/EasyCodeFramework.git>
-cd EasyCodeFramework
+## Passo 2: Trabalhando COM a Inteligência Artificial (Skills)
 
-# 2. Instale as dependências e faça o build inicial do monorepo
+No ECF, o seu foco é o **design e a regra de negócio**. O trabalho repetitivo de criar rotas, repositórios e DTOs é delegado à IA por meio das **Agent Skills** — que já estão na pasta `.agents/skills/` do seu app.
 
-npx pnpm install
-npx pnpm build
+**Exemplos práticos:**
 
-# 3. Inicialize seu novo projeto no diretório desejado (ex: uma pasta acima)
+- **Gerar um Novo Módulo (`scaffold-module`):** Você tem uma _User Story_ para Gestão de Usuários? Peça para a IA rodar a skill `scaffold-module`. Ela cria rotas, schemas Drizzle e repositórios no padrão do framework.
 
-npx tsx tooling/cli/src/index.ts init ../meu-super-app
+  - **O Gate de Aprovação:** A IA só gera código se a US estiver com `Status: aprovada`. Com `draft` ou `em revisao`, ela recusa e para o processo.
 
-# 4. Entre no seu novo projeto
+  - **A Árvore Gerada:** Os artefatos de especificação ficam em `docs/04_modules/mod-XXX/requirements/` organizados em:
+    - `/br/` — Regras de Negócio
+    - `/fr/` — Requisitos Funcionais
+    - `/data/` — Modelos de Dados e Eventos
+    - `/sec/` — Políticas de Segurança
+    - `/ux/` — Jornadas de Experiência
+    - `/nfr/` — Requisitos Não Funcionais
 
-cd ../meu-super-app
-npx pnpm install
-npx pnpm dev
-\`\`\`
+- **Validar o Banco de Dados (`validate-drizzle-schemas`):** Criou ou editou um schema? A IA varre o código verificando conformidade com as regras de multi-tenant.
 
-## Mais comandos
+- **Documentar seu Código (`create-oo-component-documentation`):** Finalizou uma API? Gera o documento arquitetural padronizado.
 
-\`\`\`bash
+---
 
-# Para ejetar um módulo paramêtrico no seu projeto
+## Passo 3: O Contrato entre a User Story e o DOC-DEV-001
 
-npx easycf add
+> **Princípio Fundamental:** A User Story descreve dados e comportamentos **de negócio**. O `DOC-DEV-001` define os contratos arquiteturais obrigatórios. Qualquer skill que trate a US como fonte exclusiva comete um erro arquitetural.
+
+### Na Entrevista da User Story (`draft-user-story`)
+
+Foque apenas nos **campos de negócio**:
+
+> ✅ **Correto:** _"A entidade `user` tem `email`, `senha` e `mfa_secret`."_
+> ❌ **Errado:** _"A entidade `user` tem `id`, `tenant_id`, `email`, `created_at`, `deleted_at`..."_
+
+Os campos `id`, `codigo`, `status`, `tenant_id`, `created_at`, `updated_at` e `deleted_at` são **gerados automaticamente** pelo framework. Incluí-los na US gera ruído.
+
+### Na Geração do Módulo (`scaffold-module`)
+
+A skill realiza uma **fusão obrigatória** entre a US e o `DOC-DEV-001`:
+
+| O que vem da **User Story** | O que vem do **DOC-DEV-001** |
+|---|---|
+| Campos de negócio (`email`, `mfa_secret`) | Campos constitucionais (`id uuid`, `codigo`, `status`, `tenant_id`, timestamps, `deleted_at`) |
+| Regras de negócio (Gherkin) | Estrutura obrigatória do BR (`estado_item`, `owner`, `rastreia_para`) |
+| Endpoints e fluxos | `Done funcional` (obrigatório), `Idempotência` se efeito colateral |
+| Restrições citadas na US | Classificação LGPD, `Autorização de Linha` (tenant_id em events) |
+| Integrações mencionadas | Timeout, Retry, Backoff, DLQ (obrigatórios mesmo sem menção na US) |
+
+### Na Validação de Schemas (`validate-drizzle-schemas`)
+
+As violações mais comuns detectadas:
+
+- 🔴 `id: varchar(36)` em vez de `uuid().defaultRandom()` → **Violação Crítica**
+- 🔴 `onDelete: 'cascade'` em FKs → **Violação Crítica** (NUNCA CASCADE, sempre RESTRICT)
+- 🟠 `deleted_at` ausente → **Violação Alta** (hard delete proibido)
+- 🟡 `codigo` ausente → **Violação Média** (identificador amigável obrigatório)
+
+---
+
+## Passo 4: Regras de Ouro Inegociáveis
+
+1. **Português Sempre**: Conversações, documentações e discussões sempre em português do Brasil (exceto nomes de variáveis/arquivos de código com regras em inglês).
+2. **UTF-8 de Ponta a Ponta**: Nunca salve arquivos, banco ou dados em formato não-UTF-8. Toda falha de mojibake começa aí. Garanta: _Origem → API → Banco → Tela_.
+
+---
+
+## Passo 5: Estrutura do Seu App
+
+Após o `init`, a estrutura do seu app será:
+
+```
+meu-super-app/
+├── .agents/
+│   └── skills/           ← Todas as Skills do ECF (scaffold-module, validate-drizzle-schemas...)
+├── docs/
+│   └── 01_normativos/    ← DOC-DEV-001 e demais normativos do framework
+├── src/
+│   └── index.ts          ← Ponto de entrada do servidor Fastify
+├── .cursorrules           ← Regras arquiteturais para o editor IA
+└── package.json           ← Com @easycf/core-api como dependência npm
+```
+
+Tudo que você precisa está aqui. **A pasta do EasyCodeFramework não existe no seu ambiente.**
+
+---
+
+## Passo 6: Infraestrutura Local (Docker)
+
+O ambiente de desenvolvimento usa Docker Compose com **dois modos de uso**:
+
+### Serviços
+
+| Serviço    | Imagem                  | Porta   | Sempre sobe? |
+|------------|-------------------------|---------|--------------|
+| `postgres` | `postgres:17-alpine`    | `5432`  | ✅ Sim        |
+| `redis`    | `redis:7-alpine`        | `6379`  | ✅ Sim        |
+| `api`      | `node:20-alpine`        | `3000`  | 🔵 Profile `full` |
+| `worker`   | `node:20-alpine`        | —       | 🔵 Profile `full` |
+
+Todos os containers são nomeados seguindo o padrão `${PROJECT_NAME}-<serviço>` (ex: `easya1-postgres`).
+
+### Comandos
+
+```powershell
+# Apenas infraestrutura (banco + cache) — padrão para desenvolvimento local
+docker compose up -d
+
+# Infraestrutura + API + Worker (container completo)
+docker compose --profile full up -d
+```
+
+> **Dica:** No desenvolvimento local, suba apenas `postgres` e `redis` via Docker e rode a API fora do container com `pnpm dev`. O hot-reload fica muito mais rápido.
+
+### Atualizando o `docker-compose.yml`
+
+O arquivo `docker-compose.yml` é gerado a partir do normativo `DOC-PADRAO-001`. **Não edite o arquivo diretamente.** Para atualizar:
+
+1. Edite os valores em `docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md`
+2. Regenere o arquivo rodando:
+
+```powershell
+node .agents/skills/generate-docker-compose/scripts/generate.mjs
+```
+
+O script imprime um relatório dos valores extraídos e grava o `docker-compose.yml` atualizado.
+
+### Variáveis de Ambiente necessárias (`.env`)
+
+```env
+PROJECT_NAME=meu-super-app
+API_PORT=3000
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=admin
+POSTGRES_DB=meu-super-app
+DATABASE_URL=postgresql://admin:admin@localhost:5432/meu-super-app
+```
+
+Copie o `.env.example` e ajuste para o seu projeto:
+
+```powershell
+cp .env.example .env
+```
+
+---
+
+## Passo 7: Evoluindo o Módulo (C01, M01, R01)
+
+Arquivos gerados pela skill (`BR-001.md`, `FR-001.md`) **nunca são editados diretamente**. Usamos **Emendas (Amendments)** para rastrear o histórico.
+
+Acione a skill `create-amendment` quando precisar de alterações. Os tipos de emenda são:
+
+| Código | Tipo | Quando usar |
+|---|---|---|
+| `C` (ex: `SEC-001-C01.md`) | Correção | Bug ou falha de regra no que já foi feito |
+| `M` (ex: `FR-001-M01.md`) | Melhoria | Adição de funcionalidade nova a requisito existente |
+| `R` (ex: `BR-001-R01.md`) | Revisão | Mudança de regra de negócio (lei nova, diretriz da empresa) |
+
+**Exemplo prático:** Aprove a US da alteração e peça: _"Execute a skill `create-amendment` no pilar `fr` baseada na US aprovada"_. A IA gera o anexo `FR-001-M01` sem destruir o histórico original.
+
+---
+
+## Mais Comandos
+
+```bash
+# Para ejetar um módulo paramétrico no seu projeto
+npx @easycf/cli add
 
 # (Seleciona entre Auth / IAM / Core-DB)
+```
 
-\`\`\`
+---
 
-Consulte `docs/getting-started.md` para um overview completo.
+_Consulte `docs/01_normativos/` no seu app gerado para a documentação normativa completa do framework._

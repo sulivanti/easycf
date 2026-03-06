@@ -28,9 +28,23 @@ Se o usuário não a fornecer no prompt de origem, você **deve questioná-lo an
 
 - **Caminho da User Story**: O caminho para o arquivo Markdown localizado em `docs/04_modules/user-stories/US-MOD-XXX.md`.
 
-**REGRA DE BLOQUEIO (GATE DE APROVAÇÃO):**
-Você deve ler o arquivo da User Story informada. Verifique o campo `Status:`.
-Se o status **não for** `aprovada`, você **ESTÁ PROIBIDO** de gerar qualquer arquivo. Interrompa a execução e informe ao usuário que a US precisa estar aprovada (ela pode estar `em desenvolvimento`, `em revisao`, `para aprovação`, ou `reprovada`). Apenas proceda se estiver `aprovada`.
+**REGRA DE BLOQUEIO (GATE DE APROVAÇÃO) — COMPARAÇÃO EXATA DE STRING:**
+
+Leia o arquivo da User Story. Encontre a linha que começa com `**Status:**` e extraia o valor entre crases `` ` ``.
+
+**Tabela de decisão — sem exceção:**
+
+| Valor exato encontrado no campo `Status:` | Ação permitida |
+|---|---|
+| `` `aprovada` `` | ✅ PROSSEGUIR com o scaffold |
+| `` `em desenvolvimento` `` | 🚫 BLOQUEAR |
+| `` `em revisao` `` | 🚫 BLOQUEAR |
+| `` `para aprovação` `` | 🚫 BLOQUEAR |
+| `` `em aprovação` `` | 🚫 BLOQUEAR |
+| `` `reprovada` `` | 🚫 BLOQUEAR |
+| Qualquer outro valor não listado acima | 🚫 BLOQUEAR |
+
+> ⚠️ **ATENÇÃO CRÍTICA:** Valores como `para aprovação`, `em aprovação`, `aguardando aprovação` **NÃO SÃO** equivalentes a `aprovada`. São estados de transição e **devem bloquear a execução**. A única string que autoriza o scaffold é a palavra exata: **`aprovada`** — sem variações, sem inferências.
 
 **REGRA ANTI-ENCADEAMENTO (HUMAN-IN-THE-LOOP):**
 Se VOCÊ MESMO (agente de IA) acabou de terminar de escrever e salvar o arquivo da US na mesma interação (comportamento "agent chaining"), você **ESTÁ PROIBIDO** de realizar o Scaffold ou trocar o status para "aprovada" no meio do caminho. O processo deve parar após gerar a US e ficar aguardando nova validação estrita do Usuário Humano.
@@ -84,28 +98,59 @@ docs/04_modules/mod-{ID}-{nome}/
 
 Para a escrita de CADA UM dos arquivos que estão dentro das sub-pastas `/requirements/`, `/adr/` ou até mesmo o `mod.md` raiz:
 
+**MUITO IMPORTANTE:** Os arquivos de requisitos (BR, FR, DATA, etc.) **NÃO** devem ser jogados soltos na raiz da pasta `requirements/`. Você **TEM A OBRIGAÇÃO** de criar e respeitar as sub-pastas exatas mostradas no Passo 2 (`requirements/br/`, `requirements/fr/`, `requirements/data/`, etc.) e salvar cada tipo de documento dentro de sua respectiva sub-pasta.
+
 1. Vá até a seção específica dele dentro da leitura do `DOC-DEV-001` que você executou.
 2. Extraia o "esqueleto / template" ditado lá. Preste atenção aos itens que a norma diz que são **Obrigatórios**. **Correção Vital:** Para o documento `DATA`, certifique-se de incluir a tag `# DATA-{ID} — {Nome}` no topo, logo abaixo da tabela de automação.
-3. **OBRIGATÓRIO — AVISO DE AUTOMAÇÃO (PRIMEIRA LINHA DO ARQUIVO):** A **primeira linha de conteúdo** de cada arquivo gerado (antes de qualquer outra seção ou heading) DEVE ser exatamente:
+3. **REGRA DE FUSÃO DE CAMPOS (CRÍTICA — A User Story NÃO é a fonte completa):** Ao preencher o `DATA-{ID}.md` (modelo de dados), você DEVE incluir **obrigatoriamente** os seguintes campos definidos em `DOC-DEV-001 § DATA-XXX`, **independentemente** de a User Story citá-los ou não:
+   - `id`: `uuid` (tipo nativo PostgreSQL, NOT NULL, PRIMARY KEY)
+   - `codigo`: `varchar(100)`, NOT NULL, UNIQUE (identificador amigável para o negócio)
+   - `status`: `text (enum)`, NOT NULL (valores do negócio; ex: `active | inactive | ...`)
+   - `tenant_id`: `uuid`, NOT NULL, FK com `ON DELETE RESTRICT` — **NUNCA CASCADE**
+   - `created_at`: `timestamptz UTC`, NOT NULL, `default=now()`
+   - `updated_at`: `timestamptz UTC`, NOT NULL, `default=now()`
+   - `deleted_at`: `timestamptz`, NULL (Soft-Delete — campo ausente = hard delete proibido)
+
+   Os campos da **User Story** (ex: `email`, `mfa_secret`, `nome_fantasia`) são os campos **de negócio** que complementam esses campos constitucionais. Você deve fundir os dois conjuntos. **NUNCA gere um schema de banco de dados apenas com o que a US descreve.**
+
+4. **OBRIGATÓRIO — AVISO DE AUTOMAÇÃO (PRIMEIRA LINHA DO ARQUIVO):** A **primeira linha de conteúdo** de cada arquivo gerado (antes de qualquer outra seção ou heading) DEVE ser exatamente:
 
    ```markdown
    > ⚠️ ARQUIVO GERIDO POR AUTOMAÇÃO. NÃO EDITE DIRETAMENTE.
    ```
 
    Isso não é delegado à leitura do `DOC-DEV-001` — é uma regra de execução desta skill. Nenhum arquivo gerado pelo scaffold pode nascer sem esse aviso. Essa tag é o contrato de rastreabilidade e proteção do arquivo desde o nascimento (conforme `DOC-DEV-001`).
-4. **INJEÇÃO ATIVA DOS DADOS (PROIBIDO PLACEHOLDERS):** É expressamente PROIBIDO gerar arquivos copiando os placeholders vazios do template (como `- Regra: ...`, `<Nome>`, `<titulo>`, `[ ] Sim [ ] Não`). Você DEVE ativamente aplicar as informações lidas da **User Story fornecida** e preencher os artefatos com conteúdo rico e deduzido:
-   - No **BR-{ID}.md**: Inverta o texto genérico pela Regra de Negócio real da US. Inclua os Critérios de Aceite em (Gherkin) listados de fato na US.
-   - No **FR-{ID}.md**: Detalhe os Endpoints REST ou telas que serão impactados (conforme US) e defina explicitamente "Done Funcional".
-   - No **DATA-{ID}.md**: Descreva ou infira as colunas que nascerão no banco e os possíveis Eventos de Domínio (`domain_events`) requeridos pela feature.
-   - No **SEC-{ID}.md**: Preencha políticas de auditoria, restrição de rotas ou rate-limits citados explicitamente na US.
-5. No campo `rastreia_para` presente no rodapé de cada arquivo (estipulado pelo DOC-DEV-001), amarre a todos os outros arquivos irmãos do mesmo nó e **inclua a referência à US de origem**.
-6. No campo `referencias_exemplos`, preencha com o link relativo para a User Story de aprovação (ex: `[US-MOD-101](../../user-stories/US-MOD-101.md)`).
-7. Conforme o `DOC-DEV-001` (fonte da verdade normativa), o estado inicial de todo arquivo gerado deve ser rigorosamente **DRAFT**. Os arquivos base **não devem ser editados diretamente** após a geração — qualquer evolução deve passar pela skill `create-amendment`.
-8. Salve o arquivo em disco.
+5. **INJEÇÃO ATIVA DOS DADOS (PROIBIDO PLACEHOLDERS):** É expressamente PROIBIDO gerar arquivos copiando os placeholders vazios do template (como `- Regra: ...`, `<Nome>`, `<titulo>`, `[ ] Sim [ ] Não`). Você DEVE ativamente aplicar as informações lidas da **User Story fornecida** e preencher os artefatos com conteúdo rico e deduzido. Para cada pilar, a US é a fonte dos dados de **negócio** — o `DOC-DEV-001` é a fonte dos **contratos arquiteturais** obrigatórios. Funda os dois:
+
+   - No **BR-{ID}.md**: Inverta o texto genérico pela Regra de Negócio real da US. Inclua os Critérios de Aceite em Gherkin (`Dado/Quando/Então`) extraídos da US. Preencha obrigatoriamente: `estado_item`, `owner`, `rastreia_para` e `evidencias`.
+   - No **FR-{ID}.md**: Detalhe os Endpoints REST ou telas que serão impactados (conforme US). Campo `Done funcional` é **OBRIGATÓRIO** e não pode ficar em branco. Declare `Prioridade`, `Efeito colateral (Sim/Não)` — se Sim, implementar Idempotência — e `Dependências (IDs)`.
+   - No **DATA-{ID}.md**: **NUNCA gere campos com base apenas no que a US descreve.** Funda os campos de negócio da US com os **campos constitucionais obrigatórios do DOC-DEV-001** (já detalhados no item 3 acima). Descreva também os Eventos de Domínio requeridos pela feature.
+   - No **SEC-{ID}.md**: Preencha políticas de auditoria, restrição de rotas ou rate-limits. O DOC-DEV-001 exige obrigatoriamente: Classificação dos Dados (Público/Interno/Confidencial/PII), LGPD (minimização/anonimização), `Autorização de Linha` (toda leitura em `domain_events` filtra por `tenant_id`). Não deixe nenhuma dessas seções em branco.
+   - No **NFR-{ID}.md**: Se a US não citar explicitamente SLA ou resiliência, aplique os defaults normativos do projeto (ex: timeout padrão, retry policy). Nunca entregue um NFR vazio porque "a US não mencionou".
+   - No **INT-{ID}.md**: Todo INT deve declarar `Timeout`, `Retry`, `Backoff/Jitter`, `DLQ (Sim/Não)` e `Idempotência` — conforme exigido pelo DOC-DEV-001, independentemente do que a US especifica. Use os defaults normativos se não houver instrução explícita.
+   - No **UX-{ID}.md**: Referencie o catálogo `DOC-UX-010` para mensagens de erro e ações de UI padronizadas.
+
+6. No campo `rastreia_para` presente no rodapé de cada arquivo (estipulado pelo DOC-DEV-001), amarre a todos os outros arquivos irmãos do mesmo nó e **inclua a referência à US de origem**.
+7. No campo `referencias_exemplos`, preencha com o link relativo para a User Story de aprovação (ex: `[US-MOD-101](../../user-stories/US-MOD-101.md)`).
+8. Conforme o `DOC-DEV-001` (fonte da verdade normativa), o estado inicial de todo arquivo gerado deve ser rigorosamente **DRAFT**. Os arquivos base **não devem ser editados diretamente** após a geração — qualquer evolução deve passar pela skill `create-amendment`.
+9. Salve o arquivo em disco.
 
 ---
 
-## 6. PASSO INTERMEDIÁRIO: Atualização dos Índices (update-markdown-file-index)
+## 6. PASSO INTERMEDIÁRIO: Geração do Screen Manifest (validate-screen-manifest)
+
+Após gerar o arquivo `UX-{ID}.md` do módulo, **invoque a skill `validate-screen-manifest`** no Modo Geração para criar o manifesto de tela correspondente:
+
+- **O que fazer:** leia o `UX-{ID}.md` gerado para extrair `entity_type`, o `screen_id` (padrão: `UX-{MODULE_CODE}-001`) e as ações listadas na tela.
+- **Onde salvar:** `docs/05_manifests/screens/ux-{module-slug}-001.{entity_type}-list.yaml`
+- **Regra:** gere com `manifest_version: 1`, `name`, `routes`, `telemetry_defaults` (com `X-Correlation-ID`), `permissions`, `actions`, `ui_rules` e `error_mapping` preenchidos — sem placeholders.
+- **Após gerar:** valide imediatamente contra as regras da skill `validate-screen-manifest`.
+
+> ⚠️ Se o módulo não tiver tela UX definida na User Story, este passo é opcional — registre no sumário final que o manifesto foi omitido e indique que deve ser criado quando UX for especificado.
+
+---
+
+## 7. PASSO INTERMEDIÁRIO: Atualização dos Índices (update-markdown-file-index)
 
 Antes de comunicar ao usuário, **invoque a skill `update-markdown-file-index`** duas vezes:
 

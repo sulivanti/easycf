@@ -9,7 +9,7 @@ Este documento define os padrões e tecnologias escolhidas para a execução da 
 - **Runtime:** Node.js (v20 Alpine)
 - **Gerenciador de Pacotes:** `pnpm` (Corepack habilitado)
 - **Containerização:** Docker & Docker Compose
-- **Banco de Dados:** PostgreSQL 16
+- **Banco de Dados:** PostgreSQL 17
 - **Cache/Filas:** Redis 7
 - **ORM:** Drizzle ORM
 
@@ -17,32 +17,70 @@ Este documento define os padrões e tecnologias escolhidas para a execução da 
 
 O ambiente de desenvolvimento local é unificado pelo arquivo `docker-compose.yml`.
 
+> 📌 **Atualização do docker-compose.yml:** edite os valores neste documento e execute o script abaixo para regenerar o arquivo:
+>
+> ```powershell
+> node .agents/skills/generate-docker-compose/scripts/generate.mjs
+> ```
+
 ### 3.1. Variáveis de Ambiente (`.env`)
 
 Todos os serviços compartilham o mesmo escopo de variáveis. A definição obrigatória inclui:
 
-- `PROJECT_NAME`: Previne conflitos de nomes na rede (ex: `easya1`)
-- `API_PORT`: Porta de binding de acesso à aplicação
+- `PROJECT_NAME`: Previne conflitos de nomes na rede e nomeia os containers (ex: `easya1`)
+- `API_PORT`: Porta de binding de acesso à aplicação (default: `3000`)
 - `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`: Credenciais locais do banco
 - `DATABASE_URL`: String de conexão formal (Padrão: `postgresql://[user]:[password]@[host]:[port]/[db_name]`)
 
-### 3.2. Serviços
+### 3.2. Padrão de Nomeação dos Containers
+
+Todos os containers seguem o padrão `${PROJECT_NAME:-<default>}-<serviço>`, interpolando a variável `PROJECT_NAME` do `.env`:
+
+| Serviço  | `container_name`                        | Default            |
+|----------|-----------------------------------------|--------------------|
+| postgres | `${PROJECT_NAME:-easya1}-postgres`      | `easya1-postgres`  |
+| redis    | `${PROJECT_NAME:-easya1}-redis`         | `easya1-redis`     |
+| api      | `${PROJECT_NAME:-easya1}-api`           | `easya1-api`       |
+| worker   | `${PROJECT_NAME:-easya1}-worker`        | `easya1-worker`    |
+
+### 3.3. Serviços
 
 #### Banco de Dados (`postgres`)
 
-- Imagem: `postgres:16-alpine`
+- Imagem: `postgres:17-alpine`
 - Porta Exposta: `5432`
-- Persistência: Volume local `pg-data`
+- Persistência: Volume local `pg-data` (driver: `local`)
+- Restart: `unless-stopped`
 
 #### Cache (`redis`)
 
 - Imagem: `redis:7-alpine`
 - Porta Exposta: `6379`
+- Restart: `unless-stopped`
 
 #### Aplicação (`api` e `worker`)
 
-- Base: `node:20-alpine` via `Dockerfile` dedicado.
+- Base: `node:20-alpine` diretamente (sem Dockerfile dedicado em desenvolvimento local).
+- `working_dir`: `/usr/src/app`
 - Mapeamento: Volume `.:/usr/src/app` (Hot-reload em ambiente de desenvolvimento).
+- Comandos: `api` → `pnpm dev` | `worker` → `pnpm dev:worker`
+- Dependências: ambos dependem de `postgres` e `redis` estarem saudáveis.
+
+### 3.4. Docker Compose Profiles
+
+Os serviços de infraestrutura base (`postgres` e `redis`) sobem **sempre** com `docker compose up`.
+
+Os serviços de aplicação (`api` e `worker`) possuem o profile `full` e **só sobem se ativados explicitamente**:
+
+```powershell
+# Apenas infraestrutura (banco + cache):
+docker compose up -d
+
+# Infraestrutura + API + Worker:
+docker compose --profile full up -d
+```
+
+Essa separação permite que os serviços de aplicação rodem fora do Docker (via `pnpm dev`) enquanto o banco e o cache correm containerizados — padrão adotado no desenvolvimento local.
 
 ## 4. O Dockerfile
 

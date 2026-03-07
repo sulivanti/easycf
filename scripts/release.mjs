@@ -51,9 +51,14 @@ function copyDir(src, dest) {
 
 function cleanDirExceptGit(dirPath) {
     if (!fs.existsSync(dirPath)) return;
+    log(`Limpando conteúdo de ${path.relative(ROOT, dirPath)}...`);
     for (const entry of fs.readdirSync(dirPath)) {
-        if (entry === ".git") continue;
+        if (entry === ".git") {
+            log("  -> Mantendo .git");
+            continue;
+        }
         const full = path.join(dirPath, entry);
+        log(`  -> Removendo ${entry}`);
         fs.rmSync(full, { recursive: true, force: true });
     }
 }
@@ -104,7 +109,13 @@ if (fs.existsSync(path.join(ROOT, "dist"))) {
 fs.mkdirSync(path.join(ROOT, "dist"), { recursive: true });
 
 log(`Clonando repositório de distribuição: ${DIST_REPO}`);
-run(`git clone ${DIST_REPO} easycf-template`, path.join(ROOT, "dist"));
+run(`git clone ${DIST_REPO} easycf`, path.join(ROOT, "dist"));
+
+if (fs.existsSync(DIST_DIR)) {
+    log(`Conteúdo de ${DIST_DIR} após clone: ${fs.readdirSync(DIST_DIR).join(", ")}`);
+} else {
+    err(`Erro: Pasta ${DIST_DIR} não existe após o clone.`);
+}
 
 log("Limpando template antigo...");
 cleanDirExceptGit(DIST_DIR);
@@ -116,6 +127,10 @@ const TEMPLATE_SRC = path.join(ROOT, "apps", "template-project");
 const SKILLS_SRC = path.join(ROOT, ".agents", "skills");
 const NORMATIVOS_SRC = path.join(ROOT, "docs", "01_normativos");
 const USER_STORIES_TEMPLATES = path.join(ROOT, "docs", "04_modules", "user-stories", "templates");
+const PACOTES_AGENTES_SRC = path.join(ROOT, "docs", "02_pacotes_agentes");
+const SPECS_TEMPLATE_SRC = path.join(ROOT, "docs", "03_especificacoes", "template");
+const MANIFESTS_SRC = path.join(ROOT, "docs", "05_manifests");
+const DOCS_ROOT = path.join(ROOT, "docs");
 
 // Copiar bases
 copyDir(TEMPLATE_SRC, DIST_DIR);
@@ -124,12 +139,31 @@ copyDir(NORMATIVOS_SRC, path.join(DIST_DIR, "docs", "01_normativos"));
 if (fs.existsSync(USER_STORIES_TEMPLATES)) {
     copyDir(USER_STORIES_TEMPLATES, path.join(DIST_DIR, "docs", "04_modules", "user-stories", "templates"));
 }
+if (fs.existsSync(PACOTES_AGENTES_SRC)) {
+    copyDir(PACOTES_AGENTES_SRC, path.join(DIST_DIR, "docs", "02_pacotes_agentes"));
+}
+if (fs.existsSync(SPECS_TEMPLATE_SRC)) {
+    copyDir(SPECS_TEMPLATE_SRC, path.join(DIST_DIR, "docs", "03_especificacoes", "template"));
+}
+if (fs.existsSync(MANIFESTS_SRC)) {
+    copyDir(MANIFESTS_SRC, path.join(DIST_DIR, "docs", "05_manifests"));
+}
 
 // Arquivos avulsos
 const AVULSOS = [".cursorrules", ".env.example", "docker-compose.yml", ".gitignore"];
 AVULSOS.forEach(file => {
     const src = path.join(ROOT, file);
     if (fs.existsSync(src)) fs.copyFileSync(src, path.join(DIST_DIR, file));
+});
+
+// Arquivos avulsos do docs/
+const DOCS_AVULSOS = ["INDEX.md", "getting-started.md", "MANIFEST.json"];
+DOCS_AVULSOS.forEach(file => {
+    const src = path.join(DOCS_ROOT, file);
+    if (fs.existsSync(src)) {
+        fs.mkdirSync(path.join(DIST_DIR, "docs"), { recursive: true });
+        fs.copyFileSync(src, path.join(DIST_DIR, "docs", file));
+    }
 });
 
 // 4. Gerar RELEASE.md no template
@@ -144,6 +178,11 @@ fs.writeFileSync(path.join(DIST_DIR, "RELEASE.md"), releaseNotes);
 
 // 5. Commit e Tag no repositório de distribuição
 log(`Criando commit e tag no repositório público: ${tag}`);
+
+if (!fs.existsSync(path.join(DIST_DIR, ".git"))) {
+    err(`Erro crítico: O repositório de distribuição em ${DIST_DIR} não contém uma pasta .git. O clone falhou ou foi corrompido.`);
+}
+
 run(`git add -A`, DIST_DIR);
 try {
     run(`git commit -m "release: ${tag}"`, DIST_DIR);
@@ -169,7 +208,9 @@ console.log(` O repositório PUBLICO (easycf) foi atualizado localmente em dist/
 console.log(" Para efetivar a distribuição pública, você deve:");
 console.log();
 console.log(` 1. \x1b[33mcd dist/easycf\x1b[0m`);
-console.log(` 2. \x1b[33mgit push && git push --tags\x1b[0m`);
+console.log(` 2. \x1b[33mgit push\x1b[0m`);
+console.log(` 3. \x1b[33mgit push --tags\x1b[0m`);
+console.log(` 4. \x1b[33mcd ../..\x1b[0m`);
 console.log();
 console.log(" Para o seu repositório PRIVADO (EasyCodeFramework):");
 console.log(` 1. \x1b[33mgit push\x1b[0m`);

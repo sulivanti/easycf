@@ -2,261 +2,161 @@
 
 O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs transacionais escaláveis com Node.js, empoderado por skills nativas de Inteligência Artificial usando Antigravity.
 
-> **Princípio de produto:** Você **nunca precisa clonar ou baixar o repositório do ECF**. O framework é consumido inteiramente via `npx` e `npm`. Seu único repositório local é o **seu app**.
+Este projeto visa estabelecer padrões rigorosos de desenvolvimento, arquitetura em níveis (Clean Architecture e DDD-lite) e automações nativas para um ecossistema sólido e previsível de APIs e interfaces web.
+
+Atualmente, o projeto foca no desenvolvimento base e na estruturação de seus módulos normativos, com módulos em refinamento.
 
 ---
 
-## Os 3 Pilares do ECF
+## Stack Tecnológico
 
-| Pilar | Descrição |
-|---|---|
-| **`@easycf/core-api`** | Runtime de alta performance configurado com Fastify, pino e padronização de erros rígida (RFC 9457). Publicado no npm e instalado como dependência do seu app. |
-| **`@easycf/cli`** | Ferramenta de linha de comando para scaffolding. Usada via `npx` — sem instalação global necessária. |
-| **Agent Skills (`.agents/skills`)** | O coração da filosofia **AI-First**. Copiadas automaticamente para o seu app pelo CLI. Geram código aderente às regras arquiteturais sem esforço manual. |
+A tecnologia base escolhida preconiza alta performance e tipagem rigorosa:
+
+- **Runtime e Ferramentas:** Node.js (v20 Alpine), pnpm (Corepack), Turborepo (Monorepo), tsx.
+- **Framework Web/API:** Fastify v4.29.x
+- **Gestão de Banco e ORM:** PostgreSQL 17, Drizzle ORM (driver nativo `postgres`), redis 7 (ioredis).
+- **Mapeamento e Validação:** Zod.
+- **Autenticação e Segurança:** `@fastify/jwt@8.x`, `@fastify/oauth2@7.x`, `@fastify/rate-limit`, `otplib@12.x`.
+- **Containers:** Docker & Docker Compose (separação explícita entre Infraestrutura e Aplicação).
+
+> **Fonte:** `DOC-PADRAO-001` e `DOC-PADRAO-002`.
 
 ---
 
-## Passo 1: Inicialização AI-First
+## Arquitetura
 
-**1. Clone o Cérebro do Framework (Instalação Limpa):**
-Usamos a ferramenta oficial da comunidade (`degit`) para baixar uma cópia pura e fresca das nossas *Agent Skills* e *Documentações Normativas* a partir do nosso repositório de template dedicado, desaguando em uma pasta nova (ex: `ceasy`).
+O ecossistema adota uma Escala de Arquitetura em Níveis (0, 1 e 2), escalando em complexidade conforme a criticidade e complexidade do negócio:
 
-Nós fornecemos versões garantidas. Você pode usar a mais recente ou fixar em uma versão específica:
+- **Nível 0 (CRUD Direto):** Para rotas sem regra de negócio aparente. Cerimônia mínima.
+- **Nível 1 (Clean Leve):** Recomendado como padrão. Separa Presentation, Application e Infraestrutura. Traz interfaces onde Mocks são necessários para teste.
+- **Nível 2 (DDD Completo):** Para domínios core onde a integridade transacional é máxima (Domain com Entidades, VOs, Aggregates, Eventos e Invariantes explícitas).
+
+**Pilares Inegociáveis End-to-End:**
+
+- **Observabilidade:** Obrigatório uso e propagação de `X-Correlation-ID`. Logs são estruturados sem vazamento de PII.
+- **Contratos (API HTTP):** Problem Details (RFC 9457) mandatórios para falhas, URIs sempre versionadas (`/api/v1/...`).
+- **Resiliência:** Idempotência exigida em todas requisições com mutação lateral importante (Gatilhos Financeiros, Workflows, Disparo E-mail).
+
+> **Fonte:** `DOC-ESC-001`.
+
+---
+
+## Módulos Implementados
+
+| Módulo | Documentação Raiz | Status |
+| --- | --- | --- |
+| **MOD-001 — Backoffice (Admin)** | [mod.md](docs/04_modules/mod-001-backoffice-admin/mod.md) | `REFINING` |
+
+> *Para um índice completo das funcionalidades ou módulos em desuso (.bkp), ver `docs/INDEX.md`.*
+
+---
+
+## Primeiros Passos (Getting Started)
+
+### 1. Pré-Requisitos
+
+- **Docker** e **Docker Compose**
+- **Node.js** (v20+)
+- **pnpm** habilitado (`corepack enable`)
+
+### 2. Configurando as Variáveis de Ambiente
+
+No **EasyCodeFramework**, há **apenas um `.env` centralizado na raiz do repositório**.
 
 ```bash
-# ÚLTIMA VERSÃO: Baixa a branch main do repositório público
-npx degit sulivanti/easycf ceasy
-
-# VERSÃO FIXA: Seguranca de imutabilidade (exatamente a v0.0.2 — exemplo)
-npx degit sulivanti/easycf#v0.0.2 ceasy
-```
-
-Este comando já criará a pasta `ceasy` perfeitamente limpa, contendo apenas a inteligência bruta do projeto (`.agents/`, `docs/`, `.cursorrules`, etc.) pronta para a sua IA consumir — sem o histórico do Git do repositório original.
-
-**2. Dê a Ignição na IA:**
-Abra a sua pasta recém-extraída (`ceasy`) no seu editor de código com suporte a agentes (Cursor, Windsurf, etc.). Abra o Chat/Composer do assistente e **copie e cole exatamente o prompt abaixo**:
-
-> **Prompt de Ignição** 🚀
->
-> ```text
-> Você atua como o Arquiteto do EasyCodeFramework. Acabei de baixar a estrutura base vital (.agents e docs) para esta pasta.
-> 
-> Por favor, inicie minha nova aplicação Node.js com Fastify efetuando os seguintes passos rigorosamente:
-> 
-> 1. **Novo App:** Crie um `package.json` privado do zero usando `@easycf/core-api` e `fastify` como dependências. O nome do projeto é o nome do diretório atual. Adicione como devDependencies o `tsx` e o `@types/node`.
-> 2. **Configuração:** Defina os scripts: `"dev": "tsx watch src/index.ts"` e `"start": "node dist/index.js"`.
-> 3. **Código Inicial:** Crie a estrutura com a pasta `src/` e um arquivo `src/index.ts` contendo um servidor Fastify básico pronto para uso, que instancia a aplicação importando `createApp` do pacote `@easycf/core-api`.
-> 4. **Finalização:** Rode silenciosamente a instalação das dependências (ex: `pnpm install`).
-> 
-> Avise quando a ignição for concluída para que eu possa testar o ambiente.
-> ```
-
-A infraestrutura inicial estará erguida, limpa, e os motores de agência configurados. Você já pode usar seu ambiente! 🎉
-
----
-
-## Passo 2: Trabalhando COM a Inteligência Artificial (Skills)
-
-No ECF, o seu foco é o **design e a regra de negócio**. O trabalho repetitivo de criar rotas, repositórios e DTOs é delegado à IA por meio das **Agent Skills** — que já estão na pasta `.agents/skills/` do seu app.
-
-**Exemplos práticos:**
-
-- **Gerar um Novo Módulo (`scaffold-module`):** Você tem uma *User Story* para Gestão de Usuários? Peça para a IA rodar a skill `scaffold-module`. Ela cria rotas, schemas Drizzle e repositórios no padrão do framework.
-
-  - **O Gate de Aprovação:** A IA só gera código se a US estiver com `Status: aprovada`. Com `draft` ou `em revisao`, ela recusa e para o processo.
-
-  - **A Estrutura Unificada de Módulos:** Todo e qualquer módulo gerado (do Foundation Nível 0 até Features Nível 1) obedece à rigorosa e idêntica arquitetura de pastas em `docs/04_modules/mod-NNN-nome/`:
-    - `mod.md` e `permissions.yaml` — O manifesto do módulo e os escopos de ACL (acesso) que ele expõe.
-    - `README.md`, `CHANGELOG.md`, `CONVENTIONS.md` — Arquivos de utilidade com visão geral, o histórico auditável de mudanças (amendments) e convenções locais de IDs.
-    - `requirements/` — A fonte da verdade canônica. Subdividida em 9 pilares vitais: Regras (`br`), Funcionais (`fr`), Dados (`data`), Segurança (`sec`), UX (`ux`), Integrações (`int`), Não-Funcionais (`nfr`), Implementação (`imp`) e Testes (`tst`).
-    - `amendments/` — A base da rastreabilidade. Para não destruir a história de um requisito, todo ajuste ou correção é primeiro desenhado aqui como arquivos delta (`M` de melhoria, `C` de correção ou `R` de revisão).
-    - `adr/` — Decisões Arquiteturais Registradas que afetam o módulo.
-    - `diagrams/` e `snippets/` — Para apoios visuais Mermaid (Sequence/C4) e trechos de código recorrentes.
-
-- **Validar o Banco de Dados (`validate-drizzle-schemas`):** Criou ou editou um schema? A IA varre o código verificando conformidade com as regras de multi-tenant.
-
-- **Documentar seu Código (`create-oo-component-documentation`):** Finalizou uma API? Gera o documento arquitetural padronizado.
-
----
-
-## Passo 3: O Contrato entre a User Story e o DOC-DEV-001
-
-> **Princípio Fundamental:** A User Story descreve dados e comportamentos **de negócio**. O `DOC-DEV-001` define os contratos arquiteturais obrigatórios. Qualquer skill que trate a US como fonte exclusiva comete um erro arquitetural.
-
-### Na Entrevista da User Story (`draft-user-story`)
-
-Foque apenas nos **campos de negócio**:
-
-> ✅ **Correto:** *"A entidade `user` tem `email`, `senha` e `mfa_secret`."*
-> ❌ **Errado:** *"A entidade `user` tem `id`, `tenant_id`, `email`, `created_at`, `deleted_at`..."*
-
-Os campos `id`, `codigo`, `status`, `tenant_id`, `created_at`, `updated_at` e `deleted_at` são **gerados automaticamente** pelo framework. Incluí-los na US gera ruído.
-
-#### A Árvore de User Stories (Onde salvar)
-
-As US no framework não ficam jogadas. Após redigir a história usando o modelo em `user-stories/templates/TEMPLATE-USER-STORY.md`, salve-a de acordo com sua finalidade na pasta `docs/04_modules/user-stories/`:
-
-- `epics/`: US balizadora (ex: `US-MOD-000.md`). Serve como índice agregador de funcionalidades.
-- `features/`: A fundação (Baseline). O que está sendo feito do zero (ex: `US-MOD-000-F01`).
-- `amendments/`: Evoluções e intervenções pós-criação. Subdividida em `improvements/`, `corrections/` e `revisions/`.
-
-### Na Geração do Módulo (`scaffold-module`)
-
-A skill realiza uma **fusão obrigatória** entre a US e o `DOC-DEV-001`:
-
-| O que vem da **User Story** | O que vem do **DOC-DEV-001** |
-|---|---|
-| Campos de negócio (`email`, `mfa_secret`) | Campos constitucionais (`id uuid`, `codigo`, `status`, `tenant_id`, timestamps, `deleted_at`) |
-| Regras de negócio (Gherkin) | Estrutura obrigatória do BR (`estado_item`, `owner`, `rastreia_para`) |
-| Endpoints e fluxos | `Done funcional` (obrigatório), `Idempotência` se efeito colateral |
-| Restrições citadas na US | Classificação LGPD, `Autorização de Linha` (tenant_id em events) |
-| Integrações mencionadas | Timeout, Retry, Backoff, DLQ (obrigatórios mesmo sem menção na US) |
-
-### Na Validação de Schemas (`validate-drizzle-schemas`)
-
-As violações mais comuns detectadas:
-
-- 🔴 `id: varchar(36)` em vez de `uuid().defaultRandom()` → **Violação Crítica**
-- 🔴 `onDelete: 'cascade'` em FKs → **Violação Crítica** (NUNCA CASCADE, sempre RESTRICT)
-- 🟠 `deleted_at` ausente → **Violação Alta** (hard delete proibido)
-- 🟡 `codigo` ausente → **Violação Média** (identificador amigável obrigatório)
-
----
-
-## Passo 4: Regras de Ouro Inegociáveis
-
-1. **Português Sempre**: Conversações, documentações e discussões sempre em português do Brasil (exceto nomes de variáveis/arquivos de código com regras em inglês).
-2. **UTF-8 de Ponta a Ponta**: Nunca salve arquivos, banco ou dados em formato não-UTF-8. Toda falha de mojibake começa aí. Garanta: *Origem → API → Banco → Tela*.
-
----
-
-## Passo 5: Estrutura do Seu App
-
-Após o `init`, a estrutura do seu app será:
-
-```
-meu-super-app/
-├── .agents/
-│   └── skills/           ← Todas as Skills do ECF (scaffold-module, validate-drizzle-schemas...)
-├── docs/
-│   └── 01_normativos/    ← DOC-DEV-001 e demais normativos do framework
-├── src/
-│   └── index.ts          ← Ponto de entrada do servidor Fastify
-├── .cursorrules           ← Regras arquiteturais para o editor IA
-└── package.json           ← Com @easycf/core-api como dependência npm
-```
-
-Tudo que você precisa está aqui. **A pasta do EasyCodeFramework não existe no seu ambiente.**
-
----
-
-## Passo 6: Infraestrutura Local (Docker)
-
-O ambiente de desenvolvimento usa Docker Compose com **dois modos de uso**:
-
-### Serviços
-
-| Serviço    | Imagem                  | Porta   | Sempre sobe? |
-|------------|-------------------------|---------|--------------|
-| `postgres` | `postgres:17-alpine`    | `5432`  | ✅ Sim        |
-| `redis`    | `redis:7-alpine`        | `6379`  | ✅ Sim        |
-| `api`      | `node:20-alpine`        | `3000`  | 🔵 Profile `full` |
-| `worker`   | `node:20-alpine`        | —       | 🔵 Profile `full` |
-
-Todos os containers são nomeados seguindo o padrão `${PROJECT_NAME}-<serviço>` (ex: `easya1-postgres`).
-
-### Comandos
-
-```powershell
-# Apenas infraestrutura (banco + cache) — padrão para desenvolvimento local
-docker compose up -d
-
-# Infraestrutura + API + Worker (container completo)
-docker compose --profile full up -d
-```
-
-> **Dica:** No desenvolvimento local, suba apenas `postgres` e `redis` via Docker e rode a API fora do container com `pnpm dev`. O hot-reload fica muito mais rápido.
-
-### Atualizando o `docker-compose.yml`
-
-O arquivo `docker-compose.yml` é gerado a partir do normativo `DOC-PADRAO-001`. **Não edite o arquivo diretamente.** Para atualizar:
-
-1. Edite os valores em `docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md`
-2. Regenere o arquivo rodando:
-
-```powershell
-node .agents/skills/generate-docker-compose/scripts/generate.mjs
-```
-
-O script imprime um relatório dos valores extraídos e grava o `docker-compose.yml` atualizado.
-
-### Variáveis de Ambiente necessárias (`.env`)
-
-```env
-PROJECT_NAME=meu-super-app
-API_PORT=3000
-POSTGRES_USER=admin
-POSTGRES_PASSWORD=admin
-POSTGRES_DB=meu-super-app
-DATABASE_URL=postgresql://admin:admin@localhost:5432/meu-super-app
-```
-
-Copie o `.env.example` e ajuste para o seu projeto:
-
-```powershell
 cp .env.example .env
 ```
 
----
+Gere os segredos faltantes (`JWT_SECRET`, credenciais de banco, provedores SSO). Se houver discrepâncias de inicialização relativas ao `.env`, ocorreu a política de **Fail-Fast** devido às exigências de esquema (via Zod no boot).
 
-## Passo 7: Evoluindo o Módulo (C01, M01, R01)
+### 3. Rodando o Ambiente Local
 
-Arquivos gerados pela skill (`BR-001.md`, `FR-001.md`) **nunca são editados diretamente**. Usamos **Emendas (Amendments)** para rastrear o histórico.
-
-Acione a skill `create-amendment` quando precisar de alterações. Os tipos de emenda são:
-
-| Código | Tipo | Quando usar |
-|---|---|---|
-| `C` (ex: `SEC-001-C01.md`) | Correção | Bug ou falha de regra no que já foi feito |
-| `M` (ex: `FR-001-M01.md`) | Melhoria | Adição de funcionalidade nova a requisito existente |
-| `R` (ex: `BR-001-R01.md`) | Revisão | Mudança de regra de negócio (lei nova, diretriz da empresa) |
-
-**Exemplo prático:** Aprove a US da alteração e peça: *"Execute a skill `create-amendment` no pilar `fr` baseada na US aprovada"*. A IA gera o anexo `FR-001-M01` sem destruir o histórico original.
-
----
-
-## Mais Comandos
+Suba a infraestrutura base de banco de dados (Postgres) e cache (Redis) via Docker:
 
 ```bash
-# Para ejetar um módulo paramétrico no seu projeto
-npx @easycf/cli add
-
-# (Seleciona entre Auth / IAM / Core-DB)
+docker compose up -d
 ```
 
----
-
-## Para o Mantenedor do Framework (Release)
-
-O ECF possui um processo automatizado de release que sincroniza arquivos, faz bump de versão, altera o `package.json`, cria o commit `"release: vX.Y.Z"` e também cria a Git Tag correspondente.
+Em seguida, faça o download de pacotes e inicialize o servidor da API fora do contêiner para utilizar o hot-reload (`tsx`):
 
 ```bash
-# Lançar nova versão patch (ex: 0.1.0 -> 0.1.1)
+pnpm install
+
+# Para executar migrações para o banco (caso necessário)
+pnpm run db:generate
+pnpm run db:push
+
+# Para iniciar a API em ambiente local
+pnpm run dev
+```
+
+> **Fonte:** `DOC-PADRAO-001` e `DOC-PADRAO-004`.
+
+---
+
+## Padrões de Desenvolvimento
+
+- **Zero Alucinação / Padrões Declarativos:** Utilize sempre o [DOC-DEV-001_especificacao_executavel.md](docs/01_normativos/DOC-DEV-001_especificacao_executavel.md) para redigir ou codificar comportamentos.
+- **Testes (DOC-ARC-002):** A cobertura do código deve abranger os Use Cases puramente em memória (Testes Unitários sem mock de I/O) e roteiras de integração com banco **real** (Testcontainers, postgres efêmero). É **proibido mockar UseCases e repositórios em testes de API E2E**.
+- **Gestão Eficiente Múltiplos Apps:** Devido ao pnpm Workspaces + Turborepo, dependências e compilações (`dist`) habitam cada respectivo pacote, isolando e organizando a transpilação final.
+
+---
+
+## Fluxo de Contribuição e Agentes
+
+A automação arquitetural orientada a Inteligência Artificial (Antigravity) permeia este ecossistema.
+
+**O Processo (Ciclo de Vida):**
+
+1. **User Story (US):** Cria-se/aprova-se o requisito de negócio na pasta `user-stories/features/`.
+2. **Geração Baseline:** Uma vez que essa US alcança o status `aprovada`, usufrui-se de rotinas automáticas de agentes (`scaffold-module`) que fundem essa US aos contratos obrigatórios (`DOC-DEV-001`), forjando o boilerplate (schemas, queries, routes, handlers em níveis 0/1/2).
+3. **Evolução Segura (Amendments):** Códigos ou regras alteradas após aprovação inicial nunca sobressaem silenciosamente nos documentos. Documenta-se em Emendas - Improvements (M), Correções (C) e Revisões (R) via skill `create-amendment`.
+
+As **Agent Skills** repousam fisicamente em `.agents/skills/`.
+
+---
+
+## Processo de Release (Publicação)
+
+Para compilar uma nova versão do framework e disparar a atualização do repositório público (template), siga os passos abaixo no terminal do monorepo:
+
+```bash
+# 1. Faz o bump da versão, copia os arquivos pro dist/ e cria a tag no pacote local
 pnpm run release
 
-# Lançar nova versão minor (ex: 0.1.0 -> 0.2.0)
-pnpm run release:minor
+# 2. Navega para a pasta de distribuição onde o repositório público foi clonado
+cd dist/easycf
 
-# Lançar nova versão major (ex: 0.1.0 -> 1.0.0)
-pnpm run release:major
-```
+# 3. Envia as atualizações e tags para o repositório público
+git push
+git push --tags
 
-Após rodar o script e tudo der certo, o release e as tags devem ser enviados:
-
-```bash
-git push && git push --tags
+# 4. Retorna para a raiz e sincroniza as atualizações do package.json no repositório privado
+cd ../..
+git push
 ```
 
 ---
 
-*Consulte `docs/01_normativos/` no seu app gerado para a documentação normativa completa do framework.*
+## Documentação Normativa
+
+Todos os normativos mantêm seus identificadores em caráter imutável para rastreabilidades CI/PR. Leia os itens abaixo para profundidade nos tópicos:
+
+| Documento | Caminho |
+| --- | --- |
+| **Consolidado Geral (MUST/SHOULD)** | [DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md](docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md) |
+| **Escala de Arquitetura (0, 1 e 2)** | [DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md](docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md) |
+| **Infraestrutura e Execução** | [DOC-PADRAO-001_Infraestrutura_e_Execucao.md](docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md) |
+| **Dependências NodeJS** | [DOC-PADRAO-002_Dependencias_NodeJS.md](docs/01_normativos/DOC-PADRAO-002_Dependencias_NodeJS.md) |
+| **Variáveis de Ambiente** | [DOC-PADRAO-004_Variaveis_de_Ambiente.md](docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md) |
+| **Storage e Upload** | [DOC-PADRAO-005_Storage_e_Upload.md](docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md) |
+| **Especificação Executável** | [DOC-DEV-001_especificacao_executavel.md](docs/01_normativos/DOC-DEV-001_especificacao_executavel.md) |
+| **Estratégia de Testes** | [DOC-ARC-002__Estrategia_Testes.md](docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md) |
+| **Padrões OpenAPI** | [DOC-ARC-001__Padroes_OpenAPI.md](docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md) |
+| **Ponte de Rastreabilidade** | [DOC-ARC-003__Ponte_de_Rastreabilidade.md](docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md) |
+| **Catálogo Ações e UX** | [DOC-UX-010__Catalogo_Acoes_e_Template_UX.md](docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md) |
+| **App Shell e Navegação** | [DOC-UX-011__Application_Shell_e_Navegacao.md](docs/01_normativos/DOC-UX-011__Application_Shell_e_Navegacao.md) |
+| **Componentes e Feedback** | [DOC-UX-012__Componentes_Globais_e_Feedback.md](docs/01_normativos/DOC-UX-012__Componentes_Globais_e_Feedback.md) |
+| **Guia Padrão Agente** | [DOC-GPA-001_Guia_Padrao_Agente.md](docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md) |
+
+*(Markdown formatado em UTF-8).*

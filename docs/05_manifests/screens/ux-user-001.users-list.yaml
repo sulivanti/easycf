@@ -1,0 +1,209 @@
+manifest_version: 1
+screen_id: "UX-USER-001"
+name: "Lista de Usuários"
+entity_type: "user"
+
+routes:
+  - path: "/users"
+    method: GET
+  - path: "/users"
+    method: POST
+  - path: "/users/{id}/activate"
+    method: POST
+  - path: "/users/{id}/deactivate"
+    method: POST
+  - path: "/users/{id}/archive"
+    method: POST
+  - path: "/users/{id}/restore"
+    method: POST
+  - path: "/users/bulk-update"
+    method: PATCH
+  - path: "/users/import"
+    method: POST
+  - path: "/users/export"
+    method: POST
+
+telemetry_defaults:
+  event_name: "user.list_viewed"
+  required_fields:
+    - "screen_id"
+    - "tenant_id"
+    - "correlation_id"
+  propagate_headers:
+    - "X-Correlation-ID"
+
+permissions:
+  read: "users:read"
+  write: "users:write"
+  import: "users:import"
+  export: "users:export"
+
+actions:
+  - action: "view"
+    client_only: false
+    operation_ids:
+      - "users_list"
+    permissions:
+      - "users:read"
+    error_mapping:
+      http_status: [401, 403, 500]
+
+  - action: "search"
+    client_only: false
+    operation_ids:
+      - "users_list"
+    permissions:
+      - "users:read"
+    error_mapping:
+      http_status: [401, 403, 500]
+
+  - action: "filter"
+    client_only: false
+    operation_ids:
+      - "users_list"
+    permissions:
+      - "users:read"
+    error_mapping:
+      http_status: [401, 403, 500]
+
+  - action: "create"
+    client_only: false
+    operation_ids:
+      - "users_create"
+    permissions:
+      - "users:write"
+    error_mapping:
+      http_status: [401, 403, 409, 422, 500]
+
+  - action: "activate"
+    client_only: false
+    operation_ids:
+      - "users_activate"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            all:
+              - field: "status"
+                op: "=="
+                value: "INACTIVE"
+              - field: "deleted_at"
+                op: "is_null"
+    error_mapping:
+      http_status: [401, 403, 409, 422, 500]
+
+  - action: "deactivate"
+    client_only: false
+    operation_ids:
+      - "users_deactivate"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            all:
+              - field: "status"
+                op: "=="
+                value: "ACTIVE"
+              - field: "deleted_at"
+                op: "is_null"
+    error_mapping:
+      http_status: [401, 403, 409, 422, 500]
+
+  - action: "archive"
+    client_only: false
+    operation_ids:
+      - "users_archive"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            all:
+              - field: "deleted_at"
+                op: "is_null"
+    error_mapping:
+      http_status: [401, 403, 409, 500]
+
+  - action: "restore"
+    client_only: false
+    operation_ids:
+      - "users_restore"
+    permissions:
+      - "users:write"
+    ui_rules:
+      action_enablement:
+        - enabled_when:
+            all:
+              - field: "deleted_at"
+                op: "is_not_null"
+    error_mapping:
+      http_status: [401, 403, 409, 500]
+
+  - action: "bulk_select"
+    client_only: true
+    operation_ids: []
+    telemetry_defaults:
+      ui_only: true
+
+  - action: "bulk_update"
+    client_only: false
+    operation_ids:
+      - "users_bulk_update"
+    permissions:
+      - "users:write"
+    error_mapping:
+      http_status: [401, 403, 422, 500]
+
+  - action: "import"
+    client_only: false
+    operation_ids:
+      - "users_import_job_create"
+    permissions:
+      - "users:import"
+    error_mapping:
+      http_status: [401, 403, 422, 500]
+
+  - action: "export"
+    client_only: false
+    operation_ids:
+      - "users_export_job_create"
+    permissions:
+      - "users:export"
+    error_mapping:
+      http_status: [401, 403, 500]
+
+ui_rules:
+  action_visibility:
+    strategy: "hide_if_no_permission"
+  action_enablement: []
+
+error_mapping:
+  default_user_message: "Ocorreu um erro inesperado. Tente novamente ou contate o suporte."
+  http_status:
+    "401":
+      user_message: "Sessão expirada. Faça login novamente."
+      ui:
+        type: "modal"
+        level: "error"
+    "403":
+      user_message: "Você não tem permissão para executar esta ação."
+      ui:
+        type: "toast"
+        level: "error"
+    "409":
+      user_message: "Conflito detectado. O registro pode ter sido alterado por outro usuário."
+      ui:
+        type: "toast"
+        level: "warning"
+    "422":
+      user_message: "Dados inválidos. Verifique os campos e tente novamente."
+      ui:
+        type: "form_validation"
+        level: "error"
+    "500":
+      user_message: "Erro interno do servidor. Contate o suporte."
+      ui:
+        type: "toast"
+        level: "error"

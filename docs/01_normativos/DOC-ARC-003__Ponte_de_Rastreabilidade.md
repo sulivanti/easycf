@@ -19,7 +19,7 @@ Para garantir que o produto escale de forma previsível e auditável, todos os g
 
 ## 2. O "Idioma Operacional" do Frontend (UI Action Envelope)
 
-O rastreio intencional da UI para a API não depende de uma tabela de `ui_events`. A padronização ocorre no Envelope (payload) de Tracking/Observabilidade que as aplicações client-side emitem.
+O rastreio intencional da UI para a API não depende de uma tabela de `ui_events`. A padronização ocorre no Envelope (payload) de Tracking/Observabilidade que as aplicações client-side emitem. Para padronizar a experiência do Dev Fronte-End, este contrato deve ser abstraído no pacote utilitário instanciável `ui-telemetry` (US-MOD-000-F13).
 
 A interface gráfica de todos os aplicativos deve padronizar o envio de telemetria de ação (ex: via log console customizado, sentry ou endpoints de métricas passivas) usando o contrato `UIActionEnvelope`:
 
@@ -54,11 +54,155 @@ Toda modelagem funcional que define Catálogos de Feature (Domain Events) dever�
 
 ## 4. Auditoria e View History
 
-A Timeline do Histórico de qualquer entidade na UI consome um único formato de endpoint unificado provido pelo Core da Aplicação.
+A Timeline do Histórico de qualquer entidade na UI consome um único formato de endpoint unificado provido pelo Core da Aplicação. É expressamente **proibido criar tabelas satélites de "logs de uso"** por funcionalidade (ver Dogma 6, §1). Toda consulta de auditoria parte da tabela `domain_events` (DATA-003).
 
-- O endpoint consumido será padronizado como `GET /entities/{id}/history` (ou variação que acesse genericamente `domain_events_list_by_entity`).
-- O backend consulta de forma performática pelo index obrigatório em `(tenant_id, entity_type, entity_id, created_at desc)`.
-- A exibição de timeline renderiza (Event Type, Created At, Created By, e o Masking do Payload visando ocultar senhas/PII via regras de `sensitivity_level`).
+---
+
+### 4.1 Endpoint Canônico
+
+```
+GET /entities/{entityType}/{entityId}/history
+operationId: domain_events_list_by_entity
+```
+
+| Elemento | Detalhe |
+|---|---|
+| **Autenticação** | Bearer JWT obrigatório |
+| **Headers obrigatórios** | `X-Tenant-ID`, `X-Correlation-ID` (propagar em toda resposta) |
+| **Permissão mínima** | `audit:read` (RBAC — ver §4.4) |
+| **Index obrigatório no banco** | `(tenant_id, entity_type, entity_id, created_at DESC)` |
+| **Tenant isolation** | Query DEVE filtrar por `tenant_id` antes de qualquer outro filtro |
+
+**Path params:**
+
+| Parâmetro | Tipo | Descrição |
+|---|---|---|
+| `entityType` | string enum | Tipo da entidade: `user`, `tenant`, `tenant_user`, `role`, etc. |
+| `entityId` | UUID | Identificador da entidade |
+
+---
+
+### 4.2 Filtros Disponíveis (Query Params)
+
+| Parâmetro | Tipo | Padrão | Validação |
+|---|---|---|---|
+| `from` | ISO 8601 datetime | — | DEVE ser ≤ `to` quando informado |
+| `to` | ISO 8601 datetime | — | DEVE ser ≥ `from` quando informado |
+| `event_type` | string (repeatable) | — | Ex: `?event_type=user.created&event_type=user.updated` |
+| `actor_id` | UUID | — | Filtra eventos por ator específico |
+| `sensitivity_max` | integer 0–3 | role-based (ver §4.4) | Limita nível máximo de sensibilidade retornado |
+
+**Regras de validação:**
+
+- `from` > `to` → `422` com `type="/problems/validation-error"` e detalhe do campo inválido.
+- `event_type` com valor desconhecido → `422` listando os valores válidos no `detail`.
+- `sensitivity_max` > nível autorizado da role → silenciosamente clamped ao nível máximo da role.
+
+---
+
+### 4.3 Paginação
+
+| Parâmetro | Padrão | Máximo | Notas |
+|---|---|---|---|
+| `page` | `1` | — | |
+| `page_size` | `20` | `100` | Acima de 100 → `422` |
+| `sort` | `created_at` | — | Único campo suportado |
+| `order` | `desc` | `asc` / `desc` | |
+
+---
+
+### 4.4 RBAC e Masking de Payload
+
+Toda consulta de auditoria verifica `canRead` + `tenantMatch` antes de retornar dados.
+
+| Role / Permissão | `sensitivity_max` efetivo | Acesso |
+|---|---|---|
+| `audit:read` | `1` | Eventos públicos e de tenant (sem dados sensíveis) |
+| `audit:read` + `audit:sensitive` | `2` | Inclui campos sensíveis mascarados |
+| `superadmin` | `3` | Acesso total |
+| Sem `audit:read` | — | `403 /problems/forbidden` |
+
+**Tabela de masking por `sensitivity_level`:**
+
+| Nível | Visibilidade | Exemplo de campo |
+|---|---|---|
+| `0` | Público — sempre visível | `status`, `event_type`, `created_at` |
+| `1` | Restrito ao tenant — requer `audit:read` | `actor_id`, `entity_id`, campos de perfil |
+| `2` | Sensível — requer `audit:sensitive` | e-mail, nome completo, IP de origem |
+| `3` | Omitido da API — nunca exposto | `password_hash`, tokens, chaves secretas |
+
+Campos com `sensitivity_level=3` são **removidos do payload antes da serialização**, independentemente da role do chamador.
+
+---
+
+### 4.5 Contrato de Resposta (`HistoryEntryDTO`)
+
+```typescript
+// Resposta: 200 OK
+{
+  data: HistoryEntry[];
+  meta: PaginationMeta;
+}
+
+interface HistoryEntry {
+  id: string;                  // UUID do evento
+  event_type: string;          // Ex: "user.created", "tenant_user.blocked"
+  entity_type: string;         // Ex: "user", "tenant_user"
+  entity_id: string;           // UUID da entidade
+  actor_id: string | null;     // UUID do usuário responsável (null = sistema)
+  actor_name: string | null;   // Nome display (sensível: mascarado se nivel < 2)
+  tenant_id: string;           // UUID do tenant
+  correlation_id: string;      // Propagado de X-Correlation-ID
+  causation_id: string | null; // ID do evento que causou este (cadeia causal)
+  payload: Record<string, unknown>; // Mascarado conforme sensitivity_level
+  sensitivity_level: 0 | 1 | 2 | 3;
+  created_at: string;          // ISO 8601
+}
+
+interface PaginationMeta {
+  total: number;       // Total de registros (sem paginação)
+  page: number;
+  page_size: number;
+  total_pages: number;
+}
+```
+
+---
+
+### 4.6 Respostas de Erro (RFC 9457)
+
+| HTTP | `type` | Quando |
+|---|---|---|
+| `400` | `/problems/bad-request` | Query param malformado |
+| `401` | `/problems/unauthorized` | JWT inválido ou sessão revogada |
+| `403` | `/problems/forbidden` | Sem `audit:read` ou tenant mismatch |
+| `404` | `/problems/not-found` | `entityType` ou `entityId` inexistente no tenant |
+| `422` | `/problems/validation-error` | Filtro inválido (`from > to`, `page_size > 100`, etc.) |
+| `500` | `/problems/internal-error` | Falha inesperada |
+
+Todos os erros DEVEM incluir `extensions.correlationId` propagado do `X-Correlation-ID` recebido.
+
+---
+
+### 4.7 Variantes de Path por Módulo
+
+Quando um módulo expõe o histórico via rota própria (nested resource), DEVE usar o mesmo contrato desta seção e o mesmo `operationId` de sufixo:
+
+```
+# Variante por recurso (mais RESTful para módulos com entidades aninhadas):
+GET /users/{userId}/history
+GET /tenants/{tenantId}/history
+GET /tenants/{tenantId}/users/{userId}/history
+
+# Variante genérica (preferida para navegação cross-module no painel de auditoria):
+GET /entities/{entityType}/{entityId}/history
+```
+
+Ambas as variantes DEVEM:
+
+- Compartilhar os mesmos query params (§4.2), paginação (§4.3), RBAC (§4.4) e DTO (§4.5).
+- Declarar `operationId` estável no OpenAPI (ex: `domain_events_list_by_entity` ou `users_history_list`).
+- Realizar tenant isolation obrigatório antes de qualquer filtro adicional.
 
 ---
 
@@ -153,11 +297,14 @@ Eventos: `import.job_created`, `import.job_completed`, `import.job_failed`. Payl
 | `view`, `update` | Form isolado. Get para preencher DTO UI e Update restritivo (comportamento 409 Conflito email/código). | `users_get` & `users_update` | `users:read` / `users:write` |
 | `activate/deactivate/archive/restore` | Comutação contextual do Botão de Estado Topo da Tela com base nativa. | `users_activate` etc | `users:write` |
 | `comment`, `attachment_*` | Blocos/Tabs Adicionais na Base. UI manipula coleção satélite. | `user_comment_*` etc | `users:comment` etc |
-| `view_history` | Aba Central de Audit/Timeline. Retorna `domain_events_...` (Filtrada p/ Masking). | `domain_events_list_by_entity` | `users:read` |
+| `view_history` | Aba Central de Audit/Timeline. Retorna `domain_events_...` (Filtrada p/ Masking). | `domain_events_list_by_entity` | `audit:read` (ver §4.4) |
 
 ---
 **Metadados:**
 
 - **Status:** READY
-- **Versão:** 1.0.0
+- **Versão:** 1.1.0
 - **Rastreabilidade/Contexto:** Documentação Normativa de Ecossistema de Produtividade, Agentes (WEB, API, DOMAIN).
+- **Changelog:**
+  - `1.1.0` (2026-03-06): §4 enriquecido com contrato normativo completo de `view_history` — endpoint canônico, filtros, paginação, RBAC/masking, `HistoryEntryDTO`, erros RFC 9457 e variantes de path. Permissão `view_history` em §9 corrigida para `audit:read`.
+  - `1.0.0`: Versão inicial.

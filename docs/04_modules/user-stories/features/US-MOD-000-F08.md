@@ -1,6 +1,6 @@
 # US-MOD-000-F08 — Perfil do Usuário Autenticado (Consulta e Edição)
 
-**Status:** `em revisao`
+**Status:** `READY`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — User Profile)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F07, US-MOD-000-F09, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
@@ -118,12 +118,12 @@ Funcionalidade: Consulta do Perfil do Usuário Autenticado
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
-- [ ] Cenários Gherkin revisados e aprovados.
-- [ ] Contrato de `GET /auth/me` e `PUT /users/:id` documentado no OpenAPI.
-- [ ] Comportamento de `force_pwd_reset` no middleware (gate de acesso) definido em US-MOD-000-F01.
-- [ ] Modelo de dados (`users` + `content_users` + `tenant_users`) validado com F05, F07, F09.
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Owner definido.
+- [x] Cenários Gherkin revisados e aprovados.
+- [x] Contrato de `GET /auth/me` e `PUT /users/:id` documentado no OpenAPI.
+- [x] Comportamento de `force_pwd_reset` no middleware (gate de acesso) definido em US-MOD-000-F01.
+- [x] Modelo de dados (`users` + `content_users` + `tenant_users`) validado com F05, F07, F09.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

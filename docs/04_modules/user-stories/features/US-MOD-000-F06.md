@@ -1,6 +1,6 @@
 # US-MOD-000-F06 — Gestão de Perfis (Roles) e Controle de Acesso Baseado em Escopos (RBAC)
 
-**Status:** `em revisao`
+**Status:** `READY`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — RBAC)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-ESC-001, DOC-GNP-00
@@ -106,12 +106,12 @@ Funcionalidade: Gestão de Roles e RBAC por Escopos
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
+- [x] Owner definido.
 - [x] PENDENTE-F06-001 (hard delete vs soft delete de roles) resolvido.
-- [ ] Cenários Gherkin revisados e aprovados.
-- [ ] Contrato dos endpoints documentado no OpenAPI (`/roles`, `/roles/:id`).
-- [ ] Sem `PENDENTE-XXX` críticos em aberto.
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Cenários Gherkin revisados e aprovados.
+- [x] Contrato dos endpoints documentado no OpenAPI (`/roles`, `/roles/:id`).
+- [x] Sem `PENDENTE-XXX` críticos em aberto.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

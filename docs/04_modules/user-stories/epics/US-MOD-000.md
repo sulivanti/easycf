@@ -1,12 +1,12 @@
 # US-MOD-000 — Governança de Documentos Normativos para Geração Automática de Código
 
-**Status:** `em revisao`
+**Status:** `READY`
 **Versão:** 0.5.0
 **Data:** 2026-03-06
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Framework de Automação / Geradores)
 
-### Metadados de Governança
+## Metadados de Governança
 
 - **estado_item:** READY
 - **owner:** arquitetura
@@ -42,7 +42,7 @@ Como **time de produto e engenharia**, queremos que o framework de geração aut
 ### Documentos normativos cobertos por esta story (fonte de verdade)
 
 | Código | Documento | Papel no Épico |
-|---|---|---|
+| --- | --- | --- |
 | DOC-DEV-001 | Especificação Executável / Golden Path | Base normativa principal; define DoR/DoD, estados de item e rastreabilidade |
 | DOC-GNP-00 | Guia Normativo e Padrões | Regras MUST/SHOULD/MAY; DX, CLI/scaffolding, boilerplate obrigatório |
 | DOC-ESC-001 | Escala de Arquitetura 0/1/2 | Gate de complexidade; nivela decisões arquiteturais e gatilhos de ADR |
@@ -181,13 +181,13 @@ O épico US-MOD-000 é considerado **concluído** quando:
 > **Objetivo:** Garantir que o framework de geração de código produza artefatos 100% conformes com os normativos do projeto.
 
 | # | Métrica | Baseline | Alvo | Data |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | OKR-1 | % de endpoints gerados com OpenAPI + operationId + correlation_id | 0% | 100% | Ao final de cada sprint de scaffolding |
 | OKR-2 | % de sub-histórias (F01–F16) aprovadas sem violação CI normativa | 0% | 100% | Conclusão do épico |
 | OKR-3 | Tempo de detecção de divergência normativa (CI gate) | Manual (~dias) | Automático (<5 min no pipeline) | Pós CI configurado |
 | OKR-4 | Nº de ADRs abertas por divergência de padrão não documentada | N/A | 0 abertas sem responsável e prazo | Ao final do épico |
 
-- **estado_item:** READY (métricas aprovadas como alvo da governança)
+- **estado_item:** READY
 
 ---
 
@@ -217,22 +217,22 @@ US-MOD-000  (este arquivo) ← Épico / Governança / Índice
 
 | Sub-História | Tema | Status | Owner |
 | --- | --- | --- | --- |
-| [US-MOD-000-F01](../features/US-MOD-000-F01.md) | Autenticação nativa + gerenciamento de sessões | `para aprovação` | arquitetura |
-| [US-MOD-000-F02](../features/US-MOD-000-F02.md) | MFA / TOTP (RFC 6238) | `para aprovação` | arquitetura |
-| [US-MOD-000-F03](../features/US-MOD-000-F03.md) | SSO OAuth2 — Google + Microsoft | `para aprovação` | arquitetura |
-| [US-MOD-000-F04](../features/US-MOD-000-F04.md) | Recuperação de senha por e-mail | `para aprovação` | arquitetura |
-| [US-MOD-000-F05](../features/US-MOD-000-F05.md) | Gestão de usuários (CRUD + soft delete) | `para aprovação` | arquitetura |
-| [US-MOD-000-F06](../features/US-MOD-000-F06.md) | Roles / RBAC por escopos + cache Redis | `para aprovação` | arquitetura |
-| [US-MOD-000-F07](../features/US-MOD-000-F07.md) | Filiais multi-tenant (CRUD + soft delete) | `para aprovação` | arquitetura |
-| [US-MOD-000-F08](../features/US-MOD-000-F08.md) | Perfil do usuário autenticado | `para aprovação` | arquitetura |
-| [US-MOD-000-F09](../features/US-MOD-000-F09.md) | Vinculação usuário-filial com role | `para aprovação` | arquitetura |
-| [US-MOD-000-F10](../features/US-MOD-000-F10.md) | Alteração de Senha Autenticada (Minha Conta) | `em revisao` | arquitetura |
-| [US-MOD-000-F11](../features/US-MOD-000-F11.md) | Endpoint GET /info (Versão e Metadados do Sistema) | `em revisao` | arquitetura |
-| [US-MOD-000-F12](../features/US-MOD-000-F12.md) | Catálogo de Permissões — CRUD de escopos (integridade referencial RBAC) | `em revisao` | arquitetura |
-| [US-MOD-000-F13](../features/US-MOD-000-F13.md) | Utilitário de Telemetria UI (UIActionEnvelope) | `para aprovação` | arquitetura |
-| [US-MOD-000-F14](../features/US-MOD-000-F14.md) | Middlewares de Correlação E2E (CorrelationId Middleware) | `para aprovação` | arquitetura |
-| [US-MOD-000-F15](../features/US-MOD-000-F15.md) | Motor de Gates de Pipeline CI (Screen Manifests Validator) | `para aprovação` | arquitetura |
-| [US-MOD-000-F16](../features/US-MOD-000-F16.md) | Módulo de Storage e Upload Centralizado | `em revisao` | arquitetura |
+| [US-MOD-000-F01](../features/US-MOD-000-F01.md) | Autenticação nativa + gerenciamento de sessões | `READY` | arquitetura |
+| [US-MOD-000-F02](../features/US-MOD-000-F02.md) | MFA / TOTP (RFC 6238) | `READY` | arquitetura |
+| [US-MOD-000-F03](../features/US-MOD-000-F03.md) | SSO OAuth2 — Google + Microsoft | `REFINING` | arquitetura |
+| [US-MOD-000-F04](../features/US-MOD-000-F04.md) | Recuperação de senha por e-mail | `READY` | arquitetura |
+| [US-MOD-000-F05](../features/US-MOD-000-F05.md) | Gestão de usuários (CRUD + soft delete) | `READY` | arquitetura |
+| [US-MOD-000-F06](../features/US-MOD-000-F06.md) | Roles / RBAC por escopos + cache Redis | `READY` | arquitetura |
+| [US-MOD-000-F07](../features/US-MOD-000-F07.md) | Filiais multi-tenant (CRUD + soft delete) | `READY` | arquitetura |
+| [US-MOD-000-F08](../features/US-MOD-000-F08.md) | Perfil do usuário autenticado | `READY` | arquitetura |
+| [US-MOD-000-F09](../features/US-MOD-000-F09.md) | Vinculação usuário-filial com role | `READY` | arquitetura |
+| [US-MOD-000-F10](../features/US-MOD-000-F10.md) | Alteração de Senha Autenticada (Minha Conta) | `READY` | arquitetura |
+| [US-MOD-000-F11](../features/US-MOD-000-F11.md) | Endpoint GET /info (Versão e Metadados do Sistema) | `READY` | arquitetura |
+| [US-MOD-000-F12](../features/US-MOD-000-F12.md) | Catálogo de Permissões — CRUD de escopos (integridade referencial RBAC) | `READY` | arquitetura |
+| [US-MOD-000-F13](../features/US-MOD-000-F13.md) | Utilitário de Telemetria UI (UIActionEnvelope) | `READY` | arquitetura |
+| [US-MOD-000-F14](../features/US-MOD-000-F14.md) | Middlewares de Correlação E2E (CorrelationId Middleware) | `READY` | arquitetura |
+| [US-MOD-000-F15](../features/US-MOD-000-F15.md) | Motor de Gates de Pipeline CI (Screen Manifests Validator) | `READY` | arquitetura |
+| [US-MOD-000-F16](../features/US-MOD-000-F16.md) | Módulo de Storage e Upload Centralizado | `READY` | arquitetura |
 
 > 📌 **Regra de aprovação em cascata:** Esta US-MOD-000 deve ser aprovada **antes** de qualquer sub-história. Cada sub-história F01–F16 deve ser aprovada individualmente antes de ter seu código scaffoldado ou alterado por automação.
 
@@ -245,7 +245,9 @@ Nenhuma pendência estrutural em aberto (Nível arquitetural 2 consolidado e own
 ## 11. CHANGELOG do Épico
 
 | Versão | Data | Responsável | Descrição |
-|---|---|---|---|
+| --- | --- | --- | --- |
+| 0.7.1 | 2026-03-08 | arquitetura | Promoção de US-MOD-000-F02 (MFA / TOTP) para READY. |
+| 0.7.0 | 2026-03-08 | arquitetura | Promoção de US-MOD-000-F02 (MFA / TOTP) para REFINING. |
 | 0.6.0 | 2026-03-06 | arquitetura | Inclusão do DOC-PADRAO-005 e criação oficial da US-MOD-000-F16 (Storage e Upload Centralizado). |
 | 0.5.0 | 2026-03-06 | arquitetura | Adição das features de Telemetria (F13), Correlação E2E (F14) e Script CI (F15) mapeando gaps das US-044/047 |
 | 0.4.0 | 2026-03-06 | arquitetura | Adição de US-MOD-000-F12 (Catálogo de Permissões): gap US-013 — CRUD de escopos pré-definidos, validação semântica no F06, integridade referencial RBAC |

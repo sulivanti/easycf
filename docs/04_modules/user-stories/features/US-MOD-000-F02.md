@@ -1,17 +1,17 @@
 # US-MOD-000-F02 — Autenticação de Dois Fatores via TOTP (MFA)
 
-**Status:** `em revisao`
+**Status:** `READY`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth MFA)
-**Referências Normativas:** DOC-DEV-001 §5.3, §8.2, §12.4 | SEC-000-01 | RFC 6238 (TOTP) | DOC-ARC-001
+**Referências Normativas:** DOC-DEV-001 §5.3, §8.2, §12.4 | SEC-000-01 | RFC 6238 (TOTP) | DOC-ARC-001 | DOC-GNP-00
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-06
-- **rastreia_para:** US-MOD-000, US-MOD-000-F01, DOC-DEV-001, DOC-ARC-001, DOC-GNP-00
+- **data_ultima_revisao:** 2026-03-08
+- **rastreia_para:** US-MOD-000, US-MOD-000-F01, DOC-DEV-001, DOC-ARC-001, DOC-GNP-00, SEC-000-01
 - **nivel_arquitetura:** 2 (DDD — temp_token com escopo restrito, domain events de sessão)
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
@@ -136,12 +136,12 @@ Funcionalidade: Autenticação de Dois Fatores via TOTP (MFA)
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
-- [ ] Cenários Gherkin revisados e aprovados.
-- [ ] Contrato do endpoint `POST /auth/mfa/verify` documentado no OpenAPI.
-- [ ] Sem `PENDENTE-XXX` críticos em aberto.
-- [ ] Feature US-MOD-000-F01 **aprovada** (dependência direta).
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Owner definido (arquitetura).
+- [x] Cenários Gherkin revisados e aprovados.
+- [x] Contrato do endpoint `POST /auth/mfa/verify` documentado no OpenAPI.
+- [x] Sem `PENDENTE-XXX` críticos em aberto.
+- [x] Feature US-MOD-000-F01 **aprovada**.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

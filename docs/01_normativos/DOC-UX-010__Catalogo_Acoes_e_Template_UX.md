@@ -598,20 +598,33 @@ Exemplos:
 - `ux-user-001.users-list.yaml`
 - `ux-invoice-002.invoice-detail.yaml`
 
+#### Manifestos de Infra/Shell (sem entity de domínio)
+
+Manifestos que representam **infraestrutura de navegação** (Shell, autenticação, layout base) não possuem `entity_type` de domínio. Para esses casos, use os prefixos reservados:
+
+| Prefixo | Uso | Exemplos |
+|---------|-----|----------|
+| `ux-auth-NNN` | Fluxos de autenticação pré-sessão (login, recover, reset) | `ux-auth-001.login.yaml` |
+| `ux-shell-NNN` | Container de navegação (App Shell, Sidebar, Header) | `ux-shell-001.app-shell.yaml` |
+| `ux-dash-NNN` | Dashboards executivos/iniciais (pós-login) | `ux-dash-001.main.yaml` |
+
+> **Regra:** Nesses manifestos, `entity_type` deve ser preenchido com o valor `shell`, `auth` ou `dashboard` conforme o prefixo — nunca omitido, pois o campo é obrigatório no schema v1.
+
 ### Campos obrigatórios (resumo)
 
-| Campo               | Regra                                                             |
-|---------------------|-------------------------------------------------------------------|
-| `manifest_version`  | Sempre `1`                                                        |
-| `screen_id`         | Padrão `UX-[ENTITY]-[SEQ]`, ex.: `UX-USER-001`                   |
-| `name`              | Nome descritivo da tela                                           |
-| `entity_type`       | `snake_case` singular                                             |
-| `routes`            | Rotas HTTP que a tela consome                                     |
-| `telemetry_defaults`| DEVE conter `X-Correlation-ID` em `propagate_headers` (DOC-ARC-003) |
-| `permissions`       | Objeto raiz com chaves `read`, `write`, etc.                      |
-| `actions`           | Array de ações do catálogo UX-010                                 |
-| `ui_rules`          | `action_visibility` + `action_enablement` globais                |
-| `error_mapping`     | `default_user_message` + mapeamento de status HTTP               |
+| Campo               | Regra                                                                          |
+|---------------------|--------------------------------------------------------------------------------|
+| `manifest_version`  | Sempre `1`                                                                     |
+| `screen_id`         | Padrão `UX-[ENTITY]-[SEQ]`, ex.: `UX-USER-001`                                |
+| `name`              | Nome descritivo da tela                                                        |
+| `entity_type`       | `snake_case` singular; para infra/shell usar `auth`, `shell` ou `dashboard`   |
+| `routes`            | Rotas HTTP que a tela consome                                                  |
+| `telemetry_defaults`| DEVE conter `X-Correlation-ID` em `propagate_headers` (DOC-ARC-003)          |
+| `permissions`       | Objeto raiz com chaves `read`, `write`, etc.                                   |
+| `actions`           | Array de ações do catálogo UX-010                                              |
+| `ui_rules`          | `action_visibility` + `action_enablement` globais                             |
+| `error_mapping`     | `default_user_message` + mapeamento de status HTTP                            |
+| `linked_stories`    | **Opcional.** Lista de IDs de User Stories vinculadas (ex.: `["US-MOD-001-F01"]`) |
 
 ### Geração e Validação
 

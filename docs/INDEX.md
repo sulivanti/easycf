@@ -38,8 +38,8 @@
 
 | Documento | ID | Descrição |
 |---|---|---|
-| [UX-000 — Tela de Login e Autenticação](04_modules/mod-000-foundation/requirements/ux/UX-000.md) | UX-000 | Especificação UX completa da tela de login (campos, SSO, MFA, eventos) |
-| [UX-001 — App Shell e SDUI](04_modules/mod-001-backoffice-admin/requirements/ux/UX-001.md) | UX-001 | App Shell pós-login, Dispatcher de ações, Shell Config, SDUI |
+| UX-000 — Tela de Login e Autenticação | UX-000 | Especificação UX completa da tela de login (campos, SSO, MFA, eventos) |
+| UX-001 — App Shell e SDUI | UX-001 | App Shell pós-login, Dispatcher de ações, Shell Config, SDUI |
 
 ### Especificação Executável (Template)
 
@@ -55,7 +55,8 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 
 | Módulo | Arquivo Raiz | Estado |
 |---|---|---|
-| MOD-001 — Backoffice (Admin) | [mod.md](04_modules/mod-001-backoffice-admin/mod.md) | REFINING |
+| MOD-000 — Framework de Automação / Geradores (Foundation) | [mod.md](04_modules/mod-000-foundation/mod.md) | DRAFT |
+| MOD-001 — Backoffice (Admin) | [mod.md](04_modules/mod-001-backoffice/mod.md) | DRAFT |
 
 > **Nota:** Novos módulos devem criar um subdiretório próprio em `04_modules/<mod-id>/` seguindo o padrão do MOD-001.
 
@@ -67,14 +68,14 @@ Repositório para armazenamento de arquivos em desuso, componentes e patches ant
 
 | Arquivo/Pasta | Descrição |
 |---|---|
-| [05_patches/](.bkp/05_patches) | Artefatos temporários de migração do projeto |
-| [components/](.bkp/components) | Restos de tutoriais e experimentações sem documentação modular |
-| [CFG-DEV-001__Padroes_de...](.bkp/CFG-DEV-001__Padroes_de_Configuracao_e_Ambiente.md) | Antigo normativo de config; o conteúdo foi fundido ao DOC-PADRAO-001 e 004 |
-| [DOC-DEV-000__Modulo...](.bkp/DOC-DEV-000__Modulo_Foundation.md) | Antiga especificação Foundation; fragmentada em mod-000-foundation |
-| [DOC-DEV-001__Documento...](.bkp/DOC-DEV-001__Documento_de_Especificacao_Executavel.md) | DEPRECATED; usar a pasta `template/` |
-| [DOC-DEV-003__App_Shell...](.bkp/DOC-DEV-003__App_Shell_e_Motor_de_Eventos.md) | DEPRECATED; conteúdo unificado nos UX e normativos de arquitetura |
-| [DOC-DEV-004__Tela_de_L...](.bkp/DOC-DEV-004__Tela_de_Login_e_Autenticacao.md) | DEPRECATED; migrado para UX-000 e normativos de IAM/Foundation |
-| [spec-tool-payment...](.bkp/spec-tool-payment-processor.md) | Experimento sem escopo atual |
+| 05_patches/ | Artefatos temporários de migração do projeto |
+| components/ | Restos de tutoriais e experimentações sem documentação modular |
+| CFG-DEV-001__Padroes_de_Configuracao_e_Ambiente.md | Antigo normativo de config; o conteúdo foi fundido ao DOC-PADRAO-001 e 004 |
+| DOC-DEV-000__Modulo_Foundation.md | Antiga especificação Foundation; fragmentada em mod-000-foundation |
+| DOC-DEV-001__Documento_de_Especificacao_Executavel.md | DEPRECATED; usar a pasta `template/` |
+| DOC-DEV-003__App_Shell_e_Motor_de_Eventos.md | DEPRECATED; conteúdo unificado nos UX e normativos de arquitetura |
+| DOC-DEV-004__Tela_de_Login_e_Autenticacao.md | DEPRECATED; migrado para UX-000 e normativos de IAM/Foundation |
+| spec-tool-payment-processor.md | Experimento sem escopo atual |
 
 ---
 

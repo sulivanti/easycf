@@ -1,6 +1,6 @@
 # US-MOD-000-F11 — Endpoint GET /info (Versão e Metadados do Sistema)
 
-**Status:** `em revisao`
+**Status:** `READY`
 **Data:** 2026-03-06
 **Autor(es):** Arquitetura
 **Módulo Destino:** **ECF Core** (Infraestrutura do Framework — `@easycf/core-api`)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** DOC-PADRAO-001, DOC-ARC-001

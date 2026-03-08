@@ -1,0 +1,73 @@
+manifest_version: 1
+screen_id: "UX-SHELL-001"
+name: "Application Shell (Sidebar + Header + Breadcrumb)"
+entity_type: "shell"
+
+linked_stories:
+  - "US-MOD-001"
+  - "US-MOD-001-F01"
+  - "US-MOD-001-F02"
+
+# O Shell não é uma tela de negócio — é o container de navegação.
+# Por isso entity_type = "shell" (DOC-UX-010 §Manifestos de Infra/Shell).
+# Sidebar renderiza menu filtrado por scopes do JWT (DOC-UX-011 §3.2).
+
+routes:
+  - path: "/auth/me"
+    method: GET
+  - path: "/auth/logout"
+    method: POST
+
+telemetry_defaults:
+  event_name: "shell.rendered"
+  required_fields:
+    - "screen_id"
+    - "tenant_id"
+    - "correlation_id"
+  propagate_headers:
+    - "X-Correlation-ID"
+
+permissions:
+  read: "auth:me"
+  logout: "auth:logout"
+
+actions:
+  # Renderização do shell — carrega dados do usuário autenticado
+  - action: "view"
+    client_only: false
+    operation_ids:
+      - "auth_me"
+    permission: "auth:me"
+
+  # Logout: mapeado como submit (workflow) com contexto logout
+  # logout não consta no catálogo DOC-UX-010 §1-37;
+  # adotado submit/workflow por ser a ação mais próxima semanticamente.
+  - action: "submit"
+    client_only: false
+    operation_ids:
+      - "auth_logout"
+    permission: "auth:logout"
+
+ui_rules:
+  action_visibility:
+    strategy: "hide_if_no_permission"
+  action_enablement: []
+
+error_mapping:
+  default_user_message: "Ocorreu um erro inesperado. Tente novamente ou contate o suporte."
+  http_status:
+    "401":
+      user_message: "Sessão expirada. Faça login novamente."
+      ui:
+        type: "modal"
+        level: "error"
+    "403":
+      user_message: "Você não tem permissão para executar esta ação."
+      ui:
+        type: "toast"
+        level: "error"
+    "500":
+      user_message: "Erro interno do servidor. Contate o suporte."
+      ui:
+        type: "toast"
+        level: "error"

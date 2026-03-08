@@ -1,12 +1,12 @@
 # US-MOD-000-F14 — Middlewares de Correlação E2E (CorrelationId Middleware)
 
-**Status:** `para aprovação`
+**Status:** `READY`
 **Módulo Destino:** **MOD-000** (Foundation - API Core)
 **Épico Pai:** [US-MOD-000](../epics/US-MOD-000.md)
 
 ### Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** DOC-ARC-003 (§1 Dogma 3 e §3 Domain Events Bridge)

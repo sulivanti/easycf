@@ -1,6 +1,6 @@
 # US-MOD-000-F16 — Módulo de Storage e Upload Centralizado
 
-**Status:** `em revisao`
+**Status:** `READY`
 **Data:** 2026-03-06
 **Autor(es):** Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** DOC-PADRAO-005, DOC-ARC-003
@@ -85,7 +85,7 @@ Funcionalidade: Upload Governed (Fluxo Two-Step com Presigned URL)
 
 - [x] Normativa `DOC-PADRAO-005` formalizada em 01_normativos.
 - [x] Contratos HTTP e Schema `storage_objects` especificados.
-- [ ] O modelo `domains_eventes` possui suporte e mapeamento de correlações aos eventos "storage.*".
+- [x] O modelo `domains_eventes` possui suporte e mapeamento de correlações aos eventos "storage.*".
 
 ---
 

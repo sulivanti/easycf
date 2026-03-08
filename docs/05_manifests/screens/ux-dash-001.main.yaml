@@ -1,0 +1,66 @@
+manifest_version: 1
+screen_id: "UX-DASH-001"
+name: "Dashboard Administrativo"
+entity_type: "dashboard"
+
+linked_stories:
+  - "US-MOD-001"
+  - "US-MOD-001-F03"
+
+# Rota protegida: / ou /dashboard
+# Força re-autenticação se JWT inválido ou expirado.
+# Skeleton screen exibido durante carregamento de /auth/me (DOC-UX-012 §5.1).
+
+routes:
+  - path: "/auth/me"
+    method: GET
+
+telemetry_defaults:
+  event_name: "dashboard.viewed"
+  required_fields:
+    - "screen_id"
+    - "tenant_id"
+    - "correlation_id"
+  propagate_headers:
+    - "X-Correlation-ID"
+
+permissions:
+  read: "auth:me"
+
+actions:
+  # Widget de boas-vindas com nome do usuário
+  - action: "view"
+    client_only: false
+    operation_ids:
+      - "auth_me"
+    permission: "auth:me"
+
+  # Atalhos de módulos filtrados por scopes — client-only
+  - action: "view"
+    client_only: true
+    operation_ids: []
+    permission: "auth:me"
+
+ui_rules:
+  action_visibility:
+    strategy: "hide_if_no_permission"
+  action_enablement: []
+
+error_mapping:
+  default_user_message: "Ocorreu um erro inesperado. Tente novamente ou contate o suporte."
+  http_status:
+    "401":
+      user_message: "Sessão expirada. Faça login novamente."
+      ui:
+        type: "modal"
+        level: "error"
+    "403":
+      user_message: "Você não tem permissão para acessar este recurso."
+      ui:
+        type: "toast"
+        level: "error"
+    "500":
+      user_message: "Erro interno do servidor. Contate o suporte."
+      ui:
+        type: "toast"
+        level: "error"

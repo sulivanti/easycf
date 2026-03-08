@@ -1,0 +1,3052 @@
+﻿
+> @easycf/monorepo@0.0.9 qa:all
+> npm run lint:docs && npm run lint:markdown && npm run validate:manifests
+
+
+> @easycf/monorepo@0.0.9 lint:docs
+> node scripts/lint-docs.js
+
+--- Iniciando linting de documenta├º├úo ---
+--- Lint conclu├¡do com sucesso ---
+
+> @easycf/monorepo@0.0.9 lint:markdown
+> markdownlint-cli2 "**/*.md" "#node_modules" "#.gemini"
+
+markdownlint-cli2 v0.21.0 (markdownlint v0.40.0)
+Finding: **/*.md !node_modules !.gemini
+Linting: 92 file(s)
+Summary: 1109 error(s)
+node.exe : .agents/workflows/release.md:24:1 error MD060/table-column-style Table 
+column style [Table pipe is missing space to the right for style "compact"]
+No linha:1 caractere:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (.agents/workflo...tyle "compact"]:Stri 
+   ng) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+.agents/workflows/release.md:24:5 error MD060/table-column-style Table column style 
+[Table pipe is missing space to the left for style "compact"]
+.agents/workflows/release.md:24:5 error MD060/table-column-style Table column style 
+[Table pipe is missing space to the right for style "compact"]
+.agents/workflows/release.md:24:9 error MD060/table-column-style Table column style 
+[Table pipe is missing space to the left for style "compact"]
+.agents/workflows/release.md:24:9 error MD060/table-column-style Table column style 
+[Table pipe is missing space to the right for style "compact"]
+.agents/workflows/release.md:24:13 error MD060/table-column-style Table column 
+style [Table pipe is missing space to the left for style "compact"]
+docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md:68:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md:68:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md:68:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md:68:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:77:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:77:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:77:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:77:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:63 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:69:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:69:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:69:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:69:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:191 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:268:38 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:268:69 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:269:21 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:269:37 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:269:51 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:269:71 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:270:18 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:270:33 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:270:65 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:271:18 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:271:33 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:271:65 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:272:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:272:32 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:272:66 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:289:45 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:13:160 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:14:125 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:93 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "1. Introdu├º├úo"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:162 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "2. Recursos do Sistema (vis├úo ..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:206 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "Itens 
+base (can├┤nicos) e links"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:235 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Decis├Áes (ADR)"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:250 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "3. Regras de Neg├│cio (BR-xxx)"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:258:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:309 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "4. Requisitos (FR / DATA / INT..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:319:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:332 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Crit├®rios de aceite (Gherkin)"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:386:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:715:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:761:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:20 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:62 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:107 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:156 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:220 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:236 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:379 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:938 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "4. 
+Mapeamento Inteligente de E..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1035 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "5. Arquitetura e Implementa├º├úo..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1168 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "6. Anexos"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1234 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "6.3 
+Pend├¬ncias (sem perguntas)"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1242 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "7. Entrada do usu├írio (Templat..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1272 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:8 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**DOC-DEV-001**: Documento d..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:17 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+mantenha **padroniza├º├úo do p..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:33 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "## 2.1) Governan├ºa de Decis├Áes 
+Arquiteturais e Exce├º├Áes (ADR)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:36 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### Gatilhos Obrigat├│rios para ADR:"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:36:35 error 
+MD026/no-trailing-punctuation Trailing punctuation in heading [Punctuation: ':']
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:37 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "1. 
+**Quebra de Padr├úo:** Intro..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:42 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### Processo de Exce├º├úo ao Padr├úo:"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:42:34 error 
+MD026/no-trailing-punctuation Trailing punctuation in heading [Punctuation: ':']
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:44 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**Registro:** O PR deve ter ..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:50 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "## 3) Padr├Áes de produto "sempre 
+ligados" (MUST)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:55 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 3.1 API e contratos (MUST)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:56 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**Versionamento Obrigado na ..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:57:161 error 
+MD009/no-trailing-spaces Trailing spaces [Expected: 0 or 2; Actual: 1]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:63 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 3.2 Seguran├ºa e dados"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:64 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Autentica├º├úo/autoriza├º├úo ond..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:68 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 3.3 Observabilidade (Traceability) e 
+Trilha End-to-End"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:70 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`correlationId` (Trace-ID) p..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:77 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 3.4 Banco e migra├º├Áes"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:78 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Migra├º├Áes versionadas."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:82 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 3.5 Engenharia (tooling/CI)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:83 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Lint + typecheck + testes + ..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:91 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "> - 
+**MUST:** Obrigat├│rio. O n..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:99:37 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:101:43 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:103:37 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:109 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "## 4) Decis├úo do n├¡vel (gatilhos de 
+ado├º├úo)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:112 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 4.1 Matriz r├ípida (recomenda├º├úo)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:113 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**Use N├¡vel 0** se TODOS for..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:135 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 4.2 Score (opcional, para decidir 
+sem debate)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:137 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+estado/workflow"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:152 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 5.1 Quando usar"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:153 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Endpoints simples e est├íveis..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:158 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 5.2 Caracter├¡sticas"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:159 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Controller/handler **fino**."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:165 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "#### API (`apps/api`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:166 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```text"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:179 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "#### Web (`apps/web`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:180 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```text"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:190 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 5.4 Exemplo de "handler" 
+(esqueleto)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:191 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Recebe DTO validado *(a fun├º..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:195 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 5.5 Checklist de PR ÔÇö N├¡vel 0 
+(MUST)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:198 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Geral"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:199 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Pastas conforme estrutur..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:205 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "API"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:206 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] `controller` sem regra d..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:210 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Web"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:211 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] `data/api.ts` sem regra;..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:214 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 5.6 Como evoluir para N├¡vel 1"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:215 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Extrair depend├¬ncias (DB, HT..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:222 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 6.1 Quando usar"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:223 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Existe regra de neg├│cio mode..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:228 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 6.2 Caracter├¡sticas"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:229 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**Presentation**: controller..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:236 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "#### API (`apps/api`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:236 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "API 
+(`apps/api`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:237 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```text"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:262 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "#### Web (`apps/web`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:262 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "Web 
+(`apps/web`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:263 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```text"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:276 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 6.4 Checklist de PR ÔÇö N├¡vel 1 
+(MUST)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:277 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Geral"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:278 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Depend├¬ncias seguem: pre..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:282 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Application"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:283 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Use case ├® o ├║nico lugar..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:287 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Domain"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:288 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] VOs apenas quando fazem ..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:291 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Infrastructure"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:292 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Reposit├│rios implementam..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:295 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Web"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:296 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Data layer isolado e tes..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:299 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 6.5 Como evoluir para N├¡vel 2"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:300 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Identificar invariantes repe..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:308 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 7.1 Quando usar"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:309 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Dom├¡nio ├® core do produto."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:313 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 7.2 Caracter├¡sticas"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:314 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Dom├¡nio rico: **Entidade + V..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:325 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "#### API (`apps/api`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:325 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "API 
+(`apps/api`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:326 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```text"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:356 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "#### Web (`apps/web`) ÔÇö opcionalmente 
+"n├¡vel 2 de UI""]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:357 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```text"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:373 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 7.4 Checklist de PR ÔÇö N├¡vel 2 
+(MUST)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:374 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Domain"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:375 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Invariantes est├úo no dom..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:381 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Application"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:382 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Use cases n├úo reimplemen..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:387 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Infrastructure"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:388 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Reposit├│rios respeitam f..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:393 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Presentation"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:394 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Controller/validator faz..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:397 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Web"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:398 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- [ 
+] Workflows complexos t├¬m ..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:401 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 7.5 Como "reduzir" sem perder 
+padr├úo"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:403 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+manter camadas e contratos,"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:411 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 8.1 N├¡vel 0 ÔÇö `ListCustomers`"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:412 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`controller.ts` chama `handl..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:415 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 8.2 N├¡vel 1 ÔÇö `CreateCustomer`"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:416 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`controller.ts` valida + cha..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:421 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 8.3 N├¡vel 2 ÔÇö `PlaceOrder`"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:422 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`Order` (Aggregate Root) con..."]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:447 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "## 9.1) Anti-exemplos T├¡picos por 
+N├¡vel (O que N├âO fazer)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:473 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**Novos M├│dulos (MUST)**: `a..."]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:17 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Documentos relacionados"]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:61 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "(ANEXO ADITIVO) OpenAPI/Swagge..."]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:175 
+error MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "(ANEXO ADITIVO) OpenAPI x-perm..."]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:185 
+error MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "(ANEXO ADITIVO) Eventos Ôåö Perm..."]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:1 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "# DOC-GPA-001 ÔÇö Guia Padr├úo de 
+Agente"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:6 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "## 1) Objetivo"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:13 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**cat├ílogo de agentes** (11 ..."]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:25 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 2.1 Tipo 1 ÔÇö Agentes de 
+enriquecimento (DOC-DEV-001)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:28 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**10 agentes especialistas**..."]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:31 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 2.2 Tipo 2 ÔÇö Agentes geradores de 
+c├│digo (DOC-GNP-00 v2.0 / pacote GNP+CEE+CHE)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:34 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**5 agentes produtores**: se..."]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:41 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 3.1 Princ├¡pios"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:42 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**Sa├¡da sempre parse├ível**: ..."]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:48 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 3.2 Regras de sa├¡da obrigat├│rias 
+(MUST)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:49 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "1) 
+Retornar **UM ├ÜNICO JSON v├í..."]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:54 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### 3.3 Envelope padr├úo (MUST)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:88:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:89:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:91:3 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:92:3 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:93:3 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:94:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:96:3 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:97:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:99:3 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:100:3 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:120:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:121:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:125:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:126:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:130:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:131:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:153:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:154:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:158:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:159:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:165 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(A) SEC 
+(AGN-DEV-06)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:167:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:169 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(B) DATA 
+(AGN-DEV-04)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:171:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:173 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(C) UX 
+(AGN-DEV-07)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:175:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:177 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(D) 
+OpenAPI (coordena├º├úo DEVÔåöC..."]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:179:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:191:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:192:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:193:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:194:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:235:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:243:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:247:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:253:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:254:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:255:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:256:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:257:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:263:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:264:1 error MD004/ul-style 
+Unordered list style [Expected: dash; Actual: asterisk]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:130 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:20:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:20:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:20:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:20:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:69:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:69:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:69:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:69:17 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:70:15 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:70:19 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:70:75 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:120:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:120:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:120:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:120:17 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:121:33 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:121:37 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:121:46 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:121:100 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:30:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:30:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:30:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:30:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:209:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:209:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:209:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:209:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:255:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:255:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:255:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:255:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:466:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:466:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:466:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:466:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:3 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:586:88 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:587:88 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:588:88 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:11 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:11 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:28 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:618:103 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:620:103 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:622:102 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:625:103 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:626:103 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:627:107 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:134 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Amarra├º├úo com eventos/notifica..."]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:148 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Amarra├º├úo EventsÔåöPermissions (..."]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:160 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "OpenAPI 
+(MUST, EX-OAS)"]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:169 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"x-permissions (quando aplic├íve..."]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:178 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:211 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:266 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:335 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:379 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/03_especificacoes/template/DOC-DEV-001.template.md:7 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/04_modules/mod-000-foundation/CHANGELOG.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/CHANGELOG.md:7:74 error MD060/table-column-style 
+Table column style [Table pipe does not align with header for style "aligned"]
+docs/04_modules/mod-000-foundation/requirements/br/BR-000.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/requirements/br/BR-000.md:5:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/mod-000-foundation/requirements/data/DATA-000.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/requirements/data/DATA-000.md:5:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/mod-000-foundation/requirements/fr/FR-000.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/requirements/fr/FR-000.md:5:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/mod-000-foundation/requirements/sec/SEC-000.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/requirements/sec/SEC-000.md:5:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/TESTING-STRATEGY.md:61:33 error MD060/table-column-style Table 
+column style [Table pipe does not align with header for style "aligned"]
+docs/04_modules/TESTING-STRATEGY.md:61:112 error MD060/table-column-style Table 
+column style [Table pipe does not align with header for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:9 error MD001/heading-increment 
+Heading levels should only increment by one level at a time [Expected: h2; Actual: 
+h3]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:21 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:9 error MD001/heading-increment 
+Heading levels should only increment by one level at a time [Expected: h2; Actual: 
+h3]
+docs/04_modules/user-stories/epics/US-MOD-001.md:27 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:32 error MD032/blanks-around-lists 
+Lists should be surrounded by blank lines [Context: "1. **Screen Manifest** 
+declara..."]
+docs/04_modules/user-stories/epics/US-MOD-001.md:40 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### Inclui (Fase 1 ÔÇö UX-First)"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:41 error MD032/blanks-around-lists 
+Lists should be surrounded by blank lines [Context: "- Especifica├º├úo UX completa: 
+S..."]
+docs/04_modules/user-stories/epics/US-MOD-001.md:44 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### N├úo inclui (tratados em outros 
+├®picos/m├│dulos)"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:45 error MD032/blanks-around-lists 
+Lists should be surrounded by blank lines [Context: "- Implementa├º├úo de endpoints 
+(..."]
+docs/04_modules/user-stories/epics/US-MOD-001.md:104:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:104:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:104:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:104:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:104:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:104:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:104:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:104:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:116:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:116:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:116:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:116:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:116:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:116:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:116:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:116:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:126:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:126:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:126:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:126:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:126:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:126:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:136:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:136:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:136:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:136:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:136:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:136:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:148:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:148:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:148:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:149:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:149:22 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:149:36 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:149:105 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:58:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:17 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:21 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:25 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:20 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:101 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:205 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:263 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:311 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:376 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F13.md:7 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F13.md:64 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Mesmas 
+diretrizes globais do ..."]
+docs/04_modules/user-stories/features/US-MOD-000-F14.md:7 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F14.md:60 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Mesmas 
+diretrizes globais do ..."]
+docs/04_modules/user-stories/features/US-MOD-000-F15.md:7 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F15.md:58 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Mesmas 
+diretrizes globais do ..."]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:9 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:24 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`UX-AUTH-001` ÔÇö tela de Logi..."]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:32 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Fazer login de forma segura,..."]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:40 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### Inclui"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:41 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Contrato UX da tela de Login..."]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:47 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### N├úo inclui"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:48 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Implementa├º├úo de backend dos..."]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:117:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:117:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:117:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:117:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:117:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:117:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:9 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:40 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### Inclui"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:41 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Integra├º├úo do pacote `ui-tel..."]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:46 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### N├úo inclui"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:47 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Defini├º├úo ou exporta├º├úo do p..."]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:117:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:117:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:117:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:117:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:117:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:117:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:9 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:28 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Uma sauda├º├úo personalizada c..."]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:36 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### Inclui"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:37 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Widget de boas-vindas com no..."]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:42 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### N├úo inclui"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:43 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+M├®tricas, KPIs ou gr├íficos o..."]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:107:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:107:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:107:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:108:109 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:108:123 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:108:145 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/getting-started.md:9 error MD025/single-title/single-h1 Multiple top-level 
+headings in the same document [Context: "1. Clone o reposit├│rio"]
+docs/getting-started.md:14 error MD025/single-title/single-h1 Multiple top-level 
+headings in the same document [Context: "2. Instale as depend├¬ncias do ..."]
+docs/getting-started.md:19 error MD025/single-title/single-h1 Multiple top-level 
+headings in the same document [Context: "3. Execute o CLI apontando par..."]
+docs/INDEX.md:10:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:10:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:10:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:10:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:10:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:10:13 error MD060/table-column-style Table column style [Table pipe 
+is missing space to the left for style "compact"]
+docs/INDEX.md:27:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:27:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:27:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:27:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:27:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:27:13 error MD060/table-column-style Table column style [Table pipe 
+is missing space to the left for style "compact"]
+docs/INDEX.md:40:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:40:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:40:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:40:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:40:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:40:13 error MD060/table-column-style Table column style [Table pipe 
+is missing space to the left for style "compact"]
+docs/INDEX.md:47:5 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:47:9 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:48:80 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:48:84 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:48:122 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:57:5 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:57:9 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:57:13 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:58:32 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:58:41 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:58:52 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:69:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:69:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:69:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:69:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:84:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:84:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:84:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:84:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:84:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:84:13 error MD060/table-column-style Table column style [Table pipe 
+is missing space to the left for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:154:10 
+error MD060/table-column-style Table column style [Table pipe does not align with 
+header for style "aligned"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:154:22 
+error MD060/table-column-style Table column style [Table pipe does not align with 
+header for style "aligned"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:154:37 
+error MD060/table-column-style Table column style [Table pipe does not align with 
+header for style "aligned"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:154:46 
+error MD060/table-column-style Table column style [Table pipe does not align with 
+header for style "aligned"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:13 
+error MD060/table-column-style Table column style [Table pipe is missing space to 
+the left for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:227 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+packages/agent-skills/skills/draft-user-story/SKILL.md:65 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Depois 
+de responderem: Resuma..."]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:11 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:11 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:25 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:25 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:34 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:23:33 error 
+MD026/no-trailing-punctuation Trailing punctuation in heading [Punctuation: ':']
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:64:32 error 
+MD026/no-trailing-punctuation Trailing punctuation in heading [Punctuation: ':']
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:119 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```typescript"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:140 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```prisma"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:158 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```typescript"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:185 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```typescript"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:206 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```bash"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:221 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```bash"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:233 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```typescript"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:243 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```typescript"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:255 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```typescript"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:275 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```typescript"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:292:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:292:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:292:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:292:23 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:292:23 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:292:32 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:292:32 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:292:45 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:316:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:316:12 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:316:12 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:316:22 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:316:22 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:316:31 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:357 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```typescript"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:368 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```typescript"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:436:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:436:15 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:436:15 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:436:25 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:436:25 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:436:34 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:475 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### Drizzle"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:476 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Docs: [orm.drizzle.team](htt..."]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:480 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "### Prisma"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:481 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Docs: [prisma.io/docs](https..."]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:488 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Greenfield projects prioriti..."]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:494 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Established teams with Prism..."]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:500 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Performance becomes a bottle..."]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:14 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:14 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:22 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:22 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:31 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:31 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:44 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:10 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:10 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:20 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:20 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:29 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/rollback-module/SKILL.md:5 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> [!CAUTION]"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:52 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Did the agent follow the ski..."]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:62 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Clearer instructions that le..."]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:72 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Ambiguous instructions that ..."]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:80 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Specific instruction changes..."]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:171:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:171:12 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:171:12 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:171:26 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:187 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "Analyzing Benchmark Results"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:191 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "Role"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:195 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Inputs"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:203 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Process"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:214 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Does it **always pass** in b..."]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:223 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Are certain eval types consi..."]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:230 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Does the skill significantly..."]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:237 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+State a specific observation"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:242 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+"Assertion 'Output is a PDF ..."]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:262 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Guidelines"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:265 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Report what you observe in t..."]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:271 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Suggest improvements to the ..."]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:42 error 
+MD058/blanks-around-tables Tables should be surrounded by blank lines [Context: "| 
+Criterion | 1 (Poor) | 3 (Ac..."]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:43:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:43:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:43:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:43:24 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:43:24 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:43:41 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:43:41 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:43:57 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:49 error 
+MD058/blanks-around-tables Tables should be surrounded by blank lines [Context: "| 
+Criterion | 1 (Poor) | 3 (Ac..."]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:50:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:50:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:50:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:50:24 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:50:24 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:50:41 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:50:41 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:50:57 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:56 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+PDF form ÔåÆ "Field alignment"..."]
+packages/agent-skills/skills/skill-creator/agents/grader.md:64 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "1. 
+Read it and note any uncert..."]
+packages/agent-skills/skills/skill-creator/agents/grader.md:75 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- An 
+assertion that passed but..."]
+packages/agent-skills/skills/skill-creator/agents/grader.md:88 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+The transcript or outputs cl..."]
+packages/agent-skills/skills/skill-creator/agents/grader.md:93 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- No 
+evidence found for the ex..."]
+packages/agent-skills/skills/skill-creator/references/schemas.md:30 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`skill_name`: Name matching ..."]
+packages/agent-skills/skills/skill-creator/references/schemas.md:75 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`started_at`: ISO timestamp ..."]
+packages/agent-skills/skills/skill-creator/references/schemas.md:153 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`expectations[]`: Graded exp..."]
+packages/agent-skills/skills/skill-creator/references/schemas.md:187 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`tool_calls`: Count per tool..."]
+packages/agent-skills/skills/skill-creator/references/schemas.md:289 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`metadata`: Information abou..."]
+packages/agent-skills/skills/skill-creator/SKILL.md:75 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+packages/agent-skills/skills/skill-creator/SKILL.md:89 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "1. 
+**Metadata** (name + descri..."]
+packages/agent-skills/skills/skill-creator/SKILL.md:96 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+Keep SKILL.md under 500 line..."]
+packages/agent-skills/skills/skill-creator/SKILL.md:101 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```"]
+packages/agent-skills/skills/skill-creator/SKILL.md:101 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+packages/agent-skills/skills/skill-creator/SKILL.md:108 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```"]
+packages/agent-skills/skills/skill-creator/SKILL.md:120 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```markdown"]
+packages/agent-skills/skills/skill-creator/SKILL.md:130 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```markdown"]
+packages/agent-skills/skills/skill-creator/SKILL.md:175 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+packages/agent-skills/skills/skill-creator/SKILL.md:185 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**Creating a new skill**: no..."]
+packages/agent-skills/skills/skill-creator/SKILL.md:228 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```bash"]
+packages/agent-skills/skills/skill-creator/SKILL.md:230 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```"]
+packages/agent-skills/skills/skill-creator/SKILL.md:237 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```bash"]
+packages/agent-skills/skills/skill-creator/SKILL.md:244 error 
+MD031/blanks-around-fences Fenced code blocks should be surrounded by blank lines 
+[Context: "```"]
+packages/agent-skills/skills/skill-creator/SKILL.md:251:1 error MD029/ol-prefix 
+Ordered list item prefix [Expected: 1; Actual: 5; Style: 1/1/1]
+packages/agent-skills/skills/skill-creator/SKILL.md:256 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+**Prompt**: the task that wa..."]
+packages/agent-skills/skills/skill-creator/SKILL.md:319 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+The user says they're happy"]
+packages/agent-skills/skills/skill-creator/SKILL.md:462 error 
+MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- 
+`references/schemas.md` ÔÇö JS..."]
+packages/agent-skills/skills/transition-spec-status/SKILL.md:58:281 error 
+MD009/no-trailing-spaces Trailing spaces [Expected: 0 or 2; Actual: 1]
+packages/agent-skills/skills/transition-spec-status/SKILL.md:61:1 error 
+MD029/ol-prefix Ordered list item prefix [Expected: 1; Actual: 2; Style: 1/1/1]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:46:40 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:46:52 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:46:66 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:47:42 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:47:54 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:47:68 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+tmp/node_modules/ajv/README.md:1 error MD041/first-line-heading/first-line-h1 First 
+line in a file should be a top-level heading [Context: "<img align="right" alt="Ajv 
+lo..."]
+tmp/node_modules/ajv/README.md:21:100 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:21:154 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:23:113 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:23:167 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:23:259 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:23:313 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:25:132 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:25:373 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:25:548 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:25:602 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:61 error MD001/heading-increment Heading levels 
+should only increment by one level at a time [Expected: h3; Actual: h4]
+tmp/node_modules/ajv/README.md:63:42 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:65:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:66:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:67:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:68:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:69:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:70:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:71:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:72:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:73:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:74:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:75:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:76:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:77:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:78:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:79:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:80:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:81:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:82:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:83:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:84:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:85:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:86:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:87:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:88:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:89:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:139 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/ajv/README.md:145:29 error MD034/no-bare-urls Bare URL used 
+[Context: "https://runkit.com/npm/ajv"]
+tmp/node_modules/ajv/README.md:193:45 error MD034/no-bare-urls Bare URL used 
+[Context: "ajv.validator@gmail.com"]
+tmp/node_modules/argparse/CHANGELOG.md:8 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:9 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [2.0.1] - 2020-08-29"]
+tmp/node_modules/argparse/CHANGELOG.md:10 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:10 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:11 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fix issue with `process.argv..."]
+tmp/node_modules/argparse/CHANGELOG.md:13 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:14 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [2.0.0] - 2020-08-14"]
+tmp/node_modules/argparse/CHANGELOG.md:15 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:15 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:16 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Full rewrite. Now port from ..."]
+tmp/node_modules/argparse/CHANGELOG.md:21 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:22 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.10] - 2018-02-15"]
+tmp/node_modules/argparse/CHANGELOG.md:23 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:23 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:23 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:24 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Use .concat instead of + for..."]
+tmp/node_modules/argparse/CHANGELOG.md:26 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:27 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.9] - 2016-09-29"]
+tmp/node_modules/argparse/CHANGELOG.md:28 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:28 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:28 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:29 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Rerelease after 1.0.8 - deps..."]
+tmp/node_modules/argparse/CHANGELOG.md:31 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:32 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.8] - 2016-09-29"]
+tmp/node_modules/argparse/CHANGELOG.md:33 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:33 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:33 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:34 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Maintenance (deps bump, fix ..."]
+tmp/node_modules/argparse/CHANGELOG.md:36 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:37 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.7] - 2016-03-17"]
+tmp/node_modules/argparse/CHANGELOG.md:38 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:38 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:38 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:39 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Teach `addArgument` to accep..."]
+tmp/node_modules/argparse/CHANGELOG.md:41 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:42 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.6] - 2016-02-06"]
+tmp/node_modules/argparse/CHANGELOG.md:43 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:43 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:43 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:44 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Maintenance: moved to eslint..."]
+tmp/node_modules/argparse/CHANGELOG.md:46 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:47 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.5] - 2016-02-05"]
+tmp/node_modules/argparse/CHANGELOG.md:48 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:48 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:48 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:49 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Removed lodash dependency to..."]
+tmp/node_modules/argparse/CHANGELOG.md:52 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:53 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.4] - 2016-01-17"]
+tmp/node_modules/argparse/CHANGELOG.md:54 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:54 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:54 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:55 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Maintenance: lodash update t..."]
+tmp/node_modules/argparse/CHANGELOG.md:57 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:58 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.3] - 2015-10-27"]
+tmp/node_modules/argparse/CHANGELOG.md:59 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:59 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:59 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:60 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fix parse `=` in args: `--ex..."]
+tmp/node_modules/argparse/CHANGELOG.md:62 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:63 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.2] - 2015-03-22"]
+tmp/node_modules/argparse/CHANGELOG.md:64 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:64 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:64 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:65 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Relaxed lodash version depen..."]
+tmp/node_modules/argparse/CHANGELOG.md:67 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:68 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.1] - 2015-02-20"]
+tmp/node_modules/argparse/CHANGELOG.md:69 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:69 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:69 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:70 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Changed dependencies to be c..."]
+tmp/node_modules/argparse/CHANGELOG.md:72 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:73 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [1.0.0] - 2015-02-19"]
+tmp/node_modules/argparse/CHANGELOG.md:74 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:74 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:74 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:75 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Maintenance release."]
+tmp/node_modules/argparse/CHANGELOG.md:80 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:81 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.16] - 2013-12-01"]
+tmp/node_modules/argparse/CHANGELOG.md:82 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:82 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:82 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:83 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Maintenance release. Updated..."]
+tmp/node_modules/argparse/CHANGELOG.md:85 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:86 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.15] - 2013-05-13"]
+tmp/node_modules/argparse/CHANGELOG.md:87 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:87 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:87 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:88 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed #55, @trebor89"]
+tmp/node_modules/argparse/CHANGELOG.md:90 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:91 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.14] - 2013-05-12"]
+tmp/node_modules/argparse/CHANGELOG.md:92 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:92 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:92 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:93 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed #62, @maxtaco"]
+tmp/node_modules/argparse/CHANGELOG.md:95 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:96 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.13] - 2013-04-08"]
+tmp/node_modules/argparse/CHANGELOG.md:97 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:97 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:97 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:98 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Added `.npmignore` to reduce..."]
+tmp/node_modules/argparse/CHANGELOG.md:100 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:101 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.12] - 2013-02-10"]
+tmp/node_modules/argparse/CHANGELOG.md:102 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:102 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:102 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:103 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed conflictHandler (#46),..."]
+tmp/node_modules/argparse/CHANGELOG.md:105 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:106 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.11] - 2013-02-07"]
+tmp/node_modules/argparse/CHANGELOG.md:107 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Added"]
+tmp/node_modules/argparse/CHANGELOG.md:107 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Added"]
+tmp/node_modules/argparse/CHANGELOG.md:108 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Added 70+ tests (ported from..."]
+tmp/node_modules/argparse/CHANGELOG.md:112 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:112 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:113 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Multiple bugfixes, @hpaulj"]
+tmp/node_modules/argparse/CHANGELOG.md:115 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:116 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.10] - 2012-12-30"]
+tmp/node_modules/argparse/CHANGELOG.md:117 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Added"]
+tmp/node_modules/argparse/CHANGELOG.md:117 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Added"]
+tmp/node_modules/argparse/CHANGELOG.md:117 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Added"]
+tmp/node_modules/argparse/CHANGELOG.md:118 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Added [mutual exclusion](htt..."]
+tmp/node_modules/argparse/CHANGELOG.md:121 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:121 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:122 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed options check for `sto..."]
+tmp/node_modules/argparse/CHANGELOG.md:124 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:125 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.9] - 2012-12-27"]
+tmp/node_modules/argparse/CHANGELOG.md:126 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:126 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:126 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:127 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed option dest interferen..."]
+tmp/node_modules/argparse/CHANGELOG.md:132 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:133 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.8] - 2012-12-01"]
+tmp/node_modules/argparse/CHANGELOG.md:134 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:134 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:134 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:135 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed parser parents (issue ..."]
+tmp/node_modules/argparse/CHANGELOG.md:138 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:139 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.7] - 2012-10-14"]
+tmp/node_modules/argparse/CHANGELOG.md:140 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:140 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:140 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:141 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed 'choices' argument par..."]
+tmp/node_modules/argparse/CHANGELOG.md:144 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:145 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.6] - 2012-09-09"]
+tmp/node_modules/argparse/CHANGELOG.md:146 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:146 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:146 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:147 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed check for conflict of ..."]
+tmp/node_modules/argparse/CHANGELOG.md:149 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:150 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.5] - 2012-09-03"]
+tmp/node_modules/argparse/CHANGELOG.md:151 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:151 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:151 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:152 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fix parser #setDefaults meth..."]
+tmp/node_modules/argparse/CHANGELOG.md:154 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:155 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.4] - 2012-07-30"]
+tmp/node_modules/argparse/CHANGELOG.md:156 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:156 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:156 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:157 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed pseudo-argument suppor..."]
+tmp/node_modules/argparse/CHANGELOG.md:160 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:161 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.3] - 2012-06-27"]
+tmp/node_modules/argparse/CHANGELOG.md:162 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:162 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:162 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:163 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed formatter api name: Fo..."]
+tmp/node_modules/argparse/CHANGELOG.md:165 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:166 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.2] - 2012-05-29"]
+tmp/node_modules/argparse/CHANGELOG.md:167 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:167 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:167 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:168 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Removed excess whitespace in..."]
+tmp/node_modules/argparse/CHANGELOG.md:172 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Added"]
+tmp/node_modules/argparse/CHANGELOG.md:172 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Added"]
+tmp/node_modules/argparse/CHANGELOG.md:173 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Added basic tests"]
+tmp/node_modules/argparse/CHANGELOG.md:175 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:176 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.1] - 2012-05-23"]
+tmp/node_modules/argparse/CHANGELOG.md:177 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:177 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:177 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:178 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Fixed line wrapping in help ..."]
+tmp/node_modules/argparse/CHANGELOG.md:181 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/CHANGELOG.md:182 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "## [0.1.0] - 2012-05-16"]
+tmp/node_modules/argparse/CHANGELOG.md:183 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] 
+[Context: "### Added"]
+tmp/node_modules/argparse/CHANGELOG.md:183 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "### Added"]
+tmp/node_modules/argparse/CHANGELOG.md:183 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Added"]
+tmp/node_modules/argparse/CHANGELOG.md:184 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- First release."]
+tmp/node_modules/argparse/CHANGELOG.md:186 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/README.md:12:3 error MD030/list-marker-space Spaces after 
+list markers [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/README.md:19 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/README.md:46 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/argparse/README.md:62 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/argparse/README.md:67 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/argparse/README.md:78 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/fast-deep-equal/README.md:1 error MD022/blanks-around-headings 
+Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] 
+[Context: "# fast-deep-equal"]
+tmp/node_modules/fast-deep-equal/README.md:8 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/fast-deep-equal/README.md:15 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/fast-deep-equal/README.md:23 error MD032/blanks-around-lists Lists 
+should be surrounded by blank lines [Context: "- Maps"]
+tmp/node_modules/fast-deep-equal/README.md:27 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/fast-deep-equal/README.md:51 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/fast-deep-equal/README.md:56 error MD040/fenced-code-language 
+Fenced code blocks should have a language specified [Context: "```"]
+tmp/node_modules/fast-deep-equal/README.md:81 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/fast-deep-equal/README.md:86 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/fast-deep-equal/README.md:93 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/fast-uri/README.md:19:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:20:1 error MD010/no-hard-tabs Hard tabs 
+[Column: 1]
+tmp/node_modules/fast-uri/README.md:22:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:23:1 error MD010/no-hard-tabs Hard tabs 
+[Column: 1]
+tmp/node_modules/fast-uri/README.md:25:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:26:1 error MD010/no-hard-tabs Hard tabs 
+[Column: 1]
+tmp/node_modules/fast-uri/README.md:28:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:29:1 error MD010/no-hard-tabs Hard tabs 
+[Column: 1]
+tmp/node_modules/fast-uri/README.md:31:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:32:1 error MD010/no-hard-tabs Hard tabs 
+[Column: 1]
+tmp/node_modules/fast-uri/README.md:34:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:35:1 error MD010/no-hard-tabs Hard tabs 
+[Column: 1]
+tmp/node_modules/fast-uri/README.md:86:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:87:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:88:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:89:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:90:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:91:2 error MD010/no-hard-tabs Hard tabs 
+[Column: 2]
+tmp/node_modules/fast-uri/README.md:93 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/fast-uri/README.md:96 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/fast-uri/README.md:138:1 error MD004/ul-style Unordered list style 
+[Expected: asterisk; Actual: dash]
+tmp/node_modules/fast-uri/README.md:139:1 error MD004/ul-style Unordered list style 
+[Expected: asterisk; Actual: dash]
+tmp/node_modules/js-yaml/README.md:9 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/js-yaml/README.md:14 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/js-yaml/README.md:18 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:20 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/js-yaml/README.md:24 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/js-yaml/README.md:25 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:29 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/js-yaml/README.md:33 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:35 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/js-yaml/README.md:48 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/js-yaml/README.md:69 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/js-yaml/README.md:70 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:84:5 error MD034/no-bare-urls Bare URL used 
+[Context: "https://www.yaml.org/spec/1.2/..."]
+tmp/node_modules/js-yaml/README.md:86:5 error MD034/no-bare-urls Bare URL used 
+[Context: "https://www.yaml.org/spec/1.2/..."]
+tmp/node_modules/js-yaml/README.md:88:5 error MD034/no-bare-urls Bare URL used 
+[Context: "https://www.yaml.org/spec/1.2/..."]
+tmp/node_modules/js-yaml/README.md:92:21 error MD050/strong-style Strong style 
+[Expected: underscore; Actual: asterisk]
+tmp/node_modules/js-yaml/README.md:92:31 error MD050/strong-style Strong style 
+[Expected: underscore; Actual: asterisk]
+tmp/node_modules/js-yaml/README.md:95:15 error MD050/strong-style Strong style 
+[Expected: underscore; Actual: asterisk]
+tmp/node_modules/js-yaml/README.md:95:25 error MD050/strong-style Strong style 
+[Expected: underscore; Actual: asterisk]
+tmp/node_modules/js-yaml/README.md:100 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/js-yaml/README.md:101 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:114 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/js-yaml/README.md:115 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:189 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/js-yaml/README.md:204 error MD036/no-emphasis-as-heading Emphasis 
+used instead of a heading [Context: "JavaScript-specific tags"]
+tmp/node_modules/js-yaml/README.md:204:1 error MD050/strong-style Strong style 
+[Expected: underscore; Actual: asterisk]
+tmp/node_modules/js-yaml/README.md:204:27 error MD050/strong-style Strong style 
+[Expected: underscore; Actual: asterisk]
+tmp/node_modules/js-yaml/README.md:209 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/js-yaml/README.md:241 error MD012/no-multiple-blanks Multiple 
+consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/json-schema-traverse/README.md:1 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "# json-schema-traverse"]
+tmp/node_modules/json-schema-traverse/README.md:8 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/json-schema-traverse/README.md:11 error MD040/fenced-code-language 
+Fenced code blocks should have a language specified [Context: "```"]
+tmp/node_modules/json-schema-traverse/README.md:15 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/json-schema-traverse/README.md:60 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/json-schema-traverse/README.md:80 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/json-schema-traverse/README.md:85 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/json-schema-traverse/README.md:92 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/require-from-string/readme.md:7 error MD040/fenced-code-language 
+Fenced code blocks should have a language specified [Context: "```"]
+tmp/node_modules/require-from-string/readme.md:8:1 error MD014/commands-show-output 
+Dollar signs used before commands without showing output [Context: "$ npm install 
+--save require-f..."]
+tmp/node_modules/require-from-string/readme.md:11 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/require-from-string/readme.md:21 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/require-from-string/readme.md:33 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "#### filename"]
+tmp/node_modules/require-from-string/readme.md:39 error MD012/no-multiple-blanks 
+Multiple consecutive blank lines [Expected: 1; Actual: 2]
+tmp/node_modules/require-from-string/readme.md:40 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "#### options"]
+tmp/node_modules/require-from-string/readme.md:43 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "##### appendPaths"]
+tmp/node_modules/require-from-string/readme.md:49 error 
+MD022/blanks-around-headings Headings should be surrounded by blank lines 
+[Expected: 1; Actual: 0; Below] [Context: "##### prependPaths"]

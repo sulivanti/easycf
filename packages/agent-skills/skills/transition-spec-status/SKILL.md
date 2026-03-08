@@ -53,7 +53,12 @@ node packages/agent-skills/scripts/transition-spec-status.js docs/04_modules/use
    O terminal retornará os itens pendentes detectados (ex: *Owner não preenchido*, *Ausência de Gherkin*).
    Você **NÃO DEVE** forçar a alteração de status manualmente. Retorne ao usuário os itens apontados pelo script que impediram a validação, guiando-o no preenchimento antes de tentar de novo.
 
-2. **Se o script tiver sucesso (Exit Code 0 e sucesso reportado):**
+> [!CAUTION]
+> **REGRA DE OURO (NUNCA BURLAR):**
+> O agente **ABSOLUTAMENTE NUNCA** deve alterar ou promover o campo `estado_item` editando o arquivo Markdown diretamente (seja via ferramentas de substituição ou reescrita), **independentemente de qual seja o status atual** (mesmo que seja algo fora do padrão como "em revisao").
+> Toda e qualquer mudança de status TEM que ser feita **exclusiva e unicamente** pelo sucesso do script `transition-spec-status.js`. Se o script falhar ou não conseguir alterar, o agente deve reportar o erro ao usuário ao invés de forçar a edição manualmente, garantindo que as validações sempre ocorram.
+
+1. **Se o script tiver sucesso (Exit Code 0 e sucesso reportado):**
    O script terá feito o replace e promovido o `estado_item`.
 
 ---

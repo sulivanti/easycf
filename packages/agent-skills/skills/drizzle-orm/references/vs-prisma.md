@@ -20,7 +20,7 @@ Feature comparison, migration guide, and decision framework for choosing between
 
 ## When to Choose Drizzle
 
-### ✅ Choose Drizzle if you need:
+### ✅ Choose Drizzle if you need
 
 1. **Performance-critical applications**
    - Microservices with tight latency requirements
@@ -61,7 +61,7 @@ export async function GET() {
 
 ## When to Choose Prisma
 
-### ✅ Choose Prisma if you need:
+### ✅ Choose Prisma if you need
 
 1. **Rapid prototyping**
    - Quick schema iterations
@@ -116,6 +116,7 @@ export async function GET() {
 ### Schema Definition
 
 **Drizzle** (TypeScript-first):
+
 ```typescript
 import { pgTable, serial, text, integer } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
@@ -137,6 +138,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 ```
 
 **Prisma** (Schema DSL):
+
 ```prisma
 model User {
   id    Int    @id @default(autoincrement())
@@ -155,6 +157,7 @@ model Post {
 ### Querying
 
 **Drizzle** (SQL-like):
+
 ```typescript
 import { eq, like, and, gt } from 'drizzle-orm';
 
@@ -182,6 +185,7 @@ const usersWithPosts = await db
 ```
 
 **Prisma** (Fluent API):
+
 ```typescript
 // Simple query
 const user = await prisma.user.findUnique({ where: { id: 1 } });
@@ -203,6 +207,7 @@ const usersWithPosts = await prisma.user.findMany({
 ### Migrations
 
 **Drizzle** (SQL-based):
+
 ```bash
 # Generate migration
 npx drizzle-kit generate
@@ -218,6 +223,7 @@ npx drizzle-kit migrate
 ```
 
 **Prisma** (Declarative):
+
 ```bash
 # Generate and apply migration
 npx prisma migrate dev --name add_users
@@ -230,6 +236,7 @@ npx prisma migrate dev --name add_users
 ### Type Generation
 
 **Drizzle** (Inferred):
+
 ```typescript
 // Types are inferred at compile time
 type User = typeof users.$inferSelect;
@@ -240,6 +247,7 @@ const user: User = await db.select().from(users);
 ```
 
 **Prisma** (Generated):
+
 ```typescript
 // Types generated after schema change
 // Run: npx prisma generate
@@ -252,6 +260,7 @@ const user: User = await prisma.user.findUnique({ where: { id: 1 } });
 ### Raw SQL
 
 **Drizzle** (First-class):
+
 ```typescript
 import { sql } from 'drizzle-orm';
 
@@ -272,6 +281,7 @@ const customQuery = await db
 ```
 
 **Prisma** (Limited):
+
 ```typescript
 // Raw query (loses type safety)
 const result = await prisma.$queryRaw`
@@ -354,6 +364,7 @@ npx drizzle-kit introspect
 ### Step 3: Convert Queries
 
 **Prisma**:
+
 ```typescript
 // Before (Prisma)
 const users = await prisma.user.findMany({
@@ -365,6 +376,7 @@ const users = await prisma.user.findMany({
 ```
 
 **Drizzle**:
+
 ```typescript
 // After (Drizzle)
 import { like, desc } from 'drizzle-orm';
@@ -473,11 +485,13 @@ export async function getStaticProps() {
 ## Community & Resources
 
 ### Drizzle
+
 - Docs: [orm.drizzle.team](https://orm.drizzle.team)
 - Discord: [drizzle.team/discord](https://drizzle.team/discord)
 - GitHub: [drizzle-team/drizzle-orm](https://github.com/drizzle-team/drizzle-orm)
 
 ### Prisma
+
 - Docs: [prisma.io/docs](https://prisma.io/docs)
 - Discord: [pris.ly/discord](https://pris.ly/discord)
 - GitHub: [prisma/prisma](https://github.com/prisma/prisma)
@@ -485,18 +499,21 @@ export async function getStaticProps() {
 ## Final Recommendation
 
 **Choose Drizzle for:**
+
 - Greenfield projects prioritizing performance
 - Edge/serverless applications
 - Teams comfortable with SQL
 - Minimal bundle size requirements
 
 **Choose Prisma for:**
+
 - Established teams with Prisma experience
 - Rapid MVP development
 - Teams new to databases
 - Reliance on Prisma ecosystem (Nexus, etc.)
 
 **Consider migration when:**
+
 - Performance becomes a bottleneck
 - Bundle size impacts user experience
 - Edge runtime deployment needed

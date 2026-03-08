@@ -118,7 +118,7 @@ sequenceDiagram
     Agente->>trans_status: Checa DoR e Épico em cascata
     trans_status-->>Dev: Validação passou. Status := READY.
 
-    Dev->>Agente: "Execute o scaffold da feature aprovada"
+    Dev->>Agente: "Execute o scaffold da feature READY"
     Agente->>scaffold: Inicia geração
     scaffold-->>scaffold: Confirma dependência (Status == READY)
     scaffold-->>Dev: Estrutura gerada!

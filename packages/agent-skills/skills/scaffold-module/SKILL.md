@@ -30,7 +30,7 @@ Se o usuário não a fornecer no prompt de origem, você **deve questioná-lo an
 
 **REGRA DE BLOQUEIO (GATE DE APROVAÇÃO):**
 Você deve ler o arquivo da User Story informada. Verifique o campo `estado_item:`.
-Se o status **não for** `READY` (ou 'aprovada' em arquiteturas antigas), você **ESTÁ PROIBIDO** de gerar qualquer arquivo. Interrompa a execução e informe ao usuário que a US precisa estar aprovada (ela pode estar `DRAFT`, `REFINING`, etc). Apenas proceda se estiver `READY`.
+Se o status **não for** `APPROVED` (ou `READY` em validações anteriores), você **ESTÁ PROIBIDO** de gerar qualquer arquivo. Interrompa a execução e informe ao usuário que a US precisa estar aprovada (ela pode estar `DRAFT`, `REFINING`, `READY`, etc). Apenas proceda se estiver `APPROVED` ou `READY`.
 
 ---
 

@@ -1,6 +1,6 @@
 # US-MOD-000-F01 — Autenticação Nativa com E-mail, Senha e Gerenciamento de Sessão
 
-**Status:** `em revisao`
+**Status:** `READY`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth Core)
@@ -155,11 +155,11 @@ Funcionalidade: Autenticação Nativa com E-mail e Senha
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
-- [ ] Cenários Gherkin revisados e aprovados pelo time (seção 3).
-- [ ] Contrato de API documentado no OpenAPI (`/auth/login`, `/auth/logout`, `/auth/sessions`, `/auth/refresh`).
-- [ ] Sem `PENDENTE-XXX` críticos em aberto.
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Owner definido.
+- [x] Cenários Gherkin revisados e aprovados pelo time (seção 3).
+- [x] Contrato de API documentado no OpenAPI (`/auth/login`, `/auth/logout`, `/auth/sessions`, `/auth/refresh`).
+- [x] Sem `PENDENTE-XXX` críticos em aberto.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

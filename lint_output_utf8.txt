@@ -1,0 +1,1873 @@
+﻿markdownlint-cli2 v0.21.0 (markdownlint v0.40.0)
+Finding: **/*.md !node_modules !.gemini
+Linting: 92 file(s)
+Summary: 669 error(s)
+node.exe : .agents/workflows/release.md:24:1 error MD060/table-column-style Table 
+column style [Table pipe is missing space to the right for style "compact"]
+No linha:1 caractere:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (.agents/workflo...tyle "compact"]:Stri 
+   ng) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+.agents/workflows/release.md:24:5 error MD060/table-column-style Table column style 
+[Table pipe is missing space to the left for style "compact"]
+.agents/workflows/release.md:24:5 error MD060/table-column-style Table column style 
+[Table pipe is missing space to the right for style "compact"]
+.agents/workflows/release.md:24:9 error MD060/table-column-style Table column style 
+[Table pipe is missing space to the left for style "compact"]
+.agents/workflows/release.md:24:9 error MD060/table-column-style Table column style 
+[Table pipe is missing space to the right for style "compact"]
+.agents/workflows/release.md:24:13 error MD060/table-column-style Table column 
+style [Table pipe is missing space to the left for style "compact"]
+docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md:68:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md:68:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md:68:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md:68:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:65:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:77:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:77:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:77:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md:77:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:63 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:69:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:69:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:69:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:69:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:79:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:88:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:106:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:119:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:128:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:175:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:191 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:268:38 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:268:69 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:269:21 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:269:37 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:269:51 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:269:71 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:270:18 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:270:33 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:270:65 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:271:18 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:271:33 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:271:65 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:272:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:272:32 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:272:66 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md:289:45 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:13:160 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:14:125 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:93 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "1. Introdu├º├úo"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:162 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "2. Recursos do Sistema (vis├úo ..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:206 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "Itens 
+base (can├┤nicos) e links"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:235 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Decis├Áes (ADR)"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:250 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "3. Regras de Neg├│cio (BR-xxx)"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:258:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:309 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "4. Requisitos (FR / DATA / INT..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:319:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:332 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Crit├®rios de aceite (Gherkin)"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:386:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:715:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:761:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:20 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:62 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:107 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:156 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:220 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:236 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:816:379 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:938 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "4. 
+Mapeamento Inteligente de E..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1035 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "5. Arquitetura e Implementa├º├úo..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1168 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "6. Anexos"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1234 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "6.3 
+Pend├¬ncias (sem perguntas)"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1242 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "7. Entrada do usu├írio (Templat..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1272 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:113:37 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:115:43 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:117:37 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:222 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Geral"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:230 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "API"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:236 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Web"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:266 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "API 
+(`apps/api`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:293 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "Web 
+(`apps/web`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:310 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Geral"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:316 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Application"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:322 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Domain"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:327 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Infrastructure"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:332 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Web"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:366 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "API 
+(`apps/api`)"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:418 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Domain"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:426 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Application"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:433 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Infrastructure"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:440 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Presentation"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:445 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Web"]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:17 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Documentos relacionados"]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:61 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "(ANEXO ADITIVO) OpenAPI/Swagge..."]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:175 
+error MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "(ANEXO ADITIVO) OpenAPI x-perm..."]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:185 
+error MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "(ANEXO ADITIVO) Eventos Ôåö Perm..."]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:175 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(A) SEC 
+(AGN-DEV-06)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:179 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(B) DATA 
+(AGN-DEV-04)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:183 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(C) UX 
+(AGN-DEV-07)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:187 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(D) 
+OpenAPI (coordena├º├úo DEVÔåöC..."]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:130 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:144:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md:153:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:20:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:20:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:20:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:20:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:42:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:50:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:60:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:69:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:69:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:69:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:69:17 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:70:15 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:70:19 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:70:75 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:75:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:83:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:90:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:97:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:108:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:120:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:120:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:120:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:120:17 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:121:33 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:121:37 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:121:46 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:121:100 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:128:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md:190:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:30:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:30:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:30:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:30:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:209:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:209:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:209:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:209:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:255:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:255:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:255:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:255:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:271:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:335:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:413:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:466:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:466:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:466:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md:466:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:3 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:586:88 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:587:88 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:588:88 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:11 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:11 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:606:28 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:618:103 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:620:103 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:622:102 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:625:103 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:626:103 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:627:107 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:134 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Amarra├º├úo com eventos/notifica..."]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:148 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Amarra├º├úo EventsÔåöPermissions (..."]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:160 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "OpenAPI 
+(MUST, EX-OAS)"]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:169 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"x-permissions (quando aplic├íve..."]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:178 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:211 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:266 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:335 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md:379 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"System Prompt"]
+docs/03_especificacoes/template/DOC-DEV-001.template.md:7 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/04_modules/mod-000-foundation/CHANGELOG.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/CHANGELOG.md:7:74 error MD060/table-column-style 
+Table column style [Table pipe does not align with header for style "aligned"]
+docs/04_modules/mod-000-foundation/requirements/br/BR-000.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/requirements/br/BR-000.md:5:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/mod-000-foundation/requirements/data/DATA-000.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/requirements/data/DATA-000.md:5:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/mod-000-foundation/requirements/fr/FR-000.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/requirements/fr/FR-000.md:5:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/mod-000-foundation/requirements/sec/SEC-000.md:1 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> ÔÜá´©Å ARQUIVO GERIDO POR AUTOMA..."]
+docs/04_modules/mod-000-foundation/requirements/sec/SEC-000.md:5:76 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/TESTING-STRATEGY.md:61:33 error MD060/table-column-style Table 
+column style [Table pipe does not align with header for style "aligned"]
+docs/04_modules/TESTING-STRATEGY.md:61:112 error MD060/table-column-style Table 
+column style [Table pipe does not align with header for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:9 error MD001/heading-increment 
+Heading levels should only increment by one level at a time [Expected: h2; Actual: 
+h3]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:45:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:184:21 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-000.md:248:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:9 error MD001/heading-increment 
+Heading levels should only increment by one level at a time [Expected: h2; Actual: 
+h3]
+docs/04_modules/user-stories/epics/US-MOD-001.md:27 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:107:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:107:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:107:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:107:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:107:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:107:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:107:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:107:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:119:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:119:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:119:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:119:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:119:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:119:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:119:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:119:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:129:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:129:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:129:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:129:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:129:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:129:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:139:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:139:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:139:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:139:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:139:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:139:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:151:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:151:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:151:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:152:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:152:22 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:152:36 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/epics/US-MOD-001.md:152:105 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F07.md:35:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:55:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F09.md:58:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:17 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:21 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:22:25 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:20 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:101 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:205 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:263 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:311 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:23:376 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:77:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F12.md:285:17 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-000-F13.md:7 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F13.md:64 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Mesmas 
+diretrizes globais do ..."]
+docs/04_modules/user-stories/features/US-MOD-000-F14.md:7 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F14.md:60 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Mesmas 
+diretrizes globais do ..."]
+docs/04_modules/user-stories/features/US-MOD-000-F15.md:7 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F15.md:58 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Mesmas 
+diretrizes globais do ..."]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:9 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:121:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:121:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:121:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:121:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:121:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F01.md:121:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:9 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:119:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:119:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:119:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:119:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:119:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F02.md:119:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:9 error 
+MD001/heading-increment Heading levels should only increment by one level at a time 
+[Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:110:5 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:110:9 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:110:13 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:111:109 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:111:123 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/04_modules/user-stories/features/US-MOD-001-F03.md:111:145 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+docs/getting-started.md:9 error MD025/single-title/single-h1 Multiple top-level 
+headings in the same document [Context: "1. Clone o reposit├│rio"]
+docs/getting-started.md:14 error MD025/single-title/single-h1 Multiple top-level 
+headings in the same document [Context: "2. Instale as depend├¬ncias do ..."]
+docs/getting-started.md:19 error MD025/single-title/single-h1 Multiple top-level 
+headings in the same document [Context: "3. Execute o CLI apontando par..."]
+docs/INDEX.md:10:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:10:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:10:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:10:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:10:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:10:13 error MD060/table-column-style Table column style [Table pipe 
+is missing space to the left for style "compact"]
+docs/INDEX.md:27:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:27:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:27:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:27:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:27:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:27:13 error MD060/table-column-style Table column style [Table pipe 
+is missing space to the left for style "compact"]
+docs/INDEX.md:40:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:40:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:40:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:40:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:40:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:40:13 error MD060/table-column-style Table column style [Table pipe 
+is missing space to the left for style "compact"]
+docs/INDEX.md:47:5 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:47:9 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:48:80 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:48:84 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:48:122 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:57:5 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:57:9 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:57:13 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:58:32 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:58:41 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:58:52 error MD060/table-column-style Table column style [Table pipe 
+does not align with header for style "aligned"]
+docs/INDEX.md:69:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:69:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:69:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:69:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:84:1 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:84:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:84:5 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:84:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the left for style "compact"]
+docs/INDEX.md:84:9 error MD060/table-column-style Table column style [Table pipe is 
+missing space to the right for style "compact"]
+docs/INDEX.md:84:13 error MD060/table-column-style Table column style [Table pipe 
+is missing space to the left for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:154:10 
+error MD060/table-column-style Table column style [Table pipe does not align with 
+header for style "aligned"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:154:22 
+error MD060/table-column-style Table column style [Table pipe does not align with 
+header for style "aligned"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:154:37 
+error MD060/table-column-style Table column style [Table pipe does not align with 
+header for style "aligned"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:154:46 
+error MD060/table-column-style Table column style [Table pipe does not align with 
+header for style "aligned"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:5 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:9 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:211:13 
+error MD060/table-column-style Table column style [Table pipe is missing space to 
+the left for style "compact"]
+packages/agent-skills/skills/create-oo-component-documentation/SKILL.md:227 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+packages/agent-skills/skills/draft-user-story/SKILL.md:65 error 
+MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Depois 
+de responderem: Resuma..."]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:11 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:11 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:25 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:25 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:8:34 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:302:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:302:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:302:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:302:23 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:302:23 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:302:32 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:302:32 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:302:45 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:326:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:326:12 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:326:12 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:326:22 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:326:22 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:326:31 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:448:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:448:15 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:448:15 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:448:25 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:448:25 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/references/vs-prisma.md:448:34 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:14 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:14 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:22 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:22 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:31 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:31 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:92:44 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:10 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:10 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:20 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:20 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/drizzle-orm/SKILL.md:379:29 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/rollback-module/SKILL.md:5 error 
+MD041/first-line-heading/first-line-h1 First line in a file should be a top-level 
+heading [Context: "> [!CAUTION]"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:175:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:175:12 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:175:12 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:175:26 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:191 error 
+MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "Analyzing Benchmark Results"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:195 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: "Role"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:199 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Inputs"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:207 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Process"]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:271 error 
+MD024/no-duplicate-heading Multiple headings with the same content [Context: 
+"Guidelines"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:44:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:44:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:44:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:44:24 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:44:24 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:44:41 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:44:41 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:44:57 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:52:1 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:52:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:52:13 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:52:24 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:52:24 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:52:41 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:52:41 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+right for style "compact"]
+packages/agent-skills/skills/skill-creator/agents/comparator.md:52:57 error 
+MD060/table-column-style Table column style [Table pipe is missing space to the 
+left for style "compact"]
+packages/agent-skills/skills/skill-creator/SKILL.md:75 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+packages/agent-skills/skills/skill-creator/SKILL.md:104 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+packages/agent-skills/skills/skill-creator/SKILL.md:181 error 
+MD040/fenced-code-language Fenced code blocks should have a language specified 
+[Context: "```"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:46:40 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:46:52 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:46:66 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:47:42 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:47:54 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+packages/agent-skills/skills/update-markdown-file-index/SKILL.md:47:68 error 
+MD060/table-column-style Table column style [Table pipe does not align with header 
+for style "aligned"]
+tmp/node_modules/ajv/README.md:1 error MD041/first-line-heading/first-line-h1 First 
+line in a file should be a top-level heading [Context: "<img align="right" alt="Ajv 
+lo..."]
+tmp/node_modules/ajv/README.md:21:100 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:21:154 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:23:113 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:23:167 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:23:259 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:23:313 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:25:132 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:25:373 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:25:548 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:25:602 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:61 error MD001/heading-increment Heading levels 
+should only increment by one level at a time [Expected: h3; Actual: h4]
+tmp/node_modules/ajv/README.md:63:42 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:65:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:66:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:67:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:68:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:69:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:70:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:71:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:72:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:73:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:74:65 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:75:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:76:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:77:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:78:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:79:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:80:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:81:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:82:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:83:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:84:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:85:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:86:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:87:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:88:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:89:66 error MD045/no-alt-text Images should have 
+alternate text (alt text)
+tmp/node_modules/ajv/README.md:139 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/argparse/CHANGELOG.md:25 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:31 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:37 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:43 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:49 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:55 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:62 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:68 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:74 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:80 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:86 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:95 error MD024/no-duplicate-heading Multiple 
+headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:101 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:107 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:113 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Changed"]
+tmp/node_modules/argparse/CHANGELOG.md:119 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:131 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:137 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Added"]
+tmp/node_modules/argparse/CHANGELOG.md:142 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:148 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:157 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:164 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:171 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:177 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:183 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:190 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:196 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:202 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Added"]
+tmp/node_modules/argparse/CHANGELOG.md:208 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Fixed"]
+tmp/node_modules/argparse/CHANGELOG.md:215 error MD024/no-duplicate-heading 
+Multiple headings with the same content [Context: "Added"]
+tmp/node_modules/argparse/README.md:45 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/argparse/README.md:61 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/fast-deep-equal/README.md:54 error MD040/fenced-code-language 
+Fenced code blocks should have a language specified [Context: "```"]
+tmp/node_modules/fast-uri/README.md:95 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/js-yaml/README.md:16 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:18 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/js-yaml/README.md:22 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:26 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/js-yaml/README.md:30 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:32 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/js-yaml/README.md:65 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:95 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:108 error MD003/heading-style Heading style 
+[Expected: setext; Actual: atx]
+tmp/node_modules/js-yaml/README.md:182 error MD040/fenced-code-language Fenced code 
+blocks should have a language specified [Context: "```"]
+tmp/node_modules/js-yaml/README.md:197 error MD036/no-emphasis-as-heading Emphasis 
+used instead of a heading [Context: "JavaScript-specific tags"]
+tmp/node_modules/json-schema-traverse/README.md:11 error MD040/fenced-code-language 
+Fenced code blocks should have a language specified [Context: "```"]
+tmp/node_modules/require-from-string/readme.md:7 error MD040/fenced-code-language 
+Fenced code blocks should have a language specified [Context: "```"]

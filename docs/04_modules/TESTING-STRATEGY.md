@@ -13,7 +13,7 @@ O EasyA1 adota a abordagem **Spec-First, Validate-After**:
 2. **Cobertura validada APÓS a implementação** — o código de teste é escrito durante/após a implementação, mas o contrato (casos obrigatórios, cobertura mínima) já está fixado na spec.
 3. **Testes como contrato executável** — um PR não pode ser aprovado sem que os casos críticos do `TST-NNN` estejam cobertos por testes automatizados.
 
-```
+```text
 FR-NNN.md ──→ TST-NNN.md (spec de aceite)   →  Implementação  →  Código de Teste
    ↑___________________________________(refinamento via amendments TST-NNN-Mxx)◄──┘
 ```
@@ -22,7 +22,7 @@ FR-NNN.md ──→ TST-NNN.md (spec de aceite)   →  Implementação  →  Có
 
 ## 2. Pirâmide de Testes
 
-```
+```text
          ┌─────────────────┐
          │   E2E / UI      │  ← poucas, críticas (fluxos completos de usuário)
          ├─────────────────┤
@@ -32,21 +32,21 @@ FR-NNN.md ──→ TST-NNN.md (spec de aceite)   →  Implementação  →  Có
          └─────────────────┘
 ```
 
-| Camada | Responsabilidade | Ferramenta |
-|--------|-----------------|------------|
-| **Unit** | Regras de negócio, validações, utils, services isolados | Vitest |
-| **Integration** | Endpoints HTTP + banco real (Docker), serviços externos mockados | Vitest + Supertest |
-| **E2E** | Fluxos completos do usuário via browser ou API chain | Playwright / Supertest |
+| Camada         | Responsabilidade                                                 | Ferramenta             |
+|----------------|------------------------------------------------------------------|------------------------|
+| **Unit**       | Regras de negócio, validações, utils, services isolados          | Vitest                 |
+| **Integration**| Endpoints HTTP + banco real (Docker), serviços externos mockados | Vitest + Supertest     |
+| **E2E**        | Fluxos completos do usuário via browser ou API chain             | Playwright / Supertest |
 
 ---
 
 ## 3. Cobertura Mínima Global
 
-| Camada | Cobertura mínima | Observações |
-|--------|-----------------|-------------|
-| Unit | **80% linhas** | Medido por Vitest Coverage (v8) |
-| Integration | **Todos os endpoints do módulo** | Ao menos 1 caso happy path + 1 erro crítico |
-| Caminhos de segurança | **100%** | AuthN, AuthZ, IDOR, permissão negada — sem exceções |
+| Camada               | Cobertura mínima                 | Observações                                                                 |
+|----------------------|----------------------------------|-----------------------------------------------------------------------------|
+| Unit                 | **80% linhas**                   | Medido por Vitest Coverage (v8)                                             |
+| Integration          | **Todos os endpoints do módulo** | Ao menos 1 caso happy path + 1 erro crítico                                 |
+| Caminhos de segurança| **100%**                         | AuthN, AuthZ, IDOR, permissão negada — sem exceções                         |
 
 > **Regra de agente:** Qualquer endpoint que envolva `SEC-NNN` ou `BR-NNN` com negação de acesso tem cobertura obrigatória de **100%** nos cenários de rejeição.
 
@@ -54,14 +54,14 @@ FR-NNN.md ──→ TST-NNN.md (spec de aceite)   →  Implementação  →  Có
 
 ## 4. Ferramentas e Stack
 
-| Ferramenta | Uso |
-|-----------|-----|
-| **Vitest** | Runner principal — unit e integration |
-| **Supertest** | Requisições HTTP sobre o servidor Fastify em memória |
-| **@testcontainers/postgresql** | PostgreSQL 17 real para testes de integração (CI/CD) |
-| **vitest-mock-extended** | Mocking tipado de interfaces e serviços |
-| **Playwright** | Testes E2E de interface (quando especificado em UX-NNN) |
-| **@faker-js/faker** | Geração de dados de teste (factories) |
+| Ferramenta                   | Uso                                                                          |
+|------------------------------|------------------------------------------------------------------------------|
+| **Vitest**                   | Runner principal — unit e integration                                        |
+| **Supertest**                | Requisições HTTP sobre o servidor Fastify em memória                         |
+| **@testcontainers/postgresql**| PostgreSQL 17 real para testes de integração (CI/CD)                         |
+| **vitest-mock-extended**     | Mocking tipado de interfaces e serviços                                      |
+| **Playwright**               | Testes E2E de interface (quando especificado em UX-NNN)                      |
+| **@faker-js/faker**          | Geração de dados de teste (factories)                                        |
 
 ---
 
@@ -69,7 +69,7 @@ FR-NNN.md ──→ TST-NNN.md (spec de aceite)   →  Implementação  →  Có
 
 Todo caso de teste documentado em `TST-NNN.md` recebe um ID único e rastreável:
 
-```
+```text
 TC-<NNN>-<NN>
 │    │    └── Número sequencial do caso dentro do módulo (01, 02, ...)
 │    └───── Número do módulo (000, 001, ...)
@@ -90,7 +90,7 @@ TC-<NNN>-<NN>
 
 Cada módulo deve manter seus próprios helpers em `apps/api/src/tests/factories/`:
 
-```
+```text
 tests/
 ├── factories/
 │   ├── tenant.factory.ts       ← cria tenant de teste
@@ -136,14 +136,14 @@ O CI (GitHub Actions / pipeline) **bloqueia o merge** se:
 
 Cada `TST-NNN.md` organiza os casos nas seguintes categorias:
 
-| Categoria | Código | Descrição |
-|-----------|--------|-----------|
-| **Happy Path** | `HP` | Fluxo principal com dados válidos e permissão correta |
-| **Erro de Validação** | `EV` | Dados inválidos, campos obrigatórios ausentes |
-| **Erro de Autorização** | `EA` | Acesso negado, escopo insuficiente, token inválido |
-| **Isolamento de Tenant** | `IT` | Cross-tenant IDOR, header forjado, escopo de outro tenant |
-| **Borda / Edge Case** | `EC` | Valores limítrofes, condições de corrida, duplicatas |
-| **Não-Funcional** | `NF` | Performance, tempo de resposta, tamanho de payload |
+| Categoria               | Código | Descrição                                                 |
+|-------------------------|--------|-----------------------------------------------------------|
+| **Happy Path**          | `HP`   | Fluxo principal com dados válidos e permissão correta     |
+| **Erro de Validação**   | `EV`   | Dados inválidos, campos obrigatórios ausentes             |
+| **Erro de Autorização** | `EA`   | Acesso negado, escopo insuficiente, token inválido        |
+| **Isolamento de Tenant**| `IT`   | Cross-tenant IDOR, header forjado, escopo de outro tenant |
+| **Borda / Edge Case**   | `EC`   | Valores limítrofes, condições de corrida, duplicatas      |
+| **Não-Funcional**       | `NF`   | Performance, tempo de resposta, tamanho de payload        |
 
 ---
 
@@ -163,7 +163,7 @@ Ao gerar código de teste ou spec `TST-NNN.md`, o agente **DEVE**:
 
 ## 10. Relacionamento entre Documentos
 
-```
+```text
 TST-NNN.md          ←── especifica casos de
     │
     ├── rastreia_para FR-NNN  (o que deve funcionar)

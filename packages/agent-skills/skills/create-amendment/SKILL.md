@@ -31,8 +31,8 @@ Antes de agir, o agente deve garantir que obteve com o usuário:
   - `C` (Correção)
 
 **REGRA DE BLOQUEIO (GATE DE APROVAÇÃO):**
-Leia a User Story fornecida. Se o `Status` não for `aprovada` (se for `em desenvolvimento`, `em revisao`, `para aprovação`, ou `reprovada`), aborte a operação e avise o usuário.
-O "Conteúdo da Alteração" que você usará será a regra de negócio/gherkin extraída automaticamente de dentro desta US aprovada.
+Leia a User Story fornecida. Se o `Status` não for `APPROVED` (se for `IN_PROGRESS`, `REFINING`, `READY`, ou `REJECTED`), aborte a operação e avise o usuário.
+O "Conteúdo da Alteração" que você usará será a regra de negócio/gherkin extraída automaticamente de dentro desta US `APPROVED`.
 
 ---
 

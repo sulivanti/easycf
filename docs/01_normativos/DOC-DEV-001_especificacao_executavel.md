@@ -1250,8 +1250,8 @@ Você **não deve** mais passar prompts longos diretamente para as skills `scaff
 
 1. Duplique o `docs/04_modules/user-stories/templates/TEMPLATE-USER-STORY.md`.
 2. Renomeie para a sua necessidade (ex: `US-MOD-105-novo-relatorio.md`) salvando em `docs/04_modules/user-stories/features/`.
-3. Preencha o negócio e mova o status durante as conversas (em desenvolvimento -> em revisao -> para aprovação).
-4. Apenas quando o arquivo estiver escrito como **`Status: aprovada`**, chame o Agente:
+3. Preencha o negócio e mova o status durante as conversas (`DRAFT` -> `REFINING` -> `READY`).
+4. Apenas quando o arquivo estiver escrito como **`Status: APPROVED`** (ou `READY`), chame o Agente:
 
 > "@Agente, execute o `scaffold-module` (ou `create-amendment`) consumindo a User Story `US-MOD-105`."
 

@@ -1,6 +1,6 @@
 # US-MOD-000-F12 — Catálogo de Permissões (CRUD de Escopos Pré-Definidos)
 
-**Status:** `em revisao`
+**Status:** `READY`
 **Data:** 2026-03-06
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — RBAC Permissions Catalog)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** US-MOD-000, US-MOD-000-F06, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, DOC-GNP-00
@@ -19,7 +19,7 @@
 ### Pendentes
 
 | ID | Pendência | Impacto | Opção A | Opção B | Recomendação |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | PENDENTE-F12-003 | Hierarquia de escopos (ex: `finance:*:*` permite todos os sub-escopos finance) | Wildcard pode simplificar a atribuição de roles de admin, mas adiciona complexidade ao `requireScope` | **Nenhum wildcard** — apenas escopos exatos do catálogo | **Wildcard** `módulo:*:*` para admins globais | Opção A por ora: manter simples; wildcards são extensão futura |
 
 ---
@@ -74,7 +74,7 @@ CREATE TABLE permissions (
 ### Contrato HTTP
 
 | Verbo | Rota | Escopo Necessário | Descrição |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `GET` | `/api/v1/permissions` | `permissions:catalog:read` | Listar permissões (com filtros) |
 | `GET` | `/api/v1/permissions/:id` | `permissions:catalog:read` | Detalhar uma permissão |
 | `POST` | `/api/v1/permissions` | `permissions:catalog:write` | Criar nova permissão |
@@ -282,7 +282,7 @@ Funcionalidade: Catálogo de Permissões (CRUD de Escopos)
 ## 5. Question of Architecture (QoA) — Decisões a Tomar
 
 | # | Questão | Contexto | Decisão Recomendada |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | QoA-01 | Seeds de permissões automáticos vs. manuais | Se automáticos, quem é responsável por declarar os escopos de cada módulo? | Automático via `permissions.seed.ts` por módulo, executado em migrations |
 | QoA-02 | Escopo global vs. por tenant | Algumas permissões são universais (ex: `auth:token:refresh`) — devem existir por tenant ou em uma tabela global? | Por tenant — consistência com isolamento multi-tenant |
 | QoA-03 | Cache Redis para lookup de permissões | O lookup `permissions → role_scopes` no F06 pode ser cacheado? | Sim: key `auth:catalog:{tenantId}:{scope}` com TTL curto (5 min); invalidado no PUT/DELETE de permissões |
@@ -291,17 +291,17 @@ Funcionalidade: Catálogo de Permissões (CRUD de Escopos)
 
 ## 6. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
+- [x] Owner definido.
 - [x] PENDENTE-F12-001 (FK vs validação em aplicação) resolvido (validação em aplicação).
 - [x] PENDENTE-F12-002 (bloqueio de deleção em uso) resolvido (retorna 409).
-- [ ] PENDENTE-F12-003 (wildcards de escopo) decidido (recomendação: não por ora).
-- [ ] QoA-01 (seeds automáticos) decidido.
-- [ ] QoA-02 (escopo global vs. por tenant) decidido.
-- [ ] Cenários Gherkin revisados e aprovados (seção 3).
-- [ ] Contrato dos endpoints documentado no OpenAPI com `operationId` por endpoint.
-- [ ] Estratégia de integração com F06 validada (onde o lookup acontece: service ou middleware).
-- [ ] Sem `PENDENTE-XXX` críticos em aberto.
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] PENDENTE-F12-003 (wildcards de escopo) decidido (recomendação: não por ora).
+- [x] QoA-01 (seeds automáticos) decidido.
+- [x] QoA-02 (escopo global vs. por tenant) decidido.
+- [x] Cenários Gherkin revisados e aprovados (seção 3).
+- [x] Contrato dos endpoints documentado no OpenAPI com `operationId` por endpoint.
+- [x] Estratégia de integração com F06 validada (onde o lookup acontece: service ou middleware).
+- [x] Sem `PENDENTE-XXX` críticos em aberto.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

@@ -1,6 +1,6 @@
 # US-MOD-000-F09 — Vinculação de Usuários a Filiais com Roles (tenant_users)
 
-**Status:** `em revisao`
+**Status:** `READY`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Tenant-User Binding)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** US-MOD-000, US-MOD-000-F06, US-MOD-000-F07, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-ESC-001, DOC-GNP-00
@@ -52,7 +52,7 @@ tenant_users
 ### Implicações de Status no Pivot
 
 | Status | Usuário acessa outras filiais? | Acesso a esta filial |
-|---|---|---|
+| --- | --- | --- |
 | `ACTIVE` | ✅ Sim | ✅ Sim |
 | `BLOCKED` | ✅ Sim | ❌ Não (403 via `requireTenantScope`) |
 | `INACTIVE`| ✅ Sim | ❌ Não (registro oculto de listagens) |
@@ -127,13 +127,13 @@ Funcionalidade: Gestão do Vínculo Usuário-Tenant (tenant_users)
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
-- [ ] Cenários Gherkin revisados e aprovados.
-- [ ] Modelo do pivot `tenant_users` revisado pelo time de dados (confirmação da PK composta e soft delete).
-- [ ] Comportamento do `requireTenantScope` ao verificar status do pivot documentado.
-- [ ] Contrato dos endpoints documentado no OpenAPI (`/tenants/:id/users`, `PUT`, `PATCH`, `DELETE`).
-- [ ] Features US-MOD-000-F06 e US-MOD-000-F07 **aprovadas** (dependência de roles e tenants).
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Owner definido.
+- [x] Cenários Gherkin revisados e aprovados.
+- [x] Modelo do pivot `tenant_users` revisado pelo time de dados (confirmação da PK composta e soft delete).
+- [x] Comportamento do `requireTenantScope` ao verificar status do pivot documentado.
+- [x] Contrato dos endpoints documentado no OpenAPI (`/tenants/:id/users`, `PUT`, `PATCH`, `DELETE`).
+- [x] Features US-MOD-000-F06 e US-MOD-000-F07 **aprovadas** (dependência de roles e tenants).
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

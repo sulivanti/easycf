@@ -1,5 +1,5 @@
 ---
-description: Desfaz a geração de um módulo (scaffold), excluindo a pasta de documentação do módulo e retornando a User Story original para o status "em revisao" ou "reprovada", desde que não haja código implementado. Triggers: "reprovar módulo", "retornar módulo para US", "desfazer scaffold", "rollback module".
+description: Desfaz a geração de um módulo (scaffold), excluindo a pasta de documentação do módulo e retornando a User Story original para o status "REFINING" ou "REJECTED", desde que não haja código implementado. Triggers: "reprovar módulo", "retornar módulo para US", "desfazer scaffold", "rollback module".
 ---
 
 > [!CAUTION]
@@ -10,7 +10,7 @@ description: Desfaz a geração de um módulo (scaffold), excluindo a pasta de d
 
 ## Objetivo
 
-Permitir que a arquitetura recue um passo em caso de erro estratégico. Se o `scaffold-module` gerou um módulo prematuramente ou incorretamente a partir de uma User Story aprovada, esta skill reverte o processo destruindo a documentação canônica gerada e reabrindo a User Story para ajustes.
+Permitir que a arquitetura recue um passo em caso de erro estratégico. Se o `scaffold-module` gerou um módulo prematuramente ou incorretamente a partir de uma User Story `APPROVED`, esta skill reverte o processo destruindo a documentação canônica gerada e reabrindo a User Story para ajustes.
 
 ---
 
@@ -40,7 +40,7 @@ Se o usuário confirmar, siga para o Passo 2.
 ## 4. PASSO 2: A Reversão da User Story
 
 1. Encontre a User Story correspondente na pasta `docs/04_modules/user-stories/features/` (ex: `US-MOD-{ID}-*.md`).
-2. Altere o metadado **estado_item:** de `READY` para `REFINING` (ou `DRAFT`, caso o usuário tenha exigido).
+2. Altere o metadado **estado_item:** e a tag visual **Status:** de `APPROVED` (ou `READY`) para `REFINING` (ou `REJECTED`/`DRAFT`, conforme o caso ou exigência do usuário).
 3. Adicione uma nota simples no final da US: `> Rollback executado em {Data}: {Motivo do Rollback}`.
 
 ---

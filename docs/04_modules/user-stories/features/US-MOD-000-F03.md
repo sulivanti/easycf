@@ -1,6 +1,6 @@
 # US-MOD-000-F03 — Login via SSO OAuth2 (Google e Microsoft / Azure AD)
 
-**Status:** `em revisao`
+**Status:** `REFINING`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth SSO)
@@ -8,9 +8,9 @@
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** REFINING
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-06
+- **data_ultima_revisao:** 2026-03-08
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-PADRAO-004, INT-000-01, INT-000-02
 - **nivel_arquitetura:** 2 (integração externa OAuth2, auto-provisionamento, domain events)
 - **referencias_exemplos:** N/A
@@ -133,12 +133,12 @@ Funcionalidade: Login via SSO OAuth2 (Google e Microsoft)
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
-- [ ] Cenários Gherkin revisados e aprovados.
-- [ ] Variáveis de ambiente (`GOOGLE_CLIENT_ID`, `MICROSOFT_CLIENT_ID`, etc.) documentadas em DOC-PADRAO-004.
+- [x] Owner definido.
+- [x] Cenários Gherkin revisados e aprovados.
+- [x] Variáveis de ambiente (`GOOGLE_CLIENT_ID`, `MICROSOFT_CLIENT_ID`, etc.) documentadas em DOC-PADRAO-004.
 - [ ] Contratos `INT-000-01` e `INT-000-02` criados com retry/timeout/fallback documentados.
-- [ ] Endpointsdos callbacks documentados no OpenAPI.
-- [ ] Épico US-MOD-000 **aprovado**.
+- [ ] Endpoints dos callbacks documentados no OpenAPI.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

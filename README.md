@@ -94,6 +94,18 @@ pnpm run dev
 
 ---
 
+## Automação de Qualidade (QA)
+
+O projeto consolida diversas rotinas estáticas e validações de documentação em uma única pipeline via npm scripts:
+
+- **`npm run qa:all`:** Master Quality Gate. Roda tanto o lint de documentação quanto a verificação de esquemas JSON nos manifestos YAML de forma consecutiva e exibe apenas os retornos úteis sobre itens com defeito (falha de tipagem, links mortos em `.md`).
+- **`npm run lint:docs`:** Busca e conserta referências de *dead-links* entre os documentos canônicos da especificação na pasta `docs/`.
+- **`npm run validate:manifests`:** Audita dinamicamente todos os manifestos de UI (`05_manifests/screens`) em conformidade estrita aos esquemas versionados via Ajv.
+
+> 🤖 **Dica para Agentes:** Caso exista alguma inconsistência nos arquivos Markdown (ex: *links quebrados* após rename) ou um arquivo `YAML` fora do modelo, simplesmente acoste-se à skill **`qa_assistant`** ou rode `npm run qa:all` no terminal para relatar os problemas ao desenvolvedor.
+
+---
+
 ## Padrões de Desenvolvimento
 
 - **Zero Alucinação / Padrões Declarativos:** Utilize sempre o [DOC-DEV-001_especificacao_executavel.md](docs/01_normativos/DOC-DEV-001_especificacao_executavel.md) para redigir ou codificar comportamentos.

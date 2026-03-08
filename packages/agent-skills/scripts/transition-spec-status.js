@@ -64,8 +64,8 @@ if (featureMatch) {
 
     if (fs.existsSync(epicPath)) {
         const epicContent = fs.readFileSync(epicPath, 'utf-8');
-        const epicStatusMatch = epicContent.match(/-\s*\*\*estado_item:\*\*\s*(READY|DRAFT.*|REFINING.*)/i) ||
-            epicContent.match(/-\s*estado_item:\s*(READY|DRAFT.*|REFINING.*)/i);
+        const epicStatusMatch = epicContent.match(/-\s*\*\*estado_item:\*\*\s*(.+?)(?=\r?\n|$)/i) ||
+            epicContent.match(/-\s*estado_item:\s*(.+?)(?=\r?\n|$)/i);
 
         let isEpicReady = false;
         if (epicStatusMatch) {
@@ -87,8 +87,8 @@ if (featureMatch) {
 }
 
 // 4. Status atual
-const currentStatusMatch = content.match(/-\s*\*\*estado_item:\*\*\s*(DRAFT|REFINING|READY|DRAFT.*|REFINING.*)/i) ||
-    content.match(/-\s*estado_item:\s*(DRAFT|REFINING|READY|DRAFT.*|REFINING.*)/i);
+const currentStatusMatch = content.match(/-\s*\*\*estado_item:\*\*\s*(.+?)(?=\r?\n|$)/i) ||
+    content.match(/-\s*estado_item:\s*(.+?)(?=\r?\n|$)/i);
 
 let currentStatus = 'Não encontrado';
 if (currentStatusMatch) {
@@ -126,12 +126,12 @@ if (missing.length > 0) {
 
     if (currentStatusMatch) {
         // Substitui com o novo status mantendo a formatação e as anotações posteriores
-        newContent = newContent.replace(/(-\s*\*\*estado_item:\*\*\s*)(?:DRAFT|REFINING|READY)(.*)/gi, `$1${targetStatus}$2`);
-        newContent = newContent.replace(/(-\s*estado_item:\s*)(?:DRAFT|REFINING|READY)(.*)/gi, `$1${targetStatus}$2`);
+        newContent = newContent.replace(/(-\s*\*\*estado_item:\*\*\s*)(.+?)(?=\r?\n|$)/gi, `$1${targetStatus}`);
+        newContent = newContent.replace(/(-\s*estado_item:\s*)(.+?)(?=\r?\n|$)/gi, `$1${targetStatus}`);
 
         fs.writeFileSync(filePath, newContent, 'utf-8');
         console.log(`\n💾 Status promovido para ${targetStatus} com sucesso!`);
     } else {
-        console.log('\n⚠️ Nenhum campo "estado_item" (DRAFT ou REFINING) encontrado para substituir.');
+        console.log('\n⚠️ Nenhum campo "estado_item" encontrado para substituir.');
     }
 }

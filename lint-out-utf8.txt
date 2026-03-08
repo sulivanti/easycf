@@ -1,0 +1,97 @@
+﻿node.exe : docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:93 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: 
+"1. Introdu├º├úo"]
+No linha:1 caractere:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (docs/01_normati... Introdu├º├úo"]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:162 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: "2. 
+Recursos do Sistema (vis├úo ..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:250 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: "3. Regras 
+de Neg├│cio (BR-xxx)"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:258:27 error MD033/no-inline-html Inline HTML [Element: owner]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:309 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: "4. 
+Requisitos (FR / DATA / INT..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:319:27 error MD033/no-inline-html Inline HTML [Element: owner]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:386:27 error MD033/no-inline-html Inline HTML [Element: owner]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:715:27 error MD033/no-inline-html Inline HTML [Element: owner]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:761:27 error MD033/no-inline-html Inline HTML [Element: owner]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:938 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "4. Mapeamento 
+Inteligente de E..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1035 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: "5. 
+Arquitetura e Implementa├º├úo..."]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1168 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: "6. 
+Anexos"]
+docs/01_normativos/DOC-DEV-001_especificacao_executavel.md:1242 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: "7. 
+Entrada do usu├írio (Templat..."]
+docs/01_normativos/DOC-DEV-002_fluxo_agentes_e_governanca.md:78:102 error MD033/no-inline-html Inline HTML [Element: br]
+docs/01_normativos/DOC-DEV-002_fluxo_agentes_e_governanca.md:78:157 error MD033/no-inline-html Inline HTML [Element: br]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:222 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Geral"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:230 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "API"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:236 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Web"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:310 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Geral"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:316 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Application"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:322 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Domain"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:327 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Infrastructure"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:332 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Web"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:418 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Domain"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:426 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Application"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:433 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Infrastructure"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:440 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Presentation"]
+docs/01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md:445 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Web"]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:17 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: 
+"Documentos relacionados"]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:61 error MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "(ANEXO ADITIVO) OpenAPI/Swagge..."]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:175 error MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "(ANEXO ADITIVO) OpenAPI x-perm..."]
+docs/01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md:185 error MD025/single-title/single-h1 Multiple top-level headings in the same document 
+[Context: "(ANEXO ADITIVO) Eventos Ôåö Perm..."]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:175 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(A) SEC (AGN-DEV-06)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:179 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(B) DATA (AGN-DEV-04)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:183 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(C) UX (AGN-DEV-07)"]
+docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md:187 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(D) OpenAPI (coordena├º├úo 
+DEVÔåöC..."]
+docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md:3 error MD001/heading-increment Heading levels should only increment by one level at a time [Expected: 
+h2; Actual: h3]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:134 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Amarra├º├úo 
+com eventos/notifica..."]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:148 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Amarra├º├úo 
+EventsÔåöPermissions (..."]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:160 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "OpenAPI 
+(MUST, EX-OAS)"]
+docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md:169 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "x-permissions 
+(quando aplic├íve..."]
+docs/04_modules/mod-000-foundation/mod.md:9 error MD001/heading-increment Heading levels should only increment by one level at a time [Expected: h2; Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F13.md:7 error MD001/heading-increment Heading levels should only increment by one level at a time [Expected: h2; 
+Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F13.md:64 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Mesmas diretrizes globais 
+do ..."]
+docs/04_modules/user-stories/features/US-MOD-000-F14.md:7 error MD001/heading-increment Heading levels should only increment by one level at a time [Expected: h2; 
+Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F14.md:60 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Mesmas diretrizes globais 
+do ..."]
+docs/04_modules/user-stories/features/US-MOD-000-F15.md:7 error MD001/heading-increment Heading levels should only increment by one level at a time [Expected: h2; 
+Actual: h3]
+docs/04_modules/user-stories/features/US-MOD-000-F15.md:58 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Mesmas diretrizes globais 
+do ..."]
+docs/getting-started.md:9 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: "1. Clone o reposit├│rio"]
+docs/getting-started.md:14 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: "2. Instale as depend├¬ncias do ..."]
+docs/getting-started.md:19 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: "3. Execute o CLI apontando par..."]
+packages/agent-skills/skills/draft-user-story/SKILL.md:65 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "(Depois de responderem: 
+Resuma..."]
+packages/agent-skills/skills/README.md:9:173 error MD033/no-inline-html Inline HTML [Element: br]
+packages/agent-skills/skills/README.md:10:192 error MD033/no-inline-html Inline HTML [Element: br]
+packages/agent-skills/skills/README.md:12:149 error MD033/no-inline-html Inline HTML [Element: br]
+packages/agent-skills/skills/README.md:13:174 error MD033/no-inline-html Inline HTML [Element: br]
+packages/agent-skills/skills/README.md:15:169 error MD033/no-inline-html Inline HTML [Element: br]
+packages/agent-skills/skills/README.md:16:180 error MD033/no-inline-html Inline HTML [Element: br]
+packages/agent-skills/skills/README.md:17:171 error MD033/no-inline-html Inline HTML [Element: br]
+packages/agent-skills/skills/README.md:19:159 error MD033/no-inline-html Inline HTML [Element: br]
+packages/agent-skills/skills/README.md:23:167 error MD033/no-inline-html Inline HTML [Element: br]
+packages/agent-skills/skills/skill-creator/agents/analyzer.md:191 error MD025/single-title/single-h1 Multiple top-level headings in the same document [Context: 
+"Analyzing Benchmark Results"]

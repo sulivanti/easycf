@@ -16,7 +16,7 @@ A pasta segue o princípio de **rastreabilidade**: qualquer mudança de especifi
 
 ## 2. Estrutura de Diretórios
 
-```
+```text
 04_modules/
 ├── README.md                  ← este arquivo (visão geral da pasta)
 │
@@ -62,8 +62,8 @@ A pasta segue o princípio de **rastreabilidade**: qualquer mudança de especifi
 
 ### Convenção de nomenclatura de pastas
 
-| Padrão | Exemplo | Descrição |
-|--------|---------|-----------|
+| Padrão         | Exemplo              | Descrição                             |
+|----------------|----------------------|---------------------------------------|
 | `mod-NNN-nome` | `mod-000-foundation` | Módulo com número de 3 dígitos e slug |
 
 ---
@@ -72,24 +72,24 @@ A pasta segue o princípio de **rastreabilidade**: qualquer mudança de especifi
 
 Cada arquivo dentro de `requirements/` recebe um **ID canônico** no formato `<TIPO>-<NNN>`, onde `NNN` é o número do módulo.
 
-| Pasta | ID Padrão | Tipo de Documento | Conteúdo esperado |
-|-------|-----------|-------------------|-------------------|
-| `br/` | `BR-NNN` | Regras de Negócio | Restrições, validações e invariantes de negócio |
-| `fr/` | `FR-NNN` | Requisitos Funcionais | O que o sistema deve fazer (cenários / Gherkin) |
-| `data/` | `DATA-NNN` | Dados / Entidades | Schemas de tabelas, contratos de persistência, enums |
-| `int/` | `INT-NNN` | Integrações | Contratos externos, operationIds de API, webhooks |
-| `sec/` | `SEC-NNN` | Segurança | Políticas de acesso, escopos, eventos de segurança |
-| `ux/` | `UX-NNN` | UX / UI | Jornadas de usuário, mensagens de erro, fluxos |
-| `nfr/` | `NFR-NNN` | Não-Funcionais | Performance, disponibilidade, escalabilidade |
-| `imp/` | `IMP-NNN` | Implementação | Anti-patterns, decisões técnicas, lições aprendidas |
-| `tst/` | `TST-NNN` | Especificação de Testes | Casos obrigatórios, cobertura mínima, fixtures, categorias (HP/EA/IT/EC/EV/NF) |
-| `adr/` | `ADR-NNN` | Decisão Arquitetural | Decisões formais com contexto, alternativas e consequências |
+| Pasta   | ID Padrão  | Tipo de Documento       | Conteúdo esperado                                                              |
+|---------|------------|-------------------------|--------------------------------------------------------------------------------|
+| `br/`   | `BR-NNN`   | Regras de Negócio       | Restrições, validações e invariantes de negócio                                |
+| `fr/`   | `FR-NNN`   | Requisitos Funcionais   | O que o sistema deve fazer (cenários / Gherkin)                                |
+| `data/` | `DATA-NNN` | Dados / Entidades       | Schemas de tabelas, contratos de persistência, enums                           |
+| `int/`  | `INT-NNN`  | Integrações             | Contratos externos, operationIds de API, webhooks                              |
+| `sec/`  | `SEC-NNN`  | Segurança               | Políticas de acesso, escopos, eventos de segurança                             |
+| `ux/`   | `UX-NNN`   | UX / UI                 | Jornadas de usuário, mensagens de erro, fluxos                                 |
+| `nfr/`  | `NFR-NNN`  | Não-Funcionais          | Performance, disponibilidade, escalabilidade                                   |
+| `imp/`  | `IMP-NNN`  | Implementação           | Anti-patterns, decisões técnicas, lições aprendidas                            |
+| `tst/`  | `TST-NNN`  | Especificação de Testes | Casos obrigatórios, cobertura mínima, fixtures, categorias (HP/EA/IT/EC/EV/NF) |
+| `adr/`  | `ADR-NNN`  | Decisão Arquitetural    | Decisões formais com contexto, alternativas e consequências                    |
 
 ### Tipos especiais (na raiz de `requirements/`)
 
-| ID | Tipo | Quando usar |
-|----|------|-------------|
-| `FIX-NNN` | Correção de bug | Bugs identificados pós-especificação |
+| ID             | Tipo             | Quando usar                               |
+|----------------|------------------|-------------------------------------------|
+| `FIX-NNN`      | Correção de bug  | Bugs identificados pós-especificação      |
 | `PENDENTE-NNN` | Pendência aberta | Decisão em aberto com impacto documentado |
 
 ---
@@ -100,19 +100,19 @@ Para **nunca editar o passado**, toda mudança em um documento canônico é feit
 
 ### Nomenclatura dos Amendments
 
-```
+```text
 <BASE-ID>-<TIPO><NN>.md
 ```
 
-| Sufixo | Tipo | Quando usar |
-|--------|------|-------------|
-| `-Mxx` | **Melhoria** | Adiciona ou altera comportamento, amplia capacidade |
-| `-Rxx` | **Revisão** | Clareza ou reorganização; **não altera comportamento** |
-| `-Cxx` | **Correção** | Conserta erro ou ambiguidade no spec original |
+| Sufixo | Tipo         | Quando usar                                            |
+|--------|--------------|--------------------------------------------------------|
+| `-Mxx` | **Melhoria** | Adiciona ou altera comportamento, amplia capacidade    |
+| `-Rxx` | **Revisão**  | Clareza ou reorganização; **não altera comportamento** |
+| `-Cxx` | **Correção** | Conserta erro ou ambiguidade no spec original          |
 
 ### Exemplos de amendments
 
-```
+```text
 FR-001-M01.md   → Melhoria 01 em FR-001 (novo filtro avançado)
 BR-001-R01.md   → Revisão 01 em BR-001 (texto mais claro)
 SEC-001-C01.md  → Correção 01 em SEC-001 (obrigatoriedade de log)
@@ -120,13 +120,13 @@ SEC-001-C01.md  → Correção 01 em SEC-001 (obrigatoriedade de log)
 
 ### Caminho do arquivo de amendment
 
-```
+```text
 amendments/<tipo>/<BASE-ID>/<BASE-ID>-<SUFIXO>.md
 ```
 
 Exemplo real:
 
-```
+```text
 mod-001-backoffice-admin/
 └── amendments/
     ├── fr/
@@ -142,7 +142,7 @@ mod-001-backoffice-admin/
 
 ### Ciclo de vida de um Amendment
 
-```
+```text
 PROPOSTA → APROVADA → INTEGRADA
                     ↘ REJEITADA
                     ↘ SUPERADA
@@ -282,10 +282,10 @@ Documenta a decisão de adotar *State-stored + Domain Events + Inbox/Outbox* par
 
 ## 10. Módulos Existentes
 
-| Módulo | Status | Descrição | Nível Arch |
-|--------|--------|-----------|------------|
-| [mod-000-foundation](./mod-000-foundation/mod.md) | READY | Identidade, IAM, Auditoria, Core Components | N0 — Núcleo |
-| [mod-001-backoffice-admin](./mod-001-backoffice-admin/mod.md) | REFINING | Gestão de usuários, perfis/grupos, RBAC por escopo | N1 — Clean Leve |
+| Módulo                                            | Status   | Descrição                                            | Nível Arch      |
+|---------------------------------------------------|----------|------------------------------------------------------|-----------------|
+| [mod-000-foundation](./mod-000-foundation/mod.md) | READY    | Identidade, IAM, Auditoria, Core Components          | N0 — Núcleo     |
+| mod-001-backoffice-admin                          | REFINING | Shell de Auth, App Shell, Dashboard Admin (UX-First) | N1 — Clean Leve |
 
 ---
 
@@ -295,7 +295,7 @@ Documenta a decisão de adotar *State-stored + Domain Events + Inbox/Outbox* par
 
 Ao criar um novo módulo `mod-NNN-nome` manualmente, siga este checklist obrigatório:
 
-```
+```text
 [ ] 1. Criar pasta: docs/04_modules/mod-NNN-nome/
 [ ] 2. Criar mod.md com objetivo, escopo e dependências
 [ ] 3. Criar requirements/ com subpastas: br/ fr/ data/ int/ sec/ ux/ nfr/ tst/

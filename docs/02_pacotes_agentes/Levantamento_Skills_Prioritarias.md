@@ -48,7 +48,7 @@ Este documento cataloga o **estado atual** das Skills, separando as **já implem
 
 A skill `validate-drizzle-schemas` cobre as validações mais críticas do domínio de banco de dados.
 
-> 📄 **Para o conjunto completo e atualizado de regras**, consulte diretamente a skill: [`.agents/skills/validate-drizzle-schemas/SKILL.md`](../../.agents/skills/validate-drizzle-schemas/SKILL.md).
+> 📄 **Para o conjunto completo e atualizado de regras**, consulte diretamente a skill: `../../.agents/skills/validate-drizzle-schemas/SKILL.md`.
 
 **Skill complementar:** `drizzle-orm` (genérica) fornece referência de padrões de queries, migrations e schemas quando o agente precisar de exemplos técnicos do ORM.
 

@@ -13,9 +13,16 @@
         "release:major": "node scripts/release.mjs major",
         "commit": "node scripts/git-semantic-commit.js",
         "sync:private": "powershell scripts/git-sync-private.ps1",
-        "sync:public": "powershell scripts/git-sync-public.ps1"
+        "sync:public": "powershell scripts/git-sync-public.ps1",
+        "lint:docs": "node scripts/lint-docs.js",
+        "lint:markdown": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\" \"#.gemini/**\" \"#tmp/**\"",
+        "validate:manifests": "node scripts/validate-manifests.js",
+        "qa:all": "npm run lint:docs && npm run lint:markdown && npm run validate:manifests"
     },
     "devDependencies": {
+        "ajv": "^8.18.0",
+        "js-yaml": "^4.1.1",
+        "markdownlint-cli2": "^0.21.0",
         "turbo": "^2.0.0",
         "typescript": "^5.4.0"
     },

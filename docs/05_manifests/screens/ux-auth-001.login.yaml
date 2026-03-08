@@ -1,0 +1,92 @@
+manifest_version: 1
+screen_id: "UX-AUTH-001"
+name: "Login e Recuperação de Senha"
+entity_type: "auth"
+
+linked_stories:
+  - "US-MOD-001"
+  - "US-MOD-001-F01"
+  - "US-MOD-001-F02"
+
+routes:
+  - path: "/auth/login"
+    method: POST
+  - path: "/auth/forgot-password"
+    method: POST
+  - path: "/auth/reset-password"
+    method: POST
+
+telemetry_defaults:
+  event_name: "auth.login_attempted"
+  required_fields:
+    - "screen_id"
+    - "correlation_id"
+    - "action"
+  # tenant_id AUSENTE: fase pré-autenticação (DOC-ARC-003 §2)
+  propagate_headers:
+    - "X-Correlation-ID"
+
+permissions:
+  submit: "auth:login"
+
+actions:
+  # Contexto: login
+  - action: "submit"
+    client_only: false
+    operation_ids:
+      - "auth_login"
+    permission: "auth:login"
+
+  # Contexto: forgot-password
+  - action: "submit"
+    client_only: false
+    operation_ids:
+      - "auth_forgot_password"
+    permission: "auth:login"
+
+  # Contexto: reset-password
+  - action: "submit"
+    client_only: false
+    operation_ids:
+      - "auth_reset_password"
+    permission: "auth:login"
+
+  # Navegação cliente-side entre painéis (login ↔ recover)
+  - action: "view"
+    client_only: true
+    operation_ids: []
+    permission: "auth:login"
+
+ui_rules:
+  action_visibility:
+    strategy: "hide_if_no_permission"
+  action_enablement: []
+
+error_mapping:
+  default_user_message: "Ocorreu um erro inesperado. Tente novamente ou contate o suporte."
+  http_status:
+    "400":
+      user_message: "Requisição inválida."
+      ui:
+        type: "toast"
+        level: "error"
+    "401":
+      user_message: "E-mail ou senha inválidos."
+      ui:
+        type: "toast"
+        level: "error"
+    "422":
+      user_message: "Dados inválidos. Verifique os campos e tente novamente."
+      ui:
+        type: "form_validation"
+        level: "error"
+    "429":
+      user_message: "Muitas tentativas. Aguarde alguns instantes antes de tentar novamente."
+      ui:
+        type: "toast"
+        level: "warning"
+    "500":
+      user_message: "Erro interno do servidor. Contate o suporte."
+      ui:
+        type: "toast"
+        level: "error"

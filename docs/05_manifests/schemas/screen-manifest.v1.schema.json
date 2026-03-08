@@ -33,7 +33,7 @@
         "entity_type": {
             "type": "string",
             "pattern": "^[a-z][a-z0-9_]*$",
-            "description": "Ex: user, invoice, project"
+            "description": "Ex: user, invoice, project. Para manifestos de infra/shell usar: auth, shell ou dashboard (ver DOC-UX-010 §Manifestos de Infra/Shell)"
         },
         "routes": {
             "type": "array",
@@ -66,6 +66,16 @@
         },
         "error_mapping": {
             "$ref": "#/$defs/error_mapping"
+        },
+        "linked_stories": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "pattern": "^US-[A-Z0-9]+-[A-Z0-9]+(-F[0-9]+)?$",
+                "description": "Ex: US-MOD-001, US-MOD-001-F01"
+            },
+            "uniqueItems": true,
+            "description": "Opcional. IDs das User Stories vinculadas a este manifest (épico ou feature). Ver DOC-UX-010 §Campos obrigatórios."
         }
     },
     "$defs": {

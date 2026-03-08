@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-GNP-00, DOC-PADRAO-004

@@ -49,12 +49,12 @@ GET /info
 }
 ```
 
-| Campo         | Origem                                      | Exemplo            |
-|---------------|---------------------------------------------|--------------------|
-| `name`        | `process.env.npm_package_name`              | `"minha-api"`      |
-| `version`     | `process.env.npm_package_version`           | `"1.2.3"`          |
+| Campo         | Origem                                             | Exemplo        |
+|---------------|----------------------------------------------------|----------------|
+| `name`        | `process.env.npm_package_name`                     | `"minha-api"`  |
+| `version`     | `process.env.npm_package_version`                  | `"1.2.3"`      |
 | `environment` | `process.env.NODE_ENV` (fallback: `"development"`) | `"production"` |
-| `timestamp`   | `new Date().toISOString()` (momento da requisição) | ISO 8601      |
+| `timestamp`   | `new Date().toISOString()` (momento da requisição) | ISO 8601       |
 
 > **Nota:** `npm_package_name` e `npm_package_version` são injetados automaticamente pelo runtime Node.js a partir do `package.json` do app que executa o script. Não há leitura de arquivo em disco.
 

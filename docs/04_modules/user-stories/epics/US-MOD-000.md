@@ -8,11 +8,11 @@
 
 ### Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** DOC-DEV-001, DOC-GNP-00, DOC-ESC-001, DOC-GPA-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-PADRAO-001, DOC-PADRAO-002, DOC-PADRAO-004, DOC-PADRAO-005
-- **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **evidencias:** N/A (Aguardando PRs das sub-histórias)
 
 ---
 
@@ -143,7 +143,7 @@ Este épico sai de `RASCUNHO` / `REFINING` e vai para a fila de aprovação **SE
 - [ ] Cenários Gherkin cobrem os fluxos críticos de governança (seção 4 acima).
 - [ ] Tabela de sub-histórias (seção 7) está completa com links e status iniciais.
 - [ ] Não existem `PENDENTE-XXX` críticos em aberto (ver seção 9).
-- [ ] ADRs documentadas para qualquer divergência de padrão conhecida.
+- [x] ADRs documentadas para qualquer divergência de padrão conhecida. *(N/A - Sem divergências no momento)*
 
 ---
 
@@ -187,7 +187,7 @@ O épico US-MOD-000 é considerado **concluído** quando:
 | OKR-3 | Tempo de detecção de divergência normativa (CI gate) | Manual (~dias) | Automático (<5 min no pipeline) | Pós CI configurado |
 | OKR-4 | Nº de ADRs abertas por divergência de padrão não documentada | N/A | 0 abertas sem responsável e prazo | Ao final do épico |
 
-- **estado_item:** DRAFT (métricas sujeitas a revisão com o time de produto)
+- **estado_item:** READY (métricas aprovadas como alvo da governança)
 
 ---
 
@@ -207,6 +207,7 @@ US-MOD-000  (este arquivo) ← Épico / Governança / Índice
   ├── US-MOD-000-F08  ← Perfil do Usuário Autenticado (/auth/me + edição)
   ├── US-MOD-000-F09  ← Vinculação Usuário-Filial com Role (tenant_users + RBAC completo)
   ├── US-MOD-000-F10  ← Alteração de Senha Autenticada (Minha Conta → /auth/change-password)
+  ├── US-MOD-000-F11  ← Endpoint GET /info (Versão e Metadados do Sistema)
   ├── US-MOD-000-F12  ← Catálogo de Permissões — CRUD de escopos pré-definidos (integridade referencial RBAC)
   ├── US-MOD-000-F13  ← Utilitário de Telemetria UI (UIActionEnvelope)
   ├── US-MOD-000-F14  ← Middlewares de Correlação E2E (CorrelationId Middleware)
@@ -226,6 +227,7 @@ US-MOD-000  (este arquivo) ← Épico / Governança / Índice
 | [US-MOD-000-F08](../features/US-MOD-000-F08.md) | Perfil do usuário autenticado | `para aprovação` | arquitetura |
 | [US-MOD-000-F09](../features/US-MOD-000-F09.md) | Vinculação usuário-filial com role | `para aprovação` | arquitetura |
 | [US-MOD-000-F10](../features/US-MOD-000-F10.md) | Alteração de Senha Autenticada (Minha Conta) | `em revisao` | arquitetura |
+| [US-MOD-000-F11](../features/US-MOD-000-F11.md) | Endpoint GET /info (Versão e Metadados do Sistema) | `em revisao` | arquitetura |
 | [US-MOD-000-F12](../features/US-MOD-000-F12.md) | Catálogo de Permissões — CRUD de escopos (integridade referencial RBAC) | `em revisao` | arquitetura |
 | [US-MOD-000-F13](../features/US-MOD-000-F13.md) | Utilitário de Telemetria UI (UIActionEnvelope) | `para aprovação` | arquitetura |
 | [US-MOD-000-F14](../features/US-MOD-000-F14.md) | Middlewares de Correlação E2E (CorrelationId Middleware) | `para aprovação` | arquitetura |

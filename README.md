@@ -121,18 +121,22 @@ As **Agent Skills** repousam fisicamente em `.agents/skills/`.
 Para compilar uma nova versão do framework e disparar a atualização do repositório público (template), siga os passos abaixo no terminal do monorepo:
 
 ```bash
-# 1. Faz o bump da versão, copia os arquivos pro dist/ e cria a tag no pacote local
+# 1. GERAR A RELEASE BÁSICA (Aumenta a versão e prepara as pastas)
+# Ele copia os arquivos do framework para dentro da pasta dist/ (que será o repositório público clorado) e cria uma tag de release.
 pnpm run release
 
-# 2. Navega para a pasta de distribuição onde o repositório público foi clonado
+# 2. PUBLICAR O TEMPLATE PÚBLICO
+# Navegue até a pasta dist/easycf, que é clone do repositório público no GitHub.
 cd dist/easycf
-
-# 3. Envia as atualizações e tags para o repositório público
+# Suba as mudanças geradas no template
 git push
+# Suba a tag de versão
 git push --tags
 
-# 4. Retorna para a raiz e sincroniza as atualizações do package.json no repositório privado
+# 3. PUBLICAR O FRAMEWORK PRIVADO (Monorepo)
+# Volte duas pastas para retornar à raiz do seu projeto/monorepo privado.
 cd ../..
+# Suba as alterações do package.json com a nova numeração de versão para salvar a versão aqui.
 git push
 ```
 

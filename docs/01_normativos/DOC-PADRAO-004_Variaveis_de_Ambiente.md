@@ -120,6 +120,32 @@ O catálogo abaixo mapeia todas as variáveis do `.env.example`. A coluna **Obri
 |---|---|---|---|
 | `PUBLIC_REGISTRATION_ENABLED` | — | `true` | Permite que novos usuários se cadastrem sem convite |
 
+### 3.11. Storage e Upload de Arquivos
+
+Ver documentação completa em [DOC-PADRAO-005](./DOC-PADRAO-005_Storage_e_Upload.md).
+
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `STORAGE_PROVIDER` | ✅ | `minio` | Provider: `minio` \| `s3` \| `r2` \| `supabase` |
+| `STORAGE_ENDPOINT` | ✅ | `http://localhost:9000` | URL do endpoint do storage provider |
+| `STORAGE_REGION` | ✅ | `us-east-1` | Região do bucket |
+| `STORAGE_ACCESS_KEY` | ✅ | — | Access key do storage provider |
+| `STORAGE_SECRET_KEY` | ✅ | — | Secret key do storage provider |
+| `STORAGE_BUCKET_NAME` | ✅ | `app-storage` | Nome do bucket principal |
+| `STORAGE_PUBLIC_URL` | ✅ | `http://localhost:9000/app-storage` | URL base pública do bucket (para dev/MinIO) |
+| `STORAGE_MAX_AVATAR_BYTES` | — | `2097152` | Limite de tamanho para avatares (2 MB) |
+| `STORAGE_MAX_ATTACHMENT_BYTES` | — | `52428800` | Limite para anexos (50 MB) |
+| `STORAGE_MAX_IMPORT_BYTES` | — | `104857600` | Limite para arquivos de importação (100 MB) |
+| `STORAGE_MAX_EXPORT_BYTES` | — | `104857600` | Limite para arquivos de exportação (100 MB) |
+| `STORAGE_MAX_TEMP_BYTES` | — | `52428800` | Limite para arquivos temporários (50 MB) |
+| `STORAGE_PRESIGN_TTL_SECONDS` | — | `300` | Validade da Presigned URL de upload (5 min) |
+| `STORAGE_DOWNLOAD_TTL_SECONDS` | — | `900` | Validade da Signed URL de download (15 min) |
+| `STORAGE_TENANT_QUOTA_BYTES` | — | `0` | Quota de storage por tenant em bytes (0 = ilimitado) |
+| `STORAGE_SCAN_ENABLED` | — | `false` | Habilita scan de vírus pós-upload |
+| `STORAGE_SCAN_ENDPOINT` | ✅* | — | Endpoint do serviço de scan (ex: ClamAV) |
+
+> ✅* = Obrigatória apenas quando `STORAGE_SCAN_ENABLED=true`.
+
 ---
 
 ## 4. Validação Rigorosa no Boot (Fail-Fast)

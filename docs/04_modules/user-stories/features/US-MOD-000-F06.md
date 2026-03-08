@@ -1,10 +1,20 @@
 # US-MOD-000-F06 — Gestão de Perfis (Roles) e Controle de Acesso Baseado em Escopos (RBAC)
 
-**Status:** `para aprovação`
+**Status:** `em revisao`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — RBAC)
-**Referências Normativas:** DOC-DEV-004 §6, §8.2 | DOC-ARC-001 | DOC-GNP-00 §RBAC | DOC-ESC-001
+**Referências Normativas:** DOC-DEV-001 §6, §8.2 | DOC-ARC-001 | DOC-GNP-00 §RBAC | DOC-ESC-001
+
+## Metadados de Governança
+
+- **estado_item:** DRAFT
+- **owner:** arquitetura
+- **data_ultima_revisao:** 2026-03-06
+- **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-ESC-001, DOC-GNP-00
+- **nivel_arquitetura:** 2 (RBAC + cache Redis + domain events de permissões)
+- **referencias_exemplos:** N/A
+- **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
 
 ---
 
@@ -74,9 +84,9 @@ Funcionalidade: Gestão de Roles e RBAC por Escopos
     Quando ocorre PUT ou DELETE
     Então o Redis executa DEL "auth:scopes:role:{id}" e força fetch no próximo request
 
-  Cenário: Exclusão de role existente (Hard Delete)
+  Cenário: Exclusão de role existente (Soft Delete)
     Dado que a role é deletada via DELETE /roles/:id
-    Então deve remover o registro de roles (e role_scopes por cascade)
+    Então deve alterar o status para INACTIVE e preencher deletedAt (mantendo integridade referencial)
     E cache Redis limpo
 ```
 
@@ -88,6 +98,20 @@ Funcionalidade: Gestão de Roles e RBAC por Escopos
 2. **Substituição Total de Escopos:** PUT faz DELETE + INSERT via transação Drizzle. Não é append.
 3. **Cache Redis Obrigatório:** Key `auth:scopes:role:{roleId}` é preenchida no middleware `requireScope`. DEL é executado sempre que uma mutação ocorre na role.
 4. **Resiliência do Cache:** Falha no comando Redis `DEL` ou `SET` NÃO pode derrubar as rotas CRUD. Deve-se capturar com silencioso e prosseguir.
+5. **Soft Delete de Roles:** A exclusão preenche `deletedAt` e altera `status=INACTIVE`. Não utiliza remoção física (hard delete) para preservar histórico referencial de auditoria.
+6. **`X-Correlation-ID` Obrigatório (DOC-ARC-003):** Toda resposta DEVE propagar o `X-Correlation-ID`. Erros 403 (sem escopo) e 422 (formato inválido) DEVEM incluir `extensions.correlationId`. O evento `role.created` DEVE incluir `correlation_id` conforme `DATA-003`.
+7. **Campo `codigo` Constitucional em `roles` (DOC-DEV-001 §DATA-XXX):** A tabela `roles` DEVE conter o campo `codigo` (`varchar(100)`, NOT NULL, UNIQUE) como identificador amígável de negócio (ex: `admin`, `operador-financeiro`). Este campo é distinto do `id` UUID e do `name`.
+
+---
+
+## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
+
+- [ ] Owner definido.
+- [x] PENDENTE-F06-001 (hard delete vs soft delete de roles) resolvido.
+- [ ] Cenários Gherkin revisados e aprovados.
+- [ ] Contrato dos endpoints documentado no OpenAPI (`/roles`, `/roles/:id`).
+- [ ] Sem `PENDENTE-XXX` críticos em aberto.
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
 

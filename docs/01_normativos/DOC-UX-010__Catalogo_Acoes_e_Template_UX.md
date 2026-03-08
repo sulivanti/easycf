@@ -577,6 +577,8 @@ Todo `UX-XXX` definido neste catálogo **DEVE** ter um arquivo de Screen Manifes
 
 O Screen Manifest é um arquivo YAML declarativo que formaliza o **contrato da tela**: quais ações ela suporta, quais endpoints da API cada ação chama, quais permissões RBAC são exigidas, quando botões devem ser habilitados/desabilitados e como o frontend deve reagir a cada código de erro HTTP.
 
+> **Regra de Ouro (Single Source of Truth):** O Manifesto de Tela (`.yaml`) **substitui inteiramente** a necessidade de manter planilhas, tabelas de de-para ou catálogos isolados vinculando tela → action → permissão → operation_id. O diretório de manifestos é o próprio Catálogo Vivo da aplicação. A automatização garante que esses vínculos existam na codebase (via CI).
+
 ### Schema e Localização
 
 | Artefato         | Caminho                                                            |

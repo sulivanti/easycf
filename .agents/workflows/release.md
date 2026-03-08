@@ -61,7 +61,8 @@ O script não faz o push automático por segurança. Para efetivar o release:
 
 ```powershell
 cd dist/easycf
-git push && git push --tags
+git push
+git push --tags
 cd ../..
 ```
 

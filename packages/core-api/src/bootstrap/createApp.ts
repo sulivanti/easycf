@@ -2,6 +2,7 @@ import Fastify, { FastifyInstance, FastifyServerOptions } from 'fastify';
 import { correlationId } from '../middlewares/correlationId.js';
 import { tenantParsing } from '../middlewares/tenantParsing.js';
 import { errorHandler } from '../handlers/errorHandler.js';
+import { infoRoute } from '../routes/info.js';
 
 export interface AppConfig {
     fastifyOptions?: FastifyServerOptions;
@@ -32,6 +33,9 @@ export async function createApp(config: AppConfig = {}): Promise<FastifyInstance
     app.get('/health', async () => {
         return { status: 'ok', timestamp: new Date().toISOString() };
     });
+
+    // Endpoint de informações do sistema (versão, ambiente) — infraestrutura ECF
+    await app.register(infoRoute);
 
     return app;
 }

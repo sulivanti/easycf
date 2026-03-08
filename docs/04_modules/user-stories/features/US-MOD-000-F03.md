@@ -1,10 +1,20 @@
 # US-MOD-000-F03 — Login via SSO OAuth2 (Google e Microsoft / Azure AD)
 
-**Status:** `para aprovação`
+**Status:** `em revisao`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth SSO)
-**Referências Normativas:** DOC-DEV-004 §4.2, §8.2 | INT-000-01 (Google OAuth2) | INT-000-02 (Microsoft OAuth2) | DOC-ARC-001 | DOC-PADRAO-004
+**Referências Normativas:** DOC-DEV-001 §4.2, §8.2 | INT-000-01 (Google OAuth2) | INT-000-02 (Microsoft OAuth2) | DOC-ARC-001 | DOC-PADRAO-004
+
+## Metadados de Governança
+
+- **estado_item:** DRAFT
+- **owner:** arquitetura
+- **data_ultima_revisao:** 2026-03-06
+- **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-PADRAO-004, INT-000-01, INT-000-02
+- **nivel_arquitetura:** 2 (integração externa OAuth2, auto-provisionamento, domain events)
+- **referencias_exemplos:** N/A
+- **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
 
 ---
 
@@ -79,6 +89,13 @@ Funcionalidade: Login via SSO OAuth2 (Google e Microsoft)
     Então deve redirecionar para {FRONTEND_URL}/login?error=sso_failed&provider=google
     E o erro deve ser logado no servidor com nível ERROR
 
+  Cenário: Usuário com status BLOCKED tenta login via SSO
+    Dado que "bloqueado@empresa.com" existe no banco com status "BLOCKED"
+    Quando o callback do Google é processado com esse e-mail
+    Então deve redirecionar para {FRONTEND_URL}/login?error=account_blocked&provider=google
+    E NÃO deve criar UserSession
+    E a auditoria auth.sso_google.blocked deve ser criada com actorId=user.id
+
   Cenário: Usuário com cadastro nativo faz login via Google pelo mesmo e-mail
     Dado que "joao@empresa.com" tem conta nativa (com passwordHash real)
     Quando ele autentica via Google com o mesmo e-mail
@@ -103,6 +120,25 @@ Funcionalidade: Login via SSO OAuth2 (Google e Microsoft)
 5. **avatarUrl:** Apenas Google fornece `picture`. Microsoft → `avatarUrl = null`.
 
 6. **Sem MFA no fluxo SSO (Fase 1):** Segurança de segundo fator é responsabilidade do provider.
+
+7. **Usuário BLOCKED via SSO:** O auto-provisionamento não reativa contas bloqueadas. Se o e-mail existe com `status=BLOCKED`, o redirect é para página de erro — nunca emite sessão.
+
+8. **`X-Correlation-ID` Obrigatório (DOC-ARC-003):** O `correlationId` DEVE ser propagado como atributo no redirect de sucesso (`sso-success`) e embutido nos eventos de domínio (`user.sso_linked`). Respostas de erro (redirects de falha) DEVEM logar o `correlationId` no servidor com nível ERROR.
+
+9. **Contratos de Integração Externos (INT-000-01 / INT-000-02):** Os contratos com Google OAuth2 e Microsoft OAuth2 DEVEM declarar `Timeout`, `Retry`, `Backoff/Jitter` e política de `Fallback` conforme `DOC-DEV-001 §4.3`. Esses contratos são pré-requisito da DoR (ver Seção 5).
+
+10. **Catálogo de Eventos (DATA-003):** Os eventos `auth.sso_google.register`, `auth.sso_google.login`, `user.sso_linked` DEVEM seguir o formato `DATA-003` com `correlation_id`, `sensitivity_level=1` (dados de provedor ext.).
+
+---
+
+## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
+
+- [ ] Owner definido.
+- [ ] Cenários Gherkin revisados e aprovados.
+- [ ] Variáveis de ambiente (`GOOGLE_CLIENT_ID`, `MICROSOFT_CLIENT_ID`, etc.) documentadas em DOC-PADRAO-004.
+- [ ] Contratos `INT-000-01` e `INT-000-02` criados com retry/timeout/fallback documentados.
+- [ ] Endpointsdos callbacks documentados no OpenAPI.
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
 

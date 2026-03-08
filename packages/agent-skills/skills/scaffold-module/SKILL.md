@@ -29,8 +29,8 @@ Se o usuário não a fornecer no prompt de origem, você **deve questioná-lo an
 - **Caminho da User Story**: O caminho para o arquivo Markdown localizado em `docs/04_modules/user-stories/features/US-MOD-XXX.md`.
 
 **REGRA DE BLOQUEIO (GATE DE APROVAÇÃO):**
-Você deve ler o arquivo da User Story informada. Verifique o campo `Status:`.
-Se o status **não for** `aprovada`, você **ESTÁ PROIBIDO** de gerar qualquer arquivo. Interrompa a execução e informe ao usuário que a US precisa estar aprovada (ela pode estar `em desenvolvimento`, `em revisao`, `para aprovação`, ou `reprovada`). Apenas proceda se estiver `aprovada`.
+Você deve ler o arquivo da User Story informada. Verifique o campo `estado_item:`.
+Se o status **não for** `READY` (ou 'aprovada' em arquiteturas antigas), você **ESTÁ PROIBIDO** de gerar qualquer arquivo. Interrompa a execução e informe ao usuário que a US precisa estar aprovada (ela pode estar `DRAFT`, `REFINING`, etc). Apenas proceda se estiver `READY`.
 
 ---
 

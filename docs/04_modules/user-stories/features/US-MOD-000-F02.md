@@ -1,10 +1,20 @@
 # US-MOD-000-F02 — Autenticação de Dois Fatores via TOTP (MFA)
 
-**Status:** `para aprovação`
+**Status:** `em revisao`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth MFA)
-**Referências Normativas:** DOC-DEV-004 §5.3, §8.2, §12.4 | SEC-000-01 | RFC 6238 (TOTP) | DOC-ARC-001
+**Referências Normativas:** DOC-DEV-001 §5.3, §8.2, §12.4 | SEC-000-01 | RFC 6238 (TOTP) | DOC-ARC-001
+
+## Metadados de Governança
+
+- **estado_item:** DRAFT
+- **owner:** arquitetura
+- **data_ultima_revisao:** 2026-03-06
+- **rastreia_para:** US-MOD-000, US-MOD-000-F01, DOC-DEV-001, DOC-ARC-001, DOC-GNP-00
+- **nivel_arquitetura:** 2 (DDD — temp_token com escopo restrito, domain events de sessão)
+- **referencias_exemplos:** N/A
+- **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
 
 ---
 
@@ -92,6 +102,12 @@ Funcionalidade: Autenticação de Dois Fatores via TOTP (MFA)
     Quando ele tenta enviá-lo como temp_token
     Então o status deve ser 401 com detail="Token não autorizado para esta operação."
 
+  Cenário: Tentativas repetidas de código TOTP inválido (brute-force)
+    Dado que o mesmo temp_token fez 5+ tentativas com totp_code inválido em menos de 2 minutos
+    Quando uma nova tentativa é feita
+    Então deve retornar 429 (RFC 9457) com retry_after
+    E o temp_token deve ser invalidado por segurança (revogado antes do TTL natural)
+
   Cenário: Código TOTP com formato incorreto (diferente de 6 dígitos)
     Dado que o usuário enviou totp_code com menos ou mais de 6 caracteres
     Quando POST /auth/mfa/verify é chamado
@@ -109,6 +125,23 @@ Funcionalidade: Autenticação de Dois Fatores via TOTP (MFA)
 3. **Auditoria Obrigatória:** `auth.mfa.success` (actorId = user.id, entityId = session.id) e `auth.mfa.failed` (actorId = user.id, reason = 'invalid_totp').
 
 4. **Resposta de Sucesso Idêntica ao Login Nativo:** O contrato de resposta deve ser exatamente o mesmo da US-MOD-000-F01, garantindo que o frontend não precise tratar os dois fluxos de forma diferente.
+
+5. **Brute-Force TOTP:** Após 5 tentativas inválidas com o mesmo `temp_token`, o token deve ser revogado e o usuário deve reiniciar o login. Rate limit de tentativas por `temp_token` (não por IP).
+
+6. **`X-Correlation-ID` Obrigatório (DOC-ARC-003):** O `X-Correlation-ID` da requsição inicial de login (etapa 1 — F01) DEVE ser propagado como `causation_id` no evento `auth.mfa.success`, garantindo rastreabilidade da cadeia login→MFA. Respostas de erro RFC 9457 DEVEM incluir `extensions.correlationId`.
+
+7. **Catálogo de Eventos (DATA-003):** Os eventos `auth.mfa.success` e `auth.mfa.failed` DEVEM seguir o formato padronizado `DATA-003` com campos `correlation_id`, `causation_id`, `entity_type=user_session`, `sensitivity_level=1`.
+
+---
+
+## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
+
+- [ ] Owner definido.
+- [ ] Cenários Gherkin revisados e aprovados.
+- [ ] Contrato do endpoint `POST /auth/mfa/verify` documentado no OpenAPI.
+- [ ] Sem `PENDENTE-XXX` críticos em aberto.
+- [ ] Feature US-MOD-000-F01 **aprovada** (dependência direta).
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
 

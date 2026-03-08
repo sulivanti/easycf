@@ -1,10 +1,20 @@
 # US-MOD-000-F01 — Autenticação Nativa com E-mail, Senha e Gerenciamento de Sessão
 
-**Status:** `para aprovação`
+**Status:** `em revisao`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth Core)
-**Referências Normativas:** DOC-DEV-004 §3, §4.1, §8.2, §12.2, §12.4 | SEC-000-01 | DOC-ARC-001 | DOC-GNP-00
+**Referências Normativas:** DOC-DEV-001 §3, §4.1, §8.2, §12.2, §12.4 | SEC-000-01 | DOC-ARC-001 | DOC-GNP-00
+
+## Metadados de Governança
+
+- **estado_item:** READY
+- **owner:** arquitetura
+- **data_ultima_revisao:** 2026-03-06
+- **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-GNP-00, DOC-PADRAO-004
+- **nivel_arquitetura:** 2 (DDD — domain events, sessão em banco, kill-switch)
+- **referencias_exemplos:** N/A
+- **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
 
 ---
 
@@ -134,6 +144,22 @@ Funcionalidade: Autenticação Nativa com E-mail e Senha
 5. **Auditoria Obrigatória:** `auth.login.success/failure/blocked`, `auth.logout.success`, `auth.session.revoked/revoked_all`.
 
 6. **Desvio MFA:** Se `mfa_secret` preenchido → emite apenas `temp_token` (escopo `mfa-only`, TTL 5min). Fluxo continua em US-MOD-000-F02.
+
+7. **`X-Correlation-ID` Obrigatório (DOC-ARC-003):** Toda resposta (sucesso e erro) DEVE propagar o `X-Correlation-ID` recebido no header da requisição. Respostas de erro RFC 9457 DEVEM incluir `extensions.correlationId`. O `correlationId` DEVE ser embutido nos eventos de domínio emitidos (`session.created`, `session.revoked`).
+
+8. **Idempotência em `POST /auth/login` (DOC-DEV-001):** O endpoint DEVE suportar `Idempotency-Key` no header. Reenvios com a mesma chave dentro de TTL de 30 segundos retornam a resposta cacheada sem criar nova sessão duplicada em `user_sessions`.
+
+9. **Catálogo de Eventos (DATA-003):** Os eventos `session.created`, `session.revoked`, `session.revoked_all` DEVEM seguir o formato padronizado `DATA-003` com campos: `tenant_id`, `entity_type`, `entity_id`, `event_type`, `payload`, `correlation_id`, `created_by`. Nenhuma tabela de log exclusiva deve ser criada — a `domain_events` é a fonte única.
+
+---
+
+## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
+
+- [ ] Owner definido.
+- [ ] Cenários Gherkin revisados e aprovados pelo time (seção 3).
+- [ ] Contrato de API documentado no OpenAPI (`/auth/login`, `/auth/logout`, `/auth/sessions`, `/auth/refresh`).
+- [ ] Sem `PENDENTE-XXX` críticos em aberto.
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
 

@@ -1,10 +1,20 @@
 # US-MOD-000-F04 — Recuperação de Senha por E-mail (Forgot / Reset Password)
 
-**Status:** `para aprovação`
+**Status:** `em revisao`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth Password Recovery)
-**Referências Normativas:** DOC-DEV-004 §5.1, §8.2, §12.4 | SEC-000-01 | DOC-ARC-001 | DOC-PADRAO-004
+**Referências Normativas:** DOC-DEV-001 §5.1, §8.2, §12.4 | SEC-000-01 | DOC-ARC-001 | DOC-PADRAO-004
+
+## Metadados de Governança
+
+- **estado_item:** DRAFT
+- **owner:** arquitetura
+- **data_ultima_revisao:** 2026-03-06
+- **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-PADRAO-004, SEC-000-01
+- **nivel_arquitetura:** 1 (token de reset em banco, MailService, anti-enumeration)
+- **referencias_exemplos:** N/A
+- **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
 
 ---
 
@@ -98,6 +108,12 @@ Funcionalidade: Recuperação de Senha por E-mail
     Quando a requisição é feita
     Então deve retornar 422 com erro de validação Zod
 
+  Cenário: Tentativa de reset por usuário SSO (sem senha nativa)
+    Dado que o usuário tem passwordHash="SSO_GOOGLE_NO_PASSWORD"
+    Quando POST /auth/reset-password?token=... é chamado com nova senha
+    Então deve retornar 422 com detail="Contas via SSO não possuem senha local. Utilize o login com Google/Microsoft."
+    E NÃO deve atualizar a senha
+
   Cenário: Senhas não coincidem (new_password != confirm_password)
     Quando a requisição é feita com senhas diferentes
     Então deve retornar 422
@@ -113,9 +129,26 @@ Funcionalidade: Recuperação de Senha por E-mail
 
 3. **TTL do Token: 1 hora** — não configurável, hardcoded por segurança. `crypto.randomUUID()` garante 122 bits de entropia.
 
-4. **Integração MailService:** Em desenvolvimento local fita no console; em prod usa provedor via contrato `MailService.sendPasswordResetEmail(email, link)`.
+4. **Integração MailService (INT-000-MAIL):** Em desenvolvimento local fita no console; em prod usa provedor via contrato `MailService.sendPasswordResetEmail(email, link)`. O contrato `INT-000-MAIL` DEVE declarar `Timeout`, `Retry (3x)`, `Backoff exponencial` e `DLQ: Sim` conforme `DOC-DEV-001 §4.3`. O envio DEVE ser assimíncrono (fire-and-forget) com log de falha.
 
 5. **`force_pwd_reset` zerado:** Um usuário com reset obrigatório deve se livrar dele ao concluir via `POST /reset-password`.
+
+6. **Usuário SSO sem senha nativa:** O endpoint `POST /reset-password` deve identificar `passwordHash` iniciado por `SSO_` e retornar 422 com mensagem orientando o login via provider. Não atualizar hash nesse caso.
+
+7. **`X-Correlation-ID` Obrigatório (DOC-ARC-003):** Respostas de `POST /forgot-password` e `POST /reset-password` DEVEM incluir `X-Correlation-ID` no header. Respostas de erro RFC 9457 DEVEM incluir `extensions.correlationId`. A auditoria `auth.password_reset.requested` DEVE registrar `correlation_id`.
+
+8. **Idempotência em `POST /auth/forgot-password` (DOC-DEV-001):** O endpoint DEVE suportar `Idempotency-Key`. Reenvios com a mesma chave e e-mail dentro de TTL de 60 segundos retornam 200 sem gerar novo token de reset nem reenviar o e-mail.
+
+---
+
+## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
+
+- [ ] Owner definido.
+- [ ] Cenários Gherkin revisados e aprovados.
+- [ ] Contrato de `POST /forgot-password` e `POST /reset-password` documentado no OpenAPI.
+- [ ] Contrato `MailService.sendPasswordResetEmail` definido (interface).
+- [ ] Sem `PENDENTE-XXX` críticos em aberto.
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
 

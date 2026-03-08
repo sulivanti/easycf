@@ -3,3 +3,4 @@ export * from './middlewares/correlationId.js';
 export * from './middlewares/tenantParsing.js';
 export * from './handlers/errorHandler.js';
 export * from './plugins/jwt.js';
+export * from './routes/info.js';

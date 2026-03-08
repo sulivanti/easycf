@@ -126,7 +126,7 @@ log("Copiando arquivos do monorepo para o template...");
 const TEMPLATE_SRC = path.join(ROOT, "apps", "template-project");
 const SKILLS_SRC = path.join(ROOT, ".agents", "skills");
 const NORMATIVOS_SRC = path.join(ROOT, "docs", "01_normativos");
-const USER_STORIES_TEMPLATES = path.join(ROOT, "docs", "04_modules", "user-stories", "templates");
+const USER_STORIES_SRC = path.join(ROOT, "docs", "04_modules", "user-stories");
 const PACOTES_AGENTES_SRC = path.join(ROOT, "docs", "02_pacotes_agentes");
 const SPECS_TEMPLATE_SRC = path.join(ROOT, "docs", "03_especificacoes", "template");
 const MANIFESTS_SRC = path.join(ROOT, "docs", "05_manifests");
@@ -136,8 +136,8 @@ const DOCS_ROOT = path.join(ROOT, "docs");
 copyDir(TEMPLATE_SRC, DIST_DIR);
 copyDir(SKILLS_SRC, path.join(DIST_DIR, ".agents", "skills"));
 copyDir(NORMATIVOS_SRC, path.join(DIST_DIR, "docs", "01_normativos"));
-if (fs.existsSync(USER_STORIES_TEMPLATES)) {
-    copyDir(USER_STORIES_TEMPLATES, path.join(DIST_DIR, "docs", "04_modules", "user-stories", "templates"));
+if (fs.existsSync(USER_STORIES_SRC)) {
+    copyDir(USER_STORIES_SRC, path.join(DIST_DIR, "docs", "04_modules", "user-stories"));
 }
 if (fs.existsSync(PACOTES_AGENTES_SRC)) {
     copyDir(PACOTES_AGENTES_SRC, path.join(DIST_DIR, "docs", "02_pacotes_agentes"));

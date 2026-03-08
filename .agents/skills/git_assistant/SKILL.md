@@ -28,7 +28,7 @@ git commit -m "feat(module): implementa nova funcionalidade em pt-br"
 
 Lembre do `git status` antes.
 
-### 2. Sincronização Privada (`npm run sync:private` ou `pwsh scripts/git-sync-private.ps1`)
+### 2. Sincronização Privada (`npm run sync:private` ou `powershell scripts/git-sync-private.ps1`)
 
 Use este comando quando o usuário pedir para:
 
@@ -40,7 +40,7 @@ Ele gerará um commit *chore* e empurrará para o remote origin atual.
 **Como Invocar via Agente:** Use a tool `run_command` rodando no powershell:
 `npm run sync:private`
 
-### 3. Sincronização Pública (`npm run sync:public` ou `pwsh scripts/git-sync-public.ps1`)
+### 3. Sincronização Pública (`npm run sync:public` ou `powershell scripts/git-sync-public.ps1`)
 
 Use este comando quando o usuário:
 

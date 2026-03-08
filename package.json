@@ -12,8 +12,8 @@
         "release:minor": "node scripts/release.mjs minor",
         "release:major": "node scripts/release.mjs major",
         "commit": "node scripts/git-semantic-commit.js",
-        "sync:private": "pwsh scripts/git-sync-private.ps1",
-        "sync:public": "pwsh scripts/git-sync-public.ps1"
+        "sync:private": "powershell scripts/git-sync-private.ps1",
+        "sync:public": "powershell scripts/git-sync-public.ps1"
     },
     "devDependencies": {
         "turbo": "^2.0.0",

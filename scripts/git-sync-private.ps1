@@ -2,7 +2,7 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::InputEncoding = [System.Text.Encoding]::UTF8
 
-Write-Host "--- Sincronização Privada Completa ---" -ForegroundColor Cyan
+Write-Host "--- Sincronizacao Privada Completa ---" -ForegroundColor Cyan
 
 # 1. Obter branch atual
 $currentBranch = git branch --show-current
@@ -17,22 +17,23 @@ Write-Host "Branch atual: $currentBranch" -ForegroundColor Yellow
 Write-Host "Adicionando arquivos (git add .)..."
 git add .
 
-# 3. Verificar se há mudanças
+# 3. Verificar se ha mudancas
 $status = git status --short
 if ([string]::IsNullOrWhiteSpace($status)) {
-    Write-Host "Não há alterações para comitar." -ForegroundColor Yellow
-} else {
-    Write-Host "Arquivos alerados:"
+    Write-Host "Nao ha alteracoes para comitar." -ForegroundColor Yellow
+}
+else {
+    Write-Host "Arquivos alterados:"
     Write-Host $status
     Write-Host ""
     
     # 4. Fazer o commit
-    Write-Host "Realizando commit de sincronização..."
+    Write-Host "Realizando commit de sincronizacao..."
     git commit -m "chore: sync de desenvolvimento local"
 }
 
 # 5. Fazer o push
-Write-Host "Enviando para o repositório origin (git push origin $currentBranch)..."
+Write-Host "Enviando para o repositorio origin (git push origin $currentBranch)..."
 git push origin $currentBranch
 
-Write-Host "Sincronização privada concluída com sucesso!" -ForegroundColor Green
+Write-Host "Sincronizacao privada concluida com sucesso!" -ForegroundColor Green

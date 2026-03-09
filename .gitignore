@@ -48,3 +48,9 @@ apps/playground/*
 
 # Temporary release artifacts
 dist/
+
+# QA / Lint temp outputs
+lint*.txt
+lint-*.txt
+qa_*.txt
+validate_*.txt

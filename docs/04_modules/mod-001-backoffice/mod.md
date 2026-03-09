@@ -48,7 +48,7 @@ O MOD-001 é guiado por uma abordagem UX-First, onde os Screen Manifests ditam a
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-08
 - **rastreia_para:** DOC-DEV-001, DOC-UX-010, US-MOD-001

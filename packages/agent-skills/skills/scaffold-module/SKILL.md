@@ -55,7 +55,7 @@ Você deve criar um diretório em `docs/04_modules/mod-{ID}-{nome}/` simulando a
 ```text
 docs/04_modules/mod-{ID}-{nome}/
 ├── mod.md                          ← Índice e overview descritivo do módulo
-├── CHANGELOG.md                    ← Tabela inicial (Versão | Data | Responsável | Descrição)
+├── CHANGELOG.md                    ← Tabela inicial (Versão | Data | Responsável | Descrição) + Diagrama Mermaid de pipeline
 ├── requirements/
 │   ├── br/
 │   │   └── BR-{ID}.md              ← Regra de Negócio base
@@ -86,19 +86,36 @@ Para a escrita de CADA UM dos arquivos que estão dentro das sub-pastas `/requir
 3. **OBRIGATÓRIO — AVISO DE AUTOMAÇÃO (PRIMEIRA LINHA DO ARQUIVO):** A **primeira linha de conteúdo** de cada arquivo gerado (antes de qualquer outra seção ou heading) DEVE ser exatamente:
 
    ```markdown
-   > ⚠️ ARQUIVO GERIDO POR AUTOMAÇÃO. NÃO EDITE DIRETAMENTE.
+   > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+   > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente (fase de enriquecimento de stub).
+   > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment` para evoluções.
    ```
 
-   Isso não é delegado à leitura do `DOC-DEV-001` — é uma regra de execução desta skill. Nenhum arquivo gerado pelo scaffold pode nascer sem esse aviso. Essa tag é o contrato de rastreabilidade e proteção do arquivo desde o nascimento (conforme `DOC-DEV-001`).
+   Isso não é delegado à leitura do `DOC-DEV-001` — é uma regra de execução desta skill. Nenhum arquivo gerado pelo scaffold pode nascer sem esse aviso. Essa tag define o ciclo de vida do arquivo desde o nascimento (conforme `DOC-DEV-001`).
 4. Aplique as informações extraídas logicamente da **User Story fornecida**.
 5. No campo `rastreia_para` presente no rodapé de cada arquivo (estipulado pelo DOC-DEV-001), amarre a todos os outros arquivos irmãos do mesmo nó e **inclua a referência à US de origem**.
 6. No campo `referencias_exemplos`, preencha com o link relativo para a User Story de aprovação (ex: `[US-MOD-101](../../user-stories/features/US-MOD-101.md)`).
-7. Conforme o `DOC-DEV-001` (fonte da verdade normativa), o estado inicial de todo arquivo gerado deve ser rigorosamente **DRAFT**. Os arquivos base **não devem ser editados diretamente** após a geração — qualquer evolução deve passar pela skill `create-amendment`.
+7. O estado inicial de todo arquivo gerado deve ser rigorosamente **DRAFT**.
+   **CICLO DE VIDA DOS STUBS — REGRA CRÍTICA:**
+   - **Fase DRAFT (enriquecimento):** O agente **PODE e DEVE** editar os arquivos gerados diretamente para preencher seu conteúdo técnico a partir das User Stories aprovadas. Isso é chamado de "enriquecimento de stub" e é a etapa seguinte obrigatória ao scaffold.
+   - **Fase READY (estabilidade):** Após o arquivo ser promovido a `READY` via `transition-spec-status`, toda modificação passa **obrigatoriamente** pela skill `create-amendment`. Nunca por edição direta.
 8. Salve o arquivo em disco.
 
 ---
 
-## 6. PASSO INTERMEDIÁRIO: Atualização dos Índices (update-markdown-file-index)
+## 6. PASSO 4: Geração do Diagrama Mermaid de Pipeline no CHANGELOG.md
+
+Após gerar todos os arquivos, **atualize o `CHANGELOG.md`** do módulo recém-criado para incluir a seção de estágio atual e o diagrama Mermaid de pipeline.
+
+> **As regras de coloração, a lógica de decisão de estágio e o template Mermaid canônico estão definidos no normativo:**
+> **`docs/01_normativos/DOC-DEV-002_fluxo_agentes_e_governanca.md` — Seção 5.**
+> Leia e siga esse documento. **Não duplique as regras aqui.**
+
+No momento do scaffold, o módulo nasce na **etapa 8** (stubs gerados). Aplique a lógica da **seção 5.3** para colorir o diagrama e escreva o texto da seção `## Estágio Atual` conforme os exemplos da **seção 5.3** do normativo.
+
+---
+
+## 7. PASSO INTERMEDIÁRIO: Atualização dos Índices (update-markdown-file-index)
 
 Antes de comunicar ao usuário, **invoque a skill `update-markdown-file-index`** duas vezes:
 
@@ -114,7 +131,7 @@ Antes de comunicar ao usuário, **invoque a skill `update-markdown-file-index`**
 
 ---
 
-## 7. Passo Final: Comunicação
+## 8. Passo Final: Comunicação
 
 Após concluir, emita um sumário em markdown confirmando pro usuário:
 

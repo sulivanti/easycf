@@ -6,7 +6,9 @@ description: Cria uma emenda (amendment) governada para detalhar, corrigir ou re
 
 ## Objetivo
 
-Conforme o `DOC-DEV-001`, os documentos primários (`BR-XXX.md`, `FR-XXX.md`, etc.) gerados via `scaffold-module` não devem ser editados diretamente para adição de novas complexidades, visando preservar a rastreabilidade original. O fluxo correto é gerar um **Anexo (Amendment)**.
+Conforme o `DOC-DEV-001`, os documentos primários (`BR-XXX.md`, `FR-XXX.md`, etc.) que já atingiram o status `READY` não devem ser editados diretamente para adição de novas complexidades, visando preservar a rastreabilidade original. O fluxo correto é gerar um **Anexo (Amendment)**.
+
+> **Ciclo de vida:** Stubs recém-gerados em `DRAFT` são enriquecidos diretamente — esta skill é ativada **somente** quando o documento alvo já atingiu o status `READY`. Se o arquivo que você deseja alterar ainda está em `DRAFT`, edite-o diretamente.
 
 Esta skill instrui o agente a gerar corretamente o anexo e atar os links nos arquivos principais (Base e Changelog).
 
@@ -30,9 +32,15 @@ Antes de agir, o agente deve garantir que obteve com o usuário:
   - `R` (Revisão)
   - `C` (Correção)
 
-**REGRA DE BLOQUEIO (GATE DE APROVAÇÃO):**
+**GATE DE APROVAÇÃO (USER STORY):**
 Leia a User Story fornecida. Se o `Status` não for `APPROVED` (se for `IN_PROGRESS`, `REFINING`, `READY`, ou `REJECTED`), aborte a operação e avise o usuário.
 O "Conteúdo da Alteração" que você usará será a regra de negócio/gherkin extraída automaticamente de dentro desta US `APPROVED`.
+
+**GATE ADICIONAL (STATUS DO DOCUMENTO ALVO):**
+Verifique o `estado_item` do **arquivo base** que será alterado (ex: `BR-001.md`).
+
+- Se `estado_item: DRAFT` → **NÃO use esta skill.** O arquivo está em fase de enriquecimento. Edite-o diretamente.
+- Se `estado_item: READY` → Prossiga com a criação do amendment normalmente.
 
 ---
 
@@ -79,6 +87,16 @@ Crie o arquivo na respectiva subpasta (`/amendments/...`). O esqueleto deste arq
 2. Infira um bump semântico na versão da tabela (`Minor` para `M`, `Patch` para `C`/`R`).
 3. Adicione uma linha na tabela com o formato:
    `| {Nova Versão} | {Data Atual} | {Owner} | {Descrição amarrando o Anexo gerado} |`
+
+### 6.1 Atualização do Diagrama Mermaid de Pipeline
+
+Após registrar a nova entrada na tabela de versões, **atualize o diagrama Mermaid** e a seção `## Estágio Atual` presentes no `CHANGELOG.md` do módulo.
+
+> **As regras de coloração, a lógica de decisão de estágio e o template Mermaid canônico estão definidos no normativo:**
+> **`docs/01_normativos/DOC-DEV-002_fluxo_agentes_e_governanca.md` — Seção 5.**
+> Leia e siga esse documento. **Não duplique as regras aqui.**
+
+Aplique a lógica da **seção 5.3** do normativo para determinar qual etapa colorir com base no `estado_item` dos arquivos em `requirements/` do módulo.
 
 ---
 

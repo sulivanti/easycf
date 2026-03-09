@@ -31,9 +31,9 @@ Não há entidades de persistência exclusiva e transacional mapeadas primariame
 
 ## Metadados de Governança
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-08
+- **data_ultima_revisao:** 2026-03-09
 - **rastreia_para:** BR-001, FR-001
 - **referencias_exemplos:** [US-MOD-001](../../../user-stories/epics/US-MOD-001.md)
 - **evidencias:** N/A

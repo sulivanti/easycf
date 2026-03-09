@@ -3,6 +3,7 @@
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-08 | arquitetura | Baseline Inicial (scaffold-module) |
+> | 0.2.0  | 2026-03-09 | arquitetura | Promoção para READY — Estágio 10 |
 
 # MOD-001 — Backoffice (Admin)
 
@@ -50,7 +51,7 @@ O MOD-001 é guiado por uma abordagem UX-First, onde os Screen Manifests ditam a
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-08
+- **data_ultima_revisao:** 2026-03-09
 - **rastreia_para:** DOC-DEV-001, DOC-UX-010, US-MOD-001
 - **referencias_exemplos:** [US-MOD-001](../user-stories/epics/US-MOD-001.md)
 - **evidencias:** N/A

@@ -3,16 +3,17 @@
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-08 | arquitetura | Baseline Inicial (scaffold-module) |
+> | 0.2.0  | 2026-03-09 | arquitetura | Promoção para READY — Estágio 10 (transition-spec-status) |
 
 # CHANGELOG - MOD-001 Backoffice
 
-## Estágio Atual: **9 — Enriquecimento dos Stubs** 🔴 (Em andamento)
+## Estágio Atual: **10 — READY (Estável)** ✅
 
-O scaffold foi executado e todos os stubs foram gerados em `DRAFT`. O próximo passo é o **enriquecimento direto** dos arquivos de requirements (BR, FR, DATA, INT, SEC, UX, NFR, ADR) a partir das User Stories aprovadas do MOD-001.
+Todos os arquivos de requirements (BR, FR, DATA, INT, SEC, UX, NFR, ADR) foram promovidos de `DRAFT` para `READY`. O módulo está estabilizado e toda evolução futura ocorre **exclusivamente** via `create-amendment`.
 
 ## Pipeline de Ciclo de Vida
 
-> 🟢 Verde = Concluído | 🟠 Laranja = Etapa Atual | ⬜ Cinza = Pendente
+> 🟢 Verde = Concluído | 🔵 Azul = Estável | ⬜ Cinza = Pendente
 
 ```mermaid
 flowchart TD
@@ -24,8 +25,8 @@ flowchart TD
     E6(["6 - READY (US aprovada)"])
     E7["7 - scaffold-module"]
     E8["8 - Stubs DRAFT Gerados\nBR · FR · DATA · SEC · UX · NFR · ADR"]
-    E9["9 - Enriquecimento dos Stubs 🔴"]
-    E10(["10 - READY — Estável"])
+    E9["9 - Enriquecimento dos Stubs"]
+    E10(["10 - READY — Estável ✅"])
     E11["11 - Evoluções via create-amendment"]
 
     E1 --> E2 --> E3 --> E4 --> E5 --> E6 --> E7 --> E8 --> E9 --> E10 --> E11
@@ -38,8 +39,8 @@ flowchart TD
     style E6  fill:#27AE60,color:#fff,stroke:#1E8449
     style E7  fill:#27AE60,color:#fff,stroke:#1E8449
     style E8  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E9  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E10 fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E9  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E10 fill:#1A5276,color:#fff,stroke:#154360,font-weight:bold
     style E11 fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
@@ -48,3 +49,4 @@ flowchart TD
 | Versão | Data       | Responsável | Descrição                                                        |
 |--------|------------|-------------|------------------------------------------------------------------|
 | 0.1.0  | 2026-03-08 | arquitetura | Baseline Inicial (scaffold-module) a partir de US-MOD-001       |
+| 0.2.0  | 2026-03-09 | arquitetura | Promoção de todos os requirements para READY — Estágio 10       |

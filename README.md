@@ -4,7 +4,7 @@ O **EasyCodeFramework (ECF)** é a fundação para criação e gestão de APIs t
 
 Este projeto visa estabelecer padrões rigorosos de desenvolvimento, arquitetura em níveis (Clean Architecture e DDD-lite) e automações nativas para um ecossistema sólido e previsível de APIs e interfaces web.
 
-Atualmente, o projeto foca no desenvolvimento base e na estruturação de seus módulos normativos, com módulos em refinamento.
+Atualmente, o projeto foca no refinamento de seus módulos normativos e na geração de código a partir das especificações aprovadas.
 
 ---
 
@@ -41,13 +41,14 @@ O ecossistema adota uma Escala de Arquitetura em Níveis (0, 1 e 2), escalando e
 
 ---
 
-## Módulos Implementados
+## Módulos
 
 | Módulo | Documentação Raiz | Status |
 | --- | --- | --- |
-| **MOD-001 — Backoffice (Admin)** | [mod.md](docs/04_modules/mod-001-backoffice-admin/mod.md) | `REFINING` |
+| **MOD-000 — Foundation** | [mod.md](docs/04_modules/mod-000-foundation/mod.md) | `READY` |
+| **MOD-001 — Backoffice (Admin)** | [mod.md](docs/04_modules/mod-001-backoffice/mod.md) | `READY` |
 
-> *Para um índice completo das funcionalidades ou módulos em desuso (.bkp), ver `docs/INDEX.md`.*
+> *Para um índice completo das funcionalidades, ver `docs/INDEX.md`.*
 
 ---
 
@@ -98,11 +99,12 @@ pnpm run dev
 
 O projeto consolida diversas rotinas estáticas e validações de documentação em uma única pipeline via npm scripts:
 
-- **`npm run qa:all`:** Master Quality Gate. Roda tanto o lint de documentação quanto a verificação de esquemas JSON nos manifestos YAML de forma consecutiva e exibe apenas os retornos úteis sobre itens com defeito (falha de tipagem, links mortos em `.md`).
-- **`npm run lint:docs`:** Busca e conserta referências de *dead-links* entre os documentos canônicos da especificação na pasta `docs/`.
-- **`npm run validate:manifests`:** Audita dinamicamente todos os manifestos de UI (`05_manifests/screens`) em conformidade estrita aos esquemas versionados via Ajv.
+- **`pnpm run qa:all`:** Master Quality Gate. Roda lint de documentação, lint de Markdown e validação de esquemas JSON nos manifestos YAML de forma consecutiva, exibindo apenas os retornos úteis sobre itens com defeito (falha de tipagem, links mortos em `.md`).
+- **`pnpm run lint:docs`:** Busca referências de *dead-links* entre os documentos canônicos da especificação na pasta `docs/`.
+- **`pnpm run lint:markdown`:** Valida formatação Markdown em todos os arquivos `.md` do projeto via `markdownlint-cli2`.
+- **`pnpm run validate:manifests`:** Audita dinamicamente todos os manifestos de UI (`05_manifests/screens`) em conformidade estrita aos esquemas versionados via Ajv.
 
-> 🤖 **Dica para Agentes:** Caso exista alguma inconsistência nos arquivos Markdown (ex: *links quebrados* após rename) ou um arquivo `YAML` fora do modelo, simplesmente acoste-se à skill **`qa_assistant`** ou rode `npm run qa:all` no terminal para relatar os problemas ao desenvolvedor.
+> 🤖 **Dica para Agentes:** Caso exista alguma inconsistência nos arquivos Markdown (ex: *links quebrados* após rename) ou um arquivo `YAML` fora do modelo, acione a skill **`qa_assistant`** ou rode `pnpm run qa:all` no terminal para relatar os problemas ao desenvolvedor.
 
 ---
 
@@ -116,13 +118,13 @@ O projeto consolida diversas rotinas estáticas e validações de documentação
 
 ## Fluxo de Contribuição e Agentes
 
-A automação arquitetural orientada a Inteligência Artificial (Antigravity) permeia este ecossistema.
+A automação arquitetural orientada a Inteligência Artificial (Antigravity) permeia este ecossistema. O fluxo completo está descrito em `DOC-DEV-002`.
 
 **O Processo (Ciclo de Vida):**
 
 1. **User Story (US):** Cria-se/aprova-se o requisito de negócio na pasta `user-stories/features/`.
-2. **Geração Baseline:** Uma vez que essa US alcança o status `aprovada`, usufrui-se de rotinas automáticas de agentes (`scaffold-module`) que fundem essa US aos contratos obrigatórios (`DOC-DEV-001`), forjando o boilerplate (schemas, queries, routes, handlers em níveis 0/1/2).
-3. **Evolução Segura (Amendments):** Códigos ou regras alteradas após aprovação inicial nunca sobressaem silenciosamente nos documentos. Documenta-se em Emendas - Improvements (M), Correções (C) e Revisões (R) via skill `create-amendment`.
+2. **Geração Baseline:** Uma vez que essa US alcança o status `READY`, usufrui-se de rotinas automáticas de agentes (`scaffold-module`) que fundem essa US aos contratos obrigatórios (`DOC-DEV-001`), forjando o boilerplate (schemas, queries, routes, handlers em níveis 0/1/2).
+3. **Evolução Segura (Amendments):** Códigos ou regras alteradas após aprovação inicial nunca sobressaem silenciosamente nos documentos. Documenta-se em Emendas — Improvements (M), Correções (C) e Revisões (R) via skill `create-amendment`.
 
 As **Agent Skills** repousam fisicamente em `.agents/skills/`.
 
@@ -130,27 +132,20 @@ As **Agent Skills** repousam fisicamente em `.agents/skills/`.
 
 ## Processo de Release (Publicação)
 
-Para compilar uma nova versão do framework e disparar a atualização do repositório público (template), siga os passos abaixo no terminal do monorepo:
+Para compilar uma nova versão do framework e disparar a atualização do repositório público (template):
 
 ```bash
-# 1. GERAR A RELEASE BÁSICA (Aumenta a versão e prepara as pastas)
-# Ele copia os arquivos do framework para dentro da pasta dist/ (que será o repositório público clorado) e cria uma tag de release.
+# 1. GERAR A RELEASE (bumpa versão, copia arquivos para dist/ e cria tag)
 pnpm run release
 
-# 2. PUBLICAR O TEMPLATE PÚBLICO
-# Navegue até a pasta dist/easycf, que é clone do repositório público no GitHub.
-cd dist/easycf
-# Suba as mudanças geradas no template
-git push
-# Suba a tag de versão
-git push --tags
+# 2. SINCRONIZAR O REPOSITÓRIO PÚBLICO
+pnpm run sync:public
 
-# 3. PUBLICAR O FRAMEWORK PRIVADO (Monorepo)
-# Volte duas pastas para retornar à raiz do seu projeto/monorepo privado.
-cd ../..
-# Suba as alterações do package.json com a nova numeração de versão para salvar a versão aqui.
-git push
+# 3. SINCRONIZAR O REPOSITÓRIO PRIVADO (commita e pusha o monorepo)
+pnpm run sync:private
 ```
+
+> Ver o workflow `/release` para o processo completo gerido pelo agente.
 
 ---
 
@@ -167,6 +162,7 @@ Todos os normativos mantêm seus identificadores em caráter imutável para rast
 | **Variáveis de Ambiente** | [DOC-PADRAO-004_Variaveis_de_Ambiente.md](docs/01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md) |
 | **Storage e Upload** | [DOC-PADRAO-005_Storage_e_Upload.md](docs/01_normativos/DOC-PADRAO-005_Storage_e_Upload.md) |
 | **Especificação Executável** | [DOC-DEV-001_especificacao_executavel.md](docs/01_normativos/DOC-DEV-001_especificacao_executavel.md) |
+| **Fluxo de Agentes e Governança** | [DOC-DEV-002_fluxo_agentes_e_governanca.md](docs/01_normativos/DOC-DEV-002_fluxo_agentes_e_governanca.md) |
 | **Estratégia de Testes** | [DOC-ARC-002__Estrategia_Testes.md](docs/01_normativos/DOC-ARC-002__Estrategia_Testes.md) |
 | **Padrões OpenAPI** | [DOC-ARC-001__Padroes_OpenAPI.md](docs/01_normativos/DOC-ARC-001__Padroes_OpenAPI.md) |
 | **Ponte de Rastreabilidade** | [DOC-ARC-003__Ponte_de_Rastreabilidade.md](docs/01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md) |

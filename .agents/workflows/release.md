@@ -60,10 +60,7 @@ O script não faz o push automático por segurança. Para efetivar o release:
 ### 1. No Repositório de Distribuição (Público)
 
 ```powershell
-cd dist/easycf
-git push
-git push --tags
-cd ../..
+Set-Location dist/easycf; git push; git push --tags; Set-Location ../...
 ```
 
 ### 2. No Seu Monorepo (Privado)

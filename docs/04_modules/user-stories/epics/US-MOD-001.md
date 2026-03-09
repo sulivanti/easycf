@@ -1,6 +1,6 @@
 # US-MOD-001 — Backoffice Admin (Épico UX-First)
 
-**Status:** `READY`  
+**Status:** `APPROVED`  
 **Versão:** 0.1.0  
 **Data:** 2026-03-08  
 **Autor(es):** Produto + Arquitetura  
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **estado_item:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-08
 - **rastreia_para:** DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-ARC-003, US-MOD-000
@@ -117,9 +117,9 @@ US-MOD-001  (este arquivo) ← Épico / Governança / Índice
 
 | Manifest | Screen ID | Tipo | Status |
 | --- | --- | --- | --- |
-| [ux-auth-001.login.yaml](file:///d:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-auth-001.login.yaml) | UX-AUTH-001 | auth | REFINING |
-| [ux-shell-001.app-shell.yaml](file:///d:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-shell-001.app-shell.yaml) | UX-SHELL-001 | shell | REFINING |
-| [ux-dash-001.main.yaml](file:///d:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-dash-001.main.yaml) | UX-DASH-001 | dashboard | REFINING |
+| [ux-auth-001.login.yaml](file:///d:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-auth-001.login.yaml) | UX-AUTH-001 | auth | READY |
+| [ux-shell-001.app-shell.yaml](file:///d:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-shell-001.app-shell.yaml) | UX-SHELL-001 | shell | READY |
+| [ux-dash-001.main.yaml](file:///d:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-dash-001.main.yaml) | UX-DASH-001 | dashboard | READY |
 
 ---
 
@@ -153,4 +153,4 @@ US-MOD-001  (este arquivo) ← Épico / Governança / Índice
 
 ---
 
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.
+> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `APPROVED`.

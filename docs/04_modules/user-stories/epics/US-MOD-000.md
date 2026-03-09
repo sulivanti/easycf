@@ -1,6 +1,6 @@
 # US-MOD-000 — Governança de Documentos Normativos para Geração Automática de Código
 
-**Status:** `READY`
+**Status:** `APPROVED`
 **Versão:** 0.5.0
 **Data:** 2026-03-06
 **Autor(es):** Produto + Arquitetura
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **estado_item:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** DOC-DEV-001, DOC-GNP-00, DOC-ESC-001, DOC-GPA-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-PADRAO-001, DOC-PADRAO-002, DOC-PADRAO-004, DOC-PADRAO-005
@@ -219,7 +219,7 @@ US-MOD-000  (este arquivo) ← Épico / Governança / Índice
 | --- | --- | --- | --- |
 | [US-MOD-000-F01](../features/US-MOD-000-F01.md) | Autenticação nativa + gerenciamento de sessões | `READY` | arquitetura |
 | [US-MOD-000-F02](../features/US-MOD-000-F02.md) | MFA / TOTP (RFC 6238) | `READY` | arquitetura |
-| [US-MOD-000-F03](../features/US-MOD-000-F03.md) | SSO OAuth2 — Google + Microsoft | `REFINING` | arquitetura |
+| [US-MOD-000-F03](../features/US-MOD-000-F03.md) | SSO OAuth2 — Google + Microsoft | `READY` | arquitetura |
 | [US-MOD-000-F04](../features/US-MOD-000-F04.md) | Recuperação de senha por e-mail | `READY` | arquitetura |
 | [US-MOD-000-F05](../features/US-MOD-000-F05.md) | Gestão de usuários (CRUD + soft delete) | `READY` | arquitetura |
 | [US-MOD-000-F06](../features/US-MOD-000-F06.md) | Roles / RBAC por escopos + cache Redis | `READY` | arquitetura |
@@ -257,4 +257,4 @@ Nenhuma pendência estrutural em aberto (Nível arquitetural 2 consolidado e own
 
 ---
 
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.
+> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `APPROVED`.

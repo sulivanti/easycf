@@ -33,8 +33,8 @@ Antes de agir, o agente deve garantir que obteve com o usuário:
   - `C` (Correção)
 
 **GATE DE APROVAÇÃO (USER STORY):**
-Leia a User Story fornecida. Se o `Status` não for `APPROVED` (se for `IN_PROGRESS`, `REFINING`, `READY`, ou `REJECTED`), aborte a operação e avise o usuário.
-O "Conteúdo da Alteração" que você usará será a regra de negócio/gherkin extraída automaticamente de dentro desta US `APPROVED`.
+Leia a User Story fornecida. Se o `status_agil` não for `DONE` ou `READY` (se for `TODO` ou `IN_PROGRESS`), aborte a operação e avise o usuário.
+O "Conteúdo da Alteração" que você usará será a regra de negócio/gherkin extraída automaticamente de dentro desta US.
 
 **GATE ADICIONAL (STATUS DO DOCUMENTO ALVO):**
 Verifique o `estado_item` do **arquivo base** que será alterado (ex: `BR-001.md`).

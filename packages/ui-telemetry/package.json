@@ -1,0 +1,28 @@
+{
+    "name": "@easycf/ui-telemetry",
+    "version": "0.1.0",
+    "description": "UIActionEnvelope e utilitários de telemetria de UI — DOC-ARC-003 / FR-000-F13",
+    "publishConfig": {
+        "access": "public"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "lint": "eslint src/"
+    },
+    "devDependencies": {
+        "@easycf/eslint-config": "workspace:*",
+        "@easycf/tsconfig": "workspace:*",
+        "@types/node": "^20.0.0",
+        "typescript": "^5.4.0"
+    }
+}

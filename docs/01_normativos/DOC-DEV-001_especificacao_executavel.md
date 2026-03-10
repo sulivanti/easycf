@@ -60,14 +60,30 @@ O Pull Request de um item é aprovado **SE E SOMENTE SE**:
 - [ ] O módulo possui o "Nível" correto carimbado.
 - [ ] ADR aberta se houve fuga dos padrões definidos no `DOC-GNP-00` ou `DOC-ESC-001`.
 
-### 0.2 Estados dos itens
+### 0.2 Estados dos itens e Ciclo de Vida da Engenharia
 
-Todo item com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) deve ter:
+Neste projeto de arquitetura XP, separamos o status dos documentos técnicos do tracker gerencial do time.
 
-- `estado_item:`
-  - **DRAFT:** Rascunho inicial. A ideia existe, mas carece de regras/detalhes.
-  - **REFINING:** Em refinamento. O time de negócios/técnico está ativamente tirando dúvidas e mapeando bordas.
-  - **READY:** Pronto para desenvolvimento (Corresponde a "Ready for Dev"). Sem impedimentos.
+#### Camada de Negócio (Épicos e Features - O Tracker Ágil)
+
+Toda User Story (cujo caminho contenha `/user-stories/`) deve usar a tag `status_agil:` para mapear seu fluxo na esteira de desenvolvimento:
+
+- **`status_agil:`**
+  - **TODO:** Desenhando o Scope/Gherkin. A prioridade não está definida.
+  - **READY:** Pronta para desenvolvimento. Escopo e Gherkin finalizados. Liberada para o `forge-module`.
+  - **IN_PROGRESS:** Sendo codada e testada hoje pela equipe.
+  - **DONE:** Testes automatizados passando, merge aprovado e QA finalizado.
+  - **REJECTED:** Descartada/reprovada, arquivada.
+
+#### Camada de Arquitetura Técnica (Módulos - A Estabilidade do Documento)
+
+Todo item técnico com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) que resida em `/requirements/` ou `/adr/` deve usar a tag `estado_item:` para mapear se ele pode sofrer alterações livres ou se virou uma regra imutável:
+
+- **`estado_item:`**
+  - **DRAFT:** Rascunho vivo ou stub inicial. Agentes e Devs adicionam e removem regras livremente iterando rápido no documento.
+  - **READY:** Regra estável, madura e coberta por testes. O arquivo foi congelado. A partir de agora, alterações exigirão a criação formal de anexos.
+  - **ACEITA:** (Exclusivo para ADRs) Proposta de decisão validada pelo comitê.
+
 - `owner:` <time/pessoa>
 - `data_ultima_revisao:` YYYY-MM-DD
 - `rastreia_para:` (lista de IDs relacionados)
@@ -98,7 +114,7 @@ Todo item com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) deve ter:
 
 - Objetivo: ...
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 - **owner:** ...
 - **data_ultima_revisao:** ...
 
@@ -110,7 +126,7 @@ Todo item com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) deve ter:
 - Impacto hoje: ...
 - Resultado esperado: ...
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 - **owner:** ...
 - **data_ultima_revisao:** ...
 
@@ -139,7 +155,7 @@ Todo item com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) deve ter:
 
 - (Item que será feito depois) | Gatilho para reavaliação: (Data ou Condição)
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 
 ## 1.5 Métricas de sucesso (OKRs)
 >
@@ -148,14 +164,14 @@ Todo item com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) deve ter:
 - **OKR-1:** [Métrica] + [Baseline] + [Alvo] + [Data]
 - **OKR-2:** ...
 
-- **estado_item:** DRAFT (não definidos) | REFINING (discutindo metas) | READY (metas aprovadas)
+- **estado_item:** DRAFT | READY (metas aprovadas)
 
 ## 1.6 Premissas e restrições
 
 - **Premissas:** ...
 - **Restrições:** (legais, técnicas, prazo, custos, stack obrigatória, etc.) ...
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 
 ---
 
@@ -188,7 +204,7 @@ Todo item com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) deve ter:
 
 ### Metadados do item (MOD-XXX)
 
-- estado_item: DRAFT | REFINING | READY
+- estado_item: DRAFT | READY
 - owner: ...
 - data_ultima_revisao: ...
 - rastreia_para: ...
@@ -273,7 +289,7 @@ Cenário: <titulo>
   Então ...
 ```
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 - **owner:** ...
 - **data_ultima_revisao:** ...
 - **rastreia_para:** (FR-..., DATA-..., SEC-...)
@@ -292,7 +308,7 @@ Cenário: <titulo>
 
   - BR-001-R01: `docs/04_modules/mod-001-backoffice-admin/amendments/br/BR-001/BR-001-R01.md`
 
-- **estado_item:** READY
+- **estado_item:** DRAFT | READY
 
 - **owner:** segurança
 
@@ -340,7 +356,7 @@ Cenário: <titulo>
   Então ...
 ```
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 - **owner:** ...
 - **data_ultima_revisao:** ...
 - **rastreia_para:** ...
@@ -409,7 +425,7 @@ Cenário: <titulo>
 
 - **Auditoria / Event Sourcing:** (Opcional). Deve usar `domain_events`. Proibida criação 1-pra-1 de tabelas de log.
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 
 - **owner:** ...
 
@@ -448,7 +464,7 @@ erDiagram
 
 - **Auditoria/rastreabilidade:** ...
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 
 - **owner:** ...
 
@@ -562,7 +578,7 @@ erDiagram
 
 - **Template por módulo/feature (usar no repo):** `docs/templates/DATA.event-catalog.template.md`
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 
 - **owner:** ...
 
@@ -736,7 +752,7 @@ erDiagram
 
 - **Observabilidade:** (correlation_id, logs mínimos, métricas) ...
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 
 - **owner:** ...
 
@@ -830,7 +846,7 @@ Cenário: <titulo>
   Então ...
 ```
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 - **owner:** ...
 - **data_ultima_revisao:** ...
 - **rastreia_para:** (FR-..., INT-..., DATA-...)
@@ -864,7 +880,7 @@ Cenário: <titulo>
 
 - **Pontos de auditoria/log:** ...
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 
 - **owner:** ...
 
@@ -990,7 +1006,7 @@ Quando `kind=command|workflow|integration` e houver **mudança de estado**, regi
 
 - DATA-003 (Domain Events) + Catálogo obrigatório (Emit/View/Notify) + SEC-EventMatrix.
 
-- **estado_item:** READY
+- **estado_item:** DRAFT | READY
 
 - **owner:** design
 
@@ -1018,7 +1034,7 @@ Quando `kind=command|workflow|integration` e houver **mudança de estado**, regi
 
 - **Escalabilidade:** ...
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 
 - **owner:** ...
 
@@ -1219,7 +1235,7 @@ Um endpoint só é "Done" se:
 
 - **Consequências:** ...
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 
 - **owner:** ...
 
@@ -1250,10 +1266,10 @@ Você **não deve** mais passar prompts longos diretamente para as skills `scaff
 
 1. Duplique o `docs/04_modules/user-stories/templates/TEMPLATE-USER-STORY.md`.
 2. Renomeie para a sua necessidade (ex: `US-MOD-105-novo-relatorio.md`) salvando em `docs/04_modules/user-stories/features/`.
-3. Preencha o negócio e mova o status durante as conversas (`DRAFT` -> `REFINING` -> `READY`).
-4. Apenas quando o arquivo estiver escrito como **`Status: APPROVED`** (ou `READY`), chame o Agente:
+3. Preencha o negócio e mova o status ágil conforme a prioridade (`TODO` -> `READY` -> `IN_PROGRESS`).
+4. Apenas quando o arquivo estiver escrito como **`status_agil: READY`**, chame o Agente:
 
-> "@Agente, execute o `scaffold-module` (ou `create-amendment`) consumindo a User Story `US-MOD-105`."
+> "@Agente, execute a skill `forge-module` consumindo a User Story `US-MOD-105`."
 
 As automações cruzarão o "Quê" (User Story) com o "Como" (DOC-DEV-001) automaticamente.
 

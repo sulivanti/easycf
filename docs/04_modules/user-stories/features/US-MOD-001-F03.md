@@ -1,6 +1,6 @@
 # US-MOD-001-F03 — Dashboard Administrativo Executivo
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Versão:** 0.1.0  
 **Data:** 2026-03-08  
 **Autor(es):** Produto + Arquitetura  
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-08
 - **rastreia_para:** US-MOD-001, DOC-UX-011, DOC-UX-012, DOC-ARC-003, US-MOD-000-F08
@@ -88,19 +88,19 @@ Funcionalidade: Dashboard Administrativo Executivo
 
 ## 5. Definition of Ready (DoR)
 
-- [x] Screen Manifest `ux-dash-001.main.yaml` criado
-- [x] `auth_me` documentado em US-MOD-000-F08
-- [x] Regras de skeleton screen definidas em DOC-UX-012 §5.1
-- [x] Épico pai US-MOD-001 definido
-- [x] US-MOD-001 aprovada pelo owner
+- [ ] Screen Manifest `ux-dash-001.main.yaml` criado
+- [ ] `auth_me` documentado em US-MOD-000-F08
+- [ ] Regras de skeleton screen definidas em DOC-UX-012 §5.1
+- [ ] Épico pai US-MOD-001 definido
+- [ ] US-MOD-001 aprovada pelo owner
 
 ## 6. Definition of Done (DoD)
 
-- [x] Widget de saudação exibe nome correto do usuário autenticado
-- [x] Skeleton screen implementado conforme DOC-UX-012 §5.1
-- [x] Atalhos de módulos filtram corretamente por scopes
-- [x] Proteção de rota validada por teste E2E
-- [x] Evidências (PR/issue) documentadas neste arquivo
+- [ ] Widget de saudação exibe nome correto do usuário autenticado
+- [ ] Skeleton screen implementado conforme DOC-UX-012 §5.1
+- [ ] Atalhos de módulos filtram corretamente por scopes
+- [ ] Proteção de rota validada por teste E2E
+- [ ] Evidências (PR/issue) documentadas neste arquivo
 
 ---
 

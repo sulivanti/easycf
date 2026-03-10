@@ -1,49 +1,40 @@
-# Plano de Adequação de Testes (Test Alignment Plan)
+# Plano de Adequação de Testes (XP-Driven)
 
-**Data:** 2026-03-04
-**Referência:** `DOC-ARC-002__Estrategia_Testes.md`, `TESTING-STRATEGY.md`, `TST-000.md`, `TST-001.md`
+**Versão:** 2.0 (XP-Driven)
+**Data:** 2026-03-09
+**Referência:** `TESTING-STRATEGY.md`
 
 ## 1. Contexto
 
-Foi realizada uma revisão no repositório para verificar se a estrutura atual do código reflete o que foi documentado nas estratégias de testes e especificações técnicas. Embora os normativos e as especificações de testes (TDD/BDD) estejam presentes, o código ainda não reflete essa organização.
+Com a evolução da arquitetura para a abordagem **XP-Driven (Extreme Programming)**, a antiga estratégia burocrática de testes (que exigia a criação formal e transição de arquivos isolados físicos `TST-NNN.md`) foi **abolida**.
+No paradigma XP, os testes orientados a comportamento e domínio (TDD/BDD) devem fluir naturalmente e simultaneamente com o código. A fonte de verdade das regras são as especificações vivas (os `FR-NNN` e `BR-NNN` gerados pelo `forge-module` a partir das User Stories). O **Vitest** é a prova executável.
 
-## 2. Inconsistências Encontradas
+## 2. Inconsistências Históricas a Corrigir
 
-1. **Ausência de Bibliotecas de Teste:** Os arquivos `package.json` dos módulos `api` e `web` não contêm as dependências descritas em `TESTING-STRATEGY.md`, como `vitest`, `supertest`, `@testcontainers/postgresql`, `vitest-mock-extended` e `@faker-js/faker`.
-2. **Ausência da Estrutura de Diretórios:** A arquitetura de testes detalhada na seção *6. Estrutura de Fixtures e Factories* não existe. O diretório `apps/api/src/tests/` e seus subdiretórios `factories/`, `helpers/` e `fixtures/` não foram criados.
-3. **Casos de Teste Pendentes:** Os documentos `TST-000.md` e `TST-001.md` preveem dezenas de testes de unidade e integração (ex: AuthN, IDOR, CRUD de usuários) com cobertura mínima de 80%, mas atualmente o projeto não contém arquivos de teste (nenhum `*.test.ts` ou `*.spec.ts` com código de teste implementado).
+A estrutura anterior deixou as seguintes pedências no repositório, que agora serão sanadas via mãos na massa:
 
-## 3. Plano de Ação
+1. **Dependências Ausentes:** Faltam libs essenciais como `vitest`, `supertest`, `@testcontainers/postgresql` e `@faker-js/faker` no ecossistema (backend).
+2. **Estrutura Base Inexistente:** O diretório de fábricas e fixtures testáveis (`tests/factories`, `helpers/`) não existe fisicamente.
+3. **Burocracia Documental:** Descartar a necessidade de `TST-000` em Markdown em favor do código propriamente dito (`*.test.ts`, `*.spec.ts`).
 
-Para alinhar a base de código aos documentos normativos da arquitetura de testes, propõe-se o seguinte plano de execução:
+## 3. Plano de Ação XP (Em Execução)
 
-### Fase 1: Setup da Infraestrutura de Testes
+Para habilitar a automação XP na camada de testes, o seguinte plano tático está sendo executado:
 
-- Adicionar dependências no projeto `api` (`vitest`, `supertest`, testcontainers, etc).
-- Criar configuração básica do Vitest (`vitest.config.ts`).
-- Criar a estrutura base descrita no TESTING-STRATEGY:
-  - `apps/api/src/tests/factories`
-  - `apps/api/src/tests/helpers`
-  - `apps/api/src/tests/fixtures`
-- Implementar as factories normativas: `tenant.factory.ts`, `user.factory.ts`, `session.factory.ts`, `role.factory.ts`.
-- Configurar o script global de `setup/teardown` do banco (`apps/api/src/tests/helpers/db-setup.ts`).
+### Fase 1: Setup da Infraestrutura Real (Vitest V8)
 
-### Fase 2: Implementação Mod-000 (Foundation)
+- Instalar as dependências Vitest e utilitários no topo da aplicação transacional (`apps/api`).
+- Criar a estrutura canônica global: `tests/factories`, `tests/helpers` e as primeiras implantações de `user.factory.ts`, facilitando mocks para os devs.
 
-- Implementar suíte de testes unitários para os serviços da Foundation (~80% coverage).
-- Implementar testes de integração para os casos descritos no `TST-000.md` (Autenticação, MFA, IDOR, RBAC, Auditoria).
-- Rodar validação de CI inicial simulada para certificar a qualidade.
+### Fase 2: Automatizando o Test-Driven-Development
 
-### Fase 3: Implementação Mod-001 (Backoffice Admin)
+- Elevar a skill `forge-module` para **injetar automaticamente a pasta `tests/`** instanciando scaffolding de unit e e2e tests vazios atrelados ao Módulo, instigando o test-first.
+- O desenvolvedor mapeia as suítes Vitest usando labels de rastreabilidade do `FR` e `BR` (ex: `describe('[FR-001] Cadastro')`).
 
-- Implementar suíte de testes unitários para Backoffice Admin (validators, rotas).
-- Implementar testes de integração referenciando os cenários estipulados no `TST-001.md` (Gestão de Usuários, Gestão de Perfis, Auditoria).
+### Fase 3: CI/CD com Block
 
-### Fase 4: Integração Contínua (CI)
-
-- Adicionar o passo de execução de testes no pipeline (GitHub Actions ou equivalente).
-- Configurar travamento formal de merge em caso de falha nos teses (`test:unit`, `test:integration`) ou cobertura menor que 80%.
+- Travar a esteira em caso de quebra ou code coverage (branch minimum) indevido.
 
 ## 4. Conclusão
 
-O planejamento (documentação Spec-First) foi executado com sucesso e a estratégia está sólida. O próximo passo é aplicar a Fase 1 do plano de ação para suportar a implementação da regra "Validate-After".
+A burocracia documental de "Test Cases" em `.md` não escala. Estamos removendo a barreira do "mock no papel" e implementando TDD assistido estritamente conectado à feature da User Story (XP-Driven).

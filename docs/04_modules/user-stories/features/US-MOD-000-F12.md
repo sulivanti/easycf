@@ -1,6 +1,6 @@
 # US-MOD-000-F12 — Catálogo de Permissões (CRUD de Escopos Pré-Definidos)
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Data:** 2026-03-06
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — RBAC Permissions Catalog)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** US-MOD-000, US-MOD-000-F06, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, DOC-GNP-00
@@ -291,18 +291,18 @@ Funcionalidade: Catálogo de Permissões (CRUD de Escopos)
 
 ## 6. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [x] Owner definido.
-- [x] PENDENTE-F12-001 (FK vs validação em aplicação) resolvido (validação em aplicação).
-- [x] PENDENTE-F12-002 (bloqueio de deleção em uso) resolvido (retorna 409).
-- [x] PENDENTE-F12-003 (wildcards de escopo) decidido (recomendação: não por ora).
-- [x] QoA-01 (seeds automáticos) decidido.
-- [x] QoA-02 (escopo global vs. por tenant) decidido.
-- [x] Cenários Gherkin revisados e aprovados (seção 3).
-- [x] Contrato dos endpoints documentado no OpenAPI com `operationId` por endpoint.
-- [x] Estratégia de integração com F06 validada (onde o lookup acontece: service ou middleware).
-- [x] Sem `PENDENTE-XXX` críticos em aberto.
-- [x] Épico US-MOD-000 **aprovado**.
+- [ ] Owner definido.
+- [ ] PENDENTE-F12-001 (FK vs validação em aplicação) resolvido (validação em aplicação).
+- [ ] PENDENTE-F12-002 (bloqueio de deleção em uso) resolvido (retorna 409).
+- [ ] PENDENTE-F12-003 (wildcards de escopo) decidido (recomendação: não por ora).
+- [ ] QoA-01 (seeds automáticos) decidido.
+- [ ] QoA-02 (escopo global vs. por tenant) decidido.
+- [ ] Cenários Gherkin revisados e aprovados (seção 3).
+- [ ] Contrato dos endpoints documentado no OpenAPI com `operationId` por endpoint.
+- [ ] Estratégia de integração com F06 validada (onde o lookup acontece: service ou middleware).
+- [ ] Sem `PENDENTE-XXX` críticos em aberto.
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
 
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.
+> ⚠️ **Atenção:** As automações de arquitetura (`forge-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.

@@ -55,8 +55,9 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 
 | Módulo | Arquivo Raiz | Estado |
 |---|---|---|
-| MOD-000 — Framework de Automação / Geradores (Foundation) | [mod.md](04_modules/mod-000-foundation/mod.md) | READY |
-| MOD-001 — Backoffice (Admin) | [mod.md](04_modules/mod-001-backoffice/mod.md) | READY |
+| MOD-000 — Framework de Automação / Geradores (Foundation) | [mod.md](04_modules/mod-000-foundation/mod.md) | DRAFT |
+| MOD-001 — Backoffice (Admin) | [mod.md](04_modules/mod-001-backoffice/mod.md) | DRAFT |
+| MOD-002 — Cadastro de Usuários | [mod.md](04_modules/mod-002-cadastro-usuarios/mod.md) | DRAFT |
 
 > **Nota:** Novos módulos devem criar um subdiretório próprio em `04_modules/<mod-id>/` seguindo o padrão do MOD-001.
 

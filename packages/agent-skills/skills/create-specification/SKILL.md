@@ -15,7 +15,7 @@ description: 'Create a new specification file for the solution, optimized for Ge
 > - Documentar a **estratégia de testes** de um módulo antes de implementar
 > - Especificar **padrões de observabilidade** (traces, métricas, alertas)
 >
-> ⚠️ Se for um módulo de negócio (`MOD-XXX`), use `scaffold-module` — não esta skill.
+> ⚠️ Se for um módulo de negócio (`MOD-XXX`), use `forge-module` — não esta skill.
 
 Your goal is to create a new specification file for `${input:SpecPurpose}`.
 

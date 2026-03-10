@@ -56,7 +56,7 @@ Este pacote define **6 agentes especialistas** para geração de código e valid
 
 ### 0.4 Integração Obrigatória com Skills (MUST)
 
-- Os agentes COD **MUST** obrigatoriamente consultar e utilizar as skills presentes no diretório `.agents/skills` (como `spec-kit-skill`, `update-specification`, `readme-blueprint-generator`, etc.) ao gerarem código ou documentação interna da arquitetura.
+- Os agentes COD **MUST** obrigatoriamente consultar e utilizar as skills presentes no diretório `.agents/skills` (como `forge-module`, `update-specification`, `readme-blueprint-generator`, etc.) ao gerarem código ou documentação interna da arquitetura.
 - O uso dessas skills garante o emprego de templates, prompts (via `prompt-builder`) e fluxos previamente testados, prevenindo construções ad-hoc fora dos padrões de padronização do projeto.
 
 ---

@@ -1,6 +1,6 @@
 # US-MOD-000-F05 — Cadastro e Gestão de Usuários (CRUD + Soft Delete + Auto-Registro)
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Users)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002
@@ -94,12 +94,12 @@ Funcionalidade: Cadastro e Gestão de Usuários
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [x] Owner definido.
-- [x] Cenários Gherkin revisados e aprovados.
-- [x] Modelo de dados (`users` + `content_users`) revisado pelo time de dados.
-- [x] Contrato dos endpoints documentado no OpenAPI (`POST /users`, `GET /users`, `DELETE /users/:id`).
-- [x] Política de LGPD para `deletedAt` validada com compliance.
-- [x] Épico US-MOD-000 **aprovado**.
+- [ ] Owner definido.
+- [ ] Cenários Gherkin revisados e aprovados.
+- [ ] Modelo de dados (`users` + `content_users`) revisado pelo time de dados.
+- [ ] Contrato dos endpoints documentado no OpenAPI (`POST /users`, `GET /users`, `DELETE /users/:id`).
+- [ ] Política de LGPD para `deletedAt` validada com compliance.
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.
+> ⚠️ **Atenção:** As automações de arquitetura (`forge-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.

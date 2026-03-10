@@ -5,17 +5,16 @@
 
 ---
 
-## 1. Filosofia
+## 1. Filosofia XP-Driven (Executable Specifications)
 
-O EasyA1 adota a abordagem **Spec-First, Validate-After**:
+O EasyA1 abandonou a criação de stubs de testes desconexos (`TST-NNN.md`). Adotamos a abordagem ágil onde **o código de teste (Vitest) é a única fonte da verdade e o contrato executável final**.
 
-1. **Spec de teste ANTES da implementação** — o `TST-NNN.md` define *o que deve ser testado* junto com (ou antes de) o `FR-NNN.md`.
-2. **Cobertura validada APÓS a implementação** — o código de teste é escrito durante/após a implementação, mas o contrato (casos obrigatórios, cobertura mínima) já está fixado na spec.
-3. **Testes como contrato executável** — um PR não pode ser aprovado sem que os casos críticos do `TST-NNN` estejam cobertos por testes automatizados.
+1. **Spec no Código (TDD/BDD)** — O comportamento desejado (`FR-NNN` e `BR-NNN`) guia o desenvolvedor a escrever os cenários (test specs) diretamente nos arquivos `.test.ts`.
+2. **Cobertura validada em CI** — O gatilho de sucesso do `DONE` na sua User Story é a pipeline rodar sem erros.
+3. **Mapeamento Explícito** — Um PR não pode ser aprovado sem que os casos listados na Rule de Negócio estejam espelhados em testes no repositório.
 
 ```text
-FR-NNN.md ──→ TST-NNN.md (spec de aceite)   →  Implementação  →  Código de Teste
-   ↑___________________________________(refinamento via amendments TST-NNN-Mxx)◄──┘
+FR-NNN.md + BR-NNN.md (Spec Ágil) ──→ Implementação Direta (Vitest + Código) ──→ CI (Done)
 ```
 
 ---
@@ -67,22 +66,16 @@ FR-NNN.md ──→ TST-NNN.md (spec de aceite)   →  Implementação  →  Có
 
 ## 5. Padrão de IDs de Casos de Teste
 
-Todo caso de teste documentado em `TST-NNN.md` recebe um ID único e rastreável:
+Todo caso de teste no código fonte, em suas declarações `describe` ou `it()`, deve obrigatoriamente referenciar seu Requisito Funcional ou Regra de Negócio que ele assegura.
 
-```text
-TC-<NNN>-<NN>
-│    │    └── Número sequencial do caso dentro do módulo (01, 02, ...)
-│    └───── Número do módulo (000, 001, ...)
-└────────── Prefixo fixo "TC" (Test Case)
+```typescript
+describe('[FR-001] Cadastro de Usuário', () => {
+   it('deve registrar com dados válidos (HP)', async () => { ... })
+   it('[BR-001.2] deve rejeitar email em uso (EV)', async () => { ... })
+});
 ```
 
-**Exemplos:**
-
-- `TC-000-01` — Foundation: login com credenciais válidas → sessão criada
-- `TC-000-12` — Foundation: acesso cross-tenant → 403 Forbidden
-- `TC-001-03` — Backoffice: criar usuário sem permissão → 403 + log de auditoria
-
-> O ID `TC-NNN-NN` deve aparecer no `describe` ou comentário do código de teste para rastreabilidade.
+> A rastreabilidade sai do arquivo morto para a semântica da suíte de teste. O ID (`FR-NNN` ou `BR-NNN`) garante visibilidade sobre o que o teste protege.
 
 ---
 
@@ -132,57 +125,38 @@ O CI (GitHub Actions / pipeline) **bloqueia o merge** se:
 
 ---
 
-## 8. Categorias de Casos de Teste no TST-NNN
-
-Cada `TST-NNN.md` organiza os casos nas seguintes categorias:
+Cada bloco de suíte de teste no repositório deve ser desenhado para agrupar os testes nas seguintes categorias conceituais (sendo declaradas ou tagueadas).
 
 | Categoria               | Código | Descrição                                                 |
 |-------------------------|--------|-----------------------------------------------------------|
-| **Happy Path**          | `HP`   | Fluxo principal com dados válidos e permissão correta     |
-| **Erro de Validação**   | `EV`   | Dados inválidos, campos obrigatórios ausentes             |
-| **Erro de Autorização** | `EA`   | Acesso negado, escopo insuficiente, token inválido        |
-| **Isolamento de Tenant**| `IT`   | Cross-tenant IDOR, header forjado, escopo de outro tenant |
-| **Borda / Edge Case**   | `EC`   | Valores limítrofes, condições de corrida, duplicatas      |
-| **Não-Funcional**       | `NF`   | Performance, tempo de resposta, tamanho de payload        |
+| **Happy Path**          | `(HP)` | Fluxo principal com dados válidos e permissão correta     |
+| **Erro de Validação**   | `(EV)` | Dados inválidos, campos obrigatórios ausentes             |
+| **Erro de Autorização** | `(EA)` | Acesso negado, escopo insuficiente, token inválido        |
+| **Isolamento de Tenant**| `(IT)` | Cross-tenant IDOR, header forjado, escopo de outro tenant |
+| **Borda / Edge Case**   | `(EC)` | Valores limítrofes, condições de corrida, duplicatas      |
+| **Não-Funcional**       | `(NF)` | Performance, tempo de resposta, tamanho de payload        |
 
 ---
 
 ## 9. Regras para Agentes GenAI (MUST READ)
 
-Ao gerar código de teste ou spec `TST-NNN.md`, o agente **DEVE**:
+Ao gerar código de teste Vitest, o agente **DEVE**:
 
-1. **Mapear cada FR com casos de teste** — para cada funcionalidade em `FR-NNN`, deve existir ao menos 1 caso `HP` e 1 caso de erro correspondente.
-2. **Cobrir 100% dos cenários de segurança** — todo `SEC-NNN` e toda `BR-NNN` com negação de acesso deve ter ao menos 1 caso `EA` ou `IT`.
-3. **Usar IDs rastreáveis** (`TC-NNN-NN`) e referenciá-los nos `describe/it` do código.
+1. **Mapear cada FR com blocos `describe`** — para cada funcionalidade em `FR-NNN`, deve existir ao menos 1 caso `(HP)` e 1 caso de erro correspondente.
+2. **Cobrir 100% dos cenários de segurança** — toda regra `SEC-NNN` e `BR-NNN` com negação de acesso deve ter bloco de validação `(EA)` ou `(IT)`.
+3. **Usar IDs rastreáveis** referenciando os FRs e BRs nos `describe/it` do código.
 4. **Referenciar fixtures existentes** antes de criar novas — verificar `tests/factories/` primeiro.
 5. **Nunca usar dados hardcodados** em factories — usar sempre `@faker-js/faker`.
-6. **Nunca omitir teardown** em testes de integração.
-7. **Consultar `IMP-000.md`** para anti-patterns antes de criar qualquer schema de fixture.
+6. **Nunca omitir teardown** em testes de integração (banco em memória/testcontainers).
+7. **Consultar `IMP-000.md`** para anti-patterns antes de criar mocks incorretos.
 
 ---
 
-## 10. Relacionamento entre Documentos
+Neste momento, as diretrizes de código-fonte de teste assumem toda a veracidade do tracking:
 
-```text
-TST-NNN.md          ←── especifica casos de
-    │
-    ├── rastreia_para FR-NNN  (o que deve funcionar)
-    ├── rastreia_para BR-NNN  (regras de negócio a validar)
-    ├── rastreia_para SEC-NNN (segurança a cobrir)
-    └── rastreia_para NFR-NNN (não-funcionais a medir)
-```
-
----
-
-## 11. Status de Implementação (Gap Analysis - 2026-03-04)
-
-Atualmente, há uma discrepância entre esta estratégia documentada e a base de código real:
-
-- **Bibliotecas Ausentes:** Os arquivos `package.json` não possuem as dependências de testes listadas na estratégia (como Vitest, Supertest, Testcontainers, etc).
-- **Estrutura Ausente:** A organização de pastas exigida (ex: `apps/api/src/tests/factories`, `helpers`, `fixtures`) ainda não existe no código.
-- **Falta de Implementação:** As especificações `TST-000.md` e `TST-001.md` exigem cobertura detalhada, porém não há arquivos de teste (`*.test.ts` ou `*.spec.ts`) criados na API.
-
-Um planejamento para correção destas pendências foi elaborado em `docs/PLAN_TEST_ALIGNMENT.md`.
+- **Frameworks Test-Driven**: Usamos Vitest embarcado no fluxo da esteira CI.
+- **Isolamento e Segurança**: Cobertura baseada nos fluxos FR-BR descritos nos módulos.
+- A fase de correções pendentes (Instalação Global da Base Transacional, Testcontainers, vitest configs) encontra-se em progresso no `docs/PLAN_TEST_ALIGNMENT.md`.
 
 ---
 

@@ -1,12 +1,12 @@
 # US-MOD-000-F13 — Utilitário de Telemetria UI (UIActionEnvelope)
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Módulo Destino:** **MOD-000** (Foundation - Frontend Tooling)
 **Épico Pai:** [US-MOD-000](../epics/US-MOD-000.md)
 
 ### Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** DOC-ARC-003 (§2 O "Idioma Operacional" do Frontend)

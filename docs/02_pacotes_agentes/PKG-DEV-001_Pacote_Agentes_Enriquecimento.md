@@ -74,7 +74,7 @@ Agentes **NÃO DEVEM** recriar ou duplicar entidades e lógicas que pertencem ao
 
 ### 0.7 Integração Obrigatória com Skills (MUST)
 
-- Os agentes DEV **MUST** obrigatoriamente consultar e utilizar as skills presentes no diretório `.agents/skills` (como `spec-kit-skill`, `create-specification`, `create-oo-component-documentation`, etc.) para qualquer tarefa conceitualmente coberta por essas capacidades.
+- Os agentes DEV **MUST** obrigatoriamente consultar e utilizar as skills presentes no diretório `.agents/skills` (como `forge-module`, `create-specification`, `create-oo-component-documentation`, etc.) para qualquer tarefa conceitualmente coberta por essas capacidades.
 - O uso de skills padroniza fluxos validados de detalhamento (ex: Spec-Driven Development), mitigando desvios documentais e arquiteturais.
 
 ---
@@ -94,7 +94,7 @@ Todos os agentes produtores (AGN-DEV-01..10) usam:
         "id": "XXX-001",
         "title": "…",
         "metadata": {
-          "estado_item": "DRAFT|REFINING|READY",
+          "estado_item": "DRAFT|READY",
           "owner": "…",
           "data_ultima_revisao": "YYYY-MM-DD",
           "rastreia_para": ["…"],

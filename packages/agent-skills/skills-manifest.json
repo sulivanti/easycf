@@ -2,9 +2,9 @@
     "version": "1.0.0",
     "framework": "EasyCodeFramework",
     "skills": {
-        "scaffold-module": {
+        "forge-module": {
             "version": "1.0.0",
-            "path": "./skills/scaffold-module"
+            "path": "./skills/forge-module"
         },
         "validate-drizzle-schemas": {
             "version": "1.0.0",

@@ -1,6 +1,6 @@
 # US-MOD-[ID] — [Nome Curto da Feature]
 
-**Status:** `DRAFT` | `REFINING` | `READY` | `IN_PROGRESS` | `APPROVED` | `REJECTED`
+**Status Ágil:** `TODO` | `READY` | `IN_PROGRESS` | `DONE`
 **Data:** YYYY-MM-DD
 **Autor(es):** [Nome ou Squad]
 **Módulo Destino:** [Ex: MOD-101]
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** [Deve ser idêntico ao Status da história: DRAFT, REFINING, READY, IN_PROGRESS, APPROVED ou REJECTED]
+- **status_agil:** [TODO, READY, IN_PROGRESS, DONE]
 - **owner:** [Nome/Papel]
 - **data_ultima_revisao:** YYYY-MM-DD
 - **rastreia_para:** [Deve conter exaustivamente TUDO o que foi listado em Referências Normativas + o Épico Pai]
@@ -54,4 +54,4 @@ Cenário: [Cenário de Sucesso]
 - [ ] Épico correspondente aprovado.
 
 ---
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `APPROVED`.
+> ⚠️ **Atenção:** A automação de arquitetura (`forge-module`) **SÓ PODE SER EXECUTADA** se esta User Story estiver marcada com `status_agil: READY`.

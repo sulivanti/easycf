@@ -1,6 +1,6 @@
 # US-MOD-001-F01 — Shell de Autenticação e Layout Base
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Versão:** 0.1.0  
 **Data:** 2026-03-08  
 **Autor(es):** Produto + Arquitetura  
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-08
 - **rastreia_para:** US-MOD-001, DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-ARC-003, US-MOD-000-F01, US-MOD-000-F04
@@ -100,18 +100,18 @@ Funcionalidade: Shell de Autenticação e Layout Base do MOD-001
 
 ## 5. Definition of Ready (DoR)
 
-- [x] Screen Manifests criados: `ux-auth-001.login.yaml`, `ux-shell-001.app-shell.yaml`
-- [x] operationIds mapeados: `auth_login`, `auth_forgot_password`, `auth_reset_password`, `auth_me`, `auth_logout`
-- [x] Épico pai US-MOD-001 definido
-- [x] Rastreabilidade com US-MOD-000-F01 e US-MOD-000-F04 declarada
-- [x] US-MOD-001 aprovada pelo owner
+- [ ] Screen Manifests criados: `ux-auth-001.login.yaml`, `ux-shell-001.app-shell.yaml`
+- [ ] operationIds mapeados: `auth_login`, `auth_forgot_password`, `auth_reset_password`, `auth_me`, `auth_logout`
+- [ ] Épico pai US-MOD-001 definido
+- [ ] Rastreabilidade com US-MOD-000-F01 e US-MOD-000-F04 declarada
+- [ ] US-MOD-001 aprovada pelo owner
 
 ## 6. Definition of Done (DoD)
 
-- [x] Screen Manifests validados contra schema v1 (skill `validate-screen-manifest`)
-- [x] Critérios Gherkin cobertos por testes de contrato ou E2E
-- [x] Integração com pacote `ui-telemetry` validada (US-MOD-001-F02)
-- [x] Evidências (PR/issue) documentadas neste arquivo
+- [ ] Screen Manifests validados contra schema v1 (skill `validate-screen-manifest`)
+- [ ] Critérios Gherkin cobertos por testes de contrato ou E2E
+- [ ] Integração com pacote `ui-telemetry` validada (US-MOD-001-F02)
+- [ ] Evidências (PR/issue) documentadas neste arquivo
 
 ---
 

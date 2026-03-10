@@ -50,7 +50,8 @@ Sempre que o Agente ou o Desenvolvedor precisar executar uma etapa de processo b
 **Como usar:**
 O Agente realiza a chamada para a respectiva sub-rotina/skill:
 
-- **`create-specification` / `spec-kit-skill`**: Usadas na fase de planejamento. O agente `PKG-DEV-001` deve utilizá-las para transformar um requisito em um documento técnico rastreável, antes que qualquer linha de código seja escrita.
+- **`forge-module`**: Usado na fase de concepção (READY). Disparo único para materializar a fundação física do módulo antes do código.
+- **`create-specification`**: Usada na fase de planejamento de arquitetura transversal não atrelada a módulos padrão.
 - **`update-specification`**: Quando uma regra de negócio for alterada ou um bug requerer mudança na modelagem original.
 - **`create-oo-component-documentation` / `readme-blueprint-generator`**: Na fase de entrega/review. O agente `PKG-COD-001` deve invocá-las logo após finalizar a construção de um componente para garantir que a documentação reflita o código.
 - **`validate-drizzle-schemas`** ✅: Skill **customizada**. Usada pelo `AGN-COD-DB` (PKG-COD-001) obrigatoriamente ao criar ou revisar schemas Drizzle ORM. Valida regras de multitenancy, anti-patterns Foundation e integração Zod.

@@ -1,6 +1,6 @@
 # US-MOD-000-F11 — Endpoint GET /info (Versão e Metadados do Sistema)
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Data:** 2026-03-06
 **Autor(es):** Arquitetura
 **Módulo Destino:** **ECF Core** (Infraestrutura do Framework — `@easycf/core-api`)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** DOC-PADRAO-001, DOC-ARC-001
@@ -110,11 +110,11 @@ Funcionalidade: Endpoint GET /info — Metadados Públicos do Sistema
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [x] Localização no framework definida: `packages/core-api/src/routes/info.ts`
-- [x] Contrato HTTP documentado (seção 2).
-- [x] Cenários Gherkin revisados (seção 3).
-- [x] Confirmado: sem dados sensíveis na resposta.
-- [x] Confirmado: sem autenticação necessária.
+- [ ] Localização no framework definida: `packages/core-api/src/routes/info.ts`
+- [ ] Contrato HTTP documentado (seção 2).
+- [ ] Cenários Gherkin revisados (seção 3).
+- [ ] Confirmado: sem dados sensíveis na resposta.
+- [ ] Confirmado: sem autenticação necessária.
 
 ---
 

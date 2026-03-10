@@ -1,6 +1,6 @@
 # US-MOD-000-F02 — Autenticação de Dois Fatores via TOTP (MFA)
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth MFA)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-08
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, DOC-DEV-001, DOC-ARC-001, DOC-GNP-00, SEC-000-01
@@ -136,13 +136,13 @@ Funcionalidade: Autenticação de Dois Fatores via TOTP (MFA)
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [x] Owner definido (arquitetura).
-- [x] Cenários Gherkin revisados e aprovados.
-- [x] Contrato do endpoint `POST /auth/mfa/verify` documentado no OpenAPI.
-- [x] Sem `PENDENTE-XXX` críticos em aberto.
-- [x] Feature US-MOD-000-F01 **aprovada**.
-- [x] Épico US-MOD-000 **aprovado**.
+- [ ] Owner definido (arquitetura).
+- [ ] Cenários Gherkin revisados e aprovados.
+- [ ] Contrato do endpoint `POST /auth/mfa/verify` documentado no OpenAPI.
+- [ ] Sem `PENDENTE-XXX` críticos em aberto.
+- [ ] Feature US-MOD-000-F01 **aprovada**.
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
 
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.
+> ⚠️ **Atenção:** As automações de arquitetura (`forge-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.

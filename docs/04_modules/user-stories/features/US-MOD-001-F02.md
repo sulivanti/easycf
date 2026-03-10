@@ -1,6 +1,6 @@
 # US-MOD-001-F02 — Telemetria de UI e Rastreabilidade do Shell
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Versão:** 0.1.0  
 **Data:** 2026-03-08  
 **Autor(es):** Produto + Arquitetura  
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-08
 - **rastreia_para:** US-MOD-001, DOC-ARC-003, DOC-UX-010, DOC-UX-012, US-MOD-000-F13, US-MOD-000-F14
@@ -98,18 +98,18 @@ Funcionalidade: Telemetria de UI no Shell do MOD-001
 
 ## 5. Definition of Ready (DoR)
 
-- [x] Pacote `ui-telemetry` especificado em US-MOD-000-F13
-- [x] Middleware `X-Correlation-ID` especificado em US-MOD-000-F14
-- [x] Screen Manifests dos 3 telas do MOD-001 criados com `telemetry_defaults`
-- [x] Regra de omissão de `tenant_id` documentada em DOC-ARC-003 §2
-- [x] US-MOD-001 aprovada pelo owner
+- [ ] Pacote `ui-telemetry` especificado em US-MOD-000-F13
+- [ ] Middleware `X-Correlation-ID` especificado em US-MOD-000-F14
+- [ ] Screen Manifests dos 3 telas do MOD-001 criados com `telemetry_defaults`
+- [ ] Regra de omissão de `tenant_id` documentada em DOC-ARC-003 §2
+- [ ] US-MOD-001 aprovada pelo owner
 
 ## 6. Definition of Done (DoD)
 
-- [x] `UIActionEnvelope` emitido corretamente em todas as actions não-`client_only` dos 3 manifests
-- [x] Testes de integração validam ausência de `tenant_id` em ações de `UX-AUTH-001`
-- [x] `X-Correlation-ID` verificado em todos os headers de requisição do Shell
-- [x] Evidências (PR/issue) documentadas neste arquivo
+- [ ] `UIActionEnvelope` emitido corretamente em todas as actions não-`client_only` dos 3 manifests
+- [ ] Testes de integração validam ausência de `tenant_id` em ações de `UX-AUTH-001`
+- [ ] `X-Correlation-ID` verificado em todos os headers de requisição do Shell
+- [ ] Evidências (PR/issue) documentadas neste arquivo
 
 ---
 

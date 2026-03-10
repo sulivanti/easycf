@@ -1,6 +1,6 @@
 # US-MOD-001 — Backoffice Admin (Épico UX-First)
 
-**Status:** `APPROVED`  
+**Status Ágil:** `DRAFT`  
 **Versão:** 0.1.0  
 **Data:** 2026-03-08  
 **Autor(es):** Produto + Arquitetura  
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** APPROVED
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-08
 - **rastreia_para:** DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-ARC-003, US-MOD-000
@@ -46,7 +46,7 @@ Cada tela do módulo possui:
 ### Não inclui (tratados em outros épicos/módulos)
 
 - Implementação de endpoints (MOD-000)
-- Geração de código de produção (via skill `scaffold-module` após aprovação)
+- Geração de código de produção (via skill `forge-module` após aprovação)
 - Módulos de negócio além do Shell/Auth/Dashboard (roadmap futuro)
 
 ---
@@ -58,7 +58,7 @@ Funcionalidade: Épico UX-First do MOD-001
 
   Cenário: Sub-histórias só podem ser scaffoldadas após aprovação do épico
     Dado que US-MOD-001 está com Status diferente de "aprovada"
-    Quando um agente COD tentar executar scaffold-module para qualquer sub-história F01–F03
+    Quando um agente COD tentar executar forge-module para qualquer sub-história F01–F03
     Então a automação DEVE ser bloqueada
     E DEVE indicar que a aprovação do épico é pré-requisito obrigatório
 
@@ -79,15 +79,15 @@ Funcionalidade: Épico UX-First do MOD-001
 
 ## 5. Definition of Ready (DoR)
 
-- [x] Ajustes normativos aplicados: DOC-UX-010 §Manifestos de Infra/Shell + `linked_stories` no schema v1
-- [x] 3 Screen Manifests criados e vinculados a este épico
-- [x] 3 Feature Stories (F01–F03) em estado READY
-- [x] Rastreabilidade com operationIds do MOD-000 declarada
-- [x] Owner confirma status READY para aprovação
+- [ ] Ajustes normativos aplicados: DOC-UX-010 §Manifestos de Infra/Shell + `linked_stories` no schema v1
+- [ ] 3 Screen Manifests criados e vinculados a este épico
+- [ ] 3 Feature Stories (F01–F03) em estado READY
+- [ ] Rastreabilidade com operationIds do MOD-000 declarada
+- [ ] Owner confirma status READY para aprovação
 
 ## 6. Definition of Done (DoD)
 
-- [x] Todas as sub-histórias F01–F03 individualmente **aprovadas**
+- [ ] Todas as sub-histórias F01–F03 individualmente **aprovadas**
 - [ ] Screen Manifests validados via skill `validate-screen-manifest`
 - [ ] Paridade Manifest ↔ OpenAPI verificada (checklist do Verification Plan)
 - [ ] Evidências documentadas (links de PR/issue)
@@ -153,4 +153,4 @@ US-MOD-001  (este arquivo) ← Épico / Governança / Índice
 
 ---
 
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `APPROVED`.
+> ⚠️ **Atenção:** As automações de arquitetura (`forge-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `APPROVED`.

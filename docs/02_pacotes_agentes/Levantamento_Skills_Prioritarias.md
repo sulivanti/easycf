@@ -16,7 +16,7 @@ Este documento cataloga o **estado atual** das Skills, separando as **já implem
 
 | Skill | Tipo | Uso Principal | Agente(s) |
 | --- | --- | --- | --- |
-| `spec-kit-skill` | Comunidade+ | Criação de specs via fluxo SDD (7 fases) | PKG-DEV-001 |
+| `forge-module` | Customizada ✅ | Forja estrutural do módulo (Paradigma XP) | Agente / Dev |
 | `create-specification` | Comunidade+ | Gerar novo arquivo de especificação técnica | PKG-DEV-001 |
 | `update-specification` | Comunidade+ | Atualizar spec existente após mudança de regras | PKG-DEV-001 |
 | `prompt-builder` | Comunidade+ | Estruturar prompts para GitHub Copilot | PKG-DEV-001 / PKG-COD-001 |

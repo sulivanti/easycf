@@ -1,6 +1,6 @@
 # US-MOD-000-F01 — Autenticação Nativa com E-mail, Senha e Gerenciamento de Sessão
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth Core)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-GNP-00, DOC-PADRAO-004
@@ -155,12 +155,12 @@ Funcionalidade: Autenticação Nativa com E-mail e Senha
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [x] Owner definido.
-- [x] Cenários Gherkin revisados e aprovados pelo time (seção 3).
-- [x] Contrato de API documentado no OpenAPI (`/auth/login`, `/auth/logout`, `/auth/sessions`, `/auth/refresh`).
-- [x] Sem `PENDENTE-XXX` críticos em aberto.
-- [x] Épico US-MOD-000 **aprovado**.
+- [ ] Owner definido.
+- [ ] Cenários Gherkin revisados e aprovados pelo time (seção 3).
+- [ ] Contrato de API documentado no OpenAPI (`/auth/login`, `/auth/logout`, `/auth/sessions`, `/auth/refresh`).
+- [ ] Sem `PENDENTE-XXX` críticos em aberto.
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
 
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.
+> ⚠️ **Atenção:** As automações de arquitetura (`forge-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.

@@ -1,6 +1,6 @@
 # US-MOD-000 — Governança de Documentos Normativos para Geração Automática de Código
 
-**Status:** `APPROVED`
+**Status Ágil:** `DRAFT`
 **Versão:** 0.5.0
 **Data:** 2026-03-06
 **Autor(es):** Produto + Arquitetura
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** APPROVED
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** DOC-DEV-001, DOC-GNP-00, DOC-ESC-001, DOC-GPA-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-PADRAO-001, DOC-PADRAO-002, DOC-PADRAO-004, DOC-PADRAO-005
@@ -72,7 +72,7 @@ Como **time de produto e engenharia**, queremos que o framework de geração aut
 
 ### Não inclui (Fora de Escopo)
 
-- Implementação de lógica de negócio de nenhuma das sub-histórias F01–F16 (cada uma possui sua própria US detalhada).
+- Implementação de lógica de negócio de nenhuma das sub-histórias F01–F17 (cada uma possui sua própria US detalhada).
 - Construção, controle estrutural e arquitetura base da Interface do Usuário (UI/Shell) como Breadcrumbs, Layout do Menu, Dashboard Inicial, e Componentes Globais de Feedback Visual/Modais (esses temas são agora estritamente governados pelos normativos **DOC-UX-011** e **DOC-UX-012**).
 - Criação de novas regras normativas ou alteração dos documentos normativos referenciados (essas mudanças devem ser tratadas diretamente nos respectivos documentos com ADR).
 - Geração de código de produção diretamente a partir desta US (este é o épico balizador; o código resulta das sub-histórias aprovadas).
@@ -127,7 +127,7 @@ Funcionalidade: Governança de documentos normativos no framework de geração d
 
   Cenário: Agente COD respeita o ciclo de aprovação em cascata
     Dado que esta US-MOD-000 está com Status diferente de "aprovada"
-    Quando um agente COD ou automação tentar executar scaffold-module ou create-amendment em qualquer sub-história
+    Quando um agente COD ou automação tentar executar forge-module ou create-amendment em qualquer sub-história
     Então a automação DEVE ser bloqueada com mensagem de erro clara
     E DEVE indicar que a aprovação do épico é pré-requisito obrigatório
 ```
@@ -143,7 +143,7 @@ Este épico sai de `RASCUNHO` / `REFINING` e vai para a fila de aprovação **SE
 - [ ] Cenários Gherkin cobrem os fluxos críticos de governança (seção 4 acima).
 - [ ] Tabela de sub-histórias (seção 7) está completa com links e status iniciais.
 - [ ] Não existem `PENDENTE-XXX` críticos em aberto (ver seção 9).
-- [x] ADRs documentadas para qualquer divergência de padrão conhecida. *(N/A - Sem divergências no momento)*
+- [ ] ADRs documentadas para qualquer divergência de padrão conhecida. *(N/A - Sem divergências no momento)*
 
 ---
 
@@ -168,7 +168,7 @@ O épico US-MOD-000 é considerado **concluído** quando:
 5. **Estratégia de testes**: unit sem I/O; integração com DB real efêmero; contract test contra OpenAPI.
 6. **Contrato de agentes**: saídas estruturadas/parseáveis e validações mínimas conforme padrão DOC-GPA-001.
 7. **Execução/config**: padrões de Docker/Node/pnpm e validação fail-fast de envs são obrigatórios.
-8. **Edições manuais proibidas em artefatos gerados por automação**: toda alteração em `04_modules/` deve passar pelas skills `scaffold-module` ou `create-amendment`.
+8. **Edições manuais proibidas em artefatos gerados por automação**: toda alteração em `04_modules/` deve passar pelas skills `forge-module` ou `create-amendment`.
 9. **Redis**: usar apenas como broker de filas (BullMQ) e mecanismos efêmeros (rate limiting, idempotency locks). Proibido como banco primário ou pub/sub.
 10. **Soft-delete obrigatório**: hard deletes diretos são proibidos em dados faturáveis/auditáveis sem acionar `deleted_at`.
 11. **Padrão de Idempotência:** Toda rota de mutação (`POST`, `PUT`, `PATCH`) documentada com exigência de `Idempotency-Key` DEVE obrigatoriamente utilizar o middleware central de idempotência do framework (`@easycf/core-api/idempotency`), que utiliza Redis para TTL e cache da resposta. É estritamente proibido que os módulos implementem lógicas de idempotência exclusivas dentro de seus controllers ou services.
@@ -187,7 +187,7 @@ O épico US-MOD-000 é considerado **concluído** quando:
 | OKR-3 | Tempo de detecção de divergência normativa (CI gate) | Manual (~dias) | Automático (<5 min no pipeline) | Pós CI configurado |
 | OKR-4 | Nº de ADRs abertas por divergência de padrão não documentada | N/A | 0 abertas sem responsável e prazo | Ao final do épico |
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 
 ---
 
@@ -212,7 +212,8 @@ US-MOD-000  (este arquivo) ← Épico / Governança / Índice
   ├── US-MOD-000-F13  ← Utilitário de Telemetria UI (UIActionEnvelope)
   ├── US-MOD-000-F14  ← Middlewares de Correlação E2E (CorrelationId Middleware)
   ├── US-MOD-000-F15  ← Motor de Gates de Pipeline CI (Screen Manifests Validator)
-  └── US-MOD-000-F16  ← Módulo de Storage e Upload Centralizado (Presigned URLs)
+  ├── US-MOD-000-F16  ← Módulo de Storage e Upload Centralizado (Presigned URLs)
+  └── US-MOD-000-F17  ← Login via Sign in with Apple (Apple ID — OIDC/JWKS)
 ```
 
 | Sub-História | Tema | Status | Owner |
@@ -233,6 +234,7 @@ US-MOD-000  (este arquivo) ← Épico / Governança / Índice
 | [US-MOD-000-F14](../features/US-MOD-000-F14.md) | Middlewares de Correlação E2E (CorrelationId Middleware) | `READY` | arquitetura |
 | [US-MOD-000-F15](../features/US-MOD-000-F15.md) | Motor de Gates de Pipeline CI (Screen Manifests Validator) | `READY` | arquitetura |
 | [US-MOD-000-F16](../features/US-MOD-000-F16.md) | Módulo de Storage e Upload Centralizado | `READY` | arquitetura |
+| [US-MOD-000-F17](../features/US-MOD-000-F17.md) | Login via Sign in with Apple (Apple ID — OIDC/JWKS) | `APPROVED` | arquitetura |
 
 > 📌 **Regra de aprovação em cascata:** Esta US-MOD-000 deve ser aprovada **antes** de qualquer sub-história. Cada sub-história F01–F16 deve ser aprovada individualmente antes de ter seu código scaffoldado ou alterado por automação.
 
@@ -246,6 +248,7 @@ Nenhuma pendência estrutural em aberto (Nível arquitetural 2 consolidado e own
 
 | Versão | Data | Responsável | Descrição |
 | --- | --- | --- | --- |
+| 0.8.0 | 2026-03-09 | arquitetura | Criação da US-MOD-000-F17 (Sign in with Apple) em status DRAFT — cobertura SSO Apple ID (OIDC/JWKS, apple_sub, user object único). |
 | 0.7.1 | 2026-03-08 | arquitetura | Promoção de US-MOD-000-F02 (MFA / TOTP) para READY. |
 | 0.7.0 | 2026-03-08 | arquitetura | Promoção de US-MOD-000-F02 (MFA / TOTP) para REFINING. |
 | 0.6.0 | 2026-03-06 | arquitetura | Inclusão do DOC-PADRAO-005 e criação oficial da US-MOD-000-F16 (Storage e Upload Centralizado). |
@@ -257,4 +260,4 @@ Nenhuma pendência estrutural em aberto (Nível arquitetural 2 consolidado e own
 
 ---
 
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `APPROVED`.
+> ⚠️ **Atenção:** As automações de arquitetura (`forge-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `APPROVED`.

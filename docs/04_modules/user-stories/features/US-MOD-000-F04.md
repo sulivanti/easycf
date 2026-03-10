@@ -1,6 +1,6 @@
 # US-MOD-000-F04 — Recuperação de Senha por E-mail (Forgot / Reset Password)
 
-**Status:** `READY`
+**Status Ágil:** `DRAFT`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth Password Recovery)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **estado_item:** READY
+- **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-PADRAO-004, SEC-000-01
@@ -143,13 +143,13 @@ Funcionalidade: Recuperação de Senha por E-mail
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [x] Owner definido.
-- [x] Cenários Gherkin revisados e aprovados.
-- [x] Contrato de `POST /forgot-password` e `POST /reset-password` documentado no OpenAPI.
-- [x] Contrato `MailService.sendPasswordResetEmail` definido (interface).
-- [x] Sem `PENDENTE-XXX` críticos em aberto.
-- [x] Épico US-MOD-000 **aprovado**.
+- [ ] Owner definido.
+- [ ] Cenários Gherkin revisados e aprovados.
+- [ ] Contrato de `POST /forgot-password` e `POST /reset-password` documentado no OpenAPI.
+- [ ] Contrato `MailService.sendPasswordResetEmail` definido (interface).
+- [ ] Sem `PENDENTE-XXX` críticos em aberto.
+- [ ] Épico US-MOD-000 **aprovado**.
 
 ---
 
-> ⚠️ **Atenção:** As automações de arquitetura (`scaffold-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.
+> ⚠️ **Atenção:** As automações de arquitetura (`forge-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se esta User Story estiver marcada com Status `aprovada`.

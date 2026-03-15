@@ -2,6 +2,8 @@
 
 Cria uma emenda (amendment) governada para detalhar, corrigir ou revisar especificações existentes sem ferir o arquivo base original. Conforme DOC-DEV-001, documentos com status `READY` não devem ser editados diretamente.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `create-amendment`
+
 > **Ciclo de vida:** Stubs em `DRAFT` são enriquecidos diretamente. Esta skill é ativada **somente** quando o documento alvo já atingiu `READY`. Se o arquivo está em `DRAFT`, edite-o diretamente.
 
 ## Argumento

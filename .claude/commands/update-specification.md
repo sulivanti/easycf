@@ -2,6 +2,8 @@
 
 Atualiza um arquivo de especificação existente. Governa documentos normativos e o ciclo de vida versionado de specs de módulos (04_modules).
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `update-specification`
+
 ## Argumento
 
 $ARGUMENTS deve conter o caminho do arquivo a ser atualizado. Se não fornecido, pergunte ao usuário.
@@ -38,4 +40,4 @@ Para documentações sem versão gerenciada via Amendments:
 
 ## Template
 
-Para specs fora de módulos, use: `.agents/skills/_templates/spec-template.md`
+Para specs fora de módulos, use: `.agents/templates/spec-template.md`

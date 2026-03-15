@@ -10,13 +10,12 @@ $ARGUMENTS pode conter o tópico de consulta (ex: `joins`, `migrations`, `relati
 
 ## Referência Rápida
 
-Para consultas detalhadas, leia os arquivos de referência em `.agents/skills/drizzle-orm/`:
+Para consultas detalhadas, leia os arquivos de referência em `.agents/references/drizzle-orm/`:
 
-- **SKILL.md** — Quick start, schema definition, relations, queries, transactions, migrations
-- **references/advanced-schemas.md** — Custom types, composite keys, indexes, constraints, multi-tenant
-- **references/query-patterns.md** — Subqueries, CTEs, raw SQL, prepared statements, batch
-- **references/performance.md** — Connection pooling, query optimization, N+1 prevention
-- **references/vs-prisma.md** — Comparação de features, guia de migração
+- **advanced-schemas.md** — Custom types, composite keys, indexes, constraints, multi-tenant
+- **query-patterns.md** — Subqueries, CTEs, raw SQL, prepared statements, batch
+- **performance.md** — Connection pooling, query optimization, N+1 prevention
+- **vs-prisma.md** — Comparação de features, guia de migração
 
 ## Padrões Essenciais deste Projeto
 

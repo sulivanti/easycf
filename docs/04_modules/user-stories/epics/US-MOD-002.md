@@ -1,8 +1,8 @@
 # US-MOD-002 — Cadastro de Usuários (Épico)
 
 **Status Ágil:** `DRAFT`
-**Versão:** 0.2.0
-**Data:** 2026-03-14
+**Versão:** 0.2.1
+**Data:** 2026-03-15
 **Autor(es):** Product Owner / Squad + Arquitetura
 **Módulo Destino:** **MOD-002** (Cadastro Administrativo de Usuários)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001, SEC-000-01, LGPD-BASE-001, DOC-PADRAO-005, ADR-000-01
@@ -11,13 +11,13 @@
 
 - **status_agil:** DRAFT
 - **owner:** Product Owner
-- **data_ultima_revisao:** 2026-03-14
+- **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-002, DOC-DEV-001, DOC-ARC-001, SEC-000-01, LGPD-BASE-001, ADR-000-01, INT-000-MAIL
 - **nivel_arquitetura:** 1
 - **wave_entrega:** Wave 1
 - **epico_pai:** *(este arquivo é o épico)*
-- **manifests_vinculados:** UX-USR-001 (cadastro admin), UX-USR-002 (detalhe/edição)
-- **pendencias:** D11 (CPF configurável por tenant), D14 (escopo MOD-003+)
+- **manifests_vinculados:** UX-USER-001 (cadastro admin), UX-USER-002 (detalhe/edição)
+- **pendencias:** D11 (CPF configurável por tenant), D14 (escopo MOD-003+), D15 (SEC-000 — política de segurança não documentada), D16 (LGPD-BASE-001 — normativo LGPD não documentado), D17 (ADR-000-01 — ADR de separação de endpoints não documentada), D18 (INT-000-MAIL — contrato de integração e-mail não documentado)
 - **referencias_exemplos:** N/A
 - **evidencias:** N/A
 
@@ -367,6 +367,7 @@ O acesso ao recurso deve ser negado.
 
 | Versão | Data | Responsável | Descrição |
 | --- | --- | --- | --- |
+| 0.2.1 | 2026-03-15 | arquitetura | Correção de manifests vinculados (UX-USR → UX-USER-001/002). Registro de pendências D15–D18: SEC-000, LGPD-BASE-001, ADR-000-01, INT-000-MAIL como documentos inexistentes. |
 | 0.2.0 | 2026-03-14 | arquitetura | Reestruturação como épico formal: cascata, metadados padronizados, dependência F16/Storage, referência ADR-000-01 e INT-000-MAIL. Correção de EPIC-MOD-002 → US-MOD-002. (C03, C08) |
 | 0.1.0 | 2026-03-09 | Product Owner | Criação inicial da US de cadastro de usuários |
 

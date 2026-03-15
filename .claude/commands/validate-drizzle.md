@@ -2,6 +2,8 @@
 
 Valida schemas Drizzle ORM contra as regras fundamentais do projeto: isolamento multi-tenant, anti-patterns, integração Zod, audit trail, soft-delete e domain events.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `validate-drizzle`
+
 ## Argumento
 
 $ARGUMENTS deve conter o caminho do arquivo de schema (ex: `src/modules/orders/schema.ts`). Se não fornecido, pergunte ao usuário.
@@ -10,9 +12,9 @@ $ARGUMENTS deve conter o caminho do arquivo de schema (ex: `src/modules/orders/s
 
 ### 1. Anti-Padrão de Entidades Base
 
-- Nunca criar schemas para `users`, `tenants` ou `sessions` fora do módulo Foundation
+- Nunca criar schemas para `users`, `tenants` ou `sessions` fora do Foundation (DOC-FND-000)
 - Novas entidades DEVEM usar FK (UUID) apontando para tabelas centrais
-- Se encontrar `export const users = pgTable(...)` fora da Foundation: **VIOLAÇÃO**
+- Se encontrar `export const users = pgTable(...)` fora do Foundation (DOC-FND-000): **VIOLAÇÃO**
 
 ### 2. Isolamento Multi-Tenant
 

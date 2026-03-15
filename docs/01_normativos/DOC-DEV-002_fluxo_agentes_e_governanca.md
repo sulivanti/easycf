@@ -1,6 +1,13 @@
 # DOC-DEV-002 — Fluxo de Agentes e Governança de Automação (XP-Driven)
 
-**Status:** Norma Canônica Auxiliar | **Versão atual:** 2.0.0 | **Última revisão:** 2026-03-09
+- **id:** DOC-DEV-002
+- **version:** 2.0.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-03-09
+- **owner:** arquitetura
+- **scope:** global (governança de automação)
+
+> **Escopo deste documento:** Define o **fluxo operacional ("como")** — quando e como acionar skills, ciclo ágil vs. técnico, e o pipeline XP-Driven. Para o **contrato técnico de agentes** (envelope JSON, schema de saída, runtime de orquestração), consulte [DOC-GPA-001](DOC-GPA-001_Guia_Padrao_Agente.md).
 
 > **Regra de uso:** Este documento serve como o Guia Definitivo Operacional para Engenheiros, PMs e **Agentes de Inteligência Artificial**. Seguindo os princípios do **Extreme Programming (XP)**, ele detalha como o rastreio ágil (Histórias) se separa da estabilidade técnica (Módulos/Arquitetura), garantindo extrema velocidade na geração de código minimizando a burocracia de comandos intermediários, sem perder rastreabilidade.
 
@@ -61,6 +68,8 @@ Nesta reestruturação XP:
 ---
 
 ## 3. Glossário de Comandos (Skills Prompt Sheet)
+
+> **Nota:** Este glossário lista as **intenções operacionais** e seus mapeamentos para skills (user-facing). O catálogo técnico completo de agentes (`AGN-DEV-*`, `AGN-COD-*`) com IDs, contratos JSON e regras de validação está definido em [DOC-GPA-001 §5–§6](DOC-GPA-001_Guia_Padrao_Agente.md).
 
 Com o pipeline enxuto, o catálogo de *Intenções* vs. *Skills* se reduz drasticamente:
 

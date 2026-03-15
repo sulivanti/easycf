@@ -273,7 +273,7 @@ automações forge-module e create-amendment são bloqueadas enquanto o
 **3.5.1 F01 --- Autenticação Nativa com E-mail, Senha e Gerenciamento de
 Sessão**
 
-**Referências:** DOC-DEV-001 §3, §4.1, §8.2, §12.2, §12.4 \| SEC-000-01
+**Referências:** DOC-DEV-001 §4.1 (FR), §4.4 (SEC), §5.3 (API) \| SEC-000-01
 \| DOC-ARC-001
 
 **Nível:** 2 (DDD --- domain events, sessão em banco, kill-switch)

@@ -1,6 +1,11 @@
-# Trechos para colar no DOC-DEV-001
+# DOC-UX-010 — Catálogo de Ações Padrão (UI Events)
 
-### UX-010 — Catálogo de Ações Padrão (UI Events) + Reutilizáveis
+- **id:** DOC-UX-010
+- **version:** 1.0.0
+- **status:** DRAFT
+- **data_ultima_revisao:** 2026-03-14
+- **owner:** produto + UX
+- **scope:** global (ações/eventos de tela reutilizáveis)
 
 > **Objetivo:** padronizar as **ações/eventos de tela** (reutilizáveis) para que, no **enriquecimento** do sistema, cada UX-xxx apenas **selecione** as ações aplicáveis, sem redefinir comportamento toda vez.
 
@@ -557,7 +562,7 @@ Quando `kind=command|workflow|integration` e houver **mudança de estado**, regi
 
 ---
 
-- **estado_item:** DRAFT | REFINING | READY
+- **estado_item:** DRAFT | READY
 - **owner:** ...
 - **data_ultima_revisao:** YYYY-MM-DD
 - **rastreia_para:** (FR-..., BR-..., SEC-..., NFR-..., DATA-...)
@@ -632,7 +637,7 @@ Use a skill **`validate-screen-manifest`** para:
 
 - Gerar um novo manifesto a partir de um `UX-XXX.md` ou descrição de tela
 - Validar um manifesto existente contra o schema v1 e as regras do projeto
-- Integração automática durante o `scaffold-module` (gerado após o `UX-{ID}.md`)
+- Integração automática durante o `forge-module` (gerado após o `UX-{ID}.md`)
 
 > **Regra:** nenhum módulo pode ser considerado especificado para desenvolvimento se o `UX-{ID}.md` existir mas o manifesto correspondente em `docs/05_manifests/screens/` estiver ausente.
 

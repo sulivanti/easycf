@@ -1,0 +1,101 @@
+{
+  "$schema": "context-map.v1",
+  "description": "Manifesto de dependências skill → documentos normativos. Define quais docs/seções cada skill precisa ingerir para respeitar o limite de context window (DOC-GPA-001 §8.5).",
+  "skills": {
+    "forge-module": {
+      "docs": [
+        { "id": "DOC-DEV-001", "sections": "*", "reason": "Template de especificação executável e ciclo de vida" },
+        { "id": "DOC-DEV-002", "sections": "*", "reason": "Pipeline XP e template Mermaid CHANGELOG" },
+        { "id": "DOC-FND-000", "sections": ["§3"], "reason": "SEC-EventMatrix modelo canônico para stubs" }
+      ]
+    },
+    "validate-openapi": {
+      "docs": [
+        { "id": "DOC-ARC-001", "sections": "*", "reason": "Padrões OpenAPI inegociáveis" },
+        { "id": "DOC-GNP-00", "sections": ["EX-OAS-001", "EX-OAS-002", "EX-OAS-003", "EX-OAS-004"], "reason": "Exemplos de contrato OpenAPI" }
+      ]
+    },
+    "validate-drizzle": {
+      "docs": [
+        { "id": "DOC-GNP-00", "sections": "*", "reason": "Regras consolidadas MUST/SHOULD" },
+        { "id": "DOC-ARC-003", "sections": ["§2"], "reason": "UIActionEnvelope e domain events" },
+        { "id": "DOC-PADRAO-002", "sections": "*", "reason": "Dependências NodeJS autorizadas" },
+        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "RBAC scopes e SEC-EventMatrix" }
+      ]
+    },
+    "validate-endpoint": {
+      "docs": [
+        { "id": "DOC-GNP-00", "sections": "*", "reason": "Regras consolidadas MUST/SHOULD" },
+        { "id": "DOC-ARC-001", "sections": "*", "reason": "Schema OpenAPI na rota" },
+        { "id": "DOC-ARC-003", "sections": ["§1", "§2"], "reason": "Rastreabilidade e X-Correlation-ID" },
+        { "id": "DOC-FND-000", "sections": ["§1", "§2"], "reason": "Auth flow e RBAC scopes canônicos" }
+      ]
+    },
+    "validate-manifest": {
+      "docs": [
+        { "id": "DOC-ARC-003B", "sections": "*", "reason": "Manifestos declarativos e Gates CI" },
+        { "id": "DOC-UX-010", "sections": "*", "reason": "Catálogo de ações e template UX" },
+        { "id": "DOC-FND-000", "sections": ["§2"], "reason": "Catálogo RBAC canônico para validação de permissions" }
+      ]
+    },
+    "create-amendment": {
+      "docs": [
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle", "§metadata"], "reason": "Ciclo de vida e metadados de documentos" },
+        { "id": "DOC-DEV-002", "sections": ["§4.2", "§5"], "reason": "Comportamento amendment e Mermaid CHANGELOG" },
+        { "id": "DOC-ARC-003", "sections": ["§1"], "reason": "Rastreabilidade obrigatória" }
+      ]
+    },
+    "create-specification": {
+      "docs": [
+        { "id": "DOC-DEV-001", "sections": ["§template"], "reason": "Template canônico de especificação" }
+      ]
+    },
+    "update-specification": {
+      "docs": [
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle"], "reason": "Regra DRAFT vs READY" },
+        { "id": "DOC-DEV-002", "sections": ["§4.3"], "reason": "Autonomia do agente na edição" }
+      ]
+    },
+    "create-oo-doc": {
+      "docs": [
+        { "id": "DOC-ARC-001", "sections": "*", "reason": "Contratos e RBAC" },
+        { "id": "DOC-ARC-003", "sections": ["§1", "§2"], "reason": "Rastreabilidade" }
+      ]
+    },
+    "readme-blueprint": {
+      "docs": [
+        { "id": "DOC-PADRAO-001", "sections": "*", "reason": "Stack tecnológico" },
+        { "id": "DOC-PADRAO-002", "sections": "*", "reason": "Dependências" },
+        { "id": "DOC-ESC-001", "sections": "*", "reason": "Escala arquitetural N0/N1/N2" },
+        { "id": "DOC-DEV-001", "sections": ["§0"], "reason": "Padrões de desenvolvimento" },
+        { "id": "DOC-ARC-001", "sections": "*", "reason": "Contratos API" }
+      ]
+    },
+    "drizzle-ref": {
+      "docs": [
+        { "id": "DOC-PADRAO-002", "sections": "*", "reason": "Dependências Drizzle autorizadas" }
+      ]
+    },
+    "skill-creator": {
+      "docs": [
+        { "id": "DOC-GPA-001", "sections": "*", "reason": "Contrato padrão de agente (envelope JSON)" }
+      ]
+    },
+    "qa": {
+      "docs": [],
+      "delegates_to": ["lint:docs", "lint:markdown", "validate:manifests"]
+    },
+    "delete-module": {
+      "docs": []
+    },
+    "rollback-module": {
+      "docs": []
+    },
+    "update-index": {
+      "docs": []
+    },
+    "git": {
+      "docs": []
+    }
+  }
+}

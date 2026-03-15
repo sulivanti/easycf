@@ -1,8 +1,11 @@
-# DOC-GNP-00 — Guia Normativo e Padrões (TS + Node + Next.js) — v2.0
+# DOC-GNP-00 — Guia Normativo e Padrões (TS + Node + Vite/React)
 
-**Status:** Normativo  
-**Data:** 2026-02-20  
-**Escopo:** Padronização do produto final (TS + Node + Next.js + Postgres) em monorepo, com foco em arquitetura, organização, reuso, contratos de API, banco, observabilidade, segurança e enforcement.
+- **id:** DOC-GNP-00
+- **version:** 2.0.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-02-20
+- **owner:** arquitetura
+- **scope:** global (padronização do produto final em monorepo)
 
 ---
 
@@ -69,7 +72,7 @@ Arquivo referência: `apps/api/openapi/v1.yaml`
 ```yaml
 openapi: 3.1.0
 info:
-  title: EasyA1 API
+  title: EasyA2 API
   version: 1.0.0
 servers:
   - url: /api/v1
@@ -131,17 +134,26 @@ rules:
 
 ## EX-OAS-003 — Swagger UI local padronizado
 
-Arquivo referência: `apps/api/src/docs/swagger-ui-express.example.ts`
+Arquivo referência: `apps/api/src/docs/swagger-setup.example.ts`
 
 ```typescript
-import swaggerUi from 'swagger-ui-express';
-import YAML from 'yamljs';
-import { Express } from 'express';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
+import { FastifyInstance } from 'fastify';
 import path from 'path';
 
-export function setupSwagger(app: Express) {
-  const swaggerDocument = YAML.load(path.join(__dirname, '../../openapi/v1.yaml'));
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+export async function setupSwagger(app: FastifyInstance) {
+  await app.register(fastifySwagger, {
+    mode: 'static',
+    specification: {
+      path: path.join(__dirname, '../../openapi/v1.yaml'),
+      baseDir: path.join(__dirname, '../../openapi'),
+    },
+  });
+
+  await app.register(fastifySwaggerUi, {
+    routePrefix: '/docs',
+  });
 }
 ```
 

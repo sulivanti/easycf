@@ -1,8 +1,17 @@
-# Padrões de Ambientes e Execução (Node.js + Docker)
+# DOC-PADRAO-001 — Padrões de Ambientes e Execução (Node.js + Docker)
+
+- **id:** DOC-PADRAO-001
+- **version:** 1.0.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-03-04
+- **owner:** infraestrutura
+- **scope:** global (API, Workers, Docker)
 
 ## 1. Visão Geral
 
-Este documento define os padrões e tecnologias escolhidas para a execução da API e dos Workers do projeto **EasyA1**, estabelecendo as fundações da arquitetura de backend.
+Este documento define os padrões e tecnologias escolhidas para a execução da API e dos Workers do projeto **EasyA2**, estabelecendo as fundações da arquitetura de backend.
+
+> **Nota de nomenclatura:** **EasyA2** é o nome do produto/monorepo. **EasyCodeFramework** é o nome do framework de governança e geração de código que o sustenta.
 
 ## 2. Tecnologias Base
 
@@ -27,7 +36,7 @@ O ambiente de desenvolvimento local é unificado pelo arquivo `docker-compose.ym
 
 Todos os serviços compartilham o mesmo escopo de variáveis. A definição obrigatória inclui:
 
-- `PROJECT_NAME`: Previne conflitos de nomes na rede e nomeia os containers (ex: `easya1`)
+- `PROJECT_NAME`: Previne conflitos de nomes na rede e nomeia os containers (ex: `easya2`)
 - `API_PORT`: Porta de binding de acesso à aplicação (default: `3000`)
 - `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`: Credenciais locais do banco
 - `DATABASE_URL`: String de conexão formal (Padrão: `postgresql://[user]:[password]@[host]:[port]/[db_name]`)
@@ -38,10 +47,10 @@ Todos os containers seguem o padrão `${PROJECT_NAME:-<default>}-<serviço>`, in
 
 | Serviço  | `container_name`                        | Default            |
 |----------|-----------------------------------------|--------------------|
-| postgres | `${PROJECT_NAME:-easya1}-postgres`      | `easya1-postgres`  |
-| redis    | `${PROJECT_NAME:-easya1}-redis`         | `easya1-redis`     |
-| api      | `${PROJECT_NAME:-easya1}-api`           | `easya1-api`       |
-| worker   | `${PROJECT_NAME:-easya1}-worker`        | `easya1-worker`    |
+| postgres | `${PROJECT_NAME:-easya2}-postgres`      | `easya2-postgres`  |
+| redis    | `${PROJECT_NAME:-easya2}-redis`         | `easya2-redis`     |
+| api      | `${PROJECT_NAME:-easya2}-api`           | `easya2-api`       |
+| worker   | `${PROJECT_NAME:-easya2}-worker`        | `easya2-worker`    |
 
 ### 3.3. Serviços
 

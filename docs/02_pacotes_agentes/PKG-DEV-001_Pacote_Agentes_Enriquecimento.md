@@ -24,7 +24,7 @@ Este pacote define **11 agentes especialistas** para enriquecer o **DOC-DEV-001*
     "contract": "DOC-AGN-BASE",
     "agent_id": "AGN-DEV-XX",
     "agent_name": "…",
-    "version": "1.2",
+    "version": "1.3",
     "mode": "conservador|criativo",
     "run_id": "uuid-opcional",
     "attempt": 1

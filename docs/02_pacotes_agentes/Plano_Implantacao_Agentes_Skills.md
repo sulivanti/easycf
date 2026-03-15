@@ -41,7 +41,7 @@ Para iniciar qualquer nova demanda (feature, refatoração estrutural, análise 
 Acionando o perfil do agente correspondente ao momento da tarefa.
 
 - Acionar `PKG-DEV-001` quando o objetivo for refinar regras de negócio, documentar fluxos de tenant ou criar base de conhecimento.
-- Acionar `PKG-COD-001` quando houver uma especificação clara e o objetivo for implementar código fonte (ex: `.prw`, `.sql`).
+- Acionar `PKG-COD-001` quando houver uma especificação clara e o objetivo for implementar código fonte (ex: `.ts`, `.sql`).
 
 ### 3.2. Skills Prontas (As Ferramentas de Base)
 
@@ -68,6 +68,24 @@ O Desenvolvedor Humano ou o Agente (via skill `skill-creator`) desenvolve uma no
 
 - *Exemplo de Uso Futuro:* Criar uma skill `verificar-queries-n+1-tenancy` e instruir o `PKG-COD-001` a rodá-la obrigatoriamente antes de concluir a criação de uma view SQL.
 - *Exemplo de Uso Futuro:* Criar uma skill `validar-sintaxe-fastify` para garantir que funções estão sendo corretamente implementadas com decorators de segurança padrão.
+
+## 3.4. Quando NÃO Usar (Contra-indicações Gerais)
+
+**NÃO use Agentes (Orquestradores) quando:**
+- A tarefa é atômica e bem delimitada (ex: validar um schema, gerar um README). Neste caso, acione diretamente a skill correspondente.
+- O contexto é puramente técnico sem decisões de negócio (ex: reformatar código, atualizar dependências).
+
+**NÃO use Skills Prontas quando:**
+- A tarefa exige interpretação de regras de negócio ambíguas ou decisões arquiteturais — neste caso, o Agente deve decidir e delegar.
+- O output precisa de validação cruzada com múltiplos documentos normativos — skills operam em escopo restrito.
+
+**NÃO use Skills Customizadas quando:**
+- Uma skill genérica da comunidade resolve o problema (evitar reinventar a roda).
+- A regra a validar muda frequentemente — prefira documentar em um DOC normativo e deixar o Agente interpretar.
+
+> **Referência completa de contra-indicações por skill:** Ver seção "Quando NÃO Usar" no [Levantamento de Skills Prioritárias](Levantamento_Skills_Prioritarias.md#6-quando-não-usar-cada-skill-contra-indicações).
+
+---
 
 ## 4. Tarefas de Implantação
 

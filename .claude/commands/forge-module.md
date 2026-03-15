@@ -2,6 +2,8 @@
 
 Gerar a estrutura completa de pastas e arquivos iniciais para um novo módulo (MOD-XXX), servindo como boilerplate arquitetural governado seguindo o paradigma XP-Driven.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `forge-module`
+
 ## Argumento
 
 $ARGUMENTS deve conter o caminho da User Story (ex: `docs/04_modules/user-stories/features/US-MOD-020-F01.md`). Se não fornecido, pergunte ao usuário.
@@ -36,9 +38,9 @@ Crie o diretório em `docs/04_modules/mod-{ID}-{nome}/` com a árvore padrão:
 Stubs obrigatórios em estado DRAFT:
 
 - `requirements/data/DATA-003.md` — Catálogo de Domain Events (tabela: `event_type`, `description`, `origin_command`, `emit_permission`, `view_rule`, `notify`, `sensitivity_level`)
-- `requirements/sec/SEC-EventMatrix.md` — Matriz de Autorização de Eventos (tabela: `action`, `event_type`, `emit_perm`, `view`, `notify`)
+- `requirements/sec/SEC-EventMatrix.md` — Matriz de Autorização de Eventos (tabela: `action`, `event_type`, `emit_perm`, `view`, `notify`). Usar DOC-FND-000 §3 como modelo canônico.
 
-Ambos com header de automação e metadados `estado_item: DRAFT`, `rastreia_para: US-MOD-{ID}, DOC-ARC-003`.
+Ambos com header de automação e metadados `estado_item: DRAFT`, `rastreia_para: US-MOD-{ID}, DOC-ARC-003, DOC-FND-000`.
 
 ## PASSO 4: Geração dos Arquivos
 

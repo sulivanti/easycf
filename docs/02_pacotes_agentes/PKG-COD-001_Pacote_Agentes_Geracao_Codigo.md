@@ -24,7 +24,7 @@ Este pacote define **6 agentes especialistas** para geração de código e valid
     "contract": "DOC-AGN-BASE",
     "agent_id": "AGN-COD-XX",
     "agent_name": "…",
-    "version": "1.2",
+    "version": "1.3",
     "mode": "conservador|criativo",
     "run_id": "uuid-opcional",
     "attempt": 1

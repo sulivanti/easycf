@@ -2,6 +2,8 @@
 
 Gera documentação técnica padronizada para componentes OO do projeto (handlers Fastify, repositórios Drizzle, services, middlewares).
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `create-oo-doc`
+
 > **Quando usar:** Ao gerar ou refatorar:
 > - Fastify handler ou plugin (`src/modules/*/routes/`, `src/modules/*/handlers/`)
 > - Repositório Drizzle (`src/modules/*/repositories/`)

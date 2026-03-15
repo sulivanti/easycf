@@ -2,6 +2,8 @@
 
 Atualiza uma seção de índice/tabela em um arquivo markdown com lista de arquivos de um diretório especificado.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `update-index`
+
 ## Argumento
 
 $ARGUMENTS deve conter o arquivo alvo e o diretório a indexar (ex: `docs/INDEX.md docs/04_modules/`). Se não fornecido, pergunte ao usuário:

@@ -6,7 +6,9 @@ const { execSync } = require('child_process');
 // This script validates that any modified specification file inside docs/04_modules
 // has its corresponding CHANGELOG.md updated and contains the automation marker.
 
-const MODULES_DIR = 'docs/04_modules';
+// Path centralizado (.agents/paths.json)
+const pathsConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../paths.json'), 'utf8'));
+const MODULES_DIR = pathsConfig.paths.modules.replace(/\/$/, '');
 const AUTOMATION_MARKER = 'ARQUIVO GERIDO POR AUTOMAÇÃO. NÃO EDITE DIRETAMENTE.';
 
 function getChangedFiles() {

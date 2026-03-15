@@ -4,7 +4,9 @@ const yaml = require('js-yaml');
 const Ajv = require('ajv/dist/2020');
 const ajv = new Ajv({ strict: false });
 
-const schemaPath = path.resolve(__dirname, '../docs/05_manifests/schemas/screen-manifest.v1.schema.json');
+// Paths centralizados (.agents/paths.json)
+const pathsConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../paths.json'), 'utf8'));
+const schemaPath = path.resolve(__dirname, '../..', pathsConfig.paths.manifest_schemas, 'screen-manifest.v1.schema.json');
 let schema;
 try {
     schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
@@ -14,7 +16,7 @@ try {
 }
 const validate = ajv.compile(schema);
 
-const manifestsDir = path.resolve(__dirname, '../docs/05_manifests/screens');
+const manifestsDir = path.resolve(__dirname, '../..', pathsConfig.paths.manifest_screens);
 let manifests = [];
 
 try {

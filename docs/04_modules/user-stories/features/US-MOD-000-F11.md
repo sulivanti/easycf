@@ -11,7 +11,7 @@
 - **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
-- **rastreia_para:** DOC-PADRAO-001, DOC-ARC-001
+- **rastreia_para:** DOC-PADRAO-001, DOC-ARC-001, DOC-DEV-001
 - **nivel_arquitetura:** 0 (infraestrutura do framework — sem domínio de negócio)
 - **referencias_exemplos:** `GET /health` em `packages/core-api/src/bootstrap/createApp.ts`
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*

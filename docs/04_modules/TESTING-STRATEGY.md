@@ -1,4 +1,4 @@
-# TESTING-STRATEGY — Estratégia Global de Testes (EasyA1)
+# TESTING-STRATEGY — Estratégia Global de Testes (EasyA2)
 
 > **Para agentes GenAI:** Este documento define os padrões e regras obrigatórios de testes para todos os módulos.
 > Antes de gerar qualquer código de teste, leia esta estratégia. Cada módulo complementa estes padrões globais com seu próprio `requirements/tst/TST-NNN.md`.
@@ -7,7 +7,7 @@
 
 ## 1. Filosofia XP-Driven (Executable Specifications)
 
-O EasyA1 abandonou a criação de stubs de testes desconexos (`TST-NNN.md`). Adotamos a abordagem ágil onde **o código de teste (Vitest) é a única fonte da verdade e o contrato executável final**.
+O EasyA2 abandonou a criação de stubs de testes desconexos (`TST-NNN.md`). Adotamos a abordagem ágil onde **o código de teste (Vitest) é a única fonte da verdade e o contrato executável final**.
 
 1. **Spec no Código (TDD/BDD)** — O comportamento desejado (`FR-NNN` e `BR-NNN`) guia o desenvolvedor a escrever os cenários (test specs) diretamente nos arquivos `.test.ts`.
 2. **Cobertura validada em CI** — O gatilho de sucesso do `DONE` na sua User Story é a pipeline rodar sem erros.

@@ -2,6 +2,8 @@
 
 Valida Screen Manifests YAML contra schema v1 e regras de DOC-UX-010. Verifica nomenclatura, catálogo de ações, telemetria/rastreabilidade e error mapping.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `validate-manifest`
+
 > Esta skill NÃO EXECUTA código. Lê e analisa YAML estaticamente.
 > Complementar a `/project:validate-openapi` (contrato da API).
 
@@ -25,7 +27,7 @@ Leia obrigatoriamente:
 | `entity_type` | Pattern `^[a-z][a-z0-9_]*$` | Crítica |
 | `routes` | Array com 1+ items (`path` + `method`) | Crítica |
 | `telemetry_defaults` | `event_name`, `required_fields` (min 3), `propagate_headers` | Crítica |
-| `permissions` | 1+ propriedade, formato `recurso:acao` | Crítica |
+| `permissions` | 1+ propriedade, formato `recurso:acao` (catálogo RBAC em DOC-FND-000 §2) | Crítica |
 | `actions` | Array com 1+ item | Crítica |
 | `ui_rules` | `action_visibility` e `action_enablement` | Crítica |
 | `error_mapping` | `default_user_message` e `http_status` | Crítica |

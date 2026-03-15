@@ -1,6 +1,13 @@
 # DOC-ARC-002 — Estratégia de Testes Automáticos
 
-> **Escopo:** Normativo global — aplicável a todos os módulos e agentes de código (`AGN-COD-CORE`, `AGN-COD-API`).  
+- **id:** DOC-ARC-002
+- **version:** 1.0.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-03-04
+- **owner:** arquitetura
+- **scope:** global (todos os módulos e agentes)
+- **supersedes:** DOC-DEV-001 §5.5
+
 > **Fonte de verdade:** Este documento substituiu a seção §5.5 do `DOC-DEV-001`.
 
 ---
@@ -61,13 +68,15 @@ Garantir a saúde do CI/CD com testes rápidos, confiáveis e que valham o custo
 
 ## Gate de CI (MUST)
 
-| Gate | Tipo | Critério de Falha |
-|---|---|---|
-| `lint` | Unitário | Erro de linting (ESLint, Prettier) |
-| `test:unit` | Unitário | Qualquer falha em testes unitários |
-| `test:integration` | Integração | Qualquer falha em testes de integração |
-| `openapi:lint` | Contrato | Spectral reporta erro no OpenAPI |
-| `openapi:contract-test` | Contrato | Response real diverge do schema |
+| Gate | Tipo | Critério de Falha | Status |
+|---|---|---|---|
+| `lint` | Unitário | Erro de linting (ESLint, Prettier) | ⚠️ PENDENTE |
+| `test:unit` | Unitário | Qualquer falha em testes unitários | ⚠️ PENDENTE |
+| `test:integration` | Integração | Qualquer falha em testes de integração | ⚠️ PENDENTE |
+| `openapi:lint` | Contrato | Spectral reporta erro no OpenAPI | ⚠️ PENDENTE |
+| `openapi:contract-test` | Contrato | Response real diverge do schema | ⚠️ PENDENTE |
+
+> ⚠️ Todos os gates acima estão pendentes de implementação. Ver [Status de Implementação (Gap Analysis)](#status-de-implementação-gap-analysis---2026-03-04) abaixo.
 
 ---
 
@@ -94,11 +103,4 @@ Atualmente, o projeto encontra-se em deficit com este normativo. As seguintes pe
 
 ## Metadados
 
-- id: DOC-ARC-002
-- title: Estratégia de Testes Automáticos
-- version: 1.0
-- status: Ativo
-- data_ultima_revisao: 2026-03-04
-- owner: arquitetura
-- scope: global (todos os módulos e agentes)
-- migrado_de: DOC-DEV-001 §5.5
+> Bloco de metadados canônico movido para o topo do documento (padrão DOC-PADRAO-META v1.0.0).

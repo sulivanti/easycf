@@ -2,6 +2,8 @@
 
 Remover de forma definitiva e governada toda a estrutura de documentação (pasta raiz) de um determinado Módulo em `docs/04_modules/`.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `delete-module`
+
 ## Argumento
 
 $ARGUMENTS deve conter o ID do módulo (ex: `MOD-005` ou apenas `005`). Se não fornecido, pergunte ao usuário.

@@ -117,7 +117,7 @@ A automação arquitetural orientada a Inteligência Artificial (Antigravity) pe
 **O Processo (Ciclo de Vida):**
 
 1. **User Story (US):** Cria-se/aprova-se o requisito de negócio na pasta `user-stories/features/`.
-2. **Geração Baseline:** Uma vez que essa US alcança o status `READY`, usufrui-se de rotinas automáticas de agentes (`scaffold-module`) que fundem essa US aos contratos obrigatórios (`DOC-DEV-001`), forjando o boilerplate (schemas, queries, routes, handlers em níveis 0/1/2).
+2. **Geração Baseline:** Uma vez que essa US alcança o status `READY`, usufrui-se de rotinas automáticas de agentes (`forge-module`) que fundem essa US aos contratos obrigatórios (`DOC-DEV-001`), forjando o boilerplate (schemas, queries, routes, handlers em níveis 0/1/2).
 3. **Evolução Segura (Amendments):** Códigos ou regras alteradas após aprovação inicial nunca sobressaem silenciosamente nos documentos. Documenta-se em Emendas — Improvements (M), Correções (C) e Revisões (R) via skill `create-amendment`.
 
 As **Agent Skills** repousam fisicamente em `.agents/skills/`.

@@ -2,6 +2,8 @@
 
 Valida estaticamente código de endpoint Fastify contra contratos arquiteturais inegociáveis: RBAC, rastreabilidade e RFC 9457. Atua como arquiteto revisor automatizado.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `validate-endpoint`
+
 > Esta skill NÃO EXECUTA código. Lê o arquivo e aponta violações contratuais antes de deploy/merge.
 
 ## Argumento

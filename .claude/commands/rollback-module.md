@@ -1,5 +1,7 @@
 # Skill: rollback-module
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `rollback-module`
+
 > **CUIDADO: Uso exclusivo para cenário de erro estratégico.**
 > Ativar somente quando o `forge-module` gerou um módulo prematuramente ou incorretamente. NÃO use para ajustes de conteúdo — para isso, use `/project:create-amendment`. Este fluxo é destrutivo.
 

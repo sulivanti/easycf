@@ -1,14 +1,13 @@
-# DOC-ESC-001 — Escala de Arquitetura (Nível 0/1/2) + Gatilhos de Adoção (TS + Node + Next.js)
+# DOC-ESC-001 — Escala de Arquitetura (Nível 0/1/2) + Gatilhos de Adoção (TS + Node + Vite/React)
 
-**Versão:** 1.0  
-**Status:** Normativo (aplicação obrigatória conforme regras abaixo)  
-**Escopo:** Projetos TypeScript com **Node.js (API)** e **Next.js (Web)** em **monorepo**.
+- **id:** DOC-ESC-001
+- **version:** 1.0.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-02-28
+- **owner:** arquitetura
+- **scope:** global (projetos TS + Node + Vite/React em monorepo)
 
-**Documentos Relacionados:**
-
-- **DOC-DEV-001**: Documento de Especificação Executável
-- **DOC-GNP-00 / DOC-CEE-00 / DOC-CHE-00**: Guia Normativo e Padrões
-- **DOC-GPA-001**: Guia Padrão de Agente
+**Documentos Relacionados:** DOC-DEV-001, DOC-GNP-00, DOC-GPA-001
 
 ---
 
@@ -468,7 +467,7 @@ Se um módulo ficou "pesado demais":
 
 - `controller.ts` valida + chama `CreateCustomerUseCase`
 - `CreateCustomerUseCase` usa `CustomerRepository` (port)
-- `PrismaCustomerRepository` (infra) implementa port
+- `DrizzleCustomerRepository` (infra) implementa port
 - `Email` (VO) valida e normaliza, se necessário
 
 ### 8.3 Nível 2 — `PlaceOrder`
@@ -509,6 +508,14 @@ Se um módulo ficou "pesado demais":
 ---
 
 ## 10) Checklist único (para templates e auditoria)
+
+### Definições dos Gates de CI
+
+- **EX-CI-003** — Scan de Dependências e Pinning Seguros: Npm Audit Strict, Trivy, Dependabot.
+- **EX-CI-004** — Validação de Idempotência Criptográfica de Métodos Mutáveis: ESLint customizado com warnings/errors L1 e L2.
+- **EX-CI-005** — Garantia de Migrações Idempotentes e Integridade Tenant: `db-lint.ts` e dry-run isolado.
+- **EX-CI-006** — Conformidade com OpenAPI/Versionamento/Problem Details: Linter Spectral OpenAPI (`npx spectral`).
+- **EX-CI-007** — Identificação (ID) Rastreável no PR: `verify-contract-ids.js` ou Regex Bash.
 
 ### Itens que DEVEM existir no repositório (MUST)
 

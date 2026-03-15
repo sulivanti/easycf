@@ -2,6 +2,8 @@
 
 Cria um novo arquivo de especificação técnica, otimizado para consumo por IA Generativa.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `create-specification`
+
 > **Quando usar:** Para contratos técnicos e arquiteturais que NÃO são módulos de negócio:
 > - Estratégia de cache (Redis, TTL, invalidação)
 > - Padrão de eventos de domínio (formato, auditoria, garantias)
@@ -32,5 +34,5 @@ Nomenclatura: `spec-[a-z0-9-]+.md` (ex: `spec-cache-strategy-products.md`)
 
 ## Template
 
-Leia o template canônico antes de criar: `.agents/skills/_templates/spec-template.md`
+Leia o template canônico antes de criar: `.agents/templates/spec-template.md`
 Copie a estrutura completa e preencha todas as seções.

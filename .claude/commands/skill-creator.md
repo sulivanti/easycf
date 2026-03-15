@@ -19,25 +19,17 @@ Entenda o que o usuário quer:
 ### 2. Pesquisar e Entrevistar
 
 - Pergunte sobre edge cases, formatos, critérios de sucesso
-- Consulte skills existentes em `.agents/skills/` para padrões
+- Consulte comandos existentes em `.claude/commands/` para padrões
 - Pesquise documentação relevante em `docs/01_normativos/`
 
-### 3. Escrever SKILL.md
+### 3. Escrever Comando Claude Code
 
-Crie o arquivo em `.agents/skills/{nome}/SKILL.md` com:
+Crie o arquivo em `.claude/commands/{nome}.md` com:
 
-```yaml
----
-name: nome-da-skill
-description: Descrição concisa com triggers
----
-```
-
-E o corpo com: objetivo, gatilhos, parâmetros, passos de execução, formato de saída.
-
-### 4. Criar Comando Claude Code
-
-Crie também `.claude/commands/{nome}.md` para funcionar como slash command.
+- Título: `# Skill: nome-da-skill`
+- Seção de argumento com `$ARGUMENTS`
+- Corpo com: objetivo, gatilhos, parâmetros, passos de execução, formato de saída
+- Sem frontmatter YAML (markdown puro)
 
 ### 5. Criar Test Cases
 
@@ -47,16 +39,16 @@ Desenvolva 2-3 prompts realistas com outputs esperados para validação.
 
 - Execute os test cases
 - Avalie resultados qualitativamente e quantitativamente
-- Use `.agents/skills/skill-creator/eval-viewer/generate_review.py` para visualizar
+- Use `.agents/skill-creator/eval-viewer/generate_review.py` para visualizar
 - Reescreva baseado em feedback
 
 ### 7. Otimizar Description
 
-Use `.agents/skills/skill-creator/scripts/improve_description.py` para melhorar a precisão de triggering.
+Use `.agents/skill-creator/scripts/improve_description.py` para melhorar a precisão de triggering.
 
 ### 8. Empacotar
 
-Use `.agents/skills/skill-creator/scripts/package_skill.py` para distribuição.
+Use `.agents/skill-creator/scripts/package_skill.py` para distribuição.
 
 ## Scripts Disponíveis
 

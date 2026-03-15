@@ -1,0 +1,20 @@
+{
+  "$schema": "paths.v1",
+  "description": "Configuração central de caminhos do monorepo. Scripts e skills devem derivar paths deste arquivo.",
+  "paths": {
+    "docs":             "docs/",
+    "normativos":       "docs/01_normativos/",
+    "pacotes_agentes":  "docs/02_pacotes_agentes/",
+    "especificacoes":   "docs/03_especificacoes/",
+    "modules":          "docs/04_modules/",
+    "manifests":        "docs/05_manifests/",
+    "manifest_screens": "docs/05_manifests/screens/",
+    "manifest_schemas": "docs/05_manifests/schemas/",
+    "openapi":          "apps/api/openapi/",
+    "drizzle_schemas":  "src/modules/*/schema.ts",
+    "fastify_routes":   "src/modules/*/routes/*.route.ts",
+    "templates":        ".agents/templates/",
+    "index":            "docs/INDEX.md",
+    "user_stories":     "docs/04_modules/user-stories/"
+  }
+}

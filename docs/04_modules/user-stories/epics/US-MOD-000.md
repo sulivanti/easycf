@@ -136,7 +136,7 @@ Funcionalidade: Governança de documentos normativos no framework de geração d
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-Este épico sai de `RASCUNHO` / `REFINING` e vai para a fila de aprovação **SE E SOMENTE SE**:
+Este épico sai de `DRAFT` e vai para a fila de aprovação **SE E SOMENTE SE**:
 
 - [ ] Owner claro definido (arquitetura).
 - [ ] Todos os documentos normativos referenciados estão **versionados e acessíveis** em `docs/01_normativos/`.
@@ -252,7 +252,7 @@ Nenhuma pendência estrutural em aberto (Nível arquitetural 2 consolidado e own
 | --- | --- | --- | --- |
 | 0.8.0 | 2026-03-09 | arquitetura | Criação da US-MOD-000-F17 (Sign in with Apple) em status DRAFT — cobertura SSO Apple ID (OIDC/JWKS, apple_sub, user object único). |
 | 0.7.1 | 2026-03-08 | arquitetura | Promoção de US-MOD-000-F02 (MFA / TOTP) para READY. |
-| 0.7.0 | 2026-03-08 | arquitetura | Promoção de US-MOD-000-F02 (MFA / TOTP) para REFINING. |
+| 0.7.0 | 2026-03-08 | arquitetura | Enquadramento técnico de US-MOD-000-F02 (MFA / TOTP) em DRAFT. |
 | 0.6.0 | 2026-03-06 | arquitetura | Inclusão do DOC-PADRAO-005 e criação oficial da US-MOD-000-F16 (Storage e Upload Centralizado). |
 | 0.5.0 | 2026-03-06 | arquitetura | Adição das features de Telemetria (F13), Correlação E2E (F14) e Script CI (F15) mapeando gaps das US-044/047 |
 | 0.4.0 | 2026-03-06 | arquitetura | Adição de US-MOD-000-F12 (Catálogo de Permissões): gap US-013 — CRUD de escopos pré-definidos, validação semântica no F06, integridade referencial RBAC |

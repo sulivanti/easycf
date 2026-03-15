@@ -1,6 +1,6 @@
-# 04_modules — Documentação Modular do EasyA1
+# 04_modules — Documentação Modular do EasyA2
 
-> **Para agentes GenAI:** Este diretório é a **fonte de verdade técnica por módulo** do sistema EasyA1.
+> **Para agentes GenAI:** Este diretório é a **fonte de verdade técnica por módulo** do sistema EasyA2.
 > Antes de gerar qualquer código, leia o `mod.md` do módulo relevante e os documentos `requirements/` correspondentes.
 > Jamais referencie arquivos de outros diretórios de documentação como autoridade maior — aqui é onde os requisitos são detalhados.
 
@@ -8,7 +8,7 @@
 
 ## 1. Propósito
 
-A pasta `04_modules` organiza a **especificação técnica detalhada** de cada módulo de negócio do EasyA1. Enquanto o `DOC-DEV-001` em `docs/01_normativos/` define as regras e o template global, este diretório contém o **conteúdo completo**: regras de negócio, requisitos funcionais, contratos de dados, integrações, segurança, UX e decisões arquiteturais.
+A pasta `04_modules` organiza a **especificação técnica detalhada** de cada módulo de negócio do EasyA2. Enquanto o `DOC-DEV-001` em `docs/01_normativos/` define as regras e o template global, este diretório contém o **conteúdo completo**: regras de negócio, requisitos funcionais, contratos de dados, integrações, segurança, UX e decisões arquiteturais.
 
 A pasta segue o princípio de **rastreabilidade**: qualquer mudança de especificação deve ter um rastro de ID, data, autor e status — nunca se edita o passado; sempre se cria um delta.
 
@@ -177,7 +177,7 @@ Quais outros módulos ou entidades este módulo depende.
 Lista de todos os canônicos e ADRs com caminhos relativos.
 
 ## Metadados
-- estado_item: DRAFT | REFINING | READY
+- estado_item: DRAFT | READY
 - owner: arquitetura
 - data_ultima_revisao: YYYY-MM-DD
 - arch_level: N0 | N1 | N2
@@ -193,7 +193,7 @@ Todo documento (canônico **ou** amendment) deve conter ao final:
 
 ```markdown
 ## Metadados
-- estado_item: DRAFT | REFINING | READY | ACEITA (ADR)
+- estado_item: DRAFT | READY | ACEITA (ADR)
 - owner: arquitetura
 - data_ultima_revisao: YYYY-MM-DD
 - rastreia_para: IDs impactados/relacionados
@@ -284,14 +284,14 @@ Documenta a decisão de adotar *State-stored + Domain Events + Inbox/Outbox* par
 
 | Módulo                                            | Status   | Descrição                                            | Nível Arch      |
 |---------------------------------------------------|----------|------------------------------------------------------|-----------------|
-| [mod-000-foundation](./mod-000-foundation/mod.md) | READY    | Identidade, IAM, Auditoria, Core Components          | N0 — Núcleo     |
-| mod-001-backoffice-admin                          | REFINING | Shell de Auth, App Shell, Dashboard Admin (UX-First) | N1 — Clean Leve |
+| mod-000-foundation *(pendente forge-module)* | READY    | Identidade, IAM, Auditoria, Core Components          | N0 — Núcleo     |
+| mod-001-backoffice-admin                          | DRAFT    | Shell de Auth, App Shell, Dashboard Admin (UX-First) | N1 — Clean Leve |
 
 ---
 
 ## 11. Criando um Novo Módulo (Guia para Agentes)
 
-> **🚀 Automação Disponível:** Use a skill **`scaffold-module`** para automatizar todo o processo abaixo. Ela garante que todos os arquivos sejam criados no local correto e com os metadados normativos pré-preenchidos.
+> **🚀 Automação Disponível:** Use a skill **`forge-module`** para automatizar todo o processo abaixo. Ela garante que todos os arquivos sejam criados no local correto e com os metadados normativos pré-preenchidos.
 
 Ao criar um novo módulo `mod-NNN-nome` manualmente, siga este checklist obrigatório:
 
@@ -319,7 +319,7 @@ Ao criar um novo módulo `mod-NNN-nome` manualmente, siga este checklist obrigat
 ## 12. Regras de Operação (Resumo para Agentes)
 
 1. **Stubs e Normas**: As regras de ouro de código e spec residem no `DOC-DEV-001` (`docs/01_normativos/`). Detalhes funcionais ficam aqui.
-2. **Automação**: Priorize o uso da skill `scaffold-module` para novos MODs.
+2. **Automação**: Priorize o uso da skill `forge-module` para novos MODs.
 3. **Nunca edite** um documento canônico diretamente para adicionar funcionalidade → crie um amendment.
 4. **Toda mudança** entra no `CHANGELOG.md` do módulo com status e evidência.
 5. **Ao integrar** um amendment: atualize o canônico, marque o delta como `INTEGRADA`, inclua link para PR/issue.

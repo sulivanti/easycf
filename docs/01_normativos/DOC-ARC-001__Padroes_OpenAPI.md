@@ -1,6 +1,13 @@
 # DOC-ARC-001 — Padrões de Contrato OpenAPI/Swagger
 
-> **Escopo:** Normativo global — aplicável a todas as rotas sob `/api/v{X}/...` em todos os módulos.  
+- **id:** DOC-ARC-001
+- **version:** 1.0.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-03-04
+- **owner:** arquitetura
+- **scope:** global (todos os módulos)
+- **supersedes:** DOC-DEV-001 §5.3
+
 > **Fonte de verdade:** Este documento substituiu a seção §5.3 do `DOC-DEV-001`.
 
 ---
@@ -26,7 +33,7 @@ Para cada `paths.{path}.{method}`:
    - `Idempotency-Key`: obrigatório em operações de escrita com efeito colateral quando aplicável.
 5. **Erros padronizados:** respostas `4xx/5xx` MUST usar `application/problem+json` (RFC 9457) com `extensions.correlationId`.
    - Para 422: `extensions.invalid_fields[]` (campos inválidos).
-6. **Paginação e filtros:** endpoints de listagem MUST padronizar query params + envelope `{ data, meta }` (cursor quando aplicável).
+6. **Paginação e filtros:** endpoints de listagem MUST padronizar query params + envelope `{ data, meta }`. Endpoints de timeline/histórico DEVEM usar **Cursor Pagination** (`?limit=N&cursor=...`); listagens CRUD simples PODEM usar **Offset Pagination** (`?page=N&page_size=N`).
 7. **Segurança:** declarar `security` por operação (ou global) e `components.securitySchemes` (JWT/OAuth/etc).
 
 ---
@@ -93,17 +100,10 @@ Um endpoint só é "Done" se:
   - **View:** ACL da entity originária + tenant
   - `visibility_level/sensitivity_level`: guard-rail/mascaramento
 
-> Ver regras completas em: `docs/04_modules/mod-000-foundation/requirements/sec/SEC-000.md → SEC-EventMatrix`
+> Ver regras completas em: DOC-FND-000 §3 (SEC-EventMatrix — Matriz de Autorização de Eventos)
 
 ---
 
 ## Metadados
 
-- id: DOC-ARC-001
-- title: Padrões de Contrato OpenAPI/Swagger
-- version: 1.0
-- status: Ativo
-- data_ultima_revisao: 2026-03-04
-- owner: arquitetura
-- scope: global (todos os módulos)
-- migrado_de: DOC-DEV-001 §5.3
+> Bloco de metadados canônico movido para o topo do documento (padrão DOC-PADRAO-META v1.0.0).

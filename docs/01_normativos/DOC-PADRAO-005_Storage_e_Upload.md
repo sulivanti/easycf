@@ -1,6 +1,11 @@
 # DOC-PADRAO-005 — Armazenamento em Storage: Uploads, Anexos e Arquivos
 
-**Versão:** 1.0.0 | **Criação:** 2026-03-06 | **Status:** READY
+- **id:** DOC-PADRAO-005
+- **version:** 1.0.0
+- **status:** READY
+- **data_ultima_revisao:** 2026-03-06
+- **owner:** infraestrutura
+- **scope:** global (storage provider-agnóstico)
 
 ---
 
@@ -333,8 +338,8 @@ Todo `entity_type` utilizado em uploads DEVE ser registrado nesta tabela antes d
 
 | entity_type | Módulo | Purposes permitidos | Observações |
 |---|---|---|---|
-| `user` | MOD-000 | `avatar`, `attachment` | Avatar: único ativo por usuário |
-| `tenant` | MOD-000 | `attachment` | Documentos do tenant |
+| `user` | Foundation (DOC-FND-000 §6) | `avatar`, `attachment` | Avatar: único ativo por usuário |
+| `tenant` | Foundation (DOC-FND-000 §6) | `attachment` | Documentos do tenant |
 | `import_job` | Core | `import` | Vinculado ao `job_id` |
 | `export_job` | Core | `export` | Expira após `expires_at` |
 

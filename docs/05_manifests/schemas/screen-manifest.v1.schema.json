@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://easy-a1.dev/schemas/screen-manifest.v1.schema.json",
+    "$id": "https://easy-a2.dev/schemas/screen-manifest.v1.schema.json",
     "title": "Screen Manifest v1",
     "type": "object",
     "required": [

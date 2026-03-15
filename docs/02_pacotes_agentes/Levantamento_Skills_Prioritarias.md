@@ -109,13 +109,31 @@ A versão anterior deste documento (v1.0) não documentava as skills genéricas 
 | `postman-collection-generator` | Não documentada | ❌ Removida — não alinhada com o stack/contratos do projeto |
 | `theme-factory` | Não documentada | ✅ Instalada (utilitária para artefatos) |
 | `update-markdown-file-index` | Não documentada | ✅ Instalada (manutenção de índices docs) |
-
 | `validate-openapi-contract` | "Futura / A criar" | ✅ Implementada |
 | `validate-fastify-endpoint` | Não documentada | ✅ Implementada |
 | `create-amendment` | Não documentada | ✅ Implementada |
 | `delete-module` | Não documentada | ✅ Implementada |
 | `rollback-module` | Não documentada | ✅ Implementada |
 | `validate-audit-hooks` | "Futura / A criar" | ⚠️ Pendente — prioridade média |
+
+---
+
+## 6. Quando NÃO Usar Cada Skill (Contra-indicações)
+
+| Skill | NÃO usar quando... |
+| --- | --- |
+| `forge-module` | O módulo já foi forjado e possui pasta em `04_modules/`. Para alterações pós-forge, use `create-amendment` ou `update-specification`. |
+| `create-amendment` | O item ainda está em estado `DRAFT`. Emendas só se aplicam a itens `READY` que foram congelados. Em DRAFT, edite diretamente. |
+| `create-specification` | A especificação é de um módulo padrão (MOD-XXX). Use `forge-module` para criar a estrutura completa. `create-specification` é para especificações transversais avuladas. |
+| `update-specification` | A alteração é trivial (typo, formatação). Não gere versionamento formal para correções cosméticas — edite diretamente e registre no CHANGELOG. |
+| `delete-module` | O módulo já teve PRs mergeados ou código em produção. Neste caso, marque como `DESCONTINUADO` em vez de excluir, preservando rastreabilidade. |
+| `rollback-module` | O módulo já avançou além de DRAFT (itens em READY/DONE). Rollback é seguro apenas para módulos recém-forjados sem progresso de implementação. |
+| `validate-drizzle-schemas` | O schema é um arquivo de migração gerado (`drizzle/migrations/`). Validação aplica-se aos schemas de definição (`schema.ts`), não às migrações. |
+| `validate-fastify-endpoint` | A rota é interna/healthcheck sem autenticação. A skill assume rotas autenticadas com RBAC; rotas públicas darão falsos positivos. |
+| `validate-openapi-contract` | O arquivo OpenAPI é um rascunho parcial em fase de design. A skill espera um contrato completo e reportará erros em stubs intencionais. |
+| `validate-screen-manifest` | O manifest é experimental/PoC sem operationIds definidos. A skill exige integridade entre manifest ↔ OpenAPI ↔ RBAC. |
+| `drizzle-orm` | A consulta envolve raw SQL complexo (CTEs, window functions). A skill foca em padrões do query builder do Drizzle, não em SQL avançado. |
+| `skill-creator` | A skill a ser criada é genérica e já existe na comunidade. Verifique o catálogo de skills prontas antes de criar uma customizada. |
 
 ---
 

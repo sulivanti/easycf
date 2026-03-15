@@ -2,6 +2,8 @@
 
 Valida e audita contrato OpenAPI contra regras inegociáveis do DOC-ARC-001: versionamento, headers obrigatórios, Problem Details RFC 9457, lint Spectral e rastreabilidade.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `validate-openapi`
+
 > Esta skill NÃO EXECUTA servidores. Lê e analisa arquivos estaticamente.
 > Complementar a `/project:validate-endpoint` (que verifica TypeScript do handler).
 

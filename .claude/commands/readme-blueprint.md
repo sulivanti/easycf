@@ -2,6 +2,8 @@
 
 Gera ou atualiza o `README.md` do repositório analisando documentos normativos, módulos e manifestos.
 
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `readme-blueprint`
+
 > **Quando usar:**
 > - Onboarding de novo desenvolvedor
 > - Após encerrar ciclo de entrega (módulo em produção)

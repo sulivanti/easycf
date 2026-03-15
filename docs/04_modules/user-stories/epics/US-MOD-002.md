@@ -1,18 +1,23 @@
-# US-MOD-002 — Cadastro de Usuários
+# US-MOD-002 — Cadastro de Usuários (Épico)
 
 **Status Ágil:** `DRAFT`
-**Data:** 2026-03-09
-**Autor(es):** Product Owner / Squad
-**Módulo Destino:** MOD-002
-**Referências Normativas:** DOC-DEV-001, DOC-ARC-001, SEC-000-01, LGPD-BASE-001
+**Versão:** 0.2.1
+**Data:** 2026-03-15
+**Autor(es):** Product Owner / Squad + Arquitetura
+**Módulo Destino:** **MOD-002** (Cadastro Administrativo de Usuários)
+**Referências Normativas:** DOC-DEV-001, DOC-ARC-001, SEC-000-01, LGPD-BASE-001, DOC-PADRAO-005, ADR-000-01
 
 ## Metadados de Governança
 
 - **status_agil:** DRAFT
 - **owner:** Product Owner
-- **data_ultima_revisao:** 2026-03-09
-- **rastreia_para:** EPIC-MOD-002, DOC-DEV-001, DOC-ARC-001, SEC-000-01, LGPD-BASE-001
+- **data_ultima_revisao:** 2026-03-15
+- **rastreia_para:** US-MOD-002, DOC-DEV-001, DOC-ARC-001, SEC-000-01, LGPD-BASE-001, ADR-000-01, INT-000-MAIL
 - **nivel_arquitetura:** 1
+- **wave_entrega:** Wave 1
+- **epico_pai:** *(este arquivo é o épico)*
+- **manifests_vinculados:** UX-USER-001 (cadastro admin), UX-USER-002 (detalhe/edição)
+- **pendencias:** D11 (CPF configurável por tenant), D14 (escopo MOD-003+), D15 (SEC-000 — política de segurança não documentada), D16 (LGPD-BASE-001 — normativo LGPD não documentado), D17 (ADR-000-01 — ADR de separação de endpoints não documentada), D18 (INT-000-MAIL — contrato de integração e-mail não documentado)
 - **referencias_exemplos:** N/A
 - **evidencias:** N/A
 
@@ -276,11 +281,13 @@ O acesso ao recurso deve ser negado.
 
 ## 10. Dependências
 
-* Módulo de autenticação/autorização
-* Módulo de perfis e permissões
-* Serviço de envio de e-mail (se houver convite/ativação)
-* Política de segurança de senha
-* Camada de auditoria/logs
+* Módulo de autenticação/autorização (US-MOD-000-F01, F06)
+* Módulo de perfis e permissões (US-MOD-000-F06, F12)
+* Serviço de envio de e-mail — INT-000-MAIL (sendInviteEmail) para fluxo de convite
+* Módulo de Storage e Upload Centralizado (US-MOD-000-F16 / DOC-PADRAO-005) — para upload de avatar
+* Política de segurança de senha (SEC-000)
+* Camada de auditoria/logs (domain_events com X-Correlation-ID)
+* ADR-000-01 — Separação de endpoints: `POST /api/v1/admin/users` (este módulo) vs `POST /api/v1/users` (F05, auto-registro)
 * Definição de campos obrigatórios pelo negócio
 
 ---
@@ -345,3 +352,25 @@ O acesso ao recurso deve ser negado.
 * Confirmar necessidade de CPF/documento e regras de mascaramento.
 * Avaliar necessidade de captcha, antifraude ou rate limit para APIs públicas.
 * Confirmar integração com diretório externo ou IAM corporativo.
+
+---
+
+## 16. Regra de Aprovação em Cascata
+
+> 📌 **Regra de aprovação em cascata:** Este épico US-MOD-002 deve ser aprovado **antes** de qualquer sub-história associada. Cada sub-história futura deve ser aprovada individualmente antes de ter seu código scaffoldado ou alterado por automação.
+
+**Endpoint designado:** `POST /api/v1/admin/users` (protegido, JWT + `requireScope('users:admin:create')`) — conforme ADR-000-01.
+
+---
+
+## 17. CHANGELOG do Épico
+
+| Versão | Data | Responsável | Descrição |
+| --- | --- | --- | --- |
+| 0.2.1 | 2026-03-15 | arquitetura | Correção de manifests vinculados (UX-USR → UX-USER-001/002). Registro de pendências D15–D18: SEC-000, LGPD-BASE-001, ADR-000-01, INT-000-MAIL como documentos inexistentes. |
+| 0.2.0 | 2026-03-14 | arquitetura | Reestruturação como épico formal: cascata, metadados padronizados, dependência F16/Storage, referência ADR-000-01 e INT-000-MAIL. Correção de EPIC-MOD-002 → US-MOD-002. (C03, C08) |
+| 0.1.0 | 2026-03-09 | Product Owner | Criação inicial da US de cadastro de usuários |
+
+---
+
+> ⚠️ **Atenção:** As automações de arquitetura (`forge-module` e `create-amendment`) **SÓ PODEM SER EXECUTADAS** se este épico estiver marcado com Status `APPROVED`.

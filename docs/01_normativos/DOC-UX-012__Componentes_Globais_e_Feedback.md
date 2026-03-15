@@ -1,10 +1,11 @@
 # DOC-UX-012 — Componentes Globais e Feedback
 
-**Status:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-06
-**Autor(es):** Produto + Arquitetura + UX
-**Rastreia para:** DOC-DEV-001, DOC-ARC-003, US-MOD-000
+- **id:** DOC-UX-012
+- **version:** 1.0.0
+- **status:** READY
+- **data_ultima_revisao:** 2026-03-06
+- **owner:** produto + arquitetura + UX
+- **scope:** global (componentes globais e feedback visual)
 
 ---
 
@@ -22,8 +23,8 @@ Qualquer comunicação Assíncrona entre o Application Shell (Frontend) e o Back
 
 ### 2.1 Especificação Obrigatória do Interceptor HTTP
 
-1. O Frontend gerado (**Axios / Fetch Interceptor**) DEVE escutar respostas de status HTTP tipo `4xx` e `5xx`.
-2. Para cada resposta de erro, o framework DEVE verificar se a estrutura recebida no Payload segue o padrão normativo **Problem Details for HTTP APIs (RFC 9457)**, como definido no próprio backend do MOD-000.
+1. O Frontend gerado (**Fetch nativo ou Axios — via interceptor HTTP**) DEVE escutar respostas de status HTTP tipo `4xx` e `5xx`.
+2. Para cada resposta de erro, o framework DEVE verificar se a estrutura recebida no Payload segue o padrão normativo **Problem Details for HTTP APIs (RFC 9457)**, como definido no contrato Foundation (DOC-FND-000 §5).
 3. Se o erro for um `RFC 9457` válido, ele conterá propriedades fundamentais:
    - `type`: URI de referência ou identificador do erro (ex: `https://example.com/probs/validation`).
    - `title`: Um título amigável (ex: `Falha na Validação`).
@@ -45,7 +46,7 @@ A "Busca Global" (antiga US-019) é o componente localizado na Navegação Princ
 2. **Debounce:** DEVE haver um atraso de no mínimo `300ms-500ms` entre a digitação e a requisição HTTP.
 3. Se o framework ainda não implementar um endpoint dedicado à busca cross-module no nível de BFF (Backend For Frontend) / API Gateway, a Busca DEVE operar localmente filtrando apenas os Menus de navegação (Ex: Digita "Cliente", encontra link para `/customers`).
 4. Caso a API de Busca Global (`/api/vX/search`) esteja ativa e disponível, o resultado na tela DEVE mostrar sub-seções amigáveis baseadas em categoria de resultado (ex: `Clientes Encontrados (3)`, `Faturas Encontradas (1)`).
-5. O backend responsável pela Busca Global DEVE sempre cruzar a consulta de termos com as permissões restritivas do MOD-000, não revelando títulos de entidades que o usuário não possa ver. (Ex: Só mostrar a Fatura #3 se o usuário tem `invoices:read`).
+5. O backend responsável pela Busca Global DEVE sempre cruzar a consulta de termos com as permissões restritivas do Foundation (DOC-FND-000 §2), não revelando títulos de entidades que o usuário não possa ver. (Ex: Só mostrar a Fatura #3 se o usuário tem `invoices:read`).
 
 ---
 

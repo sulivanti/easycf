@@ -1,8 +1,13 @@
 # DOC-GPA-001 — Guia Padrão de Agente
 
-**Versão:** 1.2  
-**Data:** 2026-02-27  
-**Status:** Normativo (padrão recomendado para produção/automação)
+- **id:** DOC-GPA-001
+- **version:** 1.2.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-02-27
+- **owner:** arquitetura
+- **scope:** global (agentes DEV + COD)
+
+> **Escopo deste documento:** Define o **contrato técnico ("o quê")** dos agentes — envelope JSON obrigatório, nomenclatura `AGN-*`, schema de saída, runtime de orquestração e checklist de validação. Para o **fluxo operacional XP** (quando e como acionar cada skill, ciclo ágil vs. técnico), consulte [DOC-DEV-002](DOC-DEV-002_fluxo_agentes_e_governanca.md).
 
 ## 1) Objetivo
 
@@ -144,6 +149,8 @@ Este guia define:
 
 ## 5) Pacote 1 — Enriquecimento DOC-DEV-001 (11 agentes)
 
+> **Nota:** A tabela de intenções operacionais e mapeamento user-facing das skills está em [DOC-DEV-002 §3](DOC-DEV-002_fluxo_agentes_e_governanca.md). Este catálogo foca nos IDs técnicos, schemas de resultado e regras de validação.
+
 ### 5.1 Lista dos 11 agentes especialistas
 
 1. **AGN-DEV-01 (MOD / Escala)** — Tópico 2
@@ -270,5 +277,5 @@ Registrar por execução: `run_id`, `agent_id`, `attempt`, `timestamp`, `status`
 
 ## 10) Changelog
 
-- v1.2 (2026-02-27): Amarração explícita DEV/COD com EX-OAS-*, SEC-EventMatrix, DATA-003 e UX-010; reforço de `x-permissions` como documentação; reforço de rastreabilidade para Gate EX-CI-007.
-- v1.1 (2026-02-22): Base (11 DEV + 6 COD), envelope JSON e runtime.
+- 1.2.0 (2026-02-27): Amarração explícita DEV/COD com EX-OAS-*, SEC-EventMatrix, DATA-003 e UX-010; reforço de `x-permissions` como documentação; reforço de rastreabilidade para Gate EX-CI-007.
+- 1.1.0 (2026-02-22): Base (11 DEV + 6 COD), envelope JSON e runtime.

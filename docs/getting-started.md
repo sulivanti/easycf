@@ -1,48 +1,49 @@
 # Getting Started
 
-## Instalando o framework
+## Criando um novo projeto
 
-Você deve clonar o repositório base e usar o CLI local para preparar um novo servidor com governança pronta:
+Use `degit` para copiar o template do EasyCodeFramework para o seu novo projeto:
 
-\`\`\`bash
+```bash
+npx degit sulivanti/easycf meu-projeto
+cd meu-projeto
+```
 
-# 1. Clone o repositório
+O template inclui:
 
-git clone <https://github.com/sulivanti/EasyCodeFramework.git>
-cd EasyCodeFramework
+- Documentos Normativos (`docs/01_normativos/`)
+- Skills de IA para automacao (`.agents/skills/`)
+- User Stories e templates (`docs/04_modules/user-stories/`)
+- Estrutura de governanca XP-Driven
 
-# 2. Instale as dependências do monorepo e gere o build do CLI
+## Workflow de Desenvolvimento
 
-pnpm install
-pnpm build
+### 1. Defina User Stories
 
-# 3. Execute o CLI apontando para o diretório de destino do seu novo projeto
+Crie suas User Stories em `docs/04_modules/user-stories/features/` usando o template em `docs/04_modules/user-stories/templates/TEMPLATE-USER-STORY.md`.
 
-npx tsx tooling/cli/src/index.ts init ../minha-api
-\`\`\`
-O wizard interativo criará o diretório `minha-api` com a fundação pronta contendo:
+### 2. Scaffold de Modulos
 
-- Dependências resolvidas
-- Pacote NPM abstrato `@easycf/core-api`
-- Workflow de Inteligência Artificial (`.agents/skills`)
-- Base Normativa arquitetural compilada na raiz.
+Quando uma User Story estiver com `status_agil: READY`, peca ao agente de IA:
 
-## Estrutura do Projeto Gerado
+> "Faca scaffold do modulo X"
 
-Ao finalizar, seu projeto terá o entrypoint (Node/Fastify) apontando para a *factory* abstrata do ECF. Toda nova funcionalidade de negócio deverá residir em `src/modules`.
+A skill `forge-module` criara toda a estrutura de documentacao do modulo em `docs/04_modules/mod-XXX-nome/`.
 
-Para acelerar desenvolvimento de negócios padrões, você pode "O ejetar" módulos pré-fabricados para dentro do ecossistema:
+### 3. Itere sobre os Requisitos
 
-\`\`\`bash
-npx easycf add
-\`\`\`
-*(Selecione Módulo Auth, IAM ou Schemas base).*
+Com o modulo scaffoldado, edite livremente os documentos enquanto estiverem em `estado_item: DRAFT`. Quando estabilizar, marque como `READY`.
 
-## Deploy Packages NPM
+### 4. Amendments para Mudancas Futuras
 
-Para compilar as features e publicar a suíte base, caso queira publicar no npmjs org `@easycf`:
-\`\`\`bash
-pnpm build
-cd packages/core-api && npm publish --access public
-cd tooling/cli && npm publish --access public
-\`\`\`
+Documentos selados (`READY`) so podem ser alterados via amendments:
+
+> "Crie uma emenda de melhoria para FR-001"
+
+A skill `create-amendment` gerencia o versionamento automaticamente.
+
+## Documentacao de Referencia
+
+- `docs/01_normativos/DOC-DEV-001` — Template de Especificacao Executavel
+- `docs/01_normativos/DOC-DEV-002` — Fluxo de Agentes e Governanca XP
+- `docs/01_normativos/DOC-ESC-001` — Escala de Arquitetura (Niveis 0/1/2)

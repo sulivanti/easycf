@@ -11,10 +11,14 @@
 - **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
-- **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F04, US-MOD-000-F08, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, SEC-000-01
+- **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F04, US-MOD-000-F08, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, SEC-000-01, DOC-PADRAO-004
 - **nivel_arquitetura:** 2 (sessão em banco, kill-switch, domain events, bcrypt compare)
 - **referencias_exemplos:** US-MOD-000-F01 (gerenciamento de sessões), US-MOD-000-F04 (reset externo), US-MOD-000-F08 (perfil autenticado)
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** N/A
+- **pendencias:** N/A
 
 ---
 

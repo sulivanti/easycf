@@ -1,6 +1,11 @@
 # DOC-PADRAO-004 — Padrões de Variáveis de Ambiente e Configuração
 
-**Versão:** 2.0 | **Última revisão:** 2026-03-06
+- **id:** DOC-PADRAO-004
+- **version:** 2.0.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-03-06
+- **owner:** infraestrutura
+- **scope:** global (variáveis de ambiente e configuração)
 
 ---
 
@@ -206,7 +211,7 @@ Módulos não devem inferir protocolo (`http`/`https`) diretamente. Sempre use t
 const problemUrl = `${env.API_BASE_URL}/problems/bad-request`;
 
 // ❌ Errado — hardcoded
-const problemUrl = 'https://api.easya1.com/problems/bad-request';
+const problemUrl = 'https://api.easya2.com/problems/bad-request';
 ```
 
 ---
@@ -224,7 +229,7 @@ Nas especificações de contrato (`v1.yaml`), use o placeholder `{{API_BASE_URL}
 No monorepo existe **um único `.env` na raiz**. Ele é a fonte de verdade para todos os apps:
 
 ```text
-EasyCodeFramework/
+EasyA2/
 ├── .env              ← ✅ ÚNICO arquivo de variáveis (não commitado)
 ├── .env.example      ← ✅ Template obrigatório no repositório (sem segredos)
 ├── apps/

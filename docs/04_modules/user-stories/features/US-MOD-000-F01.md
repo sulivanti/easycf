@@ -4,17 +4,21 @@
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth Core)
-**Referências Normativas:** DOC-DEV-001 §3, §4.1, §8.2, §12.2, §12.4 | SEC-000-01 | DOC-ARC-001 | DOC-GNP-00
+**Referências Normativas:** DOC-DEV-001 §4.1 (FR), §4.4 (SEC), §5.3 (API) | SEC-000-01 | DOC-ARC-001 | DOC-GNP-00
 
 ## Metadados de Governança
 
 - **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
-- **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-GNP-00, DOC-PADRAO-004
+- **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-GNP-00, DOC-PADRAO-004, SEC-000-01
 - **nivel_arquitetura:** 2 (DDD — domain events, sessão em banco, kill-switch)
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** ux-auth-001
+- **pendencias:** N/A
 
 ---
 

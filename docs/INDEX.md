@@ -1,4 +1,4 @@
-# Índice de Documentação (EasyA1)
+# Índice de Documentação (EasyA2)
 
 > **Regra de manutenção:** Atualizar este índice sempre que um novo documento for criado ou renomeado. IDs de documentos são estáveis e não mudam após publicação.
 
@@ -6,18 +6,26 @@
 
 ## 01 — Documentos Normativos
 
-| Documento | ID | Descrição |
-|---|---|---|
-| [DOC-GNP-00 + CEE + CHE Consolidado v2.0](01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md) | DOC-GNP-00 | Guia normativo MUST/SHOULD, exemplos EX-OAS-001..004, Gates CI |
-| [DOC-ESC-001 — Escala de Arquitetura N0/N1/N2](01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md) | DOC-ESC-001 | Critérios de adoção de nível arquitetural e checklists de PR |
-| [DOC-GPA-001 — Guia Padrão de Agente](01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md) | DOC-GPA-001 | Catálogo de 11 agentes DEV + 6 agentes COD, contratos JSON, runtime |
-| [DOC-ARC-003 — Ponte de Rastreabilidade e Payloads](01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md) | DOC-ARC-003 | UIActionEnvelope, 6 dogmas, Gates CI, Screen Manifests |
-| [DOC-UX-010 — Catálogo de Ações e Template UX](01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md) | DOC-UX-010 | Catálogo oficial de action_keys reutilizáveis para telas |
-| [DOC-ARC-001 — Padrões OpenAPI/Swagger](01_normativos/DOC-ARC-001__Padroes_OpenAPI.md) | DOC-ARC-001 | Normativo global de contratos OpenAPI: organização, convenções, DoD por endpoint |
-| [DOC-ARC-002 — Estratégia de Testes Automáticos](01_normativos/DOC-ARC-002__Estrategia_Testes.md) | DOC-ARC-002 | Normativo global de testes: unitários vs integração, Testcontainers, Gates CI |
-| [DOC-PADRAO-001 — Infraestrutura e Execução](01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md) | DOC-PADRAO-001 | Infraestrutura, dependências, execução de API/WEB e DB |
-| [DOC-PADRAO-002 — Dependências NodeJS](01_normativos/DOC-PADRAO-002_Dependencias_NodeJS.md) | DOC-PADRAO-002 | Gestão de bibliotecas autorizadas, Turbo Repo e pnpm |
-| [DOC-PADRAO-004 — Variáveis de Ambiente](01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md) | DOC-PADRAO-004 | Convenções de nome, validação (Zod) e fail-fast para ambiente |
+| Documento | ID | Versão | Status | Descrição |
+|---|---|:---:|:---:|---|
+| [DOC-DEV-001 — Especificação Executável](01_normativos/DOC-DEV-001_especificacao_executavel.md) | DOC-DEV-001 | 1.4.0 | ACTIVE | **Norma canônica.** Governança, ciclo de vida, IDs, DoR/DoD |
+| [DOC-DEV-002 — Fluxo de Agentes e Governança](01_normativos/DOC-DEV-002_fluxo_agentes_e_governanca.md) | DOC-DEV-002 | 2.0.0 | ACTIVE | Pipeline XP, separação ágil vs. técnico, forge-module |
+| [DOC-ESC-001 — Escala de Arquitetura N0/N1/N2](01_normativos/DOC-ESC-001__Escala_de_Arquitetura_Niveis_0_1_2.md) | DOC-ESC-001 | 1.0.0 | ACTIVE | Critérios de nível arquitetural e checklists de PR |
+| [DOC-GNP-00 — Guia Normativo e Padrões](01_normativos/DOC-GNP-00__DOC-CEE-00__DOC-CHE-00__Consolidado_v2.0.md) | DOC-GNP-00 | 2.0.0 | ACTIVE | Guia normativo MUST/SHOULD, exemplos EX-OAS-001..004, Gates CI |
+| [DOC-GPA-001 — Guia Padrão de Agente](01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md) | DOC-GPA-001 | 1.2.0 | ACTIVE | Catálogo de 11 agentes DEV + 6 agentes COD, contratos JSON |
+| [DOC-ARC-001 — Padrões OpenAPI/Swagger](01_normativos/DOC-ARC-001__Padroes_OpenAPI.md) | DOC-ARC-001 | 1.0.0 | ACTIVE | Contratos OpenAPI: organização, convenções, DoD por endpoint |
+| [DOC-ARC-002 — Estratégia de Testes](01_normativos/DOC-ARC-002__Estrategia_Testes.md) | DOC-ARC-002 | 1.0.0 | ACTIVE | Testes unitários vs integração, Testcontainers, Gates CI |
+| [DOC-ARC-003 — Ponte de Rastreabilidade](01_normativos/DOC-ARC-003__Ponte_de_Rastreabilidade.md) | DOC-ARC-003 | 1.2.0 | READY | UIActionEnvelope, 6 dogmas, Auditoria, RBAC, Padrões Visuais |
+| [DOC-ARC-003B — Manifestos e Gates CI](01_normativos/DOC-ARC-003B__Manifestos_Declarativos_e_Gates_CI.md) | DOC-ARC-003B | 1.0.0 | READY | 9 Gates de CI, Screen Manifests, caso de referência (Usuários) |
+| [DOC-PADRAO-001 — Infraestrutura e Execução](01_normativos/DOC-PADRAO-001_Infraestrutura_e_Execucao.md) | DOC-PADRAO-001 | 1.0.0 | ACTIVE | Node.js, Docker, PostgreSQL, Redis |
+| [DOC-PADRAO-002 — Dependências NodeJS](01_normativos/DOC-PADRAO-002_Dependencias_NodeJS.md) | DOC-PADRAO-002 | 1.0.0 | ACTIVE | Bibliotecas autorizadas, Turbo Repo e pnpm |
+| [DOC-PADRAO-004 — Variáveis de Ambiente](01_normativos/DOC-PADRAO-004_Variaveis_de_Ambiente.md) | DOC-PADRAO-004 | 2.0.0 | ACTIVE | Convenções de nome, validação (Zod) e fail-fast |
+| [DOC-PADRAO-005 — Storage e Upload](01_normativos/DOC-PADRAO-005_Storage_e_Upload.md) | DOC-PADRAO-005 | 1.0.0 | READY | Uploads, anexos, presigned URLs, provider-agnóstico |
+| [DOC-UX-010 — Catálogo de Ações UX](01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md) | DOC-UX-010 | 1.0.0 | DRAFT | Catálogo oficial de action_keys reutilizáveis |
+| [DOC-UX-011 — Application Shell](01_normativos/DOC-UX-011__Application_Shell_e_Navegacao.md) | DOC-UX-011 | 1.0.0 | READY | Navegação, menus, breadcrumbs, headers |
+| [DOC-UX-012 — Componentes Globais](01_normativos/DOC-UX-012__Componentes_Globais_e_Feedback.md) | DOC-UX-012 | 1.0.0 | READY | Tratamento global de erros, busca, dark mode |
+| [DOC-FND-000 — Contratos Fundacionais](01_normativos/DOC-FND-000__Foundation.md) | DOC-FND-000 | 1.0.0 | ACTIVE | Auth, RBAC, SEC-EventMatrix, Telemetria, Error Handling, Storage |
+| [DOC-PADRAO-003 — (Reservado)](01_normativos/DOC-PADRAO-003__Reservado.md) | DOC-PADRAO-003 | — | DESCONTINUADO | ID reservado, sem conteúdo normativo ativo |
 
 ---
 
@@ -55,13 +63,111 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 
 | Módulo | Arquivo Raiz | Estado |
 |---|---|---|
-| MOD-000 — Framework de Automação / Geradores (Foundation) | [mod.md](04_modules/mod-000-foundation/mod.md) | DRAFT |
-| MOD-001 — Backoffice (Admin) | [mod.md](04_modules/mod-001-backoffice/mod.md) | DRAFT |
-| MOD-002 — Cadastro de Usuários | [mod.md](04_modules/mod-002-cadastro-usuarios/mod.md) | DRAFT |
+| MOD-000 — Framework de Automação / Geradores (Foundation) | *(pendente forge-module)* | DRAFT |
+| MOD-001 — Backoffice (Admin) | *(pendente forge-module)* | DRAFT |
+| MOD-002 — Cadastro de Usuários | *(pendente forge-module)* | DRAFT |
 
 > **Nota:** Novos módulos devem criar um subdiretório próprio em `04_modules/<mod-id>/` seguindo o padrão do MOD-001.
 
 ---
+
+## Mapa de Dependências entre Documentos
+
+```mermaid
+graph TD
+    DEV001["<b>DOC-DEV-001</b><br/>Norma Canônica"]
+
+    ESC001["DOC-ESC-001<br/>Escala Arquitetura"]
+    GNP00["DOC-GNP-00<br/>Guia Normativo"]
+    GPA001["DOC-GPA-001<br/>Guia Agentes"]
+
+    ARC001["DOC-ARC-001<br/>OpenAPI"]
+    ARC002["DOC-ARC-002<br/>Testes"]
+    ARC003["DOC-ARC-003<br/>Rastreabilidade"]
+
+    PAD001["DOC-PADRAO-001<br/>Infra"]
+    PAD002["DOC-PADRAO-002<br/>Deps Node"]
+    PAD004["DOC-PADRAO-004<br/>Env Vars"]
+    PAD005["DOC-PADRAO-005<br/>Storage"]
+
+    FND000["DOC-FND-000<br/>Foundation"]
+
+    UX010["DOC-UX-010<br/>Catálogo Ações"]
+    UX011["DOC-UX-011<br/>App Shell"]
+    UX012["DOC-UX-012<br/>Componentes"]
+
+    DEV002["DOC-DEV-002<br/>Fluxo Agentes"]
+
+    PKG_DEV["PKG-DEV-001<br/>Agentes DEV"]
+    PKG_COD["PKG-COD-001<br/>Agentes COD"]
+
+    DEV001 --> ESC001
+    DEV001 --> GNP00
+    DEV001 --> GPA001
+    DEV001 -->|"§5.3 migrado"| ARC001
+    DEV001 -->|"§5.5 migrado"| ARC002
+    DEV001 --> ARC003
+
+    GNP00 --> ARC001
+    GNP00 --> ARC002
+    ESC001 --> GNP00
+
+    ARC003 --> UX010
+    ARC003 --> ARC001
+    UX011 --> ARC003
+    UX012 --> ARC003
+
+    GPA001 --> PKG_DEV
+    GPA001 --> PKG_COD
+    DEV002 --> GPA001
+
+    PAD001 --> PAD002
+    PAD002 --> PAD004
+    PAD005 --> PAD001
+
+    PKG_COD --> ARC001
+    PKG_COD --> ARC002
+
+    UX011 --> FND000
+    UX012 --> FND000
+    ARC001 --> FND000
+    ARC003 --> FND000
+    PAD005 --> FND000
+
+    classDef canonical fill:#2563eb,color:#fff,stroke:#1d4ed8
+    classDef foundation fill:#0891b2,color:#fff,stroke:#0e7490
+    classDef arch fill:#7c3aed,color:#fff,stroke:#6d28d9
+    classDef infra fill:#059669,color:#fff,stroke:#047857
+    classDef ux fill:#d97706,color:#fff,stroke:#b45309
+    classDef agents fill:#dc2626,color:#fff,stroke:#b91c1c
+
+    class DEV001 canonical
+    class ESC001,GNP00,ARC001,ARC002,ARC003 arch
+    class PAD001,PAD002,PAD004,PAD005 infra
+    class UX010,UX011,UX012 ux
+    class FND000 foundation
+    class GPA001,DEV002,PKG_DEV,PKG_COD agents
+```
+
+> **Legenda de cores:** 🔵 Norma Canônica | 🟣 Arquitetura | 🔵‍🟦 Foundation | 🟢 Infraestrutura | 🟠 UX | 🔴 Agentes
+
+---
+
+## Hierarquia Normativa (Precedência em Conflitos)
+
+Quando dois ou mais documentos estabelecerem regras contraditórias, prevalece o documento de **nível superior** nesta hierarquia. Exceções devem ser formalizadas via ADR no módulo afetado.
+
+| Nível | Documento(s) | Escopo |
+|:-----:|---|---|
+| **1** | DOC-DEV-001 — Especificação Executável (Norma Canônica) | Regras fundacionais, ciclo de vida, governança |
+| **2** | DOC-ESC-001 — Escala de Arquitetura | Critérios de nível arquitetural (N0/N1/N2) |
+| **3** | DOC-GNP-00 — Guia Normativo e Padrões | Padrões técnicos MUST/SHOULD/MAY, gates CI |
+| **4** | DOC-ARC-* — Padrões Arquiteturais | OpenAPI (001), Testes (002), Rastreabilidade (003A/003B) |
+| **5** | DOC-PADRAO-* — Padrões de Infraestrutura | Infra (001), Deps (002), Env (004), Storage (005) |
+| **6** | DOC-UX-* — Padrões UX | Catálogo UX (010), Shell (011), Componentes (012) |
+| **7** | PKG-* — Pacotes de Agentes | Agentes DEV (001), Agentes COD (001) |
+
+> **Regra prática:** Em caso de dúvida, o DOC-DEV-001 é a fonte de verdade final. Documentos de nível inferior podem *detalhar* mas nunca *contradizer* os de nível superior.
 
 ---
 
@@ -74,7 +180,7 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 | RBAC (`@RequireScope`) | Foundation `mod.md` | UX-001, todos os módulos |
 | Audit Trail (`AuditService`) | Foundation `IMP-000` | UX-000 `SEC-EventMatrix` |
 | UIActionEnvelope | DOC-ARC-003 §2 | UX-000 §8, DOC-UX-010 |
-| action_keys UX | DOC-UX-010 | UX-000 §8, DOC-ARC-003 §9 |
+| action_keys UX | DOC-UX-010 | UX-000 §8, DOC-ARC-003 §8 |
 | OpenAPI Gates | DOC-GNP-00 EX-OAS-001..004 | DOC-ESC-001, DOC-ARC-003 §8 |
 
 ---

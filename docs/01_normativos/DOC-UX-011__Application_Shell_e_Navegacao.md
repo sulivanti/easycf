@@ -1,10 +1,11 @@
 # DOC-UX-011 — Padrões de Application Shell e Navegação
 
-**Status:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-06
-**Autor(es):** Produto + Arquitetura + UX
-**Rastreia para:** DOC-DEV-001, DOC-ARC-003, US-MOD-000
+- **id:** DOC-UX-011
+- **version:** 1.0.0
+- **status:** READY
+- **data_ultima_revisao:** 2026-03-06
+- **owner:** produto + arquitetura + UX
+- **scope:** global (Application Shell e navegação)
 
 ---
 
@@ -12,7 +13,7 @@
 
 Este documento define as regras arquiteturais e de experiência de usuário (UX) obrigatórias para o **Application Shell** (a estrutura externa ou esqueleto da aplicação) gerado pelo EasyCodeFramework.
 
-Ele estabelece que elementos de navegação como Dashboard Inicial, Menus Laterais, Breadcrumbs e Headers (antigamente planejados como User Stories US-016, 017, 018 e 021) são, na verdade, **componentes fundacionais do framework frontend**. Os geradores de código DEVEM produzir projetos (React, Vue, etc.) já com essas estruturas embutidas e integradas ao módulo de segurança (MOD-000).
+Ele estabelece que elementos de navegação como Dashboard Inicial, Menus Laterais, Breadcrumbs e Headers (antigamente planejados como User Stories US-016, 017, 018 e 021) são, na verdade, **componentes fundacionais do framework frontend**. Os geradores de código DEVEM produzir projetos (React, Vue, etc.) já com essas estruturas embutidas e integradas ao módulo de segurança ([DOC-FND-000](DOC-FND-000__Foundation.md)).
 
 ---
 
@@ -35,7 +36,7 @@ O layout base DEVE ser composto minimamente por:
 
 Os menus de navegação do sistema gerado **NÃO DEVEM** ser estáticos. A renderização dos links na Sidebar/Topbar deve ser condicionada às permissões do usuário logado.
 
-### 3.1 Consumo do MOD-000
+### 3.1 Consumo do Foundation (DOC-FND-000)
 
 1. O Shell DEVE invocar o endpoint de perfil do usuário (`GET /auth/me`) logo após o boot da aplicação ou login bem-sucedido.
 2. A resposta do `/auth/me` conterá o array de `scopes` (permissões) e as informações do Tenant/Branch atual.
@@ -63,7 +64,7 @@ O Breadcrumb é obrigatório em todas as telas de detalhe e listagem profunda ge
 
 ## 5. Dashboard Pós-Login (Landing Page)
 
-Logo após o sucesso da autenticação (via login nativo, SSO ou MFA garantido pelo MOD-000), o usuário DEVE ser redirecionado de `/login` para a rota `/` ou `/dashboard`.
+Logo após o sucesso da autenticação (via login nativo, SSO ou MFA garantido pelo Foundation — DOC-FND-000 §1), o usuário DEVE ser redirecionado de `/login` para a rota `/` ou `/dashboard`.
 
 ### 5.1 Regras do Dashboard Inicial
 
@@ -83,7 +84,7 @@ A identificação do usuário ativo DEVE estar sempre visível no Shell da aplic
 2. **Dropdown Menu:** Ao clicar/interagir com o Widget, DEVE ser exibido um menu suspenso contendo:
    - Identificação em texto do Tenant/Filial ativo.
    - Nome e E-mail do usuário.
-   - Link de atalho para "Minha Conta" ou "Alterar Senha" (apontando obrigatoriamente para a feature `US-MOD-000-F10`).
+   - Link de atalho para "Minha Conta" ou "Alterar Senha" (conforme contrato de alteração de senha — DOC-FND-000 §1.3).
    - Botão de "Sair" (Logout), que DEVE consumir a rota de logout (invalidando sessões ativas).
 
 ---
@@ -95,7 +96,7 @@ Quando a automação do framework gerar um frontend vazio para um novo projeto, 
 - **[CA-01]** O código de Layout/Shell gerado inclui de forma robusta um Header, Sidebar, Wrapper de Content e um Breadcrumb componentizado.
 - **[CA-02]** O armazenamento do array de permissões (via store de estado global como Redux/Zustand ou React Context) está implementado e alimentado logo no load principal da aplicação.
 - **[CA-03]** Componente de Menu lateral aceita um prop/array de rotas e filtra internamente baseado nas guards de escopo (`scopes`).
-- **[CA-04]** A URL `/` em ambiente autenticado aciona um Dashboard amigável lendo os dados de perfil (US-MOD-000-F08).
+- **[CA-04]** A URL `/` em ambiente autenticado aciona um Dashboard amigável lendo os dados de perfil (DOC-FND-000 §1.2 — `GET /auth/me`).
 
 ---
 

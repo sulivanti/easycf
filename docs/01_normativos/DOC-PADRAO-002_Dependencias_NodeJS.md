@@ -1,8 +1,15 @@
-# Padrões de Dependências Node.js (package.json)
+# DOC-PADRAO-002 — Padrões de Dependências Node.js (package.json)
+
+- **id:** DOC-PADRAO-002
+- **version:** 1.0.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-03-04
+- **owner:** infraestrutura
+- **scope:** global (gestão de dependências pnpm/Turbo)
 
 ## 1. Visão Geral
 
-Este documento estabelece o padrão arquitetural de dependências para o ecossistema Node.js do projeto **EasyA1**, garantindo previsibilidade, segurança e padronização entre os desenvolvedores e os Agentes de Geração de Código (Pacote COD).
+Este documento estabelece o padrão arquitetural de dependências para o ecossistema Node.js do projeto **EasyA2**, garantindo previsibilidade, segurança e padronização entre os desenvolvedores e os Agentes de Geração de Código (Pacote COD).
 
 O projeto adota uma abordagem minimalista e fortemente tipada, evitando _frameworks_ muito opinativos em favor de bibliotecas especializadas integradas sob o controle da aplicação.
 
@@ -42,13 +49,17 @@ O bloco de `dependencies` foca unicamente no que rodará em produção.
   - ⚠️ **Compatibilidade:** `@fastify/rate-limit@9.x` é compatível com Fastify `v4.x`. Versões superiores exigem Fastify v5.
 
 - **OTP Library:** `otplib@12.x` — geração e verificação de TOTP/HOTP (RFC 6238). Usado no fluxo de MFA.
-  - ⚠️ **Breaking Change v12:** A classe exposta é `OTP` (não mais `authenticator` ou `TOTP` das versões anteriores).
-  - **Uso correto:**
+  - **Uso correto (v12):**
 
     ```typescript
-    import { OTP } from 'otplib';
-    const otpTotp = new OTP({ strategy: 'totp' });
-    const { valid } = otpTotp.verifySync({ token: totpCode, secret: userMfaSecret });
+    import { authenticator } from 'otplib';
+
+    // Gerar secret e token
+    const secret = authenticator.generateSecret();
+    const token = authenticator.generate(secret);
+
+    // Verificar token
+    const isValid = authenticator.check(token, secret);
     ```
 
 - **Resend Node SDK:** `resend` — abstração simples e moderna para envio de e-mails transacionais.

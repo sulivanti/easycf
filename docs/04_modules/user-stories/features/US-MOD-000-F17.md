@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** 2 (integração externa OIDC/OAuth2, auto-provisionamento, domain events)
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 2 (fase separada)
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** N/A
+- **pendencias:** INT-000-03 (contrato Apple), migration apple_sub, chave .p8
 
 ---
 

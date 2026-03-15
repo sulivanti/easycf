@@ -1,63 +1,69 @@
-# {{project_name}} API
+# {{project_name}}
 
-> Enterprise-Grade Application gerada a partir do **EasyCodeFramework (ECF)**.  
-> Este projeto herda as políticas de Governança, Monitorabilidade, e Segurança Corporativa padrão da fundação base.
+> Projeto gerado a partir do **EasyCodeFramework (ECF)**.
+> Este repositorio herda as politicas de Governanca, Documentacao Normativa e Automacao por Agentes do framework base.
 
 ---
 
-## 🚀 Inicialização Rápida (Getting Started)
+## O que e o ECF?
 
-A espinha dorsal técnica deste projeto é garantida via dependências cruzadas (Framework Pattern). Seu código de negócio viverá puro e limpo nesta arquitetura.
+O EasyCodeFramework e um **framework de documentacao, governanca e automacao por agentes/skills**. Ele fornece:
 
-### 1. Pré-Requisitos
+- **Documentos Normativos** (`docs/01_normativos/`) — padroes de arquitetura, seguranca, testes e observabilidade
+- **Skills de IA** (`.agents/skills/`) — automacao para scaffolding de modulos, validacao, amendments e mais
+- **Workflow XP-Driven** — separacao entre velocidade agil (User Stories) e estabilidade tecnica (Especificacoes)
 
-* **Node.js**: `v20.0.0+`
-* **Gerenciador de Pacotes**: `pnpm` (ou `npm`/`yarn`)
-* **Banco de Dados**: PostgreSQL
+---
 
-### 2. Instalação & Execução Subida
+## Estrutura do Projeto
 
-```bash
-# 1. Instale todas as dependências do monolíto/framework
-npm install
-
-# 2. Inicie o servidor em modo watch (hot-reload)
-npm run dev
+```
+{{project_name}}/
+├── .agents/
+│   └── skills/          # Skills de automacao para agentes de IA
+├── docs/
+│   ├── 01_normativos/   # Documentos normativos canonicos
+│   ├── 02_pacotes_agentes/  # Pacotes de agentes
+│   ├── 03_especificacoes/   # Templates de especificacao
+│   ├── 04_modules/      # Modulos, User Stories e requisitos
+│   └── 05_manifests/    # Manifestos de tela (UI)
+└── README.md
 ```
 
-> O servidor iniciará na porta `3000` (sendo possível alterá-la setando a flag `PORT=.env`). Verifique `http://localhost:3000/api/v1/status` para ter atestado do heartbeat do microserviço.
+---
+
+## Como Trabalhar
+
+### 1. Defina User Stories
+
+Crie suas User Stories em `docs/04_modules/user-stories/features/` seguindo o template padrao.
+
+### 2. Use as Skills do Agente
+
+No chat do seu editor (Cursor, VS Code + Claude Code, etc.), peca ao agente:
+
+- *"Faca scaffold do modulo de Faturamento"* — usa a skill `forge-module`
+- *"Crie uma emenda para FR-001"* — usa a skill `create-amendment`
+- *"Valide os schemas Drizzle"* — usa a skill `validate-drizzle-schemas`
+
+### 3. Siga o Fluxo XP
+
+```
+User Story (TODO) → READY → forge-module → DRAFT (editar livremente)
+                                              ↓
+                                    Codificar + Testar
+                                              ↓
+                              Specs READY (seladas) → Amendments para mudancas futuras
+```
 
 ---
 
-## 🤖 Trabalhando com a Inteligência Artificial (Antigravity Skills)
+## Documentacao
 
-Este repositório contém as diretivas de comportamento e governança para a sua IA (o agente **Antigravity** que roda no Cursor / IDE local) dentro da pasta secreta cruzada `.agents/skills`.
+Consulte os normativos em `docs/01_normativos/` para padroes obrigatorios:
 
-Para manter seu projeto veloz, **nunca crie código à mão do zero**.
-Peça ajuda a ela no Chat do Editor:
-
-* *"Por favor, faça Scaffold de um novo módulo de Faturamento (`invoices`)"*  
-    *O Agente utilizará a skill autônoma para desenhar as controllers de cobrança que sigam nossa DOC normativa de Isolamento do Tenant!*
-
-* *"Valide as tabelas de banco de dados do arquivo X"*  
-    *O Agente utilizará uma Skill nativa de validação para esquadrinhar suas chaves de `tenant_id` e conferir que não há vazamentos de Zod schemas!*
-
----
-
-## 🏛️ Arquitetura e Extensibilidade
-
-Seu aplicativo inicializa importando a *Factory Padrão* do núcleo da arquitetura ECF (`@easycf/core-api`).
-
-O que já está configurado por debaixo dos panos?
-
-1. **[RFC 9457] Unificação de Problem Details:** Um handler embutido garante que nenhum Stacktrace sensível vaze pra UI, mas logs severos se tornem acessíveis via Datadog.
-2. **Correlation ID & Tracing:** Todos os logs injetam e retornam o tracking `x-correlation-id` entre microserviços.
-3. **Tenant Parsing:** Middlewares automáticos inferem qual organização do usuário está acessando os recursos, via context nativo.
-
-Você poderá injetar e programar o seu aplicativo na pasta raiz `src/`, livre de side-effects.
-
----
-
-## 📚 Documentação Viva (Normativos)
-
-Normais corporativas e o plano base de arquitetura do `{{project_name}}` residem de forma versionada e rica em `.docs/1_normativos` (Aguarde o preenchimento pela IA local via `readme-blueprint-generator`).
+- **DOC-DEV-001** — Especificacao Executavel (template de modulo)
+- **DOC-DEV-002** — Fluxo de Agentes e Governanca XP
+- **DOC-ESC-001** — Escala de Arquitetura (Niveis 0, 1, 2)
+- **DOC-ARC-001** — Padroes OpenAPI
+- **DOC-ARC-002** — Estrategia de Testes

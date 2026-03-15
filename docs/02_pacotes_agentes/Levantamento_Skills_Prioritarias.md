@@ -1,7 +1,7 @@
 # Levantamento de Skills Prioritárias (Domínio)
 
-**Versão:** 2.0
-**Data:** 2026-03-04
+**Versão:** 2.2
+**Data:** 2026-03-13
 **Base:** DOC-PADRAO-002, DOC-GNP-00, DOC-GPA-001, estado real do diretório `.agents/skills`
 
 Com base na análise das especificações e padrões arquiteturais do ecossistema (`DOC-PADRAO-002`, `DOC-GNP-00` e `DOC-GPA-001`), o núcleo do produto baseia-se em **Node.js, TypeScript, Drizzle ORM, Fastify, Zod e Redis**.
@@ -17,8 +17,11 @@ Este documento cataloga o **estado atual** das Skills, separando as **já implem
 | Skill | Tipo | Uso Principal | Agente(s) |
 | --- | --- | --- | --- |
 | `forge-module` | Customizada ✅ | Forja estrutural do módulo (Paradigma XP) | Agente / Dev |
+| `create-amendment` | Customizada ✅ | Criar emenda governada em spec com status READY | PKG-DEV-001 |
 | `create-specification` | Comunidade+ | Gerar novo arquivo de especificação técnica | PKG-DEV-001 |
 | `update-specification` | Comunidade+ | Atualizar spec existente após mudança de regras | PKG-DEV-001 |
+| `delete-module` | Customizada ✅ | Excluir pasta de módulo e atualizar índice global | Agente / Dev |
+| `rollback-module` | Customizada ✅ | Desfazer forge de módulo e retornar US ao pipeline | Agente / Dev |
 | `prompt-builder` | Comunidade+ | Estruturar prompts para GitHub Copilot | PKG-DEV-001 / PKG-COD-001 |
 | `skill-creator` | Comunidade+ | Criar, modificar e avaliar novas skills | PKG-DEV-001 / PKG-COD-001 |
 
@@ -36,6 +39,9 @@ Este documento cataloga o **estado atual** das Skills, separando as **já implem
 | Skill | Tipo | Uso Principal | Agente(s) |
 | --- | --- | --- | --- |
 | `validate-drizzle-schemas` | **Customizada ✅** | Validar schemas Drizzle contra regras de multitenancy, anti-patterns e integração Zod | PKG-COD-001 (AGN-COD-DB) |
+| `validate-fastify-endpoint` | **Customizada ✅** | Validar handler Fastify: RBAC, Correlation-ID, RFC 9457, schema OpenAPI | PKG-COD-001 (AGN-COD-API) |
+| `validate-openapi-contract` | **Customizada ✅** | Auditar contrato OpenAPI (EX-OAS-001..004), lint Spectral e marcador `@contract` | PKG-COD-001 (AGN-COD-API) |
+| `validate-screen-manifest` | **Customizada ✅** | Validar Screen Manifests YAML contra schema v1, DOC-UX-010, DOC-ARC-003, DOC-UX-012 | PKG-DEV-001 (AGN-DEV-07) |
 | `drizzle-orm` | Comunidade | Referência técnica de padrões Drizzle ORM (quick-start, queries, migrations) | PKG-COD-001 (AGN-COD-DB) |
 
 > **Legenda:** "Comunidade+" = skill genérica adaptada/enriquecida com regras do domínio. "Customizada" = skill criada exclusivamente para as regras arquiteturais deste projeto.
@@ -62,22 +68,20 @@ A segurança perimetral exige que endpoints Fastify sigam padrões inegociáveis
 - **Propagação de Cabeçalhos Transversais:** Endpoints de mutação (POST, PUT, PATCH) devem validar `X-Correlation-ID` e `Idempotency-Key`.
 - **Formatação de Exceções:** Rejeições devem usar RFC 9457 Problem Details (`{ type, title, status, detail, instance }`).
 
-> **⚠️ Lacuna:** A skill `validate-openapi-contract` (pendente) cobrirá a validação de contratos e geração de artefatos de teste para rotas Fastify.
+> **✅ Implementado:** A skill `validate-fastify-endpoint` cobre validação estática do handler (RBAC, Correlation-ID, RFC 9457, schema OpenAPI). A skill `validate-openapi-contract` cobre auditoria do contrato YAML publicado (EX-OAS-001..004).
 
 ---
 
 ## 3. Contratos OpenAPI e Rastreabilidade
 
-**Status:** ⚠️ Skill pendente — `validate-openapi-contract`
+**Status:** ✅ Skill implementada — `validate-openapi-contract`
 
-O normativo `DOC-GNP-00` exige conformidade com Spectral, Swagger UI e amarração de IDs. Operações a cobrir:
+O normativo `DOC-GNP-00` exige conformidade com Spectral, Swagger UI e amarração de IDs. A skill `validate-openapi-contract` cobre:
 
-- Geração/validação do `apps/api/openapi/v1.yaml` (**EX-OAS-001**).
+- Validação do `apps/api/openapi/v{X}.yaml` (**EX-OAS-001**).
 - Lint via `apps/api/openapi/spectral.yaml` (**EX-OAS-002**).
-- Swagger UI local (**EX-OAS-003**) e testes de contrato (**EX-OAS-004**).
-- Inclusão mandatória do header `@contract EX-...` nos artefatos.
-
-> **⚠️ Lacuna ativa:** Nenhuma skill cobre geração de artefatos de contrato neste momento. A skill `validate-openapi-contract` (prioridade alta) deve preencher este gap.
+- Verificação de infraestrutura do Swagger UI local (**EX-OAS-003**) e testes de contrato (**EX-OAS-004**).
+- Verificação do marcador `// @contract EX-OAS-{ID}` nos artefatos TypeScript.
 
 ---
 
@@ -105,9 +109,31 @@ A versão anterior deste documento (v1.0) não documentava as skills genéricas 
 | `postman-collection-generator` | Não documentada | ❌ Removida — não alinhada com o stack/contratos do projeto |
 | `theme-factory` | Não documentada | ✅ Instalada (utilitária para artefatos) |
 | `update-markdown-file-index` | Não documentada | ✅ Instalada (manutenção de índices docs) |
-
-| `validate-openapi-contract` | "Futura / A criar" | ⚠️ Pendente — prioridade alta |
+| `validate-openapi-contract` | "Futura / A criar" | ✅ Implementada |
+| `validate-fastify-endpoint` | Não documentada | ✅ Implementada |
+| `create-amendment` | Não documentada | ✅ Implementada |
+| `delete-module` | Não documentada | ✅ Implementada |
+| `rollback-module` | Não documentada | ✅ Implementada |
 | `validate-audit-hooks` | "Futura / A criar" | ⚠️ Pendente — prioridade média |
+
+---
+
+## 6. Quando NÃO Usar Cada Skill (Contra-indicações)
+
+| Skill | NÃO usar quando... |
+| --- | --- |
+| `forge-module` | O módulo já foi forjado e possui pasta em `04_modules/`. Para alterações pós-forge, use `create-amendment` ou `update-specification`. |
+| `create-amendment` | O item ainda está em estado `DRAFT`. Emendas só se aplicam a itens `READY` que foram congelados. Em DRAFT, edite diretamente. |
+| `create-specification` | A especificação é de um módulo padrão (MOD-XXX). Use `forge-module` para criar a estrutura completa. `create-specification` é para especificações transversais avuladas. |
+| `update-specification` | A alteração é trivial (typo, formatação). Não gere versionamento formal para correções cosméticas — edite diretamente e registre no CHANGELOG. |
+| `delete-module` | O módulo já teve PRs mergeados ou código em produção. Neste caso, marque como `DESCONTINUADO` em vez de excluir, preservando rastreabilidade. |
+| `rollback-module` | O módulo já avançou além de DRAFT (itens em READY/DONE). Rollback é seguro apenas para módulos recém-forjados sem progresso de implementação. |
+| `validate-drizzle-schemas` | O schema é um arquivo de migração gerado (`drizzle/migrations/`). Validação aplica-se aos schemas de definição (`schema.ts`), não às migrações. |
+| `validate-fastify-endpoint` | A rota é interna/healthcheck sem autenticação. A skill assume rotas autenticadas com RBAC; rotas públicas darão falsos positivos. |
+| `validate-openapi-contract` | O arquivo OpenAPI é um rascunho parcial em fase de design. A skill espera um contrato completo e reportará erros em stubs intencionais. |
+| `validate-screen-manifest` | O manifest é experimental/PoC sem operationIds definidos. A skill exige integridade entre manifest ↔ OpenAPI ↔ RBAC. |
+| `drizzle-orm` | A consulta envolve raw SQL complexo (CTEs, window functions). A skill foca em padrões do query builder do Drizzle, não em SQL avançado. |
+| `skill-creator` | A skill a ser criada é genérica e já existe na comunidade. Verifique o catálogo de skills prontas antes de criar uma customizada. |
 
 ---
 
@@ -115,13 +141,13 @@ A versão anterior deste documento (v1.0) não documentava as skills genéricas 
 
 Usar a skill `skill-creator` para materializar as skills customizadas restantes, na seguinte ordem de prioridade:
 
-1. **`validate-openapi-contract`** — Cobre EX-OAS-001..004 e gates Spectral. Alta criticidade.
-2. **`validate-audit-hooks`** — Amplia cobertura de auditoria para a camada de Application. Média criticidade.
+1. **`validate-audit-hooks`** — Amplia cobertura de auditoria para a camada de Application (Use Cases), complementando o que `validate-drizzle-schemas` cobre no schema de banco. Média criticidade.
 
 ---
 
 ## Changelog
 
-- v2.0 (2026-03-04): Revisão completa. Adição do catálogo de skills existentes (tabelas), marcação de `validate-drizzle-schemas` como implementada, documentação das skills genéricas recentemente instaladas (`drizzle-orm`, `theme-factory`, `update-markdown-file-index`), tabela de lacunas encontradas (Seção 5).
+- v2.2 (2026-03-13): Implementação de `validate-openapi-contract` (EX-OAS-001..004, lint Spectral, `@contract`). Skills `validate-fastify-endpoint`, `create-amendment`, `delete-module`, `rollback-module` documentadas no catálogo. Tabela de lacunas (Seção 5) atualizada. Path do diretório de skills atualizado para `.agents/skills`.
 - v2.1 (2026-03-05): Removida skill `postman-collection-generator` — não alinhada com contratos do projeto (sem suporte a `X-Correlation-ID`, `X-Tenant-ID`, RBAC). Lacuna marcada como ativa até entrega de `validate-openapi-contract`.
+- v2.0 (2026-03-04): Revisão completa. Adição do catálogo de skills existentes (tabelas), marcação de `validate-drizzle-schemas` como implementada, documentação das skills genéricas recentemente instaladas (`drizzle-orm`, `theme-factory`, `update-markdown-file-index`), tabela de lacunas encontradas (Seção 5).
 - v1.0 (data original): Levantamento inicial das operações críticas sem distinção de estado de implementação.

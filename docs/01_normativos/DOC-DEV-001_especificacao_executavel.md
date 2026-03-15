@@ -1,8 +1,13 @@
-# DOC-DEV-001 — Documento de Especificação Executável (TS + Node + Next.js | OpenAPI/Swagger)
+# DOC-DEV-001 — Documento de Especificação Executável (TS + Node + Vite/React | OpenAPI/Swagger)
 
-**Status:** Norma Canônica do Projeto | **Versão atual:** 1.4.0 | **Última revisão:** 2026-03-04
+- **id:** DOC-DEV-001
+- **version:** 1.5.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-03-15
+- **owner:** arquitetura
+- **scope:** global (norma canônica do projeto)
 
-> **Regra de uso:** Este documento é a **norma canônica e viva** do projeto. Toda nova spec de módulo (`MOD-XXX`) deve ser gerada via **skill `scaffold-module`**, que lê as regras fixadas aqui e estrutura a pasta `docs/04_modules/mod-xxx-nome/` com todos os artefatos pré-preenchidos. Alterações neste documento **DEVEM** ser registradas no CHANGELOG abaixo e acompanhar incremento de versão semântica (`MAJOR.MINOR.PATCH`). O CI/CD validará conformidade dos artefatos gerados via **Gate EX-CI-007**.
+> **Regra de uso:** Este documento é a **norma canônica e viva** do projeto. Toda nova spec de módulo (`MOD-XXX`) deve ser gerada via **skill `forge-module`**, que lê as regras fixadas aqui e estrutura a pasta `docs/04_modules/mod-xxx-nome/` com todos os artefatos pré-preenchidos. Alterações neste documento **DEVEM** ser registradas no CHANGELOG abaixo e acompanhar incremento de versão semântica (`MAJOR.MINOR.PATCH`). O CI/CD validará conformidade dos artefatos gerados via **Gate EX-CI-007**.
 
 ---
 
@@ -10,7 +15,8 @@
 
 | Versão | Data       | Responsável | Descrição |
 |--------|------------|-------------|-----------|
-| 1.4.0  | 2026-03-04 | arquitetura | Promovido a norma canônica em `01_normativos`. CHANGELOG embutido. Skill `scaffold-module` referenciada na regra de uso. |
+| 1.5.0  | 2026-03-15 | arquitetura | Correções: remoção de REFINING, renumeração de seções, unificação para forge-module, Vite/React. Metadados duplicados removidos do rodapé. |
+| 1.4.0  | 2026-03-04 | arquitetura | Promovido a norma canônica em `01_normativos`. CHANGELOG embutido. Skill `forge-module` referenciada na regra de uso. |
 | 1.3.0  | 2026-02-28 | arquitetura | Versão inicial como template. Seções de OpenAPI, testes automáticos e arquitetura C4. |
 
 ---
@@ -43,7 +49,7 @@ Para manter o "Golden Path", itens só ganham status (READY / DONE) se cumprirem
 
 #### Definition of Ready (DoR) - Para Iniciar o Desenvolvimento
 
-O item sai de `REFINING` e vai para `READY` **SE E SOMENTE SE**:
+O item sai de `DRAFT` e vai para `READY` **SE E SOMENTE SE**:
 
 - [ ] Possui um `owner` claro.
 - [ ] O problema ou funcionalidade tem escopo fechado e não ambíguo (BR/FR mínimos).
@@ -60,7 +66,7 @@ O Pull Request de um item é aprovado **SE E SOMENTE SE**:
 - [ ] O módulo possui o "Nível" correto carimbado.
 - [ ] ADR aberta se houve fuga dos padrões definidos no `DOC-GNP-00` ou `DOC-ESC-001`.
 
-### 0.2 Estados dos itens e Ciclo de Vida da Engenharia
+### 0.3 Estados dos itens e Ciclo de Vida da Engenharia
 
 Neste projeto de arquitetura XP, separamos o status dos documentos técnicos do tracker gerencial do time.
 
@@ -69,7 +75,7 @@ Neste projeto de arquitetura XP, separamos o status dos documentos técnicos do 
 Toda User Story (cujo caminho contenha `/user-stories/`) deve usar a tag `status_agil:` para mapear seu fluxo na esteira de desenvolvimento:
 
 - **`status_agil:`**
-  - **TODO:** Desenhando o Scope/Gherkin. A prioridade não está definida.
+  - **TODO:** A ideia está sendo rascunhada. Scope e prioridade ainda não definidos.
   - **READY:** Pronta para desenvolvimento. Escopo e Gherkin finalizados. Liberada para o `forge-module`.
   - **IN_PROGRESS:** Sendo codada e testada hoje pela equipe.
   - **DONE:** Testes automatizados passando, merge aprovado e QA finalizado.
@@ -90,7 +96,7 @@ Todo item técnico com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) que resid
 - `referencias_exemplos:` (EX-... quando aplicável)
 - `evidencias:` (links internos: PRs, testes, diagramas, decisões)
 
-### 0.3 Padrão de IDs (-\d{3})
+### 0.4 Padrão de IDs (-\d{3})
 
 - **MOD-XXX** Módulos/recursos do sistema
 - **BR-XXX** Regras de negócio
@@ -255,7 +261,7 @@ Todo item técnico com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) que resid
 
 ### Metadados do item (MOD-001)
 
-- estado_item: REFINING
+- estado_item: DRAFT
 - owner: arquitetura
 - data_ultima_revisao: 2026-02-27
 - rastreia_para: BR-001, FR-001, DATA-001, INT-001, SEC-001, UX-001, NFR-001, ADR-001
@@ -271,7 +277,7 @@ Todo item técnico com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) que resid
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (scaffold-module) |
+> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (forge-module) |
 
 - Regra: ...
 - Exemplo: ...
@@ -332,7 +338,7 @@ Cenário: <titulo>
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (scaffold-module) |
+> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (forge-module) |
 
 - **Descrição:** ...
 - **Prioridade:** Must | Should | Could
@@ -375,7 +381,7 @@ Cenário: <titulo>
 
   - FR-001-M01: `docs/04_modules/mod-001-backoffice-admin/amendments/fr/FR-001/FR-001-M01.md`
 
-- **estado_item:** REFINING
+- **estado_item:** DRAFT
 
 - **owner:** produto
 
@@ -399,7 +405,7 @@ Cenário: <titulo>
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (scaffold-module) |
+> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (forge-module) |
 
 - **Objetivo:** ...
 
@@ -728,7 +734,7 @@ erDiagram
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (scaffold-module) |
+> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (forge-module) |
 
 - **Sistema externo:** ...
 
@@ -774,7 +780,7 @@ erDiagram
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (scaffold-module) |
+> | 0.1.0  | YYYY-MM-DD | <owner>     | Baseline Inicial (forge-module) |
 
 - **Autenticação:** ...
 - **Autorização:** RBAC | ABAC | híbrido
@@ -897,7 +903,7 @@ Cenário: <titulo>
 ```mermaid
 sequenceDiagram
   actor U as Usuário
-  participant W as Web (Next.js)
+  participant W as Web (Vite/React)
   participant A as API (Node)
   participant D as DB (Postgres)
 
@@ -1056,7 +1062,7 @@ Quando `kind=command|workflow|integration` e houver **mudança de estado**, regi
 
 ```mermaid
 flowchart LR
-  user["Usuário"] --> web["Web (Next.js)"]
+  user["Usuário"] --> web["Web (Vite/React)"]
   web --> api["API (Node.js)"]
   api --> db[(Postgres)]
 ```
@@ -1070,6 +1076,8 @@ flowchart LR
 - ...
 
 ## 5.3 Contratos de API (padrões mínimos)
+
+> **MIGRADO:** O conteúdo normativo completo desta seção foi extraído para [DOC-ARC-001 — Padrões de Contrato OpenAPI/Swagger](DOC-ARC-001__Padroes_OpenAPI.md). O resumo abaixo é mantido apenas como referência rápida. Em caso de divergência, **DOC-ARC-001 prevalece**.
 
 - Erros em **Problem Details** (RFC 9457)
 - Paginação / filtros / ordenação padronizados
@@ -1159,16 +1167,18 @@ Um endpoint só é "Done" se:
 
 ---
 
-## 5.4 Contratos de Frontend (Next.js)
+## 5.4 Contratos de Frontend (Vite/React)
 
-> **Objetivo:** Estabelecer a forma de comunicação entre a UI (Next.js) e a API (Node.js) para limitar alucinação de agentes clientes.
+> **Objetivo:** Estabelecer a forma de comunicação entre a UI (Vite/React) e a API (Node.js) para limitar alucinação de agentes clientes.
 
-- A comunicação padrão entre o Frontend e a API **DEVE** ocorrer preferencialmente no modelo **Server Components -> API**.
+- A comunicação padrão entre o Frontend e a API **DEVE** ocorrer preferencialmente no modelo **Client Components -> API** (chamadas HTTP/fetch diretas do SPA para a API).
 - O Frontend (gerado pelo `AGN-COD-WEB`) **DEVE** respeitar o contrato de erro da API (RFC 9457). Em caso de `422 Unprocessable Entity`, o cliente **MUST** abstrair e mapear a resposta `extensions.invalid_fields[]` diretamente para os estados de validação dos formulários na UI, sem inventar mensagens ou tipagens.
 
 ---
 
 ## 5.5 Estratégia de Testes Automáticos
+
+> **MIGRADO:** O conteúdo normativo completo desta seção foi extraído para [DOC-ARC-002 — Estratégia de Testes Automáticos](DOC-ARC-002__Estrategia_Testes.md). O resumo abaixo é mantido apenas como referência rápida. Em caso de divergência, **DOC-ARC-002 prevalece**.
 
 > **Objetivo:** Garantir a saúde do CI/CD com testes rápidos, confiáveis e que valham o custo de manutenção. Agentes geradores (como `AGN-COD-CORE` e `AGN-COD-API`) **MUST** seguir os limites arquiteturais abaixo para testes:
 
@@ -1262,7 +1272,7 @@ Cole ou preencha a estrutura abaixo ao acionar as automações (Skills) de cria�
 ## 7.1 Criação ou Alteração de Módulo (Fluxo Puxado via US)
 
 A arquitetura agora exige um **Gate de Aprovação** antes da geração de código ou documentos.
-Você **não deve** mais passar prompts longos diretamente para as skills `scaffold-module` ou `create-amendment`. O fluxo correto é:
+Você **não deve** mais passar prompts longos diretamente para as skills `forge-module` ou `create-amendment`. O fluxo correto é:
 
 1. Duplique o `docs/04_modules/user-stories/templates/TEMPLATE-USER-STORY.md`.
 2. Renomeie para a sua necessidade (ex: `US-MOD-105-novo-relatorio.md`) salvando em `docs/04_modules/user-stories/features/`.
@@ -1291,13 +1301,4 @@ As automações cruzarão o "Quê" (User Story) com o "Como" (DOC-DEV-001) autom
 
 ## Metadados
 
-- id: DOC-DEV-001
-- title: Documento de Especificação Executável (TS + Node + Next.js | OpenAPI/Swagger)
-- version: 1.4.0
-- status: Norma Canônica
-- last_updated: 2026-03-04
-- owner: arquitetura
-- scope: full-stack
-- format: normativo
-- local_canonico: docs/01_normativos/DOC-DEV-001_especificacao_executavel.md
-- scaffold_skill: .agents/skills/scaffold-module/SKILL.md
+> Metadados canônicos mantidos no topo do documento (linhas 3-8).

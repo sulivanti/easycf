@@ -14,6 +14,10 @@
 - **rastreia_para:** DOC-PADRAO-005, DOC-ARC-003
 - **nivel_arquitetura:** 1 (Infraestrutura de Negócio / Foundation)
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** N/A
+- **pendencias:** N/A
 
 ---
 

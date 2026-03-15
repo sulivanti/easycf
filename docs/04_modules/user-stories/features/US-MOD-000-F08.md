@@ -11,10 +11,14 @@
 - **status_agil:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-06
-- **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F07, US-MOD-000-F09, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
+- **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F07, US-MOD-000-F09, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, DOC-UX-010
 - **nivel_arquitetura:** 1 (leitura enriquecida de sessão, kill-switch via banco, correlação UI→API)
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** ux-user-002
+- **pendencias:** N/A
 
 ---
 

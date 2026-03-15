@@ -63,7 +63,7 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 
 | Módulo | Arquivo Raiz | Estado |
 |---|---|---|
-| MOD-000 — Framework de Automação / Geradores (Foundation) | *(pendente forge-module)* | DRAFT |
+| MOD-000 — Framework de Automação / Geradores (Foundation) | *(pendente forge-module)* | READY |
 | MOD-001 — Backoffice (Admin) | *(pendente forge-module)* | DRAFT |
 | MOD-002 — Cadastro de Usuários | *(pendente forge-module)* | DRAFT |
 

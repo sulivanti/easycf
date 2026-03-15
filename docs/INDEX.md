@@ -63,9 +63,17 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 
 | Módulo | Arquivo Raiz | Estado |
 |---|---|---|
-| MOD-000 — Framework de Automação / Geradores (Foundation) | *(pendente forge-module)* | READY |
-| MOD-001 — Backoffice (Admin) | *(pendente forge-module)* | DRAFT |
-| MOD-002 — Cadastro de Usuários | *(pendente forge-module)* | DRAFT |
+| MOD-000 — Framework de Automação / Geradores (Foundation) | [mod.md](04_modules/mod-000-foundation/mod.md) | DRAFT |
+| MOD-001 — Backoffice (Admin) | *(rollback — aguardando re-forge)* | TODO |
+| MOD-002 — Gestão de Usuários | [US-MOD-002](04_modules/user-stories/epics/US-MOD-002.md) | READY |
+
+### Features — MOD-002
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-002-F01](04_modules/user-stories/features/US-MOD-002-F01.md) | Listagem de Usuários + Filtros + Ações | UX-USR-001 | READY |
+| [US-MOD-002-F02](04_modules/user-stories/features/US-MOD-002-F02.md) | Formulário de Cadastro (senha / convite) | UX-USR-002 | READY |
+| [US-MOD-002-F03](04_modules/user-stories/features/US-MOD-002-F03.md) | Fluxo de Convite e Ativação | UX-USR-003 | READY |
 
 > **Nota:** Novos módulos devem criar um subdiretório próprio em `04_modules/<mod-id>/` seguindo o padrão do MOD-001.
 

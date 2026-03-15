@@ -1,0 +1,88 @@
+# ============================================================
+# Screen Manifest — UX-USR-003
+# Tela: Fluxo de Convite e Ativação de Usuário (MOD-002)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# ============================================================
+# Status card por estado: PENDING, ACTIVE, BLOCKED, INACTIVE.
+# Cooldown 60s anti-spam no reenvio de convite.
+# LGPD: título e conteúdo usam NOME, nunca e-mail.
+# Amendment: users_invite_resend em MOD-000-F05.
+# ============================================================
+
+manifest_version: 1
+screen_id: UX-USR-003
+name: Fluxo de Convite e Ativação de Usuário
+entity_type: user
+
+linked_stories:
+  - US-MOD-002
+  - US-MOD-002-F03
+
+routes:
+  - path: /api/v1/users/{id}
+    method: GET
+  - path: /api/v1/users/{id}/invite/resend
+    method: POST
+
+telemetry_defaults:
+  event_name: user.invite_status_viewed
+  required_fields:
+    - screen_id
+    - tenant_id
+    - correlation_id
+  propagate_headers:
+    - X-Correlation-ID
+
+permissions:
+  read: users:read
+  write: users:write
+
+actions:
+  - action: view
+    client_only: false
+    operation_ids:
+      - users_get
+    permission: users:read
+    # Skeleton no card de status durante carregamento
+
+  - action: submit
+    client_only: false
+    operation_ids:
+      - users_invite_resend
+    permission: users:write
+    # Reenviar convite — cooldown 60s após sucesso
+
+ui_rules:
+  action_visibility:
+    strategy: hide_if_no_permission
+  action_enablement: []
+  # Regra: submit (reenvio) habilitado apenas quando status == PENDING (ver US-MOD-002-F03)
+
+error_mapping:
+  default_user_message: Ocorreu um erro inesperado. Tente novamente ou contate o suporte.
+  http_status:
+    '401':
+      user_message: Sessão expirada. Faça login novamente.
+      ui:
+        type: modal
+        level: error
+    '403':
+      user_message: Sem permissão para reenviar convites.
+      ui:
+        type: toast
+        level: error
+    '404':
+      user_message: Usuário não encontrado.
+      ui:
+        type: inline
+        level: error
+    '422':
+      user_message: Não é possível reenviar convite para este usuário.
+      ui:
+        type: toast
+        level: warning
+    '500':
+      user_message: Não foi possível reenviar o convite.
+      ui:
+        type: toast
+        level: error

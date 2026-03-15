@@ -47,7 +47,7 @@ O ecossistema adota uma Escala de Arquitetura em Níveis (0, 1 e 2), escalando e
 | --- | --- | --- |
 | **MOD-000 — Foundation** | [US-MOD-000](docs/04_modules/user-stories/epics/US-MOD-000.md) | `DRAFT` |
 | **MOD-001 — Backoffice (Admin)** | [US-MOD-001](docs/04_modules/user-stories/epics/US-MOD-001.md) | `DRAFT` |
-| **MOD-002 — Cadastro de Usuario** | [US-MOD-002](docs/04_modules/user-stories/epics/US-MOD-002.md) | `DRAFT` |
+| **MOD-002 — Gestão de Usuários** | [US-MOD-002](docs/04_modules/user-stories/epics/US-MOD-002.md) | `READY` |
 
 > *Para um indice completo das funcionalidades, ver `docs/INDEX.md`.*
 
@@ -120,13 +120,13 @@ A automação arquitetural orientada a Inteligência Artificial (Antigravity) pe
 2. **Geração Baseline:** Uma vez que essa US alcança o status `READY`, usufrui-se de rotinas automáticas de agentes (`forge-module`) que fundem essa US aos contratos obrigatórios (`DOC-DEV-001`), forjando o boilerplate (schemas, queries, routes, handlers em níveis 0/1/2).
 3. **Evolução Segura (Amendments):** Códigos ou regras alteradas após aprovação inicial nunca sobressaem silenciosamente nos documentos. Documenta-se em Emendas — Improvements (M), Correções (C) e Revisões (R) via skill `create-amendment`.
 
-As **Agent Skills** repousam fisicamente em `.agents/skills/`.
+As **Agent Skills** repousam fisicamente em `.claude/commands/`.
 
 ---
 
 ## Agent Skills (Antigravity)
 
-Todas as skills ficam em `.agents/skills/`. Para utilizá-las, basta pedir ao agente de IA no chat do editor. Abaixo, cada skill com seu propósito, quando usar e exemplos de prompt.
+Todas as skills ficam em `.claude/commands/`. Para utilizá-las, basta pedir ao agente de IA no chat do editor (ou usar `/nome-da-skill`). Abaixo, cada skill com seu propósito, quando usar e exemplos de prompt.
 
 ### Gestão de Módulos
 

@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** 1 (token de reset em banco, MailService, anti-enumeration)
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** N/A
+- **pendencias:** N/A
 
 ---
 

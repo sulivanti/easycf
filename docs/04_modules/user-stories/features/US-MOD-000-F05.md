@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** 1 (CRUD + soft delete + cursor pagination)
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** ux-user-001, ux-user-002
+- **pendencias:** N/A
 
 ---
 

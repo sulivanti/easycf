@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** 0 (infraestrutura do framework — sem domínio de negócio)
 - **referencias_exemplos:** `GET /health` em `packages/core-api/src/bootstrap/createApp.ts`
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** ECF Core (independente da cascata US-MOD-000)
+- **manifests_vinculados:** N/A
+- **pendencias:** N/A
 
 ---
 

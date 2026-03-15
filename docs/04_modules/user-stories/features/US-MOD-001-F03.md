@@ -13,6 +13,10 @@
 - **data_ultima_revisao:** 2026-03-08
 - **rastreia_para:** US-MOD-001, DOC-UX-011, DOC-UX-012, DOC-ARC-003, US-MOD-000-F08
 - **evidencias:** N/A (aguardando aprovação do épico US-MOD-001)
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-001
+- **manifests_vinculados:** ux-dash-001
+- **pendencias:** N/A
 
 ---
 

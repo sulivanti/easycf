@@ -1,7 +1,7 @@
 # Plano de Implantação: Arquitetura Híbrida (Agentes + Skills)
 
-**Versão:** 1.1  
-**Data:** 2026-03-04
+**Versão:** 1.2
+**Data:** 2026-03-13
 
 Este documento descreve o plano de implantação para a arquitetura de Inteligência Artificial do projeto, utilizando uma abordagem híbrida que combina o contexto situacional de **Agentes** com a especialização técnica de **Skills**.
 
@@ -81,5 +81,5 @@ O Desenvolvedor Humano ou o Agente (via skill `skill-creator`) desenvolve uma no
 
 ### Pendentes (Próximas Skills Customizadas)
 
-- [ ] **`validate-openapi-contract`** — Prioridade **Alta**: Validar conformidade com EX-OAS-001..004, lint Spectral e presença de `@contract` em artefatos. Usar `skill-creator` para desenvolvimento.
+- [x] **`validate-openapi-contract`** — ✅ Implementada (2026-03-13): Valida conformidade com EX-OAS-001..004, lint Spectral e presença de `@contract` em artefatos. Ver `.agents/skills/validate-openapi-contract/SKILL.md`.
 - [ ] **`validate-audit-hooks`** — Prioridade **Média**: Ampliar cobertura de auditoria para a camada Application (Use Cases), complementando o que `validate-drizzle-schemas` já cobre no schema de banco.

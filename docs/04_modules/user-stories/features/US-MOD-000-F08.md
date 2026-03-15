@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** 1 (leitura enriquecida de sessão, kill-switch via banco, correlação UI→API)
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** ux-user-002
+- **pendencias:** N/A
 
 ---
 

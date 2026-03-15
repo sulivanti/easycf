@@ -1300,4 +1300,4 @@ As automações cruzarão o "Quê" (User Story) com o "Como" (DOC-DEV-001) autom
 - scope: full-stack
 - format: normativo
 - local_canonico: docs/01_normativos/DOC-DEV-001_especificacao_executavel.md
-- scaffold_skill: .agents/skills/scaffold-module/SKILL.md
+- scaffold_skill: .agents/skills/forge-module/SKILL.md

@@ -218,25 +218,27 @@ US-MOD-000  (este arquivo) ← Épico / Governança / Índice
 
 | Sub-História | Tema | Status | Owner |
 | --- | --- | --- | --- |
-| [US-MOD-000-F01](../features/US-MOD-000-F01.md) | Autenticação nativa + gerenciamento de sessões | `READY` | arquitetura |
-| [US-MOD-000-F02](../features/US-MOD-000-F02.md) | MFA / TOTP (RFC 6238) | `READY` | arquitetura |
-| [US-MOD-000-F03](../features/US-MOD-000-F03.md) | SSO OAuth2 — Google + Microsoft | `READY` | arquitetura |
-| [US-MOD-000-F04](../features/US-MOD-000-F04.md) | Recuperação de senha por e-mail | `READY` | arquitetura |
-| [US-MOD-000-F05](../features/US-MOD-000-F05.md) | Gestão de usuários (CRUD + soft delete) | `READY` | arquitetura |
-| [US-MOD-000-F06](../features/US-MOD-000-F06.md) | Roles / RBAC por escopos + cache Redis | `READY` | arquitetura |
-| [US-MOD-000-F07](../features/US-MOD-000-F07.md) | Filiais multi-tenant (CRUD + soft delete) | `READY` | arquitetura |
-| [US-MOD-000-F08](../features/US-MOD-000-F08.md) | Perfil do usuário autenticado | `READY` | arquitetura |
-| [US-MOD-000-F09](../features/US-MOD-000-F09.md) | Vinculação usuário-filial com role | `READY` | arquitetura |
-| [US-MOD-000-F10](../features/US-MOD-000-F10.md) | Alteração de Senha Autenticada (Minha Conta) | `READY` | arquitetura |
-| [US-MOD-000-F11](../features/US-MOD-000-F11.md) | Endpoint GET /info (Versão e Metadados do Sistema) | `READY` | arquitetura |
-| [US-MOD-000-F12](../features/US-MOD-000-F12.md) | Catálogo de Permissões — CRUD de escopos (integridade referencial RBAC) | `READY` | arquitetura |
-| [US-MOD-000-F13](../features/US-MOD-000-F13.md) | Utilitário de Telemetria UI (UIActionEnvelope) | `READY` | arquitetura |
-| [US-MOD-000-F14](../features/US-MOD-000-F14.md) | Middlewares de Correlação E2E (CorrelationId Middleware) | `READY` | arquitetura |
-| [US-MOD-000-F15](../features/US-MOD-000-F15.md) | Motor de Gates de Pipeline CI (Screen Manifests Validator) | `READY` | arquitetura |
-| [US-MOD-000-F16](../features/US-MOD-000-F16.md) | Módulo de Storage e Upload Centralizado | `READY` | arquitetura |
-| [US-MOD-000-F17](../features/US-MOD-000-F17.md) | Login via Sign in with Apple (Apple ID — OIDC/JWKS) | `APPROVED` | arquitetura |
+| [US-MOD-000-F01](../features/US-MOD-000-F01.md) | Autenticação nativa + gerenciamento de sessões | `DRAFT` | arquitetura |
+| [US-MOD-000-F02](../features/US-MOD-000-F02.md) | MFA / TOTP (RFC 6238) | `DRAFT` | arquitetura |
+| [US-MOD-000-F03](../features/US-MOD-000-F03.md) | SSO OAuth2 — Google + Microsoft | `DRAFT` | arquitetura |
+| [US-MOD-000-F04](../features/US-MOD-000-F04.md) | Recuperação de senha por e-mail | `DRAFT` | arquitetura |
+| [US-MOD-000-F05](../features/US-MOD-000-F05.md) | Gestão de usuários (CRUD + soft delete) | `DRAFT` | arquitetura |
+| [US-MOD-000-F06](../features/US-MOD-000-F06.md) | Roles / RBAC por escopos + cache Redis | `DRAFT` | arquitetura |
+| [US-MOD-000-F07](../features/US-MOD-000-F07.md) | Filiais multi-tenant (CRUD + soft delete) | `DRAFT` | arquitetura |
+| [US-MOD-000-F08](../features/US-MOD-000-F08.md) | Perfil do usuário autenticado | `DRAFT` | arquitetura |
+| [US-MOD-000-F09](../features/US-MOD-000-F09.md) | Vinculação usuário-filial com role | `DRAFT` | arquitetura |
+| [US-MOD-000-F10](../features/US-MOD-000-F10.md) | Alteração de Senha Autenticada (Minha Conta) | `DRAFT` | arquitetura |
+| [US-MOD-000-F11](../features/US-MOD-000-F11.md) | Endpoint GET /info (Versão e Metadados do Sistema) ⁽¹⁾ | `DRAFT` | arquitetura |
+| [US-MOD-000-F12](../features/US-MOD-000-F12.md) | Catálogo de Permissões — CRUD de escopos (integridade referencial RBAC) | `DRAFT` | arquitetura |
+| [US-MOD-000-F13](../features/US-MOD-000-F13.md) | Utilitário de Telemetria UI (UIActionEnvelope) | `DRAFT` | arquitetura |
+| [US-MOD-000-F14](../features/US-MOD-000-F14.md) | Middlewares de Correlação E2E (CorrelationId Middleware) | `DRAFT` | arquitetura |
+| [US-MOD-000-F15](../features/US-MOD-000-F15.md) | Motor de Gates de Pipeline CI (Screen Manifests Validator) | `DRAFT` | arquitetura |
+| [US-MOD-000-F16](../features/US-MOD-000-F16.md) | Módulo de Storage e Upload Centralizado | `DRAFT` | arquitetura |
+| [US-MOD-000-F17](../features/US-MOD-000-F17.md) | Login via Sign in with Apple (Apple ID — OIDC/JWKS) | `DRAFT` | arquitetura |
 
 > 📌 **Regra de aprovação em cascata:** Esta US-MOD-000 deve ser aprovada **antes** de qualquer sub-história. Cada sub-história F01–F16 deve ser aprovada individualmente antes de ter seu código scaffoldado ou alterado por automação.
+>
+> ⁽¹⁾ **Exceção F11:** A US-MOD-000-F11 (GET /info) é infraestrutura de nível 0 do framework (`@easycf/core-api`). Não depende da aprovação deste épico para ser implementada — pertence ao roadmap do core-api diretamente. Permanece listada aqui apenas para rastreabilidade.
 
 ---
 

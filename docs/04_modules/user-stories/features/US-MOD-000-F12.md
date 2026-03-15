@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** 2 (integridade referencial RBAC + domain events + validação cruzada)
 - **referencias_exemplos:** US-MOD-000-F06 (Roles/RBAC), US-MOD-000-F09 (Vinculação usuário-filial)
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** N/A
+- **pendencias:** N/A
 
 ### Pendentes
 

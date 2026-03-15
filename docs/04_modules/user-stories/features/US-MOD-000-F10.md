@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** 2 (sessão em banco, kill-switch, domain events, bcrypt compare)
 - **referencias_exemplos:** US-MOD-000-F01 (gerenciamento de sessões), US-MOD-000-F04 (reset externo), US-MOD-000-F08 (perfil autenticado)
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** N/A
+- **pendencias:** N/A
 
 ---
 

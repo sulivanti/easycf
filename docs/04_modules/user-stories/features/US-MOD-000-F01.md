@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** 2 (DDD — domain events, sessão em banco, kill-switch)
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** ux-auth-001
+- **pendencias:** N/A
 
 ---
 

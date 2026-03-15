@@ -17,7 +17,7 @@ Esta *Skill* define o comportamento que o agente de inteligência (você) deve a
 
 Você tem três comandos principais disponíveis via `package.json` ou diretamente os scripts:
 
-### 1. Commit Semântico (`npm run commit` ou `node scripts/git-semantic-commit.js`)
+### 1. Commit Semântico (`npm run commit` ou `node .agents/scripts/git-semantic-commit.js`)
 
 Use este comando ou imite seu comportamento (fazendo os passos no terminal diretamente ou invocando-o) quando o usuário disser "faça os commits" de forma detalhada e quiser aprovação por etapas das responsabilidades (ex: um commit para o banco de dados e outro para a UI). Se fizer via terminal interativo as vezes não funcionará perfeitamente para nós, agentes, devido a dependência de standard input iterativo. Portanto, como Agente, você pode **você mesmo rodar os comandos no terminal**, como:
 
@@ -28,7 +28,7 @@ git commit -m "feat(module): implementa nova funcionalidade em pt-br"
 
 Lembre do `git status` antes.
 
-### 2. Sincronização Privada (`npm run sync:private` ou `powershell scripts/git-sync-private.ps1`)
+### 2. Sincronização Privada (`npm run sync:private` ou `powershell .agents/scripts/git-sync-private.ps1`)
 
 Use este comando quando o usuário pedir para:
 
@@ -40,7 +40,7 @@ Ele gerará um commit *chore* e empurrará para o remote origin atual.
 **Como Invocar via Agente:** Use a tool `run_command` rodando no powershell:
 `npm run sync:private`
 
-### 3. Sincronização Pública (`npm run sync:public` ou `powershell scripts/git-sync-public.ps1`)
+### 3. Sincronização Pública (`npm run sync:public` ou `powershell .agents/scripts/git-sync-public.ps1`)
 
 Use este comando quando o usuário:
 

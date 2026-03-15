@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** 2 (RBAC + cache Redis + domain events de permissões)
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-000
+- **manifests_vinculados:** N/A
+- **pendencias:** N/A
 
 ---
 

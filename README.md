@@ -12,9 +12,9 @@ Atualmente, o projeto foca no refinamento de seus módulos normativos e na gera�
 
 A tecnologia base escolhida preconiza alta performance e tipagem rigorosa:
 
-- **Runtime e Ferramentas:** Node.js (v20 Alpine), pnpm (Corepack), Turborepo (Monorepo), tsx.
-- **Framework Web/API:** Fastify v4.29.x
-- **Gestão de Banco e ORM:** PostgreSQL 17, Drizzle ORM (driver nativo `postgres`), redis 7 (ioredis).
+- **Runtime e Ferramentas:** Node.js (v20 Alpine), pnpm (Corepack), tsx.
+- **Framework Web/API (Recomendado):** Fastify v4.29.x
+- **Gestão de Banco e ORM (Recomendado):** PostgreSQL 17, Drizzle ORM (driver nativo `postgres`), redis 7 (ioredis).
 - **Mapeamento e Validação:** Zod.
 - **Autenticação e Segurança:** `@fastify/jwt@8.x`, `@fastify/oauth2@7.x`, `@fastify/rate-limit`, `otplib@12.x`.
 - **Containers:** Docker & Docker Compose (separação explícita entre Infraestrutura e Aplicação).
@@ -41,14 +41,15 @@ O ecossistema adota uma Escala de Arquitetura em Níveis (0, 1 e 2), escalando e
 
 ---
 
-## Módulos
+## Modulos
 
-| Módulo | Documentação Raiz | Status |
+| Modulo | Epico | Status |
 | --- | --- | --- |
-| **MOD-000 — Foundation** | [mod.md](docs/04_modules/mod-000-foundation/mod.md) | `READY` |
-| **MOD-001 — Backoffice (Admin)** | [mod.md](docs/04_modules/mod-001-backoffice/mod.md) | `READY` |
+| **MOD-000 — Foundation** | [US-MOD-000](docs/04_modules/user-stories/epics/US-MOD-000.md) | `DRAFT` |
+| **MOD-001 — Backoffice (Admin)** | [US-MOD-001](docs/04_modules/user-stories/epics/US-MOD-001.md) | `DRAFT` |
+| **MOD-002 — Cadastro de Usuario** | [US-MOD-002](docs/04_modules/user-stories/epics/US-MOD-002.md) | `DRAFT` |
 
-> *Para um índice completo das funcionalidades, ver `docs/INDEX.md`.*
+> *Para um indice completo das funcionalidades, ver `docs/INDEX.md`.*
 
 ---
 
@@ -78,17 +79,10 @@ Suba a infraestrutura base de banco de dados (Postgres) e cache (Redis) via Dock
 docker compose up -d
 ```
 
-Em seguida, faça o download de pacotes e inicialize o servidor da API fora do contêiner para utilizar o hot-reload (`tsx`):
+Em seguida, instale as dependencias do monorepo:
 
 ```bash
 pnpm install
-
-# Para executar migrações para o banco (caso necessário)
-pnpm run db:generate
-pnpm run db:push
-
-# Para iniciar a API em ambiente local
-pnpm run dev
 ```
 
 > **Fonte:** `DOC-PADRAO-001` e `DOC-PADRAO-004`.
@@ -112,7 +106,7 @@ O projeto consolida diversas rotinas estáticas e validações de documentação
 
 - **Zero Alucinação / Padrões Declarativos:** Utilize sempre o [DOC-DEV-001_especificacao_executavel.md](docs/01_normativos/DOC-DEV-001_especificacao_executavel.md) para redigir ou codificar comportamentos.
 - **Testes (DOC-ARC-002):** A cobertura do código deve abranger os Use Cases puramente em memória (Testes Unitários sem mock de I/O) e roteiras de integração com banco **real** (Testcontainers, postgres efêmero). É **proibido mockar UseCases e repositórios em testes de API E2E**.
-- **Gestão Eficiente Múltiplos Apps:** Devido ao pnpm Workspaces + Turborepo, dependências e compilações (`dist`) habitam cada respectivo pacote, isolando e organizando a transpilação final.
+- **Gestao Eficiente:** Dependencias e automacoes sao organizadas via pnpm Workspaces.
 
 ---
 
@@ -127,6 +121,348 @@ A automação arquitetural orientada a Inteligência Artificial (Antigravity) pe
 3. **Evolução Segura (Amendments):** Códigos ou regras alteradas após aprovação inicial nunca sobressaem silenciosamente nos documentos. Documenta-se em Emendas — Improvements (M), Correções (C) e Revisões (R) via skill `create-amendment`.
 
 As **Agent Skills** repousam fisicamente em `.agents/skills/`.
+
+---
+
+## Agent Skills (Antigravity)
+
+Todas as skills ficam em `.agents/skills/`. Para utilizá-las, basta pedir ao agente de IA no chat do editor. Abaixo, cada skill com seu propósito, quando usar e exemplos de prompt.
+
+### Gestão de Módulos
+
+#### `forge-module`
+
+Gera a estrutura completa de documentação de um novo módulo (MOD-XXX) a partir de uma User Story aprovada. Lê obrigatoriamente DOC-DEV-001 e DOC-DEV-002 para garantir conformidade.
+
+**Quando usar:** Quando uma User Story atinge `status_agil: READY` e o módulo precisa ser scaffoldado.
+
+**O que gera:**
+
+- Pasta `docs/04_modules/mod-{ID}-{nome}/` com todas as subpastas
+- Stubs de requisitos: `BR-`, `FR-`, `DATA-`, `SEC-`, `UX-`, `NFR-`
+- `mod.md`, `CHANGELOG.md`, `CONVENTIONS.md`, `permissions.yaml`
+- Pastas `amendments/`, `adr/`, `diagrams/`, `snippets/`
+- Todos os documentos com `estado_item: DRAFT`
+
+**Exemplos:**
+
+```text
+"Forge module para US-MOD-020 de relatórios financeiros"
+"Scaffold do novo módulo de gestão de contratos"
+"Criar a estrutura do MOD-015"
+```
+
+---
+
+#### `delete-module`
+
+Remove fisicamente todo o diretório de um módulo da documentação. Usado para limpeza ou descontinuação.
+
+**Quando usar:** Quando um módulo foi descontinuado ou precisa ser removido definitivamente.
+
+**Exemplos:**
+
+```text
+"Apagar o MOD-005 da documentação"
+"Excluir completamente o módulo de teste"
+```
+
+---
+
+#### `rollback-module`
+
+Desfaz a geração de um módulo (`forge-module`), deletando a pasta de documentação e retornando a User Story original para `TODO` ou `REJECTED`.
+
+**Quando usar:** Quando o `forge-module` foi executado prematuramente ou com especificação incorreta. Somente se nenhum código técnico foi escrito ainda.
+
+**Exemplos:**
+
+```text
+"Fazer rollback do MOD-012"
+"Desfazer scaffold porque a especificação mudou"
+"Reprovar o módulo de pagamentos"
+```
+
+---
+
+### Documentação e Especificações
+
+#### `create-amendment`
+
+Cria uma emenda governada para especificações que já estão em estado `READY`. Nunca edita o documento original — cria um delta versionado.
+
+**Quando usar:** Quando precisa alterar, detalhar ou corrigir uma especificação selada (`READY`). Existem 3 tipos:
+
+- **M (Melhoria):** Adiciona funcionalidade ou detalha comportamento existente
+- **C (Correção):** Corrige erro factual ou bug na especificação
+- **R (Revisão):** Esclarece sem alterar comportamento
+
+**O que gera:** Arquivo `{ID}-{Tipo}{NN}.md` (ex: `FR-001-M02.md`) na pasta `amendments/`. Atualiza o documento base, `mod.md` e `CHANGELOG.md`.
+
+**Exemplos:**
+
+```text
+"Criar emenda para FR-101 detalhando o novo fluxo de exportação"
+"Adicionar melhoria na regra de negócio BR-003"
+"Corrigir erro na especificação SEC-001"
+```
+
+---
+
+#### `create-specification`
+
+Cria uma nova especificação técnica para contratos que NÃO pertencem a módulos (cache, eventos de domínio, integrações externas, observabilidade).
+
+**Quando usar:** Para especificar contratos técnicos transversais. **Não usar para módulos** — para módulos, use `forge-module`.
+
+**Exemplos:**
+
+```text
+"Criar especificação para estratégia de cache do módulo de produtos"
+"Especificar padrão de eventos de domínio para auditoria"
+"Documentar contrato de integração com sistema de faturamento externo"
+```
+
+---
+
+#### `update-specification`
+
+Atualiza uma especificação existente. Se a spec está dentro de `docs/04_modules/`, delega automaticamente para `create-amendment`.
+
+**Quando usar:** Para atualizar especificações genéricas (fora de módulos). Nunca edite specs de módulo diretamente.
+
+**Exemplos:**
+
+```text
+"Atualizar a spec do carrinho com novos requisitos"
+"Adicionar nova regra na especificação de cache"
+```
+
+---
+
+#### `create-oo-component-documentation`
+
+Gera documentação técnica padronizada para componentes OO (handlers Fastify, repositórios Drizzle, services, middlewares).
+
+**Quando usar:** Ao gerar código backend ou quando precisar documentar componentes existentes.
+
+**O que gera:** Documentação completa com diagramas Mermaid, referência de interfaces, exemplos de uso e validação de contratos arquiteturais (RBAC, RFC 9457, Correlation ID, Multi-Tenant).
+
+**Exemplos:**
+
+```text
+"Documentar o repositório ItemRepository do módulo de pedidos"
+"Gerar documentação técnica para o handler de autenticação"
+"Doc do serviço de integração com gateway de pagamento"
+```
+
+---
+
+#### `readme-blueprint-generator`
+
+Gera ou atualiza o `README.md` analisando normativos, módulos e manifestos do projeto.
+
+**Quando usar:** No onboarding de novos desenvolvedores, após ciclo de entrega, ou quando o README está desatualizado. Frequência sugerida: a cada 2-3 módulos entregues.
+
+**Exemplos:**
+
+```text
+"Gerar README do projeto"
+"Atualizar README para os novos módulos"
+"Documentar para novos devs entrando na equipe"
+```
+
+---
+
+### Validação e Qualidade
+
+#### `validate-drizzle-schemas`
+
+Valida schemas Drizzle ORM contra as regras fundamentais do projeto: isolamento multi-tenant, anti-patterns, integração Zod, audit trail, soft-delete e domain events.
+
+**Quando usar:** Obrigatório após criar ou modificar qualquer schema de banco de dados.
+
+**O que valida:**
+
+- Nunca recriar entidades base (users, tenants, sessions) — usar FK
+- Toda query filtra por `tenant_id` no SQL (nunca em memória)
+- Exportar Zod schemas via `createInsertSchema` e `$inferSelect`
+- Tabelas de negócio têm `deleted_at` (soft-delete) e audit log
+- Domain events seguem padrão genérico com `correlation_id`
+
+**Exemplos:**
+
+```text
+"Validar schema.ts de contas de usuários"
+"Checar se há anti-patterns neste schema do banco"
+"Validar isolamento multi-tenant no schema de pedidos"
+```
+
+---
+
+#### `validate-fastify-endpoint`
+
+Valida estaticamente código de endpoint Fastify contra contratos arquiteturais invioláveis: RBAC, rastreabilidade e RFC 9457.
+
+**Quando usar:** Obrigatório após gerar ou modificar handlers backend.
+
+**O que valida:**
+
+- Rota usa guard `@RequireScope` (ou comentário `// ROTA PÚBLICA`)
+- Mutações (POST/PUT/PATCH/DELETE) propagam `X-Correlation-ID`
+- Erros usam formato RFC 9457 (Problem Details)
+- Rota declara `schema: { body?, querystring?, params?, response }`
+
+**Exemplos:**
+
+```text
+"Validar rota de login"
+"Revisar endpoint de criação de usuários em user.routes.ts"
+"Verificar segurança do handler de produtos"
+```
+
+---
+
+#### `validate-openapi-contract`
+
+Audita contrato YAML OpenAPI contra regras EX-OAS-001 a EX-OAS-004: estrutura, versionamento, Spectral lint, Swagger UI e testes de contrato.
+
+**Quando usar:** Obrigatório após gerar ou modificar rotas Fastify. Complementa `validate-fastify-endpoint` auditando o YAML.
+
+**O que valida:**
+
+- OpenAPI 3.1.0, paths versionados (`/api/v{X}/...`)
+- `operationId` único e estável, `x-permissions` documentados
+- ProblemDetails schema com `correlationId`
+- Headers `X-Correlation-ID` e `Idempotency-Key` declarados
+- Zero erros no Spectral lint
+
+**Exemplos:**
+
+```text
+"Validar contrato openapi da API v1"
+"Lint do yaml openapi completo"
+"Checar contrato da rota de login"
+```
+
+---
+
+#### `validate-screen-manifest`
+
+Valida manifestos de tela YAML contra schema v1 e regras DOC-UX-010 (EX-UX-001 a EX-UX-005): nomenclatura, catálogo de ações, telemetria e mapeamento de erros.
+
+**Quando usar:** Obrigatório após criar ou editar YAML em `docs/05_manifests/screens/`.
+
+**O que valida:**
+
+- Schema v1 (campos obrigatórios: `screen_id`, `entity_type`, `actions`, etc.)
+- Nomenclatura: `ux-{entity_type}-{seq}.{context}.yaml`
+- Ações no catálogo permitido (37 ações padronizadas)
+- `X-Correlation-ID` em `propagate_headers`
+- Mapeamento de erros HTTP (401, 403, 422, 500)
+
+**Exemplos:**
+
+```text
+"Validar manifesto UX-USER-001"
+"Checar screen manifest da tela de login"
+"Verificar manifest de CRUD de produtos"
+```
+
+---
+
+#### `qa_assistant`
+
+Pipeline de qualidade que valida documentação, manifestos e integridade geral do projeto.
+
+**Quando usar:** Para rodar validações de qualidade, CI local, ou checagem geral do projeto.
+
+**Comandos disponíveis:**
+
+- `pnpm run qa:all` — Master Quality Gate (roda tudo)
+- `pnpm run lint:docs` — Verifica dead-links em markdown
+- `pnpm run lint:markdown` — Valida sintaxe markdown
+- `pnpm run validate:manifests` — Valida manifestos YAML contra schemas
+
+**Exemplos:**
+
+```text
+"Rode os testes de qualidade"
+"Faz a checagem completa"
+"Pode validar tudo?"
+```
+
+---
+
+### Operações e Utilitários
+
+#### `git_assistant`
+
+Assistente Git com suporte a commits semânticos em PT-BR e sincronização multi-repo.
+
+**Quando usar:** Para operações git, commits semânticos, ou sincronização entre repositórios privado e público.
+
+**Comandos:**
+
+- `pnpm run commit` — Commit semântico interativo
+- `pnpm run sync:private` — Sincroniza repositório privado
+- `pnpm run sync:public` — Sincroniza template público
+
+**Exemplos:**
+
+```text
+"Terminei essa User Story, faz o commit pra mim"
+"Sincroniza o projeto privado"
+"Publicar as alterações no repositório template"
+```
+
+---
+
+#### `update-markdown-file-index`
+
+Atualiza seções de índice/tabela em arquivos markdown com lista de arquivos de um diretório especificado.
+
+**Quando usar:** Quando índices de documentação precisam ser atualizados. Também invocada automaticamente por outras skills (`forge-module`, `create-amendment`, `delete-module`, `rollback-module`).
+
+**Exemplos:**
+
+```text
+"Atualizar índice do diretório docs/04_modules em mod.md"
+"Atualizar o docs/INDEX.md com novos módulos"
+"Reindexar a pasta de amendments"
+```
+
+---
+
+#### `drizzle-orm`
+
+Referência completa de padrões Drizzle ORM: schemas, relações, queries, transações, migrações e performance.
+
+**Quando usar:** Quando tiver dúvidas sobre padrões Drizzle ORM ou precisar de referência para implementação.
+
+**Exemplos:**
+
+```text
+"Como fazer um join com Drizzle corretamente?"
+"Qual padrão de query builder para paginação?"
+"Explicar relações many-to-many no Drizzle"
+```
+
+---
+
+#### `skill-creator`
+
+Meta-skill para criar, avaliar e otimizar novas skills. Inclui benchmark, avaliação com subagentes e empacotamento para distribuição.
+
+**Quando usar:** Quando precisar criar uma skill nova, melhorar uma existente, ou medir performance de skills.
+
+**Exemplos:**
+
+```text
+"Criar uma nova skill para validar padronização de commits"
+"Melhorar a skill de validação de Drizzle schemas"
+"Analisar as métricas de performance da skill validate-fastify-endpoint"
+```
 
 ---
 

@@ -15,6 +15,10 @@
 - **nivel_arquitetura:** [0, 1 ou 2]
 - **referencias_exemplos:** N/A
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
+- **wave_entrega:** [Wave 1, Wave 2, etc.]
+- **epico_pai:** [US-MOD-NNN]
+- **manifests_vinculados:** [ux-xxx-nnn ou N/A]
+- **pendencias:** [PENDENTE-XXX ou N/A]
 
 ---
 

@@ -2,7 +2,7 @@
 
 **Versão:** 2.2
 **Data:** 2026-03-13
-**Base:** DOC-PADRAO-002, DOC-GNP-00, DOC-GPA-001, estado real do diretório `.agents/skills`
+**Base:** DOC-PADRAO-002, DOC-GNP-00, DOC-GPA-001, estado real do diretório `.claude/commands`
 
 Com base na análise das especificações e padrões arquiteturais do ecossistema (`DOC-PADRAO-002`, `DOC-GNP-00` e `DOC-GPA-001`), o núcleo do produto baseia-se em **Node.js, TypeScript, Drizzle ORM, Fastify, Zod e Redis**.
 
@@ -10,7 +10,7 @@ Este documento cataloga o **estado atual** das Skills, separando as **já implem
 
 ---
 
-## Catálogo Atual de Skills (`.agents/skills`)
+## Catálogo Atual de Skills (`.claude/commands`)
 
 ### Skills de Processo / Workflow
 
@@ -54,7 +54,7 @@ Este documento cataloga o **estado atual** das Skills, separando as **já implem
 
 A skill `validate-drizzle-schemas` cobre as validações mais críticas do domínio de banco de dados.
 
-> 📄 **Para o conjunto completo e atualizado de regras**, consulte diretamente a skill: `../../.agents/skills/validate-drizzle-schemas/SKILL.md`.
+> 📄 **Para o conjunto completo e atualizado de regras**, consulte diretamente a skill: `.claude/commands/validate-drizzle.md`.
 
 **Skill complementar:** `drizzle-orm` (genérica) fornece referência de padrões de queries, migrations e schemas quando o agente precisar de exemplos técnicos do ORM.
 
@@ -147,7 +147,7 @@ Usar a skill `skill-creator` para materializar as skills customizadas restantes,
 
 ## Changelog
 
-- v2.2 (2026-03-13): Implementação de `validate-openapi-contract` (EX-OAS-001..004, lint Spectral, `@contract`). Skills `validate-fastify-endpoint`, `create-amendment`, `delete-module`, `rollback-module` documentadas no catálogo. Tabela de lacunas (Seção 5) atualizada. Path do diretório de skills atualizado para `.agents/skills`.
+- v2.2 (2026-03-13): Implementação de `validate-openapi-contract` (EX-OAS-001..004, lint Spectral, `@contract`). Skills `validate-fastify-endpoint`, `create-amendment`, `delete-module`, `rollback-module` documentadas no catálogo. Tabela de lacunas (Seção 5) atualizada. Path do diretório de skills atualizado para `.claude/commands`.
 - v2.1 (2026-03-05): Removida skill `postman-collection-generator` — não alinhada com contratos do projeto (sem suporte a `X-Correlation-ID`, `X-Tenant-ID`, RBAC). Lacuna marcada como ativa até entrega de `validate-openapi-contract`.
 - v2.0 (2026-03-04): Revisão completa. Adição do catálogo de skills existentes (tabelas), marcação de `validate-drizzle-schemas` como implementada, documentação das skills genéricas recentemente instaladas (`drizzle-orm`, `theme-factory`, `update-markdown-file-index`), tabela de lacunas encontradas (Seção 5).
 - v1.0 (data original): Levantamento inicial das operações críticas sem distinção de estado de implementação.

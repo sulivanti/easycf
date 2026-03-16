@@ -12,7 +12,7 @@ cd meu-projeto
 O template inclui:
 
 - Documentos Normativos (`docs/01_normativos/`)
-- Skills de IA para automacao (`.agents/skills/`)
+- Skills de IA para automacao (`.claude/commands/`)
 - User Stories e templates (`docs/04_modules/user-stories/`)
 - Estrutura de governanca XP-Driven
 

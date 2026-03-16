@@ -10,7 +10,7 @@
 O EasyCodeFramework e um **framework de documentacao, governanca e automacao por agentes/skills**. Ele fornece:
 
 - **Documentos Normativos** (`docs/01_normativos/`) — padroes de arquitetura, seguranca, testes e observabilidade
-- **Skills de IA** (`.agents/skills/`) — automacao para scaffolding de modulos, validacao, amendments e mais
+- **Skills de IA** (`.claude/commands/`) — automacao para scaffolding de modulos, validacao, amendments e mais
 - **Workflow XP-Driven** — separacao entre velocidade agil (User Stories) e estabilidade tecnica (Especificacoes)
 
 ---

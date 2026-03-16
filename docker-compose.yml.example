@@ -5,7 +5,7 @@
 #
 # Para atualizar este arquivo:
 #   1. Edite o DOC-PADRAO-001 com os novos valores
-#   2. Execute: node .agents/skills/generate-docker-compose/scripts/generate.mjs
+#   2. Edite diretamente este arquivo conforme as diretrizes do DOC-PADRAO-001
 # ============================================================
 
 services:

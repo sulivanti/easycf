@@ -590,7 +590,7 @@ O Screen Manifest é um arquivo YAML declarativo que formaliza o **contrato da t
 |------------------|--------------------------------------------------------------------|
 | Schema JSON v1   | `docs/05_manifests/schemas/screen-manifest.v1.schema.json`        |
 | Manifestos       | `docs/05_manifests/screens/ux-{entity}-{seq}.{type}.yaml`         |
-| Skill de suporte | `.agents/skills/validate-screen-manifest/SKILL.md`                |
+| Skill de suporte | `.claude/commands/validate-manifest.md`                           |
 
 ### Convenção de nomenclatura do arquivo
 

@@ -56,7 +56,7 @@ Este pacote define **6 agentes especialistas** para geração de código e valid
 
 ### 0.4 Integração Obrigatória com Skills (MUST)
 
-- Os agentes COD **MUST** obrigatoriamente consultar e utilizar as skills presentes no diretório `.agents/skills` (como `forge-module`, `update-specification`, `readme-blueprint-generator`, etc.) ao gerarem código ou documentação interna da arquitetura.
+- Os agentes COD **MUST** obrigatoriamente consultar e utilizar as skills presentes no diretório `.claude/commands` (como `forge-module`, `update-specification`, `readme-blueprint`, etc.) ao gerarem código ou documentação interna da arquitetura.
 - O uso dessas skills garante o emprego de templates, prompts (via `prompt-builder`) e fluxos previamente testados, prevenindo construções ad-hoc fora dos padrões de padronização do projeto.
 
 ---
@@ -239,6 +239,6 @@ OpenAPI (quando AGN-COD-API):
 
 ## 6) Changelog
 
-- v1.3 (2026-03-02): Adição do subtópico 0.4 que obriga o uso de skills do diretório `.agents/skills`.
+- v1.3 (2026-03-02): Adição do subtópico 0.4 que obriga o uso de skills do diretório `.claude/commands`.
 - v1.2 (2026-02-27): Amarração explícita com EX-OAS-001..004, x-permissions (timeline/notifications), SEC-EventMatrix, DATA-003 e UX-010; expansão de ownership do AGN-COD-API para `apps/api/openapi/`.
 - v1.1 (2026-02-22): Base por camadas, plan→emit_files, content_lines[], validador.

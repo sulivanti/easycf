@@ -1,0 +1,150 @@
+# ============================================================
+# Screen Manifest — UX-CASE-002
+# Tela: Listagem de Casos
+# Módulo: MOD-006 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-CASE-002"
+name: "Listagem de Casos"
+type: list
+module: "MOD-006"
+route: "/casos"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-006"
+  - "US-MOD-006-F04"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+actions:
+
+  - id: load_cases
+    label: "Carregar listagem de casos"
+    type: view
+    operation_id: cases_list
+    http_method: GET
+    endpoint: "/api/v1/cases"
+    requires_scope: ["process:case:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os casos."
+
+  - id: filter_cases
+    label: "Aplicar filtros"
+    type: view
+    operation_id: cases_list
+    http_method: GET
+    endpoint: "/api/v1/cases"
+    requires_scope: ["process:case:read"]
+    loading_state: overlay
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Erro ao filtrar casos."
+
+  - id: open_new_case
+    label: "Abrir novo caso"
+    type: submit
+    operation_id: cases_open
+    http_method: POST
+    endpoint: "/api/v1/cases"
+    requires_scope: ["process:case:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível abrir o caso."
+
+  - id: navigate_to_case
+    label: "Navegar para painel do caso"
+    type: navigate
+    client_only: true
+    loading_state: none
+
+  - id: search_cases
+    label: "Buscar casos por código ou objeto"
+    type: view
+    operation_id: cases_list
+    http_method: GET
+    endpoint: "/api/v1/cases"
+    requires_scope: ["process:case:read"]
+    loading_state: none
+    notes: "Debounce 400ms. Busca por código (CASO-*) ou object_id."
+
+components:
+
+  - id: "cases-page-header"
+    name: "CasesPageHeader"
+    description: |
+      Header com título "Casos", contador total e botão "Novo Caso"
+      (visível apenas com process:case:write).
+      Campo de busca por código/objeto (debounce 400ms).
+    actions_used: [open_new_case, search_cases]
+
+  - id: "cases-filters"
+    name: "CasesFilters"
+    description: |
+      Filtros horizontais:
+        - Select "Ciclo": lista de process_cycles PUBLISHED
+        - Select "Status": ALL | OPEN | ON_HOLD | COMPLETED | CANCELLED
+        - Select "Estágio atual": filtrado pelo ciclo selecionado
+        - Select "Minha responsabilidade": mostra apenas casos onde sou responsável ativo
+        - Date range "Abertura": de/até
+        - Botão "Limpar filtros"
+      Sincronizados com query params da URL.
+    actions_used: [filter_cases]
+
+  - id: "cases-table"
+    name: "CasesTable"
+    description: |
+      Tabela com colunas:
+        - Código (badge monospace, link para /casos/:id)
+        - Ciclo + versão
+        - Estágio atual (badge colorido por macroetapa)
+        - Status (badge: OPEN=verde, ON_HOLD=âmbar, COMPLETED=azul, CANCELLED=cinza)
+        - Meu papel (se sou responsável ativo: exibe papel; caso contrário: vazio)
+        - Gates pendentes (número de gate_instances PENDING, badge vermelho se > 0)
+        - Aberto em (data + ator)
+      Clique na linha: navega para /casos/:id
+      Estado vazio: "Nenhum caso encontrado." + CTA "Abrir primeiro caso"
+      Skeleton durante load_cases.
+    actions_used: [load_cases, navigate_to_case]
+
+  - id: "open-case-drawer"
+    name: "OpenCaseDrawer"
+    description: |
+      Drawer para abrir novo caso:
+        - Select "Ciclo" (apenas PUBLISHED) — obrigatório
+        - Select "Área organizacional" (org_unit) — opcional
+        - Select "Tipo de objeto" (ex: pedido, contrato) — opcional
+        - Campo "ID do objeto" — opcional (só se tipo preenchido)
+        - Botão "Abrir caso"
+      Ao submeter: redireciona para /casos/:id do novo caso.
+    actions_used: [open_new_case]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. Scope process:case:read obrigatório.
+  2. Filtro "Minha responsabilidade": backend filtra por case_assignments.user_id=caller AND is_active=true.
+  3. Paginação: cursor-based (não offset).
+  4. Coluna "Gates pendentes": badge vermelho com contagem — clique abre /casos/:id na aba Gates.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Listagem cursor-based, filtros por ciclo/status/estágio, drawer de abertura."

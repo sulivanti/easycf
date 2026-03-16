@@ -74,7 +74,7 @@ Agentes **NÃO DEVEM** recriar ou duplicar entidades e lógicas que pertencem ao
 
 ### 0.7 Integração Obrigatória com Skills (MUST)
 
-- Os agentes DEV **MUST** obrigatoriamente consultar e utilizar as skills presentes no diretório `.agents/skills` (como `forge-module`, `create-specification`, `create-oo-component-documentation`, etc.) para qualquer tarefa conceitualmente coberta por essas capacidades.
+- Os agentes DEV **MUST** obrigatoriamente consultar e utilizar as skills presentes no diretório `.claude/commands` (como `forge-module`, `create-specification`, `create-oo-doc`, etc.) para qualquer tarefa conceitualmente coberta por essas capacidades.
 - O uso de skills padroniza fluxos validados de detalhamento (ex: Spec-Driven Development), mitigando desvios documentais e arquiteturais.
 
 ---
@@ -494,6 +494,6 @@ Retorne 1 item entity=UX.
 
 ## 13) Changelog
 
-- v1.3 (2026-03-02): Adição do subtópico 0.7 que obriga o uso de skills do diretório `.agents/skills`.
+- v1.3 (2026-03-02): Adição do subtópico 0.7 que obriga o uso de skills do diretório `.claude/commands`.
 - v1.2 (2026-02-27): Amarração explícita com SEC-EventMatrix, DATA-003 (catálogo obrigatório), UX-010 (action_id) e alinhamento com EX-OAS no ciclo DEV↔COD.
 - v1.1 (2026-02-22): Base do pacote (11 agentes) + structured-first + contract_refs.

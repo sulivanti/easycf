@@ -1,0 +1,245 @@
+# ============================================================
+# Screen Manifest — UX-PROC-002
+# Tela: Configurador de Estágio (painel lateral do editor)
+# Módulo: MOD-005 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-PROC-002"
+name: "Configurador de Estágio"
+type: detail
+module: "MOD-005"
+route: null   # painel lateral dentro de UX-PROC-001 — sem rota própria
+auth_required: true
+pre_auth: false
+layout: split   # renderizado como drawer direito dentro do editor
+
+linked_stories:
+  - "US-MOD-005"
+  - "US-MOD-005-F04"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "info"
+    label: "Informações"
+    default: true
+    actions_scope: [update_stage]
+
+  - id: "gates"
+    label: "Gates"
+    default: false
+    actions_scope: [load_gates, create_gate, update_gate, delete_gate, reorder_gates]
+
+  - id: "roles"
+    label: "Papéis"
+    default: false
+    actions_scope: [load_roles_catalog, link_role, unlink_role]
+
+  - id: "transitions"
+    label: "Transições"
+    default: false
+    actions_scope: [load_transitions, create_transition, delete_transition]
+
+actions:
+
+  - id: update_stage
+    label: "Salvar alterações básicas do estágio"
+    type: submit
+    operation_id: admin_stages_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/stages/:id"
+    requires_scope: ["process:cycle:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível salvar as alterações."
+
+  - id: create_gate
+    label: "Adicionar gate ao estágio"
+    type: submit
+    operation_id: admin_gates_create
+    http_method: POST
+    endpoint: "/api/v1/admin/stages/:sid/gates"
+    requires_scope: ["process:cycle:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar o gate."
+
+  - id: update_gate
+    label: "Editar gate existente"
+    type: submit
+    operation_id: admin_gates_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/gates/:id"
+    requires_scope: ["process:cycle:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível salvar o gate."
+
+  - id: delete_gate
+    label: "Remover gate"
+    type: submit
+    operation_id: admin_gates_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/gates/:id"
+    requires_scope: ["process:cycle:delete"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível remover o gate."
+
+  - id: reorder_gates
+    label: "Reordenar gates via drag-and-drop"
+    type: client_only
+    client_only: true
+    loading_state: none
+    notes: "Drag local — persiste ao finalizar drop via PATCH individual."
+
+  - id: load_roles_catalog
+    label: "Carregar catálogo de papéis disponíveis"
+    type: view
+    operation_id: admin_process_roles_list
+    http_method: GET
+    endpoint: "/api/v1/admin/process-roles"
+    requires_scope: ["process:cycle:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os papéis."
+
+  - id: link_role
+    label: "Vincular papel ao estágio"
+    type: submit
+    operation_id: admin_stage_roles_create
+    http_method: POST
+    endpoint: "/api/v1/admin/stages/:sid/roles"
+    requires_scope: ["process:cycle:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível vincular o papel."
+
+  - id: unlink_role
+    label: "Desvincular papel do estágio"
+    type: submit
+    operation_id: admin_stage_roles_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/stages/:sid/roles/:rid"
+    requires_scope: ["process:cycle:delete"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível desvincular o papel."
+
+  - id: create_transition
+    label: "Criar transição de saída a partir deste estágio"
+    type: submit
+    operation_id: admin_transitions_create
+    http_method: POST
+    endpoint: "/api/v1/admin/stage-transitions"
+    requires_scope: ["process:cycle:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar a transição."
+    notes: "Alternativa ao drag no canvas. Seleciona estágio destino via autocomplete."
+
+  - id: delete_transition
+    label: "Remover transição de saída"
+    type: submit
+    operation_id: admin_transitions_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/stage-transitions/:id"
+    requires_scope: ["process:cycle:delete"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível remover a transição."
+
+components:
+
+  - id: "stage-info-tab"
+    name: "StageInfoPanel"
+    description: |
+      Aba "Informações":
+        - Campo Nome* (editável, inline save)
+        - Campo Descrição (textarea, opcional)
+        - Toggle "Estágio inicial" — aviso se outro estágio já é inicial
+        - Toggle "Estágio terminal"
+        - Badge de Macroetapa (readonly — alterar macroetapa = mover no canvas)
+        - Botão "Salvar" (update_stage)
+      Ciclo PUBLISHED: todos os campos readonly.
+    actions_used: [update_stage]
+
+  - id: "gates-tab"
+    name: "GatesPanel"
+    description: |
+      Aba "Gates":
+        - Lista de gates ordenados por campo `ordem`, com drag-and-drop para reordenar
+        - Cada gate exibe: tipo (ícone + label), nome, badge required/informativo
+        - Inline edit ao clicar no gate (não abre modal)
+        - Campos editáveis inline: nome, gate_type, required, ordem
+        - Botão (+) no rodapé: abre mini-form inline para novo gate
+        - Botão 🗑 em cada gate: remove após confirmação
+        - Legenda de tipos: APPROVAL=azul, DOCUMENT=laranja, CHECKLIST=amarelo, INFORMATIVE=cinza
+      Ciclo PUBLISHED: lista readonly.
+    actions_used: [create_gate, update_gate, delete_gate, reorder_gates]
+
+  - id: "roles-tab"
+    name: "RolesPanel"
+    description: |
+      Aba "Papéis":
+        - Lista de papéis vinculados com: nome, badge required, badge can_approve
+        - Select com autocomplete para adicionar papel do catálogo
+        - Toggle required por papel vinculado
+        - Botão x para desvincular
+        - Skeleton durante load_roles_catalog
+      Ciclo PUBLISHED: lista readonly.
+    actions_used: [load_roles_catalog, link_role, unlink_role]
+
+  - id: "transitions-tab"
+    name: "TransitionsPanel"
+    description: |
+      Aba "Transições":
+        - Seção "Saída": lista de transições que partem deste estágio
+          - Cada transição: nome, estágio destino (badge com código+cor), gate_required badge, evidence_required badge
+          - Botão (+): abre mini-form para nova transição (autocomplete de estágio destino)
+          - Botão 🗑: remove após confirmação
+        - Seção "Entrada": lista de transições que chegam neste estágio (readonly — para contexto)
+      Ciclo PUBLISHED: ambas as seções readonly.
+    actions_used: [create_transition, delete_transition]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Este manifest é um PAINEL LATERAL de UX-PROC-001 — não tem rota própria.
+  2. Aberto ao clicar no ícone ⚙ de um nó no canvas ou ao clicar "Configurar" no nó selecionado.
+  3. Ciclo PUBLISHED: todos os campos e botões readonly. Banner: "Ciclo publicado — somente leitura."
+  4. Alterações inline são auto-saved com debounce de 800ms (sem botão "Salvar" explícito nos campos, exceto na aba Info).
+  5. Drag-and-drop de gates (reorder_gates) persiste ao soltar — PATCH individual por gate.
+  6. Toggle "Estágio inicial" com aviso se outro já é inicial: "O estágio X já é o inicial. Altere lá primeiro."
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Painel lateral com 4 abas: Info, Gates, Papéis, Transições. Modo readonly para ciclo PUBLISHED."

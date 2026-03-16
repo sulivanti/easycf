@@ -1,6 +1,6 @@
 # US-MOD-000-F01 — Autenticação Nativa com E-mail, Senha e Gerenciamento de Sessão
 
-**Status Ágil:** `DRAFT`
+**Status Ágil:** `READY`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth Core)
@@ -8,9 +8,9 @@
 
 ## Metadados de Governança
 
-- **status_agil:** DRAFT
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-06
+- **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-GNP-00, DOC-PADRAO-004, SEC-000-01
 - **nivel_arquitetura:** 2 (DDD — domain events, sessão em banco, kill-switch)
 - **referencias_exemplos:** N/A
@@ -159,11 +159,11 @@ Funcionalidade: Autenticação Nativa com E-mail e Senha
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
-- [ ] Cenários Gherkin revisados e aprovados pelo time (seção 3).
-- [ ] Contrato de API documentado no OpenAPI (`/auth/login`, `/auth/logout`, `/auth/sessions`, `/auth/refresh`).
-- [ ] Sem `PENDENTE-XXX` críticos em aberto.
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Owner definido.
+- [x] Cenários Gherkin revisados e aprovados pelo time (seção 3).
+- [x] Contrato de API documentado no OpenAPI (`/auth/login`, `/auth/logout`, `/auth/sessions`, `/auth/refresh`).
+- [x] Sem `PENDENTE-XXX` críticos em aberto.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

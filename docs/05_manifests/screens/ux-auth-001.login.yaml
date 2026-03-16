@@ -1,92 +1,193 @@
-manifest_version: 1
+# ============================================================
+# Screen Manifest — UX-AUTH-001
+# Tela: Login + Recuperação de Senha + Reset de Senha
+# Módulo: MOD-001 (Backoffice Admin)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
 screen_id: "UX-AUTH-001"
 name: "Login e Recuperação de Senha"
-entity_type: "auth"
+type: auth
+module: "MOD-001"
+route: "/login"
+auth_required: false
+pre_auth: true
+layout: centered
 
 linked_stories:
-  - "US-MOD-001"
-  - "US-MOD-001-F01"
-  - "US-MOD-001-F02"
-
-routes:
-  - path: "/auth/login"
-    method: POST
-  - path: "/auth/forgot-password"
-    method: POST
-  - path: "/auth/reset-password"
-    method: POST
+  - "US-MOD-001"       # épico pai — governa o ciclo de aprovação
+  - "US-MOD-001-F01"   # Shell de Autenticação e Layout Base
+  - "US-MOD-001-F02"   # Telemetria de UI e Rastreabilidade do Shell
 
 telemetry_defaults:
-  event_name: "auth.login_attempted"
-  required_fields:
-    - "screen_id"
-    - "correlation_id"
-    - "action"
-  # tenant_id AUSENTE: fase pré-autenticação (DOC-ARC-003 §2)
-  propagate_headers:
-    - "X-Correlation-ID"
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: false   # PRÉ-AUTH: tenant ainda não conhecido
+  propagate_correlation_id: true
+  capture_duration_ms: true
 
-permissions:
-  submit: "auth:login"
+# ─── PAINÉIS (sub-contextos sem reload de página) ────────────
+panels:
+  - id: "login"
+    label: "Login"
+    default: true
+    actions_scope: [submit_login, navigate_to_forgot]
 
+  - id: "forgot-password"
+    label: "Recuperar Senha"
+    default: false
+    actions_scope: [submit_forgot_password, navigate_to_login]
+
+  - id: "reset-password"
+    label: "Redefinir Senha"
+    default: false
+    # Painel ativado via URL: /login?token=<reset_token>
+    actions_scope: [submit_reset_password]
+
+# ─── AÇÕES ───────────────────────────────────────────────────
 actions:
-  # Contexto: login
-  - action: "submit"
+
+  # ── Painel: login ──────────────────────────────────────────
+  - id: submit_login
+    label: "Submeter formulário de login"
+    type: submit
+    operation_id: auth_login
+    http_method: POST
+    endpoint: "/api/v1/auth/login"
     client_only: false
-    operation_ids:
-      - "auth_login"
-    permission: "auth:login"
-
-  # Contexto: forgot-password
-  - action: "submit"
-    client_only: false
-    operation_ids:
-      - "auth_forgot_password"
-    permission: "auth:login"
-
-  # Contexto: reset-password
-  - action: "submit"
-    client_only: false
-    operation_ids:
-      - "auth_reset_password"
-    permission: "auth:login"
-
-  # Navegação cliente-side entre painéis (login ↔ recover)
-  - action: "view"
-    client_only: true
-    operation_ids: []
-    permission: "auth:login"
-
-ui_rules:
-  action_visibility:
-    strategy: "hide_if_no_permission"
-  action_enablement: []
-
-error_mapping:
-  default_user_message: "Ocorreu um erro inesperado. Tente novamente ou contate o suporte."
-  http_status:
-    "400":
-      user_message: "Requisição inválida."
-      ui:
-        type: "toast"
-        level: "error"
-    "401":
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      enumeration_safe: true
       user_message: "E-mail ou senha inválidos."
-      ui:
-        type: "toast"
-        level: "error"
-    "422":
-      user_message: "Dados inválidos. Verifique os campos e tente novamente."
-      ui:
-        type: "form_validation"
-        level: "error"
-    "429":
-      user_message: "Muitas tentativas. Aguarde alguns instantes antes de tentar novamente."
-      ui:
-        type: "toast"
-        level: "warning"
-    "500":
-      user_message: "Erro interno do servidor. Contate o suporte."
-      ui:
-        type: "toast"
-        level: "error"
+      # REGRA CRÍTICA: mensagem SEMPRE genérica — previne user enumeration (SEC-000-01)
+    telemetry_override:
+      include_tenant_id: false   # pré-auth: sem tenant
+      capture_duration_ms: true
+
+  - id: navigate_to_forgot
+    label: "Abrir painel de recuperação de senha"
+    type: client_only
+    client_only: true
+    loading_state: none
+    # Transição de painel: login → forgot-password (sem reload, sem HTTP)
+    telemetry_override:
+      capture_duration_ms: false
+
+  # ── Painel: forgot-password ────────────────────────────────
+  - id: submit_forgot_password
+    label: "Solicitar link de recuperação de senha"
+    type: submit
+    operation_id: auth_forgot_password
+    http_method: POST
+    endpoint: "/api/v1/auth/forgot-password"
+    client_only: false
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      enumeration_safe: true
+      user_message: "Se o e-mail estiver cadastrado, você receberá um link em breve."
+      # REGRA CRÍTICA: resposta sempre positiva — previne enumeração de e-mails (SEC-000-01)
+    telemetry_override:
+      include_tenant_id: false
+
+  - id: navigate_to_login
+    label: "Voltar para tela de login"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+  # ── Painel: reset-password ─────────────────────────────────
+  - id: submit_reset_password
+    label: "Redefinir senha com token de reset"
+    type: submit
+    operation_id: auth_reset_password
+    http_method: POST
+    endpoint: "/api/v1/auth/reset-password"
+    client_only: false
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      enumeration_safe: false
+      user_message: "Link inválido ou expirado. Solicite um novo link de recuperação."
+    telemetry_override:
+      include_tenant_id: false
+
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
+
+  - id: "auth-card"
+    name: "AuthCard"
+    description: "Container centralizado com logo, título e painel ativo. Ocupa centro vertical/horizontal da viewport."
+    conditional: "sempre visível"
+    actions_used: []
+
+  - id: "login-form"
+    name: "LoginForm"
+    description: "Formulário com campos email (type=email) e password. Inclui label 'Lembrar-me' (remember_me boolean) e link 'Esqueci minha senha'."
+    conditional: "panel == 'login'"
+    actions_used: [submit_login, navigate_to_forgot]
+
+  - id: "forgot-password-form"
+    name: "ForgotPasswordForm"
+    description: "Formulário com apenas campo email. Botão 'Enviar link' e link 'Voltar ao login'."
+    conditional: "panel == 'forgot-password'"
+    actions_used: [submit_forgot_password, navigate_to_login]
+
+  - id: "reset-password-form"
+    name: "ResetPasswordForm"
+    description: "Formulário com campos nova_senha e confirmar_senha. Token lido do query param ?token=. Valida política de senha inline antes do submit."
+    conditional: "panel == 'reset-password'"
+    actions_used: [submit_reset_password]
+
+  - id: "auth-toast-error"
+    name: "AuthToastError"
+    description: "Toast de erro RFC 9457 com mensagem amigável e correlationId no rodapé. Não exibe detalhes técnicos. Posição: top-right, auto-dismiss 6s."
+    conditional: "quando action retorna erro"
+    actions_used: []
+
+# ─── NAVEGAÇÃO E PROTEÇÃO DE ROTA ────────────────────────────
+navigation:
+  guard: guest
+  # Se usuário JÁ estiver autenticado ao acessar /login → redireciona
+  redirect_if_auth: "/dashboard"
+  redirect_if_unauth: null   # esta rota É a rota de não-autenticados
+  # Token de reset: /login?token=<uuid> → ativa painel reset-password automaticamente
+
+# ─── REGRAS CRÍTICAS DE UX ────────────────────────────────────
+# Documentadas aqui para referência do desenvolvedor frontend.
+# A fonte normativa é DOC-UX-011, DOC-UX-012 e SEC-000-01.
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Mensagem de erro de login e forgot-password DEVEM ser genéricas (user enumeration prevention).
+     Nunca revelar se o e-mail existe ou não. Texto fixo: conforme user_message de cada action.
+  2. Botão de submit DEVE entrar em estado disabled + spinner (isLoading) imediatamente após clique.
+     Permanece desabilitado até resposta da API (sucesso ou erro).
+  3. Toast de erro DEVE incluir o correlationId no rodapé (menor, cor cinza) — permite debug pelo usuário.
+  4. Transição entre painéis (login ↔ forgot-password) DEVE ser client-only: sem reload, sem nova rota.
+  5. Painel reset-password é ativado por query param ?token= na URL /login.
+     O token é validado apenas no submit — não fazer requisição de validação antecipada.
+  6. Layout DEVE ser responsivo. Em mobile: padding comprimido, logo menor.
+  7. Campos de senha DEVEM ter toggle de visibilidade (ícone olho).
+  8. Não armazenar nenhum dado sensível em localStorage ou sessionStorage nesta fase pré-auth.
+
+  COMPORTAMENTOS ESPERADOS POR CENÁRIO:
+  - Login OK (200):          Armazena tokens (cookies httpOnly gerenciados pelo browser), redireciona para /dashboard
+  - Login MFA (200+mfa):     Redireciona para /login/mfa com temp_token
+  - Login BLOCKED (403):     Toast "Sua conta está bloqueada. Entre em contato com o suporte." + correlationId
+  - Login Rate Limit (429):  Toast "Muitas tentativas. Aguarde X segundos." + retry_after
+  - Forgot OK (200):         Toast de sucesso (mesma mensagem p/ email existente e inexistente)
+  - Reset token expirado:    Toast de erro, link para tentar novamente (volta ao painel forgot)
+  - Reset OK (200):          Toast de sucesso + redirect para /login (painel login, sem token na URL)
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Cobre painéis login, forgot-password e reset-password. Telemetria pré-auth sem tenant_id."

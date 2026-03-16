@@ -1,6 +1,6 @@
 # US-MOD-000-F16 — Módulo de Storage e Upload Centralizado
 
-**Status Ágil:** `DRAFT`
+**Status Ágil:** `READY`
 **Data:** 2026-03-06
 **Autor(es):** Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation)
@@ -8,9 +8,9 @@
 
 ## Metadados de Governança
 
-- **status_agil:** DRAFT
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-06
+- **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** DOC-PADRAO-005, DOC-ARC-003
 - **nivel_arquitetura:** 1 (Infraestrutura de Negócio / Foundation)
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
@@ -87,9 +87,9 @@ Funcionalidade: Upload Governed (Fluxo Two-Step com Presigned URL)
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Normativa `DOC-PADRAO-005` formalizada em 01_normativos.
-- [ ] Contratos HTTP e Schema `storage_objects` especificados.
-- [ ] O modelo `domains_eventes` possui suporte e mapeamento de correlações aos eventos "storage.*".
+- [x] Normativa `DOC-PADRAO-005` formalizada em 01_normativos.
+- [x] Contratos HTTP e Schema `storage_objects` especificados.
+- [x] O modelo `domains_eventes` possui suporte e mapeamento de correlações aos eventos "storage.*".
 
 ---
 

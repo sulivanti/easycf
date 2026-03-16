@@ -1,6 +1,6 @@
 # US-MOD-000-F02 — Autenticação de Dois Fatores via TOTP (MFA)
 
-**Status Ágil:** `DRAFT`
+**Status Ágil:** `READY`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth MFA)
@@ -8,9 +8,9 @@
 
 ## Metadados de Governança
 
-- **status_agil:** DRAFT
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-08
+- **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, DOC-DEV-001, DOC-ARC-001, DOC-GNP-00, SEC-000-01
 - **nivel_arquitetura:** 2 (DDD — temp_token com escopo restrito, domain events de sessão)
 - **referencias_exemplos:** N/A
@@ -140,12 +140,12 @@ Funcionalidade: Autenticação de Dois Fatores via TOTP (MFA)
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido (arquitetura).
-- [ ] Cenários Gherkin revisados e aprovados.
-- [ ] Contrato do endpoint `POST /auth/mfa/verify` documentado no OpenAPI.
-- [ ] Sem `PENDENTE-XXX` críticos em aberto.
-- [ ] Feature US-MOD-000-F01 **aprovada**.
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Owner definido (arquitetura).
+- [x] Cenários Gherkin revisados e aprovados.
+- [x] Contrato do endpoint `POST /auth/mfa/verify` documentado no OpenAPI.
+- [x] Sem `PENDENTE-XXX` críticos em aberto.
+- [x] Feature US-MOD-000-F01 **aprovada**.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

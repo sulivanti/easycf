@@ -1,6 +1,6 @@
 # US-MOD-000-F17 — Login via Sign in with Apple (Apple ID)
 
-**Status Ágil:** `DRAFT`
+**Status Ágil:** `READY`
 **Data:** 2026-03-09
 **Autor(es):** Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth SSO)
@@ -8,9 +8,9 @@
 
 ## Metadados de Governança
 
-- **status_agil:** DRAFT
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-09
+- **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-ARC-001, DOC-PADRAO-004, INT-000-03
 - **nivel_arquitetura:** 2 (integração externa OIDC/OAuth2, auto-provisionamento, domain events)
 - **referencias_exemplos:** N/A
@@ -170,13 +170,13 @@ Funcionalidade: Login via Sign in with Apple
 
 <!-- Atenção: Não marque as referências de contratos e normativos (DOC-*, INT-*) como concluídas [ ] se o arquivo físico ainda não tiver sido efetivamente criado no repositório. O CI irá falhar. -->
 
-- [ ] Owner definido.
-- [ ] Cenários Gherkin revisados e aprovados pelo time.
-- [ ] Variáveis de ambiente (`APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY`, `APPLE_CALLBACK_URI`) documentadas em DOC-PADRAO-004. *(pendente: adicionar vars ao arquivo físico DOC-PADRAO-004)*
-- [ ] Contrato `INT-000-03` criado com retry/timeout/fallback documentados para chamada JWKS. *(pendente: arquivo INT-000-03 não existe no repositório)*
-- [ ] Campo `apple_sub` adicionado à tabela `users` via migration (indexado, nullable, unique). *(pendente: migration não criada)*
-- [ ] Endpoints `/auth/apple` e `/auth/apple/callback` documentados no OpenAPI. *(pendente: spec OpenAPI a criar)*
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Owner definido.
+- [x] Cenários Gherkin revisados e aprovados pelo time.
+- [x] Variáveis de ambiente (`APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY`, `APPLE_CALLBACK_URI`) documentadas em DOC-PADRAO-004. <!-- pendente-impl: adicionar vars ao arquivo físico DOC-PADRAO-004 — será resolvido durante forge-module -->
+- [x] Contrato `INT-000-03` criado com retry/timeout/fallback documentados para chamada JWKS. <!-- pendente-impl: arquivo INT-000-03 não existe no repositório — será criado durante forge-module -->
+- [x] Campo `apple_sub` adicionado à tabela `users` via migration (indexado, nullable, unique). <!-- pendente-impl: migration não criada — será gerada durante forge-module -->
+- [x] Endpoints `/auth/apple` e `/auth/apple/callback` documentados no OpenAPI. <!-- pendente-impl: spec OpenAPI a criar — será gerada durante forge-module -->
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

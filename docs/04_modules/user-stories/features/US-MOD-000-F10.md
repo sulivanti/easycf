@@ -1,6 +1,6 @@
 # US-MOD-000-F10 — Alteração de Senha Autenticada (Minha Conta)
 
-**Status Ágil:** `DRAFT`
+**Status Ágil:** `READY`
 **Data:** 2026-03-06
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Auth Password Change)
@@ -8,9 +8,9 @@
 
 ## Metadados de Governança
 
-- **status_agil:** DRAFT
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-06
+- **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F04, US-MOD-000-F08, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, SEC-000-01, DOC-PADRAO-004
 - **nivel_arquitetura:** 2 (sessão em banco, kill-switch, domain events, bcrypt compare)
 - **referencias_exemplos:** US-MOD-000-F01 (gerenciamento de sessões), US-MOD-000-F04 (reset externo), US-MOD-000-F08 (perfil autenticado)
@@ -178,12 +178,12 @@ Funcionalidade: Alteração de Senha Autenticada
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
-- [ ] Cenários Gherkin revisados e aprovados (seção 3).
-- [ ] Contrato `PUT /auth/change-password` documentado no OpenAPI com `operationId=changePassword_US-MOD-000-F10`.
-- [ ] Comportamento do middleware `force_pwd_reset` alinhado com US-MOD-000-F01 (gate de sessão) e documentado como regra do middleware.
-- [ ] Sem `PENDENTE-XXX` críticos em aberto.
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Owner definido.
+- [x] Cenários Gherkin revisados e aprovados (seção 3).
+- [x] Contrato `PUT /auth/change-password` documentado no OpenAPI com `operationId=changePassword_US-MOD-000-F10`.
+- [x] Comportamento do middleware `force_pwd_reset` alinhado com US-MOD-000-F01 (gate de sessão) e documentado como regra do middleware.
+- [x] Sem `PENDENTE-XXX` críticos em aberto.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

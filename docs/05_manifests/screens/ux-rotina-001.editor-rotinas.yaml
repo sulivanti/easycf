@@ -1,0 +1,266 @@
+# ============================================================
+# Screen Manifest — UX-ROTINA-001
+# Tela: Cadastro e Editor de Rotinas de Comportamento
+# Módulo: MOD-007 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-ROTINA-001"
+name: "Cadastro e Editor de Rotinas de Comportamento"
+type: config
+module: "MOD-007"
+route: "/parametrizacao/rotinas"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-007"
+  - "US-MOD-007-F05"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "list"
+    label: "Rotinas"
+    default: true
+
+  - id: "editor"
+    label: "Editor de Itens"
+    default: false
+    notes: "Ativado ao selecionar uma rotina na listagem"
+
+  - id: "history"
+    label: "Histórico de Versões"
+    default: false
+
+actions:
+
+  - id: load_routines
+    label: "Carregar lista de rotinas"
+    type: view
+    operation_id: admin_routines_list
+    http_method: GET
+    endpoint: "/api/v1/admin/routines"
+    requires_scope: ["param:routine:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar as rotinas."
+
+  - id: load_routine_detail
+    label: "Carregar detalhes e itens de uma rotina"
+    type: view
+    operation_id: admin_routines_get
+    http_method: GET
+    endpoint: "/api/v1/admin/routines/:id"
+    requires_scope: ["param:routine:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar a rotina."
+
+  - id: create_routine
+    label: "Criar nova rotina DRAFT"
+    type: submit
+    operation_id: admin_routines_create
+    http_method: POST
+    endpoint: "/api/v1/admin/routines"
+    requires_scope: ["param:routine:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar a rotina."
+
+  - id: publish_routine
+    label: "Publicar rotina (DRAFT → PUBLISHED)"
+    type: submit
+    operation_id: admin_routines_publish
+    http_method: POST
+    endpoint: "/api/v1/admin/routines/:id/publish"
+    requires_scope: ["param:routine:publish"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível publicar a rotina."
+
+  - id: fork_routine
+    label: "Criar nova versão da rotina (fork)"
+    type: submit
+    operation_id: admin_routines_fork
+    http_method: POST
+    endpoint: "/api/v1/admin/routines/:id/fork"
+    requires_scope: ["param:routine:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível criar a nova versão."
+
+  - id: add_routine_item
+    label: "Adicionar item à rotina DRAFT"
+    type: submit
+    operation_id: admin_routine_items_create
+    http_method: POST
+    endpoint: "/api/v1/admin/routines/:id/items"
+    requires_scope: ["param:routine:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível adicionar o item."
+
+  - id: update_routine_item
+    label: "Editar item da rotina DRAFT"
+    type: submit
+    operation_id: admin_routine_items_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/routine-items/:id"
+    requires_scope: ["param:routine:write"]
+    loading_state: none
+    notes: "Auto-save com debounce 600ms nos campos do item"
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível salvar o item."
+
+  - id: delete_routine_item
+    label: "Remover item da rotina DRAFT"
+    type: submit
+    operation_id: admin_routine_items_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/routine-items/:id"
+    requires_scope: ["param:routine:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível remover o item."
+
+  - id: preview_routine
+    label: "Pré-visualizar resultado da rotina (dry-run)"
+    type: submit
+    operation_id: routine_engine_evaluate
+    http_method: POST
+    endpoint: "/api/v1/routine-engine/evaluate"
+    requires_scope: ["param:engine:evaluate"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível simular a rotina."
+
+  - id: reorder_items
+    label: "Reordenar itens da rotina por drag-and-drop"
+    type: client_only
+    client_only: true
+    loading_state: none
+    notes: "Persiste via PATCH individual por item ao soltar."
+
+components:
+
+  - id: "routines-list"
+    name: "RoutinesList"
+    description: |
+      Painel "Rotinas":
+        - Tabela: Código, Nome, Tipo (BEHAVIOR), Versão, Status badge, Itens #, Publicada em
+        - Status: DRAFT=âmbar, PUBLISHED=verde, DEPRECATED=cinza
+        - Filtro por status (select)
+        - Botão "Nova rotina" (scope write): drawer com codigo*, nome*, routine_type (fixo: BEHAVIOR nesta tela)
+        - Clique na linha: abre painel "Editor de Itens" à direita (split view)
+        - Versão badge: ex. "v2" → tooltip "Derivada de v1 (publicada em 2026-02-10)"
+    actions_used: [load_routines, create_routine]
+
+  - id: "routine-editor"
+    name: "RoutineItemEditor"
+    description: |
+      Painel "Editor de Itens" (split view à direita):
+        Header:
+          - Nome da rotina + versão + status badge
+          - Botão "Publicar" (DRAFT only + scope publish): modal de confirmação "Rotina se tornará imutável."
+          - Botão "Nova versão" (PUBLISHED only + scope write): abre modal com campo "Motivo da mudança" obrigatório
+          - Botão "Pré-visualizar": executa preview_routine + exibe resultado no drawer lateral
+
+        Lista de itens (drag-and-drop para reordenar, DRAFT only):
+          Cada item exibe:
+            - Drag handle (DRAFT only)
+            - Ordem (número)
+            - Tipo badge (cor por item_type)
+            - Campo-alvo (field_label)
+            - Ação (SHOW/HIDE/SET_REQUIRED/...)
+            - Valor (truncado se longo)
+            - is_blocking badge vermelho (se VALIDATION + blocking)
+            - Botões: editar (abre inline), deletar (DRAFT only)
+
+          Formulário inline por item (ao clicar editar):
+            - Select item_type → campos adaptativos:
+              FIELD_VISIBILITY:  select action (SHOW/HIDE), autocomplete campo-alvo
+              REQUIRED:          select action (SET_REQUIRED/SET_OPTIONAL), autocomplete campo
+              DEFAULT:           autocomplete campo, input valor default
+              DOMAIN:            autocomplete campo, multi-input valores permitidos (chips)
+              VALIDATION:        autocomplete campo, textarea regra, input mensagem de erro, toggle is_blocking
+              EVIDENCE:          select tipo de evidência, toggle is_blocking (para gate formal)
+            - Toggle "Condição" (expandido): field condition_expr (texto, preparado para v2)
+
+        Rodapé:
+          - Botão "Adicionar item" (DRAFT only + scope write)
+
+      PUBLISHED: lista readonly, sem drag, sem editar/deletar itens.
+      Banner: "Rotina publicada — use 'Nova versão' para modificar."
+    actions_used: [load_routine_detail, add_routine_item, update_routine_item,
+                   delete_routine_item, reorder_items, publish_routine, fork_routine, preview_routine]
+
+  - id: "routine-preview-drawer"
+    name: "RoutinePreviewDrawer"
+    description: |
+      Drawer lateral (abre ao clicar "Pré-visualizar"):
+        - Select "Objeto-alvo" (pré-preenchido com o objeto vinculado à rotina)
+        - Select "Enquadrador" (pré-preenchido com o framer desta rotina)
+        - Botão "Simular"
+        - Resultado em seções colapsáveis:
+            Campos visíveis (lista)
+            Campos obrigatórios (lista)
+            Campos ocultos (lista)
+            Defaults (pares chave:valor)
+            Restrições de domínio (por campo)
+            Validações (lista, com badge "Bloqueante" se is_blocking=true)
+        - Aviso: "Esta simulação não registra domain_events (modo dry-run)."
+    actions_used: [preview_routine]
+
+  - id: "version-history"
+    name: "VersionHistoryPanel"
+    description: |
+      Painel "Histórico de Versões":
+        - Timeline de versões da rotina selecionada (mais recente no topo)
+        - Cada versão: número, status, publicada por, data, motivo da mudança
+        - Linha de ancestralidade: v3 ← v2 ← v1 (com ícone de fork)
+        - Clique em versão anterior: abre visualização readonly dos itens dessa versão
+        - Botão "Comparar com atual" (futura funcionalidade — badge "Em breve")
+    actions_used: [load_routine_detail]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. Scope param:routine:read obrigatório.
+  2. Botão "Nova versão" (fork): campo "Motivo da mudança" OBRIGATÓRIO (min 10 chars) — armazenado em routine_version_history.
+  3. PUBLISHED: editor completamente readonly. Nenhum item editável.
+  4. Auto-save nos itens: debounce 600ms — sem botão "Salvar" explícito por item.
+  5. is_blocking=true: badge vermelho visível na listagem + no preview.
+  6. "Pré-visualizar" (dry-run): NÃO cria domain_events — apenas simula o resultado.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Split view lista+editor, drag-and-drop de itens, fork com motivo obrigatório, preview dry-run."

@@ -1,0 +1,246 @@
+# ============================================================
+# Screen Manifest — Schema v1
+# DOC-UX-010 §Manifestos de Infra/Shell
+# Versão: 1.0.0 | Data: 2026-03-15
+# ============================================================
+# Este arquivo descreve a estrutura obrigatória e opcional
+# de todo Screen Manifest do projeto ECF/Integrador.
+# Validado pela skill validate-screen-manifest.
+# ============================================================
+
+$schema: "https://easycf.dev/schemas/screen-manifest/v1"
+$version: "1.0.0"
+
+# ─── CAMPOS OBRIGATÓRIOS ─────────────────────────────────────
+required:
+  - schema_version
+  - screen_id
+  - name
+  - type
+  - module
+  - route
+  - auth_required
+  - linked_stories
+  - telemetry_defaults
+  - actions
+
+# ─── DEFINIÇÃO DOS CAMPOS ────────────────────────────────────
+fields:
+
+  schema_version:
+    type: string
+    enum: ["v1"]
+    description: "Versão do schema. Obrigatório para versionamento futuro."
+
+  screen_id:
+    type: string
+    pattern: "^UX-[A-Z]{2,8}-[0-9]{3}$"
+    description: "Identificador único e estável da tela. Ex: UX-AUTH-001, UX-SHELL-001."
+
+  name:
+    type: string
+    description: "Nome legível da tela para documentação e ferramental."
+
+  type:
+    type: string
+    enum: [auth, shell, dashboard, list, form, detail, config, monitor, inbox]
+    description: |
+      Tipo de tela. Define o template de layout padrão:
+      - auth:      Centralizado, sem shell, sem sidebar (pré-autenticação)
+      - shell:     Layout wrapper que envolve rotas autenticadas
+      - dashboard: Pós-login com cards, atalhos e widgets
+      - list:      Tabela paginada + filtros laterais
+      - form:      Formulário de cadastro/edição
+      - detail:    Visualização de registro com metadados
+      - config:    Editor de configurações/regras
+      - monitor:   Log table + status badges
+      - inbox:     Fila de itens pendentes de ação
+
+  module:
+    type: string
+    pattern: "^MOD-[0-9]{3}$"
+    description: "Módulo ECF responsável por esta tela. Ex: MOD-001."
+
+  route:
+    type: string
+    description: "Rota frontend associada. Ex: /login, /dashboard, /* (layout wrapper)."
+
+  auth_required:
+    type: boolean
+    description: "Se true, JWT válido é exigido para renderizar a tela. Redirect para /login se ausente/expirado."
+
+  pre_auth:
+    type: boolean
+    default: false
+    description: "Se true, ações desta tela NÃO incluem tenant_id no UIActionEnvelope (fase pré-autenticação)."
+
+  layout:
+    type: string
+    enum: [centered, shell, fullscreen, split]
+    default: shell
+    description: |
+      Template de layout:
+      - centered:   Formulário centralizado, fundo limpo (usado em auth)
+      - shell:      Sidebar + Header + Breadcrumb envolvendo o conteúdo
+      - fullscreen: Ocupa 100vw x 100vh (uso excepcional)
+      - split:      Dois painéis lado a lado
+
+  linked_stories:
+    type: array
+    items:
+      type: string
+      pattern: "^US-MOD-[0-9]{3}(-F[0-9]{2})?$"
+    minItems: 1
+    description: "Lista de User Stories que governam esta tela. Obrigatório ao menos o épico pai."
+
+  telemetry_defaults:
+    type: object
+    description: "Configuração padrão de telemetria aplicada a todas as actions deste manifest."
+    fields:
+      package: { type: string, default: "@easycf/ui-telemetry" }
+      include_tenant_id: { type: boolean, description: "false em telas pre_auth=true." }
+      propagate_correlation_id: { type: boolean, default: true }
+      capture_duration_ms: { type: boolean, default: true }
+
+  actions:
+    type: array
+    minItems: 1
+    description: "Lista de ações rastreáveis da tela. Cada ação gera um UIActionEnvelope."
+    items:
+      required: [id, label, type]
+      fields:
+
+        id:
+          type: string
+          pattern: "^[a-z_]+$"
+          description: "Identificador único da ação dentro do manifest. Ex: submit_login."
+
+        label:
+          type: string
+          description: "Rótulo legível da ação para documentação."
+
+        type:
+          type: string
+          enum: [view, submit, navigate, client_only]
+          description: |
+            Tipo de ação:
+            - view:        Carregamento automático de dados ao montar componente
+            - submit:      Envio de formulário ou mutação
+            - navigate:    Navegação com efeito de rota (pode carregar dados)
+            - client_only: Transição de estado local, sem requisição HTTP
+
+        operation_id:
+          type: string
+          description: "operationId do OpenAPI associado. Obrigatório quando type != client_only."
+
+        http_method:
+          type: string
+          enum: [GET, POST, PUT, PATCH, DELETE]
+          description: "Método HTTP da operação. Obrigatório quando type != client_only."
+
+        endpoint:
+          type: string
+          description: "Path da API. Ex: /api/v1/auth/login. Obrigatório quando type != client_only."
+
+        client_only:
+          type: boolean
+          default: false
+          description: "Se true, nenhuma requisição HTTP é feita. Apenas evento de telemetria local."
+
+        requires_scope:
+          type: array
+          items: { type: string }
+          description: "Escopos RBAC necessários para executar a ação. Vazio = público ou apenas autenticado."
+
+        loading_state:
+          type: string
+          enum: [button, skeleton, overlay, none]
+          default: none
+          description: |
+            Tipo de feedback de loading durante execução:
+            - button:   Botão entra em estado disabled/spinner
+            - skeleton: Placeholder animado substitui o conteúdo
+            - overlay:  Loader cobre a área da tela
+            - none:     Sem feedback visual de loading
+
+        error_handling:
+          type: object
+          description: "Como erros RFC 9457 são tratados visualmente."
+          fields:
+            strategy:
+              type: string
+              enum: [toast, inline, redirect, silent]
+              description: |
+                - toast:    Toast com correlationId e mensagem amigável
+                - inline:   Mensagem abaixo do campo ou no formulário
+                - redirect: Redireciona para rota de erro
+                - silent:   Log apenas, sem feedback visual
+            include_correlation_id:
+              type: boolean
+              default: true
+            user_message:
+              type: string
+              description: "Mensagem amigável exibida ao usuário. Não expõe detalhes técnicos."
+            enumeration_safe:
+              type: boolean
+              default: false
+              description: "Se true, mensagem é genérica para prevenir user enumeration."
+
+        telemetry_override:
+          type: object
+          description: "Sobreposição de telemetry_defaults para esta ação específica."
+          fields:
+            include_tenant_id: { type: boolean }
+            capture_duration_ms: { type: boolean }
+
+  components:
+    type: array
+    description: "Componentes de UI que compõem a tela."
+    items:
+      fields:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        conditional: { type: string, description: "Condição de renderização. Ex: 'panel == login'" }
+        actions_used: { type: array, items: { type: string }, description: "IDs das actions que este componente dispara." }
+
+  navigation:
+    type: object
+    description: "Regras de navegação e proteção de rota."
+    fields:
+      guard:
+        type: string
+        enum: [auth, guest, none]
+        description: "auth = rota protegida; guest = apenas não-autenticados; none = pública."
+      redirect_if_auth:
+        type: string
+        description: "Redireciona para esta rota se usuário já estiver autenticado."
+      redirect_if_unauth:
+        type: string
+        description: "Redireciona para esta rota se usuário não estiver autenticado."
+      back_action:
+        type: string
+        description: "Rota de retorno padrão (usado em telas de erro ou confirmação)."
+
+  panels:
+    type: array
+    description: "Sub-painéis ou contextos dentro de uma mesma rota (sem reload de página)."
+    items:
+      fields:
+        id: { type: string }
+        label: { type: string }
+        default: { type: boolean }
+        actions_scope: { type: array, items: { type: string } }
+
+  notes:
+    type: string
+    description: "Observações e decisões de design relevantes para o time."
+
+  changelog:
+    type: array
+    items:
+      fields:
+        version: { type: string }
+        date: { type: string }
+        author: { type: string }
+        description: { type: string }

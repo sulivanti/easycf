@@ -54,3 +54,9 @@ lint*.txt
 lint-*.txt
 qa_*.txt
 validate_*.txt
+
+# Obsidian vault
+.obsidian/
+
+# Scratch / rascunho
+d.md

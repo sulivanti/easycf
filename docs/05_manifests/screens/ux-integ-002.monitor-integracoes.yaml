@@ -1,0 +1,210 @@
+# ============================================================
+# Screen Manifest — UX-INTEG-002
+# Tela: Monitor de Integrações
+# Módulo: MOD-008 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-INTEG-002"
+name: "Monitor de Integrações"
+type: list
+module: "MOD-008"
+route: "/integracoes/monitor"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-008"
+  - "US-MOD-008-F05"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "all-logs"
+    label: "Todas as Chamadas"
+    default: true
+  - id: "dlq"
+    label: "DLQ"
+    default: false
+    notes: "Badge com contagem de DLQ ativos no tab"
+
+actions:
+
+  - id: load_logs
+    label: "Carregar logs de chamadas"
+    type: view
+    operation_id: admin_integration_logs_list
+    http_method: GET
+    endpoint: "/api/v1/admin/integration-logs"
+    requires_scope: ["integration:log:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os logs."
+
+  - id: load_log_detail
+    label: "Carregar detalhes de uma chamada"
+    type: view
+    operation_id: admin_integration_logs_get
+    http_method: GET
+    endpoint: "/api/v1/admin/integration-logs/:id"
+    requires_scope: ["integration:log:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar o detalhe."
+
+  - id: reprocess_log
+    label: "Reprocessar chamada em DLQ"
+    type: submit
+    operation_id: admin_integration_logs_reprocess
+    http_method: POST
+    endpoint: "/api/v1/admin/integration-logs/:id/reprocess"
+    requires_scope: ["integration:log:reprocess"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível reprocessar."
+
+  - id: filter_logs
+    label: "Filtrar logs"
+    type: view
+    operation_id: admin_integration_logs_list
+    http_method: GET
+    endpoint: "/api/v1/admin/integration-logs"
+    requires_scope: ["integration:log:read"]
+    loading_state: overlay
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Erro ao filtrar."
+
+  - id: navigate_to_case
+    label: "Navegar para o caso vinculado"
+    type: navigate
+    client_only: true
+    loading_state: none
+
+components:
+
+  - id: "monitor-header"
+    name: "MonitorHeader"
+    description: |
+      Header: título "Monitor de Integrações", métricas do dia:
+        - Total de chamadas (últimas 24h)
+        - Taxa de sucesso (%)
+        - Em DLQ (contador com badge vermelho se > 0)
+      Métricas atualizam a cada 60s (polling leve).
+    actions_used: []
+
+  - id: "logs-filters"
+    name: "LogsFilters"
+    description: |
+      Filtros horizontais:
+        - Select "Rotina": lista de integration routines
+        - Select "Status": ALL | QUEUED | RUNNING | SUCCESS | FAILED | DLQ
+        - Select "Serviço": lista de integration_services
+        - Input "Correlation ID": busca exata
+        - Date range "Período": de/até
+        - Botão "Limpar"
+      Sincronizados com query params da URL.
+    actions_used: [filter_logs]
+
+  - id: "logs-table"
+    name: "IntegrationLogsTable"
+    description: |
+      Tabela principal (painel "Todas as Chamadas"):
+        Colunas:
+          - ID curto (primeiros 8 chars, monospace)
+          - Rotina (nome + versão)
+          - Caso (link para /casos/:id ou "—")
+          - Status badge: QUEUED=cinza, RUNNING=azul piscando, SUCCESS=verde, FAILED=vermelho, DLQ=vermelho escuro
+          - Tentativa: "1 de 3" se retry
+          - HTTP Status (200, 503, etc.)
+          - Duration (ms)
+          - Enfileirado em (data relativa)
+        Clique na linha: abre painel de detalhe (split view)
+        Paginação cursor-based.
+        Auto-refresh a cada 30s para logs RUNNING/QUEUED.
+    actions_used: [load_logs, navigate_to_case]
+
+  - id: "dlq-panel"
+    name: "DLQPanel"
+    description: |
+      Painel "DLQ" — apenas chamadas com status=DLQ:
+        Mesma estrutura da tabela principal + coluna "Retentativas" (retry_max)
+        Cada linha tem botão "Reprocessar" à direita (scope integration:log:reprocess)
+        Contador no tab: badge vermelho com total de DLQ não reprocessados.
+    actions_used: [load_logs, reprocess_log]
+
+  - id: "log-detail-panel"
+    name: "LogDetailPanel"
+    description: |
+      Painel lateral (split view à direita ao clicar numa linha):
+        Seções colapsáveis:
+          1. Resumo: rotina, serviço, status, correlation_id, caso vinculado, tentativas
+          2. Request: método, URL resolvida, headers (sensíveis mascarados), payload JSON formatado
+          3. Response: http_status, body JSON formatado, protocolo Protheus, duration_ms
+          4. Erro: error_message (se FAILED/DLQ)
+          5. Histórico de tentativas: lista de logs com parent_log_id (chain de reprocessamentos)
+
+        Botão "Reprocessar" no rodapé (DLQ only, scope integration:log:reprocess):
+          - Abre mini-form com campo "Motivo" (textarea, min 10 chars, obrigatório)
+          - Botão "Confirmar reprocessamento"
+          - Após sucesso: badge muda para QUEUED + toast "Reprocessamento enfileirado."
+          - Log original permanece DLQ (imutável)
+
+        Botão "Ver caso" (se case_id presente): navega para /casos/:id (navigate_to_case)
+    actions_used: [load_log_detail, reprocess_log, navigate_to_case]
+
+  - id: "reprocess-confirm-modal"
+    name: "ReprocessConfirmModal"
+    description: |
+      Modal de confirmação de reprocessamento:
+        Título: "Reprocessar chamada?"
+        Corpo: "Será criada uma nova tentativa. O log original será preservado."
+        Campo: "Motivo do reprocessamento" (textarea, obrigatório, min 10 chars)
+        Botões: "Cancelar" e "Confirmar reprocessamento" (isLoading durante POST)
+    actions_used: [reprocess_log]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+query_params:
+  status:
+    type: string
+    enum: [ALL, QUEUED, RUNNING, SUCCESS, FAILED, DLQ]
+    default: "ALL"
+  routine_id:
+    type: string
+    default: ""
+  service_id:
+    type: string
+    default: ""
+  correlation_id:
+    type: string
+    default: ""
+
+notes: |
+  REGRAS:
+  1. Scope integration:log:read obrigatório para ver logs.
+  2. Payload e response body: dados sensíveis SEMPRE mascarados ("***") — servidor aplica antes de retornar.
+  3. Reprocessamento: motivo obrigatório (min 10 chars). Log original IMUTÁVEL.
+  4. DLQ tab: badge com contagem atualizado a cada 60s.
+  5. Auto-refresh 30s para linhas RUNNING/QUEUED — apenas quando painel "Todas as Chamadas" ativo.
+  6. "Ver caso": só visível quando log tem case_id preenchido.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Monitor com DLQ dedicado, detalhe split-view, reprocessamento com motivo obrigatório."

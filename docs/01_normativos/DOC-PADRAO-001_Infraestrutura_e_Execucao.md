@@ -26,11 +26,7 @@ Este documento define os padrões e tecnologias escolhidas para a execução da 
 
 O ambiente de desenvolvimento local é unificado pelo arquivo `docker-compose.yml`.
 
-> 📌 **Atualização do docker-compose.yml:** edite os valores neste documento e execute o script abaixo para regenerar o arquivo:
->
-> ```powershell
-> node .agents/skills/generate-docker-compose/scripts/generate.mjs
-> ```
+> 📌 **Atualização do docker-compose.yml:** edite os valores neste documento e aplique as alterações diretamente no `docker-compose.yml`.
 
 ### 3.1. Variáveis de Ambiente (`.env`)
 

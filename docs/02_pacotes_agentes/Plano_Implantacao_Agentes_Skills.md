@@ -20,10 +20,10 @@ A implementação se dará pela separação clara de responsabilidades no reposi
 1. **Definição de Papéis (Agentes):**
    - Manter e evoluir as definições dos agentes dentro da pasta `docs/02_pacotes_agentes/`.
    - Exemplos vigentes: `PKG-DEV-001` (Enriquecimento/Documentação) e `PKG-COD-001` (Geração de Código).
-   - Injetar no *system prompt* ou diretrizes do agente a instrução explícita de buscar e utilizar as skills da pasta `.agents/skills` para tarefas de rotina.
+   - Injetar no *system prompt* ou diretrizes do agente a instrução explícita de buscar e utilizar as skills da pasta `.claude/commands` para tarefas de rotina.
 
 2. **Mapeamento de Ferramentas (Skills):**
-   - Manter a pasta `.agents/skills` como o repositório central de capacidades técnicas.
+   - Manter a pasta `.claude/commands` como o repositório central de capacidades técnicas.
    - O agente não deve tentar "adivinhar" como estruturar um Readme ou uma Especificação; ele deve delegar a chamada à respectiva skill instalada.
 
 3. **Ciclo de Vida do Desenvolvimento (SDD - Spec-Driven Development):**
@@ -64,7 +64,7 @@ O Agente realiza a chamada para a respectiva sub-rotina/skill:
 **Quando usar:**
 Quando o projeto atingir gargalos técnicos que as skills prontas (comunitárias) não cobrem. Normalmente atreladas a frameworks proprietários ou regras arquiteturais rígidas.
 **Como usar:**
-O Desenvolvedor Humano ou o Agente (via skill `skill-creator`) desenvolve uma nova habilidade na pasta `.agents/skills`.
+O Desenvolvedor Humano ou o Agente (via skill `skill-creator`) desenvolve uma nova habilidade na pasta `.claude/commands`.
 
 - *Exemplo de Uso Futuro:* Criar uma skill `verificar-queries-n+1-tenancy` e instruir o `PKG-COD-001` a rodá-la obrigatoriamente antes de concluir a criação de uma view SQL.
 - *Exemplo de Uso Futuro:* Criar uma skill `validar-sintaxe-fastify` para garantir que funções estão sendo corretamente implementadas com decorators de segurança padrão.
@@ -99,5 +99,5 @@ O Desenvolvedor Humano ou o Agente (via skill `skill-creator`) desenvolve uma no
 
 ### Pendentes (Próximas Skills Customizadas)
 
-- [x] **`validate-openapi-contract`** — ✅ Implementada (2026-03-13): Valida conformidade com EX-OAS-001..004, lint Spectral e presença de `@contract` em artefatos. Ver `.agents/skills/validate-openapi-contract/SKILL.md`.
+- [x] **`validate-openapi-contract`** — ✅ Implementada (2026-03-13): Valida conformidade com EX-OAS-001..004, lint Spectral e presença de `@contract` em artefatos. Ver `.claude/commands/validate-openapi.md`.
 - [ ] **`validate-audit-hooks`** — Prioridade **Média**: Ampliar cobertura de auditoria para a camada Application (Use Cases), complementando o que `validate-drizzle-schemas` já cobre no schema de banco.

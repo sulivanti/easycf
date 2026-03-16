@@ -1,0 +1,140 @@
+# ============================================================
+# Screen Manifest — UX-IDN-001
+# Tela: Gestão de Escopo Organizacional do Usuário
+# Módulo: MOD-004 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-IDN-001"
+name: "Gestão de Escopo Organizacional do Usuário"
+type: detail
+module: "MOD-004"
+route: "/usuarios/:id/escopo-organizacional"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-004"
+  - "US-MOD-004-F03"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+actions:
+
+  - id: load_user_org_scopes
+    label: "Carregar vínculos org do usuário"
+    type: view
+    operation_id: admin_user_org_scopes_list
+    http_method: GET
+    endpoint: "/api/v1/admin/users/:id/org-scopes"
+    requires_scope: ["identity:org_scope:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os vínculos organizacionais."
+
+  - id: load_org_tree_options
+    label: "Carregar opções de nós org para o select"
+    type: view
+    operation_id: org_units_list
+    http_method: GET
+    endpoint: "/api/v1/org-units"
+    requires_scope: ["org:unit:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar a estrutura organizacional."
+
+  - id: grant_org_scope
+    label: "Vincular usuário a nó organizacional"
+    type: submit
+    operation_id: admin_user_org_scopes_create
+    http_method: POST
+    endpoint: "/api/v1/admin/users/:id/org-scopes"
+    requires_scope: ["identity:org_scope:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar o vínculo."
+
+  - id: revoke_org_scope
+    label: "Remover vínculo org do usuário"
+    type: submit
+    operation_id: admin_user_org_scopes_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/users/:id/org-scopes/:scopeId"
+    requires_scope: ["identity:org_scope:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível remover o vínculo."
+
+  - id: navigate_back
+    label: "Voltar para perfil do usuário"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+components:
+
+  - id: "page-header"
+    name: "OrgScopePageHeader"
+    description: |
+      Título: "Escopo Organizacional — {usuario.nome}"
+      Subtítulo: tenant ativo do usuário
+      Botão "Adicionar área" (visível com identity:org_scope:write)
+    actions_used: [grant_org_scope]
+
+  - id: "current-scopes-list"
+    name: "UserOrgScopesList"
+    description: |
+      Lista de vínculos ativos. Cada card exibe:
+        - Badge PRIMARY (azul) ou SECONDARY (cinza)
+        - Breadcrumb do nó: "Grupo Alpha > Unidade SP > Macroárea Tech"
+        - Nível do nó (N1–N4) como badge pequeno
+        - Data de concessão e valid_until (se não permanente)
+        - Botão "Remover" (com modal de confirmação) se scope write presente
+
+      Estado vazio: "Nenhuma área organizacional vinculada. Adicione uma área principal."
+      Skeleton durante load_user_org_scopes.
+    actions_used: [load_user_org_scopes, revoke_org_scope]
+
+  - id: "add-scope-panel"
+    name: "AddOrgScopePanel"
+    description: |
+      Painel lateral (drawer) para adicionar vínculo:
+        - Select de tipo: "Área principal (PRIMARY)" | "Área adicional (SECONDARY)"
+        - Autocomplete de nó org: busca por nome/código, exibe breadcrumb
+          Skeleton durante load_org_tree_options
+        - Campo valid_until (date picker) — opcional (vazio = permanente)
+        - Aviso se PRIMARY já existe: "Remova a área principal atual antes de adicionar uma nova."
+        - Botão "Vincular"
+    actions_used: [load_org_tree_options, grant_org_scope]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+  back_action: "/usuarios/:id"
+
+notes: |
+  REGRAS:
+  1. Tela acessível apenas com identity:org_scope:read.
+  2. PRIMARY: apenas 1 por usuário. Aviso inline se tentar criar segundo.
+  3. Nós N5 (tenant) NÃO aparecem no autocomplete — somente N1–N4.
+  4. Remoção de PRIMARY: toast de aviso "Ao remover a área principal, processos vinculados podem perder contexto."
+  5. valid_until: se não preenchido, o vínculo é permanente (null no banco).
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial."

@@ -1,0 +1,115 @@
+# ============================================================
+# Screen Manifest — UX-USR-001
+# Tela: Listagem de Usuários (MOD-002)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# ============================================================
+# UX-First: MOD-002 é exclusivamente frontend.
+# Todos os endpoints são consumidos de MOD-000-F05 e F06.
+# LGPD: e-mail NUNCA em toasts/modais. Apenas nome do usuário.
+# Paginação cursor-based, filtros sincronizados com URL.
+# ============================================================
+
+manifest_version: 1
+screen_id: UX-USR-001
+name: Listagem de Usuários
+entity_type: user
+
+linked_stories:
+  - US-MOD-002
+  - US-MOD-002-F01
+
+routes:
+  - path: /api/v1/users
+    method: GET
+  - path: /api/v1/users/{id}
+    method: DELETE
+  - path: /api/v1/roles
+    method: GET
+
+telemetry_defaults:
+  event_name: user.list_viewed
+  required_fields:
+    - screen_id
+    - tenant_id
+    - correlation_id
+  propagate_headers:
+    - X-Correlation-ID
+
+permissions:
+  read: users:read
+  write: users:write
+  delete: users:delete
+
+actions:
+  - action: view
+    client_only: false
+    operation_ids:
+      - users_list
+    permission: users:read
+    # Skeleton loading durante carregamento inicial
+
+  - action: search
+    client_only: false
+    operation_ids:
+      - users_list
+    permission: users:read
+    # Debounce 400ms — busca por nome ou e-mail
+
+  - action: filter
+    client_only: false
+    operation_ids:
+      - users_list
+    permission: users:read
+    # Filtros: status (ACTIVE|PENDING|BLOCKED|INACTIVE), role_id
+    # Sincronizados com query params da URL para deep link
+
+  - action: paginate
+    client_only: false
+    operation_ids:
+      - users_list
+    permission: users:read
+    # Cursor-based: append, nunca substituição
+
+  - action: create
+    client_only: false
+    operation_ids:
+      - users_create
+    permission: users:write
+    # Botão "Novo Usuário" visível apenas com scope
+
+  - action: deactivate
+    client_only: false
+    operation_ids:
+      - users_delete
+    permission: users:delete
+    # Modal de confirmação obrigatório — usa nome, NUNCA e-mail (LGPD)
+
+ui_rules:
+  action_visibility:
+    strategy: hide_if_no_permission
+  action_enablement: []
+  # Regra: deactivate habilitado apenas quando status != INACTIVE (ver US-MOD-002-F01)
+
+error_mapping:
+  default_user_message: Ocorreu um erro inesperado. Tente novamente ou contate o suporte.
+  http_status:
+    '401':
+      user_message: Sessão expirada. Faça login novamente.
+      ui:
+        type: modal
+        level: error
+    '403':
+      user_message: Sem permissão para acessar esta seção.
+      ui:
+        type: toast
+        level: error
+    '422':
+      user_message: Dados inválidos. Verifique os filtros e tente novamente.
+      ui:
+        type: form_validation
+        level: error
+    '500':
+      user_message: Não foi possível carregar a lista de usuários.
+      ui:
+        type: toast
+        level: error

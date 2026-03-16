@@ -1,6 +1,6 @@
 # US-MOD-000-F07 — Gestão de Filiais Multi-Tenant (CRUD + Soft Delete)
 
-**Status Ágil:** `DRAFT`
+**Status Ágil:** `READY`
 **Data:** 2026-03-05
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-000** (Foundation — Multi-Tenant)
@@ -8,9 +8,9 @@
 
 ## Metadados de Governança
 
-- **status_agil:** DRAFT
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-06
+- **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-000, US-MOD-000-F09, DOC-DEV-001, DOC-ARC-001, DOC-ESC-001, DOC-GNP-00
 - **nivel_arquitetura:** 2 (multi-tenant isolado, kill-switch org, domain events)
 - **referencias_exemplos:** N/A
@@ -86,12 +86,12 @@ Funcionalidade: Gestão de Filiais (Multi-Tenant)
 
 ## 5. Definition of Ready (DoR) — Para Iniciar o Desenvolvimento
 
-- [ ] Owner definido.
-- [ ] Cenários Gherkin revisados e aprovados.
-- [ ] Modelo de dados do tenant revisado pelo time de dados.
-- [ ] Contrato dos endpoints documentado no OpenAPI (`/tenants`, `/tenants/:id`).
-- [ ] Comportamento do `requireTenantScope` ao detectar status `BLOCKED` documentado como regra do middleware.
-- [ ] Épico US-MOD-000 **aprovado**.
+- [x] Owner definido.
+- [x] Cenários Gherkin revisados e aprovados.
+- [x] Modelo de dados do tenant revisado pelo time de dados.
+- [x] Contrato dos endpoints documentado no OpenAPI (`/tenants`, `/tenants/:id`).
+- [x] Comportamento do `requireTenantScope` ao detectar status `BLOCKED` documentado como regra do middleware.
+- [x] Épico US-MOD-000 **aprovado**.
 
 ---
 

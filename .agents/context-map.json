@@ -96,6 +96,25 @@
     },
     "git": {
       "docs": []
+    },
+    "enrich": {
+      "docs": [
+        { "id": "PKG-DEV-001", "sections": ["§0"], "reason": "Contrato de execução e envelope padrão" },
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle"], "reason": "Ciclo de vida DRAFT/READY" }
+      ]
+    },
+    "enrich-agent": {
+      "docs": [
+        { "id": "PKG-DEV-001", "sections": "*", "reason": "System prompts e schemas dos 11 agentes" },
+        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "Anti-patterns Foundation e SEC-EventMatrix canônico" }
+      ]
+    },
+    "promote-module": {
+      "docs": [
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle", "§metadata"], "reason": "Ciclo de vida DRAFT/READY e metadados obrigatórios" },
+        { "id": "DOC-DEV-002", "sections": ["§4.1"], "reason": "Regras de promoção e Definition of Ready" }
+      ],
+      "delegates_to": ["qa", "update-index", "git"]
     }
   }
 }

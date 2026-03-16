@@ -124,7 +124,11 @@ cleanDirExceptGit(DIST_DIR);
 log("Copiando arquivos do monorepo para o template...");
 
 const TEMPLATE_SRC = path.join(ROOT, "apps", "template-project");
-const SKILLS_SRC = path.join(ROOT, ".agents", "skills");
+const COMMANDS_SRC = path.join(ROOT, ".claude", "commands");
+const AGENTS_SUPPORT = [
+    { file: "context-map.json", src: path.join(ROOT, ".agents", "context-map.json") },
+    { file: "paths.json", src: path.join(ROOT, ".agents", "paths.json") },
+];
 const NORMATIVOS_SRC = path.join(ROOT, "docs", "01_normativos");
 const USER_STORIES_SRC = path.join(ROOT, "docs", "04_modules", "user-stories");
 const PACOTES_AGENTES_SRC = path.join(ROOT, "docs", "02_pacotes_agentes");
@@ -134,7 +138,13 @@ const DOCS_ROOT = path.join(ROOT, "docs");
 
 // Copiar bases
 copyDir(TEMPLATE_SRC, DIST_DIR);
-copyDir(SKILLS_SRC, path.join(DIST_DIR, ".agents", "skills"));
+copyDir(COMMANDS_SRC, path.join(DIST_DIR, ".claude", "commands"));
+AGENTS_SUPPORT.forEach(({ file, src }) => {
+    if (fs.existsSync(src)) {
+        fs.mkdirSync(path.join(DIST_DIR, ".agents"), { recursive: true });
+        fs.copyFileSync(src, path.join(DIST_DIR, ".agents", file));
+    }
+});
 copyDir(NORMATIVOS_SRC, path.join(DIST_DIR, "docs", "01_normativos"));
 if (fs.existsSync(USER_STORIES_SRC)) {
     copyDir(USER_STORIES_SRC, path.join(DIST_DIR, "docs", "04_modules", "user-stories"));

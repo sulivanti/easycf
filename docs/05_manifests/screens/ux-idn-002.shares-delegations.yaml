@@ -1,0 +1,232 @@
+# ============================================================
+# Screen Manifest — UX-IDN-002
+# Tela: Painel de Compartilhamentos e Delegações
+# Módulo: MOD-004 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-IDN-002"
+name: "Painel de Compartilhamentos e Delegações"
+type: list
+module: "MOD-004"
+route: "/identidade/compartilhamentos"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-004"
+  - "US-MOD-004-F04"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "shares"
+    label: "Compartilhamentos"
+    default: true
+    actions_scope: [load_shares, create_share, revoke_share]
+
+  - id: "delegations"
+    label: "Delegações"
+    default: false
+    actions_scope: [load_delegations, create_delegation, revoke_delegation]
+
+  - id: "received"
+    label: "Recebidos por Mim"
+    default: false
+    actions_scope: [load_my_shared_accesses, load_my_delegations_received]
+
+actions:
+
+  - id: load_shares
+    label: "Carregar compartilhamentos ativos (admin)"
+    type: view
+    operation_id: admin_access_shares_list
+    http_method: GET
+    endpoint: "/api/v1/admin/access-shares"
+    requires_scope: ["identity:share:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os compartilhamentos."
+
+  - id: create_share
+    label: "Criar compartilhamento controlado"
+    type: submit
+    operation_id: admin_access_shares_create
+    http_method: POST
+    endpoint: "/api/v1/admin/access-shares"
+    requires_scope: ["identity:share:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar o compartilhamento."
+
+  - id: revoke_share
+    label: "Revogar compartilhamento"
+    type: submit
+    operation_id: admin_access_shares_revoke
+    http_method: DELETE
+    endpoint: "/api/v1/admin/access-shares/:id"
+    requires_scope: ["identity:share:revoke"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível revogar o compartilhamento."
+
+  - id: load_delegations
+    label: "Carregar delegações ativas (admin)"
+    type: view
+    operation_id: access_delegations_list
+    http_method: GET
+    endpoint: "/api/v1/access-delegations"
+    requires_scope: []
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar as delegações."
+
+  - id: create_delegation
+    label: "Criar delegação temporária"
+    type: submit
+    operation_id: access_delegations_create
+    http_method: POST
+    endpoint: "/api/v1/access-delegations"
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar a delegação."
+
+  - id: revoke_delegation
+    label: "Revogar delegação própria"
+    type: submit
+    operation_id: access_delegations_revoke
+    http_method: DELETE
+    endpoint: "/api/v1/access-delegations/:id"
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível revogar a delegação."
+
+  - id: load_my_shared_accesses
+    label: "Carregar acessos compartilhados comigo"
+    type: view
+    operation_id: my_shared_accesses
+    http_method: GET
+    endpoint: "/api/v1/my/shared-accesses"
+    requires_scope: []
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar seus acessos recebidos."
+
+  - id: load_my_delegations_received
+    label: "Carregar delegações recebidas"
+    type: view
+    operation_id: access_delegations_list
+    http_method: GET
+    endpoint: "/api/v1/access-delegations?direction=received"
+    requires_scope: []
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar as delegações recebidas."
+
+  - id: switch_panel
+    label: "Alternar entre painéis"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+components:
+
+  - id: "shares-table"
+    name: "SharesTable"
+    description: |
+      Tabela de compartilhamentos (painel shares):
+      Colunas: Recurso, Solicitante, Beneficiário, Motivo (truncado), Autorizador,
+               Válido até (badge âmbar se < 7 dias), Status (ACTIVE/REVOKED/EXPIRED), Ações
+      Ação "Revogar" visível apenas com identity:share:revoke.
+      Estado vazio: "Nenhum compartilhamento ativo."
+    actions_used: [load_shares, revoke_share]
+
+  - id: "create-share-drawer"
+    name: "CreateShareDrawer"
+    description: |
+      Drawer lateral para criar compartilhamento:
+        - Autocomplete "Beneficiário" (usuário que recebe)
+        - Select "Recurso" (tipo: org_unit | tenant | processo) + autocomplete do ID
+        - Multi-select "Ações permitidas" (lista de escopos disponíveis)
+        - Campo "Motivo" (textarea, obrigatório, max 500 chars)
+        - Autocomplete "Autorizador" (usuário que aprova — ≠ solicitante)
+          AVISO inline se autorizador = usuário atual: "Você não pode se auto-autorizar."
+        - Date picker "Válido até" (obrigatório, mínimo amanhã)
+        - Botão "Criar compartilhamento"
+    actions_used: [create_share]
+
+  - id: "delegations-table"
+    name: "DelegationsTable"
+    description: |
+      Tabela de delegações (painel delegations):
+      Colunas: Delegatário, Escopos delegados (chips), Válido até, Status, Ações
+      Ação "Revogar" apenas para delegações onde caller = delegator.
+      Estado vazio: "Nenhuma delegação ativa."
+    actions_used: [load_delegations, revoke_delegation]
+
+  - id: "create-delegation-drawer"
+    name: "CreateDelegationDrawer"
+    description: |
+      Drawer lateral para criar delegação:
+        - Autocomplete "Delegar para" (usuário)
+        - Multi-select "Escopos a delegar" (apenas escopos que eu mesmo possuo)
+          Escopos com *:approve, *:execute, *:sign: exibidos mas desabilitados com tooltip
+          "Escopos de aprovação não podem ser delegados."
+        - Date picker "Válido até" (obrigatório)
+        - Campo "Motivo" (obrigatório)
+        - Aviso: "Os escopos delegados não podem ser re-delegados pelo beneficiário."
+    actions_used: [create_delegation]
+
+  - id: "received-panel"
+    name: "ReceivedAccessPanel"
+    description: |
+      Painel "Recebidos por Mim" em duas seções:
+        1. Compartilhamentos recebidos: tabela com recurso, concedente, ações, validade
+        2. Delegações recebidas: tabela com escopos, delegador, validade
+      Sem ações (somente leitura para o receptor).
+      Banner informativo: "Acesso temporário. Expira em {valid_until}."
+    actions_used: [load_my_shared_accesses, load_my_delegations_received]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. Painel "Compartilhamentos" (admin): visível apenas com identity:share:read.
+     Painel "Delegações" e "Recebidos": acessíveis por qualquer usuário autenticado.
+  2. Botão "Revogar share": visível apenas com identity:share:revoke.
+  3. Autorizador ≠ solicitante: validação inline no drawer antes do submit.
+  4. Escopos de aprovação no drawer de delegação: exibidos como desabilitados (não ocultos)
+     para transparência — o usuário entende por que não pode delegá-los.
+  5. Recursos com status EXPIRED: exibidos em cinza com badge "Expirado".
+     Não são removidos da listagem por 30 dias (histórico).
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Painéis shares/delegations/received, drawers de criação com validações inline."

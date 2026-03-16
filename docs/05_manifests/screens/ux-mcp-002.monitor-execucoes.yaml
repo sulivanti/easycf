@@ -1,0 +1,97 @@
+# ============================================================
+# Screen Manifest — UX-MCP-002
+# Tela: Monitor de Execuções MCP
+# Módulo: MOD-010 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-MCP-002"
+name: "Monitor de Execuções MCP"
+type: list
+module: "MOD-010"
+route: "/automacao/execucoes"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-010"
+  - "US-MOD-010-F05"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+actions:
+  - id: load_executions
+    operation_id: admin_mcp_executions_list
+    http_method: GET
+    endpoint: "/api/v1/admin/mcp-executions"
+    requires_scope: ["mcp:log:read"]
+    loading_state: skeleton
+    error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível carregar as execuções." }
+
+  - id: load_execution_detail
+    operation_id: admin_mcp_executions_get
+    http_method: GET
+    endpoint: "/api/v1/admin/mcp-executions/:id"
+    requires_scope: ["mcp:log:read"]
+    loading_state: skeleton
+    error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível carregar o detalhe." }
+
+  - id: filter_executions
+    operation_id: admin_mcp_executions_list
+    http_method: GET
+    endpoint: "/api/v1/admin/mcp-executions"
+    requires_scope: ["mcp:log:read"]
+    loading_state: overlay
+    error_handling: { strategy: toast, include_correlation_id: true, user_message: "Erro ao filtrar." }
+
+  - id: navigate_to_movement
+    type: client_only
+    client_only: true
+    loading_state: none
+
+components:
+
+  - id: "monitor-header"
+    name: "McpMonitorHeader"
+    description: |
+      Métricas (24h): Total, DIRECT_SUCCESS %, CONTROLLED_PENDING #, BLOCKED #.
+      Badge vermelho se privilege_escalation_attempts > 0.
+    actions_used: []
+
+  - id: "executions-table"
+    name: "McpExecutionsTable"
+    description: |
+      Filtros: agente, ação, status, data range. Tabela cursor-based.
+      Status badges: DIRECT_SUCCESS=verde, EVENT_EMITTED=cinza, CONTROLLED_PENDING=âmbar,
+      DIRECT_FAILED=vermelho, BLOCKED=vermelho escuro.
+      Badge "⚠ Escalada" para privilege_escalation.
+      Clique: split-view detalhe.
+    actions_used: [load_executions, filter_executions, navigate_to_movement]
+
+  - id: "execution-detail-panel"
+    name: "McpExecutionDetailPanel"
+    description: |
+      Painel lateral: agente, ação, política, payload sanitizado, resultado,
+      linked_movement (link para UX-APROV-001), privilege escalation bloco vermelho.
+    actions_used: [load_execution_detail, navigate_to_movement]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. API key: JAMAIS exibida.
+  2. Privilege escalation: badge permanente.
+  3. CONTROLLED_PENDING: link direto para inbox de aprovações.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Monitor com métricas, badge de escalada, detalhe split-view."

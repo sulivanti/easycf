@@ -1,0 +1,222 @@
+# ============================================================
+# Screen Manifest — UX-APROV-001
+# Tela: Inbox de Aprovações
+# Módulo: MOD-009 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-APROV-001"
+name: "Inbox de Aprovações"
+type: list
+module: "MOD-009"
+route: "/aprovacoes"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-009"
+  - "US-MOD-009-F04"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "inbox"
+    label: "Meu Inbox"
+    default: true
+  - id: "all"
+    label: "Todos os Movimentos"
+    default: false
+    notes: "Visível apenas com approval:movement:read"
+  - id: "sent"
+    label: "Enviados por Mim"
+    default: false
+
+actions:
+
+  - id: load_my_approvals
+    label: "Carregar aprovações pendentes para mim"
+    type: view
+    operation_id: my_approvals_list
+    http_method: GET
+    endpoint: "/api/v1/my/approvals"
+    requires_scope: []
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar seu inbox."
+
+  - id: load_all_movements
+    label: "Carregar todos os movimentos (admin)"
+    type: view
+    operation_id: movements_list
+    http_method: GET
+    endpoint: "/api/v1/movements"
+    requires_scope: ["approval:movement:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os movimentos."
+
+  - id: load_movement_detail
+    label: "Carregar detalhes do movimento para decisão"
+    type: view
+    operation_id: my_approvals_list
+    http_method: GET
+    endpoint: "/api/v1/my/approvals/:approvalId"
+    requires_scope: []
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar o movimento."
+
+  - id: approve_movement
+    label: "Aprovar movimento"
+    type: submit
+    operation_id: my_approvals_approve
+    http_method: POST
+    endpoint: "/api/v1/my/approvals/:approvalId/approve"
+    requires_scope: ["approval:decide"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível registrar a aprovação."
+
+  - id: reject_movement
+    label: "Reprovar movimento"
+    type: submit
+    operation_id: my_approvals_reject
+    http_method: POST
+    endpoint: "/api/v1/my/approvals/:approvalId/reject"
+    requires_scope: ["approval:decide"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível registrar a reprovação."
+
+  - id: cancel_movement
+    label: "Cancelar movimento (pelo solicitante)"
+    type: submit
+    operation_id: movements_cancel
+    http_method: POST
+    endpoint: "/api/v1/movements/:id/cancel"
+    requires_scope: ["approval:movement:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível cancelar o movimento."
+
+  - id: override_movement
+    label: "Override com justificativa"
+    type: submit
+    operation_id: movements_override
+    http_method: POST
+    endpoint: "/api/v1/movements/:id/override"
+    requires_scope: ["approval:override"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível executar o override."
+
+  - id: filter_movements
+    label: "Filtrar movimentos"
+    type: view
+    operation_id: movements_list
+    http_method: GET
+    endpoint: "/api/v1/movements"
+    requires_scope: ["approval:movement:read"]
+    loading_state: overlay
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Erro ao filtrar."
+
+  - id: navigate_to_case
+    label: "Navegar para o caso vinculado"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+components:
+
+  - id: "inbox-header"
+    name: "InboxHeader"
+    description: |
+      Header: título "Aprovações", contador de pendências.
+      Badge âmbar se > 0. Atualiza a cada 60s.
+    actions_used: []
+
+  - id: "inbox-list"
+    name: "InboxList"
+    description: |
+      Painel "Meu Inbox" — cards por movimento pendente:
+        Código, tipo operação, solicitante, valor, prazo countdown, nível atual.
+        Botões: "Ver detalhes", "Aprovar", "Reprovar".
+        Parecer obrigatório (min 10 chars).
+        Estado vazio: "Nenhuma aprovação pendente."
+    actions_used: [load_my_approvals, load_movement_detail, approve_movement, reject_movement]
+
+  - id: "movement-detail-panel"
+    name: "MovementDetailPanel"
+    description: |
+      Painel lateral split-view:
+        Seções: Resumo, Operação (payload sanitizado), Cadeia de aprovação, Histórico, Override log.
+        Ações: Aprovar, Reprovar, Override, Cancelar, Ver caso.
+        Segregação: caller=solicitante → botões desabilitados.
+    actions_used: [approve_movement, reject_movement, override_movement, cancel_movement, navigate_to_case]
+
+  - id: "all-movements-table"
+    name: "AllMovementsTable"
+    description: |
+      Painel "Todos os Movimentos" (admin):
+        Filtros, tabela com status badges, clique abre detalhe.
+    actions_used: [load_all_movements, filter_movements]
+
+  - id: "sent-movements"
+    name: "SentMovements"
+    description: |
+      Painel "Enviados por Mim":
+        Movimentos do caller com botão Cancelar (PENDING_APPROVAL only).
+    actions_used: [load_all_movements, cancel_movement]
+
+  - id: "approve-reject-form"
+    name: "ApproveRejectForm"
+    description: |
+      Mini-form: campo Parecer (min 10 chars), botão confirmar.
+    actions_used: [approve_movement, reject_movement]
+
+  - id: "override-modal"
+    name: "OverrideModal"
+    description: |
+      Modal: aviso auditoria, justificativa min 20 chars, checkbox confirmação.
+    actions_used: [override_movement]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. Inbox pessoal: sem scope extra.
+  2. "Todos os movimentos": requer approval:movement:read.
+  3. Segregação: caller=solicitante → Aprovar/Reprovar desabilitados.
+  4. Parecer: min 10 chars.
+  5. Override: min 20 chars + checkbox.
+  6. Badge sidebar: 60s refresh.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Inbox pessoal, painel admin, detalhe split-view, override modal."

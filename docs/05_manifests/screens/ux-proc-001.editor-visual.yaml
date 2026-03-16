@@ -1,0 +1,210 @@
+# ============================================================
+# Screen Manifest — UX-PROC-001
+# Tela: Editor Visual de Fluxo de Processo
+# Módulo: MOD-005 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-PROC-001"
+name: "Editor Visual de Fluxo de Processo"
+type: config
+module: "MOD-005"
+route: "/processos/ciclos/:id/editor"
+auth_required: true
+pre_auth: false
+layout: fullscreen   # editor ocupa 100vw x 100vh
+
+linked_stories:
+  - "US-MOD-005"
+  - "US-MOD-005-F03"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+actions:
+
+  - id: load_cycle_flow
+    label: "Carregar grafo completo do ciclo"
+    type: view
+    operation_id: admin_cycles_flow
+    http_method: GET
+    endpoint: "/api/v1/admin/cycles/:id/flow"
+    requires_scope: ["process:cycle:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar o fluxo do processo."
+
+  - id: create_stage_from_canvas
+    label: "Criar estágio via duplo clique no canvas"
+    type: submit
+    operation_id: admin_stages_create
+    http_method: POST
+    endpoint: "/api/v1/admin/macro-stages/:mid/stages"
+    requires_scope: ["process:cycle:write"]
+    loading_state: none
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar o estágio."
+    notes: "Cria estágio inline no canvas. Posição X,Y salva em metadata do estágio para o editor."
+
+  - id: create_transition_from_canvas
+    label: "Criar transição arrastando aresta entre estágios"
+    type: submit
+    operation_id: admin_transitions_create
+    http_method: POST
+    endpoint: "/api/v1/admin/stage-transitions"
+    requires_scope: ["process:cycle:write"]
+    loading_state: none
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível criar a transição."
+    notes: "Dispara ao soltar aresta de um nó de origem em nó de destino."
+
+  - id: delete_stage_from_canvas
+    label: "Deletar estágio selecionado no canvas"
+    type: submit
+    operation_id: admin_stages_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/stages/:id"
+    requires_scope: ["process:cycle:delete"]
+    loading_state: none
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível deletar o estágio."
+
+  - id: delete_transition_from_canvas
+    label: "Deletar transição selecionada no canvas"
+    type: submit
+    operation_id: admin_transitions_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/stage-transitions/:id"
+    requires_scope: ["process:cycle:delete"]
+    loading_state: none
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível deletar a transição."
+
+  - id: publish_cycle
+    label: "Publicar ciclo (DRAFT → PUBLISHED)"
+    type: submit
+    operation_id: admin_cycles_publish
+    http_method: POST
+    endpoint: "/api/v1/admin/cycles/:id/publish"
+    requires_scope: ["process:cycle:publish"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível publicar o ciclo."
+
+  - id: fork_cycle
+    label: "Criar nova versão (fork) do ciclo publicado"
+    type: submit
+    operation_id: admin_cycles_fork
+    http_method: POST
+    endpoint: "/api/v1/admin/cycles/:id/fork"
+    requires_scope: ["process:cycle:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível criar nova versão do ciclo."
+
+  - id: open_stage_config
+    label: "Abrir painel de configuração de estágio"
+    type: client_only
+    client_only: true
+    loading_state: none
+    notes: "Abre o painel lateral UX-PROC-002 para o estágio selecionado."
+
+components:
+
+  - id: "canvas-header"
+    name: "ProcessEditorHeader"
+    description: |
+      Barra superior fixa (z-index alto):
+        - Nome do ciclo + versão badge (ex: "Ciclo Comercial  v2  DRAFT")
+        - Status badge colorido: DRAFT=âmbar, PUBLISHED=verde, DEPRECATED=cinza
+        - Botões à direita:
+          "Publicar" (só em DRAFT + scope publish): abre modal de confirmação
+          "Nova versão" (só em PUBLISHED + scope write): dispara fork + redireciona para novo DRAFT
+          "Fechar editor": retorna para listagem de ciclos
+    actions_used: [publish_cycle, fork_cycle]
+
+  - id: "canvas-area"
+    name: "ProcessFlowCanvas"
+    description: |
+      Área principal: canvas infinito com grafo de nós (estágios) e arestas (transições).
+
+      NODOS (Estágios):
+        - Forma: retângulo arredondado
+        - Cor por macroetapa: cada macroetapa tem cor distinta (até 8 cores pré-definidas)
+        - Conteúdo: código (topo), nome (centro), badges: is_initial (⚑ azul), is_terminal (⊠ cinza)
+        - Badges adicionais: contador de gates, contador de papéis
+        - Clique simples: seleciona (destaca bordas, mostra botões delete/config)
+        - Duplo clique: edita nome inline (sem abrir painel)
+        - Clique no ícone config (⚙): abre UX-PROC-002 como painel lateral
+
+      ARESTAS (Transições):
+        - Seta direcional com label = nome da transição
+        - Cor padrão: cinza. Com gate_required=true: laranja. Com evidence_required=true: roxo.
+        - Clique: seleciona (mostra botão delete)
+        - Drag de porta de saída de nó → drop em porta de entrada de outro: cria transição
+        - Drag de porta de saída → drop no canvas vazio: abre dialog de criação de novo estágio
+
+      MACROETAPAS:
+        - Exibidas como "swimlanes" horizontais (faixas coloridas) com label à esquerda
+        - Estágios são posicionados dentro de sua macroetapa
+        - Botão (+) no swimlane: cria nova macroetapa ou novo estágio nela
+
+      CONTROLES DO CANVAS:
+        - Zoom: scroll do mouse ou botões +/-
+        - Pan: arrastar fundo
+        - Fit: botão para encaixar grafo na tela
+        - Mini-mapa: painel no canto inferior direito para navegação em grafos grandes
+        - Modo leitura automático quando ciclo=PUBLISHED (sem drag, sem duplo clique)
+
+      Estado ciclo PUBLISHED: canvas em modo readonly — nós não movíveis, sem arestas criáveis,
+      sem duplo clique. Banner "Ciclo publicado — use 'Nova versão' para editar" no topo do canvas.
+
+    actions_used: [create_stage_from_canvas, create_transition_from_canvas,
+                   delete_stage_from_canvas, delete_transition_from_canvas, open_stage_config]
+
+  - id: "macro-stage-panel"
+    name: "MacroStageSidebar"
+    description: |
+      Painel lateral esquerdo (colapsável):
+        - Lista de macroetapas com cor, nome e contador de estágios
+        - Botão (+) para adicionar macroetapa (DRAFT only)
+        - Arrasto de macroetapa para reordenar (DRAFT only)
+        - Clique na macroetapa: filtra/destaca estágios dela no canvas
+    actions_used: []
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Ciclo PUBLISHED = canvas em modo readonly. Nenhuma edição direta.
+  2. Botão "Publicar" só visível se ciclo=DRAFT E scope process:cycle:publish.
+  3. Botão "Nova versão" só visível se ciclo=PUBLISHED E scope process:cycle:write.
+  4. Drag de aresta entre estágios de ciclos diferentes: impossível (UI previne).
+  5. Nó de estágio selecionado: tecla Delete/Backspace dispara confirmação de deleção.
+  6. Estágio com instâncias ativas: nó exibe badge de aviso (ícone alerta) — deleção bloqueada com mensagem.
+  7. Posições X,Y dos nós no canvas salvas em metadata do estágio para persistência do layout.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Editor visual fullscreen com canvas, swimlanes, nós/arestas, modo readonly para PUBLISHED, fork/publish."

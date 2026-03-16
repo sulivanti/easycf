@@ -1,0 +1,264 @@
+# ============================================================
+# Screen Manifest — UX-ORG-002
+# Tela: Formulário de Nó Organizacional (Criar / Editar)
+# Módulo: MOD-003 (Estrutura Organizacional)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-ORG-002"
+name: "Formulário de Nó Organizacional"
+type: form
+module: "MOD-003"
+route: "/organizacao/novo"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-003"
+  - "US-MOD-003-F03"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+# ─── PAINÉIS (modos: criar vs editar) ─────────────────────────
+panels:
+  - id: "create"
+    label: "Criar Nó"
+    default: true
+    description: "Criação de novo nó com seleção de pai e geração de código."
+    actions_scope: [load_parent_options, submit_create, navigate_back]
+
+  - id: "edit"
+    label: "Editar Nó"
+    default: false
+    description: "Edição de nó existente. Código imutável. Pai imutável após criação."
+    actions_scope: [load_node, submit_update, navigate_back]
+
+# ─── AÇÕES ────────────────────────────────────────────────────
+actions:
+
+  - id: load_parent_options
+    label: "Carregar opções de nó pai para o select (modo criar)"
+    type: view
+    operation_id: org_units_list
+    http_method: GET
+    endpoint: "/api/v1/org-units"
+    client_only: false
+    requires_scope: ["org:unit:write"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar as unidades disponíveis."
+    notes: "Carrega apenas nós com nivel < 4 e status=ACTIVE. N4 não pode ter filhos org_unit."
+
+  - id: load_node
+    label: "Carregar dados do nó para edição"
+    type: view
+    operation_id: org_units_get
+    http_method: GET
+    endpoint: "/api/v1/org-units/:id"
+    client_only: false
+    requires_scope: ["org:unit:write"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os dados da unidade."
+
+  - id: submit_create
+    label: "Criar novo nó organizacional"
+    type: submit
+    operation_id: org_units_create
+    http_method: POST
+    endpoint: "/api/v1/org-units"
+    client_only: false
+    requires_scope: ["org:unit:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar a unidade organizacional."
+
+  - id: submit_update
+    label: "Salvar alterações do nó"
+    type: submit
+    operation_id: org_units_update
+    http_method: PATCH
+    endpoint: "/api/v1/org-units/:id"
+    client_only: false
+    requires_scope: ["org:unit:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível salvar as alterações."
+
+  - id: navigate_back
+    label: "Cancelar e voltar para árvore"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+# ─── COMPONENTES ──────────────────────────────────────────────
+components:
+
+  - id: "form-header"
+    name: "OrgNodeFormHeader"
+    description: |
+      Header com título dinâmico:
+        - Modo criar: "Nova Unidade Organizacional"
+        - Modo editar: "Editar — {codigo}: {nome}"
+      Breadcrumb: "Organização > {modo}"
+      Botão "Cancelar" (navigate_back).
+    actions_used: [navigate_back]
+
+  - id: "fields-create-mode"
+    name: "OrgNodeCreateFields"
+    description: |
+      Campos para criação:
+
+      Nó Pai (select/autocomplete):
+        - Label: "Unidade pai"
+        - Obrigatório: SIM (exceto para N1 — ver campo Nível Raiz)
+        - Opções: todos os nós ACTIVE com nivel ≤ 3 (N1, N2, N3), excluindo N4
+        - Formato: "{codigo} — {nome} (N{nivel})"
+        - Ao selecionar: campo Nível exibe automaticamente "N{parent.nivel + 1}"
+        - Skeleton durante load_parent_options
+
+      Checkbox "Criar como raiz (N1)":
+        - Quando marcado: campo "Nó Pai" desaparece, nivel = 1
+        - Visível apenas se não houver parent_id na URL (?parent=)
+
+      Nível (readonly, derivado):
+        - Calculado do pai: "N{nivel}" — nunca editável pelo usuário
+        - Exibe label descritivo: N1=Grupo Corp., N2=Unidade, N3=Macroárea, N4=Subunidade
+
+      Código*:
+        - Tipo: text, uppercase automático ao digitar
+        - Max: 50 chars, padrão sugerido: "{PREFIXO}-{SEQ}" (ex: GC-001)
+        - Validação inline: formato alfanumérico com hífen
+        - Aviso: "O código não pode ser alterado após a criação."
+        - Erro 409: "Este código já está em uso."
+
+      Nome*:
+        - Tipo: text, max 200 chars
+        - Validação inline: mínimo 3 chars
+
+      Descrição:
+        - Tipo: textarea, max 500 chars, opcional
+    conditional: "panel == 'create'"
+    actions_used: [load_parent_options, submit_create]
+
+  - id: "fields-edit-mode"
+    name: "OrgNodeEditFields"
+    description: |
+      Campos para edição:
+
+      Código (readonly):
+        - Exibido como texto, sem input editável
+        - Tooltip: "O código é imutável e não pode ser alterado."
+        - Badge com nível atual: "N{nivel} — {tipo}"
+
+      Nó Pai (readonly):
+        - Exibido como texto: "{parent.codigo} — {parent.nome}"
+        - Tooltip: "A hierarquia não pode ser reorganizada após criação."
+        - (Reorganização estrutural será funcionalidade futura)
+
+      Nome*:
+        - Editável, max 200 chars
+
+      Descrição:
+        - Editável, max 500 chars, opcional
+
+      Status:
+        - Toggle ACTIVE / INACTIVE
+        - INACTIVE: equivalente a soft delete via PATCH (não usa DELETE)
+        - Aviso ao desativar: "Subunidades ativas devem ser desativadas primeiro."
+    conditional: "panel == 'edit'"
+    actions_used: [load_node, submit_update]
+
+  - id: "level-indicator"
+    name: "LevelIndicator"
+    description: |
+      Componente visual que mostra a posição do novo nó na hierarquia.
+      Exibe breadcrumb dos ancestrais + novo nó como último item destacado.
+      Exemplo: "Grupo Alpha > Unidade SP > [Nova Macroárea]"
+      Atualiza em tempo real ao selecionar o nó pai.
+      Invisível se ainda não selecionou o pai.
+    actions_used: []
+
+  - id: "form-actions"
+    name: "OrgNodeFormActions"
+    description: |
+      Rodapé com botões:
+        - "Cancelar" à esquerda (navigate_back)
+        - "Criar unidade" ou "Salvar alterações" à direita (submit_create / submit_update)
+      Botão de submit: disabled se formulário inválido.
+      Após clique: isLoading até resposta da API.
+    actions_used: [submit_create, submit_update, navigate_back]
+
+  - id: "success-toast"
+    name: "OrgNodeSuccessToast"
+    description: |
+      Toast após operação bem-sucedida:
+        - Criar: "Unidade '{codigo} — {nome}' criada com sucesso."
+        - Editar: "Unidade '{codigo}' atualizada."
+      Após toast: redirect para /organizacao (árvore) com nó novo destacado (query param ?highlight=:id).
+      Timeout: 1.5s antes do redirect.
+    actions_used: []
+
+# ─── MAPEAMENTO DE ERROS POR CAMPO ────────────────────────────
+field_errors:
+  parent_id:
+    required: "Selecione a unidade pai."
+    invalid: "A unidade selecionada não está disponível."
+
+  codigo:
+    required: "O código é obrigatório."
+    format: "O código deve conter apenas letras, números e hífens."
+    conflict_409: "Este código já está em uso. Escolha outro."
+    immutable: "O código não pode ser alterado após a criação."
+
+  nome:
+    required: "O nome é obrigatório."
+    min_length: "O nome deve ter ao menos 3 caracteres."
+    max_length: "O nome deve ter no máximo 200 caracteres."
+
+# ─── NAVEGAÇÃO ────────────────────────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+  back_action: "/organizacao"
+
+query_params:
+  parent:
+    type: string
+    description: "ID do nó pai pré-selecionado (passado ao clicar em 'Novo filho' na árvore)."
+  edit:
+    type: string
+    description: "ID do nó a editar (muda o panel para 'edit' automaticamente)."
+
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Scope org:unit:write obrigatório. Sem ele: redirect /organizacao.
+  2. Nível é CALCULADO DO PAI pelo backend — o frontend exibe como readonly, nunca envia no body.
+  3. Código é IMUTÁVEL após criação — campo readonly no modo edição com tooltip explicativo.
+  4. Nó pai é IMUTÁVEL após criação — sem opção de "mover para outro pai" (funcionalidade futura).
+  5. Checkbox "Criar como raiz" visível apenas se ?parent= ausente na URL.
+  6. Código: uppercase automático no input (transforma em tempo real).
+  7. LevelIndicator atualiza em tempo real ao selecionar o pai (mostra posição na hierarquia).
+  8. Após sucesso: redirect para /organizacao?highlight=:id para destacar o nó criado/editado.
+  9. Erros 409 (código duplicado): inline no campo código — não em toast.
+  10. Query param ?parent= pré-seleciona o nó pai quando vindo de "Novo filho" na árvore.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Dois modos (criar/editar), nível derivado do pai, código imutável, LevelIndicator em tempo real, deep link via query params."

@@ -1,0 +1,113 @@
+# ============================================================
+# Screen Manifest — UX-SGR-002
+# Tela: Formulário de Alteração de Registro
+# Módulo: MOD-011 (SmartGrid) | Schema: v1 | Data: 2026-03-15
+# ============================================================
+# ⚠️ PENDÊNCIA PEND-SGR-02 (F01 amendment): depende do suporte
+# a current_record_state no motor MOD-007-F03.
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-SGR-002"
+name: "Formulário de Alteração de Registro"
+type: form
+module: "MOD-011"
+route: "/{modulo}/{rotina}/{id}/alterar"
+auth_required: true
+pre_auth: false
+layout: shell
+notes: "Sempre em rota/modal separado — nunca inline na grade de listagem."
+
+linked_stories:
+  - "US-MOD-011"
+  - "US-MOD-011-F03"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+actions:
+
+  - id: evaluate_record_on_open
+    label: "Avaliar se registro pode ser editado (com estado atual)"
+    type: view
+    operation_id: routine_engine_evaluate
+    http_method: POST
+    endpoint: "/api/v1/routine-engine/evaluate"
+    requires_scope: ["param:engine:evaluate"]
+    loading_state: skeleton
+    notes: "Chamado com current_record_state. SE blocking → formulário NÃO abre."
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível verificar o registro."
+
+  - id: validate_changes
+    label: "Validar alterações feitas pelo usuário"
+    type: submit
+    operation_id: routine_engine_evaluate
+    http_method: POST
+    endpoint: "/api/v1/routine-engine/evaluate"
+    requires_scope: ["param:engine:evaluate"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível validar as alterações."
+
+  - id: save_changes
+    label: "Salvar alterações do registro"
+    type: submit
+    operation_id: null
+    notes: "operationId depende do módulo destino."
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível salvar as alterações."
+
+  - id: navigate_back
+    label: "Cancelar e voltar"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+components:
+
+  - id: "blocked-record-message"
+    name: "BlockedRecordMessage"
+    description: |
+      Exibido quando evaluate_record_on_open retorna blocking_validations.
+      Tela não abre formulário — exibe mensagem de bloqueio + botão "Voltar".
+    conditional: "blocking_validations não vazio"
+    actions_used: [navigate_back]
+
+  - id: "edit-form"
+    name: "SmartEditForm"
+    description: |
+      Formulário: campos editáveis (visible_fields não bloqueados), campos readonly (com cadeado),
+      domain dropdowns, required asterisco, defaults pré-preenchidos.
+      Botões: "Cancelar" | "Validar" | "Salvar" (habilitado após validação sem ❌).
+    actions_used: [evaluate_record_on_open, validate_changes, save_changes, navigate_back]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+  back_action: "/{modulo}/{rotina}"
+
+notes: |
+  REGRAS:
+  1. current_record_state OBRIGATÓRIO.
+  2. Formulário NUNCA inline.
+  3. Campos bloqueados: readonly com ícone, não ocultos.
+  4. Log via domain_events: campo, valor anterior, novo valor.
+  5. Salvar habilitado apenas após validação sem blocking_validations.
+
+changelog:
+  - version: "0.1.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "DRAFT. Aguarda PEND-SGR-02."

@@ -1,0 +1,151 @@
+# ============================================================
+# Screen Manifest — UX-APROV-002
+# Tela: Configurador de Regras de Controle e Alçada
+# Módulo: MOD-009 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-APROV-002"
+name: "Configurador de Regras de Controle e Alçada"
+type: config
+module: "MOD-009"
+route: "/aprovacoes/configurar"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-009"
+  - "US-MOD-009-F05"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "control-rules"
+    label: "Regras de Controle"
+    default: true
+  - id: "approval-rules"
+    label: "Alçadas"
+    default: false
+
+actions:
+
+  - id: load_control_rules
+    label: "Carregar regras de controle"
+    type: view
+    operation_id: admin_control_rules_list
+    http_method: GET
+    endpoint: "/api/v1/admin/control-rules"
+    requires_scope: ["approval:rule:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar as regras."
+
+  - id: create_control_rule
+    label: "Criar regra de controle"
+    type: submit
+    operation_id: admin_control_rules_create
+    http_method: POST
+    endpoint: "/api/v1/admin/control-rules"
+    requires_scope: ["approval:rule:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar a regra."
+
+  - id: update_control_rule
+    label: "Editar regra de controle"
+    type: submit
+    operation_id: admin_control_rules_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/control-rules/:id"
+    requires_scope: ["approval:rule:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível salvar a regra."
+
+  - id: create_approval_rule
+    label: "Criar nível de alçada para uma regra"
+    type: submit
+    operation_id: admin_approval_rules_create
+    http_method: POST
+    endpoint: "/api/v1/admin/control-rules/:id/approval-rules"
+    requires_scope: ["approval:rule:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar o nível de alçada."
+
+  - id: update_approval_rule
+    label: "Editar nível de alçada"
+    type: submit
+    operation_id: admin_approval_rules_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/approval-rules/:id"
+    requires_scope: ["approval:rule:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível atualizar a alçada."
+
+  - id: simulate_motor
+    label: "Simular motor de controle (dry-run)"
+    type: submit
+    operation_id: movement_engine_evaluate
+    http_method: POST
+    endpoint: "/api/v1/movement-engine/evaluate"
+    requires_scope: ["approval:engine:evaluate"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível simular."
+
+components:
+
+  - id: "control-rules-list"
+    name: "ControlRulesList"
+    description: |
+      Painel "Regras de Controle":
+        Tabela: Código, Nome, Objeto, Operação, Origens, Critério valor, Status, Vigência, Prioridade.
+        Drawer de criação com toggle "Por valor".
+        Ao salvar: abre aba Alçadas.
+    actions_used: [load_control_rules, create_control_rule, update_control_rule]
+
+  - id: "approval-chain-editor"
+    name: "ApprovalChainEditor"
+    description: |
+      Painel "Alçadas":
+        Select regra, cards verticais por nível, preview horizontal.
+        Simulação dry-run com resultado inline.
+    actions_used: [create_approval_rule, update_approval_rule, simulate_motor]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. Scope approval:rule:read para acessar.
+  2. Criar regra → abre alçada automaticamente.
+  3. allow_self_approve: NÃO existe na UI.
+  4. Simulação dry-run.
+  5. Vigência expirada: badge âmbar.
+  6. Prioridade: tooltip "Menor = avaliada primeiro".
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Configurador de regras + cadeia visual de alçadas + simulação dry-run."

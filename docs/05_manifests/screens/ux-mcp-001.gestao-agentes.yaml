@@ -1,0 +1,146 @@
+# ============================================================
+# Screen Manifest — UX-MCP-001
+# Tela: Gestão de Agentes e Ações MCP
+# Módulo: MOD-010 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-MCP-001"
+name: "Gestão de Agentes e Ações MCP"
+type: config
+module: "MOD-010"
+route: "/automacao/agentes"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-010"
+  - "US-MOD-010-F04"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "agents"
+    label: "Agentes"
+    default: true
+  - id: "actions"
+    label: "Catálogo de Ações"
+    default: false
+  - id: "matrix"
+    label: "Permissões"
+    default: false
+
+actions:
+  - id: load_agents
+    operation_id: admin_mcp_agents_list
+    http_method: GET
+    endpoint: "/api/v1/admin/mcp-agents"
+    requires_scope: ["mcp:agent:read"]
+    loading_state: skeleton
+    error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível carregar os agentes." }
+
+  - id: create_agent
+    operation_id: admin_mcp_agents_create
+    http_method: POST
+    endpoint: "/api/v1/admin/mcp-agents"
+    requires_scope: ["mcp:agent:write"]
+    loading_state: button
+    error_handling: { strategy: inline, include_correlation_id: true, user_message: "Não foi possível criar o agente." }
+
+  - id: revoke_agent
+    operation_id: admin_mcp_agents_revoke
+    http_method: POST
+    endpoint: "/api/v1/admin/mcp-agents/:id/revoke"
+    requires_scope: ["mcp:agent:revoke"]
+    loading_state: button
+    error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível revogar o agente." }
+
+  - id: rotate_key
+    operation_id: admin_mcp_agents_rotate_key
+    http_method: POST
+    endpoint: "/api/v1/admin/mcp-agents/:id/rotate-key"
+    requires_scope: ["mcp:agent:write"]
+    loading_state: button
+    error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível rodar a chave." }
+
+  - id: load_actions
+    operation_id: admin_mcp_actions_list
+    http_method: GET
+    endpoint: "/api/v1/admin/mcp-actions"
+    requires_scope: ["mcp:action:read"]
+    loading_state: skeleton
+    error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível carregar as ações." }
+
+  - id: create_action
+    operation_id: admin_mcp_actions_create
+    http_method: POST
+    endpoint: "/api/v1/admin/mcp-actions"
+    requires_scope: ["mcp:action:write"]
+    loading_state: button
+    error_handling: { strategy: inline, include_correlation_id: true, user_message: "Não foi possível criar a ação." }
+
+  - id: grant_action
+    operation_id: admin_mcp_agent_action_grant
+    http_method: POST
+    endpoint: "/api/v1/admin/mcp-agents/:id/actions"
+    requires_scope: ["mcp:agent:write"]
+    loading_state: button
+    error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível conceder a ação." }
+
+  - id: revoke_action_link
+    operation_id: admin_mcp_agent_action_revoke
+    http_method: DELETE
+    endpoint: "/api/v1/admin/mcp-agents/:id/actions/:actionId"
+    requires_scope: ["mcp:agent:write"]
+    loading_state: button
+    error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível revogar a permissão." }
+
+components:
+
+  - id: "agents-table"
+    name: "AgentsTable"
+    description: |
+      Painel "Agentes": tabela Código, Nome, Owner, Status badge, Ações ativas #, Último uso.
+      REVOKED=vermelho escuro. Drawer de criação com allowed_scopes (sem escopos de aprovação).
+      Modal pós-criação com API key (uma vez, checkbox obrigatório).
+    actions_used: [load_agents, create_agent, rotate_key, revoke_agent]
+
+  - id: "api-key-modal"
+    name: "ApiKeyModal"
+    description: |
+      Modal: aviso vermelho, campo readonly com key, botão "Copiar", checkbox obrigatório.
+    actions_used: []
+
+  - id: "actions-catalog"
+    name: "ActionsCatalog"
+    description: |
+      Painel "Catálogo de Ações": tabela com política badges (DIRECT=verde, CONTROLLED=âmbar, EVENT_ONLY=cinza).
+    actions_used: [load_actions, create_action]
+
+  - id: "permissions-matrix"
+    name: "PermissionsMatrix"
+    description: |
+      Painel "Permissões": matriz Agentes × Ações com checkboxes e vigência.
+    actions_used: [grant_action, revoke_action_link]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. API key exibida UMA VEZ — modal com checkbox.
+  2. allowed_scopes: escopos de aprovação AUSENTES.
+  3. REVOKED: todas as ações desabilitadas.
+  4. Rotação: aviso de invalidação imediata.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Agentes, catálogo de ações, matriz de permissões, modal de API key."

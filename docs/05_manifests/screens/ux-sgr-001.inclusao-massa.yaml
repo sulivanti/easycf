@@ -1,0 +1,166 @@
+# ============================================================
+# Screen Manifest — UX-SGR-001
+# Tela: Grade de Inclusão em Massa
+# Módulo: MOD-011 (SmartGrid) | Schema: v1 | Data: 2026-03-15
+# ============================================================
+# ⚠️ PENDÊNCIA PEND-SGR-01: Este manifest está DRAFT até a definição
+# do contrato de mapeamento resultado-do-motor → estado visual da linha.
+# Promover para READY após resolução.
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-SGR-001"
+name: "Grade de Inclusão em Massa"
+type: grid
+module: "MOD-011"
+route: "/{modulo}/{rotina}/inclusao-em-massa"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-011"
+  - "US-MOD-011-F02"
+  - "US-MOD-011-F05"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+actions:
+
+  - id: load_operation_config
+    label: "Carregar configuração da Operação no mount da grade"
+    type: view
+    operation_id: routine_engine_evaluate
+    http_method: POST
+    endpoint: "/api/v1/routine-engine/evaluate"
+    requires_scope: ["param:engine:evaluate"]
+    loading_state: skeleton
+    notes: "Chamado no mount com { framer_id, object_type }. SEM object_id e SEM current_record_state."
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar a configuração da Operação."
+
+  - id: validate_line
+    label: "Validar uma linha contra a Operação (chamado por linha)"
+    type: submit
+    operation_id: routine_engine_evaluate
+    http_method: POST
+    endpoint: "/api/v1/routine-engine/evaluate"
+    requires_scope: ["param:engine:evaluate"]
+    loading_state: none
+    notes: "Chamado 1 vez por linha com current_record_state. blocking_validations→❌, validations→⚠️, vazio→✅"
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Erro ao validar linha."
+
+  - id: save_batch
+    label: "Salvar todas as linhas válidas"
+    type: submit
+    operation_id: null
+    notes: "operationId depende do módulo destino. Habilitado SOMENTE quando todas as linhas têm ✅."
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível salvar os registros."
+
+  - id: export_json
+    label: "Exportar estado da grade em JSON (client-side)"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+  - id: import_json
+    label: "Importar JSON para restaurar estado da grade"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+  - id: add_line
+    label: "Adicionar nova linha em branco"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+  - id: remove_selected_lines
+    label: "Remover linhas selecionadas da grade"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+  - id: apply_value_mass
+    label: "Aplicar valor em coluna nas linhas selecionadas"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+  - id: clear_column_mass
+    label: "Limpar coluna nas linhas selecionadas"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+  - id: duplicate_line
+    label: "Duplicar linha selecionada N vezes"
+    type: client_only
+    client_only: true
+    loading_state: none
+    notes: "Funciona com exatamente 1 linha selecionada."
+
+components:
+
+  - id: "grid-header"
+    name: "SmartGridHeader"
+    description: |
+      Header: nome da Operação, contador de linhas/válidas/erros.
+      Botões: "Importar JSON", "Exportar JSON", "Validar Tudo", "Salvar" (desabilitado até 100% ✅).
+    actions_used: [export_json, import_json, save_batch]
+
+  - id: "mass-action-toolbar"
+    name: "MassActionToolbar"
+    description: |
+      Toolbar OCULTA sem seleção. Aparece com ≥1 linha selecionada.
+      "Aplicar valor", "Limpar coluna", "Duplicar item" (1 linha only).
+    actions_used: [apply_value_mass, clear_column_mass, duplicate_line]
+
+  - id: "data-grid"
+    name: "SmartDataGrid"
+    description: |
+      Grade editável: colunas por visible_fields, checkbox seleção, coluna status (✅/⚠️/❌).
+      Cells com defaults, required asterisco, domain dropdowns.
+    actions_used: [load_operation_config, validate_line, add_line, remove_selected_lines]
+
+  - id: "close-confirmation-modal"
+    name: "CloseConfirmationModal"
+    description: |
+      Modal ao fechar com dados não salvos: "Exportar e sair" | "Sair sem exportar" | "Cancelar".
+    actions_used: [export_json]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. Motor chamado 1 LINHA POR VEZ.
+  2. "Validar Tudo" = loop sobre todas as linhas.
+  3. "Salvar" habilitado SOMENTE com 100% ✅.
+  4. Revalidação sempre TOTAL.
+  5. Export/Import client-side.
+  6. Toolbar OCULTA sem seleção.
+  7. Status neutro após ação em massa.
+
+  PENDÊNCIA PEND-SGR-01: contrato de mapeamento motor → estado visual.
+
+changelog:
+  - version: "0.1.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "DRAFT. Aguarda resolução PEND-SGR-01."

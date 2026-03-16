@@ -1,73 +1,253 @@
-manifest_version: 1
+# ============================================================
+# Screen Manifest — UX-SHELL-001
+# Tela: Application Shell (Sidebar + Header + Breadcrumb)
+# Módulo: MOD-001 (Backoffice Admin)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# ============================================================
+# O Shell é um LAYOUT WRAPPER, não uma rota isolada.
+# Ele envolve TODAS as rotas autenticadas do sistema.
+# Cada módulo futuro (MOD-002 a MOD-010) será renderizado
+# dentro deste shell como <Outlet /> (React Router) ou equivalente.
+# ============================================================
+
+schema_version: "v1"
 screen_id: "UX-SHELL-001"
-name: "Application Shell (Sidebar + Header + Breadcrumb)"
-entity_type: "shell"
+name: "Application Shell — Layout Base Autenticado"
+type: shell
+module: "MOD-001"
+route: "/*"          # layout wrapper — envolve todas as rotas autenticadas
+auth_required: true
+pre_auth: false
+layout: shell
 
 linked_stories:
-  - "US-MOD-001"
-  - "US-MOD-001-F01"
-  - "US-MOD-001-F02"
-
-# O Shell não é uma tela de negócio — é o container de navegação.
-# Por isso entity_type = "shell" (DOC-UX-010 §Manifestos de Infra/Shell).
-# Sidebar renderiza menu filtrado por scopes do JWT (DOC-UX-011 §3.2).
-
-routes:
-  - path: "/auth/me"
-    method: GET
-  - path: "/auth/logout"
-    method: POST
+  - "US-MOD-001"       # épico pai
+  - "US-MOD-001-F01"   # Shell de Autenticação e Layout Base
+  - "US-MOD-001-F02"   # Telemetria de UI e Rastreabilidade do Shell
 
 telemetry_defaults:
-  event_name: "shell.rendered"
-  required_fields:
-    - "screen_id"
-    - "tenant_id"
-    - "correlation_id"
-  propagate_headers:
-    - "X-Correlation-ID"
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true    # PÓS-AUTH: tenant disponível no JWT
+  propagate_correlation_id: true
+  capture_duration_ms: true
 
-permissions:
-  read: "auth:me"
-  logout: "auth:logout"
-
+# ─── AÇÕES ───────────────────────────────────────────────────
 actions:
-  # Renderização do shell — carrega dados do usuário autenticado
-  - action: "view"
+
+  - id: load_current_user
+    label: "Carregar perfil do usuário autenticado (mount do shell)"
+    type: view
+    operation_id: auth_me
+    http_method: GET
+    endpoint: "/api/v1/auth/me"
     client_only: false
-    operation_ids:
-      - "auth_me"
-    permission: "auth:me"
+    requires_scope: []    # apenas autenticação válida — sem scope adicional
+    loading_state: skeleton
+    # Skeleton aplicado ao Header (avatar, nome, tenant) e Sidebar (itens de menu)
+    # até a resposta retornar os dados de perfil e scopes
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      enumeration_safe: false
+      user_message: "Não foi possível carregar seu perfil. Tente novamente."
+      # Não desconecta o usuário automaticamente — permite retry
 
-  # Logout: mapeado como submit (workflow) com contexto logout
-  # logout não consta no catálogo DOC-UX-010 §1-37;
-  # adotado submit/workflow por ser a ação mais próxima semanticamente.
-  - action: "submit"
+  - id: submit_logout
+    label: "Encerrar sessão do usuário"
+    type: submit
+    operation_id: auth_logout
+    http_method: POST
+    endpoint: "/api/v1/auth/logout"
     client_only: false
-    operation_ids:
-      - "auth_logout"
-    permission: "auth:logout"
+    requires_scope: []
+    loading_state: button
+    # Botão "Sair" no ProfileWidget do Header entra em isLoading durante a chamada
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Erro ao encerrar sessão. Tente novamente."
+    telemetry_override:
+      capture_duration_ms: true
 
-ui_rules:
-  action_visibility:
-    strategy: "hide_if_no_permission"
-  action_enablement: []
+  - id: navigate_sidebar
+    label: "Navegar para módulo via Sidebar"
+    type: navigate
+    client_only: true
+    # A navegação em si é client-side (React Router). A tela destino
+    # gerencia suas próprias chamadas de API e telemetria.
+    loading_state: none
+    notes: "Sidebar só exibe itens para os quais o usuário tem scope. Itens sem permissão NÃO aparecem."
 
-error_mapping:
-  default_user_message: "Ocorreu um erro inesperado. Tente novamente ou contate o suporte."
-  http_status:
-    "401":
-      user_message: "Sessão expirada. Faça login novamente."
-      ui:
-        type: "modal"
-        level: "error"
-    "403":
-      user_message: "Você não tem permissão para executar esta ação."
-      ui:
-        type: "toast"
-        level: "error"
-    "500":
-      user_message: "Erro interno do servidor. Contate o suporte."
-      ui:
-        type: "toast"
-        level: "error"
+  - id: navigate_breadcrumb
+    label: "Navegar via Breadcrumb"
+    type: navigate
+    client_only: true
+    loading_state: none
+
+  - id: open_change_password
+    label: "Abrir tela de alteração de senha (do ProfileWidget)"
+    type: navigate
+    client_only: false
+    operation_id: null     # navegação para rota dedicada — sem operationId direto
+    http_method: null
+    endpoint: null
+    loading_state: none
+    notes: "Link no ProfileWidget → redireciona para /perfil/alterar-senha (US-MOD-000-F10)."
+
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
+
+  - id: "sidebar"
+    name: "Sidebar"
+    description: |
+      Navegação lateral persistente. Exibe módulos/seções disponíveis para o usuário.
+      REGRA: Itens são filtrados pelos scopes do JWT — módulos sem permissão NÃO aparecem,
+      nem como desabilitados. Popula a partir dos scopes retornados em auth_me.
+      Suporte a colapso/expansão (responsivo). Inclui logo da aplicação no topo.
+      Estado colapsado salvo em preferências locais (não no backend).
+    conditional: "sempre visível dentro do shell"
+    actions_used: [navigate_sidebar]
+
+  - id: "sidebar-item"
+    name: "SidebarItem"
+    description: |
+      Item de menu da Sidebar. Cada item possui:
+      - icon: ícone do módulo
+      - label: rótulo do módulo
+      - route: rota de destino
+      - required_scope: escopo necessário (comparado com JWT — se ausente, item não é renderizado)
+      - active_match: padrão de rota para estado ativo (ex: /usuarios/* → ativo em /usuarios/123)
+      Grupos de itens podem ser aninhados (sub-menus) com chevron de expansão.
+    conditional: "apenas se required_scope presente no JWT"
+    actions_used: [navigate_sidebar]
+
+  - id: "header"
+    name: "Header"
+    description: |
+      Barra superior persistente. Contém:
+      - Logo/nome da aplicação (link para /dashboard)
+      - Breadcrumb (centro/esquerda)
+      - ProfileWidget (direita)
+      Durante skeleton loading: avatar e nome aparecem como placeholders animados.
+    conditional: "sempre visível"
+    actions_used: [load_current_user]
+
+  - id: "breadcrumb"
+    name: "Breadcrumb"
+    description: |
+      Trilha de navegação baseada na rota atual. Gerada automaticamente a partir da
+      configuração de rotas (nome da rota + rota pai). Último item é não-clicável.
+      Truncamento em mobile: exibe apenas último item + reticências clicáveis.
+    conditional: "sempre visível no Header"
+    actions_used: [navigate_breadcrumb]
+
+  - id: "profile-widget"
+    name: "ProfileWidget"
+    description: |
+      Dropdown no Header (direita). Exibe:
+      - Avatar circular (URL de `/auth/me` → avatarUrl ou iniciais como fallback)
+      - Nome completo do usuário
+      - E-mail
+      - Tenant ativo (nome da filial)
+      Ao expandir, mostra links:
+      - "Alterar Senha" → /perfil/alterar-senha
+      - "Sair" → dispara submit_logout
+      Skeleton: avatar e nome como placeholders durante load_current_user.
+    conditional: "sempre visível no Header"
+    actions_used: [load_current_user, submit_logout, open_change_password]
+
+  - id: "content-area"
+    name: "ContentArea"
+    description: |
+      Área principal de conteúdo. Renderiza o <Outlet /> (React Router) da rota ativa.
+      Padding interno padrão: 24px. Scrollable independente do Header e Sidebar.
+    conditional: "sempre visível"
+    actions_used: []
+
+  - id: "global-toast"
+    name: "GlobalToastProvider"
+    description: |
+      Provider de toasts globais. Posição: top-right. Auto-dismiss: 5s (erros: 8s).
+      Inclui correlationId no rodapé do toast de erro (texto menor, cor cinza).
+      Máximo de 3 toasts simultâneos (FIFO — mais antigo removido primeiro).
+      Segue padrão DOC-UX-012 §2.1.
+    conditional: "sempre presente no shell"
+    actions_used: []
+
+# ─── ESTRUTURA DO MENU SIDEBAR (seed inicial MOD-001) ────────
+# Esta configuração representa os itens disponíveis para MOD-001.
+# Novos módulos (MOD-003+) devem adicionar seus itens aqui via amendment.
+sidebar_menu:
+  groups:
+    - id: "admin"
+      label: "Administração"
+      icon: "settings"
+      items:
+        - id: "nav-users"
+          label: "Usuários"
+          icon: "users"
+          route: "/usuarios"
+          required_scope: "users:user:read"
+          active_match: "/usuarios/*"
+
+        - id: "nav-roles"
+          label: "Perfis e Permissões"
+          icon: "shield"
+          route: "/perfis"
+          required_scope: "users:role:read"
+          active_match: "/perfis/*"
+
+        - id: "nav-branches"
+          label: "Filiais"
+          icon: "building"
+          route: "/filiais"
+          required_scope: "tenants:branch:read"
+          active_match: "/filiais/*"
+
+    - id: "system"
+      label: "Sistema"
+      icon: "cpu"
+      items:
+        - id: "nav-audit"
+          label: "Auditoria"
+          icon: "activity"
+          route: "/auditoria"
+          required_scope: "system:audit:read"
+          active_match: "/auditoria/*"
+
+# ─── NAVEGAÇÃO E PROTEÇÃO DE ROTA ────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+  redirect_if_auth: null   # shell não redireciona usuários autenticados
+
+# ─── REGRAS CRÍTICAS DE UX ────────────────────────────────────
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Sidebar DEVE filtrar itens pelo required_scope versus scopes do JWT (auth_me).
+     Itens sem permissão NÃO APARECEM — não exibir como desabilitados ou com cadeado.
+  2. ProfileWidget DEVE exibir dados de auth_me — nunca usar dados do localStorage ou JWT decodificado.
+  3. Skeleton loading: Header (avatar + nome + tenant) e Sidebar (itens) devem ter skeleton
+     animado durante a chamada a auth_me no mount. Duração máxima do skeleton: 3s; após isso exibir
+     estado de erro com opção de retry.
+  4. Submit de logout: botão "Sair" entra em isLoading, desabilitado até resposta.
+     Após resposta (200 ou erro), redireciona para /login.
+     Em caso de erro de rede, redireciona mesmo assim (limpa estado local).
+  5. X-Correlation-ID DEVE estar presente em TODAS as requisições HTTP do Shell.
+     Gerado pelo @easycf/ui-telemetry na inicialização do componente.
+  6. Tenant ativo no ProfileWidget deve vir do campo `tenant.name` retornado em auth_me.
+     Se usuário tiver múltiplas filiais, exibir a filial ativa da sessão atual.
+  7. A ContentArea deve ter scroll independente — Header e Sidebar devem permanecer fixos.
+  8. Em mobile (<768px): Sidebar colapsa para menu hamburguer (drawer overlay).
+
+  ESTADOS DO SHELL:
+  - Loading: skeleton em Header e Sidebar enquanto auth_me não retornou
+  - Ready: dados carregados, Sidebar populada, ProfileWidget preenchido
+  - Error: toast de erro + botão "Tentar novamente" na área do ProfileWidget
+  - Session expired: interceptor HTTP detecta 401 → redireciona para /login com mensagem
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Cobre Sidebar, Header, Breadcrumb, ProfileWidget, GlobalToast. Seed de menu para MOD-001."

@@ -1,66 +1,167 @@
-manifest_version: 1
+# ============================================================
+# Screen Manifest — UX-DASH-001
+# Tela: Dashboard Administrativo Executivo
+# Módulo: MOD-001 (Backoffice Admin)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
 screen_id: "UX-DASH-001"
-name: "Dashboard Administrativo"
-entity_type: "dashboard"
+name: "Dashboard Administrativo Executivo"
+type: dashboard
+module: "MOD-001"
+route: "/dashboard"
+auth_required: true
+pre_auth: false
+layout: shell     # renderizado dentro do UX-SHELL-001
 
 linked_stories:
-  - "US-MOD-001"
-  - "US-MOD-001-F03"
-
-# Rota protegida: / ou /dashboard
-# Força re-autenticação se JWT inválido ou expirado.
-# Skeleton screen exibido durante carregamento de /auth/me (DOC-UX-012 §5.1).
-
-routes:
-  - path: "/auth/me"
-    method: GET
+  - "US-MOD-001"       # épico pai
+  - "US-MOD-001-F02"   # Telemetria de UI e Rastreabilidade do Shell
+  - "US-MOD-001-F03"   # Dashboard Administrativo Executivo
 
 telemetry_defaults:
-  event_name: "dashboard.viewed"
-  required_fields:
-    - "screen_id"
-    - "tenant_id"
-    - "correlation_id"
-  propagate_headers:
-    - "X-Correlation-ID"
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true    # PÓS-AUTH: tenant ativo disponível no JWT
+  propagate_correlation_id: true
+  capture_duration_ms: true
 
-permissions:
-  read: "auth:me"
-
+# ─── AÇÕES ───────────────────────────────────────────────────
 actions:
-  # Widget de boas-vindas com nome do usuário
-  - action: "view"
+
+  - id: load_dashboard_profile
+    label: "Carregar perfil para saudação e atalhos do dashboard"
+    type: view
+    operation_id: auth_me
+    http_method: GET
+    endpoint: "/api/v1/auth/me"
     client_only: false
-    operation_ids:
-      - "auth_me"
-    permission: "auth:me"
+    requires_scope: []
+    loading_state: skeleton
+    # Skeleton substitui: WelcomeWidget (nome do usuário) + ModuleShortcuts (cards)
+    # enquanto auth_me não retornou
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      enumeration_safe: false
+      user_message: "Não foi possível carregar as informações do dashboard."
+      # Não redireciona para login — erro 5xx não invalida sessão
+      # Erro 401 → interceptor HTTP global do Shell redireciona para /login
 
-  # Atalhos de módulos filtrados por scopes — client-only
-  - action: "view"
-    client_only: true
-    operation_ids: []
-    permission: "auth:me"
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
 
-ui_rules:
-  action_visibility:
-    strategy: "hide_if_no_permission"
-  action_enablement: []
+  - id: "welcome-widget"
+    name: "WelcomeWidget"
+    description: |
+      Card de boas-vindas no topo da página.
+      Exibe: "Bom dia / Boa tarde / Boa noite, {auth_me.name}!"
+      Saudação baseada no horário local do browser.
+      Subtexto: nome da filial ativa (auth_me.tenant.name).
+      Skeleton: linha de texto animada (largura variável) durante loading.
+      Fonte dos dados: SEMPRE auth_me — nunca localStorage ou JWT decodificado.
+    conditional: "sempre visível"
+    actions_used: [load_dashboard_profile]
 
-error_mapping:
-  default_user_message: "Ocorreu um erro inesperado. Tente novamente ou contate o suporte."
-  http_status:
-    "401":
-      user_message: "Sessão expirada. Faça login novamente."
-      ui:
-        type: "modal"
-        level: "error"
-    "403":
-      user_message: "Você não tem permissão para acessar este recurso."
-      ui:
-        type: "toast"
-        level: "error"
-    "500":
-      user_message: "Erro interno do servidor. Contate o suporte."
-      ui:
-        type: "toast"
-        level: "error"
+  - id: "module-shortcuts"
+    name: "ModuleShortcuts"
+    description: |
+      Grade de cards de acesso rápido aos módulos do sistema.
+      Cada card contém: ícone, nome do módulo e rota de destino.
+      REGRA: Apenas módulos com scopes correspondentes nos JWT scopes são exibidos.
+      Módulos sem permissão NÃO aparecem — não exibir desabilitados ou com cadeado.
+      Layout: grid responsivo (4 colunas desktop, 2 tablet, 1 mobile).
+      Skeleton: N cards placeholder durante loading (N = número de módulos habilitados ao usuário,
+      ou 4 como fallback enquanto scopes não carregaram).
+      Hover: elevação e borda de destaque no card.
+    conditional: "sempre visível"
+    actions_used: [load_dashboard_profile]
+
+  - id: "dashboard-toast-error"
+    name: "DashboardToastError"
+    description: |
+      Toast de erro para falhas no load_dashboard_profile.
+      Inclui correlationId no rodapé. Exibe botão "Tentar novamente"
+      que reexecuta load_dashboard_profile sem reload da página.
+      Posição: top-right, auto-dismiss desabilitado (persiste até ação do usuário).
+    conditional: "quando load_dashboard_profile retorna erro"
+    actions_used: [load_dashboard_profile]
+
+# ─── CATÁLOGO DE ATALHOS (seed inicial MOD-001) ──────────────
+# Define os cards de acesso rápido disponíveis e seus requisitos de scope.
+# Novos módulos devem adicionar seus atalhos aqui via amendment.
+module_shortcuts_catalog:
+  - id: "shortcut-users"
+    label: "Usuários"
+    description: "Gerencie usuários do sistema"
+    icon: "users"
+    route: "/usuarios"
+    required_scope: "users:user:read"
+    color_accent: "#2E6DA4"
+
+  - id: "shortcut-roles"
+    label: "Perfis e Permissões"
+    description: "Configure perfis e controle de acesso"
+    icon: "shield"
+    route: "/perfis"
+    required_scope: "users:role:read"
+    color_accent: "#1A7F8A"
+
+  - id: "shortcut-branches"
+    label: "Filiais"
+    description: "Gerencie filiais e configurações"
+    icon: "building"
+    route: "/filiais"
+    required_scope: "tenants:branch:read"
+    color_accent: "#217A3C"
+
+  - id: "shortcut-audit"
+    label: "Auditoria"
+    description: "Consulte logs e trilha de auditoria"
+    icon: "activity"
+    route: "/auditoria"
+    required_scope: "system:audit:read"
+    color_accent: "#C97B00"
+
+# ─── NAVEGAÇÃO E PROTEÇÃO DE ROTA ────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+  redirect_if_auth: null
+  # REGRA: JWT inválido ou expirado → interceptor do Shell redireciona para /login
+  # antes de qualquer chamada de API. A tela do dashboard não precisa tratar este caso
+  # diretamente — o Shell (UX-SHELL-001) é responsável pela guarda global.
+
+# ─── REGRAS CRÍTICAS DE UX ────────────────────────────────────
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Dashboard DEVE chamar auth_me ao montar — nunca usar dados de localStorage ou JWT decodificado
+     para exibir nome e tenant. O JWT pode conter dados desatualizados.
+  2. Skeleton screen DEVE ser exibido para WelcomeWidget e ModuleShortcuts
+     durante o loading de auth_me (DOC-UX-012 §5.1).
+  3. Atalhos de módulos DEVEM ser filtrados por scopes do JWT.
+     Módulos sem permissão não aparecem — nunca exibir item desabilitado.
+  4. Rota /dashboard é protegida pelo guard de auth do Shell (UX-SHELL-001).
+     JWT inválido → redirect para /login gerenciado pelo interceptor HTTP global.
+  5. Erros de auth_me (4xx/5xx) DEVEM exibir Toast com correlationId (DOC-UX-012 §2.1).
+     Erro de rede não deve desconectar o usuário automaticamente.
+  6. A saudação (Bom dia/tarde/noite) deve usar o horário local do browser,
+     não o horário do servidor.
+
+  ESTADOS DA TELA:
+  - Loading:  skeleton em WelcomeWidget e ModuleShortcuts durante auth_me
+  - Ready:    WelcomeWidget com nome/tenant + cards de atalhos filtrados por scope
+  - Error:    Toast de erro com correlationId + botão "Tentar novamente"
+  - No scopes: WelcomeWidget exibido normalmente; ModuleShortcuts vazio com mensagem
+               "Nenhum módulo disponível para seu perfil. Contate o administrador."
+
+  DADOS CONSUMIDOS DE auth_me:
+  - auth_me.name           → saudação no WelcomeWidget
+  - auth_me.tenant.name    → nome da filial no subtexto do WelcomeWidget
+  - auth_me.scopes[]       → filtra quais shortcut cards são exibidos
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Cobre WelcomeWidget, ModuleShortcuts com filtro por scope, skeleton e toast de erro."

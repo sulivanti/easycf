@@ -1,0 +1,324 @@
+# ============================================================
+# Screen Manifest — UX-CASE-001
+# Tela: Painel do Caso em Andamento
+# Módulo: MOD-006 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-CASE-001"
+name: "Painel do Caso em Andamento"
+type: detail
+module: "MOD-006"
+route: "/casos/:id"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-006"
+  - "US-MOD-006-F03"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "overview"
+    label: "Visão Geral"
+    default: true
+    actions_scope: [load_case, execute_transition, cancel_case, hold_case, resume_case]
+
+  - id: "gates"
+    label: "Gates"
+    default: false
+    actions_scope: [load_gates, resolve_gate, waive_gate]
+
+  - id: "assignments"
+    label: "Responsáveis"
+    default: false
+    actions_scope: [load_assignments, create_assignment, update_assignment]
+
+  - id: "timeline"
+    label: "Histórico"
+    default: false
+    actions_scope: [load_timeline]
+
+actions:
+
+  - id: load_case
+    label: "Carregar dados completos do caso"
+    type: view
+    operation_id: cases_get
+    http_method: GET
+    endpoint: "/api/v1/cases/:id"
+    requires_scope: ["process:case:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar o caso."
+
+  - id: execute_transition
+    label: "Executar transição de estágio"
+    type: submit
+    operation_id: cases_transition
+    http_method: POST
+    endpoint: "/api/v1/cases/:id/transition"
+    requires_scope: ["process:case:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível executar a transição."
+      # Erros específicos do motor são exibidos inline (gate pendente, papel não autorizado)
+
+  - id: cancel_case
+    label: "Cancelar caso"
+    type: submit
+    operation_id: cases_cancel
+    http_method: POST
+    endpoint: "/api/v1/cases/:id/cancel"
+    requires_scope: ["process:case:cancel"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível cancelar o caso."
+
+  - id: hold_case
+    label: "Colocar caso em espera"
+    type: submit
+    operation_id: cases_hold
+    http_method: POST
+    endpoint: "/api/v1/cases/:id/hold"
+    requires_scope: ["process:case:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível suspender o caso."
+
+  - id: resume_case
+    label: "Retomar caso em espera"
+    type: submit
+    operation_id: cases_resume
+    http_method: POST
+    endpoint: "/api/v1/cases/:id/resume"
+    requires_scope: ["process:case:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível retomar o caso."
+
+  - id: load_gates
+    label: "Carregar gates do estágio atual"
+    type: view
+    operation_id: cases_gates_list
+    http_method: GET
+    endpoint: "/api/v1/cases/:id/gates"
+    requires_scope: ["process:case:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os gates."
+
+  - id: resolve_gate
+    label: "Resolver gate (aprovação, documento ou checklist)"
+    type: submit
+    operation_id: cases_gates_resolve
+    http_method: POST
+    endpoint: "/api/v1/cases/:id/gates/:gateId/resolve"
+    requires_scope: ["process:case:gate_resolve"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível resolver o gate."
+
+  - id: waive_gate
+    label: "Dispensar gate obrigatório (requer justificativa)"
+    type: submit
+    operation_id: cases_gates_waive
+    http_method: POST
+    endpoint: "/api/v1/cases/:id/gates/:gateId/waive"
+    requires_scope: ["process:case:gate_waive"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível dispensar o gate."
+
+  - id: load_assignments
+    label: "Carregar responsáveis do caso"
+    type: view
+    operation_id: cases_assignments_list
+    http_method: GET
+    endpoint: "/api/v1/cases/:id/assignments"
+    requires_scope: ["process:case:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os responsáveis."
+
+  - id: create_assignment
+    label: "Atribuir responsável a papel do estágio"
+    type: submit
+    operation_id: cases_assignments_create
+    http_method: POST
+    endpoint: "/api/v1/cases/:id/assignments"
+    requires_scope: ["process:case:assign"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar a atribuição."
+
+  - id: update_assignment
+    label: "Reatribuir responsável (substitui o anterior)"
+    type: submit
+    operation_id: cases_assignments_update
+    http_method: PATCH
+    endpoint: "/api/v1/cases/:id/assignments/:aid"
+    requires_scope: ["process:case:assign"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível reatribuir."
+
+  - id: load_timeline
+    label: "Carregar timeline completa do caso"
+    type: view
+    operation_id: cases_timeline
+    http_method: GET
+    endpoint: "/api/v1/cases/:id/timeline"
+    requires_scope: ["process:case:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar o histórico."
+
+  - id: add_comment
+    label: "Adicionar comentário ao caso"
+    type: submit
+    operation_id: cases_events_create
+    http_method: POST
+    endpoint: "/api/v1/cases/:id/events"
+    requires_scope: ["process:case:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível registrar o comentário."
+
+components:
+
+  - id: "case-header"
+    name: "CaseHeader"
+    description: |
+      Cabeçalho fixo com:
+        - Código do caso (badge monospace): CASO-2026-00042
+        - Nome do ciclo + versão: "Ciclo Comercial  v1"
+        - Status badge: OPEN=verde, ON_HOLD=âmbar, COMPLETED=azul, CANCELLED=cinza
+        - Estágio atual: nome + macroetapa (breadcrumb: "Validação > Em Análise")
+        - Ações contextuais (dropdown direito, por status):
+          OPEN:     "Suspender" (hold), "Cancelar" (cancel)
+          ON_HOLD:  "Retomar" (resume), "Cancelar" (cancel)
+          COMPLETED/CANCELLED: sem ações
+    actions_used: [hold_case, resume_case, cancel_case]
+
+  - id: "stage-progress"
+    name: "StageProgressBar"
+    description: |
+      Barra de progresso visual das macroetapas:
+        - Pills horizontais com nome de cada macroetapa
+        - Macroetapa atual destacada com cor do ciclo
+        - Macroetapas concluídas marcadas com ✓
+        - Clique em macroetapa passada: filtra timeline para aquele período (client-only)
+    actions_used: []
+
+  - id: "available-transitions"
+    name: "AvailableTransitions"
+    description: |
+      Seção de transições disponíveis no estágio atual:
+        - Cada transição exibe: nome (botão), gates pendentes (se houver), papel necessário
+        - Transição com gates pendentes: botão desabilitado com tooltip "X gate(s) pendente(s)"
+        - Transição com papel não autorizado: botão desabilitado com tooltip "Papel não autorizado"
+        - Transição com evidence_required: ao clicar abre mini-form inline para nota/arquivo
+        - Botão ativo (sem pendências): ao clicar abre modal de confirmação antes de POST /transition
+        - Em COMPLETED/CANCELLED/ON_HOLD: seção não exibida
+    actions_used: [execute_transition]
+
+  - id: "gates-panel"
+    name: "GatesPanel"
+    description: |
+      Aba "Gates" — lista de gate_instances do estágio atual:
+        - Card por gate: tipo (ícone), nome, status badge
+        - PENDING: botão "Resolver" (abre form por tipo: APPROVAL=decisão+parecer, DOCUMENT=upload, CHECKLIST=itens)
+        - RESOLVED: mostra decisão/evidência, resolvido por, data
+        - WAIVED: badge âmbar "Dispensado" + motivo registrado
+        - INFORMATIVE: badge cinza "Informativo — não bloqueia"
+        - Gate APPROVAL resolvido com REJECTED: card em vermelho com parecer de rejeição
+        - Skeleton durante load_gates
+    actions_used: [load_gates, resolve_gate, waive_gate]
+
+  - id: "assignments-panel"
+    name: "AssignmentsPanel"
+    description: |
+      Aba "Responsáveis":
+        - Lista de papéis do estágio com atribuição atual (ou badge "Não atribuído" em âmbar)
+        - Papel required=true sem atribuição: destaque visual vermelho + aviso "Obrigatório"
+        - Cada atribuição: avatar + nome + valid_until (se temporária)
+        - Botão "Reatribuir" por atribuição ativa (scope process:case:assign)
+        - Botão "Atribuir" em papel sem atribuição
+        - Autocomplete de usuários para seleção
+        - Skeleton durante load_assignments
+    actions_used: [load_assignments, create_assignment, update_assignment]
+
+  - id: "timeline-panel"
+    name: "TimelinePanel"
+    description: |
+      Aba "Histórico" — timeline vertical cronológica intercalando 3 históricos:
+        - STAGE_CHANGE: ícone de seta, nome da transição, de → para, ator, data
+        - GATE_RESOLVED: ícone de gate (por tipo), decisão badge (APPROVED=verde, REJECTED=vermelho, WAIVED=âmbar), ator, parecer
+        - EVENT: ícone por event_type (comentário, exceção, reabertura, evidência)
+        - Cada item tem: data/hora relativa + absoluta no hover
+        - Filtro por tipo: STAGE_CHANGE | GATE | EVENT | TODOS
+        - Infinite scroll ou "Carregar mais" para timelines longas
+        - Campo para adicionar comentário no rodapé (add_comment)
+    actions_used: [load_timeline, add_comment]
+
+  - id: "cancel-modal"
+    name: "CancelCaseModal"
+    description: |
+      Modal de cancelamento: campo "Motivo do cancelamento" (textarea, obrigatório, max 500).
+      Aviso: "Esta ação não pode ser desfeita. O caso ficará com status Cancelado."
+      Botões: "Voltar" e "Cancelar caso" (isLoading durante POST).
+    actions_used: [cancel_case]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+  back_action: "/casos"
+
+notes: |
+  REGRAS:
+  1. Escopo process:case:read obrigatório para acessar o painel.
+  2. Transições: motor de validação é server-side — a UI previamente desabilita botões
+     baseada nos gate_instances e assignments conhecidos, mas a validação definitiva é no backend.
+  3. Gate WAIVE: campo motivo obrigatório + aviso de auditoria antes de confirmar.
+  4. Reatribuição: sempre confirmar "Substituir {nome atual} por {novo}?" antes de POST.
+  5. ON_HOLD: bloqueia execução de transições e resolução de gates.
+  6. Caso COMPLETED ou CANCELLED: painel em modo somente leitura.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. 4 painéis (Visão Geral, Gates, Responsáveis, Histórico), motor de transição UI, timeline intercalada."

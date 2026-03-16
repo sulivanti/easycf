@@ -1,0 +1,203 @@
+# ============================================================
+# Screen Manifest — UX-ORG-001
+# Tela: Árvore Organizacional
+# Módulo: MOD-003 (Estrutura Organizacional)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-ORG-001"
+name: "Árvore Organizacional"
+type: list
+module: "MOD-003"
+route: "/organizacao"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-003"
+  - "US-MOD-003-F02"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+# ─── AÇÕES ────────────────────────────────────────────────────
+actions:
+
+  - id: load_org_tree
+    label: "Carregar árvore organizacional completa"
+    type: view
+    operation_id: org_units_tree
+    http_method: GET
+    endpoint: "/api/v1/org-units/tree"
+    client_only: false
+    requires_scope: ["org:unit:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar a estrutura organizacional."
+
+  - id: expand_node
+    label: "Expandir/colapsar nó da árvore"
+    type: client_only
+    client_only: true
+    loading_state: none
+    # Estado de expansão mantido em memória local — sem chamada de API
+
+  - id: navigate_to_create
+    label: "Navegar para criação de novo nó"
+    type: navigate
+    client_only: true
+    loading_state: none
+    requires_scope: ["org:unit:write"]
+
+  - id: navigate_to_edit
+    label: "Navegar para edição de nó existente"
+    type: navigate
+    client_only: true
+    loading_state: none
+    requires_scope: ["org:unit:write"]
+
+  - id: deactivate_node
+    label: "Desativar nó organizacional (soft delete)"
+    type: submit
+    operation_id: org_units_delete
+    http_method: DELETE
+    endpoint: "/api/v1/org-units/:id"
+    client_only: false
+    requires_scope: ["org:unit:delete"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível desativar esta unidade."
+
+  - id: link_tenant
+    label: "Vincular estabelecimento (N5/tenant) a subunidade N4"
+    type: submit
+    operation_id: org_units_link_tenant
+    http_method: POST
+    endpoint: "/api/v1/org-units/:id/tenants"
+    client_only: false
+    requires_scope: ["org:unit:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível vincular o estabelecimento."
+
+  - id: unlink_tenant
+    label: "Desvincular estabelecimento de subunidade N4"
+    type: submit
+    operation_id: org_units_unlink_tenant
+    http_method: DELETE
+    endpoint: "/api/v1/org-units/:id/tenants/:tenantId"
+    client_only: false
+    requires_scope: ["org:unit:delete"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível desvincular o estabelecimento."
+
+  - id: search_nodes
+    label: "Buscar nós na árvore por nome ou código"
+    type: client_only
+    client_only: true
+    loading_state: none
+    # Busca client-side no dataset já carregado — sem nova chamada de API
+    # Para árvores com > 1000 nós, considerar busca server-side (amendment futuro)
+
+# ─── COMPONENTES ──────────────────────────────────────────────
+components:
+
+  - id: "org-page-header"
+    name: "OrgPageHeader"
+    description: |
+      Cabeçalho com título "Estrutura Organizacional", contador de nós ativos
+      e botão "Novo Nível" (visível apenas com scope org:unit:write).
+      Campo de busca rápida (client-side, debounce 300ms sobre dados já carregados).
+    actions_used: [navigate_to_create, search_nodes]
+
+  - id: "org-tree-panel"
+    name: "OrgTreePanel"
+    description: |
+      Painel principal de visualização da árvore hierárquica.
+
+      Layout: componente de árvore com indentação visual por nível.
+      Cada nó exibe:
+        - Ícone de nível (N1=building, N2=briefcase, N3=layers, N4=folder, N5=map-pin)
+        - Código (badge pequeno, monospace)
+        - Nome
+        - Status badge (ACTIVE=verde, INACTIVE=cinza)
+        - Contador de filhos diretos
+        - Botão de expand/collapse (chevron) — somente se tiver filhos
+        - Menu de ações (dropdown): Editar | Novo filho | Desativar
+
+      N4 adicionalmente exibe lista de tenants vinculados (N5):
+        - Nome + código do tenant como chips
+        - Botão "Vincular estabelecimento" se scope org:unit:write
+        - Botão "Desvincular" em cada chip se scope org:unit:delete
+
+      N5 (tenant vinculado) exibe como folha não-clicável com:
+        - Ícone distinto (map-pin)
+        - Nome + código do tenant
+        - Status badge do tenant (ACTIVE/BLOCKED/INACTIVE)
+        - Link para gerenciar tenant (→ /filiais/:id — MOD-000-F07)
+
+      Estado inicial: N1 expandido, demais colapsados.
+      Estado de busca: todos os nós que correspondem são destacados + ancestrais expandidos.
+
+      Skeleton: N linhas de placeholder animadas durante load_org_tree.
+      Estado vazio: ilustração + "Nenhuma estrutura organizacional cadastrada" + CTA criar N1.
+
+    actions_used: [load_org_tree, expand_node, navigate_to_edit, deactivate_node, link_tenant, unlink_tenant]
+
+  - id: "deactivate-node-modal"
+    name: "DeactivateNodeModal"
+    description: |
+      Modal de confirmação antes de desativar nó.
+      Título: "Desativar unidade?"
+      Corpo: "A unidade '{codigo} — {nome}' será desativada e ficará invisível na árvore."
+      Se o nó tiver filhos ativos: modal bloqueado com mensagem de erro
+      "Esta unidade possui {n} subunidade(s) ativa(s). Desative-as primeiro."
+      Botões: "Cancelar" e "Desativar" (isLoading durante DELETE).
+    actions_used: [deactivate_node]
+
+  - id: "link-tenant-modal"
+    name: "LinkTenantModal"
+    description: |
+      Modal para vincular um tenant (N5) a um nó N4.
+      Campo de busca: autocomplete de tenants com status=ACTIVE não vinculados ainda.
+      Exibe: codigo + nome do tenant. Busca por nome ou codigo.
+      Botão "Vincular": dispara link_tenant.
+      Aviso: "Selecione um estabelecimento para vincular a esta subunidade."
+    actions_used: [link_tenant]
+
+# ─── NAVEGAÇÃO ────────────────────────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Scope org:unit:read obrigatório — sem ele, redirect /dashboard com Toast.
+  2. Ações de escrita visíveis APENAS com scope org:unit:write ou org:unit:delete.
+  3. N5 (tenant) é SOMENTE LEITURA na árvore — gerenciado via /filiais (MOD-000-F07).
+     O botão de link/unlink gerencia o VÍNCULO, não o tenant em si.
+  4. Busca na árvore é client-side (sobre dados já carregados).
+     Para organizações > 1000 nós: amendment para busca server-side.
+  5. Estado de expansão/colapso é salvo em memória de sessão (não no backend).
+  6. Desativar nó com filhos ativos: modal bloqueado com lista dos filhos — não chama DELETE.
+  7. Tenant vinculado (N5) exibe status do próprio tenant (pode ser BLOCKED/INACTIVE).
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Árvore expansível N1–N5, vinculação de tenant, busca client-side, modal de desativação com bloqueio por filhos ativos."

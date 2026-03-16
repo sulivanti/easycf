@@ -1,0 +1,99 @@
+# ============================================================
+# Screen Manifest — UX-SGR-003
+# Tela: Grade de Exclusão em Massa
+# Módulo: MOD-011 (SmartGrid) | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-SGR-003"
+name: "Grade de Exclusão em Massa"
+type: grid
+module: "MOD-011"
+route: "/{modulo}/{rotina}/exclusao-em-massa"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-011"
+  - "US-MOD-011-F04"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+actions:
+
+  - id: validate_for_delete
+    label: "Validar cada registro para exclusão (com estado atual)"
+    type: submit
+    operation_id: routine_engine_evaluate
+    http_method: POST
+    endpoint: "/api/v1/routine-engine/evaluate"
+    requires_scope: ["param:engine:evaluate"]
+    loading_state: none
+    notes: "Chamado por registro com current_record_state. LIBERADO (sem blocking) ou BLOQUEADO (com motivo)."
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível verificar o registro."
+
+  - id: confirm_delete
+    label: "Confirmar e executar exclusão lógica dos registros liberados"
+    type: submit
+    operation_id: null
+    notes: "operationId depende do módulo destino. Executa soft delete: deleted_at + status=INACTIVE."
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível excluir os registros."
+
+  - id: navigate_back
+    label: "Cancelar e voltar"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+components:
+
+  - id: "selection-list"
+    name: "SelectionList"
+    description: |
+      Lista dos registros selecionados. Botão "Verificar" dispara validate_for_delete para todos.
+    actions_used: [validate_for_delete]
+
+  - id: "delete-confirmation-panel"
+    name: "DeleteConfirmationPanel"
+    description: |
+      Após validação: seção registros liberados (verde) + bloqueados (vermelho com motivo).
+      Botões: "Cancelar" | "Confirmar exclusão (X registros)".
+    actions_used: [confirm_delete, navigate_back]
+
+  - id: "delete-result-feedback"
+    name: "DeleteResultFeedback"
+    description: |
+      Feedback: ✅ excluído | ❌ falhou (com motivo). Toast com contagem.
+    actions_used: []
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+  back_action: "/{modulo}/{rotina}"
+
+notes: |
+  REGRAS:
+  1. Validação ANTES da confirmação.
+  2. Confirmação SEMPRE obrigatória.
+  3. Exclusão SEMPRE lógica: deleted_at + status=INACTIVE.
+  4. current_record_state obrigatório (depende do F01).
+  5. Registros bloqueados permanecem sem alteração.
+
+changelog:
+  - version: "0.1.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "DRAFT. Aguarda PEND-SGR-02."

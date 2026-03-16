@@ -1,0 +1,263 @@
+# ============================================================
+# Screen Manifest — UX-INTEG-001
+# Tela: Editor de Rotinas de Integração
+# Módulo: MOD-008 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-INTEG-001"
+name: "Editor de Rotinas de Integração"
+type: config
+module: "MOD-008"
+route: "/integracoes/rotinas"
+auth_required: true
+pre_auth: false
+layout: shell
+notes: "Extensão de UX-ROTINA-001 do MOD-007. Mesmo split-view; abas adicionais específicas de integração."
+
+linked_stories:
+  - "US-MOD-008"
+  - "US-MOD-008-F04"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "list"
+    label: "Rotinas de Integração"
+    default: true
+  - id: "http-config"
+    label: "Config. HTTP"
+    default: false
+  - id: "mappings"
+    label: "Mapeamentos"
+    default: false
+  - id: "params"
+    label: "Parâmetros"
+    default: false
+  - id: "history"
+    label: "Histórico"
+    default: false
+
+actions:
+
+  - id: load_integration_routines
+    label: "Carregar rotinas de integração"
+    type: view
+    operation_id: admin_routines_list
+    http_method: GET
+    endpoint: "/api/v1/admin/routines?type=INTEGRATION"
+    requires_scope: ["param:routine:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar as rotinas."
+
+  - id: load_services
+    label: "Carregar serviços de destino"
+    type: view
+    operation_id: admin_integration_services_list
+    http_method: GET
+    endpoint: "/api/v1/admin/integration-services"
+    requires_scope: ["integration:service:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os serviços."
+
+  - id: save_http_config
+    label: "Salvar configuração HTTP da rotina"
+    type: submit
+    operation_id: admin_integration_routines_configure
+    http_method: POST
+    endpoint: "/api/v1/admin/routines/:id/integration-config"
+    requires_scope: ["integration:routine:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível salvar a configuração."
+
+  - id: add_field_mapping
+    label: "Adicionar mapeamento de campo"
+    type: submit
+    operation_id: admin_field_mappings_create
+    http_method: POST
+    endpoint: "/api/v1/admin/routines/:id/field-mappings"
+    requires_scope: ["integration:routine:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível adicionar o mapeamento."
+
+  - id: update_field_mapping
+    label: "Editar mapeamento (auto-save 600ms)"
+    type: submit
+    operation_id: admin_field_mappings_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/field-mappings/:id"
+    requires_scope: ["integration:routine:write"]
+    loading_state: none
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível salvar o mapeamento."
+
+  - id: delete_field_mapping
+    label: "Remover mapeamento"
+    type: submit
+    operation_id: admin_field_mappings_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/field-mappings/:id"
+    requires_scope: ["integration:routine:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível remover o mapeamento."
+
+  - id: add_param
+    label: "Adicionar parâmetro técnico"
+    type: submit
+    operation_id: admin_integration_params_create
+    http_method: POST
+    endpoint: "/api/v1/admin/routines/:id/params"
+    requires_scope: ["integration:routine:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível adicionar o parâmetro."
+
+  - id: publish_routine
+    label: "Publicar rotina de integração"
+    type: submit
+    operation_id: admin_routines_publish
+    http_method: POST
+    endpoint: "/api/v1/admin/routines/:id/publish"
+    requires_scope: ["param:routine:publish"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível publicar a rotina."
+
+  - id: fork_routine
+    label: "Criar nova versão (fork)"
+    type: submit
+    operation_id: admin_routines_fork
+    http_method: POST
+    endpoint: "/api/v1/admin/routines/:id/fork"
+    requires_scope: ["param:routine:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível criar a nova versão."
+
+  - id: test_call
+    label: "Executar chamada de teste (ambiente HML)"
+    type: submit
+    operation_id: integration_engine_execute
+    http_method: POST
+    endpoint: "/api/v1/integration-engine/execute"
+    requires_scope: ["integration:execute"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível executar o teste."
+    notes: "Sempre usa serviço de ambiente HML para testes — nunca PROD."
+
+  - id: reorder_mappings
+    label: "Reordenar mapeamentos"
+    type: client_only
+    client_only: true
+    loading_state: none
+
+components:
+
+  - id: "routines-list"
+    name: "IntegrationRoutinesList"
+    description: |
+      Lista de rotinas com routine_type=INTEGRATION.
+      Colunas: Código, Nome, Serviço destino, Versão, Status badge, Campos #, Publicada em.
+      Clique: abre editor split-view à direita.
+      Botão "Nova rotina de integração": cria com routine_type=INTEGRATION pré-definido.
+    actions_used: [load_integration_routines]
+
+  - id: "http-config-tab"
+    name: "HttpConfigTab"
+    description: |
+      Aba "Config. HTTP":
+        - Select "Serviço de destino" (skeleton durante load_services)
+          Exibe: codigo + nome + environment badge (PROD=vermelho, HML=âmbar, DEV=cinza)
+          AVISO se PROD selecionado: "Atenção: esta rotina chamará o ambiente de PRODUÇÃO."
+        - Select "Método HTTP" (GET/POST/PUT/PATCH/DELETE)
+        - Input "Endpoint template" com preview de resolução de variáveis
+          ex: /WSRESTPV001/{case.object_id} → preview: /WSRESTPV001/[resolvido em runtime]
+        - Input Timeout (ms, default do serviço se vazio)
+        - Input Retry máx (0–5)
+        - Input Retry backoff (ms)
+        - Multi-select "Disparar quando" (trigger_events): lista de event_types do MOD-006
+        - Botão "Salvar config." (DRAFT only)
+        - Botão "Testar agora (HML)" (abre mini resultado inline, usa serviço HML)
+
+      PUBLISHED: todos os campos readonly.
+    actions_used: [load_services, save_http_config, test_call]
+
+  - id: "mappings-tab"
+    name: "FieldMappingsTab"
+    description: |
+      Aba "Mapeamentos" — tabela drag-and-drop por ordem:
+        Cada mapeamento: ordem, tipo badge (FIELD/PARAM/HEADER/FIXED/DERIVED), campo origem, ícone →, campo destino Protheus, required badge, condition badge se houver.
+        Formulário inline ao clicar em mapeamento:
+          - Select tipo: adapta campos mostrados
+          - FIELD:       autocomplete campo origem (caso/objeto), input campo destino
+          - FIXED_VALUE: input valor literal, input campo destino
+          - DERIVED:     input expressão, input campo destino
+          - PARAM:       select tipo derivação, input derivation_expr, input campo destino
+          - Toggle required
+          - Input transform_expr (opcional)
+          - Input condition_expr (opcional) — toggle "Com condição" para expandir
+        Rodapé: botão "Adicionar mapeamento"
+        PUBLISHED: readonly.
+    actions_used: [add_field_mapping, update_field_mapping, delete_field_mapping, reorder_mappings]
+
+  - id: "params-tab"
+    name: "IntegrationParamsTab"
+    description: |
+      Aba "Parâmetros" — lista de parâmetros técnicos:
+        Cada param: chave, tipo (badge), valor (mascarado se is_sensitive=true), botão excluir.
+        Formulário inline para adicionar:
+          - param_key* (ex: empresa, filial)
+          - Select param_type (FIXED/DERIVED_FROM_TENANT/DERIVED_FROM_CONTEXT/HEADER)
+          - Input value (se FIXED) / Input derivation_expr (se DERIVED_*)
+          - Toggle is_sensitive: "Valor nunca será logado"
+        PUBLISHED: readonly.
+    actions_used: [add_param]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. Serviço PROD: aviso vermelho permanente quando selecionado.
+  2. Botão "Testar agora": SEMPRE usa serviço HML — nunca PROD.
+     Se não houver serviço HML cadastrado: botão desabilitado com tooltip.
+  3. PUBLISHED: todas as abas readonly. Botão "Nova versão" visível.
+  4. Fork: motivo obrigatório (min 10 chars) — herdado do MOD-007.
+  5. Credenciais de serviço: auth_config mostrado como "***" no select de destino.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. Extensão de UX-ROTINA-001 com abas HTTP, Mapeamentos e Parâmetros."

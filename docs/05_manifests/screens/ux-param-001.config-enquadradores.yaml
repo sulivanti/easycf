@@ -1,0 +1,231 @@
+# ============================================================
+# Screen Manifest — UX-PARAM-001
+# Tela: Configurador de Enquadradores e Regras de Incidência
+# Módulo: MOD-007 | Schema: v1 | Data: 2026-03-15
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-PARAM-001"
+name: "Configurador de Enquadradores e Regras de Incidência"
+type: config
+module: "MOD-007"
+route: "/parametrizacao/enquadradores"
+auth_required: true
+pre_auth: false
+layout: shell
+
+linked_stories:
+  - "US-MOD-007"
+  - "US-MOD-007-F04"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+panels:
+  - id: "framers"
+    label: "Enquadradores"
+    default: true
+
+  - id: "objects"
+    label: "Objetos-Alvo"
+    default: false
+
+  - id: "incidence"
+    label: "Regras de Incidência"
+    default: false
+
+actions:
+
+  - id: load_framers
+    label: "Carregar lista de enquadradores"
+    type: view
+    operation_id: admin_framers_list
+    http_method: GET
+    endpoint: "/api/v1/admin/framers"
+    requires_scope: ["param:framer:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os enquadradores."
+
+  - id: create_framer
+    label: "Criar novo enquadrador"
+    type: submit
+    operation_id: admin_framers_create
+    http_method: POST
+    endpoint: "/api/v1/admin/framers"
+    requires_scope: ["param:framer:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar o enquadrador."
+
+  - id: update_framer
+    label: "Editar enquadrador"
+    type: submit
+    operation_id: admin_framers_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/framers/:id"
+    requires_scope: ["param:framer:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível salvar o enquadrador."
+
+  - id: delete_framer
+    label: "Inativar enquadrador"
+    type: submit
+    operation_id: admin_framers_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/framers/:id"
+    requires_scope: ["param:framer:delete"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível inativar o enquadrador."
+
+  - id: load_target_objects
+    label: "Carregar objetos-alvo"
+    type: view
+    operation_id: admin_target_objects_list
+    http_method: GET
+    endpoint: "/api/v1/admin/target-objects"
+    requires_scope: ["param:framer:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os objetos-alvo."
+
+  - id: create_target_field
+    label: "Adicionar campo-alvo ao objeto"
+    type: submit
+    operation_id: admin_target_fields_create
+    http_method: POST
+    endpoint: "/api/v1/admin/target-objects/:id/fields"
+    requires_scope: ["param:framer:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar o campo."
+
+  - id: load_incidence_rules
+    label: "Carregar regras de incidência"
+    type: view
+    operation_id: admin_incidence_rules_list
+    http_method: GET
+    endpoint: "/api/v1/admin/incidence-rules"
+    requires_scope: ["param:framer:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar as regras."
+
+  - id: create_incidence_rule
+    label: "Criar regra de incidência"
+    type: submit
+    operation_id: admin_incidence_rules_create
+    http_method: POST
+    endpoint: "/api/v1/admin/incidence-rules"
+    requires_scope: ["param:framer:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar a regra."
+
+  - id: update_incidence_rule
+    label: "Editar prioridade ou vigência da regra"
+    type: submit
+    operation_id: admin_incidence_rules_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/incidence-rules/:id"
+    requires_scope: ["param:framer:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível atualizar a regra."
+
+  - id: preview_evaluation
+    label: "Simular avaliação do motor para este enquadrador"
+    type: submit
+    operation_id: routine_engine_evaluate
+    http_method: POST
+    endpoint: "/api/v1/routine-engine/evaluate"
+    requires_scope: ["param:engine:evaluate"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível simular a avaliação."
+    notes: "Permite o admin testar o resultado do motor antes de publicar."
+
+components:
+
+  - id: "framers-table"
+    name: "FramersTable"
+    description: |
+      Painel "Enquadradores":
+        - Tabela: Código, Nome, Tipo, Status (ACTIVE=verde/INACTIVE=cinza), Válido até, Ações
+        - Filtro por tipo de enquadrador (select)
+        - Botão "Novo enquadrador" (scope write)
+        - Drawer lateral para criar/editar:
+            campo codigo* (uppercase automático, imutável após criação)
+            campo nome*, select tipo*, date valid_from*, date valid_until (opcional)
+        - ACTIVE + valid_until passado: badge âmbar "Expirando"
+        - Inativar: modal de confirmação "Enquadradores inativos não disparam regras."
+    actions_used: [load_framers, create_framer, update_framer, delete_framer]
+
+  - id: "objects-panel"
+    name: "TargetObjectsPanel"
+    description: |
+      Painel "Objetos-Alvo":
+        - Lista de objetos com seus campos expandíveis
+        - Cada objeto: nome, módulo ECF de origem, contador de campos
+        - Campos expandidos: field_key, label, tipo, is_system (badge)
+        - Botão "Adicionar campo" (scope write): drawer com field_key*, label*, field_type* select
+        - Campos is_system=true: exibidos mas sem botão de editar/deletar
+        - NOTA: Objetos-alvo em si são cadastrados via migration/seed — não via UI nesta versão
+    actions_used: [load_target_objects, create_target_field]
+
+  - id: "incidence-matrix"
+    name: "IncidenceMatrix"
+    description: |
+      Painel "Regras de Incidência" — matriz visual:
+        - Linhas: enquadradores ACTIVE
+        - Colunas: objetos-alvo disponíveis
+        - Célula: badge com prioridade se regra existe, vazio se não
+        - Célula com conflito (mesma prioridade em campos): badge âmbar "⚠ Conflito"
+        - Clique em célula existente: abre drawer de edição (prioridade, vigência, rotinas vinculadas)
+        - Clique em célula vazia: abre drawer de criação
+        - Drawer de edição inclui: seção "Rotinas vinculadas" (lista de behavior_routines PUBLISHED linkadas)
+        - Botão "Simular motor" no drawer: dispara preview_evaluation e exibe resultado inline
+    actions_used: [load_incidence_rules, create_incidence_rule, update_incidence_rule, preview_evaluation]
+
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+notes: |
+  REGRAS:
+  1. Scope param:framer:read obrigatório para acessar a tela.
+  2. codigo de enquadradores: uppercase automático + imutável após criação (tooltip no campo).
+  3. Conflito de prioridade: célula com badge âmbar — resolver antes de publicar rotinas relacionadas.
+  4. "Simular motor": pré-visualiza o resultado sem criar domain_events (dry-run mode).
+  5. valid_until: expiração automática pelo background job (mesmo job do MOD-004).
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-15"
+    author: "arquitetura"
+    description: "Criação inicial. 3 painéis (enquadradores, objetos, matriz de incidência), simulação de motor."

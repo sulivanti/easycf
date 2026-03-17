@@ -1,16 +1,16 @@
 # US-MOD-005-F01 — API: Ciclos, Macroetapas e Estágios
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.1.0
+**Data:** 2026-03-16
 **Módulo Destino:** **MOD-005** (Modelagem de Processos — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001, DOC-ARC-002
 
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **owner:** Marcos Sulivan
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-005, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002
 - **nivel_arquitetura:** 2 (versionamento de blueprints, grafo de transições, integridade referencial com instâncias)
 - **tipo:** Backend — cria novos endpoints
@@ -67,7 +67,7 @@ Funcionalidade: API Ciclos, Macroetapas e Estágios
 
   # ── Ciclos ───────────────────────────────────────────────────
   Cenário: Criar ciclo em DRAFT
-    Dado que POST /api/v1/admin/cycles com { codigo, nome }
+    Quando POST /api/v1/admin/cycles com { codigo, nome }
     Então status 201, cycle.status=DRAFT, version=1
     E evento process.cycle_created emitido
 
@@ -98,6 +98,19 @@ Funcionalidade: API Ciclos, Macroetapas e Estágios
     Dado que ciclo tem status=PUBLISHED
     Quando DELETE /admin/cycles/:id
     Então 422: "Somente ciclos em DRAFT podem ser excluídos. Para descontinuar, use DEPRECATED."
+
+  Cenário: Deprecar ciclo PUBLISHED
+    Dado que ciclo tem status=PUBLISHED
+    Quando PATCH /admin/cycles/:id com { status: "DEPRECATED" }
+    Então status=DEPRECATED
+    E novas instâncias no MOD-006 são bloqueadas para este ciclo
+    E instâncias ativas existentes continuam até conclusão
+    E evento process.cycle_deprecated emitido
+
+  Cenário: Rejeitar depreciação de ciclo em DRAFT
+    Dado que ciclo tem status=DRAFT
+    Quando PATCH /admin/cycles/:id com { status: "DEPRECATED" }
+    Então 422: "Somente ciclos publicados podem ser depreciados."
 
   Cenário: GET /admin/cycles/:id/flow retorna grafo completo
     Dado que o ciclo tem 3 macroetapas, 8 estágios e 10 transições
@@ -181,7 +194,7 @@ Funcionalidade: API Ciclos, Macroetapas e Estágios
 - [x] Modelo de dados definido (tabelas cycles, macro_stages, stages)
 - [x] Máquina de estados DRAFT → PUBLISHED → DEPRECATED documentada
 - [x] Dependência de MOD-006 (instâncias) documentada para validação de deleção
-- [x] Gherkin com 16 cenários cobrindo happy path e edge cases
+- [x] Gherkin com 17 cenários cobrindo happy path e edge cases
 - [ ] Owner confirmar READY → APPROVED
 
 ## 8. Definition of Done (DoD)
@@ -200,7 +213,9 @@ Funcionalidade: API Ciclos, Macroetapas e Estágios
 
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
-| 1.0.0 | 2026-03-15 | arquitetura | Criação. CRUD Ciclos + Macroetapas + Estágios, versionamento, 16 cenários Gherkin, domain events. |
+| 1.0.0 | 2026-03-15 | arquitetura | Criação. CRUD Ciclos + Macroetapas + Estágios, versionamento, domain events. |
+| 1.0.1 | 2026-03-16 | Marcos Sulivan | Revisão: corrige contagem de cenários (16→15), alinha owner com épico. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Revisão final: adiciona 2 cenários DEPRECATED (happy + edge), corrige Gherkin "Criar ciclo" (Dado→Quando). Total: 17 cenários. |
 
 ---
 

@@ -97,18 +97,18 @@ Funcionalidade: API Enquadradores, Objetos e Regras de Incidência
     Então objeto e campo criados, disponíveis para vincular a regras
 
   # ── Regras de Incidência ─────────────────────────────────────
-  Cenário: Criar regra de incidência com prioridade
+  Cenário: Criar regra de incidência
     Dado que framer "SERV-ENG" e objeto "PEDIDO_VENDA" existem
-    Quando POST /admin/incidence-rules com { framer_id, target_object_id, priority: 10 }
+    Quando POST /admin/incidence-rules com { framer_id, target_object_id }
     Então 201 com regra criada, status=ACTIVE
 
-  Cenário: Rejeitar regra duplicada (mesmo framer + objeto)
+  Cenário: Conflito detectado ao salvar bloqueia cadastro
     Dado que já existe regra para SERV-ENG + PEDIDO_VENDA
     Quando POST /admin/incidence-rules com mesmo framer_id + target_object_id
-    Então 409: "Já existe uma regra de incidência para este enquadrador e objeto."
+    Então 422: "Conflito de incidência detectado. Resolva o conflito antes de salvar."
 
   Cenário: Listar regras com conflitos detectados
-    Dado que existem 2 regras de prioridade igual para o mesmo objeto
+    Dado que por exceção existem 2 regras incidentes para o mesmo objeto
     Quando GET /admin/incidence-rules?target_object_id=uuid
     Então a resposta inclui: conflicts_detected=true e lista dos campos conflitantes
 

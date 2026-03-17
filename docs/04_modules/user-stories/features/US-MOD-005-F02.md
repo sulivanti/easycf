@@ -1,16 +1,16 @@
 # US-MOD-005-F02 — API: Gates, Papéis e Transições
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.0.2
+**Data:** 2026-03-16
 **Módulo Destino:** **MOD-005** (Modelagem de Processos — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **owner:** Marcos Sulivan
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-005, US-MOD-005-F01, DOC-ARC-001
 - **nivel_arquitetura:** 2 (grafo de transições, validação de gates, integridade referencial)
 - **tipo:** Backend — cria novos endpoints
@@ -67,6 +67,11 @@ Funcionalidade: API Gates, Papéis e Transições
     Quando POST /admin/stages/:sid/gates com { nome, gate_type: "APPROVAL", required: true, ordem: 1 }
     Então 201 com gate criado
     E evento process.gate_created emitido
+
+  # ── Contrato MOD-005 → MOD-006 ──────────────────────────────
+  # Os cenários abaixo documentam o comportamento esperado em runtime (MOD-006)
+  # com base na configuração definida no blueprint (MOD-005).
+  # São testáveis apenas com o MOD-006 implementado.
 
   Cenário: Gates avaliados em ordem crescente
     Dado que estágio tem gates com ordem 1 (DOCUMENT) e ordem 2 (APPROVAL)
@@ -125,6 +130,7 @@ Funcionalidade: API Gates, Papéis e Transições
 
   Cenário: Rejeitar auto-transição (from = to)
     Dado que from_stage_id = to_stage_id
+    Quando POST /admin/stage-transitions com { from_stage_id, to_stage_id }
     Então 422: "Um estágio não pode transitar para si mesmo."
 
   Cenário: Transição com gate_required=true só disponível se gate resolvido
@@ -190,6 +196,8 @@ Funcionalidade: API Gates, Papéis e Transições
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. CRUD Gates + Papéis + Transições, 15 cenários Gherkin, domain events. |
+| 1.0.1 | 2026-03-16 | Marcos Sulivan | Revisão: alinha owner com épico. |
+| 1.0.2 | 2026-03-16 | Marcos Sulivan | Revisão final: corrige Gherkin auto-transição (faltava step Quando), adiciona nota de fronteira MOD-005→MOD-006 nos cenários de runtime. |
 
 ---
 

@@ -1,16 +1,17 @@
 # US-MOD-005-F04 — UX: Configurador de Estágio (UX-PROC-002)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.0.2
+**Data:** 2026-03-16
 **Módulo Destino:** **MOD-005** (Modelagem de Processos — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
+**operationIds consumidos:** `admin_stages_get/update`, `admin_gates_create/update/delete`, `admin_stage_roles_create/delete`, `admin_transitions_create/delete`, `admin_process_roles_list`
 
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **owner:** Marcos Sulivan
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-005, US-MOD-005-F01, US-MOD-005-F02, US-MOD-005-F03, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — painel lateral de configuração
@@ -167,6 +168,8 @@ Funcionalidade: Configurador de Estágio — UX-PROC-002
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Painel lateral com 4 abas, 12 cenários Gherkin, manifest UX-PROC-002. |
+| 1.0.1 | 2026-03-16 | Marcos Sulivan | Revisão: alinha owner com épico. |
+| 1.0.2 | 2026-03-16 | Marcos Sulivan | Revisão final: adiciona operationIds consumidos para rastreabilidade com F01/F02. |
 
 ---
 

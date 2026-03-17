@@ -1,8 +1,8 @@
 # US-MOD-004-F02 — API: Compartilhamento Controlado e Delegação Temporária
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.1.0
+**Data:** 2026-03-16
 **Módulo Destino:** **MOD-004** (Identidade Avançada — Backend)
 **Referências Normativas:** DOC-DEV-001 §6, DOC-ARC-003, LGPD-BASE-001
 
@@ -10,10 +10,11 @@
 
 - **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-004, DOC-DEV-001 §6, LGPD-BASE-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (multi-tenant, cache Redis, domain events, vigência controlada)
 - **tipo:** Backend — cria novos endpoints
+- **operationIds:** admin_access_shares_create, admin_access_shares_list, admin_access_shares_revoke, my_shared_accesses, access_delegations_create, access_delegations_list, access_delegations_revoke
 - **epico_pai:** US-MOD-004
 - **manifests_vinculados:** N/A
 - **evidencias:** N/A
@@ -25,7 +26,7 @@
 Dois mecanismos distintos precisam coexistir:
 
 **Compartilhamento controlado (`access_shares`):**
-Regra formal pela qual um administrador expande a visibilidade de um recurso para outro usuário, fora do escopo principal, com motivo documentado, autorizador distinto e vigência obrigatória.
+Regra formal pela qual um administrador expande a visibilidade de um recurso para outro usuário, fora do escopo principal, com motivo documentado, autorizador identificado (distinto ou auto-autorizado via scope `identity:share:authorize`) e vigência obrigatória.
 
 **Delegação temporária (`access_delegations`):**
 Mecanismo pelo qual um *usuário* transfere um subconjunto de suas próprias permissões para outro usuário por um período limitado — sem transferir poder decisório (aprovação, execução de movimentos controlados).
@@ -35,7 +36,7 @@ Mecanismo pelo qual um *usuário* transfere um subconjunto de suas próprias per
 ## 2. Regras Fundamentais
 
 ### access_shares
-- `authorized_by ≠ grantor_id` — quem solicita não pode se auto-autorizar (segregação de funções)
+- **Validação de autorização por scope**: Usuário com scope `identity:share:authorize` **pode** ser simultaneamente `grantor_id` e `authorized_by` (auto-autorização permitida). Sem esse scope, `authorized_by` deve ser diferente de `grantor_id` — validado no service (sem CHECK constraint no banco)
 - `valid_until` obrigatório — não existe compartilhamento permanente via este mecanismo
 - `reason` obrigatório — rastreabilidade
 - Revogação disponível a qualquer momento pelo `authorized_by` ou por admin com scope `identity:share:revoke`
@@ -63,21 +64,36 @@ Funcionalidade: Compartilhamento Controlado e Delegação Temporária
     E access_shares é criado com status=ACTIVE
     E o evento identity.share_created é emitido com correlation_id
 
-  Cenário: Rejeitar compartilhamento com grantor = authorized_by
-    Dado que grantor_id = authorized_by = "user-A"
+  Cenário: Compartilhamento auto-autorizado com scope permitido
+    Dado que grantor_id = "user-A" e authorized_by = "user-A"
+    E "user-A" possui scope "identity:share:authorize"
     Quando POST /api/v1/admin/access-shares
-    Então deve retornar 422: "O autorizador não pode ser o mesmo que o solicitante (segregação de funções)."
+    Então o compartilhamento é criado com sucesso (status 201)
+
+  Cenário: Rejeitar compartilhamento auto-autorizado sem scope
+    Dado que grantor_id = "user-B" e authorized_by = "user-B"
+    E "user-B" NÃO possui scope "identity:share:authorize"
+    Quando POST /api/v1/admin/access-shares
+    Então deve retornar 422: "Sem scope 'identity:share:authorize', o autorizador deve ser diferente do solicitante."
 
   Cenário: Rejeitar compartilhamento sem valid_until
     Dado que valid_until não está no body
+    Quando POST /api/v1/admin/access-shares
     Então deve retornar 422: "A data de expiração é obrigatória para compartilhamentos."
 
   Cenário: Rejeitar compartilhamento sem motivo
     Dado que reason está vazio ou ausente
+    Quando POST /api/v1/admin/access-shares
     Então deve retornar 422: "O motivo do compartilhamento é obrigatório."
 
+  Cenário: RBAC — scope obrigatório para criar compartilhamento
+    Dado que o caller não tem identity:share:write
+    Quando POST /api/v1/admin/access-shares
+    Então retorna 403 RFC 9457
+
   Cenário: Revogar compartilhamento ativo
-    Dado que o admin ou authorized_by chama DELETE /admin/access-shares/:id
+    Dado que existe um access_share com status=ACTIVE
+    Quando o admin ou authorized_by chama DELETE /api/v1/admin/access-shares/:id
     Então status=REVOKED e revoked_at=now() e revoked_by=caller.id
     E evento identity.share_revoked emitido
 
@@ -172,15 +188,24 @@ Falha no job: DLQ com retry 3x — NÃO bloqueia operações da aplicação
 
 ## 6. Regras Críticas
 
-1. `authorized_by ≠ grantor_id` — CHECK constraint na DB + validação no service
+1. Validação de autorização por scope: com `identity:share:authorize`, auto-autorização é permitida; sem ele, `authorized_by ≠ grantor_id` — validação **apenas no service** (sem CHECK constraint no banco)
 2. `valid_until` obrigatório em AMBOS os mecanismos — sem "permanente"
 3. `reason` obrigatório em compartilhamentos — auditabilidade
 4. Delegação NUNCA contém `*:approve`, `*:execute`, `*:sign`
 5. Delegação SOMENTE de escopos que o delegator possui no token atual
 6. Sem re-delegação em cadeia — delegatee não pode sub-delegar
 7. Background job via BullMQ com Outbox Pattern — falha não impacta aplicação
+8. **X-Correlation-ID** em todas as respostas; presente em todos os domain_events
+9. **Idempotência** em POST com Idempotency-Key TTL 60s
 
 ## 7. DoR ✅ / DoD
 
 **DoR:** Modelo definido, escopos proibidos em delegação listados, job de expiração arquitetado.
-**DoD:** Todos os cenários Gherkin cobertos, background job testado (happy path + DLQ), testes de segregação grantor ≠ authorized_by, testes de escopo proibido em delegação, testes de sub-delegação bloqueada.
+**DoD:** Todos os cenários Gherkin cobertos, background job testado (happy path + DLQ), testes de validação por scope (auto-autorização com `identity:share:authorize` + bloqueio sem scope), testes de escopo proibido em delegação, testes de sub-delegação bloqueada.
+
+## 8. CHANGELOG
+
+| Versão | Data | Responsável | Descrição |
+|---|---|---|---|
+| 1.0.0 | 2026-03-15 | arquitetura | Criação. Gherkin completo para shares e delegations. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Alinha regra authorized_by com épico v1.1.0: CHECK constraint removido, validação por scope `identity:share:authorize`, Gherkin com dois cenários (com/sem scope). |

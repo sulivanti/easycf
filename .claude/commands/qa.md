@@ -31,6 +31,16 @@ Inspeciona `.md` em `docs/` buscando dead-links e inconsistências de metadados.
 
 Valida formatação markdown via markdownlint-cli2. Se falhar com regras como `MD009`, `MD012`, `MD040`, avalie e corrija.
 
+### Validação via Extensão markdownlint (VSCode)
+
+**Pré-requisito:** extensão `DavidAnson.vscode-markdownlint` instalada.
+
+A extensão usa o mesmo engine (markdownlint-cli2) e a mesma configuração (`.markdownlint.json`) que o CLI, oferecendo validação interativa:
+
+1. **Lint do workspace:** `Ctrl+Shift+P` → `markdownlint.lintWorkspace` para escanear todos os `.md` do projeto
+2. **Revisar problemas:** `Ctrl+Shift+M` para abrir o painel Problems e filtrar por warnings `MD###`
+3. **Auto-fix:** `Ctrl+Shift+P` → `markdownlint.fixAll` ou Format Document (`Shift+Alt+F`) para corrigir violações automaticamente
+
 ### `pnpm run validate:manifests` — Validação de Manifestos
 
 Confere YAMLs em `docs/05_manifests/screens/` contra JSON schemas. Erros exibem keywords que falharam (`type`, `required`, etc.).

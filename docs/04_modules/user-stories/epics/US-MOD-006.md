@@ -1,7 +1,7 @@
 # US-MOD-006 — Execução de Casos (Épico)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
+**Versão:** 1.1.0
 **Data:** 2026-03-15
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-006** (Execução de Casos)
@@ -10,7 +10,7 @@
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
+- **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** EP04 (doc 02_Arquitetura_de_Processo_e_Execucao), US-MOD-005, US-MOD-004, US-MOD-003, US-MOD-000-F09, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (domínio rico, transições com invariantes, audit trail completo)
@@ -311,6 +311,7 @@ US-MOD-006
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. 5 tabelas, motor de transição, 3 históricos independentes, 4 features. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: todas as decisões já estavam corretas. Owner atualizado. |
 
 ---
 

@@ -1,7 +1,7 @@
 # US-MOD-009 — Controle de Movimentos Sob Aprovação (Épico)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
+**Versão:** 1.1.0
 **Data:** 2026-03-15
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-009** (Aprovações e Alçadas)
@@ -10,7 +10,7 @@
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
+- **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** EP08, doc 04_Integracoes_Aprovacoes_e_Automacao_Governada §4–5, US-MOD-004, US-MOD-006, US-MOD-007, US-MOD-008, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (domínio rico, alçadas hierárquicas, rastreabilidade integral)
@@ -73,6 +73,28 @@ Uma `approval_rules` pode usar um ou mais desses critérios em combinação:
 4. OBJETO:     object_type + operation_type (ex: DELETE de cadastro_produto → sempre controlado)
 ```
 
+### 3.1 Exceção de Auto-Aprovação por Suficiência de Escopo
+
+> Decisão técnica 2026-03-15
+
+A segregação padrão (solicitante ≠ aprovador) é mantida como regra geral. Porém, existe uma exceção de eficiência:
+
+> **Se o solicitante possui o scope de aprovação exigido pela alçada do movimento (`required_scope` da `approval_rules`), o sistema cria e aprova automaticamente o movimento sem enviá-lo ao inbox.**
+
+**Fluxo da auto-aprovação:**
+1. Motor de controle identifica operação controlada
+2. Cria `controlled_movement` (status=PENDING_APPROVAL)
+3. Verifica se `requested_by` possui o `required_scope` da `approval_rules` aplicável
+4. Se SIM: aprova automaticamente → status passa direto para AUTO_APPROVED → EXECUTED
+5. Registra em `movement_history` com event_type=`AUTO_APPROVED_BY_SCOPE`
+6. Movimento **não** aparece no inbox de ninguém
+7. Se NÃO: fluxo normal de aprovação com inbox
+
+**Condições:**
+- O solicitante deve possuir exatamente o `required_scope` exigido pela `approval_rules` da alçada
+- O registro em `movement_history` inclui o scope usado como justificativa
+- Auditável: todo auto-approve aparece no histórico do movimento
+
 ---
 
 ## 4. Escopo
@@ -121,10 +143,18 @@ Funcionalidade: Épico Controle de Movimentos MOD-009
     E override registrado no histórico com quem, quando e por quê
     E domain_event: movement.overridden emitido
 
-  Cenário: Aprovador não pode aprovar o próprio movimento
+  Cenário: Segregação padrão — aprovador não pode aprovar o próprio movimento
     Dado que solicitante = aprovador
+    E solicitante NÃO possui o required_scope da alçada
     Quando solicitante tenta aprovar seu próprio movimento
     Então 422: "O solicitante não pode aprovar o próprio movimento (segregação de funções)."
+
+  Cenário: Auto-aprovação por suficiência de escopo
+    Dado que solicitante possui o required_scope exigido pela alçada do movimento
+    Quando motor de controle cria o movimento
+    Então movimento é criado E aprovado automaticamente sem passar pelo inbox
+    E movement_history registra event_type=AUTO_APPROVED_BY_SCOPE
+    E operação é executada imediatamente
 
   Cenário: Sub-histórias bloqueadas sem aprovação do épico
     Dado que US-MOD-009 está diferente de "APPROVED"
@@ -149,7 +179,7 @@ Funcionalidade: Épico Controle de Movimentos MOD-009
 
 - [ ] F01–F05 aprovadas e scaffoldadas
 - [ ] Motor de controle intercepta operação via middleware/hook — testado
-- [ ] Segregação solicitante ≠ aprovador — testado
+- [ ] Segregação solicitante ≠ aprovador — testado (regra geral + exceção auto-aprovação por scope §3.1)
 - [ ] Override auditado com justificativa — testado
 - [ ] Rastreabilidade integral do histórico (solicitação→decisão→execução) — validada
 - [ ] Inbox notifica aprovadores via domain_event → notification queue
@@ -207,7 +237,7 @@ US-MOD-009
 | `required_scope` | varchar | nullable | Scope RBAC exigido do aprovador |
 | `timeout_hours` | integer | nullable | Horas para aprovação automática ou escalada |
 | `escalation_rule_id` | uuid | FK→approval_rules, nullable | Para onde escala se timeout |
-| `allow_self_approve` | boolean | default false | Nunca true para segregação de funções |
+| `allow_self_approve` | boolean | default false | Controle de auto-aprovação por suficiência de escopo. Default false = segregação padrão. Quando true, habilita auto-aprovação se solicitante possui required_scope (ver §3.1). |
 
 ### `controlled_movements` — Movimentos Controlados
 | Campo | Tipo | Constraint | Descrição |
@@ -223,7 +253,7 @@ US-MOD-009
 | `requested_at` | timestamp | NOT NULL | |
 | `operation_payload` | jsonb | NOT NULL | Payload original da operação |
 | `operation_value` | numeric | nullable | Valor monetário se aplicável |
-| `status` | varchar | PENDING_APPROVAL\|APPROVED\|REJECTED\|EXECUTED\|CANCELLED\|OVERRIDDEN\|FAILED | |
+| `status` | varchar | PENDING_APPROVAL\|APPROVED\|AUTO_APPROVED\|REJECTED\|EXECUTED\|CANCELLED\|OVERRIDDEN\|FAILED | |
 | `current_approval_level` | integer | default 1 | Nível atual na cadeia de aprovação |
 | `case_id` | uuid | FK→case_instances, nullable | Caso relacionado |
 | `correlation_id` | varchar | NOT NULL | Propagado ao executar |
@@ -244,7 +274,7 @@ US-MOD-009
 | `parecer` | text | nullable | Nota do aprovador |
 | `notified_at` | timestamp | nullable | |
 | `timeout_at` | timestamp | nullable | Deadline calculado |
-| CHECK | | `decided_by != movement.requested_by` | Segregação de funções |
+| — | | Segregação validada no service layer | Permite exceção de auto-aprovação por scope (§3.1). Log obrigatório em movement_history. |
 
 ### `movement_executions` — Execuções de Movimentos
 | Campo | Tipo | Constraint | Descrição |
@@ -263,7 +293,7 @@ US-MOD-009
 |---|---|---|---|
 | `id` | uuid | PK | |
 | `movement_id` | uuid | FK→controlled_movements NOT NULL | |
-| `event_type` | varchar | CREATED\|APPROVAL_REQUESTED\|APPROVED\|REJECTED\|EXECUTED\|FAILED\|CANCELLED\|OVERRIDDEN\|ESCALATED\|TIMEOUT | |
+| `event_type` | varchar | CREATED\|APPROVAL_REQUESTED\|APPROVED\|AUTO_APPROVED_BY_SCOPE\|REJECTED\|EXECUTED\|FAILED\|CANCELLED\|OVERRIDDEN\|ESCALATED\|TIMEOUT | |
 | `actor_id` | uuid | FK→users NOT NULL | |
 | `event_at` | timestamp | NOT NULL | |
 | `payload` | jsonb | nullable | Dados relevantes do evento |
@@ -321,7 +351,7 @@ US-MOD-009
 
 | # | Métrica | Alvo |
 |---|---|---|
-| OKR-1 | Solicitante nunca aprova o próprio movimento | 100% |
+| OKR-1 | Segregação mantida: solicitante sem scope suficiente nunca aprova o próprio movimento; auto-aprovação por scope registrada em 100% dos casos | 100% |
 | OKR-2 | Override auditado com justificativa em movement_override_log | 100% |
 | OKR-3 | Rastreabilidade integral: todos os eventos em movement_history | 100% |
 | OKR-4 | API/MCP como origem gera movimento controlado quando regra aplica | 100% |
@@ -333,6 +363,7 @@ US-MOD-009
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. 7 tabelas, motor de controle, 4 critérios de alçada, 5 features. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: auto-aprovação por suficiência de escopo (AUTO_APPROVED_BY_SCOPE), CHECK constraint removido do banco → validação no service, owner atualizado. |
 
 ---
 

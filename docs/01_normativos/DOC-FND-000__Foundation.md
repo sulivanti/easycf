@@ -1,9 +1,9 @@
 # DOC-FND-000 — Contratos Fundacionais (Foundation)
 
 - **id:** DOC-FND-000
-- **version:** 1.0.0
+- **version:** 1.1.0
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-17
 - **owner:** arquitetura
 - **scope:** global (contratos abstratos do módulo fundacional)
 
@@ -71,6 +71,10 @@ O Foundation define os scopes base do sistema. Todo módulo que adiciona novos s
 | `users:import` | Importar usuários em lote |
 | `users:export` | Exportar dados de usuários |
 | `users:comment` | Comentar em registros de usuários |
+| `process:cycle:read` | Visualizar ciclos, estágios, gates, papéis e transições (MOD-005) |
+| `process:cycle:write` | Criar e editar elementos do blueprint de processo (MOD-005) |
+| `process:cycle:publish` | Publicar ciclo — promove DRAFT → PUBLISHED (MOD-005) |
+| `process:cycle:delete` | Soft-delete de elementos do blueprint de processo (MOD-005) |
 
 > **Regra de validação (Gate 3 — DOC-ARC-003B):** Todo scope referenciado em Screen Manifests DEVE existir neste catálogo. O CI DEVE falhar se encontrar scope não registrado.
 
@@ -153,6 +157,7 @@ O Foundation define os entity types base para o sistema de uploads e storage (DO
 
 ## CHANGELOG
 
+- v1.1.0 (2026-03-17): §2.2 — Adiciona 4 scopes do MOD-005 (Modelagem de Processos): `process:cycle:read/write/publish/delete`. Referência: US-MOD-005, SEC-005, INT-005.
 - v1.0.0 (2026-03-15): Criação do documento. Contratos extraídos de DOC-UX-011, DOC-UX-012, DOC-ARC-001, DOC-ARC-003, DOC-ARC-003B e DOC-PADRAO-005 para eliminar acoplamento direto entre normativos e `04_modules/mod-000-foundation/`.
 
 ---

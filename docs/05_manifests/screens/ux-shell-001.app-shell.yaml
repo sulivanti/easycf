@@ -87,10 +87,7 @@ actions:
   - id: open_change_password
     label: "Abrir tela de alteração de senha (do ProfileWidget)"
     type: navigate
-    client_only: false
-    operation_id: null     # navegação para rota dedicada — sem operationId direto
-    http_method: null
-    endpoint: null
+    client_only: true
     loading_state: none
     notes: "Link no ProfileWidget → redireciona para /perfil/alterar-senha (US-MOD-000-F10)."
 

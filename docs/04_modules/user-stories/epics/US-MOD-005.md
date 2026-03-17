@@ -1,8 +1,8 @@
 # US-MOD-005 — Modelagem de Processos (Épico)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.2.0
+**Data:** 2026-03-16
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-005** (Modelagem de Processos)
 **Épico de Negócio:** EP03
@@ -10,7 +10,7 @@
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
+- **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** EP03 (doc 02_Arquitetura_de_Processo_e_Execucao), DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, US-MOD-003, US-MOD-004, US-MOD-000-F06, LGPD-BASE-001
 - **nivel_arquitetura:** 2 (versionamento de blueprints, grafo de transições, integridade referencial com instâncias)
@@ -84,7 +84,7 @@ O vínculo entre um Papel e um usuário/role real é feito na **atribuição de 
 - API CRUD de Papéis de processo (catálogo global reutilizável)
 - API CRUD de vínculos Estágio × Papel (quais participações cada estágio espera)
 - API CRUD de Transições de Estágio (grafo de navegação com condições e evidências)
-- Editor visual de fluxo (UX-PROC-001) — nós e arestas drag-configurable
+- Editor visual de fluxo (UX-PROC-001) — nós e arestas drag-configurable, mini-mapa obrigatório a partir de 15 nós
 - Configurador de estágio detalhado (UX-PROC-002) — gates, papéis, transições
 
 ### Não inclui
@@ -132,7 +132,7 @@ Funcionalidade: Épico Modelagem de Processos MOD-005
 - [x] Separação Blueprint (MOD-005) vs. Execução (MOD-006) documentada
 - [x] Versionamento de ciclos (DRAFT → PUBLISHED → DEPRECATED) definido
 - [x] Distinção Papel (processo) vs. Role (RBAC) documentada
-- [x] Modelo de dados completo (8 tabelas) definido
+- [x] Modelo de dados completo (7 tabelas) definido
 - [x] Features F01–F04 com Gherkin completo
 - [x] Screen Manifests UX-PROC-001, UX-PROC-002 criados
 - [x] Novos escopos mapeados para MOD-000-F12
@@ -142,6 +142,7 @@ Funcionalidade: Épico Modelagem de Processos MOD-005
 
 - [ ] F01–F04 individualmente aprovadas e scaffoldadas
 - [ ] Ciclo PUBLISHED rejeita edição — validado por teste
+- [ ] Ciclo PUBLISHED deprecável; DRAFT não deprecável — validado por teste
 - [ ] Transição cross-ciclo rejeitada — validado por teste
 - [ ] Deleção de estágio com instâncias ativas bloqueada
 - [ ] Editor visual renderiza grafo com estágios + transições
@@ -207,6 +208,8 @@ US-MOD-005
 | `ordem` | integer | NOT NULL | |
 | `is_initial` | boolean | default false | Apenas 1 por ciclo (CHECK via trigger) |
 | `is_terminal` | boolean | default false | Estágio final (sem transições de saída obrigatórias) |
+| `canvas_x` | integer | nullable | Posição X do nó no editor visual (UX-PROC-001) |
+| `canvas_y` | integer | nullable | Posição Y do nó no editor visual (UX-PROC-001) |
 | `created_by` | uuid | FK→users.id | |
 | `deleted_at` | timestamp | nullable | Bloqueado se instâncias ativas |
 
@@ -316,7 +319,7 @@ US-MOD-005
 | OKR-1 | Ciclo PUBLISHED rejeita edição direta | 100% |
 | OKR-2 | Transição cross-ciclo rejeitada | 100% |
 | OKR-3 | Deleção com instâncias ativas bloqueada | 100% |
-| OKR-4 | Editor visual renderiza grafo completo N estágios | Sem falha visual até 50 nós |
+| OKR-4 | Editor visual renderiza grafo completo N estágios; mini-mapa ativo a partir de 15 nós | Sem falha visual até 50 nós |
 
 ---
 
@@ -324,7 +327,9 @@ US-MOD-005
 
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
-| 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. Modelo de 8 tabelas, versionamento, grafo de transições, 4 features. |
+| 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. Modelo de 7 tabelas, versionamento, grafo de transições, 4 features. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: mini-mapa obrigatório a partir de 15 nós documentado no épico, owner atualizado. |
+| 1.2.0 | 2026-03-16 | Marcos Sulivan | Revisão: corrige contagem de tabelas (8→7), adiciona canvas_x/canvas_y ao modelo de process_stages, alinha owner das features. |
 
 ---
 

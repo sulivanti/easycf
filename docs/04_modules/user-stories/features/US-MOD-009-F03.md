@@ -33,7 +33,7 @@ Como **aprovador**, quero um inbox com todos os movimentos pendentes para minha 
 - Inbox do aprovador (`GET /my/approvals`) filtrado por alçada pessoal
 - Aprovação e reprovação com parecer obrigatório
 - Cadeia de aprovação em níveis (nível 1 aprovado → nível 2 criado)
-- Segregação de funções: solicitante ≠ aprovador (CHECK no service e DB)
+- Segregação de funções: solicitante ≠ aprovador (validação no service). Exceção: auto-aprovação por suficiência de escopo (ver épico §3.1)
 - Cancelamento de movimento pelo solicitante (apenas em PENDING_APPROVAL)
 - Override com justificativa obrigatória (min 20 chars) + scope especial
 - Execução do movimento após aprovação do último nível
@@ -75,10 +75,18 @@ Funcionalidade: Inbox de Aprovações, Execução e Override
     Então movement.status=APPROVED → EXECUTED
     E domain_event: movement.executed emitido
 
-  Cenário: Solicitante não pode aprovar o próprio movimento
+  Cenário: Solicitante sem scope suficiente não pode aprovar o próprio movimento
     Dado que solicitante_id = aprovador_id
+    E solicitante NÃO possui o required_scope da alçada
     Quando POST /my/approvals/:approvalId/approve
     Então 422: "O solicitante não pode aprovar o próprio movimento (segregação de funções)."
+
+  Cenário: Auto-aprovação por suficiência de escopo não passa pelo inbox
+    Dado que solicitante possui o required_scope exigido pela alçada
+    E allow_self_approve=true na approval_rule
+    Quando motor cria o movimento
+    Então movimento é auto-aprovado sem aparecer no inbox
+    E movement_history registra AUTO_APPROVED_BY_SCOPE
 
   Cenário: Reprovar movimento encerra a cadeia
     Quando POST /my/approvals/:approvalId/reject com { parecer }
@@ -132,7 +140,7 @@ Funcionalidade: Inbox de Aprovações, Execução e Override
 
 ## 5. Regras Críticas
 
-1. **Segregação de funções**: `decided_by != movement.requested_by` — CHECK no service E na DB
+1. **Segregação de funções**: `decided_by != movement.requested_by` — validação no service. Exceção: auto-aprovação por suficiência de escopo (ver épico §3.1)
 2. **Override**: `justificativa` mín 20 chars; `movement_override_log` imutável após criação
 3. **Cadeia de aprovação**: nível 1 aprovado → nível 2 criado automaticamente
 4. **Execução**: somente após último nível da cadeia APPROVED

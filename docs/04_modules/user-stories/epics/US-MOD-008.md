@@ -1,7 +1,7 @@
 # US-MOD-008 — Integração Dinâmica Protheus/TOTVS (Épico)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
+**Versão:** 1.1.0
 **Data:** 2026-03-15
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-008** (Integração Dinâmica)
@@ -10,7 +10,7 @@
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
+- **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** EP07, doc 04_Integracoes_Aprovacoes_e_Automacao_Governada §2–3, US-MOD-007, US-MOD-006, US-MOD-000-F07, DOC-DEV-001 §4.3, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (Outbox Pattern, BullMQ, retry com backoff, DLQ, audit log)
@@ -64,6 +64,13 @@ MOTOR DE INTEGRAÇÃO
   11. Se retries esgotados → status=DLQ, notificação ao monitor
 ```
 
+### Notas de Configuração Operacional
+
+- **Concurrency global do worker BullMQ:** controlada pela variável de ambiente `INTEGRATION_CONCURRENCY` (default: 10). Ajustável por ops sem deploy.
+- **Limite Protheus:** Protheus possui limitação de conexões simultâneas. Durante testes usar valor conservador (ex: 3). Ajustar conforme capacidade do ambiente. Se implementado broker intermediário, o concurrency do broker é configurado separadamente.
+- **retry_max** e **retry_backoff_ms**: configuráveis **por rotina** na UX-INTEG-001 (já contemplado no modelo `integration_routines`).
+- **DLQ**: ativada automaticamente após `retry_max` esgotado por rotina.
+
 ---
 
 ## 3. Separação MOD-007 vs MOD-008
@@ -76,6 +83,8 @@ MOTOR DE INTEGRAÇÃO
 | Efeito colateral | Nenhum — apenas retorna resultado | Chama Protheus/TOTVS — efeito real |
 | Rollback | Não aplicável (sem efeito) | Reprocessamento governado |
 | Tabelas extras | `routine_items` | `integration_routines`, `integration_field_mappings`, `integration_params`, `integration_call_logs`, `integration_reprocess_requests` |
+
+> **Princípio de Mapeamento (herança MOD-007):** O WS Protheus é configurado para aceitar e processar todos os campos recebidos. O mapeamento da rotina de integração (`integration_field_mappings`) é a fonte da verdade — o que está mapeado vai, o que não está não vai. O WS não filtra nem rejeita campos extras.
 
 ---
 
@@ -321,6 +330,7 @@ US-MOD-008
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. Herança MOD-007, 6 tabelas, motor BullMQ, Outbox, DLQ, 5 features. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: concurrency via env var INTEGRATION_CONCURRENCY, princípio de mapeamento WS Protheus, nota sobre limite conexões Protheus. Owner atualizado. |
 
 ---
 

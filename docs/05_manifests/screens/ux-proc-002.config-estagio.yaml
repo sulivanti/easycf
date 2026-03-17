@@ -33,7 +33,8 @@ panels:
   - id: "gates"
     label: "Gates"
     default: false
-    actions_scope: [load_gates, create_gate, update_gate, delete_gate, reorder_gates]
+    actions_scope: [create_gate, update_gate, delete_gate, reorder_gates]
+    # Nota: dados de gates carregados via admin_cycles_flow (UX-PROC-001) — sem endpoint de listagem dedicado
 
   - id: "roles"
     label: "Papéis"
@@ -43,7 +44,8 @@ panels:
   - id: "transitions"
     label: "Transições"
     default: false
-    actions_scope: [load_transitions, create_transition, delete_transition]
+    actions_scope: [create_transition, delete_transition]
+    # Nota: dados de transições carregados via admin_cycles_flow (UX-PROC-001) — sem endpoint de listagem dedicado
 
 actions:
 

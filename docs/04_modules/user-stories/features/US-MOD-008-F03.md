@@ -65,7 +65,7 @@ WORKER DE EXECUÇÃO
 ### Inclui
 - Endpoint `POST /integration-engine/execute` (disparo manual/programático)
 - Outbox Pattern: INSERT log DENTRO da transação de negócio
-- Worker BullMQ com concurrency 10 por instância
+- Worker BullMQ com concurrency controlada por env var `INTEGRATION_CONCURRENCY` (default 10) — ajustável por ops sem deploy
 - Retry com backoff exponencial (`retry_backoff_ms × 2^(attempt-1)`)
 - DLQ após esgotar retry_max
 - Reprocessamento de DLQ via API com justificativa e novo log vinculado

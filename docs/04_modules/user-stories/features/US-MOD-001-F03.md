@@ -1,20 +1,18 @@
 # US-MOD-001-F03 — Dashboard Administrativo Executivo
 
-**Status Ágil:** `TODO`
-**Versão:** 0.4.0
-**Data:** 2026-03-15
-
-> Rollback executado em 2026-03-15: Scaffold gerado prematuramente — reaberto para ajustes.
+**Status Ágil:** `READY`
+**Versão:** 0.5.0
+**Data:** 2026-03-16
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-001** (Backoffice Admin)
 
 ## Metadados de Governança
 
-- **status_agil:** TODO
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-001, DOC-UX-011, DOC-UX-012, DOC-ARC-003, US-MOD-000-F08
-- **evidencias:** Rollback de READY para TODO (2026-03-15) — scaffold destruído. Revisão de conteúdo incorporada (2026-03-15)
+- **evidencias:** Transição TODO → READY (2026-03-16) — DoR verificado, conteúdo revisado
 - **wave_entrega:** Wave 1
 - **epico_pai:** US-MOD-001
 - **manifests_vinculados:** ux-dash-001
@@ -128,11 +126,11 @@ Funcionalidade: Dashboard Administrativo Executivo — UX-DASH-001
 
 ## 5. Definition of Ready (DoR)
 
-- [ ] Screen Manifest `ux-dash-001.main.yaml` criado com catálogo de atalhos e regras
-- [ ] `auth_me` especificado em US-MOD-000-F08 com campo `scopes[]` e `tenant.name`
-- [ ] Regras de skeleton screen documentadas no manifest (max 3s, fallback para erro)
-- [ ] Épico pai US-MOD-001 em estado READY
-- [ ] Catálogo de atalhos definido com `required_scope` por card
+- [x] Screen Manifest `ux-dash-001.main.yaml` criado com catálogo de atalhos e regras
+- [x] `auth_me` especificado em US-MOD-000-F08 com campo `scopes[]` e `tenant.name`
+- [x] Regras de skeleton screen documentadas no manifest (max 3s, fallback para erro)
+- [x] Épico pai US-MOD-001 em estado READY
+- [x] Catálogo de atalhos definido com `required_scope` por card
 
 ## 6. Definition of Done (DoD)
 
@@ -186,6 +184,7 @@ Funcionalidade: Dashboard Administrativo Executivo — UX-DASH-001
 
 | Versão | Data | Responsável | Descrição |
 | --- | --- | --- | --- |
+| 0.5.0 | 2026-03-16 | arquitetura | Transição TODO → READY — DoR verificado, conteúdo revisado, rollback concluído |
 | 0.4.0 | 2026-03-15 | arquitetura | Incorporação da revisão: +4 cenários Gherkin (fonte auth_me, timeout 3s, estado vazio, diferença 401 vs 5xx), catálogo de atalhos com scopes (seção 8), DoD expandido para 10 itens, saudação por período do dia, 7 regras críticas |
 | 0.3.0 | 2026-03-15 | arquitetura | Rollback de READY para TODO — scaffold destruído |
 | 0.1.0 | 2026-03-08 | arquitetura | Criação inicial |

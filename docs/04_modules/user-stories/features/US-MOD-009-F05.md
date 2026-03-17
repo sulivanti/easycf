@@ -35,7 +35,7 @@ Como **administrador de governança**, quero configurar visualmente as regras de
 - Cadeia de alçada visual em cards horizontais conectados por setas
 - Adição/remoção de níveis de aprovação com configuração de timeout e escalada
 - Simulação dry-run do motor com resultado inline
-- `allow_self_approve` oculto da UI (sempre false)
+- `allow_self_approve` exibido como toggle na UI (default false — habilita auto-aprovação por suficiência de escopo, ver épico §3.1)
 - Vigência expirada com badge visual
 
 ### Não inclui
@@ -77,8 +77,10 @@ Funcionalidade: Configurador de Regras — UX-APROV-002
     Dado que regra tem valid_until = ontem
     Então badge âmbar "Vigência expirada"
 
-  Cenário: allow_self_approve oculto da UI
-    Então campo NÃO existe em nenhum formulário
+  Cenário: allow_self_approve exibido como toggle
+    Dado que admin abre drawer de alçada
+    Então toggle "Auto-aprovação por scope" visível (default off)
+    E tooltip explica: "Quando ativo, solicitantes com scope suficiente são auto-aprovados (§3.1)"
 ```
 
 ---
@@ -93,7 +95,7 @@ Funcionalidade: Configurador de Regras — UX-APROV-002
 
 ## 5. Regras Críticas
 
-1. **allow_self_approve**: NUNCA exposto na UI — sempre false
+1. **allow_self_approve**: toggle na UI — default false, habilita auto-aprovação por suficiência de escopo (ver épico §3.1)
 2. **Criação de regra**: abre cadeia de alçada automaticamente
 3. **Preview visual**: cards horizontais com setas obrigatório
 4. **Simulação**: dry-run sem criar movimentos

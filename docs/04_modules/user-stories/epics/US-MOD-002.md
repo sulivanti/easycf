@@ -1,8 +1,8 @@
 # US-MOD-002 — Gestão de Usuários (Épico UX-First)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.1.0
+**Data:** 2026-03-16
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-002** (Gestão de Usuários — Backoffice)
 
@@ -10,10 +10,10 @@
 
 - **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-000-F05, US-MOD-000-F06, US-MOD-000-F12, DOC-UX-011, DOC-UX-012, DOC-ARC-003, SEC-000-01, LGPD-BASE-001
 - **nivel_arquitetura:** 1
-- **evidencias:** Screen Manifests v1 criados (2026-03-15)
+- **evidencias:** Screen Manifests v1 criados (2026-03-15). DoR verificado, 3 features em READY, conteúdo revisado (2026-03-16)
 
 ---
 
@@ -103,7 +103,7 @@ Funcionalidade: Épico UX-First do MOD-002
 - [x] operationIds de MOD-000-F05 e F06 declarados e verificados
 - [x] Regras LGPD (PII nos toasts) e SEC-000-01 documentadas nas features
 - [x] Sidebar seed do MOD-002 adicionado ao UX-SHELL-001 (nav-users existente)
-- [ ] Owner confirmar status READY → APPROVED
+- [x] Owner confirmar status READY → APPROVED
 
 ## 7. Definition of Done (DoD)
 
@@ -196,6 +196,7 @@ Status relevantes para o UX:
 
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
+| 1.1.0 | 2026-03-16 | arquitetura | Revisão final: DoR completo verificado, owner confirma READY para aprovação. |
 | 1.0.0 | 2026-03-15 | arquitetura | Reescrita completa no padrão ECF. Separação clara MOD-002 (UX) vs MOD-000-F05 (API). Feature cascade F01–F03. Screen Manifests v1 criados. Gherkin revisado. Incorporado de @incorporar/mod-002. |
 | 0.2.1 | 2026-03-15 | arquitetura | Correção de manifests vinculados. Registro de pendências D15–D18. |
 | 0.2.0 | 2026-03-14 | arquitetura | Reestruturação como épico formal. |

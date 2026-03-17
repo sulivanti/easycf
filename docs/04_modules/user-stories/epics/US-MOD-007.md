@@ -1,7 +1,7 @@
 # US-MOD-007 — Parametrização Contextual e Rotinas (Épico)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
+**Versão:** 1.1.0
 **Data:** 2026-03-15
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-007** (Parametrização Contextual e Rotinas)
@@ -10,7 +10,7 @@
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
+- **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** EP05, EP06, doc 03_Parametrizacao_Contextual_e_Cadastro_de_Rotinas, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, US-MOD-006, US-MOD-003, US-MOD-004
 - **nivel_arquitetura:** 2 (versionamento de rotinas, motor de avaliação, integração com MOD-006)
@@ -55,7 +55,7 @@ Ambas compartilham estrutura base (id, versão, vigência, governança), mas tê
 | Gap | Problema | Solução neste módulo |
 |---|---|---|
 | GAP 1 | Sem versionamento técnico de rotinas | Ciclo DRAFT→PUBLISHED→DEPRECATED + freeze de versão aplicada |
-| GAP 2 | Sem regra de priorização de contextos | Campo `priority` (menor = maior prioridade) + especificidade sobrepõe |
+| GAP 2 | Sem regra de priorização de contextos | Duas camadas: (1) Conflito detectado ao salvar regra bloqueia cadastro com 422; (2) Runtime safety net: regra mais restritiva sempre vence. Campo `priority` removido. |
 | GAP 3 | Rotina de comportamento ≠ rotina de integração | `routine_type` distinto; MOD-008 herda a base mas adiciona seus campos |
 | GAP 4 | Histórico de incidência sem destino técnico | `domain_events` com `event_type='routine.applied'` |
 
@@ -80,6 +80,15 @@ POST /api/v1/routine-engine/evaluate
 ```
 
 Se `blocking_validations` não vazio → MOD-006 bloqueia a transição com 422.
+
+### 4.1 Motor de avaliação sem cache
+
+> Decisão técnica 2026-03-15: Cache Redis removido do motor inteiro. Todas as chamadas ao motor de avaliação executam ao vivo, sem exceção. Operações críticas exigem consistência — zero risco de dado desatualizado.
+
+### 4.2 Resolução de conflito em duas camadas
+
+1. **Configuração (config-time):** Ao salvar uma regra de incidência, o sistema verifica se já existe regra conflitante para o mesmo enquadrador + objeto. Se houver conflito, o cadastro é bloqueado com erro 422.
+2. **Runtime (safety net):** Se por exceção (dados legados, race condition) dois contextos conflitantes coexistirem, a regra mais restritiva sempre vence. Nenhum campo `priority` é usado — a restritividade é determinada pela natureza da ação (HIDE > SHOW, SET_REQUIRED > SET_OPTIONAL, domínio menor prevalece).
 
 ---
 
@@ -115,10 +124,15 @@ Funcionalidade: Épico Parametrização Contextual e Rotinas MOD-007
     Quando motor avalia { object_type: "PedidoVenda", framer: "Serviço de Engenharia" }
     Então retorna: { visible: ["Projeto"], required: ["Projeto"], hidden: ["Depósito"] }
 
-  Cenário: Dois contextos incidentes — prioridade determina o vencedor
-    Dado que há 2 regras de incidência com prioridade 1 e prioridade 2 para o mesmo objeto
-    Quando motor avalia ambas
-    Então regra de prioridade 1 vence em campos conflitantes
+  Cenário: Conflito detectado no cadastro bloqueia a criação da regra
+    Dado que já existe regra de incidência para enquadrador "A" + objeto "PedidoVenda"
+    Quando POST /admin/incidence-rules tenta criar outra regra para o mesmo enquadrador + objeto
+    Então deve retornar 422: "Conflito de incidência detectado. Resolva o conflito antes de salvar."
+
+  Cenário: Runtime safety net — regra mais restritiva vence
+    Dado que por exceção existem 2 regras incidentes para o mesmo objeto (legacy ou race condition)
+    Quando motor avalia ambas em runtime
+    Então a regra mais restritiva vence em campos conflitantes
     E regras não conflitantes são mescladas
 
   Cenário: Rotina publicada é imutável
@@ -143,7 +157,7 @@ Funcionalidade: Épico Parametrização Contextual e Rotinas MOD-007
 - [x] 4 gaps do Documento Mestre endereçados e documentados
 - [x] Separação Rotina de Comportamento (MOD-007) vs Integração (MOD-008) formalizada
 - [x] Ponto de integração com MOD-006 (motor de transição) especificado
-- [x] Regra de priorização de contextos definida
+- [x] Resolução de conflito em duas camadas (config-time block + runtime safety net) definida
 - [x] Modelo de dados completo (9 tabelas) definido
 - [x] Features F01–F05 com Gherkin completo
 - [x] Novos escopos mapeados para MOD-000-F12
@@ -152,7 +166,7 @@ Funcionalidade: Épico Parametrização Contextual e Rotinas MOD-007
 ## 8. Definition of Done (DoD)
 
 - [ ] F01–F05 aprovadas e scaffoldadas
-- [ ] Motor de avaliação retorna resultado correto com 2 contextos conflitantes
+- [ ] Motor de avaliação: conflito bloqueado no cadastro; runtime safety net (mais restritivo vence) validado por teste
 - [ ] Rotina PUBLISHED rejeita edição — validado por teste
 - [ ] `domain_events` com `routine.applied` gerado a cada avaliação com efeito
 - [ ] MOD-006 integrado: transição bloqueada por `blocking_validations` do motor
@@ -230,7 +244,6 @@ US-MOD-007
 | `id` | uuid | PK | |
 | `framer_id` | uuid | FK→context_framers | |
 | `target_object_id` | uuid | FK→target_objects | |
-| `priority` | integer | NOT NULL, default 50 | Menor = maior prioridade. 1 = crítico |
 | `condition_expr` | text | nullable | Expressão de condição futura (JSON rule engine v2) |
 | `valid_from` | timestamp | NOT NULL | |
 | `valid_until` | timestamp | nullable | |
@@ -339,7 +352,7 @@ US-MOD-007
 
 | # | Métrica | Alvo |
 |---|---|---|
-| OKR-1 | Motor retorna resultado correto para 2 contextos conflitantes | 100% |
+| OKR-1 | Conflito de incidência bloqueado no cadastro; safety net runtime (mais restritivo vence) funcional | 100% |
 | OKR-2 | Rotina PUBLISHED rejeita edição | 100% |
 | OKR-3 | `routine.applied` em domain_events para cada avaliação com efeito | 100% |
 | OKR-4 | MOD-006 bloqueia transição por `blocking_validations` do motor | 100% |
@@ -351,6 +364,7 @@ US-MOD-007
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. 9 tabelas, motor de avaliação, 4 gaps resolvidos, 5 features. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: campo priority removido de incidence_rules, resolução de conflito em duas camadas (config-time + runtime safety net), cache Redis removido do motor, owner atualizado. |
 
 ---
 

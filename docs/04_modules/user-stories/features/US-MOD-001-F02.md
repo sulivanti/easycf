@@ -1,20 +1,18 @@
 # US-MOD-001-F02 — Telemetria de UI e Rastreabilidade do Shell
 
-**Status Ágil:** `TODO`
-**Versão:** 0.4.0
-**Data:** 2026-03-15
-
-> Rollback executado em 2026-03-15: Scaffold gerado prematuramente — reaberto para ajustes.
+**Status Ágil:** `READY`
+**Versão:** 0.5.0
+**Data:** 2026-03-16
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-001** (Backoffice Admin)
 
 ## Metadados de Governança
 
-- **status_agil:** TODO
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-001, DOC-ARC-003, DOC-UX-010, DOC-UX-012, US-MOD-000-F13, US-MOD-000-F14
-- **evidencias:** Rollback de READY para TODO (2026-03-15) — scaffold destruído. Revisão de conteúdo incorporada (2026-03-15)
+- **evidencias:** Transição TODO → READY (2026-03-16) — DoR verificado, conteúdo revisado
 - **wave_entrega:** Wave 1
 - **epico_pai:** US-MOD-001
 - **manifests_vinculados:** ux-auth-001, ux-shell-001, ux-dash-001
@@ -150,11 +148,11 @@ Funcionalidade: Telemetria de UI no Shell do MOD-001
 
 ## 5. Definition of Ready (DoR)
 
-- [ ] Pacote `@easycf/ui-telemetry` especificado em US-MOD-000-F13
-- [ ] Middleware `X-Correlation-ID` especificado em US-MOD-000-F14
-- [ ] 3 Screen Manifests criados com `telemetry_defaults` e `pre_auth` configurados
-- [ ] Tabela de envelopes por ação documentada nesta feature (seção 3)
-- [ ] Épico pai US-MOD-001 em estado READY
+- [x] Pacote `@easycf/ui-telemetry` especificado em US-MOD-000-F13
+- [x] Middleware `X-Correlation-ID` especificado em US-MOD-000-F14
+- [x] 3 Screen Manifests criados com `telemetry_defaults` e `pre_auth` configurados
+- [x] Tabela de envelopes por ação documentada nesta feature (seção 3)
+- [x] Épico pai US-MOD-001 em estado READY
 
 ## 6. Definition of Done (DoD)
 
@@ -193,6 +191,7 @@ Funcionalidade: Telemetria de UI no Shell do MOD-001
 
 | Versão | Data | Responsável | Descrição |
 | --- | --- | --- | --- |
+| 0.5.0 | 2026-03-16 | arquitetura | Transição TODO → READY — DoR verificado, conteúdo revisado, rollback concluído |
 | 0.4.0 | 2026-03-15 | arquitetura | Incorporação da revisão: tabela de envelopes por ação (seção 3), +3 cenários Gherkin (client_only sem HTTP, problem_type em failed, X-Correlation-ID único), DoD expandido (duration_ms, problem_type), manifests_vinculados atualizado, 7 regras críticas |
 | 0.3.0 | 2026-03-15 | arquitetura | Rollback de READY para TODO — scaffold destruído |
 | 0.1.0 | 2026-03-08 | arquitetura | Criação inicial |

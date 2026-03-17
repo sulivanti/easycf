@@ -1,20 +1,18 @@
 # US-MOD-001 — Backoffice Admin (Épico UX-First)
 
-**Status Ágil:** `TODO`
-**Versão:** 0.4.0
-**Data:** 2026-03-15
-
-> Rollback executado em 2026-03-15: Scaffold gerado prematuramente — reaberto para ajustes.
+**Status Ágil:** `READY`
+**Versão:** 0.5.0
+**Data:** 2026-03-16
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-001** (Backoffice Admin)
 
 ## Metadados de Governança
 
-- **status_agil:** TODO
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-ARC-003, US-MOD-000
-- **evidencias:** Rollback de READY para TODO (2026-03-15) — scaffold destruído. Revisão de conteúdo incorporada (2026-03-15)
+- **evidencias:** Transição TODO → READY (2026-03-16) — DoR verificado, 3 features em READY, conteúdo revisado
 
 ---
 
@@ -92,12 +90,12 @@ Funcionalidade: Épico UX-First do MOD-001
 
 ## 5. Definition of Ready (DoR)
 
-- [ ] Schema v1 do Screen Manifest formalizado (`docs/05_manifests/screen-manifest.schema.v1.yaml`)
-- [ ] 3 Screen Manifests criados e vinculados: UX-AUTH-001, UX-SHELL-001, UX-DASH-001
-- [ ] 3 Feature Stories (F01–F03) em estado READY com Gherkin revisado
-- [ ] Rastreabilidade com operationIds do MOD-000 declarada e verificada
-- [ ] Regras de telemetria pré/pós-auth documentadas nos manifests
-- [ ] Owner confirma status READY para aprovação
+- [x] Schema v1 do Screen Manifest formalizado (`docs/05_manifests/screen-manifest.schema.v1.yaml`)
+- [x] 3 Screen Manifests criados e vinculados: UX-AUTH-001, UX-SHELL-001, UX-DASH-001
+- [x] 3 Feature Stories (F01–F03) em estado READY com Gherkin revisado
+- [x] Rastreabilidade com operationIds do MOD-000 declarada e verificada
+- [x] Regras de telemetria pré/pós-auth documentadas nos manifests
+- [x] Owner confirma status READY para aprovação
 
 ## 6. Definition of Done (DoD)
 
@@ -120,9 +118,9 @@ US-MOD-001  (este arquivo) ← Épico / Governança / Índice
 
 | Sub-História | Tema | Status | Owner |
 | --- | --- | --- | --- |
-| [US-MOD-001-F01](../features/US-MOD-001-F01.md) | Shell de Autenticação e Layout Base | `TODO` | arquitetura |
-| [US-MOD-001-F02](../features/US-MOD-001-F02.md) | Telemetria de UI e Rastreabilidade do Shell | `TODO` | arquitetura |
-| [US-MOD-001-F03](../features/US-MOD-001-F03.md) | Dashboard Administrativo Executivo | `TODO` | arquitetura |
+| [US-MOD-001-F01](../features/US-MOD-001-F01.md) | Shell de Autenticação e Layout Base | `READY` | arquitetura |
+| [US-MOD-001-F02](../features/US-MOD-001-F02.md) | Telemetria de UI e Rastreabilidade do Shell | `READY` | arquitetura |
+| [US-MOD-001-F03](../features/US-MOD-001-F03.md) | Dashboard Administrativo Executivo | `READY` | arquitetura |
 
 > 📌 **Regra de aprovação em cascata:** Este épico (US-MOD-001) deve ser **aprovado antes** de qualquer sub-história. Cada F01–F03 deve ser aprovada individualmente antes de ter código scaffoldado.
 
@@ -132,9 +130,9 @@ US-MOD-001  (este arquivo) ← Épico / Governança / Índice
 
 | Manifest | Screen ID | Tipo | Rota | Status |
 | --- | --- | --- | --- | --- |
-| `docs/05_manifests/screens/ux-auth-001.login.yaml` | UX-AUTH-001 | auth | /login | TODO |
-| `docs/05_manifests/screens/ux-shell-001.app-shell.yaml` | UX-SHELL-001 | shell | /* | TODO |
-| `docs/05_manifests/screens/ux-dash-001.main.yaml` | UX-DASH-001 | dashboard | /dashboard | TODO |
+| `docs/05_manifests/screens/ux-auth-001.login.yaml` | UX-AUTH-001 | auth | /login | READY |
+| `docs/05_manifests/screens/ux-shell-001.app-shell.yaml` | UX-SHELL-001 | shell | /* | READY |
+| `docs/05_manifests/screens/ux-dash-001.main.yaml` | UX-DASH-001 | dashboard | /dashboard | READY |
 
 ---
 
@@ -165,6 +163,7 @@ US-MOD-001  (este arquivo) ← Épico / Governança / Índice
 
 | Versão | Data | Responsável | Descrição |
 | --- | --- | --- | --- |
+| 0.5.0 | 2026-03-16 | arquitetura | Transição TODO → READY — DoR verificado, 3 features em READY, 3 manifests existentes, rollback concluído |
 | 0.4.0 | 2026-03-15 | arquitetura | Incorporação da revisão: escopo detalhado com IDs de tela, cenário Gherkin de telemetria, OKR-4 (user enumeration), DoR/DoD expandidos, tabela de dependências com coluna Manifest, exclusões explícitas (MFA, SSO) |
 | 0.3.0 | 2026-03-15 | arquitetura | Rollback de READY para TODO — scaffold destruído |
 | 0.1.0 | 2026-03-08 | arquitetura | Criação inicial do épico UX-First com F01–F03 e 3 Screen Manifests |

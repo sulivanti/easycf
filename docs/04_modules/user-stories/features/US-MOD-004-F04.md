@@ -1,8 +1,8 @@
 # US-MOD-004-F04 — UX: Painel de Compartilhamentos e Delegações
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.1.0
+**Data:** 2026-03-16
 **Módulo Destino:** **MOD-004** (Identidade Avançada — UX)
 **Referências Normativas:** DOC-UX-012
 
@@ -10,7 +10,7 @@
 
 - **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-004, US-MOD-004-F02, DOC-UX-012
 - **nivel_arquitetura:** 2
 - **tipo:** UX
@@ -53,9 +53,16 @@ Funcionalidade: Painel de Compartilhamentos e Delegações — UX-IDN-002
     Então POST /admin/access-shares é chamado
     E após 201, o item aparece na tabela e Toast "Compartilhamento criado."
 
-  Cenário: Aviso inline no drawer — autorizador = usuário atual
+  Cenário: Auto-autorização permitida com scope identity:share:authorize
     Dado que admin seleciona a si mesmo como autorizador
-    Então aparece aviso inline sob o campo: "Você não pode se auto-autorizar. Selecione outro aprovador."
+    E admin possui scope "identity:share:authorize"
+    Então o drawer permite a criação normalmente
+    E badge informativo: "Você possui permissão para auto-autorizar."
+
+  Cenário: Auto-autorização bloqueada sem scope identity:share:authorize
+    Dado que admin seleciona a si mesmo como autorizador
+    E admin NÃO possui scope "identity:share:authorize"
+    Então aparece aviso inline sob o campo: "Sem permissão para auto-autorizar. Selecione outro aprovador."
     E o botão "Criar" permanece disabled
 
   Cenário: Revogar compartilhamento
@@ -69,8 +76,10 @@ Funcionalidade: Painel de Compartilhamentos e Delegações — UX-IDN-002
   # ── Painel Delegações ────────────────────────────────────────
   Cenário: Listar delegações dadas e recebidas
     Dado que o usuário está no painel "Delegações"
-    Quando GET /access-delegations é chamado
-    Então tabela exibe delegações onde caller = delegator
+    Quando GET /api/v1/access-delegations é chamado
+    Então tabela exibe seção "Delegações Dadas" (onde caller = delegator)
+    E seção "Delegações Recebidas" (onde caller = delegatee)
+    Filtrando apenas status=ACTIVE
 
   Cenário: Escopos de aprovação desabilitados no drawer
     Dado que admin está criando delegação
@@ -123,16 +132,17 @@ Funcionalidade: Painel de Compartilhamentos e Delegações — UX-IDN-002
 1. Escopos de aprovação: **visíveis mas desabilitados** no drawer de delegação — não ocultos (transparência)
 2. Recursos EXPIRED: permanecem na lista por **30 dias** em cinza (histórico auditável)
 3. Painel admin (shares): visível apenas com `identity:share:read` — sem redirect, simplesmente não renderiza o painel
-4. Auto-autorização: validação **inline no drawer**, antes do submit — não apenas no servidor
+4. Auto-autorização: validação **inline no drawer** condicional ao scope `identity:share:authorize` — com scope, permite; sem scope, bloqueia antes do submit
 5. Banner "Recebidos": sempre informa que o acesso é temporário
 
 ## 5. DoR ✅ / DoD
 
 **DoR:** Manifests UX-IDN-002 criados, F02 em READY.
-**DoD:** Três painéis funcionando (shares admin, delegations, received), drawer com validação autorizador ≠ solicitante, escopos de aprovação visíveis mas desabilitados, badges de expiração iminente, testes E2E dos fluxos críticos.
+**DoD:** Três painéis funcionando (shares admin, delegations, received), drawer com validação condicional de auto-autorização (permite com scope `identity:share:authorize`, bloqueia sem), escopos de aprovação visíveis mas desabilitados, badges de expiração iminente, testes E2E dos fluxos críticos.
 
 ## 6. CHANGELOG
 
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Gherkin completo para 3 painéis. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Alinha drawer de auto-autorização com épico v1.1.0: cenário condicional ao scope `identity:share:authorize`. |

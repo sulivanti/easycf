@@ -64,7 +64,7 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 | Módulo | Arquivo Raiz | Estado |
 |---|---|---|
 | MOD-000 — Framework de Automação / Geradores (Foundation) | [mod.md](04_modules/mod-000-foundation/mod.md) | DRAFT |
-| MOD-001 — Backoffice (Admin) | *(rollback — aguardando re-forge)* | TODO |
+| MOD-001 — Backoffice Admin (UX-First Shell) | [mod.md](04_modules/mod-001-backoffice-admin/mod.md) | READY |
 | MOD-002 — Gestão de Usuários | [US-MOD-002](04_modules/user-stories/epics/US-MOD-002.md) | READY |
 
 ### Features — MOD-002

@@ -2,57 +2,96 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://easy-a2.dev/schemas/screen-manifest.v1.schema.json",
     "title": "Screen Manifest v1",
+    "description": "Schema alinhado com screen-manifest.schema.v1.yaml (DOC-UX-010 §Manifestos de Infra/Shell)",
     "type": "object",
     "required": [
-        "manifest_version",
+        "schema_version",
         "screen_id",
         "name",
-        "entity_type",
-        "routes",
+        "type",
+        "module",
+        "route",
+        "auth_required",
+        "linked_stories",
         "telemetry_defaults",
-        "permissions",
-        "actions",
-        "ui_rules",
-        "error_mapping"
+        "actions"
     ],
     "additionalProperties": false,
     "properties": {
-        "manifest_version": {
-            "type": "integer",
-            "const": 1
+        "schema_version": {
+            "type": "string",
+            "enum": ["v1"],
+            "description": "Versão do schema. Obrigatório para versionamento futuro."
         },
         "screen_id": {
             "type": "string",
-            "pattern": "^UX-[A-Z0-9]+-[0-9]{3}$",
-            "description": "Ex: UX-USER-001"
+            "pattern": "^UX-[A-Z]{2,8}-[0-9]{3}$",
+            "description": "Identificador único e estável da tela. Ex: UX-AUTH-001, UX-SHELL-001."
         },
         "name": {
             "type": "string",
             "minLength": 2
         },
-        "entity_type": {
+        "type": {
             "type": "string",
-            "pattern": "^[a-z][a-z0-9_]*$",
-            "description": "Ex: user, invoice, project. Para manifestos de infra/shell usar: auth, shell ou dashboard (ver DOC-UX-010 §Manifestos de Infra/Shell)"
+            "enum": [
+                "auth",
+                "shell",
+                "dashboard",
+                "list",
+                "form",
+                "detail",
+                "config",
+                "monitor",
+                "inbox"
+            ],
+            "description": "Tipo de tela. Define o template de layout padrão."
         },
-        "routes": {
+        "module": {
+            "type": "string",
+            "pattern": "^MOD-[0-9]{3}$",
+            "description": "Módulo ECF responsável por esta tela. Ex: MOD-001."
+        },
+        "route": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Rota frontend associada. Ex: /login, /dashboard, /* (layout wrapper)."
+        },
+        "auth_required": {
+            "type": "boolean",
+            "description": "Se true, JWT válido é exigido para renderizar a tela."
+        },
+        "pre_auth": {
+            "type": "boolean",
+            "default": false,
+            "description": "Se true, ações desta tela NÃO incluem tenant_id no UIActionEnvelope (fase pré-autenticação)."
+        },
+        "layout": {
+            "type": "string",
+            "enum": ["centered", "shell", "fullscreen", "split"],
+            "default": "shell",
+            "description": "Template de layout: centered, shell, fullscreen ou split."
+        },
+        "linked_stories": {
             "type": "array",
-            "minItems": 1,
             "items": {
-                "$ref": "#/$defs/route"
-            }
+                "type": "string",
+                "pattern": "^US-MOD-[0-9]{3}(-F[0-9]{2})?$",
+                "description": "Ex: US-MOD-001, US-MOD-001-F01"
+            },
+            "minItems": 1,
+            "uniqueItems": true,
+            "description": "Lista de User Stories que governam esta tela. Obrigatório ao menos o épico pai."
         },
         "telemetry_defaults": {
             "$ref": "#/$defs/telemetry_defaults"
         },
-        "permissions": {
-            "type": "object",
-            "minProperties": 1,
-            "additionalProperties": {
-                "type": "string",
-                "pattern": "^[a-z][a-z0-9_]*:[a-z][a-z0-9_]*$",
-                "description": "Formato sugerido: recurso:acao (ex: users:read)"
-            }
+        "panels": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/panel"
+            },
+            "description": "Sub-painéis ou contextos dentro de uma mesma rota (sem reload de página)."
         },
         "actions": {
             "type": "array",
@@ -61,152 +100,131 @@
                 "$ref": "#/$defs/action_entry"
             }
         },
-        "ui_rules": {
-            "$ref": "#/$defs/ui_rules"
-        },
-        "error_mapping": {
-            "$ref": "#/$defs/error_mapping"
-        },
-        "linked_stories": {
+        "components": {
             "type": "array",
             "items": {
-                "type": "string",
-                "pattern": "^US-[A-Z0-9]+-[A-Z0-9]+(-F[0-9]+)?$",
-                "description": "Ex: US-MOD-001, US-MOD-001-F01"
+                "$ref": "#/$defs/component"
             },
-            "uniqueItems": true,
-            "description": "Opcional. IDs das User Stories vinculadas a este manifest (épico ou feature). Ver DOC-UX-010 §Campos obrigatórios."
+            "description": "Componentes de UI que compõem a tela."
+        },
+        "navigation": {
+            "$ref": "#/$defs/navigation",
+            "description": "Regras de navegação e proteção de rota."
+        },
+        "sidebar_menu": {
+            "$ref": "#/$defs/sidebar_menu",
+            "description": "Estrutura do menu lateral (usado em manifests do tipo shell)."
+        },
+        "module_shortcuts_catalog": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/module_shortcut"
+            },
+            "description": "Catálogo de atalhos de módulo (usado em manifests do tipo dashboard)."
+        },
+        "notes": {
+            "type": "string",
+            "description": "Observações e decisões de design relevantes para o time."
+        },
+        "changelog": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/changelog_entry"
+            }
         }
     },
     "$defs": {
-        "route": {
-            "type": "object",
-            "required": [
-                "path",
-                "method"
-            ],
-            "additionalProperties": false,
-            "properties": {
-                "path": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "method": {
-                    "type": "string",
-                    "enum": [
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "PATCH",
-                        "DELETE"
-                    ]
-                }
-            }
-        },
         "telemetry_defaults": {
             "type": "object",
             "required": [
-                "event_name",
-                "required_fields",
-                "propagate_headers"
+                "package",
+                "include_tenant_id",
+                "propagate_correlation_id",
+                "capture_duration_ms"
             ],
             "additionalProperties": false,
             "properties": {
-                "event_name": {
+                "package": {
                     "type": "string",
-                    "minLength": 1
+                    "default": "@easycf/ui-telemetry"
                 },
-                "required_fields": {
-                    "type": "array",
-                    "minItems": 3,
-                    "items": {
-                        "type": "string",
-                        "minLength": 1
-                    }
+                "include_tenant_id": {
+                    "type": "boolean",
+                    "description": "false em telas pre_auth=true."
                 },
-                "propagate_headers": {
-                    "type": "array",
-                    "minItems": 0,
-                    "items": {
-                        "type": "string",
-                        "minLength": 1
-                    },
-                    "contains": {
-                        "const": "X-Correlation-ID"
-                    }
+                "propagate_correlation_id": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "capture_duration_ms": {
+                    "type": "boolean",
+                    "default": true
                 }
             }
         },
         "action_entry": {
             "type": "object",
             "required": [
-                "action",
-                "operation_ids",
-                "permission"
+                "id",
+                "label",
+                "type"
             ],
             "additionalProperties": false,
             "properties": {
-                "action": {
+                "id": {
                     "type": "string",
-                    "enum": [
-                        "view",
-                        "filter",
-                        "search",
-                        "sort",
-                        "paginate",
-                        "create",
-                        "update",
-                        "delete",
-                        "import",
-                        "download_template",
-                        "export",
-                        "export_selected",
-                        "print",
-                        "view_kanban",
-                        "view_gantt",
-                        "bulk_select",
-                        "bulk_update",
-                        "bulk_create",
-                        "clone",
-                        "archive",
-                        "unarchive",
-                        "activate",
-                        "deactivate",
-                        "restore",
-                        "comment",
-                        "attachment_add",
-                        "attachment_remove",
-                        "attachment_download",
-                        "attachment_list",
-                        "share_manage",
-                        "view_history",
-                        "approve",
-                        "reject",
-                        "submit",
-                        "publish",
-                        "cancel",
-                        "reprocess"
-                    ]
+                    "pattern": "^[a-z_]+$",
+                    "description": "Identificador único da ação dentro do manifest. Ex: submit_login."
                 },
-                "operation_ids": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "minLength": 1
-                    },
-                    "description": "Pode ser vazio quando client_only=true"
-                },
-                "permission": {
+                "label": {
                     "type": "string",
-                    "pattern": "^[a-z][a-z0-9_]*:[a-z][a-z0-9_]*$",
-                    "description": "Ex: users:read"
+                    "description": "Rótulo legível da ação para documentação."
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["view", "submit", "navigate", "client_only"],
+                    "description": "Tipo de ação: view, submit, navigate ou client_only."
+                },
+                "operation_id": {
+                    "type": ["string", "null"],
+                    "description": "operationId do OpenAPI associado. Obrigatório quando type != client_only."
+                },
+                "http_method": {
+                    "type": ["string", "null"],
+                    "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", null],
+                    "description": "Método HTTP da operação. Obrigatório quando type != client_only."
+                },
+                "endpoint": {
+                    "type": ["string", "null"],
+                    "description": "Path da API. Ex: /api/v1/auth/login. Obrigatório quando type != client_only."
                 },
                 "client_only": {
                     "type": "boolean",
-                    "default": false
+                    "default": false,
+                    "description": "Se true, nenhuma requisição HTTP é feita."
                 },
-                "meta_schema": {
-                    "$ref": "#/$defs/meta_schema"
+                "requires_scope": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Escopos RBAC necessários para executar a ação."
+                },
+                "loading_state": {
+                    "type": "string",
+                    "enum": ["button", "skeleton", "overlay", "none"],
+                    "default": "none",
+                    "description": "Tipo de feedback de loading durante execução."
+                },
+                "error_handling": {
+                    "$ref": "#/$defs/error_handling"
+                },
+                "telemetry_override": {
+                    "$ref": "#/$defs/telemetry_override"
+                },
+                "notes": {
+                    "type": "string",
+                    "description": "Observações específicas da ação."
                 }
             },
             "allOf": [
@@ -217,396 +235,236 @@
                                 "const": true
                             }
                         },
-                        "required": [
-                            "client_only"
-                        ]
+                        "required": ["client_only"]
                     },
                     "then": {},
                     "else": {
-                        "properties": {
-                            "operation_ids": {
-                                "minItems": 1
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "enum": ["view", "submit"]
+                                }
                             }
+                        },
+                        "then": {
+                            "required": ["operation_id", "http_method", "endpoint"]
                         }
                     }
                 }
             ]
         },
-        "meta_schema": {
+        "error_handling": {
             "type": "object",
-            "required": [
-                "fields"
-            ],
             "additionalProperties": false,
             "properties": {
-                "fields": {
+                "strategy": {
+                    "type": "string",
+                    "enum": ["toast", "inline", "redirect", "silent"],
+                    "description": "Estratégia de tratamento de erro visual."
+                },
+                "include_correlation_id": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "user_message": {
+                    "type": "string",
+                    "description": "Mensagem amigável exibida ao usuário. Não expõe detalhes técnicos."
+                },
+                "enumeration_safe": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Se true, mensagem é genérica para prevenir user enumeration."
+                }
+            }
+        },
+        "telemetry_override": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "include_tenant_id": {
+                    "type": "boolean"
+                },
+                "capture_duration_ms": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "panel": {
+            "type": "object",
+            "required": ["id", "label"],
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "default": {
+                    "type": "boolean"
+                },
+                "actions_scope": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/meta_field"
+                        "type": "string"
                     }
                 }
             }
         },
-        "meta_field": {
+        "component": {
             "type": "object",
-            "required": [
-                "name",
-                "type",
-                "pii"
-            ],
             "additionalProperties": false,
             "properties": {
+                "id": {
+                    "type": "string"
+                },
                 "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "conditional": {
                     "type": "string",
-                    "pattern": "^[a-z][a-z0-9_]*$"
+                    "description": "Condição de renderização. Ex: 'panel == login'"
                 },
-                "type": {
+                "actions_used": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "IDs das actions que este componente dispara."
+                }
+            }
+        },
+        "navigation": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "guard": {
                     "type": "string",
-                    "enum": [
-                        "string",
-                        "number",
-                        "boolean",
-                        "enum",
-                        "object"
-                    ]
+                    "enum": ["auth", "guest", "none"],
+                    "description": "auth = rota protegida; guest = apenas não-autenticados; none = pública."
                 },
-                "pii": {
-                    "type": "boolean",
-                    "default": false
+                "redirect_if_auth": {
+                    "type": ["string", "null"],
+                    "description": "Redireciona para esta rota se usuário já estiver autenticado."
                 },
-                "sensitivity_level": {
-                    "type": "integer",
-                    "enum": [
-                        0,
-                        1,
-                        2
-                    ],
-                    "default": 0
+                "redirect_if_unauth": {
+                    "type": ["string", "null"],
+                    "description": "Redireciona para esta rota se usuário não estiver autenticado."
                 },
-                "allowed": {
+                "back_action": {
+                    "type": "string",
+                    "description": "Rota de retorno padrão."
+                }
+            }
+        },
+        "sidebar_menu": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/sidebar_menu_group"
+                    }
+                }
+            }
+        },
+        "sidebar_menu_group": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/sidebar_menu_item"
+                    }
+                }
+            }
+        },
+        "sidebar_menu_item": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "route": {
+                    "type": "string"
+                },
+                "required_scope": {
+                    "type": "string"
+                },
+                "active_match": {
+                    "type": "string"
+                },
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/sidebar_menu_item"
+                    }
+                }
+            }
+        },
+        "module_shortcut": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "route": {
+                    "type": "string"
+                },
+                "requires_scope": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "fixed": {
-                    "type": [
-                        "string",
-                        "number",
-                        "boolean"
-                    ]
-                }
-            },
-            "allOf": [
-                {
-                    "if": {
-                        "properties": {
-                            "type": {
-                                "const": "enum"
-                            }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "allowed"
-                        ]
-                    }
-                }
-            ]
-        },
-        "ui_rules": {
-            "type": "object",
-            "required": [
-                "action_visibility",
-                "action_enablement"
-            ],
-            "additionalProperties": true,
-            "properties": {
-                "action_visibility": {
-                    "type": "object",
-                    "required": [
-                        "strategy"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                        "strategy": {
-                            "type": "string",
-                            "enum": [
-                                "hide_if_no_permission",
-                                "disable_if_no_permission"
-                            ]
-                        }
-                    }
-                },
-                "action_enablement": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/enablement_rule"
-                    }
-                },
-                "jobs_ui": {
-                    "$ref": "#/$defs/jobs_ui"
-                },
-                "history_ui": {
-                    "$ref": "#/$defs/history_ui"
+                "description": {
+                    "type": "string"
                 }
             }
         },
-        "jobs_ui": {
-            "type": "object",
-            "properties": {
-                "tracking": {
-                    "type": "object",
-                    "required": [
-                        "poll_operation_id",
-                        "poll_interval_ms",
-                        "terminal_states"
-                    ],
-                    "properties": {
-                        "poll_operation_id": {
-                            "type": "string",
-                            "minLength": 1
-                        },
-                        "poll_interval_ms": {
-                            "type": "integer",
-                            "minimum": 500
-                        },
-                        "terminal_states": {
-                            "type": "array",
-                            "minItems": 1,
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                },
-                "completion": {
-                    "type": "object",
-                    "minProperties": 1,
-                    "patternProperties": {
-                        "^[a-z_]+_operation_id$": {
-                            "type": "string"
-                        }
-                    },
-                    "additionalProperties": false
-                }
-            },
-            "additionalProperties": false
-        },
-        "history_ui": {
-            "type": "object",
-            "required": [
-                "source",
-                "query_defaults",
-                "masking"
-            ],
-            "properties": {
-                "source": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "query_defaults": {
-                    "type": "object",
-                    "additionalProperties": true
-                },
-                "masking": {
-                    "type": "object",
-                    "required": [
-                        "sensitivity_level_block_above",
-                        "mask_fields_by_level"
-                    ],
-                    "properties": {
-                        "sensitivity_level_block_above": {
-                            "type": "integer"
-                        },
-                        "mask_fields_by_level": {
-                            "type": "object",
-                            "patternProperties": {
-                                "^[0-9]+$": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "additionalProperties": false
-                        }
-                    },
-                    "additionalProperties": false
-                }
-            },
-            "additionalProperties": false
-        },
-        "enablement_rule": {
-            "type": "object",
-            "required": [
-                "action",
-                "enabled_when"
-            ],
-            "additionalProperties": false,
-            "properties": {
-                "action": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "enabled_when": {
-                    "$ref": "#/$defs/condition_group"
-                }
-            }
-        },
-        "condition_group": {
+        "changelog_entry": {
             "type": "object",
             "additionalProperties": false,
-            "oneOf": [
-                {
-                    "required": [
-                        "all"
-                    ],
-                    "properties": {
-                        "all": {
-                            "type": "array",
-                            "minItems": 1,
-                            "items": {
-                                "$ref": "#/$defs/condition"
-                            }
-                        }
-                    }
-                },
-                {
-                    "required": [
-                        "any"
-                    ],
-                    "properties": {
-                        "any": {
-                            "type": "array",
-                            "minItems": 1,
-                            "items": {
-                                "$ref": "#/$defs/condition"
-                            }
-                        }
-                    }
-                }
-            ]
-        },
-        "condition": {
-            "type": "object",
-            "required": [
-                "field",
-                "op"
-            ],
-            "additionalProperties": false,
             "properties": {
-                "field": {
-                    "type": "string",
-                    "minLength": 1
+                "version": {
+                    "type": "string"
                 },
-                "op": {
-                    "type": "string",
-                    "enum": [
-                        "==",
-                        "!=",
-                        "in",
-                        "not_in",
-                        "is_null",
-                        "is_not_null"
-                    ]
+                "date": {
+                    "type": "string"
                 },
-                "value": {
-                    "type": [
-                        "string",
-                        "number",
-                        "boolean",
-                        "array",
-                        "null"
-                    ]
-                }
-            },
-            "allOf": [
-                {
-                    "if": {
-                        "properties": {
-                            "op": {
-                                "enum": [
-                                    "==",
-                                    "!=",
-                                    "in",
-                                    "not_in"
-                                ]
-                            }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "value"
-                        ]
-                    }
-                }
-            ]
-        },
-        "error_mapping": {
-            "type": "object",
-            "required": [
-                "default_user_message",
-                "http_status"
-            ],
-            "additionalProperties": false,
-            "properties": {
-                "default_user_message": {
-                    "type": "string",
-                    "minLength": 1
+                "author": {
+                    "type": "string"
                 },
-                "http_status": {
-                    "type": "object",
-                    "minProperties": 1,
-                    "additionalProperties": {
-                        "$ref": "#/$defs/error_case"
-                    }
-                }
-            }
-        },
-        "error_case": {
-            "type": "object",
-            "required": [
-                "user_message",
-                "ui"
-            ],
-            "additionalProperties": false,
-            "properties": {
-                "user_message": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "ui": {
-                    "type": "object",
-                    "required": [
-                        "type",
-                        "level"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "enum": [
-                                "toast",
-                                "form_validation",
-                                "modal",
-                                "inline"
-                            ]
-                        },
-                        "level": {
-                            "type": "string",
-                            "enum": [
-                                "info",
-                                "warning",
-                                "error",
-                                "success"
-                            ]
-                        }
-                    }
-                },
-                "invalid_fields_path": {
-                    "type": "string",
-                    "minLength": 1
+                "description": {
+                    "type": "string"
                 }
             }
         }

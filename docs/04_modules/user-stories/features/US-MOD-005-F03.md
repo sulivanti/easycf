@@ -1,17 +1,17 @@
 # US-MOD-005-F03 — UX: Editor Visual de Fluxo (UX-PROC-001)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.0.2
+**Data:** 2026-03-16
 **Módulo Destino:** **MOD-005** (Modelagem de Processos — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
-**operationIds consumidos:** `admin_cycles_flow`, `admin_stages_create/delete`, `admin_transitions_create/delete`, `admin_cycles_publish`, `admin_cycles_fork`
+**operationIds consumidos:** `admin_cycles_flow`, `admin_stages_create/update/delete`, `admin_transitions_create/delete`, `admin_cycles_publish`, `admin_cycles_fork`
 
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **owner:** Marcos Sulivan
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-005, US-MOD-005-F01, US-MOD-005-F02, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — editor visual de fluxo
@@ -177,6 +177,8 @@ Funcionalidade: Editor Visual de Fluxo — UX-PROC-001
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Editor visual canvas com swimlanes, 12 cenários Gherkin, manifest UX-PROC-001. |
+| 1.0.1 | 2026-03-16 | Marcos Sulivan | Revisão: alinha owner com épico. |
+| 1.0.2 | 2026-03-16 | Marcos Sulivan | Revisão final: adiciona admin_stages_update aos operationIds (persistência canvas_x/canvas_y). |
 
 ---
 

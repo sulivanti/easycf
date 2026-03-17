@@ -1,8 +1,8 @@
 # US-MOD-004-F03 — UX: Gestão de Escopo Organizacional do Usuário
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.1.0
+**Data:** 2026-03-16
 **Módulo Destino:** **MOD-004** (Identidade Avançada — UX)
 **Referências Normativas:** DOC-UX-012
 
@@ -10,7 +10,7 @@
 
 - **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-004, US-MOD-004-F01, US-MOD-003-F01, DOC-UX-012
 - **nivel_arquitetura:** 2
 - **tipo:** UX
@@ -44,7 +44,7 @@ Funcionalidade: Gestão de Escopo Organizacional — UX-IDN-001
     E o SECONDARY mostra badge cinza "Área Adicional"
     E cada card exibe data de concessão e validade (se houver)
 
-  Cenário: Adicionar área principal quando não há nenhuma
+  Cenário: Adicionar área principal quando não há nenhum
     Dado que o usuário não tem nenhum vínculo org
     Quando admin seleciona tipo PRIMARY e nó org no drawer
     E clica em "Vincular"
@@ -103,3 +103,10 @@ Funcionalidade: Gestão de Escopo Organizacional — UX-IDN-001
 
 **DoR:** Manifest UX-IDN-001 criado, F01 em READY, MOD-003 em READY.
 **DoD:** Skeleton, badges PRIMARY/SECONDARY, breadcrumb do nó, autocomplete sem N5, modal com aviso para PRIMARY, badge de expiração, testes com mocks de scopes.
+
+## 5. CHANGELOG
+
+| Versão | Data | Responsável | Descrição |
+|---|---|---|---|
+| 1.0.0 | 2026-03-15 | arquitetura | Criação. Gherkin completo para gestão de escopo organizacional. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Revisão: typo corrigido, CHANGELOG adicionado. |

@@ -1,18 +1,24 @@
 # US-MOD-002-F03 — Fluxo de Convite e Ativação de Usuário
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.1.0
+**Data:** 2026-03-16
+**Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-002** (Gestão de Usuários)
 
 ## Metadados de Governança
 
 - **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-002, US-MOD-000-F05, DOC-UX-012, LGPD-BASE-001
 - **nivel_arquitetura:** 1
 - **operationIds consumidos:** `users_get`, `users_invite_resend`
+- **evidencias:** DoR verificado, conteúdo revisado (2026-03-16)
+- **wave_entrega:** Wave 1
+- **epico_pai:** US-MOD-002
+- **manifests_vinculados:** ux-usr-003
+- **pendencias:** Amendment users_invite_resend pendente no MOD-000-F05 (DoD, não bloqueia READY)
 
 ---
 

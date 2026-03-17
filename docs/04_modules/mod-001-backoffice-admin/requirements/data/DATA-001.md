@@ -5,6 +5,7 @@
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
+> | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Re-enriquecimento DATA — corrige ref DATA-000, adiciona EX-* |
 > | 0.2.0  | 2026-03-16 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
 
 # DATA-001 — Modelo de Dados do Backoffice Admin
@@ -42,7 +43,7 @@ O MOD-001 **NÃO DEVE** criar tabelas, schemas ou entidades próprias. Toda a pe
 
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-16
-- **rastreia_para:** US-MOD-001, FR-001, MOD-000, DATA-000, BR-005, BR-008
-- **referencias_exemplos:** N/A
+- **data_ultima_revisao:** 2026-03-17
+- **rastreia_para:** US-MOD-001, FR-001, FR-005, MOD-000, BR-005, BR-008, DOC-FND-000
+- **referencias_exemplos:** EX-CI-005, EX-CI-007
 - **evidencias:** N/A

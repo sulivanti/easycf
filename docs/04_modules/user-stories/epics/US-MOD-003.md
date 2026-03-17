@@ -1,7 +1,7 @@
 # US-MOD-003 — Estrutura Organizacional (Épico)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
+**Versão:** 1.1.0
 **Data:** 2026-03-15
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-003** (Estrutura Organizacional)
@@ -10,7 +10,7 @@
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
+- **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** EP01 (doc 01_Fundacao_Organizacional_e_de_Acesso), DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-011, DOC-UX-012, US-MOD-000-F07, US-MOD-000-F12, LGPD-BASE-001
 - **nivel_arquitetura:** 1 (CRUD + soft delete + tree query CTE)
@@ -135,7 +135,7 @@ Funcionalidade: Épico Estrutura Organizacional MOD-003
 ## 7. Definition of Done (DoD)
 
 - [ ] F01, F02, F03 individualmente aprovadas e scaffoldadas
-- [ ] `GET /org-units/tree` retorna árvore completa N1–N5 em <200ms (com até 500 nós)
+- [ ] `GET /org-units/tree` retorna árvore completa N1–N5 em <200ms (com até 100 nós, com cache de árvore invalidado apenas em alterações)
 - [ ] Soft delete bloqueado quando há filhos ativos — validado por teste
 - [ ] Vinculação N4 → tenant testada com tenant existente e tenant inexistente
 - [ ] Tela de árvore renderiza hierarquia expansível até N5
@@ -233,7 +233,7 @@ Os seguintes escopos devem ser adicionados ao catálogo de permissões via amend
 
 | # | Métrica | Alvo |
 |---|---|---|
-| OKR-1 | `GET /org-units/tree` latência com 500 nós | < 200ms |
+| OKR-1 | `GET /org-units/tree` latência com 100 nós (cache invalidado em alterações) | < 200ms |
 | OKR-2 | Tentativas de criar loop na árvore bloqueadas | 100% |
 | OKR-3 | Screen Manifests validados sem erro | 2/2 |
 | OKR-4 | Soft delete com filhos ativos sempre bloqueado | 100% |
@@ -245,6 +245,7 @@ Os seguintes escopos devem ser adicionados ao catálogo de permissões via amend
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. Decisão N5=tenant documentada, modelo de dados, endpoints, escopos, features F01–F03. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: volume árvore ajustado de 500 para ~100 nós, cache strategy documentada, owner atualizado. |
 
 ---
 

@@ -1,7 +1,7 @@
 # US-MOD-010 — MCP e Automação Governada (Épico)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
+**Versão:** 1.1.0
 **Data:** 2026-03-15
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-010** (MCP e Automação Governada)
@@ -10,7 +10,7 @@
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
+- **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** EP09, doc 04_Integracoes_Aprovacoes_e_Automacao_Governada §6–7, doc 01_Fundacao_Organizacional_e_de_Acesso §7, US-MOD-004, US-MOD-007, US-MOD-008, US-MOD-009, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (identidade técnica governada, políticas de execução, rastreabilidade integral)
@@ -50,9 +50,37 @@ O sistema precisa suportar **agentes de automação (MCP)** que possam executar 
 
 Consequências técnicas:
 - **Agente MCP tem escopos próprios** — não herda escopos do usuário vinculado
-- **Escopos de aprovação** (`*:approve`, `approval:decide`, `approval:override`) **nunca podem ser atribuídos a agentes MCP**
+- **Escopos bloqueados** (`*:delete`, `*:approve`, `approval:decide`, `approval:override`, `*:sign`, `*:execute`) **nunca podem ser atribuídos a agentes MCP** (Phase 1 — permanente)
 - **Política CONTROLLED** sempre exige que a decisão final seja de um humano com `approval:decide`
 - **Política DIRECT** só disponível para ações de baixo risco (consultas, preparações, submissões)
+
+### 2.1 Blocklist de Escopos — Abordagem em Duas Fases
+
+**Phase 1 (agora — permanente):**
+Escopos permanentemente bloqueados para agentes MCP:
+- `*:delete` — exclusões nunca permitidas a agentes
+- `*:approve` — aprovações nunca permitidas a agentes
+- `approval:decide` — decisão de aprovação
+- `approval:override` — override de aprovação
+- `*:sign` — assinaturas
+- `*:execute` — execuções de gates
+
+**Phase 2 (após MCP testado e validado em produção):**
+Escopos que podem ser liberados sob condições:
+- `*:create` — criação de objetos
+
+Condições para liberação Phase 2:
+1. MCP testado e validado em ambiente de produção
+2. Aprovação explícita do owner (Marcos Sulivan)
+3. Configuração **per-agent** (não global) — cada agente recebe liberação individual
+4. Registro em auditoria com data e motivo
+
+### 2.2 Detecção de Privilege Escalation
+
+Tentativas de escalada de privilégio (agente tentando usar escopos bloqueados ou injetar escopos no payload) são classificadas como:
+- **sensitivity_level=2** (alto) — evento `mcp.privilege_escalation_attempt`
+- Alerta imediato no monitor **UX-MCP-002** (badge vermelho "Escalada de Privilégio")
+- Registrado em `mcp_executions` com status=BLOCKED
 
 ---
 
@@ -195,7 +223,7 @@ US-MOD-010
 | `revoked_at` | timestamp | nullable | |
 | `revocation_reason` | text | nullable | |
 
-**Constraint crítica:** `allowed_scopes` NUNCA pode conter `approval:decide`, `approval:override`, `*:approve`, `*:sign`, `*:execute` de gates.
+**Constraint crítica (Phase 1):** `allowed_scopes` NUNCA pode conter `*:delete`, `*:approve`, `approval:decide`, `approval:override`, `*:sign`, `*:execute`. Veja §2.1 para roadmap Phase 2 (`*:create`).
 
 ### `mcp_action_types` — Tipos de Ação MCP
 | Campo | Tipo | Descrição |
@@ -304,6 +332,7 @@ US-MOD-010
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. 5 tabelas, 3 políticas, gateway MCP, 5 features. Último módulo do backlog. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: blocklist expandida com *:delete, abordagem duas fases documentada, sensitivity_level=2 para privilege escalation. Owner atualizado. |
 
 ---
 

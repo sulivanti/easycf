@@ -172,8 +172,12 @@ components:
         - Select "Recurso" (tipo: org_unit | tenant | processo) + autocomplete do ID
         - Multi-select "Ações permitidas" (lista de escopos disponíveis)
         - Campo "Motivo" (textarea, obrigatório, max 500 chars)
-        - Autocomplete "Autorizador" (usuário que aprova — ≠ solicitante)
-          AVISO inline se autorizador = usuário atual: "Você não pode se auto-autorizar."
+        - Autocomplete "Autorizador" (usuário que aprova)
+          Se autorizador = usuário atual E usuário possui scope identity:share:authorize:
+            badge informativo "Você possui permissão para auto-autorizar."
+          Se autorizador = usuário atual E usuário NÃO possui scope identity:share:authorize:
+            AVISO inline "Sem permissão para auto-autorizar. Selecione outro aprovador."
+            Botão "Criar" disabled
         - Date picker "Válido até" (obrigatório, mínimo amanhã)
         - Botão "Criar compartilhamento"
     actions_used: [create_share]
@@ -219,13 +223,17 @@ notes: |
   1. Painel "Compartilhamentos" (admin): visível apenas com identity:share:read.
      Painel "Delegações" e "Recebidos": acessíveis por qualquer usuário autenticado.
   2. Botão "Revogar share": visível apenas com identity:share:revoke.
-  3. Autorizador ≠ solicitante: validação inline no drawer antes do submit.
+  3. Auto-autorização condicional ao scope identity:share:authorize — com scope, permite (badge info); sem scope, bloqueia (aviso inline + botão disabled).
   4. Escopos de aprovação no drawer de delegação: exibidos como desabilitados (não ocultos)
      para transparência — o usuário entende por que não pode delegá-los.
   5. Recursos com status EXPIRED: exibidos em cinza com badge "Expirado".
      Não são removidos da listagem por 30 dias (histórico).
 
 changelog:
+  - version: "1.1.0"
+    date: "2026-03-17"
+    author: "Marcos Sulivan"
+    description: "Alinha CreateShareDrawer com épico v1.1.0: auto-autorização condicional ao scope identity:share:authorize (M-W1 validate-all)."
   - version: "1.0.0"
     date: "2026-03-15"
     author: "arquitetura"

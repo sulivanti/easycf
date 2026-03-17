@@ -1,13 +1,14 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+> - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 
 # MOD-001 — Backoffice Admin (UX-First Shell)
 
 - **id:** MOD-001
-- **version:** 0.9.0
-- **estado_item:** READY
+- **version:** 0.9.1
+- **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-16
+- **data_ultima_revisao:** 2026-03-17
 - **rastreia_para:** US-MOD-001, US-MOD-001-F01, US-MOD-001-F02, US-MOD-001-F03, DOC-DEV-001, DOC-ESC-001, DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-ARC-003, DOC-FND-000, MOD-000
 - **evidencias:** N/A
 
@@ -56,7 +57,7 @@ Módulo UX-First sem lógica de domínio própria. Consome endpoints do MOD-000 
 ## 4. Dependências
 
 - **Depende de:** MOD-000 (Foundation) — auth_login, auth_logout, auth_forgot_password, auth_reset_password, auth_me
-- **Dependentes:** Nenhum (módulo de UI Shell)
+- **Dependentes:** MOD-002+ (todos os módulos frontend utilizam o Application Shell — Sidebar, Header, Breadcrumb — provido por este módulo para navegação e layout)
 
 ### Caminhos do Módulo (module_paths)
 
@@ -96,5 +97,5 @@ Módulo UX-First sem lógica de domínio própria. Consome endpoints do MOD-000 
 ## 7. Decisões (ADR)
 
 <!-- start adr-index -->
-*(Nenhuma ADR registrada na baseline inicial. Serão criadas durante o enriquecimento, se necessário.)*
+- [ADR-001](adr/ADR-001__nivel_1_clean_leve.md) — Nível 1 (Clean Leve) para Módulo UX-First com Score 1/6
 <!-- end adr-index -->

@@ -1,8 +1,8 @@
 # US-MOD-004-F01 — API: Vínculo Usuário ↔ Estrutura Organizacional
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Versão:** 1.1.0
+**Data:** 2026-03-16
 **Módulo Destino:** **MOD-004** (Identidade Avançada — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 
@@ -10,10 +10,11 @@
 
 - **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-004, US-MOD-000-F06, US-MOD-000-F09, US-MOD-003-F01, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (multi-tenant, cache Redis, domain events, vigência controlada)
 - **tipo:** Backend — cria novos endpoints
+- **operationIds:** admin_user_org_scopes_list, admin_user_org_scopes_create, admin_user_org_scopes_delete, my_org_scopes
 - **epico_pai:** US-MOD-004
 - **manifests_vinculados:** N/A
 - **evidencias:** N/A
@@ -60,21 +61,23 @@ Funcionalidade: API de Vínculo Usuário ↔ Estrutura Organizacional
 
   Cenário: Rejeitar segundo vínculo PRIMARY para o mesmo usuário
     Dado que o usuário já tem um vínculo PRIMARY ativo
-    Quando POST /admin/users/:id/org-scopes com scope_type=PRIMARY
+    Quando POST /api/v1/admin/users/:id/org-scopes com scope_type=PRIMARY
     Então deve retornar 409: "Usuário já possui uma área principal (PRIMARY). Revogue-a antes de criar outra."
 
   Cenário: Criar vínculo SECONDARY adicional
     Dado que o usuário já tem vínculo PRIMARY em N3-Tech
-    Quando POST /admin/users/:id/org-scopes com { org_unit_id: N3-Finance, scope_type: "SECONDARY" }
+    Quando POST /api/v1/admin/users/:id/org-scopes com { org_unit_id: N3-Finance, scope_type: "SECONDARY" }
     Então o status deve ser 201
     E o usuário agora tem 2 vínculos org (1 PRIMARY + 1 SECONDARY)
 
   Cenário: Rejeitar vínculo para nó org inexistente
     Dado que o org_unit_id enviado não existe
+    Quando POST /api/v1/admin/users/:id/org-scopes com esse org_unit_id
     Então deve retornar 404: "Nó organizacional não encontrado."
 
   Cenário: Rejeitar vínculo em tenant (N5) — somente N1–N4
     Dado que o org_unit_id aponta para um tenant (nível N5 via org_unit_tenant_links)
+    Quando POST /api/v1/admin/users/:id/org-scopes com esse org_unit_id
     Então deve retornar 422: "Vínculos organizacionais só são permitidos em nós N1–N4. Para vínculo com filial, use tenant_users."
 
   Cenário: Listar vínculos org do usuário com breadcrumb
@@ -128,7 +131,30 @@ Funcionalidade: API de Vínculo Usuário ↔ Estrutura Organizacional
 5. **X-Correlation-ID** em todas as respostas; presente em todos os domain_events
 6. **Idempotência** em POST com Idempotency-Key TTL 60s
 
-## 6. DoR ✅ / DoD
+## 6. Background Job de Expiração (user_org_scopes)
+
+```
+Job: expire_identity_grants (compartilhado com F02)
+Frequência: a cada 5 minutos (cron: */5 * * * *)
+BullMQ queue: identity-expiration
+
+O job inclui:
+  UPDATE user_org_scopes SET status='INACTIVE', deleted_at=now()
+    WHERE valid_until < now() AND status='ACTIVE' AND valid_until IS NOT NULL
+
+Para cada registro expirado → emite identity.org_scope_expired via Outbox Pattern
+```
+
+---
+
+## 7. DoR ✅ / DoD
 
 **DoR:** Modelo de dados definido, MOD-003-F01 em READY (depende de org_units), escopos mapeados.
 **DoD:** Migrations revisadas, testes de unicidade PRIMARY, cache Redis testado, background job de expiração com testes de borda, testes de contrato no OpenAPI.
+
+## 8. CHANGELOG
+
+| Versão | Data | Responsável | Descrição |
+|---|---|---|---|
+| 1.0.0 | 2026-03-15 | arquitetura | Criação. Gherkin completo, modelo de dados, domain events. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Revisão: operationIds em metadados, paths Gherkin padronizados com /api/v1/, steps Quando adicionados, seção background job de expiração. |

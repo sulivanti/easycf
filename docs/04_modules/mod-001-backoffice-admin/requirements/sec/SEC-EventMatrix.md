@@ -5,6 +5,7 @@
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
+> | 0.3.0  | 2026-03-17 | AGN-DEV-06  | Re-enriquecimento SEC-EventMatrix — adiciona maskable_fields, EX-* |
 > | 0.2.0  | 2026-03-16 | AGN-DEV-06  | Enriquecimento SEC-EventMatrix (enrich-agent) |
 
 # SEC-EventMatrix — Matriz de Autorização de Eventos do Backoffice Admin
@@ -52,6 +53,12 @@ O MOD-001 é **UX-First** — os domain events são emitidos pelo MOD-000 (backe
 | Navigate sidebar | navigate_sidebar (ui_only) | usuário autenticado | — (client_only) | — | 0 |
 | Navigate breadcrumb | navigate_breadcrumb (ui_only) | usuário autenticado | — (client_only) | — | 0 |
 
+### Mascaramento (Masking Policy)
+
+- **Auth Events (sensitivity 1):** `auth.login_failed` — `maskable_fields: ["identifier"]` (já opaco por design, DOC-FND-000 §1.2). `auth.password_reset_requested` / `auth.password_reset_completed` — `maskable_fields: []` (sem PII no payload, apenas metadados).
+- **Auth Events (sensitivity 0):** `auth.login_success`, `auth.logout` — `maskable_fields: []` (IDs apenas).
+- **Shell UIActionEnvelopes:** `maskable_fields: []` (nenhuma PII — apenas action_id, screen_id, status, duration_ms).
+
 ### Regras de Filtragem (MUST)
 
 - Toda consulta a `domain_events` relacionados ao auth MUST filtrar por `tenant_id`
@@ -61,7 +68,7 @@ O MOD-001 é **UX-First** — os domain events são emitidos pelo MOD-000 (backe
 
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-16
+- **data_ultima_revisao:** 2026-03-17
 - **rastreia_para:** US-MOD-001-F02, DATA-003, BR-001, BR-002, BR-006, SEC-001, DOC-ARC-003, DOC-FND-000
-- **referencias_exemplos:** N/A
+- **referencias_exemplos:** EX-CI-007
 - **evidencias:** N/A

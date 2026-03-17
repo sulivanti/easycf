@@ -111,7 +111,7 @@ Funcionalidade: Agentes MCP e Catálogo de Ações
 ## 6. Regras Críticas
 
 1. API key retornada **uma única vez** — sem recuperação
-2. `allowed_scopes` blocklist: `approval:decide`, `approval:override`, `*:approve`, `*:sign`
+2. `allowed_scopes` blocklist (Phase 1 permanente): `*:delete`, `*:approve`, `approval:decide`, `approval:override`, `*:sign`, `*:execute`
 3. `api_key_hash`: bcrypt rounds ≥ 12, nunca exposto
 4. Revogação: imediata
 5. `codigo` imutável

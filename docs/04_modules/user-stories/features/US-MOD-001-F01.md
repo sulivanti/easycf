@@ -1,20 +1,18 @@
 # US-MOD-001-F01 — Shell de Autenticação e Layout Base
 
-**Status Ágil:** `TODO`
-**Versão:** 0.4.0
-**Data:** 2026-03-15
-
-> Rollback executado em 2026-03-15: Scaffold gerado prematuramente — reaberto para ajustes.
+**Status Ágil:** `READY`
+**Versão:** 0.5.0
+**Data:** 2026-03-16
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-001** (Backoffice Admin)
 
 ## Metadados de Governança
 
-- **status_agil:** TODO
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-16
 - **rastreia_para:** US-MOD-001, DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-ARC-003, US-MOD-000-F01, US-MOD-000-F04, US-MOD-000-F08
-- **evidencias:** Rollback de READY para TODO (2026-03-15) — scaffold destruído. Revisão de conteúdo incorporada (2026-03-15)
+- **evidencias:** Transição TODO → READY (2026-03-16) — DoR verificado, conteúdo revisado
 - **wave_entrega:** Wave 1
 - **epico_pai:** US-MOD-001
 - **manifests_vinculados:** ux-auth-001, ux-shell-001
@@ -166,12 +164,12 @@ Funcionalidade: Shell de Autenticação e Layout Base — UX-AUTH-001 e UX-SHELL
 
 ## 5. Definition of Ready (DoR)
 
-- [ ] Screen Manifest `ux-auth-001.login.yaml` criado com painéis login, forgot-password, reset-password
-- [ ] Screen Manifest `ux-shell-001.app-shell.yaml` criado com sidebar_menu, componentes e regras
-- [ ] operationIds mapeados: `auth_login`, `auth_forgot_password`, `auth_reset_password`, `auth_me`, `auth_logout`
-- [ ] Épico pai US-MOD-001 em estado READY
-- [ ] US-MOD-000-F01 (auth) e US-MOD-000-F04 (recuperação) referenciadas
-- [ ] Regras de user enumeration prevention documentadas nos manifests
+- [x] Screen Manifest `ux-auth-001.login.yaml` criado com painéis login, forgot-password, reset-password
+- [x] Screen Manifest `ux-shell-001.app-shell.yaml` criado com sidebar_menu, componentes e regras
+- [x] operationIds mapeados: `auth_login`, `auth_forgot_password`, `auth_reset_password`, `auth_me`, `auth_logout`
+- [x] Épico pai US-MOD-001 em estado READY
+- [x] US-MOD-000-F01 (auth) e US-MOD-000-F04 (recuperação) referenciadas
+- [x] Regras de user enumeration prevention documentadas nos manifests
 
 ## 6. Definition of Done (DoD)
 
@@ -211,6 +209,7 @@ Funcionalidade: Shell de Autenticação e Layout Base — UX-AUTH-001 e UX-SHELL
 
 | Versão | Data | Responsável | Descrição |
 | --- | --- | --- | --- |
+| 0.5.0 | 2026-03-16 | arquitetura | Transição TODO → READY — DoR verificado, conteúdo revisado, rollback concluído |
 | 0.4.0 | 2026-03-15 | arquitetura | Incorporação da revisão: +10 cenários Gherkin (MFA redirect, rate limit, conta bloqueada, token expirado, sidebar filtrada, skeleton, sessão expirada, ProfileWidget, logout com erro de rede), DoR/DoD expandidos, rastreabilidade com US-MOD-000-F08, 7 regras críticas |
 | 0.3.0 | 2026-03-15 | arquitetura | Rollback de READY para TODO — scaffold destruído |
 | 0.1.0 | 2026-03-08 | arquitetura | Criação inicial |

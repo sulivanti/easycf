@@ -1,132 +1,350 @@
-# Pendencias — User Stories (MOD-003 a MOD-011)
+# Pendencias e Decisoes — MOD-003 a MOD-011
 
-> Arquivo temporario de acompanhamento. Gerado em 2026-03-15.
-
----
-
-## Status Geral
-
-| Modulo   | Titulo                                | Features | Status |
-|----------|---------------------------------------|----------|--------|
-| MOD-003  | Estrutura Organizacional              | 3        | READY  |
-| MOD-004  | Identidade Avancada                   | 4        | READY  |
-| MOD-005  | Modelagem de Processos (Blueprint)    | 4        | READY  |
-| MOD-006  | Execucao de Casos (Instances)         | 4        | READY  |
-| MOD-007  | Parametrizacao Contextual e Rotinas   | 5        | READY  |
-| MOD-008  | Integracao Dinamica Protheus/TOTVS    | 5        | READY  |
-| MOD-009  | Controle de Movimentos Sob Aprovacao  | 5        | READY  |
-| MOD-010  | MCP e Automacao Governada             | 5        | READY  |
-| MOD-011  | SmartGrid — Edicao em Massa           | 5        | READY  |
+> Atualizado em 2026-03-15 — sessao de resolucao de pendencias.
+> Aprovacoes do owner (Marcos Sulivan) omitidas — gate de processo, nao decisao tecnica.
 
 ---
 
-## Pendencias por Modulo
+## MOD-003 — Estrutura Organizacional
 
-### MOD-003 — Estrutura Organizacional
+- [x] **Dependencia em MOD-000-F07 e MOD-000-F12** — confirmada como dependencia de sequencia de entrega *(REGISTRADA — 2026-03-15)*
+- [x] **SLA: tree query CTE** *(RESOLVIDA — 2026-03-15)*
 
-- [ ] Aprovacao do owner
-- [ ] Dependencia em MOD-000-F07 (tenant) e MOD-000-F12
-- [ ] SLA: tree query CTE < 200ms com 500 nos
+### Decisao — SLA tree query CTE
 
-### MOD-004 — Identidade Avancada
+**Pergunta:** 500 nos e um volume realista? 200ms e aceitavel como SLA?
 
-- [ ] Aprovacao do owner
-- [ ] Dependencia em MOD-003-F01 (org structure API)
-- [ ] Background job de expiracao de delegacoes (intervalo 5min)
-- [ ] Segregacao de deveres (shares: authorized_by != grantor_id)
+**Resposta:**
+- Volume maximo: ~100 nos (nao 500) — estrutura organizacional do contexto e menor
+- Estrategia: **cache da arvore organizacional**, invalidado apenas quando ha alteracao
+- Justificativa: a estrutura organizacional muda raramente (configuracao pontual) — cache e a abordagem correta
+- SLA de 200ms mantido como referencia tecnica, sem pressao real dado o volume baixo
 
-### MOD-005 — Modelagem de Processos
+---
 
-- [ ] Aprovacao do owner
-- [ ] Editor visual deve suportar 50 nos sem falha visual
-- [ ] Ciclos publicados sao imutaveis — fork para nova versao
+## MOD-004 — Identidade Avancada
 
-### MOD-006 — Execucao de Casos
+- [x] **Dependencia em MOD-003-F01** — confirmada como dependencia de sequencia de entrega *(REGISTRADA — 2026-03-15)*
+- [x] **Background job de expiracao de delegacoes** *(RESOLVIDA — 2026-03-15)*
+- [x] **Segregacao de deveres (shares: authorized_by != grantor_id)** *(RESOLVIDA — 2026-03-15)*
 
-- [ ] Aprovacao do owner
-- [ ] Dependencia em MOD-005 (ciclos/estagios definidos)
-- [ ] Motor de transicao com 5 etapas de validacao (gate, role, evidence)
-- [ ] cycle_version_id congelado na criacao da instancia
+### Decisao — Background job de expiracao
 
-### MOD-007 — Parametrizacao Contextual
+**Pergunta:** 5 minutos de tolerancia e aceitavel? Uma delegacao pode continuar ativa por ate 5 minutos apos a hora de expiracao configurada.
 
-- [ ] Aprovacao do owner
-- [ ] Motor de avaliacao com 6 etapas + cache Redis (30s)
-- [ ] blocking_validations bloqueiam transicoes do MOD-006
-- [ ] Resolucao de conflito por prioridade (2 contextos conflitantes)
+**Resposta:** Sim, 5 minutos e toleravel.
 
-### MOD-008 — Integracao Dinamica Protheus/TOTVS
+### Decisao — Segregacao authorized_by != grantor_id
 
-- [ ] Aprovacao do owner
-- [ ] Herda behavior_routines do MOD-007 (routine_type=INTEGRATION)
-- [ ] Outbox Pattern + BullMQ (concurrency 10, exponential backoff)
-- [ ] DLQ com reprocessamento exigindo justificativa (min 10 chars)
+**Pergunta:** A restricao de que quem autoriza um compartilhamento nao pode ser o proprio usuario que esta concedendo — e regra de negocio obrigatoria ou pode ser flexibilizada?
 
-### MOD-009 — Controle de Movimentos Sob Aprovacao
+**Resposta:** A regra absoluta foi **removida**. A logica correta e baseada em permissao:
 
-- [ ] Aprovacao do owner
-- [ ] Middleware interceptor para motor de controle
-- [ ] Resposta 202 quando movimento PENDING
-- [ ] Override com justificativa min 20 chars + auditoria completa
-- [ ] Segregacao: solicitante != aprovador (CHECK constraint)
+| Situacao | Comportamento |
+|---|---|
+| Usuario tem `identity:share:authorize` | Pode ser grantor e authorized_by ao mesmo tempo |
+| Usuario nao tem o scope | Precisa indicar terceiro como authorized_by |
 
-### MOD-010 — MCP e Automacao Governada
+**Implementacao:**
+- CHECK constraint `authorized_by != grantor_id` removida do banco
+- Validacao vive no service layer
+- Somente usuarios sem o scope precisam de terceiro autorizador
+- Faz sentido: se Joao e gestor com permissao para liberar, nao precisa de aprovacao de outro
 
-- [ ] Aprovacao do owner
-- [ ] API key 256 bits, bcrypt >= 12 rounds, retornada uma unica vez
-- [ ] Blocklist de escopos de aprovacao (agents nunca herdam do owner)
-- [ ] 3 politicas de execucao: DIRECT, CONTROLLED (via MOD-009), EVENT_ONLY
-- [ ] Deteccao de privilege escalation + alerta
+---
 
-### MOD-011 — SmartGrid: Componente de Grade com Edicao em Massa
+## MOD-005 — Modelagem de Processos
 
-- [ ] Aprovacao do owner
-- [ ] **PEND-SGR-01** — Contrato de mapeamento: resultado do motor → estado visual da linha (bloqueia F02)
-- [ ] **PEND-SGR-02** — Suporte a `current_record_state` no motor MOD-007-F03 (bloqueia F01, F03, F04)
-- [ ] Dependencia em MOD-007-F03 (POST /routine-engine/evaluate)
-- [ ] Dependencia em MOD-007-F01 (context_framers com framer_type=OPERACAO)
-- [ ] Dependencia em MOD-007-F02 (routine_items: FIELD_VISIBILITY, REQUIRED, DEFAULT, DOMAIN, VALIDATION)
-- [ ] 3 Screen Manifests em DRAFT (UX-SGR-001, UX-SGR-002, UX-SGR-003) — aguardam resolucao das PENDs
+- [x] **Editor visual — suporte a 50 nos** *(RESOLVIDA — 2026-03-15)*
+- [x] **Ciclos publicados sao imutaveis — fork para nova versao** *(RESOLVIDA — 2026-03-15)*
 
-#### Detalhamento das Pendencias Bloqueantes
+### Decisao — Editor visual 50 nos
 
-**PEND-SGR-01 — Contrato motor → estado visual**
+**Pergunta:** 50 nos e um teto adequado para o seu contexto?
 
-| Item                | Detalhe                                                    |
-|---------------------|------------------------------------------------------------|
-| Descricao           | Definir como a resposta do motor mapeia para estado visual |
-| Bloqueia            | F02 (Grade de Inclusao em Massa), manifest UX-SGR-001      |
-| O que falta definir | `blocking_validations[]` → estado ❌ (erro/bloqueio)       |
-|                     | `validations[]` → estado ⚠️ (warning)                     |
-|                     | resposta vazia → estado ✅ (valido)                        |
-|                     | Se warnings permitem ou bloqueiam o save                   |
-|                     | Regras de rendering de tooltip/mensagem por tipo           |
-| Resolucao necessaria| Antes de iniciar F02 e promover UX-SGR-001 de DRAFT → READY|
+**Contexto discutido:** exemplo de ciclo de compras com 15 estagios em 3 macroetapas (Solicitacao, Aprovacao, Execucao). Ao incorporar outras macroetapas como Separacao, Consumo e Producao, um ciclo completo facilmente chega a 30-40 estagios.
 
-**PEND-SGR-02 — current_record_state no motor**
+**Resposta:** Confirmado — 50 nos e o teto adequado.
 
-| Item                | Detalhe                                                    |
-|---------------------|------------------------------------------------------------|
-| Descricao           | Amendment no POST /routine-engine/evaluate para aceitar estado atual do registro |
-| Bloqueia            | F01 (Amendment backend), F03 (Formulario Alteracao), F04 (Grade Exclusao) |
-| Manifests bloqueados| UX-SGR-002, UX-SGR-003 (ambos DRAFT)                      |
-| Contrato proposto   | Novo campo opcional no body: `current_record_state?: { status, tipo, ... }` |
-| Regras do amendment | Campo nullable (backward compatible)                       |
-|                     | Cache Redis bypass quando presente (dados dinamicos)       |
-|                     | Campo ausente no state → condition avalia como `false`     |
-|                     | domain_events gerados normalmente                          |
-| Testes exigidos     | Condition match, backward compat, partial fields, cache bypass |
-| Resolucao necessaria| Antes de iniciar F01, F03, F04 e promover UX-SGR-002/003   |
+**Detalhes:**
+- Ciclos tipicos: 30 a 40 estagios num ciclo completo de operacao
+- Mini-mapa obrigatorio no editor a partir de 15 nos
+- Performance do canvas validada ate 50 nos sem degradacao visual
 
-#### Status por Feature
+### Decisao — Ciclos publicados imutaveis
 
-| Feature | Tema                                      | Tipo     | Bloqueador  | Criterios |
-|---------|-------------------------------------------|----------|-------------|-----------|
-| F01     | Amendment: current_record_state no motor  | Backend  | PEND-SGR-02 | 4         |
-| F02     | Grade de Inclusao em Massa (UX-SGR-001)   | UX       | PEND-SGR-01 | 11        |
-| F03     | Formulario de Alteracao (UX-SGR-002)      | UX       | PEND-SGR-02 | 4         |
-| F04     | Grade de Exclusao em Massa (UX-SGR-003)   | UX       | PEND-SGR-02 | 5         |
-| F05     | Acoes em Massa sobre Linhas               | UX       | Nenhum      | 6         |
+**Pergunta:** Ciclos publicados nao podem ser alterados diretamente — qualquer mudanca exige fork. Confirma para o contexto de negocio?
+
+**Motivo da regra:** casos em andamento (MOD-006) referenciam a versao exata do ciclo em que foram abertos. Se o ciclo pudesse ser editado, os casos em andamento estariam seguindo um processo diferente do que foi aprovado.
+
+**Resposta:** Confirmado — processos publicados nao podem ser alterados diretamente. Fork obrigatorio para qualquer mudanca. Casos em andamento nunca migram automaticamente para nova versao.
+
+---
+
+## MOD-006 — Execucao de Casos
+
+- [x] **Dependencia em MOD-005** — confirmada como dependencia de sequencia de entrega *(REGISTRADA — 2026-03-15)*
+- [x] **Motor de transicao com 5 etapas de validacao** *(RESOLVIDA — 2026-03-15)*
+- [x] **cycle_version_id congelado na criacao da instancia** *(RESOLVIDA — 2026-03-15)*
+
+### Decisao — Motor de transicao 5 etapas
+
+**Pergunta:** As 5 etapas de validacao antes de qualquer transicao de estagio refletem como voce espera que o controle de avanco funcione?
+
+```
+1. O caso esta aberto (nao cancelado, nao concluido)?
+2. A transicao existe no blueprint?
+3. O usuario tem o papel autorizado para essa transicao?
+4. Todos os gates obrigatorios do estagio estao resolvidos?
+5. A evidencia foi fornecida (se a transicao exige)?
+```
+
+**Resposta:** Confirmadas as 5 etapas. Qualquer falha bloqueia a transicao com 422 e mensagem especifica da etapa que falhou.
+
+### Decisao — cycle_version_id congelado
+
+**Pergunta:** Cada caso segue a versao do ciclo em que foi aberto, ou prefere que casos em andamento sigam sempre a versao mais recente?
+
+**Resposta:** Confirmado — cada caso segue a versao do ciclo em que foi aberto. Nunca migra automaticamente para versao mais recente. Garante que o caso seja julgado pelo processo que estava vigente quando foi aberto.
+
+---
+
+## MOD-007 — Parametrizacao Contextual
+
+- [x] **Motor de avaliacao — cache Redis** *(RESOLVIDA — decisao MOD-011 PEND-SGR-02 #4, 2026-03-15)*
+- [x] **blocking_validations bloqueiam transicoes do MOD-006** *(RESOLVIDA — 2026-03-15)*
+- [x] **Resolucao de conflito por prioridade** *(RESOLVIDA — 2026-03-15)*
+
+### Decisao — Cache Redis removido do motor
+
+Resolvido como parte da PEND-SGR-02 do MOD-011. Cache Redis removido do motor inteiro — todas as chamadas ao `/routine-engine/evaluate` executam ao vivo, sem excecao.
+
+**Motivo:** operacoes criticas nao toleram dado desatualizado. Consistencia vale mais que performance aqui.
+
+### Decisao — blocking_validations → MOD-006
+
+**Pergunta:** Quando o motor retorna `blocking_validations` nao vazio, o motor de transicao do MOD-006 deve bloquear o avanco do caso?
+
+**Resposta:** Confirmado. `blocking_validations` nao vazio bloqueia a transicao de estagio com 422 e a mensagem especifica da validacao.
+
+### Decisao — Resolucao de conflito entre enquadradores
+
+**Contexto discutido:** conflito real nao ocorre entre duas operacoes do mesmo tipo (um pedido e ou de servico ou de produto importado — nunca os dois). O conflito acontece quando tipos diferentes de enquadrador incidem simultaneamente:
+
+```
+Pedido de Compra de Aco Importado em Etapa de Aprovacao:
+  Enquadrador TIPO_DOCUMENTO:    "Pedido de Compra"     → ncm opcional
+  Enquadrador CLASSE_PRODUTO:    "Aco SAE Importado"    → ncm obrigatorio
+  Enquadrador CONTEXTO_PROCESSO: "Etapa Aprovacao"      → ncm obrigatorio
+```
+
+**Opcoes discutidas:**
+- **Opcao A:** bloquear o conflito na criacao (nao permite cadastrar regra conflitante)
+- **Opcao B:** em runtime, sempre aplicar a regra mais restritiva como safety net
+
+**Resposta:** Ambas — em camadas:
+
+```
+CAMADA 1 — Configuracao (Opcao A — hard block):
+  Conflito detectado ao salvar regra → sistema BLOQUEIA
+  Admin nao pode seguir — precisa resolver o conflito antes de cadastrar
+
+CAMADA 2 — Runtime (Opcao B — safety net):
+  Se por qualquer motivo (bug) um conflito existir em producao
+  → motor sempre aplica a regra mais restritiva
+  → campo priority removido do modelo de dados
+```
+
+---
+
+## MOD-008 — Integracao Dinamica Protheus/TOTVS
+
+- [x] **Herda behavior_routines do MOD-007** *(RESOLVIDA — 2026-03-15)*
+- [x] **Outbox Pattern + BullMQ — concurrency e retry parametrizaveis** *(RESOLVIDA — 2026-03-15)*
+- [x] **DLQ com reprocessamento exigindo justificativa** *(RESOLVIDA — 2026-03-15)*
+
+### Decisao — Heranca MOD-007 e contrato com o WS Protheus
+
+**Contexto discutido:** a rotina de integracao e cadastro dinamico, nao codigo fixo. Exemplo real:
+
+```
+Rotina: ROT-PV-INCLUSAO
+  Servico: PROTHEUS-PROD
+  Endpoint: POST /WSRESTPV001/PedidoVenda
+  Disparada quando: case.stage_transitioned → estagio "PO Emitida"
+
+  Mapeamentos:
+    caso.numero_pedido → C5_NUM
+    caso.filial        → C5_FILIAL  (derivado do tenant)
+    caso.valor_total   → C5_VALOR
+    "PV"               → C5_TIPO    (valor fixo)
+```
+
+**Resposta:** WS Protheus configurado para aceitar os campos encaminhados. Se um campo for encaminhado ele sera sempre processado. **Mapeamento da rotina e a fonte da verdade** — o que esta mapeado vai, o que nao esta nao vai. Validacao ocorre antes da chamada HTTP.
+
+### Decisao — Outbox + BullMQ — concurrency e retry
+
+**Contexto:** Protheus tem limitacao de conexoes simultaneas. Solucao: parametros configuraveis.
+
+**Resposta:** Ambos os parametros configuraveis, em niveis diferentes:
+
+| Parametro | Onde configura | Por que |
+|---|---|---|
+| `concurrency` global | Variavel de ambiente `INTEGRATION_CONCURRENCY` | Ajustado por ops/devops sem deploy. Conservador nos testes, aumenta conforme ambiente suporta. |
+| `retry_max` | Por rotina na UX-INTEG-001 | Cada integracao pode ter tolerancia diferente |
+| `retry_backoff_ms` | Por rotina na UX-INTEG-001 | Backoff configuravel junto com retry |
+
+**DLQ:** apos `retry_max` esgotado (qualquer valor configurado).
+
+### Decisao — DLQ com justificativa
+
+**Resposta:** Confirmado. Justificativa minima de 10 chars obrigatoria para reprocessar qualquer chamada em DLQ.
+
+---
+
+## MOD-009 — Controle de Movimentos Sob Aprovacao
+
+- [x] **Middleware interceptor para motor de controle** *(RESOLVIDA — 2026-03-15)*
+- [x] **Resposta 202 quando movimento PENDING** *(RESOLVIDA — 2026-03-15)*
+- [x] **Override com justificativa min. 20 chars + auditoria** *(RESOLVIDA — 2026-03-15)*
+- [x] **Segregacao: solicitante != aprovador** *(RESOLVIDA — 2026-03-15)*
+
+### Decisao — Middleware interceptor
+
+**Pergunta:** Operacao bloqueada ate aprovacao quando regra incide?
+
+**Resposta:** Confirmado.
+
+```
+Usuario/API/MCP tenta executar operacao
+        |
+        v
+Middleware chama POST /movement-engine/evaluate
+        |
+   controlled=false → executa normalmente
+   controlled=true  → retorna 202, operacao NAO executada
+```
+
+### Decisao — Resposta 202
+
+**Resposta:** Confirmado. HTTP 202 + `{ movement_id, status: "PENDING_APPROVAL", message: "Operacao enviada para aprovacao." }` retornado ao chamador quando operacao e interceptada.
+
+### Decisao — Override com justificativa
+
+**Resposta:** Confirmado. Minimo 20 caracteres obrigatorio. Registrado permanentemente em `movement_override_log` com quem fez, quando e a justificativa.
+
+### Decisao — Segregacao solicitante != aprovador
+
+**Pergunta:** O solicitante nunca pode aprovar o proprio movimento?
+
+**Resposta:** Segregacao padrao mantida, **com excecao de auto-aprovacao por suficiencia de scope:**
+
+> "Se eu tenho permissao para aprovar e incluir, o sistema deve criar o registro e na sequencia aprovar. Exemplo: sou gestor e nao tenho superior para aprovar no sistema."
+
+```
+REGRA GERAL:
+  solicitante != aprovador (segregacao padrao)
+
+EXCECAO — Auto-aprovacao por suficiencia:
+  SE o solicitante tem o scope de aprovacao exigido
+  pela regra de alcada do proprio movimento
+  ENTAO sistema cria o movimento e aprova automaticamente
+  SEM passar pelo inbox de aprovacao
+  Registrado em movement_history como AUTO_APPROVED_BY_SCOPE
+```
+
+---
+
+## MOD-010 — MCP e Automacao Governada
+
+- [x] **API key 256 bits, bcrypt >= 12 rounds, retornada uma unica vez** *(RESOLVIDA — 2026-03-15)*
+- [x] **Blocklist de escopos — agentes nunca herdam do owner** *(RESOLVIDA — 2026-03-15)*
+- [x] **3 politicas de execucao: DIRECT, CONTROLLED, EVENT_ONLY** *(RESOLVIDA — 2026-03-15)*
+- [x] **Deteccao de privilege escalation + alerta** *(RESOLVIDA — 2026-03-15)*
+
+### Decisao — API key modelo GitHub
+
+**Pergunta:** API key de 256 bits, mostrada uma unica vez na criacao, armazenada apenas como hash bcrypt — confirma?
+
+**Resposta:** Confirmado. Modelo de tokens de acesso pessoal do GitHub. Perda = revogar e gerar nova. Nunca recuperavel apos a criacao.
+
+### Decisao — Blocklist de escopos em duas fases
+
+**Pergunta:** Agentes nunca herdam permissoes decisorias do usuario vinculado?
+
+**Resposta:** Confirmado com evolucao em duas fases:
+
+**Fase 1 — agora (blocklist completa):**
+```
+Permanentemente bloqueados em TODAS as fases:
+  *:delete       → exclusao nunca permitida a agentes
+  *:approve      → aprovacao nunca permitida a agentes
+  approval:decide
+  approval:override
+  *:sign
+  *:execute
+```
+
+**Fase 2 — apos MCP testado e validado em producao:**
+```
+Pode ser liberado por agente especifico (nao global):
+  *:create → inclusao liberavel apos validacao
+
+Condicoes para liberacao:
+  → MCP testado e validado em producao
+  → Aprovacao explicita do owner (Marcos Sulivan)
+  → Configuracao por agente especifico — nao liberacao global
+  → Registro em auditoria com data e motivo
+```
+
+> "*:delete e *:approve permanecem bloqueados independente da fase."
+
+### Decisao — 3 politicas de execucao
+
+**Resposta:** Confirmadas.
+
+| Politica | Comportamento | Exemplo |
+|---|---|---|
+| `DIRECT` | Executa imediatamente | Consultar status de um caso |
+| `CONTROLLED` | Gera movimento MOD-009 — humano aprova | Criar pedido de compra |
+| `EVENT_ONLY` | Registra evento sem executar nada | Notificar que algo foi detectado |
+
+### Decisao — Privilege escalation
+
+**Resposta:** Confirmado: `sensitivity_level=2` (alto) + alerta no monitor UX-MCP-002.
+
+---
+
+## MOD-011 — SmartGrid
+
+- [x] **PEND-SGR-01** — Contrato de mapeamento: resultado do motor → estado visual da linha *(RESOLVIDA — 2026-03-15, decisoes 1-3)*
+- [x] **PEND-SGR-02** — Suporte a `current_record_state` no motor MOD-007-F03 *(RESOLVIDA — 2026-03-15, decisoes 4-5)*
+- [x] Dependencia em MOD-007-F03, F01, F02 — confirmadas como dependencias de sequencia *(REGISTRADAS — 2026-03-15)*
+- [x] 3 Screen Manifests promovidos de DRAFT → **READY** (UX-SGR-001, UX-SGR-002, UX-SGR-003) — 2026-03-15
+
+> Detalhamento completo das 5 decisoes em `MOD-011-Decisoes-PEND-SGR.md`.
+
+---
+
+## Resumo Geral
+
+| Modulo | Pendencias tecnicas | Status |
+|---|---|---|
+| MOD-003 | 2 | ✅ Todas resolvidas |
+| MOD-004 | 3 | ✅ Todas resolvidas |
+| MOD-005 | 2 | ✅ Todas resolvidas |
+| MOD-006 | 3 | ✅ Todas resolvidas |
+| MOD-007 | 3 | ✅ Todas resolvidas |
+| MOD-008 | 3 | ✅ Todas resolvidas |
+| MOD-009 | 4 | ✅ Todas resolvidas |
+| MOD-010 | 4 | ✅ Todas resolvidas |
+| MOD-011 | 5 | ✅ Todas resolvidas (sessao anterior) |
+
+**Unico item pendente em todos os modulos:** aprovacao formal do owner Marcos Sulivan — gate de processo antes do scaffold de cada modulo.
+
+---
+
+*34 decisoes registradas · 9 modulos · Sessao 2026-03-15*
 
 ---
 
@@ -298,13 +516,12 @@ MOD-007 define parametrizacao contextual e rotinas de comportamento. Tem integra
 | context_framers (OPERACAO) | `context_framers` table             | MOD-011 (configura colunas grade)  |
 | routine_items (5 tipos)    | `routine_items` table               | MOD-011 (FIELD_VIS, REQ, DEF, DOM, VAL) |
 
-**Motor de avaliacao (6 etapas):**
+**Motor de avaliacao (5 etapas — cache Redis removido em 2026-03-15, decisao MOD-011 #4):**
 1. Encontra regras de incidencia aplicaveis ao contexto
 2. Resolve rotinas vinculadas (PUBLISHED only)
-3. Merge de conflitos por prioridade (menor = mais precedente)
+3. Merge de conflitos (regra mais restritiva vence — campo `priority` removido)
 4. Avalia itens da rotina (7 tipos: FIELD_VISIBILITY, REQUIRED, DEFAULT, DOMAIN, DERIVATION, VALIDATION, EVIDENCE)
-5. Cache Redis (TTL 30s)
-6. Retorna resultado com blocking_validations
+5. Retorna resultado com blocking_validations
 
 **7 tipos de item de rotina:**
 - FIELD_VISIBILITY — visibilidade de campos
@@ -336,7 +553,7 @@ MOD-008 executa integracoes com Protheus/TOTVS via BullMQ e Outbox Pattern.
 
 **Arquitetura de execucao:**
 - **Outbox Pattern:** INSERT log na mesma transacao de negocio (garante zero perda)
-- **BullMQ:** concurrency=10, sem retry interno (gerenciado pelo Outbox)
+- **BullMQ:** concurrency via env var `INTEGRATION_CONCURRENCY` (default 10), sem retry interno (gerenciado pelo Outbox)
 - **Retry:** exponential backoff `2^(attempt-1)` segundos
 - **DLQ:** apos `retry_max` tentativas, move para Dead Letter Queue
 - **Reprocessamento:** cria novo log com `parent_log_id`, exige justificativa (min 10 chars)
@@ -380,7 +597,7 @@ MOD-009 intercepta operacoes criticas e exige aprovacao por alcada.
 7. Ultimo nivel aprovado → executa operacao original
 
 **Regras de segregacao:**
-- `solicitante != aprovador` (CHECK constraint no banco + validacao no service)
+- `solicitante != aprovador` (regra geral — validacao no service). Excecao: auto-aprovacao por suficiencia de escopo (`AUTO_APPROVED_BY_SCOPE`) — ver US-MOD-009 §3.1
 - Override exige scope especial + justificativa min 20 chars + auditoria completa
 
 **Eventos emitidos:** `movement.created/approved/rejected/executed/failed/cancelled/overridden/escalated/timeout`
@@ -422,9 +639,10 @@ MOD-010 e o ultimo elo da cadeia principal. Nao possui dependentes.
 8. Dispatch conforme politica
 
 **Blocklist de escopos (agentes NUNCA recebem):**
+- `*:delete` ← adicionado (decisao 2026-03-15)
+- `*:approve`
 - `approval:decide`
 - `approval:override`
-- `*:approve`
 - `*:sign`
 - `*:execute`
 
@@ -460,9 +678,9 @@ MOD-011 e um componente UX puro de grade editavel com operacoes em massa. Consom
 
 | Manifest       | Tela                      | Rota                                   | Status |
 |----------------|---------------------------|----------------------------------------|--------|
-| UX-SGR-001     | Grade de Inclusao em Massa| `/{modulo}/{rotina}/inclusao-em-massa` | DRAFT  |
-| UX-SGR-002     | Formulario de Alteracao   | `/{modulo}/{rotina}/{id}/alterar`      | DRAFT  |
-| UX-SGR-003     | Grade de Exclusao em Massa| `/{modulo}/{rotina}/exclusao-em-massa` | DRAFT  |
+| UX-SGR-001     | Grade de Inclusao em Massa| `/{modulo}/{rotina}/inclusao-em-massa` | **READY** |
+| UX-SGR-002     | Formulario de Alteracao   | `/{modulo}/{rotina}/{id}/alterar`      | **READY** |
+| UX-SGR-003     | Grade de Exclusao em Massa| `/{modulo}/{rotina}/exclusao-em-massa` | **READY** |
 
 **Regras criticas:**
 - Motor chamado **1 linha por vez** (nunca batch)
@@ -551,19 +769,41 @@ Impactos potenciais:
 - [ ] Necessario estabilizar MOD-001 antes de iniciar qualquer feature UX dos modulos subsequentes
 - [ ] Investigar causa do rollback e definir prazo para re-promocao a READY
 
-### 2. PEND-SGR-01 — Contrato motor → estado visual (MOD-011)
+### 2. ~~PEND-SGR-01 — Contrato motor → estado visual (MOD-011)~~ ✅ RESOLVIDA (2026-03-15)
 
-- [ ] Definir mapeamento formal: `blocking_validations[]` → ❌, `validations[]` → ⚠️, vazio → ✅
-- [ ] Definir se warnings permitem ou bloqueiam save
-- [ ] Definir regras de tooltip/mensagem por tipo de validacao
-- [ ] **Bloqueia:** MOD-011-F02 (Grade Inclusao), manifest UX-SGR-001
-- [ ] **Responsavel:** Arquitetura
+- [x] Definir mapeamento formal: `blocking_validations[]` → ❌, `validations[]` → ⚠️, vazio → ✅
+- [x] Definir se warnings permitem ou bloqueiam save — **Decisao: ⚠️ nao bloqueia save, ❌ bloqueia**
+- [x] Definir regras de tooltip/mensagem por tipo de validacao — **Decisao: celula vermelha + tooltip (erro com field), linha inteira (erro sem field)**
+- [x] ~~**Bloqueia:** MOD-011-F02 (Grade Inclusao), manifest UX-SGR-001~~ Desbloqueados
+- [x] **Responsavel:** Arquitetura — 3 decisoes registradas (esquema visual 4 estados confirmado)
 
-### 3. PEND-SGR-02 — Amendment current_record_state no motor MOD-007 (MOD-011)
+### 3. ~~PEND-SGR-02 — Amendment current_record_state no motor MOD-007 (MOD-011)~~ ✅ RESOLVIDA (2026-03-15)
 
-- [ ] Aprovar amendment no POST `/routine-engine/evaluate`
-- [ ] Campo `current_record_state` nullable no body (backward compatible)
-- [ ] Cache Redis bypass quando presente (dados dinamicos nao cacheiaveis)
-- [ ] Campos ausentes no state → condition avalia como `false`
-- [ ] **Bloqueia:** MOD-011-F01 (backend), MOD-011-F03 (alteracao), MOD-011-F04 (exclusao), manifests UX-SGR-002 e UX-SGR-003
-- [ ] **Responsavel:** Arquitetura
+- [x] Aprovar amendment no POST `/routine-engine/evaluate`
+- [x] Campo `current_record_state` nullable no body (backward compatible)
+- [x] ~~Cache Redis bypass quando presente~~ — **Decisao 4: cache Redis removido do motor inteiro (operacoes criticas exigem consistencia)**
+- [x] Campos ausentes no state → condition avalia como `false` — **Decisao 5: confirmada. Linhas novas nao afetadas por condition_expr**
+- [x] ~~**Bloqueia:** MOD-011-F01, F03, F04, manifests UX-SGR-002 e UX-SGR-003~~ Desbloqueados, manifests promovidos a READY
+- [x] **Responsavel:** Arquitetura — 2 decisoes registradas
+
+---
+
+## Decisoes Tecnicas Consolidadas — 2026-03-15
+
+34 decisoes tecnicas + 1 transversal registradas em sessao de 2026-03-15. Owner universal: Marcos Sulivan.
+
+Decisoes integradas aos US files em 2026-03-16 (v1.1.0):
+
+| Modulo | Decisoes | Impacto principal |
+|--------|----------|-------------------|
+| MOD-003 | 3 | SLA ajustado 500→100 nos + cache strategy |
+| MOD-004 | 4 | Segregacao authorized_by → validacao por scope (`identity:share:authorize`) |
+| MOD-005 | 3 | Editor visual 50 nos confirmado, mini-mapa obrigatorio ≥15 nos |
+| MOD-006 | 4 | Confirmados (motor 5 etapas, cycle_version frozen) |
+| MOD-007 | 4 | Campo `priority` removido, conflito em 2 camadas, cache Redis removido |
+| MOD-008 | 4 | Concurrency via env var `INTEGRATION_CONCURRENCY`, principio mapeamento WS |
+| MOD-009 | 5 | Auto-aprovacao por suficiencia de escopo (`AUTO_APPROVED_BY_SCOPE`) |
+| MOD-010 | 5 | Blocklist expandida (*:delete), 2 fases, sensitivity_level=2 |
+| MOD-011 | 5 | Ja integradas em sessao anterior (PEND-SGR-01, PEND-SGR-02) |
+
+**Referencia:** Documento "Registro de Decisoes — MOD-003 a MOD-011" (2026-03-15)

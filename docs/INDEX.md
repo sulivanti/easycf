@@ -64,8 +64,11 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 | Módulo | Arquivo Raiz | Estado |
 |---|---|---|
 | MOD-000 — Framework de Automação / Geradores (Foundation) | [mod.md](04_modules/mod-000-foundation/mod.md) | DRAFT |
-| MOD-001 — Backoffice Admin (UX-First Shell) | [mod.md](04_modules/mod-001-backoffice-admin/mod.md) | READY |
+| MOD-001 — Backoffice Admin (UX-First Shell) | [mod.md](04_modules/mod-001-backoffice-admin/mod.md) | DRAFT |
 | MOD-002 — Gestão de Usuários | [US-MOD-002](04_modules/user-stories/epics/US-MOD-002.md) | READY |
+| MOD-003 — Estrutura Organizacional | [mod.md](04_modules/mod-003-estrutura-organizacional/mod.md) | DRAFT |
+| MOD-004 — Identidade Avançada | [mod.md](04_modules/mod-004-identidade-avancada/mod.md) | DRAFT |
+| MOD-005 — Modelagem de Processos (Blueprint) | [mod.md](04_modules/mod-005-modelagem-processos/mod.md) | DRAFT |
 
 ### Features — MOD-002
 
@@ -74,6 +77,32 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 | [US-MOD-002-F01](04_modules/user-stories/features/US-MOD-002-F01.md) | Listagem de Usuários + Filtros + Ações | UX-USR-001 | READY |
 | [US-MOD-002-F02](04_modules/user-stories/features/US-MOD-002-F02.md) | Formulário de Cadastro (senha / convite) | UX-USR-002 | READY |
 | [US-MOD-002-F03](04_modules/user-stories/features/US-MOD-002-F03.md) | Fluxo de Convite e Ativação | UX-USR-003 | READY |
+
+### Features — MOD-003
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-003-F01](04_modules/user-stories/features/US-MOD-003-F01.md) | API Core — CRUD + Tree Query + Vinculação N5 | — (Backend) | READY |
+| [US-MOD-003-F02](04_modules/user-stories/features/US-MOD-003-F02.md) | Árvore Organizacional | UX-ORG-001 | READY |
+| [US-MOD-003-F03](04_modules/user-stories/features/US-MOD-003-F03.md) | Formulário de Nó Organizacional | UX-ORG-002 | READY |
+
+### Features — MOD-004
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-004-F01](04_modules/user-stories/features/US-MOD-004-F01.md) | API: user_org_scopes (CRUD + invalidação Redis) | — (Backend) | READY |
+| [US-MOD-004-F02](04_modules/user-stories/features/US-MOD-004-F02.md) | API: access_shares + access_delegations + job expiração | — (Backend) | READY |
+| [US-MOD-004-F03](04_modules/user-stories/features/US-MOD-004-F03.md) | UX: Escopo organizacional do usuário | UX-IDN-001 | READY |
+| [US-MOD-004-F04](04_modules/user-stories/features/US-MOD-004-F04.md) | UX: Compartilhamentos e delegações ativas | UX-IDN-002 | READY |
+
+### Features — MOD-005
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-005-F01](04_modules/user-stories/features/US-MOD-005-F01.md) | API Ciclos + Macroetapas + Estágios | — (Backend) | READY |
+| [US-MOD-005-F02](04_modules/user-stories/features/US-MOD-005-F02.md) | API Gates + Papéis + Transições | — (Backend) | READY |
+| [US-MOD-005-F03](04_modules/user-stories/features/US-MOD-005-F03.md) | UX Editor Visual de Fluxo | UX-PROC-001 | READY |
+| [US-MOD-005-F04](04_modules/user-stories/features/US-MOD-005-F04.md) | UX Configurador de Estágio | UX-PROC-002 | READY |
 
 > **Nota:** Novos módulos devem criar um subdiretório próprio em `04_modules/<mod-id>/` seguindo o padrão do MOD-001.
 

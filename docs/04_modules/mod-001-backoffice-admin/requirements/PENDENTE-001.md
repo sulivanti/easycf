@@ -5,6 +5,7 @@
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
+> | 0.3.0  | 2026-03-17 | AGN-DEV-10  | Re-enriquecimento — adiciona status de resolução, metadata, EX-* |
 > | 0.2.0  | 2026-03-16 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) |
 
 # PENDENTE-001 — Questões Abertas do Backoffice Admin
@@ -20,6 +21,7 @@
   - **Opção B:** Shell chama auth_me e injeta via React Context — 1 requisição, mas acoplamento Shell↔Dashboard
   - **Opção C:** React Query/SWR com cache de 30s — 1 requisição efetiva, cache automático, sem acoplamento
 - **Recomendação:** Opção C (React Query/SWR) — balance entre performance e simplicidade. O cache TTL curto (30s) garante dados frescos sem duplicar chamadas. Se não houver lib de cache no projeto, Opção A é aceitável para MVP.
+- **Status:** ABERTO — aguardando decisão do owner. Se aceita, incorporar em FR-004/FR-005 e fechar.
 
 ---
 
@@ -31,3 +33,15 @@
   - **Opção A:** Sidebar vazia é aceitável — o Dashboard já explica a situação
   - **Opção B:** Sidebar exibe mensagem "Nenhum módulo configurado" com ícone informativo
 - **Recomendação:** Opção B — melhora a UX sem complexidade adicional. Decisão pode ser tomada durante implementação.
+- **Status:** ABERTO — aguardando decisão do owner. Se aceita, incorporar em FR-004/UX-001 e fechar.
+
+---
+
+> **Nota de governança:** Ambos os PENDENTEs devem ser resolvidos antes de promover o módulo para `estado_item: READY`. Resolução = tomar a decisão, incorporar no requisito afetado e atualizar status para RESOLVIDO.
+
+- **estado_item:** DRAFT
+- **owner:** arquitetura
+- **data_ultima_revisao:** 2026-03-17
+- **rastreia_para:** US-MOD-001, FR-004, FR-005, UX-001, BR-005, NFR-001
+- **referencias_exemplos:** EX-CI-007
+- **evidencias:** N/A

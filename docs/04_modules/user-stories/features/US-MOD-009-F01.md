@@ -42,7 +42,7 @@ Exemplo: Pedido de Venda com valor > R$ 50.000
 ### Inclui
 - CRUD de Regras de Controle de Gravação (object_type, operation_type, origin_types, valor, prioridade, vigência)
 - CRUD de Regras de Alçada com níveis em cadeia (approver_type, timeout, escalada)
-- Validação: `allow_self_approve` nunca true (CHECK + service)
+- Validação: `allow_self_approve` default false — controle de auto-aprovação por suficiência de escopo (ver épico §3.1)
 - Prioridade e vigência respeitadas pelo motor
 
 ### Não inclui
@@ -72,9 +72,10 @@ Funcionalidade: Regras de Controle e Alçada
     E POST /admin/control-rules/:id/approval-rules com { level: 2, approver_type: "ORG_LEVEL", approver_ref: "N2", timeout_hours: 48 }
     Então regra de alçada em 2 níveis criada
 
-  Cenário: allow_self_approve nunca pode ser true
+  Cenário: allow_self_approve controlado por admin
     Quando POST /admin/approval-rules com { allow_self_approve: true }
-    Então 422: "O campo allow_self_approve não pode ser verdadeiro — segregação de funções obrigatória."
+    Então regra criada com allow_self_approve=true
+    E auto-aprovação por suficiência de escopo habilitada para esta alçada (ver épico §3.1)
 
   Cenário: Regra com priority menor avaliada primeiro
     Dado que há 2 regras ACTIVE para o mesmo object_type com prioridades 10 e 50
@@ -112,7 +113,7 @@ Funcionalidade: Regras de Controle e Alçada
 
 ## 6. Regras Críticas
 
-1. `allow_self_approve` nunca aceito como `true` — CHECK no banco + validação no service
+1. `allow_self_approve` default false — quando true, habilita auto-aprovação por suficiência de escopo (ver épico §3.1). Validação no service.
 2. `priority` — menor = maior precedência (igual ao MOD-007)
 3. `valid_from`/`valid_until` — vigência respeitada pelo motor a cada avaliação
 4. Escalada: `escalation_rule_id` deve apontar para `approval_rules.level > level_atual`

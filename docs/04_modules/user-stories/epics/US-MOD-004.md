@@ -1,7 +1,7 @@
 # US-MOD-004 — Identidade Avançada (Épico)
 
 **Status Ágil:** `READY`
-**Versão:** 1.0.0
+**Versão:** 1.1.0
 **Data:** 2026-03-15
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-004** (Identidade Avançada)
@@ -10,7 +10,7 @@
 ## Metadados de Governança
 
 - **status_agil:** READY
-- **owner:** arquitetura
+- **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** EP02 (doc 01_Fundacao_Organizacional_e_de_Acesso), DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, US-MOD-000-F06, US-MOD-000-F09, US-MOD-003, LGPD-BASE-001
 - **nivel_arquitetura:** 2 (multi-tenant, cache Redis, domain events, vigência controlada)
@@ -83,9 +83,14 @@ Delegação NÃO PODE: aprovar, executar movimentos controlados, assinar
 
 Esta regra é reforçada por validação no service: `access_delegations` não pode conter escopos de aprovação (`*:approve`, `*:execute`, `*:sign`).
 
-### 4.3 Compartilhamento exige aprovador ≠ solicitante
+### 4.3 Compartilhamento — validação de autorização por scope
 
-Para garantir segregação de funções: o campo `authorized_by` em `access_shares` DEVE ser diferente de `grantor_id`. Um usuário não pode se auto-autorizar um compartilhamento.
+A segregação entre `authorized_by` e `grantor_id` **não é mais uma regra absoluta**. A validação é feita no service com base em scopes:
+
+- Usuário com scope `identity:share:authorize` **pode** ser simultaneamente `grantor_id` e `authorized_by` (auto-autorização permitida).
+- Usuário **sem** esse scope deve indicar um terceiro como `authorized_by` (diferente de `grantor_id`).
+
+> Decisão técnica 2026-03-15: Removida como regra absoluta. Substituída por validação de scope no service.
 
 ---
 
@@ -105,10 +110,17 @@ Funcionalidade: Épico Identidade Avançada MOD-004
     Quando POST /access-delegations é chamado
     Então deve retornar 422: "Delegações não podem incluir escopos de ação 'approve', 'execute' ou 'sign'."
 
-  Cenário: Compartilhamento exige authorized_by diferente do grantor
+  Cenário: Compartilhamento auto-autorizado com scope permitido
     Dado que grantor_id = "user-A" e authorized_by = "user-A"
+    E "user-A" possui scope "identity:share:authorize"
     Quando POST /admin/access-shares é chamado
-    Então deve retornar 422: "O autorizador não pode ser o mesmo que o solicitante."
+    Então o compartilhamento é criado com sucesso
+
+  Cenário: Compartilhamento auto-autorizado sem scope é bloqueado
+    Dado que grantor_id = "user-B" e authorized_by = "user-B"
+    E "user-B" NÃO possui scope "identity:share:authorize"
+    Quando POST /admin/access-shares é chamado
+    Então deve retornar 422: "Sem scope 'identity:share:authorize', o autorizador deve ser diferente do solicitante."
 
   Cenário: Expiração automática de compartilhamentos
     Dado que um access_share tem valid_until = ontem
@@ -129,7 +141,7 @@ Funcionalidade: Épico Identidade Avançada MOD-004
 - [x] Gap entre MOD-000 e MOD-004 documentado e validado
 - [x] Modelo de dados `user_org_scopes`, `access_shares`, `access_delegations` definido
 - [x] Regra de delegação sem poder decisório documentada
-- [x] Regra de segregação grantor ≠ authorized_by documentada
+- [x] Regra de validação de autorização por scope (`identity:share:authorize`) documentada
 - [x] Features F01–F04 com Gherkin completo
 - [x] Screen Manifests UX-IDN-001, UX-IDN-002 criados
 - [x] Novos escopos mapeados para MOD-000-F12
@@ -140,7 +152,7 @@ Funcionalidade: Épico Identidade Avançada MOD-004
 - [ ] F01–F04 individualmente aprovadas e scaffoldadas
 - [ ] Background job de expiração testado com casos de borda (valid_until = agora, passado)
 - [ ] Delegação bloqueia escopos de aprovação — validado por teste
-- [ ] Compartilhamento: grantor ≠ authorized_by — validado por teste
+- [ ] Compartilhamento: validação por scope (auto-autorização com `identity:share:authorize`, bloqueio sem scope) — validado por teste
 - [ ] Cache Redis invalidado ao criar/revogar user_org_scopes
 - [ ] Telas de gestão validadas com manifests
 
@@ -195,7 +207,7 @@ US-MOD-004  (este arquivo) ← Épico / Governança / Índice
 | `resource_id` | uuid | NOT NULL | ID do recurso compartilhado |
 | `allowed_actions` | jsonb | NOT NULL | Array de escopos concedidos |
 | `reason` | text | NOT NULL | Motivo — obrigatório |
-| `authorized_by` | uuid | FK → users.id, NOT NULL | Aprovador (≠ grantor) |
+| `authorized_by` | uuid | FK → users.id, NOT NULL | Aprovador (pode ser = grantor se possuir scope `identity:share:authorize`) |
 | `valid_from` | timestamp | NOT NULL | |
 | `valid_until` | timestamp | NOT NULL | Expiração obrigatória |
 | `status` | varchar | ACTIVE \| REVOKED \| EXPIRED | |
@@ -203,7 +215,7 @@ US-MOD-004  (este arquivo) ← Épico / Governança / Índice
 | `revoked_at` | timestamp | nullable | |
 | `revoked_by` | uuid | nullable, FK → users.id | |
 
-**Constraint:** `CHECK (authorized_by != grantor_id)` — segregação de funções.
+**Nota:** A validação `authorized_by != grantor_id` é feita no **service** (não via CHECK constraint no banco). Usuários com scope `identity:share:authorize` podem ser simultaneamente grantor e authorized_by.
 
 ### Tabela: `access_delegations`
 
@@ -252,6 +264,7 @@ US-MOD-004  (este arquivo) ← Épico / Governança / Índice
 | `identity:share:read` | Ver compartilhamentos controlados |
 | `identity:share:write` | Criar compartilhamentos |
 | `identity:share:revoke` | Revogar compartilhamentos |
+| `identity:share:authorize` | Permite auto-autorizar compartilhamentos (grantor = authorized_by) |
 
 ---
 
@@ -260,7 +273,7 @@ US-MOD-004  (este arquivo) ← Épico / Governança / Índice
 | # | Métrica | Alvo |
 |---|---|---|
 | OKR-1 | Delegações com escopo de aprovação bloqueadas | 100% |
-| OKR-2 | Compartilhamentos com grantor = authorized_by bloqueados | 100% |
+| OKR-2 | Auto-autorização bloqueada quando usuário não possui scope `identity:share:authorize` | 100% |
 | OKR-3 | Expiração automática em < 5min após valid_until | 100% |
 | OKR-4 | Cache Redis invalidado ao criar/revogar user_org_scopes | 100% |
 
@@ -271,6 +284,7 @@ US-MOD-004  (este arquivo) ← Épico / Governança / Índice
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. Gap mapeado, modelo de dados, endpoints, regras críticas, features F01–F04. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: segregação authorized_by substituída por validação de scope, CHECK constraint removido, novo scope identity:share:authorize, owner atualizado. |
 
 ---
 

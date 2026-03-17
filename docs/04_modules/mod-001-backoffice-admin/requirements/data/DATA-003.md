@@ -5,6 +5,7 @@
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
+> | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Re-enriquecimento DATA-003 — adiciona sensitivity_level, EX-*, nota de desvio DATA-003 |
 > | 0.2.0  | 2026-03-16 | AGN-DEV-04  | Enriquecimento DATA-003 (enrich-agent) |
 
 # DATA-003 — Catálogo de Domain Events do Backoffice Admin
@@ -23,32 +24,34 @@
 
 O MOD-001 é **UX-First**: não emite domain events no backend (essa responsabilidade é do MOD-000). O que o MOD-001 produz são **UIActionEnvelopes** — eventos de telemetria UI que rastreiam ações do usuário no frontend e se correlacionam com os domain events do MOD-000 via `X-Correlation-ID`.
 
+> **Nota de desvio (DATA-003):** Este catálogo NÃO segue o formato padrão de domain events (tabela `event_type`, `origin_command`, `emit_permission`, `view_rule`, `notify`, `sensitivity_level`, `maskable_fields`) porque o MOD-001 não emite domain events. Em vez disso, cataloga UIActionEnvelopes conforme DOC-ARC-003 §2. Os domain events correspondentes residem no MOD-000. Desvio aceito — módulo consumidor UX-First.
+
 ## Catálogo de UIActionEnvelopes (Telemetria UI)
 
 ### UX-AUTH-001 — Ações Pré-Autenticação (tenant_id AUSENTE)
 
-| action_id | operation_id | type | tenant_id | Ciclo de vida |
-|---|---|---|---|---|
-| `submit_login` | auth_login | submit | ❌ ausente | requested → succeeded/failed |
-| `submit_forgot_password` | auth_forgot_password | submit | ❌ ausente | requested → succeeded/failed |
-| `submit_reset_password` | auth_reset_password | submit | ❌ ausente | requested → succeeded/failed |
-| `navigate_to_forgot` | — | client_only | ❌ ausente | ui_only=true |
-| `navigate_to_login` | — | client_only | ❌ ausente | ui_only=true |
+| action_id | operation_id | type | tenant_id | sensitivity | Ciclo de vida |
+|---|---|---|---|---|---|
+| `submit_login` | auth_login | submit | ❌ ausente | 1 (credenciais) | requested → succeeded/failed |
+| `submit_forgot_password` | auth_forgot_password | submit | ❌ ausente | 1 (e-mail) | requested → succeeded/failed |
+| `submit_reset_password` | auth_reset_password | submit | ❌ ausente | 1 (token) | requested → succeeded/failed |
+| `navigate_to_forgot` | — | client_only | ❌ ausente | 0 | ui_only=true |
+| `navigate_to_login` | — | client_only | ❌ ausente | 0 | ui_only=true |
 
 ### UX-SHELL-001 — Ações Pós-Autenticação (tenant_id PRESENTE)
 
-| action_id | operation_id | type | tenant_id | Ciclo de vida |
-|---|---|---|---|---|
-| `load_current_user` | auth_me | view | ✅ presente | requested → succeeded/failed |
-| `submit_logout` | auth_logout | submit | ✅ presente | requested → succeeded/failed |
-| `navigate_sidebar` | — | client_only | ✅ presente | ui_only=true |
-| `navigate_breadcrumb` | — | client_only | ✅ presente | ui_only=true |
+| action_id | operation_id | type | tenant_id | sensitivity | Ciclo de vida |
+|---|---|---|---|---|---|
+| `load_current_user` | auth_me | view | ✅ presente | 0 | requested → succeeded/failed |
+| `submit_logout` | auth_logout | submit | ✅ presente | 0 | requested → succeeded/failed |
+| `navigate_sidebar` | — | client_only | ✅ presente | 0 | ui_only=true |
+| `navigate_breadcrumb` | — | client_only | ✅ presente | 0 | ui_only=true |
 
 ### UX-DASH-001 — Ações Pós-Autenticação (tenant_id PRESENTE)
 
-| action_id | operation_id | type | tenant_id | Ciclo de vida |
-|---|---|---|---|---|
-| `load_dashboard_profile` | auth_me | view | ✅ presente | requested → succeeded/failed |
+| action_id | operation_id | type | tenant_id | sensitivity | Ciclo de vida |
+|---|---|---|---|---|---|
+| `load_dashboard_profile` | auth_me | view | ✅ presente | 0 | requested → succeeded/failed |
 
 ## Correlação UI ↔ Backend Domain Events
 
@@ -78,7 +81,7 @@ O MOD-001 é **UX-First**: não emite domain events no backend (essa responsabil
 
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-16
-- **rastreia_para:** US-MOD-001-F02, FR-006, BR-006, SEC-EventMatrix, DOC-ARC-003, DOC-FND-000
-- **referencias_exemplos:** N/A
+- **data_ultima_revisao:** 2026-03-17
+- **rastreia_para:** US-MOD-001-F02, FR-006, BR-001, BR-002, BR-006, SEC-EventMatrix, DOC-ARC-003, DOC-FND-000
+- **referencias_exemplos:** EX-CI-007
 - **evidencias:** N/A

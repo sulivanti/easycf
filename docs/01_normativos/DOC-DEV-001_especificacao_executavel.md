@@ -540,7 +540,7 @@ erDiagram
   - **Entity originária:** `<entity_type>` / `<entity_id>`
   - **Emit (perm do comando):** `<permission_id>` *(documentação)*
   - **View (regra):** `canRead(entity) && tenantMatch` *(sempre)* + observações
-  - **Notify:** (Sim/Não) → regra de destinatários (ref.: SEC-EventMatrix)
+  - **Notify:** (Sim/Não) → regra de destinatários (ref.: SEC-002)
   - **Integração/Outbox:** (Sim/Não) → `dedupe_key`? TTL? retries?
   - **Sensibilidade:** `sensitivity_level=0|1|2` e campos mascaráveis (se houver)
   - **Payload policy (MUST):** snapshot mínimo + sem PII desnecessária; para export/import, apenas metadados.
@@ -797,12 +797,12 @@ erDiagram
 
   - **MUST:** Não use "permissão no evento" como fonte de verdade. Use a permissão no **comando** (Emit) e a permissão na **entity/ACL** (View).
   - **MUST:** `visibility_level`/`sensitivity_level` são apenas **guard-rails/otimizadores** (mascarar/filtrar), mantendo a regra forte de **ACL/tenant**.
-  - **MUST:** Definir a *Matriz de Autorização de Eventos* (SEC-EventMatrix) e referenciá-la no catálogo DATA-003.
+  - **MUST:** Definir a *Matriz de Autorização de Eventos* (SEC-002) e referenciá-la no catálogo DATA-003.
 - **Proteções:** rate limit | validação | logs seguros | secrets | WAF (se aplicável)
 
 ---
 
-### SEC-EventMatrix — Matriz de Autorização de Eventos (Emit / View / Notify) (MUST)
+### SEC-002 — Matriz de Autorização de Eventos (Emit / View / Notify) (MUST)
 
 #### Princípios (MUST)
 
@@ -952,7 +952,7 @@ Em cada **UX-XXX — <Jornada/Tela/Fluxo>**, incluir:
 
 **3. Mascaramento Dinâmico Baseado em Sensibilidade (`masking` e LGPD)**
 
-- Integrado intimamente à segurança (DATA-003 / SEC-EventMatrix).
+- Integrado intimamente à segurança (DATA-003 / SEC-002).
 - A UI não transita dados sensíveis proibidos; o backend dita a exibição e o front obedece as regras de mascaramento nativamente com base no *Sensitivity Level*.
   - Impede exibir ou trafegar dados se estiver acima do limite de sensibilidade do usuário atual.
   - Campos do Nível 2 (ex: e-mail, telefone, CPF) exigem máscara visual por padrão.
@@ -1010,7 +1010,7 @@ Para cada ação selecionada, emitir (no mínimo):
 
 Quando `kind=command|workflow|integration` e houver **mudança de estado**, registrar evento de domínio seguindo:
 
-- DATA-003 (Domain Events) + Catálogo obrigatório (Emit/View/Notify) + SEC-EventMatrix.
+- DATA-003 (Domain Events) + Catálogo obrigatório (Emit/View/Notify) + SEC-002.
 
 - **estado_item:** DRAFT | READY
 
@@ -1295,6 +1295,234 @@ As automações cruzarão o "Quê" (User Story) com o "Como" (DOC-DEV-001) autom
 - **Restrições:**
 - **Fora de escopo:**
 
+```
+
+---
+
+---
+
+## Apêndice — Exemplos Canônicos (EX-*)
+
+> Âncoras referenciáveis por módulos via `referencias_exemplos`. Cada ID é único e rastreável pelo Gate de IDs (EX-CI-007).
+
+### EX-DATA-001 — Modelo de dados canônico (padrão DATA-xxx)
+
+Exemplo de estrutura mínima para documentar entidades e relacionamentos em um artefato DATA-xxx.
+
+```markdown
+## Entidade: users
+
+| Coluna | Tipo | Nullable | Default | Descrição |
+|---|---|---|---|---|
+| id | uuid | NOT NULL | gen_random_uuid() | PK |
+| tenant_id | uuid | NOT NULL | — | FK tenants(id), índice RLS |
+| email | varchar(255) | NOT NULL | — | Único por tenant |
+| name | varchar(255) | NOT NULL | — | Nome completo |
+| role_id | uuid | NOT NULL | — | FK roles(id) |
+| status | enum('active','inactive','suspended') | NOT NULL | 'active' | — |
+| created_at | timestamptz | NOT NULL | now() | — |
+| updated_at | timestamptz | NOT NULL | now() | — |
+| created_by | uuid | NOT NULL | — | Actor ID |
+| updated_by | uuid | NOT NULL | — | Actor ID |
+| deleted_at | timestamptz | NULL | NULL | Soft-delete |
+
+### Índices
+- idx_users_tenant_id (tenant_id)
+- idx_users_tenant_email UNIQUE (tenant_id, email) WHERE deleted_at IS NULL
+- idx_users_tenant_status (tenant_id, status, deleted_at)
+
+### Relacionamentos
+- users.role_id → roles.id (N:1)
+- users.tenant_id → tenants.id (N:1, RLS)
+```
+
+### EX-DATA-003 — Catálogo de domain events (padrão DATA-003)
+
+Exemplo de catálogo rastreável de domain events por módulo. Todo módulo que emite eventos DEVE manter esta tabela.
+
+```markdown
+## Catálogo de Domain Events — MOD-XXX
+
+| event_type | Trigger (ação) | Payload obrigatório | Sensitivity |
+|---|---|---|---|
+| UserCreated | POST /users | user_id, tenant_id, role_id, correlation_id | normal |
+| UserUpdated | PATCH /users/:id | user_id, changed_fields[], correlation_id | normal |
+| UserDeactivated | DELETE /users/:id | user_id, reason, correlation_id | normal |
+| PasswordChanged | POST /auth/change-password | user_id, correlation_id | high |
+| RoleAssigned | PATCH /users/:id/role | user_id, old_role_id, new_role_id, correlation_id | normal |
+
+### Regras (MUST)
+- Todo evento DEVE conter: `event_type`, `tenant_id`, `actor_id`, `correlation_id`, `occurred_at`
+- Eventos com sensitivity=high NÃO DEVEM conter PII no payload (ver EX-PII-001)
+- O catálogo DEVE ser atualizado na mesma PR que adiciona/altera eventos
+```
+
+### EX-INT-001 — Contrato de integração (padrão INT-xxx)
+
+Exemplo de documentação de contrato de integração entre módulos ou com serviços externos.
+
+```markdown
+## Integração: MOD-XXX → MOD-000 (Auth)
+
+| Campo | Valor |
+|---|---|
+| Tipo | Síncrona (HTTP) |
+| Protocolo | REST/JSON |
+| Endpoint consumido | GET /api/v1/auth/me |
+| Autenticação | Bearer JWT (propagado) |
+| Headers obrigatórios | X-Correlation-ID |
+| Timeout | 5s |
+| Retry | 3x com backoff exponencial (EX-RES-001) |
+| Circuit breaker | Threshold: 5 falhas → 30s cooldown |
+| Fallback | Cache local (Redis) do último /auth/me bem-sucedido |
+
+### Contrato de request/response
+
+Request:
+  GET /api/v1/auth/me
+  Authorization: Bearer <jwt>
+  X-Correlation-ID: <uuid>
+
+Response 200:
+  {
+    "id": "uuid",
+    "email": "user@tenant.com",
+    "name": "Nome",
+    "tenant_id": "uuid",
+    "scopes": ["users:user:read", "users:role:read"]
+  }
+
+Response 401:
+  { "type": "...", "title": "Unauthorized", "status": 401, "detail": "...", "correlationId": "..." }
+```
+
+### EX-NFR-001 — Requisitos não funcionais (padrão NFR-xxx)
+
+Exemplo de documentação de SLAs, limites e métricas para um módulo.
+
+```markdown
+## SLAs — MOD-XXX
+
+| Métrica | Target | Medição |
+|---|---|---|
+| Latência P95 (listagem) | < 200ms | APM / Prometheus histogram |
+| Latência P95 (escrita) | < 500ms | APM / Prometheus histogram |
+| Disponibilidade | 99.5% (horário comercial) | Uptime monitor |
+| Taxa de erro 5xx | < 0.1% | Prometheus counter |
+
+## Limites
+
+| Recurso | Limite | Justificativa |
+|---|---|---|
+| Page size máximo | 100 registros | Proteção de memória do Node.js |
+| Upload máximo | 10MB por arquivo | Limite do presigned URL |
+| Rate limit (por tenant) | 100 req/min por endpoint | Proteção contra abuso |
+
+## Testes de carga (definição mínima)
+
+- Cenário: 50 usuários simultâneos, 80% leitura / 20% escrita
+- Duração: 5 minutos
+- Target: zero erros 5xx, P95 dentro do SLA
+- Ferramenta: k6 ou Artillery
+```
+
+### EX-UX-001 — Padrão de Screen Manifest YAML (schema v1)
+
+Exemplo de manifesto declarativo de tela conforme DOC-ARC-003B (schema v1). Todo manifesto DEVE seguir esta estrutura.
+
+```yaml
+# docs/05_manifests/screens/ux-xxx-001.example-list.yaml
+id: ux-xxx-001
+title: "Lista de Exemplos"
+module: MOD-XXX
+route: /examples
+layout: main
+status: DRAFT
+
+permissions:
+  required_scopes:
+    - "example:item:read"
+
+sections:
+  - id: filters
+    type: filter-bar
+    fields:
+      - { name: search, type: text, placeholder: "Buscar..." }
+      - { name: status, type: select, options: [active, inactive] }
+
+  - id: data-table
+    type: table
+    source: GET /api/v1/examples
+    columns:
+      - { field: name, label: "Nome", sortable: true }
+      - { field: status, label: "Status", sortable: true }
+      - { field: created_at, label: "Criado em", format: date }
+    actions:
+      - { id: view, label: "Ver", route: "/examples/:id" }
+      - { id: edit, label: "Editar", scope: "example:item:write" }
+
+  - id: pagination
+    type: pagination
+    style: offset  # ou "cursor" para timelines
+
+telemetry:
+  screen_view: "examples_list_viewed"
+  actions:
+    - { trigger: view, event: "examples_item_viewed" }
+    - { trigger: edit, event: "examples_item_edit_started" }
+
+error_mapping:
+  401: { redirect: /login }
+  403: { toast: "Sem permissão para acessar esta lista." }
+```
+
+### EX-UX-010 — Catálogo de ações UX (action catalog)
+
+Exemplo de catálogo de ações declarativas para uma tela. Define todas as interações rastreáveis pela telemetria.
+
+```yaml
+# Action Catalog — tela UX-XXX-001
+actions:
+  - id: view_list
+    label: "Visualizar lista"
+    type: navigation
+    telemetry_event: "entity_list_viewed"
+    scope_required: "module:entity:read"
+
+  - id: create_new
+    label: "Criar novo"
+    type: command
+    telemetry_event: "entity_create_started"
+    scope_required: "module:entity:write"
+    triggers: [form_open]
+
+  - id: edit_item
+    label: "Editar"
+    type: command
+    telemetry_event: "entity_edit_started"
+    scope_required: "module:entity:write"
+    context: { entity_id: ":id" }
+
+  - id: delete_item
+    label: "Excluir"
+    type: command
+    telemetry_event: "entity_delete_requested"
+    scope_required: "module:entity:delete"
+    confirmation: true
+    confirmation_message: "Tem certeza que deseja excluir este item?"
+
+  - id: view_history
+    label: "Ver histórico"
+    type: navigation
+    telemetry_event: "entity_history_viewed"
+    scope_required: "module:entity:read"
+    route: "/entities/:id/history"
+
+  - id: export_list
+    label: "Exportar"
+    type: command
+    telemetry_event: "entity_export_started"
+    scope_required: "module:entity:export"
 ```
 
 ---

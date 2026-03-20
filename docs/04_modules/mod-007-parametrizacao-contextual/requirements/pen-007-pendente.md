@@ -1,0 +1,158 @@
+> ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+> - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
+> - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
+>
+> | Versão | Data       | Responsável | Status/Integração |
+> |--------|------------|-------------|-------------------|
+> | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) — Batch 4: opções/recomendações detalhadas, PEN-004..PEN-006 adicionados |
+| 0.3.0  | 2026-03-19 | arquitetura | PEN-002 decidida+implementada: Opção 1 (job independente, isolamento > DRY) |
+| 0.4.0  | 2026-03-19 | arquitetura | PEN-004 decidida+implementada: Opção 3 (flag auto_deprecate_previous, default=false) |
+| 0.5.0  | 2026-03-19 | arquitetura | PEN-003 decidida+implementada: Opção 2 (tabela auxiliar routine_integration_config, MOD-008 responsável pela migração) |
+| 0.6.0  | 2026-03-19 | arquitetura | PEN-001 decidida+implementada: Opção 1 (JSONLogic como engine v2 para condition_expr) |
+| 0.7.0  | 2026-03-19 | arquitetura | PEN-005 implementada (hard limit configurável por tenant), PEN-006 implementada (flag dry_run no evaluate) |
+> | 0.8.0  | 2026-03-20 | AGN-DEV-10  | Re-enriquecimento PENDENTE Batch 4 — PEN-007/PEN-008 adicionados (auto-deprecate links, bulk items) |
+> | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
+
+# PEN-007 — Questões Abertas da Parametrização Contextual e Rotinas
+
+- **estado_item:** DRAFT
+- **owner:** Marcos Sulivan
+- **data_ultima_revisao:** 2026-03-20
+- **rastreia_para:** US-MOD-007, BR-007, FR-007, INT-007, DATA-007, SEC-007, NFR-007, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005, ADR-006
+
+---
+
+## PEN-001 — condition_expr: Escopo e Sintaxe (v2)
+
+- **Descrição:** O campo `condition_expr` em `incidence_rules` e `routine_items` é nullable em v1 (motor ignora). Em v2, será necessário definir a sintaxe JSON do rule engine (ex: JSONLogic, CEL, custom DSL). O campo existe no schema (DATA-007) como `jsonb nullable` mas não é avaliado pelo motor em v1.
+- **Impacto:** F01 (incidence_rules), F02 (routine_items), F03 (motor de avaliação — passo 3 precisará interpretar condition_expr)
+- **Decisão pendente:** ~~Qual engine de expressão adotar? Prazo para v2?~~ **DECIDIDA + IMPLEMENTADA**
+- **Opções:**
+  1. **JSONLogic:** Biblioteca madura, JSON nativo, fácil de serializar/deserializar. Limitações em expressões complexas com contexto aninhado.
+  2. **CEL (Common Expression Language):** Mais expressivo, tipado, usado pelo Google. Requer compilação de expressão. Overhead maior que JSONLogic.
+  3. **Custom DSL:** Máximo controle, mas custo de desenvolvimento e manutenção elevado. Documentação e onboarding complexos.
+- **Recomendação:** JSONLogic para v2 (simplicidade, maturidade, serialização nativa em jsonb). Reavaliar CEL se limitações de JSONLogic forem encontradas durante uso real.
+- **Prioridade:** BAIXA (v1 funciona sem condições)
+- **rastreia_para:** FR-004, FR-006, FR-009, DATA-007 (incidence_rules.condition_expr, routine_items.condition_expr)
+
+### Resolução
+
+> **Decisão:** Opção 1 — JSONLogic como engine de expressão para condition_expr v2. Biblioteca madura, JSON nativo, serialização/deserialização direta em jsonb. Reavaliar CEL se limitações de JSONLogic forem encontradas durante uso real.
+> **Decidido por:** Marcos Sulivan em 2026-03-19
+> **Justificativa:** JSONLogic oferece o melhor equilíbrio entre simplicidade e poder expressivo para v2. Serialização nativa em JSON elimina camada de transformação — condition_expr armazenado em jsonb é diretamente interpretável pelo motor. Maturidade da biblioteca (json-logic-js) reduz risco. CEL permanece como fallback caso expressões complexas com contexto aninhado excedam capacidade do JSONLogic.
+> **Artefato de saída:** Decisão registrada em PEN-007. ADR futuro quando v2 iniciar (JSONLogic como engine).
+> **Implementado em:** Decisão arquitetural documentada; implementação física quando v2 do motor iniciar.
+
+---
+
+## PEN-002 — Background Job de Expiração: Compartilhar com MOD-004?
+
+- **Descrição:** O job de expiração de enquadradores (`framer-expiration.job.ts`, BR-002) usa o mesmo padrão do job de expiração de `access_delegations` no MOD-004. Ambos verificam `valid_until < now()` e mudam status para INACTIVE/EXPIRED.
+- **Impacto:** F01 (enquadradores), INT-007 (integração MOD-004), NFR-007 (resiliência do job)
+- **Decisão pendente:** ~~Reutilizar infraestrutura de jobs do MOD-004 ou criar job independente?~~ **DECIDIDA + IMPLEMENTADA**
+- **Opções:**
+  1. **Job independente no MOD-007:** Isolamento total. Falha no job do MOD-004 não afeta expiração de enquadradores. Duplicação de lógica de scheduling.
+  2. **Infraestrutura compartilhada (job runner genérico):** Extrair um job runner genérico para MOD-000 (Foundation) que aceite registros de entidades com `valid_until`. MOD-004 e MOD-007 registram suas entidades. Menos duplicação, mais acoplamento.
+  3. **Estender job do MOD-004:** Menor esforço, mas cria dependência circular (MOD-007 depende de MOD-004 para expiração).
+- **Recomendação:** Opção 1 (job independente) para v1 — isolamento é mais importante que DRY nesta fase. Revisitar Opção 2 quando houver 3+ módulos com jobs de expiração.
+- **Prioridade:** MEDIA
+- **rastreia_para:** BR-002, FR-002, DATA-003 (EVT-004 framer.expired), INT-007 (INT-002)
+
+### Resolução
+
+> **Decisão:** Opção 1 — Job independente no MOD-007. Isolamento total: falha no job do MOD-004 não afeta expiração de enquadradores. Duplicação de lógica de scheduling aceita nesta fase. Revisitar quando houver 3+ módulos com jobs de expiração.
+> **Decidido por:** Marcos Sulivan em 2026-03-19
+> **Justificativa:** Isolamento > DRY nesta fase. O job `framer-expiration.job.ts` tem scheduler próprio e healthcheck dedicado. Menor blast radius em caso de falha. Revisitar Opção 2 (job runner genérico no Foundation) quando houver 3+ módulos.
+> **Artefato de saída:** NFR-007 (decisão de isolamento documentada)
+> **Implementado em:** NFR-007
+
+---
+
+## PEN-003 — Rotina de Integração (MOD-008): Campos Específicos
+
+- **Descrição:** MOD-008 herdará `behavior_routines` com `routine_type=INTEGRATION`. A tabela `behavior_routines` já possui o campo `routine_type` (varchar) com valor default `BEHAVIOR`. MOD-008 adicionará registros com `routine_type=INTEGRATION` e possivelmente campos específicos (ex: `integration_target`, `mapping_config`, `retry_policy`).
+- **Impacto:** DATA-007 (behavior_routines), INT-007 (INT-004), schema de migração
+- **Decisão pendente:** ~~Escopo do MOD-008 ainda não definido. Campos específicos de integração serão colunas adicionais na mesma tabela ou tabela auxiliar com FK?~~ **DECIDIDA + IMPLEMENTADA**
+- **Opções:**
+  1. **Colunas nullable na tabela `behavior_routines`:** Simples. Campos de integração são nullable e ignorados quando `routine_type=BEHAVIOR`.
+  2. **Tabela auxiliar `routine_integration_config`:** Normalizado. FK para `behavior_routines.id` com `WHERE routine_type=INTEGRATION`. Mais limpo, sem colunas nullable.
+- **Recomendação:** Opção 2 (tabela auxiliar) — evita poluir a tabela principal com campos de outro módulo. MOD-008 é responsável pela migração da tabela auxiliar.
+- **Prioridade:** BAIXA (MOD-008 é wave futura)
+- **rastreia_para:** DATA-007, INT-007 (INT-004), ADR-003
+
+### Resolução
+
+> **Decisão:** Opção 2 — Tabela auxiliar `routine_integration_config` com FK para `behavior_routines.id` WHERE `routine_type=INTEGRATION`. Evita poluir a tabela principal com campos específicos de outro módulo. MOD-008 é responsável pela criação e migração da tabela auxiliar quando a wave chegar.
+> **Decidido por:** Marcos Sulivan em 2026-03-19
+> **Justificativa:** Normalização > simplicidade neste caso. Colunas nullable na tabela principal criariam acoplamento estrutural entre MOD-007 e MOD-008. A tabela auxiliar mantém ownership claro: MOD-007 possui `behavior_routines`, MOD-008 possui `routine_integration_config`. Alinhado com ADR-003.
+> **Artefato de saída:** Decisão registrada em PEN-007. MOD-008 implementa `routine_integration_config` quando wave chegar.
+> **Implementado em:** Decisão arquitetural documentada; migração física sob responsabilidade de MOD-008.
+
+---
+
+## PEN-004 — Fork Auto-Depreca Versão Anterior?
+
+- **Descrição:** Ao fazer fork de rotina PUBLISHED, a versão original permanece PUBLISHED. Isso permite que duas versões da mesma rotina (original e fork após publicação) coexistam como PUBLISHED, potencialmente vinculadas a regras de incidência diferentes. A questão é se o fork deveria auto-deprecar a versão anterior automaticamente.
+- **Impacto:** BR-008 (fork), BR-012 (deprecação), FR-005, FR-008, UX-007 (fluxo de fork)
+- **Decisão pendente:** ~~Fork deve auto-deprecar a versão PUBLISHED original?~~ **DECIDIDA + IMPLEMENTADA**
+- **Opções:**
+  1. **Não auto-deprecar (comportamento atual):** Administrador decide quando deprecar a versão anterior. Permite coexistência temporária de versões (ex: migração gradual de regras de incidência para a nova versão).
+  2. **Auto-deprecar ao publicar o fork:** Ao publicar a nova versão (fork), a versão anterior é automaticamente DEPRECATED. Simplifica gestão mas remove flexibilidade de migração gradual.
+  3. **Auto-deprecar com flag opcional:** `POST /admin/routines/:id/publish` aceita `{ auto_deprecate_previous: true }`. Default = false. Máxima flexibilidade.
+- **Recomendação:** Opção 3 (flag opcional) — combina segurança com flexibilidade. Default conservador (não depreca), mas permite automação quando desejado.
+- **Prioridade:** MEDIA
+- **rastreia_para:** BR-008, BR-012, FR-008, ADR-003, UX-007
+
+### Resolução
+
+> **Decisão:** Opção 3 — Flag opcional `auto_deprecate_previous: boolean` (default: false) no body de `POST /admin/routines/:id/publish`. Se true, a versão PUBLISHED anterior é automaticamente marcada DEPRECATED. Se false, coexistência permitida.
+> **Decidido por:** Marcos Sulivan em 2026-03-19
+> **Justificativa:** Combina segurança com flexibilidade. Default conservador (não depreca) protege contra deprecação acidental. Permite automação quando desejado. Alinhado com princípio de menor surpresa.
+> **Artefato de saída:** FR-007 (flag auto_deprecate_previous adicionado ao endpoint publish)
+> **Implementado em:** FR-007
+
+---
+
+## PEN-005 — Limites de Itens por Rotina e Regras por Enquadrador
+
+- **Descrição:** NFR-007 define SLOs baseados em "até 10 regras de incidência ativas e 50 routine_items". Contudo, não há limite técnico (constraint) impedindo a criação de mais itens ou regras. Se um administrador criar 500 itens em uma rotina ou 100 regras para um enquadrador, o motor pode exceder o SLO.
+- **Impacto:** NFR-001 (performance motor), NFR-007, FR-006 (itens), FR-004 (regras)
+- **Decisão pendente:** ~~Implementar limites técnicos (hard limits) ou apenas monitoramento (soft limits)?~~ **DECIDIDA + IMPLEMENTADA**
+- **Opções:**
+  1. **Hard limit via validação de endpoint:** POST /items retorna 422 se rotina já tem 50 itens. POST /incidence-rules retorna 422 se enquadrador já tem 10 regras. Seguro mas inflexível.
+  2. **Soft limit com warning no UX:** UI exibe warning ao ultrapassar threshold. Backend não bloqueia. Monitora e alerta via observabilidade.
+  3. **Hard limit configurável por tenant:** Limite default = 50 itens / 10 regras, mas configurável por tenant para cenários excepcionais.
+- **Recomendação:** Opção 3 (configurável por tenant) — combina proteção default com flexibilidade para cenários legítimos de alta complexidade.
+- **Prioridade:** MEDIA
+- **rastreia_para:** NFR-001, NFR-007, FR-004, FR-006, DATA-007
+
+### Resolução
+
+> **Decisão:** Opção 3 — Hard limit configurável por tenant. Default: 50 itens por rotina, 10 regras por enquadrador. Configurável por tenant para cenários excepcionais de alta complexidade. POST /items retorna 422 se limite atingido. POST /incidence-rules retorna 422 se limite atingido.
+> **Decidido por:** Marcos Sulivan em 2026-03-19
+> **Justificativa:** Combina proteção default com flexibilidade. Default protege motor dentro dos SLOs (< 200ms p95). Configuração por tenant via tabela tenant_config ou env var para cenários legítimos. Response 422: `{error: LIMIT_EXCEEDED, current: N, max: M, configurable: true}`.
+> **Artefato de saída:** NFR-007 (limites configuráveis) + FR-007 (validações 422 nos endpoints)
+> **Implementado em:** NFR-007, FR-007
+
+---
+
+## PEN-006 — Auditoria de Dry-Run: Persistir ou Não?
+
+- **Descrição:** O UX de dry-run (preview do motor) chama `POST /routine-engine/evaluate` com dados reais. Atualmente, o motor emite domain event `routine.applied` para toda avaliação com efeito (BR-010). Dry-runs do UX gerariam domain events "falsos" que poluiriam a timeline de auditoria.
+- **Impacto:** BR-010 (domain events condicionais), DATA-003 (EVT-012), UX-007 (dry-run preview), SEC-007 (auditoria)
+- **Decisão pendente:** ~~Dry-run deve persistir domain events?~~ **DECIDIDA + IMPLEMENTADA**
+- **Opções:**
+  1. **Flag `dry_run: true` no request body:** Motor executa normalmente mas NÃO persiste domain event. Response é idêntico mas sem side-effects.
+  2. **Endpoint separado `POST /routine-engine/dry-run`:** Endpoint dedicado sem persistência. Mais explícito no OpenAPI.
+  3. **Persistir com tag:** Domain event `routine.applied` com campo `is_dry_run: true`. Auditoria completa, mas timeline precisa de filtro para excluir dry-runs.
+- **Recomendação:** Opção 1 (flag `dry_run: true`) — menor impacto no schema de endpoints (25 endpoints já definidos), motor reutiliza toda a lógica, apenas suprime persistência do evento.
+- **Prioridade:** MEDIA
+- **rastreia_para:** BR-010, FR-009, DATA-003, UX-007, SEC-007
+
+### Resolução
+
+> **Decisão:** Opção 1 — Flag `dry_run: true` no request body de POST /routine-engine/evaluate. Motor executa normalmente mas NÃO persiste domain event `routine.applied` (EVT-012). Sem side-effects.
+> **Decidido por:** Marcos Sulivan em 2026-03-19
+> **Justificativa:** Menor impacto no schema de endpoints (25 endpoints já definidos). Motor reutiliza toda a lógica, apenas suprime emissão do domain event routine.applied (EVT-012). Response inclui `dry_run: true`. Sem persistência de efeitos.
+> **Artefato de saída:** FR-007 (flag dry_run adicionado ao FR-009, supressão de domain event)
+> **Implementado em:** FR-007

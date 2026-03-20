@@ -7,6 +7,8 @@
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Re-enriquecimento DATA-003 — adiciona sensitivity_level, EX-*, nota de desvio DATA-003 |
 > | 0.2.0  | 2026-03-16 | AGN-DEV-04  | Enriquecimento DATA-003 (enrich-agent) |
+> | 0.5.0  | 2026-03-18 | AGN-DEV-04  | PENDENTE-003 Opção A — UIActionEnvelope submit_change_password + correlação auth.password_changed |
+> | 0.4.0  | 2026-03-17 | AGN-DEV-04  | Enriquecimento Batch 2 — adiciona regras de estado de erro/timeout na telemetria, refs BR-009/BR-010 |
 
 # DATA-003 — Catálogo de Domain Events do Backoffice Admin
 
@@ -44,6 +46,7 @@ O MOD-001 é **UX-First**: não emite domain events no backend (essa responsabil
 |---|---|---|---|---|---|
 | `load_current_user` | auth_me | view | ✅ presente | 0 | requested → succeeded/failed |
 | `submit_logout` | auth_logout | submit | ✅ presente | 0 | requested → succeeded/failed |
+| `submit_change_password` | auth_change_password | submit | ✅ presente | 1 (credenciais) | requested → succeeded/failed |
 | `navigate_sidebar` | — | client_only | ✅ presente | 0 | ui_only=true |
 | `navigate_breadcrumb` | — | client_only | ✅ presente | 0 | ui_only=true |
 
@@ -52,6 +55,8 @@ O MOD-001 é **UX-First**: não emite domain events no backend (essa responsabil
 | action_id | operation_id | type | tenant_id | sensitivity | Ciclo de vida |
 |---|---|---|---|---|---|
 | `load_dashboard_profile` | auth_me | view | ✅ presente | 0 | requested → succeeded/failed |
+| `dashboard_skeleton_timeout` | — | client_only | ✅ presente | 0 | timeout (3s) → erro parcial (BR-009) |
+| `dashboard_retry` | auth_me | view | ✅ presente | 0 | requested → succeeded/failed (BR-010) |
 
 ## Correlação UI ↔ Backend Domain Events
 
@@ -62,8 +67,20 @@ O MOD-001 é **UX-First**: não emite domain events no backend (essa responsabil
 | submit_logout (succeeded) | `auth.logout` | X-Correlation-ID |
 | submit_forgot_password (succeeded) | `auth.password_reset_requested` | X-Correlation-ID |
 | submit_reset_password (succeeded) | `auth.password_reset_completed` | X-Correlation-ID |
+| submit_change_password (succeeded) | `auth.password_changed` | X-Correlation-ID |
 | load_current_user (succeeded) | — (leitura, sem evento) | X-Correlation-ID |
 | load_dashboard_profile (succeeded) | — (leitura, sem evento) | X-Correlation-ID |
+
+## Regras de Telemetria em Estados de Erro e Timeout
+
+| Cenário | UIActionEnvelope | status | Campos extras | Referência |
+|---|---|---|---|---|
+| auth_me timeout > 3s (Dashboard) | `load_dashboard_profile` | `failed` | `duration_ms ≥ 3000`, `problem_type: "timeout"` | BR-009, FR-005 |
+| auth_me 5xx (Dashboard) | `load_dashboard_profile` | `failed` | `http_status: 5xx`, `problem_type` de RFC 9457 | BR-010, FR-005 |
+| Retry após timeout/5xx | `dashboard_retry` | `requested → succeeded/failed` | Novo `correlation_id` UUID v4 | BR-009, BR-010 |
+| auth_me 401 (qualquer tela) | `load_current_user` | `failed` | `http_status: 401` → interceptor redirect /login | SEC-001, FR-004 |
+
+> **Nota:** O evento `dashboard_skeleton_timeout` e client_only e NAO gera requisicao HTTP. Apenas registra a transicao de skeleton para estado de erro na UI. O `dashboard_retry` dispara um novo GET /auth/me.
 
 ## Campos do UIActionEnvelope (DOC-ARC-003 §2)
 
@@ -81,7 +98,7 @@ O MOD-001 é **UX-First**: não emite domain events no backend (essa responsabil
 
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
-- **rastreia_para:** US-MOD-001-F02, FR-006, BR-001, BR-002, BR-006, SEC-EventMatrix, DOC-ARC-003, DOC-FND-000
+- **data_ultima_revisao:** 2026-03-18
+- **rastreia_para:** US-MOD-001-F01, US-MOD-001-F02, US-MOD-001-F03, FR-005, FR-006, FR-007, BR-001, BR-002, BR-006, BR-009, BR-010, SEC-002, DOC-ARC-003, DOC-FND-000, INT-006, PEN-001-003
 - **referencias_exemplos:** EX-CI-007
 - **evidencias:** N/A

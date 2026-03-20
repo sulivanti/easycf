@@ -1,11 +1,16 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
+>
+> | Versão | Data       | Responsável | Status/Integração |
+> |--------|------------|-------------|-------------------|
+> | 0.9.1  | 2026-03-17 | arquitetura | Baseline enriquecido |
+> | 0.10.0 | 2026-03-17 | AGN-DEV-01  | Enriquecimento MOD/Escala — valida nível 1, atualiza module_paths, reforça escopo |
 
 # MOD-001 — Backoffice Admin (UX-First Shell)
 
 - **id:** MOD-001
-- **version:** 0.9.1
+- **version:** 0.10.0
 - **estado_item:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-17
@@ -56,7 +61,7 @@ Módulo UX-First sem lógica de domínio própria. Consome endpoints do MOD-000 
 
 ## 4. Dependências
 
-- **Depende de:** MOD-000 (Foundation) — auth_login, auth_logout, auth_forgot_password, auth_reset_password, auth_me
+- **Depende de:** MOD-000 (Foundation) — auth_login, auth_logout, auth_forgot_password, auth_reset_password, auth_me, auth_change_password
 - **Dependentes:** MOD-002+ (todos os módulos frontend utilizam o Application Shell — Sidebar, Header, Breadcrumb — provido por este módulo para navegação e layout)
 
 ### Caminhos do Módulo (module_paths)
@@ -64,8 +69,10 @@ Módulo UX-First sem lógica de domínio própria. Consome endpoints do MOD-000 
 | Camada | Path |
 |---|---|
 | Especificação | `docs/04_modules/mod-001-backoffice-admin/` |
+| Requisitos | `docs/04_modules/mod-001-backoffice-admin/requirements/` (br/, fr/, data/, sec/, ux/, nfr/, int/) |
+| ADRs | `docs/04_modules/mod-001-backoffice-admin/adr/` |
 | User Stories | `docs/04_modules/user-stories/features/US-MOD-001-F*.md` |
-| Épico | `docs/04_modules/user-stories/epics/US-MOD-001.md` |
+| Epico | `docs/04_modules/user-stories/epics/US-MOD-001.md` |
 | Screen Manifests | `docs/05_manifests/screens/ux-auth-001.login.yaml`, `ux-shell-001.app-shell.yaml`, `ux-dash-001.main.yaml` |
 | Web — UI | `apps/web/src/modules/backoffice-admin/ui/screens/`, `apps/web/src/modules/backoffice-admin/ui/components/` |
 | Web — Domain | `apps/web/src/modules/backoffice-admin/domain/` (view-model, rules) |
@@ -84,18 +91,22 @@ Módulo UX-First sem lógica de domínio própria. Consome endpoints do MOD-000 
 <!-- start index -->
 - [BR-001](requirements/br/BR-001.md) — Regras de Negócio do Backoffice Admin
 - [FR-001](requirements/fr/FR-001.md) — Requisitos Funcionais do Backoffice Admin
+- [FR-007](requirements/fr/FR-007.md) — Alteração de Senha via ProfileWidget
 - [DATA-001](requirements/data/DATA-001.md) — Modelo de Dados do Backoffice Admin
 - [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events do Backoffice Admin
 - [INT-001](requirements/int/INT-001.md) — Integrações e Contratos do Backoffice Admin
+- [INT-006](requirements/int/INT-006.md) — Contrato de Integração: Alteração de Senha
 - [SEC-001](requirements/sec/SEC-001.md) — Segurança e Compliance do Backoffice Admin
-- [SEC-EventMatrix](requirements/sec/SEC-EventMatrix.md) — Matriz de Autorização de Eventos do Backoffice Admin
+- [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos do Backoffice Admin
 - [UX-001](requirements/ux/UX-001.md) — Jornadas e Fluxos do Backoffice Admin
 - [NFR-001](requirements/nfr/NFR-001.md) — Requisitos Não Funcionais do Backoffice Admin
-- [PENDENTE-001](requirements/PENDENTE-001.md) — Questões Abertas do Backoffice Admin
+- [PEN-001](requirements/pen-001-pendente.md) — Questões Abertas do Backoffice Admin
 <!-- end index -->
 
 ## 7. Decisões (ADR)
 
 <!-- start adr-index -->
 - [ADR-001](adr/ADR-001__nivel_1_clean_leve.md) — Nível 1 (Clean Leve) para Módulo UX-First com Score 1/6
+- [ADR-002](adr/ADR-002__telemetria_pre_pos_auth.md) — Separação de Telemetria Pré/Pós-Autenticação via UIActionEnvelope
+- [ADR-003](adr/ADR-003__zero_blank_screen.md) — Princípio Zero-Blank-Screen com Skeleton Timeout de 3 Segundos
 <!-- end adr-index -->

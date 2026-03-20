@@ -1,15 +1,15 @@
 # US-MOD-011-F04 — UX: Grade de Exclusão em Massa (UX-SGR-003)
 
-**Status Ágil:** `READY` (aguarda PEND-SGR-02 — F01)
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-011** (SmartGrid — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010
 
 ## Metadados de Governança
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-011, US-MOD-011-F01
 - **tipo:** UX — grade de exclusão em massa
 - **epico_pai:** US-MOD-011
@@ -89,6 +89,7 @@ Funcionalidade: Exclusão em Massa — UX-SGR-003
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Grade de exclusão em massa, 5 cenários Gherkin, manifest UX-SGR-003. |
+| 1.1.0 | 2026-03-19 | arquitetura | APPROVED. PEND-SGR-02 resolvida. Cascata do épico US-MOD-011. |
 
 ---
 

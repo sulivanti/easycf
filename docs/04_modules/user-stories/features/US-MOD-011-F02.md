@@ -1,16 +1,16 @@
 # US-MOD-011-F02 — UX: Grade de Inclusão em Massa (UX-SGR-001)
 
-**Status Ágil:** `READY` (aguarda PEND-SGR-01)
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-011** (SmartGrid — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 **operationIds consumidos:** `routine_engine_evaluate`, `admin_framers_list`
 
 ## Metadados de Governança
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-011, US-MOD-011-F01, US-MOD-007-F03, DOC-UX-010
 - **tipo:** UX — grade editável de inclusão em massa
 - **epico_pai:** US-MOD-011
@@ -113,6 +113,7 @@ Funcionalidade: Grade de Inclusão em Massa — UX-SGR-001
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Grade de inclusão em massa, 11 cenários Gherkin, manifest UX-SGR-001. |
+| 1.1.0 | 2026-03-19 | arquitetura | APPROVED. PEND-SGR-01 resolvida. Cascata do épico US-MOD-011. |
 
 ---
 

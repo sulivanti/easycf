@@ -1,16 +1,16 @@
 # US-MOD-006-F03 — UX: Painel do Caso em Andamento (UX-CASE-001)
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-18
 **Módulo Destino:** **MOD-006** (Execução de Casos — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 
 ## Metadados de Governança
 
-- **status_agil:** READY
-- **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **status_agil:** APPROVED
+- **owner:** Marcos Sulivan
+- **data_ultima_revisao:** 2026-03-18
 - **rastreia_para:** US-MOD-006, US-MOD-006-F01, US-MOD-006-F02, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — painel de caso em andamento
@@ -174,7 +174,7 @@ Funcionalidade: Painel do Caso — UX-CASE-001
 - [x] Manifest UX-CASE-001 criado
 - [x] F01/F02 em READY (APIs consumidas pelo painel)
 - [x] Gherkin com 14 cenários cobrindo todas as abas e estados do caso
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED ✅ (2026-03-18)
 
 ## 7. Definition of Done (DoD)
 
@@ -194,6 +194,7 @@ Funcionalidade: Painel do Caso — UX-CASE-001
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Painel do caso com 4 abas, 14 cenários Gherkin, manifest UX-CASE-001. |
+| 1.1.0 | 2026-03-18 | Marcos Sulivan | Revisão final e promoção para APPROVED. |
 
 ---
 

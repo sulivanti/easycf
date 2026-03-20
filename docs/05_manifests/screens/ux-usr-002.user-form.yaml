@@ -1,7 +1,7 @@
 # ============================================================
 # Screen Manifest — UX-USR-002
 # Tela: Formulário de Cadastro de Usuário (MOD-002)
-# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# Schema: v1 | Versão: 1.1.0 | Data: 2026-03-17
 # ============================================================
 # Dois modos: "Enviar Convite" (padrão) e "Senha Temporária".
 # Idempotency-Key (UUID v4) gerado no mount do formulário.
@@ -9,6 +9,7 @@
 # Erros 422: inline por campo. Erros 409: inline no campo e-mail.
 # ============================================================
 
+schema_version: "v1"
 manifest_version: 1
 screen_id: UX-USR-002
 name: Formulário de Cadastro de Usuário
@@ -34,21 +35,21 @@ telemetry_defaults:
     - X-Correlation-ID
 
 permissions:
-  write: users:write
+  write: users:user:write
 
 actions:
   - action: view
     client_only: false
     operation_ids:
       - roles_list
-    permission: users:write
+    permission: users:user:write
     # Carrega perfis disponíveis para o select
 
   - action: create
     client_only: false
     operation_ids:
       - users_create
-    permission: users:write
+    permission: users:user:write
     # POST /api/v1/users com Idempotency-Key
     # Modo convite: { mode: "invite" }
     # Modo senha: { password, forcePasswordReset: true }
@@ -56,7 +57,7 @@ actions:
   - action: cancel
     client_only: true
     operation_ids: []
-    permission: users:write
+    permission: users:user:write
     # Descarta formulário e redireciona para /usuarios
 
 ui_rules:

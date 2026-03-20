@@ -241,7 +241,7 @@ Funcionalidade: API Core de Estrutura Organizacional
 5. **Vinculação só em N4**: `org_unit_tenant_links` rejeita `org_unit_id` com `nivel != 4`
 6. **X-Correlation-ID obrigatório** em todas as respostas (sucesso e erro RFC 9457)
 7. **Idempotência em POST**: `Idempotency-Key` suportado com TTL 60s para `org_units_create` e `org_units_link_tenant`
-8. **Tree query**: latência alvo < 200ms para árvores com até 100 nós (índice em `parent_id`, cache de árvore invalidado em alterações)
+8. **Tree query**: latência alvo < 200ms para árvores com até 100 nós (índice em `parent_id`, sem cache — todas as chamadas executam ao vivo)
 9. **Paginação flat**: `GET /org-units` usa cursor-based pagination (não tree)
 
 ---
@@ -273,7 +273,7 @@ Funcionalidade: API Core de Estrutura Organizacional
 - [ ] Todos os endpoints documentados no OpenAPI com Spectral lint passando
 - [ ] Testes unitários: regras de integridade da árvore (loop, nivel, soft delete)
 - [ ] Testes de integração: CTE tree query com árvore real de 50+ nós
-- [ ] Testes de performance: tree query < 200ms com 100 nós (índice validado, cache de árvore)
+- [ ] Testes de performance: tree query < 200ms com 100 nós (índice validado, sem cache)
 - [ ] domain_events emitidos e verificados para todos os eventos
 - [ ] Idempotency-Key testado em create e link_tenant
 - [ ] RBAC: todos os endpoints retornam 403 sem scope correto

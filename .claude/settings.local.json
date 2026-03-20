@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(ralph-wiggum:ralph-loop)",
+      "Bash(pnpm run:*)",
+      "Bash(ls -1 /d/Dev/EasyCodeFramework/.claude/commands/*.md)",
+      "Bash(grep -r 'Referência de arquivo quebrada' /d/Dev/EasyCodeFramework --include=*.py --include=*.js --include=*.mjs)",
+      "Bash(ls D:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-param-001* D:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-rotina-001*)"
+    ]
+  }
+}

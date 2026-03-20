@@ -5,11 +5,11 @@
 # MOD-005 — Modelagem de Processos (Blueprint)
 
 - **id:** MOD-005
-- **version:** 0.12.0
+- **version:** 0.17.0
 - **estado_item:** DRAFT
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-17
-- **rastreia_para:** US-MOD-005, US-MOD-005-F01, US-MOD-005-F02, US-MOD-005-F03, US-MOD-005-F04, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-FND-000, MOD-000, MOD-003, MOD-004
+- **data_ultima_revisao:** 2026-03-18
+- **rastreia_para:** US-MOD-005, US-MOD-005-F01, US-MOD-005-F02, US-MOD-005-F03, US-MOD-005-F04, DOC-DEV-001, DOC-ESC-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-FND-000, MOD-000, MOD-003, MOD-004
 - **evidencias:** N/A
 
 ---
@@ -45,7 +45,7 @@ Módulo responsável pela **modelagem de processos** (blueprint), definindo como
 
 **Nível 2 — DDD-lite + Full Clean** (DOC-ESC-001 §7)
 
-Módulo com domínio rico: máquina de estados (DRAFT → PUBLISHED → DEPRECATED), invariantes de integridade (estágio inicial único, imutabilidade de PUBLISHED, deleção protegida), grafo de transições com validações cross-entidade, e fork atômico de estrutura completa. Possui 7 tabelas próprias, 25 endpoints administrativos, 9 domain events, e integração com MOD-000 (RBAC + audit trail) e MOD-006 (integridade referencial em runtime).
+Módulo com domínio rico: máquina de estados (DRAFT → PUBLISHED → DEPRECATED), invariantes de integridade (estágio inicial único, imutabilidade de PUBLISHED, deleção protegida), grafo de transições com validações cross-entidade, e fork atômico de estrutura completa. Possui 7 tabelas próprias, 26 endpoints administrativos, 19 domain events, e integração com MOD-000 (RBAC + audit trail) e MOD-006 (integridade referencial em runtime). 13 requisitos funcionais (FR-001 a FR-013), 10 regras de negócio (BR-001 a BR-010), 4 ADRs aceitas, e 2 telas UX (editor visual + configurador de estágio).
 
 ### Justificativa (Score DOC-ESC-001 §4.2: 5/6)
 
@@ -79,7 +79,7 @@ apps/api/src/modules/process-modeling/
       cycle-fork.service.ts    # Fork atômico de estrutura completa
       flow-graph.service.ts    # Montagem do grafo para /flow
     domain-events/
-      process-events.ts        # 9 domain events (DATA-003)
+      process-events.ts        # 19 domain events (DATA-003)
     errors/
       cycle-immutable.error.ts
       cross-cycle-transition.error.ts
@@ -186,10 +186,10 @@ apps/web/src/modules/process-modeling/
 - [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events da Modelagem de Processos
 - [INT-005](requirements/int/INT-005.md) — Integrações e Contratos da Modelagem de Processos
 - [SEC-005](requirements/sec/SEC-005.md) — Segurança e Compliance da Modelagem de Processos
-- [SEC-EventMatrix](requirements/sec/SEC-EventMatrix.md) — Matriz de Autorização de Eventos da Modelagem de Processos
+- [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos da Modelagem de Processos
 - [UX-005](requirements/ux/UX-005.md) — Jornadas e Fluxos da Modelagem de Processos
 - [NFR-005](requirements/nfr/NFR-005.md) — Requisitos Não Funcionais da Modelagem de Processos
-- [PENDENTE-005](requirements/PENDENTE-005.md) — Questões Abertas da Modelagem de Processos
+- [PEN-005](requirements/pen-005-pendente.md) — Questões Abertas da Modelagem de Processos
 <!-- end index -->
 
 ## 7. Decisões (ADR)
@@ -197,4 +197,6 @@ apps/web/src/modules/process-modeling/
 <!-- start adr-index -->
 - [ADR-001](adr/ADR-001.md) — Garantia de Estágio Inicial Único por Ciclo (Trigger vs. Campo Denormalizado)
 - [ADR-002](adr/ADR-002.md) — Estratégia Fail-Safe na Integração MOD-005 → MOD-006 (Deleção Protegida)
+- [ADR-003](adr/ADR-003.md) — Fork Atômico via Transação Única com Remapeamento de UUIDs
+- [ADR-004](adr/ADR-004.md) — Optimistic Locking via `updated_at` para Edição Concorrente de Ciclos DRAFT
 <!-- end adr-index -->

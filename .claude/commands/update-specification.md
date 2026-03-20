@@ -10,19 +10,28 @@ $ARGUMENTS deve conter o caminho do arquivo a ser atualizado. Se não fornecido,
 
 ## Regra de Governança: Delegação para create-amendment
 
-Quando o arquivo em edição for um **arquivo de módulo** (`BR-`, `FR-`, `DATA-`, `SEC-`, `UX-`, `NFR-`, `INT-`) localizado em `docs/04_modules/`:
-
-**NÃO aplique edição direta. DELEGUE IMEDIATAMENTE para `/project:create-amendment`.**
+Quando o arquivo em edição for um **arquivo de módulo** (`BR-`, `FR-`, `DATA-`, `SEC-`, `UX-`, `NFR-`, `INT-`, `ADR-`, `PENDENTE-`) localizado em `docs/04_modules/`, **ou** uma user story (`US-MOD-*`) em `docs/04_modules/user-stories/`:
 
 Fluxo de decisão:
 
 ```text
-Arquivo está em docs/04_modules/mod-*/requirements/**?
-├── SIM → Interrompa. Invoque /project:create-amendment com:
+Arquivo está em docs/04_modules/mod-*/requirements/** ou docs/04_modules/mod-*/adr/**?
+├── estado_item = DRAFT → Edição direta permitida (DOC-DEV-001 §0.3)
+├── estado_item = READY → DELEGUE para /project:create-amendment
 │         - Caminho da User Story ou motivação
-│         - Pilar afetado (br | fr | data | int | sec | ux | nfr)
+│         - Pilar afetado (br | fr | data | int | sec | ux | nfr | adr)
 │         - Natureza: M (Melhoria) | C (Correção) | R (Revisão)
-└── NÃO → Continue para as regras genéricas abaixo.
+└── estado_item = ACEITA (ADR) → DELEGUE para /project:create-amendment
+
+Arquivo está em docs/04_modules/user-stories/**?
+├── status_agil = TODO ou IN_PROGRESS → Edição direta permitida
+├── status_agil = READY ou DONE → DELEGUE para /project:create-amendment
+│         - Motivação da alteração
+│         - Natureza: M (Melhoria) | C (Correção) | R (Revisão)
+└── status_agil = REJECTED → NÃO EDITE (arquivado)
+
+Arquivo NÃO está em docs/04_modules/?
+└── Continue para as regras genéricas abaixo.
 ```
 
 > Nunca remova a tag `> ⚠️ ARQUIVO GERIDO POR AUTOMAÇÃO` do topo de arquivos de módulo.

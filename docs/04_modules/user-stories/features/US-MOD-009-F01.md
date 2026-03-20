@@ -1,6 +1,6 @@
 # US-MOD-009-F01 — API: Regras de Controle e Alçada
 
-**Status Ágil:** `READY`
+**Status Ágil:** `APPROVED`
 **Versão:** 1.0.0
 **Data:** 2026-03-15
 **Módulo Destino:** **MOD-009** (Aprovações e Alçadas — Backend)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-009, US-MOD-007, US-MOD-004, DOC-ARC-001
@@ -126,7 +126,7 @@ Funcionalidade: Regras de Controle e Alçada
 - [x] Modelo definido (movement_control_rules, approval_rules)
 - [x] 4 critérios de alçada documentados
 - [x] Gherkin com 7 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (cascata do épico 2026-03-19)
 
 ## 8. Definition of Done (DoD)
 

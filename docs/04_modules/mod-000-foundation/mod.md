@@ -1,14 +1,20 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
+>
+> | Versão | Data       | Responsável | Status/Integração |
+> |--------|------------|-------------|-------------------|
+> | 0.1.0  | 2026-03-15 | arquitetura | Baseline Inicial (forge-module) |
+> | 0.2.1  | 2026-03-17 | AGN-DEV-01  | Re-validação MOD/Escala — CHANGELOG sincronizado, consistência verificada |
+> | 0.2.0  | 2026-03-17 | AGN-DEV-01  | Enriquecimento MOD/Escala — fix contagem eventos, atualização metadata |
 
 # MOD-000 — Foundation (Framework de Automação / Geradores)
 
 - **id:** MOD-000
-- **version:** 0.1.0
+- **version:** 0.10.0
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-18
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-GNP-00, DOC-ESC-001, DOC-GPA-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-PADRAO-001, DOC-PADRAO-002, DOC-PADRAO-004, DOC-PADRAO-005, DOC-FND-000
 - **evidencias:** N/A
 
@@ -105,16 +111,16 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 ## 6. Itens Base (Canônicos) e Links
 
 <!-- start index -->
-- [BR-000](requirements/br/BR-000.md) — Regras de Negócio do Foundation (12 regras)
-- [FR-000](requirements/fr/FR-000.md) — Requisitos Funcionais do Foundation (14 requisitos)
+- [BR-000](requirements/br/BR-000.md) — Regras de Negócio do Foundation (14 regras)
+- [FR-000](requirements/fr/FR-000.md) — Requisitos Funcionais do Foundation (19 requisitos)
 - [DATA-000](requirements/data/DATA-000.md) — Modelo de Dados do Foundation (8 entidades)
-- [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events do Foundation (28 eventos)
+- [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events do Foundation (34 eventos)
 - [INT-000](requirements/int/INT-000.md) — Integrações e Contratos do Foundation (6 integrações)
 - [SEC-000](requirements/sec/SEC-000.md) — Segurança e Compliance do Foundation (8 seções)
-- [SEC-EventMatrix](requirements/sec/SEC-EventMatrix.md) — Matriz de Autorização de Eventos do Foundation (28 entradas)
+- [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos do Foundation (34 entradas)
 - [UX-000](requirements/ux/UX-000.md) — Jornadas e Fluxos do Foundation (8 telas/jornadas)
 - [NFR-000](requirements/nfr/NFR-000.md) — Requisitos Não Funcionais do Foundation (SLOs, observabilidade, DR)
-- [PENDENTE-000](requirements/PENDENTE-000.md) — Questões Abertas do Foundation (4 pendências)
+- [PEN-000](requirements/pen-000-pendente.md) — Questões Abertas do Foundation (7 pendências)
 <!-- end index -->
 
 ## 7. Decisões (ADR)
@@ -123,4 +129,13 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [ADR-001](adr/ADR-001.md#adr-001--sessão-ancorada-em-banco-desvio-de-stateless-jwt) — Sessão Ancorada em Banco (Desvio de Stateless JWT) — accepted
 - [ADR-002](adr/ADR-001.md#adr-002--substituição-total-de-escopos-em-roles-put-vs-patch) — Substituição Total de Escopos em Roles (PUT vs PATCH) — accepted
 - [ADR-003](adr/ADR-001.md#adr-003--separação-de-tabelas-users--content_users) — Separação de Tabelas users / content_users — accepted
+- [ADR-004](adr/ADR-004.md) — Vinculação SSO com Confirmação de Senha Nativa (Identity Linking) — accepted
 <!-- end adr-index -->
+
+## 8. Amendments
+
+<!-- start amendments-index -->
+- [DOC-PADRAO-005-C01](amendments/normativos/DOC-PADRAO-005-C01.md) — Limites de anexos configuráveis por entity_type (PENDENTE-004)
+- [DOC-FND-000-M01](amendments/sec/DOC-FND-000-M01.md) — 6 scopes process:case:* registrados no catálogo canônico §2.2 (MOD-006, PEN-006 PENDENTE-004)
+- [DOC-FND-000-M02](amendments/sec/DOC-FND-000-M02.md) — 7º scope process:case:reopen no catálogo §2.2 (PEN-006 PENDENTE-001)
+<!-- end amendments-index -->

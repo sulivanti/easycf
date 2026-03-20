@@ -6,6 +6,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-17 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
+> | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Re-enriquecimento DATA — soft-delete policies, FK ON DELETE, estimativas de volume adicionadas |
 
 # DATA-005 — Modelo de Dados da Modelagem de Processos
 
@@ -222,6 +223,38 @@ CREATE TRIGGER trg_stages_set_cycle_id
 
 ---
 
+## 2.8 Política de Soft Delete por Entidade
+
+| Entidade | Soft Delete | Constraint ON DELETE FK | Justificativa |
+|---|---|---|---|
+| `process_cycles` | SIM (`deleted_at`) | RESTRICT em `process_macro_stages.cycle_id` | Macroetapas devem ser desativadas primeiro (BR-005) |
+| `process_macro_stages` | SIM (`deleted_at`) | RESTRICT em `process_stages.macro_stage_id` | Estágios devem ser desativados primeiro (BR-005) |
+| `process_stages` | SIM (`deleted_at`) | RESTRICT via consulta MOD-006 (INT-005 §4.1) | Instâncias ativas impedem deleção (BR-005) |
+| `process_gates` | SIM (`deleted_at`) | Nenhuma FK dependente | Deleção livre quando ciclo DRAFT |
+| `process_roles` | SIM (`deleted_at`) | RESTRICT em `stage_role_links.role_id` | Papel com vínculos ativos não pode ser deletado |
+| `stage_role_links` | NAO (hard delete) | — | Sem dependências downstream |
+| `stage_transitions` | NAO (hard delete) | — | Sem dependências downstream |
+
+> **Nota:** Todas as queries de listagem MUST filtrar `WHERE deleted_at IS NULL` nas entidades com soft delete.
+
+---
+
+## 2.9 Estimativa de Volume por Tenant
+
+| Entidade | Volume estimado (por tenant) | Crescimento | Observação |
+|---|---|---|---|
+| `process_cycles` | 5-50 | Baixo | Blueprints de processo tendem a ser estáveis |
+| `process_macro_stages` | 20-200 | Baixo | ~4 macroetapas por ciclo |
+| `process_stages` | 50-500 | Baixo | ~10 estágios por ciclo |
+| `process_gates` | 100-1000 | Baixo | ~2 gates por estágio |
+| `process_roles` | 5-20 | Muito baixo | Catálogo global reutilizável |
+| `stage_role_links` | 100-500 | Baixo | ~2 papéis por estágio |
+| `stage_transitions` | 50-500 | Baixo | ~1-3 transições por estágio |
+
+> **Impacto em /flow:** Com grafos de até 50 estágios, a query JOINs retorna ~200-500 linhas. SLA <200ms é viável sem cache.
+
+---
+
 ## 3. Seed Data Recomendado
 
 ### 3.1 Papéis de Processo (process_roles)
@@ -295,6 +328,6 @@ WHERE current_stage_id = :stage_id
 - **estado_item:** DRAFT
 - **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-17
-- **rastreia_para:** US-MOD-005, US-MOD-005-F01, US-MOD-005-F02, DOC-ARC-001, DOC-ARC-002, BR-005, SEC-EventMatrix
-- **referencias_exemplos:** N/A
+- **rastreia_para:** US-MOD-005, US-MOD-005-F01, US-MOD-005-F02, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, BR-005, BR-006, BR-012, SEC-002, SEC-005, DATA-003
+- **referencias_exemplos:** EX-DATA-001
 - **evidencias:** N/A

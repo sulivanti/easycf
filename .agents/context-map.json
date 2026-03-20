@@ -6,7 +6,7 @@
       "docs": [
         { "id": "DOC-DEV-001", "sections": "*", "reason": "Template de especificação executável e ciclo de vida" },
         { "id": "DOC-DEV-002", "sections": "*", "reason": "Pipeline XP e template Mermaid CHANGELOG" },
-        { "id": "DOC-FND-000", "sections": ["§3"], "reason": "SEC-EventMatrix modelo canônico para stubs" }
+        { "id": "DOC-FND-000", "sections": ["§3"], "reason": "SEC-002 modelo canônico para stubs" }
       ]
     },
     "validate-openapi": {
@@ -20,7 +20,7 @@
         { "id": "DOC-GNP-00", "sections": "*", "reason": "Regras consolidadas MUST/SHOULD" },
         { "id": "DOC-ARC-003", "sections": ["§2"], "reason": "UIActionEnvelope e domain events" },
         { "id": "DOC-PADRAO-002", "sections": "*", "reason": "Dependências NodeJS autorizadas" },
-        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "RBAC scopes e SEC-EventMatrix" }
+        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "RBAC scopes e SEC-002" }
       ]
     },
     "validate-endpoint": {
@@ -106,7 +106,7 @@
     "enrich-agent": {
       "docs": [
         { "id": "PKG-DEV-001", "sections": "*", "reason": "System prompts e schemas dos 11 agentes" },
-        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "Anti-patterns Foundation e SEC-EventMatrix canônico" }
+        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "Anti-patterns Foundation e SEC-002 canônico" }
       ]
     },
     "promote-module": {

@@ -6,6 +6,9 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-15 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-15 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
+> | 0.5.0  | 2026-03-18 | usuário     | Nota chave amigável tenant_users: concatenação userId+tenantCode em runtime (PENDENTE-003 opção A) |
+| 0.4.0  | 2026-03-18 | usuário     | Correção CHECK regex role_permissions 2-seg → 3-seg (PENDENTE-006, DOC-FND-000 §2.1) |
+| 0.3.0  | 2026-03-17 | AGN-DEV-04  | Revisão metadata (data_ultima_revisao) |
 
 # DATA-000 — Modelo de Dados do Foundation
 
@@ -108,7 +111,7 @@ Toda entidade principal do Foundation DEVE conter:
 |---|---|---|---|---|
 | `id` | uuid | NOT NULL | PK | |
 | `role_id` | uuid | NOT NULL | FK→roles.id ON DELETE RESTRICT | |
-| `scope` | varchar(100) | NOT NULL | CHECK(regex ^[a-z][a-z0-9_]*:[a-z][a-z0-9_]*$) | BR-005 |
+| `scope` | varchar(100) | NOT NULL | CHECK(regex ^[a-z][a-z0-9_]*(:[a-z][a-z0-9_]*){1,2}$) | BR-005, DOC-FND-000 §2.1 |
 
 **Índices:** `UNIQUE(role_id, scope)` — sem duplicatas de escopo por role
 
@@ -123,6 +126,8 @@ Toda entidade principal do Foundation DEVE conter:
 | `created_at` | timestamptz | NOT NULL | default=now() | |
 | `updated_at` | timestamptz | NOT NULL | default=now() | |
 | `deleted_at` | timestamptz | NULL | | Soft-delete (LGPD) |
+
+> **Chave amigável (PENDENTE-003, Opção A):** `tenant_users` **não possui** campo `codigo` próprio. Para referência em APIs externas e importação/exportação, expor a concatenação `{userId}+{tenantCode}` como identificador amigável derivado em runtime. Sem mudança no schema — campo `codigo` poderá ser adicionado no futuro se demanda concreta surgir.
 
 ### 8. `domain_events` — Tabela Unificada de Eventos
 
@@ -171,7 +176,7 @@ erDiagram
 
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-18
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F05, US-MOD-000-F06, US-MOD-000-F07, US-MOD-000-F09, FR-000, BR-000, SEC-000, DOC-FND-000, DOC-ARC-003
 - **referencias_exemplos:** DOC-FND-000 §1-§3 (contratos auth/RBAC/events), DOC-ARC-003 §1-§4 (rastreabilidade)
 - **evidencias:** Extraído de US-MOD-000-F01, F05, F06, F07, F09

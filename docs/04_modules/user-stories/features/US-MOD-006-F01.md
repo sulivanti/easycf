@@ -1,16 +1,16 @@
 # US-MOD-006-F01 — API: Abertura de Caso e Motor de Transição
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-18
 **Módulo Destino:** **MOD-006** (Execução de Casos — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 
 ## Metadados de Governança
 
-- **status_agil:** READY
-- **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **status_agil:** APPROVED
+- **owner:** Marcos Sulivan
+- **data_ultima_revisao:** 2026-03-18
 - **rastreia_para:** US-MOD-006, US-MOD-005-F01, US-MOD-005-F02, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (domínio rico, transições com invariantes, audit trail completo)
 - **tipo:** Backend — cria novos endpoints
@@ -207,7 +207,7 @@ Funcionalidade: API Abertura de Caso e Motor de Transição
 - [x] Motor de transição com 5 passos de validação documentado
 - [x] Modelo de dados (case_instances, stage_history) definido
 - [x] Gherkin com 13 cenários cobrindo abertura, motor, controles e freeze
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED ✅ (2026-03-18)
 
 ## 8. Definition of Done (DoD)
 
@@ -225,6 +225,7 @@ Funcionalidade: API Abertura de Caso e Motor de Transição
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Abertura de caso + motor de transição, 13 cenários Gherkin, domain events. |
+| 1.1.0 | 2026-03-18 | Marcos Sulivan | Revisão final e promoção para APPROVED. |
 
 ---
 

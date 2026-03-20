@@ -1,17 +1,17 @@
 # US-MOD-007 — Parametrização Contextual e Rotinas (Épico)
 
-**Status Ágil:** `READY`
-**Versão:** 1.1.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.3.0
+**Data:** 2026-03-19
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-007** (Parametrização Contextual e Rotinas)
 **Épicos de Negócio:** EP05 (Parametrização Contextual) + EP06 (Cadastro de Rotinas)
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** EP05, EP06, doc 03_Parametrizacao_Contextual_e_Cadastro_de_Rotinas, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, US-MOD-006, US-MOD-003, US-MOD-004
 - **nivel_arquitetura:** 2 (versionamento de rotinas, motor de avaliação, integração com MOD-006)
 - **evidencias:** N/A
@@ -97,7 +97,7 @@ Se `blocking_validations` não vazio → MOD-006 bloqueia a transição com 422.
 ### Inclui (Wave 3)
 - API CRUD de Tipos de Enquadrador e Enquadradores com versionamento
 - API CRUD de Objetos-Alvo e Campos-Alvo
-- API CRUD de Regras de Incidência (enquadrador → objeto + prioridade + vigência)
+- API CRUD de Regras de Incidência (enquadrador → objeto + vigência + UNIQUE constraint)
 - API CRUD de Rotinas de Comportamento com itens e versionamento
 - Motor de Avaliação de Regras (endpoint de runtime consultado por MOD-006 e frontend)
 - Publicação de rotinas (DRAFT → PUBLISHED → DEPRECATED)
@@ -161,7 +161,7 @@ Funcionalidade: Épico Parametrização Contextual e Rotinas MOD-007
 - [x] Modelo de dados completo (9 tabelas) definido
 - [x] Features F01–F05 com Gherkin completo
 - [x] Novos escopos mapeados para MOD-000-F12
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 8. Definition of Done (DoD)
 
@@ -186,11 +186,11 @@ US-MOD-007
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-007-F01](../features/US-MOD-007-F01.md) | API Enquadradores + Objetos + Incidências | Backend | `READY` |
-| [US-MOD-007-F02](../features/US-MOD-007-F02.md) | API Rotinas + Itens + Versionamento | Backend | `READY` |
-| [US-MOD-007-F03](../features/US-MOD-007-F03.md) | Motor de Avaliação (runtime) | Backend | `READY` |
-| [US-MOD-007-F04](../features/US-MOD-007-F04.md) | UX Configurador de Enquadradores | UX | `READY` |
-| [US-MOD-007-F05](../features/US-MOD-007-F05.md) | UX Cadastro de Rotinas | UX | `READY` |
+| [US-MOD-007-F01](../features/US-MOD-007-F01.md) | API Enquadradores + Objetos + Incidências | Backend | `APPROVED` |
+| [US-MOD-007-F02](../features/US-MOD-007-F02.md) | API Rotinas + Itens + Versionamento | Backend | `APPROVED` |
+| [US-MOD-007-F03](../features/US-MOD-007-F03.md) | Motor de Avaliação (runtime) | Backend | `APPROVED` |
+| [US-MOD-007-F04](../features/US-MOD-007-F04.md) | UX Configurador de Enquadradores | UX | `APPROVED` |
+| [US-MOD-007-F05](../features/US-MOD-007-F05.md) | UX Cadastro de Rotinas | UX | `APPROVED` |
 
 ---
 
@@ -365,6 +365,8 @@ US-MOD-007
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. 9 tabelas, motor de avaliação, 4 gaps resolvidos, 5 features. |
 | 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: campo priority removido de incidence_rules, resolução de conflito em duas camadas (config-time + runtime safety net), cache Redis removido do motor, owner atualizado. |
+| 1.2.0 | 2026-03-18 | Marcos Sulivan | Revisão de alinhamento: propaga decisões v1.1.0 para F01–F05. F01: remove priorização, adiciona duas camadas. F03: remove cache Redis e priority do algoritmo/response. F04: remove badges de prioridade, UNIQUE constraint na UX. F05: remove ref cache Redis. Épico pronto para APPROVED. |
+| 1.3.0 | 2026-03-19 | Marcos Sulivan | Revisão final e promoção READY → APPROVED. Todas as features F01–F05 aprovadas. DoR 100% completo. |
 
 ---
 

@@ -6,6 +6,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-17 | AGN-DEV-04  | Enriquecimento DATA-003 (enrich-agent) |
+> | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Enriquecimento Batch 2 — rastreia_para expandido, alinhamento com BR-001.10-12 |
 
 # DATA-003 — Catálogo de Domain Events da Identidade Avançada
 
@@ -198,6 +199,6 @@ Todos os eventos seguem o schema padrão da tabela `domain_events`:
 - **estado_item:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-17
-- **rastreia_para:** US-MOD-004, US-MOD-004-F01, US-MOD-004-F02, FR-001, DATA-001, SEC-EventMatrix, DOC-ARC-003, DOC-FND-000
+- **rastreia_para:** US-MOD-004, US-MOD-004-F01, US-MOD-004-F02, FR-001, BR-001, DATA-001, SEC-001, SEC-002, DOC-ARC-003, DOC-FND-000
 - **referencias_exemplos:** EX-TRACE-001 (rastreabilidade domain events)
 - **evidencias:** N/A

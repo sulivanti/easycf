@@ -1,8 +1,8 @@
 # US-MOD-011 — SmartGrid: Componente de Grade com Edição em Massa (Épico)
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-011** (SmartGrid)
 **Épico de Negócio:** EP-SGR
@@ -10,9 +10,9 @@
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** SmartGrid-SPEC-v1.0, US-MOD-007, US-MOD-007-F03, DOC-UX-011, DOC-UX-012, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 1 (UX — consome MOD-007 como fornecedor de regras)
 - **evidencias:** N/A
@@ -68,8 +68,8 @@ SmartGrid (MOD-011) — interpreta e renderiza
 
 | ID | Pendência | Impacto |
 |---|---|---|
-| **PEND-SGR-01** | Contrato de mapeamento resultado do motor → estado visual da linha | Bloqueia F02 (UX) |
-| **PEND-SGR-02** | `current_record_state` no motor MOD-007-F03 para avaliar estado do registro | Bloqueia F01, F03 e F04 |
+| **PEND-SGR-01** | Contrato de mapeamento resultado do motor → estado visual da linha | ✅ RESOLVIDA (2026-03-15) |
+| **PEND-SGR-02** | `current_record_state` no motor MOD-007-F03 para avaliar estado do registro | ✅ RESOLVIDA (2026-03-15) |
 
 ---
 
@@ -128,8 +128,8 @@ Funcionalidade: Épico SmartGrid MOD-011
 - [x] Pendências PEND-SGR-01 e PEND-SGR-02 registradas formalmente
 - [x] Features F01–F05 com Gherkin completo
 - [x] Screen Manifests UX-SGR-001, UX-SGR-002, UX-SGR-003 criados
-- [ ] Owner confirmar READY → APPROVED
-- [ ] PEND-SGR-02 resolvida (amendment MOD-007-F03) antes do F02/F04
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
+- [x] PEND-SGR-02 resolvida (amendment MOD-007-F03) — RESOLVIDA 2026-03-15
 
 ## 8. Definition of Done (DoD)
 
@@ -156,11 +156,11 @@ US-MOD-011
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-011-F01](../features/US-MOD-011-F01.md) | Amendment: `current_record_state` no motor MOD-007 | Backend (amendment) | `READY` (aguarda PEND-SGR-02) |
-| [US-MOD-011-F02](../features/US-MOD-011-F02.md) | UX Grade de Inclusão em Massa | UX | `READY` (aguarda PEND-SGR-01) |
-| [US-MOD-011-F03](../features/US-MOD-011-F03.md) | UX Formulário de Alteração de Registro | UX | `READY` (aguarda PEND-SGR-02) |
-| [US-MOD-011-F04](../features/US-MOD-011-F04.md) | UX Grade de Exclusão em Massa | UX | `READY` (aguarda PEND-SGR-02) |
-| [US-MOD-011-F05](../features/US-MOD-011-F05.md) | UX Ações em Massa sobre Linhas | UX | `READY` |
+| [US-MOD-011-F01](../features/US-MOD-011-F01.md) | Amendment: `current_record_state` no motor MOD-007 | Backend (amendment) | `APPROVED` |
+| [US-MOD-011-F02](../features/US-MOD-011-F02.md) | UX Grade de Inclusão em Massa | UX | `APPROVED` |
+| [US-MOD-011-F03](../features/US-MOD-011-F03.md) | UX Formulário de Alteração de Registro | UX | `APPROVED` |
+| [US-MOD-011-F04](../features/US-MOD-011-F04.md) | UX Grade de Exclusão em Massa | UX | `APPROVED` |
+| [US-MOD-011-F05](../features/US-MOD-011-F05.md) | UX Ações em Massa sobre Linhas | UX | `APPROVED` |
 
 ---
 
@@ -192,6 +192,7 @@ O MOD-011 não cria novos escopos próprios. Usa os escopos já definidos no MOD
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Incorporação das US-SGR-001 a 006. UX consumidor do MOD-007. Pendências PEND-SGR-01/02. |
+| 1.1.0 | 2026-03-19 | arquitetura | APPROVED. PEND-SGR-01/02 resolvidas. DoR completo. Aprovação com cascata F01-F05. |
 
 ---
 

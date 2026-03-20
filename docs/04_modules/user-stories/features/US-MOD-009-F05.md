@@ -1,6 +1,6 @@
 # US-MOD-009-F05 — UX: Configurador de Regras (UX-APROV-002)
 
-**Status Ágil:** `READY`
+**Status Ágil:** `APPROVED`
 **Versão:** 1.0.0
 **Data:** 2026-03-15
 **Módulo Destino:** **MOD-009** (Aprovações e Alçadas — UX)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-009, US-MOD-009-F01, DOC-UX-010
@@ -108,7 +108,7 @@ Funcionalidade: Configurador de Regras — UX-APROV-002
 - [x] Manifest UX-APROV-002 criado
 - [x] F01 em READY
 - [x] Gherkin com 7 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (cascata do épico 2026-03-19)
 
 ## 7. Definition of Done (DoD)
 

@@ -5,12 +5,12 @@
 # MOD-003 — Estrutura Organizacional
 
 - **id:** MOD-003
-- **version:** 0.1.0
+- **version:** 0.3.0
 - **estado_item:** DRAFT
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-16
+- **data_ultima_revisao:** 2026-03-17
 - **architecture_level:** 1
-- **rastreia_para:** US-MOD-003, US-MOD-003-F01, US-MOD-003-F02, US-MOD-003-F03, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-UX-012, DOC-FND-000, MOD-000, US-MOD-000-F07, US-MOD-000-F12, LGPD-BASE-001
+- **rastreia_para:** US-MOD-003, US-MOD-003-F01, US-MOD-003-F02, US-MOD-003-F03, US-MOD-003-F04, DOC-DEV-001, DOC-ESC-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-UX-012, DOC-FND-000, MOD-000, US-MOD-000-F07, US-MOD-000-F12, LGPD-BASE-001
 - **evidencias:** N/A
 
 ---
@@ -23,12 +23,14 @@ Módulo full-stack que implementa a hierarquia organizacional formal de 5 nívei
 
 ### Inclui
 
-- API CRUD de unidades organizacionais N1–N4 com soft delete e restore
-- Tree query para visualização hierárquica (CTE recursivo)
-- Vinculação N4 → N5 (tenant existente do MOD-000-F07)
-- Tela de árvore organizacional com navegação hierárquica (UX-ORG-001)
-- Formulário de criação/edição de nó com seleção de pai (UX-ORG-002)
-- Novos escopos no catálogo MOD-000-F12: `org:unit:read`, `org:unit:write`, `org:unit:delete`
+- API CRUD de unidades organizacionais N1–N4 com soft delete, restore e idempotência (`Idempotency-Key`)
+- Tree query para visualização hierárquica via CTE recursivo (`GET /api/v1/org-units/tree`)
+- Vinculação N4 → N5 (tenant existente do MOD-000-F07) com endpoints dedicados
+- Tela de árvore organizacional com navegação hierárquica, busca client-side e toggle de inativos (UX-ORG-001)
+- Formulário de criação/edição de nó com seleção de pai e nível derivado automaticamente (UX-ORG-002)
+- Restore de unidades soft-deleted via menu contextual na árvore (F04)
+- Domain events para todas as operações de escrita (`org.unit_created`, `org.unit_updated`, `org.unit_deleted`, `org.unit_restored`, `org.tenant_linked`, `org.tenant_unlinked`)
+- Novos escopos registrados no catálogo DOC-FND-000 §2.2: `org:unit:read`, `org:unit:write`, `org:unit:delete`
 
 ### Não inclui
 
@@ -64,17 +66,20 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 
 ### Caminhos do Módulo (module_paths)
 
-| Camada | Path |
-|---|---|
-| Especificação | `docs/04_modules/mod-003-estrutura-organizacional/` |
-| User Stories | `docs/04_modules/user-stories/features/US-MOD-003-F*.md` |
-| Épico | `docs/04_modules/user-stories/epics/US-MOD-003.md` |
-| Screen Manifests | `docs/05_manifests/screens/ux-org-001.*.yaml`, `ux-org-002.*.yaml` |
-| API — Routes | `src/modules/org-units/routes/*.route.ts` |
-| API — Schema | `src/modules/org-units/schema.ts` |
-| Web — UI | `apps/web/src/modules/org-units/ui/screens/`, `apps/web/src/modules/org-units/ui/components/` |
-| Web — Domain | `apps/web/src/modules/org-units/domain/` |
-| Web — Data | `apps/web/src/modules/org-units/data/` |
+| Camada | Path | Nota |
+|---|---|---|
+| Especificação | `docs/04_modules/mod-003-estrutura-organizacional/` | Requisitos, ADRs, amendments |
+| User Stories | `docs/04_modules/user-stories/features/US-MOD-003-F*.md` | F01–F04 |
+| Épico | `docs/04_modules/user-stories/epics/US-MOD-003.md` | Governança e DoR/DoD |
+| Screen Manifests | `docs/05_manifests/screens/ux-org-001.*.yaml`, `ux-org-002.*.yaml` | UX declarativo |
+| API — Presentation | `apps/api/src/modules/org-units/presentation/` | Routes, controllers, validators (Nível 1) |
+| API — Application | `apps/api/src/modules/org-units/application/` | Use cases, ports, DTOs (Nível 1) |
+| API — Domain | `apps/api/src/modules/org-units/domain/` | Types, VOs essenciais, errors (Nível 1) |
+| API — Infrastructure | `apps/api/src/modules/org-units/infrastructure/` | Repositories, mappers DB (Nível 1) |
+| API — Schema | `src/modules/org-units/schema.ts` | Drizzle schema |
+| Web — UI | `apps/web/src/modules/org-units/ui/screens/`, `apps/web/src/modules/org-units/ui/components/` | React components |
+| Web — Domain | `apps/web/src/modules/org-units/domain/` | View models, formatters |
+| Web — Data | `apps/web/src/modules/org-units/data/` | Queries, mappers API |
 
 ## 5. Sub-Histórias (Features)
 
@@ -83,6 +88,7 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 | [US-MOD-003-F01](../user-stories/features/US-MOD-003-F01.md) | API Core — CRUD + Tree Query + Vinculação N5 | **Backend** | `READY` |
 | [US-MOD-003-F02](../user-stories/features/US-MOD-003-F02.md) | Árvore Organizacional (UX-ORG-001) | **UX** | `READY` |
 | [US-MOD-003-F03](../user-stories/features/US-MOD-003-F03.md) | Formulário de Nó Organizacional (UX-ORG-002) | **UX** | `READY` |
+| [US-MOD-003-F04](../user-stories/features/US-MOD-003-F04.md) | Restore de Unidade Organizacional | **Backend + UX** | `TODO` |
 
 ## 6. Itens Base (Canônicos) e Links
 
@@ -93,10 +99,10 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 - [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events da Estrutura Organizacional
 - [INT-001](requirements/int/INT-001.md) — Integrações e Contratos da Estrutura Organizacional
 - [SEC-001](requirements/sec/SEC-001.md) — Segurança e Compliance da Estrutura Organizacional
-- [SEC-EventMatrix](requirements/sec/SEC-EventMatrix.md) — Matriz de Autorização de Eventos da Estrutura Organizacional
+- [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos da Estrutura Organizacional
 - [UX-001](requirements/ux/UX-001.md) — Jornadas e Fluxos da Estrutura Organizacional
 - [NFR-001](requirements/nfr/NFR-001.md) — Requisitos Não Funcionais da Estrutura Organizacional
-- [PENDENTE-001](requirements/PENDENTE-001.md) — Pendências e Questões Abertas da Estrutura Organizacional
+- [PEN-003](requirements/pen-003-pendente.md) — Pendências e Questões Abertas da Estrutura Organizacional
 <!-- end index -->
 
 ## 7. Decisões (ADR)
@@ -104,5 +110,12 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 <!-- start adr-index -->
 - [ADR-001](adr/ADR-001.md) — N5 como Tenant Existente (MOD-000-F07), Não como Org Unit
 - [ADR-002](adr/ADR-002.md) — CTE Recursivo para Tree Query (vs. Materialized Path / Nested Sets)
-- [ADR-003](adr/ADR-003.md) — tenant_id em org_units para Isolamento Multi-Tenant (RLS)
+- [ADR-003](adr/ADR-003.md) — org_units é Cross-Tenant (Sem Coluna tenant_id)
+- [ADR-004](adr/ADR-004.md) — Idempotency-Key via MOD-000 com Fail-Open (Sem Tabela Paralela)
 <!-- end adr-index -->
+
+## 8. Amendments
+
+- [FR-001-C01](amendments/fr/FR-001-C01.md) — Estratégia de constraint catch (PostgreSQL 23505 → 409) para unicidade de codigo
+- [US-MOD-003-M01](amendments/us/US-MOD-003-M01.md) — Inclusão de F04 (Restore) no tree view, tabela de sub-histórias e endpoints do épico
+- [US-MOD-003-F01-M01](amendments/us/US-MOD-003-F01-M01.md) — Adição do domain event org.unit_restored à tabela de F01

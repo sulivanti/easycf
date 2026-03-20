@@ -5,7 +5,7 @@
 # MOD-004 — Identidade Avançada
 
 - **id:** MOD-004
-- **version:** 0.2.0
+- **version:** 0.3.0
 - **estado_item:** DRAFT
 - **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-17
@@ -30,7 +30,7 @@ Módulo de identidade avançada que complementa o MOD-000 (identidade operaciona
 - Expiração automática via background job (marks EXPIRED/REVOKED quando `valid_until < now()`)
 - Tela de gestão de escopo organizacional do usuário (UX-IDN-001)
 - Tela de compartilhamentos e delegações ativas (UX-IDN-002)
-- Novos escopos no catálogo: `identity:org_scope:*`, `identity:share:*`
+- Novos escopos no catálogo: `identity:org_scope:*`, `identity:share:*`, `identity:delegation:*`
 
 ### Não inclui
 - Revisão periódica formal de acessos — roadmap Wave 3 (requer gestão de campanhas de revisão)
@@ -149,6 +149,21 @@ apps/web/src/modules/identity-advanced/
     mappers.ts
 ```
 
+## 4.1 Catálogo de Scopes do Módulo (DOC-FND-000 §2.2)
+
+| Scope | Descrição |
+|---|---|
+| `identity:org_scope:read` | Visualizar vínculos organizacionais de usuários |
+| `identity:org_scope:write` | Criar e remover vínculos organizacionais |
+| `identity:share:read` | Visualizar compartilhamentos de acesso |
+| `identity:share:write` | Criar compartilhamentos de acesso |
+| `identity:share:revoke` | Revogar compartilhamentos de acesso |
+| `identity:share:authorize` | Permitir auto-autorização em compartilhamentos (grantor = authorized_by) |
+| `identity:delegation:read` | Visualizar delegações temporárias (admin) |
+| `identity:delegation:write` | Criar delegações temporárias (admin — endpoints self-service não requerem scope) |
+
+> **Nota:** Endpoints self-service (`/my/org-scopes`, `/my/shared-accesses`, `/access-delegations`) operam no contexto do próprio usuário autenticado e não requerem scopes adicionais.
+
 ## 5. Premissas e Restrições
 
 ### Premissas
@@ -189,9 +204,10 @@ apps/web/src/modules/identity-advanced/
 - [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events da Identidade Avançada
 - [INT-001](requirements/int/INT-001.md) — Integrações e Contratos da Identidade Avançada
 - [SEC-001](requirements/sec/SEC-001.md) — Segurança e Compliance da Identidade Avançada
-- [SEC-EventMatrix](requirements/sec/SEC-EventMatrix.md) — Matriz de Autorização de Eventos da Identidade Avançada
+- [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos da Identidade Avançada
 - [UX-001](requirements/ux/UX-001.md) — Jornadas e Fluxos da Identidade Avançada
 - [NFR-001](requirements/nfr/NFR-001.md) — Requisitos Não Funcionais da Identidade Avançada
+- [PEN-004](requirements/pen-004-pendente.md) — Questões Abertas da Identidade Avançada
 <!-- end index -->
 
 ## 9. Decisões (ADR)
@@ -199,4 +215,6 @@ apps/web/src/modules/identity-advanced/
 <!-- start adr-index -->
 - [ADR-001](adr/ADR-001__validacao_auto_autorizacao_no_service.md) — Validação de Auto-Autorização no Service (Não via CHECK Constraint)
 - [ADR-002](adr/ADR-002__tenant_id_direto_para_rls.md) — `tenant_id` Direto nas Tabelas para Row-Level Security
+- [ADR-003](adr/ADR-003__outbox_pattern_domain_events.md) — Outbox Pattern para Emissão de Domain Events
+- [ADR-004](adr/ADR-004__escopos_proibidos_regex_service.md) — Validação de Escopos Proibidos em Delegação via Regex no Service
 <!-- end adr-index -->

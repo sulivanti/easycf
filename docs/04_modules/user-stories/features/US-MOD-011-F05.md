@@ -1,15 +1,15 @@
 # US-MOD-011-F05 — UX: Ações em Massa sobre Linhas Selecionadas
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-011** (SmartGrid — UX, parte de UX-SGR-001)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010
 
 ## Metadados de Governança
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-011, US-MOD-011-F02
 - **tipo:** UX — toolbar de ações em massa
 - **epico_pai:** US-MOD-011
@@ -90,6 +90,7 @@ Funcionalidade: Ações em Massa sobre Linhas — UX-SGR-001 (toolbar)
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Ações em massa, 6 cenários Gherkin. |
+| 1.1.0 | 2026-03-19 | arquitetura | APPROVED. Cascata do épico US-MOD-011. |
 
 ---
 

@@ -43,11 +43,14 @@ O ecossistema adota uma Escala de Arquitetura em Níveis (0, 1 e 2), escalando e
 
 ## Modulos
 
-| Modulo | Epico | Status |
-| --- | --- | --- |
-| **MOD-000 — Foundation** | [US-MOD-000](docs/04_modules/user-stories/epics/US-MOD-000.md) | `DRAFT` |
-| **MOD-001 — Backoffice (Admin)** | [US-MOD-001](docs/04_modules/user-stories/epics/US-MOD-001.md) | `DRAFT` |
-| **MOD-002 — Gestão de Usuários** | [US-MOD-002](docs/04_modules/user-stories/epics/US-MOD-002.md) | `READY` |
+| Modulo | Epico | Nivel | Status |
+| --- | --- | --- | --- |
+| **MOD-000 — Foundation** | [US-MOD-000](docs/04_modules/user-stories/epics/US-MOD-000.md) | N2 | `DRAFT` |
+| **MOD-001 — Backoffice Admin** | [US-MOD-001](docs/04_modules/user-stories/epics/US-MOD-001.md) | N1 | `DRAFT` |
+| **MOD-002 — Gestao de Usuarios** | [US-MOD-002](docs/04_modules/user-stories/epics/US-MOD-002.md) | — | `READY` |
+| **MOD-003 — Estrutura Organizacional** | [US-MOD-003](docs/04_modules/user-stories/epics/US-MOD-003.md) | N2 | `DRAFT` |
+| **MOD-004 — Identidade Avancada** | [US-MOD-004](docs/04_modules/user-stories/epics/US-MOD-004.md) | N2 | `DRAFT` |
+| **MOD-005 — Modelagem de Processos** | [US-MOD-005](docs/04_modules/user-stories/epics/US-MOD-005.md) | N2 | `DRAFT` |
 
 > *Para um indice completo das funcionalidades, ver `docs/INDEX.md`.*
 
@@ -505,6 +508,8 @@ Todos os normativos mantêm seus identificadores em caráter imutável para rast
 | **Catálogo Ações e UX** | [DOC-UX-010__Catalogo_Acoes_e_Template_UX.md](docs/01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md) |
 | **App Shell e Navegação** | [DOC-UX-011__Application_Shell_e_Navegacao.md](docs/01_normativos/DOC-UX-011__Application_Shell_e_Navegacao.md) |
 | **Componentes e Feedback** | [DOC-UX-012__Componentes_Globais_e_Feedback.md](docs/01_normativos/DOC-UX-012__Componentes_Globais_e_Feedback.md) |
+| **Contratos Fundacionais** | [DOC-FND-000__Foundation.md](docs/01_normativos/DOC-FND-000__Foundation.md) |
+| **Manifestos e Gates CI** | [DOC-ARC-003B__Manifestos_Declarativos_e_Gates_CI.md](docs/01_normativos/DOC-ARC-003B__Manifestos_Declarativos_e_Gates_CI.md) |
 | **Guia Padrão Agente** | [DOC-GPA-001_Guia_Padrao_Agente.md](docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md) |
 
 *(Markdown formatado em UTF-8).*

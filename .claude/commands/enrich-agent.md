@@ -74,12 +74,12 @@ Checklist obrigatório antes de escrever:
 
 Se houver auditoria/timeline/notificações:
 - **MUST** incluir catálogo DATA-003 com: `event_type`, `origin_command`, `emit_permission`, `view_rule`, `notify`, `sensitivity_level`, `maskable_fields`
-- **MUST** referenciar SEC-EventMatrix
+- **MUST** referenciar SEC-002
 
 ### Regra especial para AGN-DEV-06 (SEC)
 
 Se houver domain_events/notifications:
-- **MUST** incluir seção SEC-EventMatrix (Emit/View/Notify)
+- **MUST** incluir seção SEC-002 (Emit/View/Notify)
 - **MUST** reforçar filtro `tenant_id` + ACL
 
 ### Regra especial para AGN-DEV-07 (UX)
@@ -91,7 +91,7 @@ Se houver domain_events/notifications:
 
 - Não gera conteúdo — apenas valida consistência cruzada
 - Formato de saída: `doc_dev_validation` (summary + findings + coverage)
-- Checagens mínimas: formato IDs, metadados, rastreabilidade, DATA-003/SEC-EventMatrix/UX-010
+- Checagens mínimas: formato IDs, metadados, rastreabilidade, DATA-003/SEC-002/UX-010
 
 ## PASSO 6: Aplicar ao Módulo
 

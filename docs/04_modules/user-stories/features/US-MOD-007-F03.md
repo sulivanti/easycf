@@ -1,18 +1,18 @@
 # US-MOD-007-F03 — API: Motor de Avaliação (Runtime)
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.2.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-007** (Parametrização Contextual — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-007, US-MOD-007-F01, US-MOD-007-F02, US-MOD-006
-- **nivel_arquitetura:** 2 (motor de avaliação, mescla de prioridades, cache Redis, integração MOD-006)
+- **nivel_arquitetura:** 2 (motor de avaliação, resolução por restritividade, sem cache, integração MOD-006)
 - **tipo:** Backend — endpoint de runtime
 - **epico_pai:** US-MOD-007
 - **manifests_vinculados:** N/A
@@ -29,6 +29,8 @@ Como **sistema** (chamado pelo MOD-006, pelo frontend e por agentes), quero aval
 
 ## 2. Algoritmo de Avaliação
 
+> **Decisão técnica 2026-03-15:** Cache Redis removido do motor inteiro. Todas as chamadas executam ao vivo. Campo `priority` removido — conflitos resolvidos por restritividade.
+
 ```
 POST /api/v1/routine-engine/evaluate
   body: { object_type, object_id?, context: [{ framer_id }], stage_id? }
@@ -39,7 +41,6 @@ PASSO 1: Encontrar regras de incidência ativas
     AND ir.target_object_id = resolve_target(object_type)
     AND ir.status = 'ACTIVE'
     AND (ir.valid_until IS NULL OR ir.valid_until > now())
-  ORDER BY ir.priority ASC
 
 PASSO 2: Para cada regra → encontrar rotina PUBLISHED vinculada
   JOIN routine_incidence_links + behavior_routines WHERE status='PUBLISHED'
@@ -49,9 +50,9 @@ PASSO 3: Avaliar itens de cada rotina (por ordem)
     - Avaliar condition_expr (se presente)
     - Acumular resultado por campo
 
-PASSO 4: Resolver conflitos entre rotinas
-  - Campos com ação de prioridade diferente → prioridade menor vence
-  - Campos sem conflito → mesclados
+PASSO 4: Resolver conflitos entre rotinas (safety net)
+  - Regra mais RESTRITIVA vence: HIDE > SHOW, SET_REQUIRED > SET_OPTIONAL, domínio menor prevalece
+  - Campos sem conflito → mesclados (union)
 
 PASSO 5: Construir response
   {
@@ -63,7 +64,7 @@ PASSO 5: Construir response
     domain_restrictions: { field_key: { allowed: [...] }, ... },
     validations: [ { field, rule, message, is_blocking } ],
     blocking_validations: [ { field, message, routine_id } ],  ← bloqueia MOD-006
-    applied_routines: [ { routine_id, routine_version, priority } ]
+    applied_routines: [ { routine_id, routine_version } ]
   }
 
 PASSO 6: Persistir em domain_events (GAP 4 resolvido)
@@ -83,9 +84,8 @@ PASSO 6: Persistir em domain_events (GAP 4 resolvido)
 ## 3. Escopo
 
 ### Inclui
-- Endpoint `POST /routine-engine/evaluate` (runtime)
-- Algoritmo de mescla com resolução de prioridade (6 passos)
-- Cache Redis (TTL 30s) com invalidação ao publicar rotina ou alterar incidência
+- Endpoint `POST /routine-engine/evaluate` (runtime, sem cache)
+- Algoritmo de mescla com resolução por restritividade (6 passos)
 - Registro de `routine.applied` em domain_events (apenas com efeito)
 - Retorno de `blocking_validations` para integração com MOD-006
 
@@ -116,11 +116,11 @@ Funcionalidade: Motor de Avaliação de Regras
     Quando motor avalia com ambos os framers
     Então response combina todos os campos de ambas as rotinas
 
-  Cenário: Dois contextos — conflito resolvido por prioridade
-    Dado que Rotina-A (priority=1) define projeto_wbs como REQUIRED
-    E Rotina-B (priority=10) define projeto_wbs como OPTIONAL
-    Quando motor avalia com ambos
-    Então response.required_fields inclui projeto_wbs (Rotina-A vence)
+  Cenário: Dois contextos — conflito resolvido por restritividade (safety net)
+    Dado que Rotina-A define projeto_wbs como SET_REQUIRED
+    E Rotina-B define projeto_wbs como SET_OPTIONAL
+    Quando motor avalia com ambos (exceção: dados legados ou race condition)
+    Então response.required_fields inclui projeto_wbs (SET_REQUIRED > SET_OPTIONAL)
     E response inclui applied_routines com ambas as rotinas listadas
 
   Cenário: blocking_validations bloqueia transição no MOD-006
@@ -134,7 +134,7 @@ Funcionalidade: Motor de Avaliação de Regras
     Dado que motor avaliou e aplicou 2 rotinas
     Quando a avaliação é concluída
     Então domain_events tem: event_type='routine.applied', correlation_id preenchido
-    E payload.routines_applied=[{ routine_id, version, priority }]
+    E payload.routines_applied=[{ routine_id, version }]
 
   Cenário: Motor retorna vazio se nenhuma rotina ativa para o contexto
     Dado que nenhuma incidence_rule ativa liga o framer ao objeto
@@ -146,64 +146,46 @@ Funcionalidade: Motor de Avaliação de Regras
     Dado que context=[{}] (sem framer_id)
     Então 422: "Pelo menos um enquadrador deve ser informado no contexto."
 
-  Cenário: Cache de resultado para mesmo input (performance)
-    Dado que motor foi chamado com mesmo { object_type, context } nos últimos 30s
-    Quando chamado novamente com mesmo input
-    Então retorna resposta cacheada (Redis, TTL 30s)
-    E domain_events NÃO é duplicado para chamadas cacheadas
 ```
 
 ---
 
-## 5. Cache e Performance
+## 5. Regras Críticas
 
-```
-Redis cache:
-  key:   "routine-engine:eval:{hash(object_type + framer_ids)}"
-  TTL:   30 segundos
-  inval: DEL ao publicar nova rotina ou ativar/inativar regra de incidência
-
-Motivo: o motor pode ser chamado múltiplas vezes por requisição
-(ex: frontend chama ao carregar formulário + ao mudar campo de contexto).
-Cache evita redundância sem comprometer consistência.
-```
-
----
-
-## 6. Regras Críticas
-
-1. **domain_events só para avaliações com efeito** — response vazio não gera evento
-2. **Cache Redis 30s** — invalidado ao publicar rotina ou alterar incidência
+1. **Sem cache** — todas as chamadas executam ao vivo (decisão 2026-03-15: consistência > performance)
+2. **domain_events só para avaliações com efeito** — response vazio não gera evento
 3. **blocking_validations**: integração com MOD-006 — transição bloqueada com 422 específico
 4. **X-Correlation-ID propagado** ao domain_event de routine.applied
 5. **condition_expr**: ignorado em v1 (motor aplica todos os itens sem condição)
+6. **Conflitos runtime**: safety net — regra mais restritiva vence (HIDE > SHOW, SET_REQUIRED > SET_OPTIONAL)
 
 ---
 
-## 7. Definition of Ready (DoR) ✅
+## 6. Definition of Ready (DoR) ✅
 
 - [x] F01 e F02 em READY (enquadradores, rotinas e itens)
 - [x] Pelo menos 2 rotinas PUBLISHED com itens para teste
 - [x] Algoritmo de 6 passos documentado
-- [x] Gherkin com 8 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Gherkin com 7 cenários (cache removido)
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
-## 8. Definition of Done (DoD)
+## 7. Definition of Done (DoD)
 
-- [ ] Algoritmo de mescla testado com conflito de prioridade
+- [ ] Algoritmo de mescla testado com conflito por restritividade (safety net)
 - [ ] blocking_validations testado com integração MOD-006
 - [ ] domain_events gerado para avaliações com efeito
-- [ ] Cache Redis testado (hit e invalidação)
 - [ ] Response vazio sem domain_events
 - [ ] Evidências documentadas (PR/issue)
 
 ---
 
-## 9. CHANGELOG
+## 8. CHANGELOG
 
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Motor de avaliação runtime, 8 cenários Gherkin, cache Redis, domain events. |
+| 1.1.0 | 2026-03-18 | Marcos Sulivan | Alinha com épico v1.1.0: remove cache Redis, remove campo priority do algoritmo e response, substitui resolução por prioridade por resolução por restritividade (safety net), remove cenário de cache. |
+| 1.2.0 | 2026-03-19 | Marcos Sulivan | Revisão final e promoção READY → APPROVED. |
 
 ---
 

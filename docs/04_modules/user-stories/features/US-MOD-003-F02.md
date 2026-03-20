@@ -7,7 +7,7 @@
 ## Metadados de Governança
 - **status_agil:** READY | **owner:** arquitetura
 - **rastreia_para:** US-MOD-003, US-MOD-003-F01, DOC-UX-011, DOC-UX-012, DOC-ARC-003
-- **nivel_arquitetura:** 1 | **operationIds consumidos:** `org_units_tree`, `org_units_delete`, `org_units_link_tenant`, `org_units_unlink_tenant`
+- **nivel_arquitetura:** 1 | **operationIds consumidos:** `org_units_tree`, `org_units_delete`, `org_units_link_tenant`, `org_units_unlink_tenant`, `domain_events_list_by_entity` (MOD-000)
 
 ---
 
@@ -109,6 +109,30 @@ Funcionalidade: Árvore Organizacional — UX-ORG-001
     Então é redirecionado para /filiais/:id (MOD-000-F07)
     E não abre edição direta na tela de organização
 
+  # ── Histórico do nó (MOD-000) ─────────────────────────────────
+  Cenário: Ver histórico de um nó via menu contextual
+    Dado que o admin clica no menu "..." de um nó
+    Então o dropdown inclui a opção "Histórico"
+    Quando clica em "Histórico"
+    Então um drawer lateral abre com a timeline de eventos do nó
+
+  Cenário: Timeline consome endpoint do MOD-000 diretamente
+    Dado que o drawer de histórico está aberto para o nó com id=:id
+    Quando a timeline é carregada
+    Então GET /api/v1/entities/org_unit/:id/history é chamado (operationId: domain_events_list_by_entity — MOD-000)
+    E nenhum endpoint do MOD-003 é criado para histórico
+
+  Cenário: Timeline exibe eventos do nó em ordem cronológica reversa
+    Dado que o nó teve operações de create, update e link_tenant
+    Quando o drawer de histórico carrega
+    Então exibe timeline com: data, ação (org.unit_created, org.unit_updated, org.tenant_linked), actor e resumo
+    E scroll infinito / load more para eventos antigos
+
+  Cenário: Timeline vazia para nó recém-criado
+    Dado que o nó acabou de ser criado (apenas org.unit_created)
+    Quando o drawer de histórico carrega
+    Então exibe apenas o evento de criação
+
   Cenário: Acesso sem scope redirecionado
     Dado que o admin não tem scope org:unit:read
     Quando tenta acessar /organizacao
@@ -129,6 +153,7 @@ Funcionalidade: Árvore Organizacional — UX-ORG-001
 3. Modal de desativação: verifica filhos ativos **antes** de habilitar o botão DELETE
 4. Estado de expansão: salvo em **memória de sessão** (não backend)
 5. Após vincular/desvincular tenant: atualização **inline** da árvore, sem reload
+6. Histórico: **NÃO cria endpoint próprio** — consome `GET /api/v1/entities/org_unit/:id/history` do MOD-000 (`operationId: domain_events_list_by_entity`). Funciona porque os domain_events do MOD-003 já gravam `entity_type = "org_unit"` (F01 §7).
 
 ---
 

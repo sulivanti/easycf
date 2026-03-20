@@ -7,6 +7,7 @@
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Re-enriquecimento DATA — corrige ref DATA-000, adiciona EX-* |
 > | 0.2.0  | 2026-03-16 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
+> | 0.4.0  | 2026-03-17 | AGN-DEV-04  | Enriquecimento Batch 2 — adiciona estados de UI, refs BR-009/BR-010, alinha com FR-005 |
 
 # DATA-001 — Modelo de Dados do Backoffice Admin
 
@@ -40,10 +41,12 @@ O MOD-001 **NÃO DEVE** criar tabelas, schemas ou entidades próprias. Toda a pe
 | Scopes do usuário | auth_me.scopes[] | Sidebar, ModuleShortcuts | Filtro de menu e atalhos (BR-005) |
 | Tenant ativo | auth_me.tenant | WelcomeWidget, ProfileWidget | Nome e ID do tenant |
 | JWT tokens | Cookies httpOnly | Interceptor HTTP | Gerenciado pelo browser, não acessível via JS |
+| Estado de loading (skeleton) | Derivado de auth_me pending | Dashboard, Shell | Skeleton exibido; timeout 3s → erro parcial (BR-009) |
+| Estado de erro (5xx) | Derivado de auth_me error | Dashboard | Toast + retry sem desconexão (BR-010); 401 → redirect /login |
 
 - **estado_item:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-17
-- **rastreia_para:** US-MOD-001, FR-001, FR-005, MOD-000, BR-005, BR-008, DOC-FND-000
+- **rastreia_para:** US-MOD-001, FR-001, FR-005, MOD-000, BR-005, BR-008, BR-009, BR-010, DOC-FND-000
 - **referencias_exemplos:** EX-CI-005, EX-CI-007
 - **evidencias:** N/A

@@ -1,7 +1,7 @@
 # ============================================================
 # Screen Manifest — UX-USR-003
 # Tela: Fluxo de Convite e Ativação de Usuário (MOD-002)
-# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# Schema: v1 | Versão: 1.1.0 | Data: 2026-03-17
 # ============================================================
 # Status card por estado: PENDING, ACTIVE, BLOCKED, INACTIVE.
 # Cooldown 60s anti-spam no reenvio de convite.
@@ -9,6 +9,7 @@
 # Amendment: users_invite_resend em MOD-000-F05.
 # ============================================================
 
+schema_version: "v1"
 manifest_version: 1
 screen_id: UX-USR-003
 name: Fluxo de Convite e Ativação de Usuário
@@ -34,22 +35,22 @@ telemetry_defaults:
     - X-Correlation-ID
 
 permissions:
-  read: users:read
-  write: users:write
+  read: users:user:read
+  write: users:user:write
 
 actions:
   - action: view
     client_only: false
     operation_ids:
       - users_get
-    permission: users:read
+    permission: users:user:read
     # Skeleton no card de status durante carregamento
 
   - action: submit
     client_only: false
     operation_ids:
       - users_invite_resend
-    permission: users:write
+    permission: users:user:write
     # Reenviar convite — cooldown 60s após sucesso
 
 ui_rules:

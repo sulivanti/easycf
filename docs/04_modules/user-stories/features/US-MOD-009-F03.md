@@ -1,6 +1,6 @@
 # US-MOD-009-F03 — API: Inbox de Aprovações, Execução e Override
 
-**Status Ágil:** `READY`
+**Status Ágil:** `APPROVED`
 **Versão:** 1.0.0
 **Data:** 2026-03-15
 **Módulo Destino:** **MOD-009** (Aprovações e Alçadas — Backend)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-009, US-MOD-009-F01, US-MOD-009-F02, DOC-ARC-001
@@ -154,7 +154,7 @@ Funcionalidade: Inbox de Aprovações, Execução e Override
 - [x] F01 e F02 em READY
 - [x] Notification queue configurada
 - [x] Gherkin com 11 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (cascata do épico 2026-03-19)
 
 ## 7. Definition of Done (DoD)
 

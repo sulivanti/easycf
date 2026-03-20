@@ -30,13 +30,11 @@ panels:
   - id: "create"
     label: "Criar Nó"
     default: true
-    description: "Criação de novo nó com seleção de pai e geração de código."
     actions_scope: [load_parent_options, submit_create, navigate_back]
 
   - id: "edit"
     label: "Editar Nó"
     default: false
-    description: "Edição de nó existente. Código imutável. Pai imutável após criação."
     actions_scope: [load_node, submit_update, navigate_back]
 
 # ─── AÇÕES ────────────────────────────────────────────────────
@@ -213,36 +211,11 @@ components:
       Timeout: 1.5s antes do redirect.
     actions_used: []
 
-# ─── MAPEAMENTO DE ERROS POR CAMPO ────────────────────────────
-field_errors:
-  parent_id:
-    required: "Selecione a unidade pai."
-    invalid: "A unidade selecionada não está disponível."
-
-  codigo:
-    required: "O código é obrigatório."
-    format: "O código deve conter apenas letras, números e hífens."
-    conflict_409: "Este código já está em uso. Escolha outro."
-    immutable: "O código não pode ser alterado após a criação."
-
-  nome:
-    required: "O nome é obrigatório."
-    min_length: "O nome deve ter ao menos 3 caracteres."
-    max_length: "O nome deve ter no máximo 200 caracteres."
-
 # ─── NAVEGAÇÃO ────────────────────────────────────────────────
 navigation:
   guard: auth
   redirect_if_unauth: "/login"
   back_action: "/organizacao"
-
-query_params:
-  parent:
-    type: string
-    description: "ID do nó pai pré-selecionado (passado ao clicar em 'Novo filho' na árvore)."
-  edit:
-    type: string
-    description: "ID do nó a editar (muda o panel para 'edit' automaticamente)."
 
 notes: |
   REGRAS OBRIGATÓRIAS:
@@ -256,6 +229,15 @@ notes: |
   8. Após sucesso: redirect para /organizacao?highlight=:id para destacar o nó criado/editado.
   9. Erros 409 (código duplicado): inline no campo código — não em toast.
   10. Query param ?parent= pré-seleciona o nó pai quando vindo de "Novo filho" na árvore.
+
+  QUERY PARAMS:
+  - parent (string): ID do nó pai pré-selecionado (passado ao clicar em 'Novo filho' na árvore).
+  - edit (string): ID do nó a editar (muda o panel para 'edit' automaticamente).
+
+  FIELD ERRORS:
+  - parent_id — required: "Selecione a unidade pai." | invalid: "A unidade selecionada não está disponível."
+  - codigo — required: "O código é obrigatório." | format: "O código deve conter apenas letras, números e hífens." | conflict_409: "Este código já está em uso. Escolha outro." | immutable: "O código não pode ser alterado após a criação."
+  - nome — required: "O nome é obrigatório." | min_length: "O nome deve ter ao menos 3 caracteres." | max_length: "O nome deve ter no máximo 200 caracteres."
 
 changelog:
   - version: "1.0.0"

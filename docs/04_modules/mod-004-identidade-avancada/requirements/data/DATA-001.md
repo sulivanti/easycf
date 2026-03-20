@@ -6,6 +6,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-17 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
+> | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Enriquecimento Batch 2 — rastreia_para expandido, validações BR-001.10-12, constraint valid_until access_delegations |
 
 # DATA-001 — Modelo de Dados da Identidade Avançada
 
@@ -53,7 +54,9 @@ Todas as tabelas deste módulo incluem os campos padrão:
 ### Constraints
 
 - `UNIQUE(user_id, org_unit_id)` — um usuário só pode ter um vínculo por nó organizacional
-- Business rule: máximo 1 PRIMARY ativo por `user_id` — validado no service (não via constraint, pois `UNIQUE(user_id, scope_type)` bloquearia SECONDARY múltiplo)
+- Business rule: máximo 1 PRIMARY ativo por `user_id` — validado no service (não via constraint, pois `UNIQUE(user_id, scope_type)` bloquearia SECONDARY múltiplo) (BR-001.2)
+- **Somente N1-N4:** `org_unit_id` deve referenciar nó organizacional ativo de nível N1-N4 — validado no service via consulta a MOD-003 (BR-001.3, BR-001.11)
+- **Vigência futura:** `valid_until`, quando presente, deve ser estritamente no futuro — validado no service (BR-001.10)
 
 ### Índices
 
@@ -93,8 +96,11 @@ Todas as tabelas deste módulo incluem os campos padrão:
 
 ### Constraints
 
-- **Validação `authorized_by != grantor_id`** — feita no **service** (não via CHECK constraint no banco). Usuários com scope `identity:share:authorize` podem ser simultaneamente grantor e authorized_by.
-- `CHECK (valid_until > valid_from)` — expiração deve ser posterior ao início
+- **Validação `authorized_by != grantor_id`** — feita no **service** (não via CHECK constraint no banco). Usuários com scope `identity:share:authorize` podem ser simultaneamente grantor e authorized_by (BR-001.7)
+- `CHECK (valid_until > valid_from)` — expiração deve ser posterior ao início (BR-001.10)
+- **Vigência obrigatória:** `valid_until` é NOT NULL — compartilhamento permanente proibido (BR-001.8)
+- **Motivo obrigatório:** `reason` é NOT NULL e não pode ser vazio — validado no service (BR-001.9)
+- **Validação de usuário alvo:** `grantee_id` deve existir em `users` do mesmo tenant — validado no service (BR-001.12)
 
 ### Índices
 
@@ -132,9 +138,11 @@ Todas as tabelas deste módulo incluem os campos padrão:
 
 ### Constraints
 
-- **Escopos proibidos:** `delegated_scopes` NÃO pode conter `*:approve`, `*:execute`, `*:sign` — validado no service via regex
-- **Escopos próprios:** delegator MUST possuir todos os escopos listados — validado no service contra token JWT
-- **Sem re-delegação:** escopos obtidos por delegação não podem ser sub-delegados — validado no service
+- `CHECK (valid_until > created_at)` — expiração deve ser posterior à criação (BR-001.10)
+- **Escopos proibidos:** `delegated_scopes` NÃO pode conter `*:approve`, `*:execute`, `*:sign` — validado no service via regex (BR-001.4)
+- **Escopos próprios:** delegator MUST possuir todos os escopos listados — validado no service contra token JWT (BR-001.5)
+- **Sem re-delegação:** escopos obtidos por delegação não podem ser sub-delegados — validado no service (BR-001.6)
+- **Validação de usuário alvo:** `delegatee_id` deve existir em `users` do mesmo tenant — validado no service (BR-001.12)
 
 ### Índices
 
@@ -238,6 +246,6 @@ erDiagram
 - **estado_item:** DRAFT
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-17
-- **rastreia_para:** US-MOD-004, US-MOD-004-F01, US-MOD-004-F02, FR-001, BR-001, SEC-001, INT-001
+- **rastreia_para:** US-MOD-004, US-MOD-004-F01, US-MOD-004-F02, FR-001, BR-001, BR-001.2, BR-001.3, BR-001.4, BR-001.5, BR-001.6, BR-001.7, BR-001.8, BR-001.9, BR-001.10, BR-001.11, BR-001.12, SEC-001, SEC-002, INT-001
 - **referencias_exemplos:** EX-DB-001 (padrão de campos obrigatórios), EX-NAME-001 (naming convention)
 - **evidencias:** N/A

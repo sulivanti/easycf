@@ -39,7 +39,7 @@ Use a sequência definida em `execution_phases`:
 | 2 | AGN-DEV-02, AGN-DEV-03 | Regras de negócio e requisitos funcionais |
 | 3 | AGN-DEV-04 | Modelo de dados e eventos |
 | 4 | AGN-DEV-05, AGN-DEV-08 | Integrações e NFR |
-| 5 | AGN-DEV-06 | Segurança e SEC-EventMatrix |
+| 5 | AGN-DEV-06 | Segurança e SEC-002 |
 | 6 | AGN-DEV-07 | UX e jornadas |
 | 7 | AGN-DEV-09, AGN-DEV-10 | ADR e pendências |
 | 8 | AGN-DEV-11 | Validação cruzada |

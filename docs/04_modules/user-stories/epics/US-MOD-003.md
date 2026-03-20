@@ -135,7 +135,7 @@ Funcionalidade: Épico Estrutura Organizacional MOD-003
 ## 7. Definition of Done (DoD)
 
 - [ ] F01, F02, F03 individualmente aprovadas e scaffoldadas
-- [ ] `GET /org-units/tree` retorna árvore completa N1–N5 em <200ms (com até 100 nós, com cache de árvore invalidado apenas em alterações)
+- [ ] `GET /org-units/tree` retorna árvore completa N1–N5 em <200ms (com até 100 nós, sem cache — query ao vivo com índice otimizado)
 - [ ] Soft delete bloqueado quando há filhos ativos — validado por teste
 - [ ] Vinculação N4 → tenant testada com tenant existente e tenant inexistente
 - [ ] Tela de árvore renderiza hierarquia expansível até N5
@@ -233,7 +233,7 @@ Os seguintes escopos devem ser adicionados ao catálogo de permissões via amend
 
 | # | Métrica | Alvo |
 |---|---|---|
-| OKR-1 | `GET /org-units/tree` latência com 100 nós (cache invalidado em alterações) | < 200ms |
+| OKR-1 | `GET /org-units/tree` latência com 100 nós (sem cache, query ao vivo) | < 200ms |
 | OKR-2 | Tentativas de criar loop na árvore bloqueadas | 100% |
 | OKR-3 | Screen Manifests validados sem erro | 2/2 |
 | OKR-4 | Soft delete com filhos ativos sempre bloqueado | 100% |
@@ -245,7 +245,7 @@ Os seguintes escopos devem ser adicionados ao catálogo de permissões via amend
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. Decisão N5=tenant documentada, modelo de dados, endpoints, escopos, features F01–F03. |
-| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: volume árvore ajustado de 500 para ~100 nós, cache strategy documentada, owner atualizado. |
+| 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: volume árvore ajustado de 500 para ~100 nós, cache Redis removido (query ao vivo), owner atualizado. |
 
 ---
 

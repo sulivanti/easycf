@@ -38,7 +38,7 @@ Crie o diretório em `docs/04_modules/mod-{ID}-{nome}/` com a árvore padrão:
 Stubs obrigatórios em estado DRAFT:
 
 - `requirements/data/DATA-003.md` — Catálogo de Domain Events (tabela: `event_type`, `description`, `origin_command`, `emit_permission`, `view_rule`, `notify`, `sensitivity_level`)
-- `requirements/sec/SEC-EventMatrix.md` — Matriz de Autorização de Eventos (tabela: `action`, `event_type`, `emit_perm`, `view`, `notify`). Usar DOC-FND-000 §3 como modelo canônico.
+- `requirements/sec/SEC-002.md` — Matriz de Autorização de Eventos (tabela: `action`, `event_type`, `emit_perm`, `view`, `notify`). Usar DOC-FND-000 §3 como modelo canônico.
 
 Ambos com header de automação e metadados `estado_item: DRAFT`, `rastreia_para: US-MOD-{ID}, DOC-ARC-003, DOC-FND-000`.
 

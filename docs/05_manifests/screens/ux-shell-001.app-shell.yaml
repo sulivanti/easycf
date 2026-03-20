@@ -85,11 +85,29 @@ actions:
     loading_state: none
 
   - id: open_change_password
-    label: "Abrir tela de alteração de senha (do ProfileWidget)"
+    label: "Abrir modal de alteração de senha (do ProfileWidget)"
     type: navigate
     client_only: true
     loading_state: none
-    notes: "Link no ProfileWidget → redireciona para /perfil/alterar-senha (US-MOD-000-F10)."
+    notes: "Dropdown do ProfileWidget → abre modal com campos senha_atual + nova_senha + confirmar (FR-007)."
+
+  - id: submit_change_password
+    label: "Submeter alteração de senha (modal ProfileWidget)"
+    type: submit
+    operation_id: auth_change_password
+    http_method: POST
+    endpoint: "/api/v1/auth/change-password"
+    client_only: false
+    requires_scope: []    # apenas autenticação válida — sem scope adicional
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      enumeration_safe: false
+      user_message: "Erro ao alterar senha."
+    telemetry_override:
+      capture_duration_ms: true
+    notes: "FR-007, INT-006. Modal NÃO fecha em caso de erro. 422 (senha incorreta) → foco no campo. 200 → Toast sucesso + fechar modal."
 
 # ─── COMPONENTES ─────────────────────────────────────────────
 components:
@@ -151,7 +169,7 @@ components:
       - "Sair" → dispara submit_logout
       Skeleton: avatar e nome como placeholders durante load_current_user.
     conditional: "sempre visível no Header"
-    actions_used: [load_current_user, submit_logout, open_change_password]
+    actions_used: [load_current_user, submit_logout, open_change_password, submit_change_password]
 
   - id: "content-area"
     name: "ContentArea"

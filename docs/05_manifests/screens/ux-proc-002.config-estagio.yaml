@@ -9,7 +9,7 @@ screen_id: "UX-PROC-002"
 name: "Configurador de Estágio"
 type: detail
 module: "MOD-005"
-route: null   # painel lateral dentro de UX-PROC-001 — sem rota própria
+route: '#embedded'   # painel lateral dentro de UX-PROC-001 — sem rota própria
 auth_required: true
 pre_auth: false
 layout: split   # renderizado como drawer direito dentro do editor

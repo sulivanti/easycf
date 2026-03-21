@@ -24,7 +24,7 @@
 | [DOC-UX-010 — Catálogo de Ações UX](01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md) | DOC-UX-010 | 1.0.0 | DRAFT | Catálogo oficial de action_keys reutilizáveis |
 | [DOC-UX-011 — Application Shell](01_normativos/DOC-UX-011__Application_Shell_e_Navegacao.md) | DOC-UX-011 | 1.0.0 | READY | Navegação, menus, breadcrumbs, headers |
 | [DOC-UX-012 — Componentes Globais](01_normativos/DOC-UX-012__Componentes_Globais_e_Feedback.md) | DOC-UX-012 | 1.0.0 | READY | Tratamento global de erros, busca, dark mode |
-| [DOC-FND-000 — Contratos Fundacionais](01_normativos/DOC-FND-000__Foundation.md) | DOC-FND-000 | 1.0.0 | ACTIVE | Auth, RBAC, SEC-EventMatrix, Telemetria, Error Handling, Storage |
+| [DOC-FND-000 — Contratos Fundacionais](01_normativos/DOC-FND-000__Foundation.md) | DOC-FND-000 | 1.0.0 | ACTIVE | Auth, RBAC, SEC-002, Telemetria, Error Handling, Storage |
 | [DOC-PADRAO-003 — (Reservado)](01_normativos/DOC-PADRAO-003__Reservado.md) | DOC-PADRAO-003 | — | DESCONTINUADO | ID reservado, sem conteúdo normativo ativo |
 
 ---
@@ -65,10 +65,16 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 |---|---|---|
 | MOD-000 — Framework de Automação / Geradores (Foundation) | [mod.md](04_modules/mod-000-foundation/mod.md) | DRAFT |
 | MOD-001 — Backoffice Admin (UX-First Shell) | [mod.md](04_modules/mod-001-backoffice-admin/mod.md) | DRAFT |
-| MOD-002 — Gestão de Usuários | [US-MOD-002](04_modules/user-stories/epics/US-MOD-002.md) | READY |
+| MOD-002 — Gestão de Usuários (Backoffice) | [mod.md](04_modules/mod-002-gestao-usuarios/mod.md) | DRAFT |
 | MOD-003 — Estrutura Organizacional | [mod.md](04_modules/mod-003-estrutura-organizacional/mod.md) | DRAFT |
 | MOD-004 — Identidade Avançada | [mod.md](04_modules/mod-004-identidade-avancada/mod.md) | DRAFT |
 | MOD-005 — Modelagem de Processos (Blueprint) | [mod.md](04_modules/mod-005-modelagem-processos/mod.md) | DRAFT |
+| MOD-006 — Execução de Casos | [mod.md](04_modules/mod-006-execucao-casos/mod.md) | DRAFT |
+| MOD-007 — Parametrização Contextual e Rotinas | [mod.md](04_modules/mod-007-parametrizacao-contextual/mod.md) | DRAFT |
+| MOD-008 — Integração Dinâmica Protheus/TOTVS | [mod.md](04_modules/mod-008-integracao-protheus/mod.md) | DRAFT |
+| MOD-009 — Movimentos sob Aprovação (Aprovações e Alçadas) | [mod.md](04_modules/mod-009-movimentos-aprovacao/mod.md) | DRAFT |
+| MOD-010 — MCP e Automação Governada | [mod.md](04_modules/mod-010-mcp-automacao/mod.md) | DRAFT |
+| MOD-011 — SmartGrid: Componente de Grade com Edição em Massa | [mod.md](04_modules/mod-011-smartgrid/mod.md) | DRAFT |
 
 ### Features — MOD-002
 
@@ -103,6 +109,65 @@ Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendm
 | [US-MOD-005-F02](04_modules/user-stories/features/US-MOD-005-F02.md) | API Gates + Papéis + Transições | — (Backend) | READY |
 | [US-MOD-005-F03](04_modules/user-stories/features/US-MOD-005-F03.md) | UX Editor Visual de Fluxo | UX-PROC-001 | READY |
 | [US-MOD-005-F04](04_modules/user-stories/features/US-MOD-005-F04.md) | UX Configurador de Estágio | UX-PROC-002 | READY |
+
+### Features — MOD-006
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-006-F01](04_modules/user-stories/features/US-MOD-006-F01.md) | API abertura + motor de transição | — (Backend) | APPROVED |
+| [US-MOD-006-F02](04_modules/user-stories/features/US-MOD-006-F02.md) | API gates + responsáveis + eventos | — (Backend) | APPROVED |
+| [US-MOD-006-F03](04_modules/user-stories/features/US-MOD-006-F03.md) | UX Painel do caso + timeline | UX-CASE-001 | APPROVED |
+| [US-MOD-006-F04](04_modules/user-stories/features/US-MOD-006-F04.md) | UX Listagem de casos | UX-CASE-002 | APPROVED |
+
+### Features — MOD-007
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-007-F01](04_modules/user-stories/features/US-MOD-007-F01.md) | API Enquadradores + Objetos + Incidências | — (Backend) | APPROVED |
+| [US-MOD-007-F02](04_modules/user-stories/features/US-MOD-007-F02.md) | API Rotinas + Itens + Versionamento | — (Backend) | APPROVED |
+| [US-MOD-007-F03](04_modules/user-stories/features/US-MOD-007-F03.md) | Motor de Avaliação (runtime) | — (Backend) | APPROVED |
+| [US-MOD-007-F04](04_modules/user-stories/features/US-MOD-007-F04.md) | UX Configurador de Enquadradores | UX-PARAM-001 | APPROVED |
+| [US-MOD-007-F05](04_modules/user-stories/features/US-MOD-007-F05.md) | UX Cadastro de Rotinas | UX-ROTINA-001 | APPROVED |
+
+### Features — MOD-008
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-008-F01](04_modules/user-stories/features/US-MOD-008-F01.md) | API Catálogo de serviços + rotinas de integração | — (Backend) | APPROVED |
+| [US-MOD-008-F02](04_modules/user-stories/features/US-MOD-008-F02.md) | API Mapeamentos de campos e parâmetros | — (Backend) | APPROVED |
+| [US-MOD-008-F03](04_modules/user-stories/features/US-MOD-008-F03.md) | API Motor de execução (BullMQ + Outbox + DLQ) | — (Backend) | APPROVED |
+| [US-MOD-008-F04](04_modules/user-stories/features/US-MOD-008-F04.md) | UX Editor de rotinas de integração | UX-INTEG-001 | APPROVED |
+| [US-MOD-008-F05](04_modules/user-stories/features/US-MOD-008-F05.md) | UX Monitor de integrações | UX-INTEG-002 | APPROVED |
+
+### Features — MOD-009
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-009-F01](04_modules/user-stories/features/US-MOD-009-F01.md) | API Regras de controle + alçada | — (Backend) | APPROVED |
+| [US-MOD-009-F02](04_modules/user-stories/features/US-MOD-009-F02.md) | API Motor de controle (interceptação) | — (Backend) | APPROVED |
+| [US-MOD-009-F03](04_modules/user-stories/features/US-MOD-009-F03.md) | API Inbox + execução + override | — (Backend) | APPROVED |
+| [US-MOD-009-F04](04_modules/user-stories/features/US-MOD-009-F04.md) | UX Inbox de aprovações | UX-APROV-001 | APPROVED |
+| [US-MOD-009-F05](04_modules/user-stories/features/US-MOD-009-F05.md) | UX Configurador de regras | UX-APROV-002 | APPROVED |
+
+### Features — MOD-010
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-010-F01](04_modules/user-stories/features/US-MOD-010-F01.md) | API Agentes MCP + Catálogo de Ações | — (Backend) | APPROVED |
+| [US-MOD-010-F02](04_modules/user-stories/features/US-MOD-010-F02.md) | API Gateway + Motor de Despacho | — (Backend) | APPROVED |
+| [US-MOD-010-F03](04_modules/user-stories/features/US-MOD-010-F03.md) | API Log de Execuções | — (Backend) | APPROVED |
+| [US-MOD-010-F04](04_modules/user-stories/features/US-MOD-010-F04.md) | UX Gestão de Agentes e Ações | UX-MCP-001 | APPROVED |
+| [US-MOD-010-F05](04_modules/user-stories/features/US-MOD-010-F05.md) | UX Monitor de Execuções | UX-MCP-002 | APPROVED |
+
+### Features — MOD-011
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-011-F01](04_modules/user-stories/features/US-MOD-011-F01.md) | Amendment: `current_record_state` no motor MOD-007 | — (Backend amendment) | APPROVED |
+| [US-MOD-011-F02](04_modules/user-stories/features/US-MOD-011-F02.md) | UX Grade de Inclusão em Massa | UX-SGR-001 | APPROVED |
+| [US-MOD-011-F03](04_modules/user-stories/features/US-MOD-011-F03.md) | UX Formulário de Alteração de Registro | UX-SGR-002 | APPROVED |
+| [US-MOD-011-F04](04_modules/user-stories/features/US-MOD-011-F04.md) | UX Grade de Exclusão em Massa | UX-SGR-003 | APPROVED |
+| [US-MOD-011-F05](04_modules/user-stories/features/US-MOD-011-F05.md) | UX Ações em Massa sobre Linhas | UX-SGR-001 | APPROVED |
 
 > **Nota:** Novos módulos devem criar um subdiretório próprio em `04_modules/<mod-id>/` seguindo o padrão do MOD-001.
 
@@ -215,7 +280,7 @@ Quando dois ou mais documentos estabelecerem regras contraditórias, prevalece o
 | JWT + Sessions + Kill-Switch | Foundation `IMP-000` | UX-000, UX-001 |
 | Multitenancy (Conceitos) | Foundation `mod.md` | DOC-BD-001 `tenants` |
 | RBAC (`@RequireScope`) | Foundation `mod.md` | UX-001, todos os módulos |
-| Audit Trail (`AuditService`) | Foundation `IMP-000` | UX-000 `SEC-EventMatrix` |
+| Audit Trail (`AuditService`) | Foundation `IMP-000` | UX-000 `SEC-002` |
 | UIActionEnvelope | DOC-ARC-003 §2 | UX-000 §8, DOC-UX-010 |
 | action_keys UX | DOC-UX-010 | UX-000 §8, DOC-ARC-003 §8 |
 | OpenAPI Gates | DOC-GNP-00 EX-OAS-001..004 | DOC-ESC-001, DOC-ARC-003 §8 |
@@ -225,5 +290,5 @@ Quando dois ou mais documentos estabelecerem regras contraditórias, prevalece o
 ## Observações Operacionais
 
 - O **Gate EX-CI-007** aponta para os arquivos "de contrato" (Consolidado + DOC-DEV-001).
-- Ao atualizar qualquer doc, **mantenha IDs estáveis** e rastreabilidade (`EX-*`, `SEC-EventMatrix`, `DATA-003`, `UX-010`) conforme o guia.
+- Ao atualizar qualquer doc, **mantenha IDs estáveis** e rastreabilidade (`EX-*`, `SEC-002`, `DATA-003`, `UX-010`) conforme o guia.
 - **Pasta 05_manifests:** prevista na arquitetura; será povoada quando os Screen Manifests forem formalizados (Gate DOC-ARC-003 §8 item 3 exige catálogo de RBAC em `docs/04_modules/mod-000-foundation/permissions.yaml`).

@@ -1,12 +1,17 @@
 {
   "$schema": "context-map.v1",
   "description": "Manifesto de dependências skill → documentos normativos. Define quais docs/seções cada skill precisa ingerir para respeitar o limite de context window (DOC-GPA-001 §8.5).",
+  "_conventions": {
+    "sections_format": "\"*\" = todas as seções | [\"§N\"] = seções por número | [\"EX-*\"] = seções por ID de exemplo",
+    "path_resolution": "Por padrão, docs são resolvidos em docs/01_normativos/{id}.md. Para docs fora de normativos, use o campo 'path' explícito."
+  },
   "skills": {
     "forge-module": {
       "docs": [
         { "id": "DOC-DEV-001", "sections": "*", "reason": "Template de especificação executável e ciclo de vida" },
         { "id": "DOC-DEV-002", "sections": "*", "reason": "Pipeline XP e template Mermaid CHANGELOG" },
-        { "id": "DOC-FND-000", "sections": ["§3"], "reason": "SEC-EventMatrix modelo canônico para stubs" }
+        { "id": "DOC-FND-000", "sections": ["§3"], "reason": "SEC-002 modelo canônico para stubs" },
+        { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1", "§3"], "reason": "Grafo de adjacência e bloqueios — validar dependências ao criar módulo" }
       ]
     },
     "validate-openapi": {
@@ -20,7 +25,7 @@
         { "id": "DOC-GNP-00", "sections": "*", "reason": "Regras consolidadas MUST/SHOULD" },
         { "id": "DOC-ARC-003", "sections": ["§2"], "reason": "UIActionEnvelope e domain events" },
         { "id": "DOC-PADRAO-002", "sections": "*", "reason": "Dependências NodeJS autorizadas" },
-        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "RBAC scopes e SEC-EventMatrix" }
+        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "RBAC scopes e SEC-002" }
       ]
     },
     "validate-endpoint": {
@@ -85,11 +90,10 @@
       "docs": [],
       "delegates_to": ["lint:docs", "lint:markdown", "validate:manifests"]
     },
-    "delete-module": {
-      "docs": []
-    },
     "rollback-module": {
-      "docs": []
+      "docs": [
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle"], "reason": "Validar estado_item e regras de reversão de DRAFT/READY" }
+      ]
     },
     "update-index": {
       "docs": []
@@ -99,22 +103,36 @@
     },
     "enrich": {
       "docs": [
-        { "id": "PKG-DEV-001", "sections": ["§0"], "reason": "Contrato de execução e envelope padrão" },
-        { "id": "DOC-DEV-001", "sections": ["§lifecycle"], "reason": "Ciclo de vida DRAFT/READY" }
+        { "id": "PKG-DEV-001", "path": "docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md", "sections": ["§0"], "reason": "Contrato de execução e envelope padrão" },
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle"], "reason": "Ciclo de vida DRAFT/READY" },
+        { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1", "§2"], "reason": "Grafo e tipos de dependência — enriquecimento deve respeitar e atualizar §4 do mod.md" }
       ]
     },
     "enrich-agent": {
       "docs": [
-        { "id": "PKG-DEV-001", "sections": "*", "reason": "System prompts e schemas dos 11 agentes" },
-        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "Anti-patterns Foundation e SEC-EventMatrix canônico" }
+        { "id": "PKG-DEV-001", "path": "docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md", "sections": "*", "reason": "System prompts e schemas dos 11 agentes" },
+        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "Anti-patterns Foundation e SEC-002 canônico" }
       ]
     },
     "promote-module": {
       "docs": [
         { "id": "DOC-DEV-001", "sections": ["§lifecycle", "§metadata"], "reason": "Ciclo de vida DRAFT/READY e metadados obrigatórios" },
-        { "id": "DOC-DEV-002", "sections": ["§4.1"], "reason": "Regras de promoção e Definition of Ready" }
+        { "id": "DOC-DEV-002", "sections": ["§4.1"], "reason": "Regras de promoção e Definition of Ready" },
+        { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1", "§3", "§5"], "reason": "Verificar bloqueios antes de promover — módulo bloqueado não pode ser READY se bloqueador não está implementado" }
       ],
       "delegates_to": ["qa", "update-index", "git"]
+    },
+    "merge-amendment": {
+      "docs": [
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle", "§metadata"], "reason": "Ciclo de vida DRAFT/READY e regras de edição de documentos selados" },
+        { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§3"], "reason": "Verificar bloqueios cross-módulo ao aplicar amendments que afetam outros módulos" }
+      ]
+    },
+    "delete-module": {
+      "docs": [
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle"], "reason": "Validar estado_item antes de destruir — módulos READY requerem confirmação extra" },
+        { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1"], "reason": "Verificar dependentes antes de deletar — módulos com dependentes não podem ser removidos sem confirmação" }
+      ]
     }
   }
 }

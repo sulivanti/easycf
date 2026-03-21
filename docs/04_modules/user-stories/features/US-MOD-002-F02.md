@@ -1,8 +1,8 @@
 # US-MOD-002-F02 — Formulário de Cadastro de Usuário
 
 **Status Ágil:** `READY`
-**Versão:** 1.1.0
-**Data:** 2026-03-16
+**Versão:** 1.2.0
+**Data:** 2026-03-17
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-002** (Gestão de Usuários)
 
@@ -10,11 +10,11 @@
 
 - **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-16
+- **data_ultima_revisao:** 2026-03-17
 - **rastreia_para:** US-MOD-002, US-MOD-000-F05, US-MOD-000-F06, SEC-000-01, LGPD-BASE-001
 - **nivel_arquitetura:** 1
 - **operationIds consumidos:** `users_create`, `roles_list`
-- **evidencias:** DoR verificado, conteúdo revisado (2026-03-16)
+- **evidencias:** Revisão cruzada: toast LGPD alinhado, cenário de erro 500 adicionado (2026-03-17)
 - **wave_entrega:** Wave 1
 - **epico_pai:** US-MOD-002
 - **manifests_vinculados:** ux-usr-002
@@ -83,7 +83,7 @@ Funcionalidade: Formulário de Cadastro de Usuário — UX-USR-002
     Então o botão entra em isLoading
     E POST /api/v1/users é chamado com { fullName, email, roleId, mode: "invite" }
     E o header Idempotency-Key é enviado com UUID gerado no mount
-    E ao receber 201, exibe Toast: "Usuário criado. Convite enviado para o e-mail informado."
+    E ao receber 201, exibe Toast: "Usuário criado com sucesso. Convite enviado."
     E o e-mail NÃO deve aparecer no Toast
     E após 1.5s, redireciona para /usuarios
 
@@ -144,6 +144,13 @@ Funcionalidade: Formulário de Cadastro de Usuário — UX-USR-002
     E NÃO exibe toast genérico
     E o foco é movido para o primeiro campo com erro (acessibilidade)
 
+  Cenário: Erro 500 ao criar usuário
+    Dado que todos os campos estão válidos
+    Quando POST /api/v1/users retorna 500
+    Então o Toast exibe: "Não foi possível criar o usuário." + correlationId
+    E o botão sai do isLoading
+    E o formulário permanece preenchido para nova tentativa
+
   Cenário: Idempotência — double-click não cria dois usuários
     Dado que o admin clicou duas vezes rapidamente em "Criar usuário"
     Então apenas uma requisição POST /api/v1/users é enviada
@@ -190,7 +197,7 @@ Funcionalidade: Formulário de Cadastro de Usuário — UX-USR-002
 ## 7. Regras Críticas
 
 1. Modo padrão SEMPRE é "Enviar Convite" — admin escolhe explicitamente "Senha Temporária"
-2. Toast de sucesso: **nunca exibir o e-mail** — apenas "Usuário criado." genérico (LGPD)
+2. Toast de sucesso: **nunca exibir o e-mail** — modo convite: "Usuário criado com sucesso. Convite enviado."; modo senha: "Usuário criado com sucesso." (LGPD)
 3. Erros 422: **inline por campo**, não em toast
 4. Erros 409 (e-mail duplicado): **inline no campo e-mail**, não em toast
 5. Idempotency-Key: UUID v4 gerado no mount da tela, mantido até resposta bem-sucedida
@@ -203,4 +210,6 @@ Funcionalidade: Formulário de Cadastro de Usuário — UX-USR-002
 
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
+| 1.2.0 | 2026-03-17 | arquitetura | Revisão cruzada: toast de sucesso alinhado com LGPD (sem referência a "e-mail informado"), cenário de erro 500 na criação adicionado. |
+| 1.1.0 | 2026-03-16 | arquitetura | DoR verificado, conteúdo revisado. |
 | 1.0.0 | 2026-03-15 | arquitetura | Criação no padrão ECF. Dois modos, validação inline, idempotência, proteção PII. |

@@ -133,7 +133,7 @@ Regras de segurança e parsing:
 
 **Amarração com eventos/notificações**
 
-- Se implementar `domain_events`, `notifications`, `outbox`, watchers: aplicar as regras do domínio (DATA-003/004/005 etc) e respeitar SEC-EventMatrix (Emit/View/Notify).
+- Se implementar `domain_events`, `notifications`, `outbox`, watchers: aplicar as regras do domínio (DATA-003/004/005 etc) e respeitar SEC-002 (Emit/View/Notify).
 
 ### 3.2 AGN-COD-CORE — Domínio (DDD-lite)
 
@@ -149,7 +149,7 @@ Regras de segurança e parsing:
 
 - Emit: checar permissão do comando.
 - View: manter ACL+tenant como regra forte.
-- Notify: resolver destinatários conforme SEC-EventMatrix (watchers + papéis + hierarquia).
+- Notify: resolver destinatários conforme SEC-002 (watchers + papéis + hierarquia).
 
 ### 3.4 AGN-COD-API — Endpoints + OpenAPI
 
@@ -240,5 +240,5 @@ OpenAPI (quando AGN-COD-API):
 ## 6) Changelog
 
 - v1.3 (2026-03-02): Adição do subtópico 0.4 que obriga o uso de skills do diretório `.claude/commands`.
-- v1.2 (2026-02-27): Amarração explícita com EX-OAS-001..004, x-permissions (timeline/notifications), SEC-EventMatrix, DATA-003 e UX-010; expansão de ownership do AGN-COD-API para `apps/api/openapi/`.
+- v1.2 (2026-02-27): Amarração explícita com EX-OAS-001..004, x-permissions (timeline/notifications), SEC-002, DATA-003 e UX-010; expansão de ownership do AGN-COD-API para `apps/api/openapi/`.
 - v1.1 (2026-02-22): Base por camadas, plan→emit_files, content_lines[], validador.

@@ -1,17 +1,17 @@
 # US-MOD-009 — Controle de Movimentos Sob Aprovação (Épico)
 
-**Status Ágil:** `READY`
-**Versão:** 1.1.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.2.0
+**Data:** 2026-03-19
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-009** (Aprovações e Alçadas)
 **Épico de Negócio:** EP08
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** EP08, doc 04_Integracoes_Aprovacoes_e_Automacao_Governada §4–5, US-MOD-004, US-MOD-006, US-MOD-007, US-MOD-008, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (domínio rico, alçadas hierárquicas, rastreabilidade integral)
 - **evidencias:** N/A
@@ -173,7 +173,7 @@ Funcionalidade: Épico Controle de Movimentos MOD-009
 - [x] Features F01–F05 com Gherkin completo
 - [x] Screen Manifests UX-APROV-001, UX-APROV-002 criados
 - [x] Novos escopos mapeados para MOD-000-F12
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED
 
 ## 7. Definition of Done (DoD)
 
@@ -199,11 +199,11 @@ US-MOD-009
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-009-F01](../features/US-MOD-009-F01.md) | API Regras de controle + alçada | Backend | `READY` |
-| [US-MOD-009-F02](../features/US-MOD-009-F02.md) | API Motor de controle (interceptação) | Backend | `READY` |
-| [US-MOD-009-F03](../features/US-MOD-009-F03.md) | API Inbox + execução + override | Backend | `READY` |
-| [US-MOD-009-F04](../features/US-MOD-009-F04.md) | UX Inbox de aprovações | UX | `READY` |
-| [US-MOD-009-F05](../features/US-MOD-009-F05.md) | UX Configurador de regras | UX | `READY` |
+| [US-MOD-009-F01](../features/US-MOD-009-F01.md) | API Regras de controle + alçada | Backend | `APPROVED` |
+| [US-MOD-009-F02](../features/US-MOD-009-F02.md) | API Motor de controle (interceptação) | Backend | `APPROVED` |
+| [US-MOD-009-F03](../features/US-MOD-009-F03.md) | API Inbox + execução + override | Backend | `APPROVED` |
+| [US-MOD-009-F04](../features/US-MOD-009-F04.md) | UX Inbox de aprovações | UX | `APPROVED` |
+| [US-MOD-009-F05](../features/US-MOD-009-F05.md) | UX Configurador de regras | UX | `APPROVED` |
 
 ---
 
@@ -364,6 +364,7 @@ US-MOD-009
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. 7 tabelas, motor de controle, 4 critérios de alçada, 5 features. |
 | 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: auto-aprovação por suficiência de escopo (AUTO_APPROVED_BY_SCOPE), CHECK constraint removido do banco → validação no service, owner atualizado. |
+| 1.2.0 | 2026-03-19 | Marcos Sulivan | Revisão final e aprovação do épico. DoR completo. Status READY → APPROVED com regra cascata para F01–F05. |
 
 ---
 

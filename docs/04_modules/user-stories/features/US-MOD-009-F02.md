@@ -1,6 +1,6 @@
 # US-MOD-009-F02 — API: Motor de Controle
 
-**Status Ágil:** `READY`
+**Status Ágil:** `APPROVED`
 **Versão:** 1.0.0
 **Data:** 2026-03-15
 **Módulo Destino:** **MOD-009** (Aprovações e Alçadas — Backend)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-009, US-MOD-009-F01, DOC-ARC-001
@@ -130,7 +130,7 @@ Funcionalidade: Motor de Controle de Movimentos
 - [x] F01 em READY (regras configuradas)
 - [x] Algoritmo do motor documentado
 - [x] Gherkin com 8 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (cascata do épico 2026-03-19)
 
 ## 8. Definition of Done (DoD)
 

@@ -1,16 +1,16 @@
 # US-MOD-008-F04 — UX: Editor de Rotinas de Integração (UX-INTEG-001)
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-008** (Integração Dinâmica — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-008, US-MOD-008-F01, US-MOD-008-F02, US-MOD-007-F05, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — editor de rotinas de integração
@@ -142,7 +142,7 @@ Funcionalidade: Editor de Rotinas de Integração — UX-INTEG-001
 - [x] F01/F02/F03 em READY
 - [x] Serviço HML disponível para teste
 - [x] Gherkin com 12 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 7. Definition of Done (DoD)
 
@@ -161,6 +161,7 @@ Funcionalidade: Editor de Rotinas de Integração — UX-INTEG-001
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Editor de integração com 3 abas, 12 cenários Gherkin, manifest UX-INTEG-001. |
+| 1.1.0 | 2026-03-19 | arquitetura | Promoção READY → APPROVED (cascata do épico US-MOD-008 v1.2.0). |
 
 ---
 

@@ -1,15 +1,15 @@
 # US-MOD-011-F01 — Amendment: current_record_state no Motor de Avaliação (MOD-007-F03)
 
-**Status Ágil:** `READY` (aguarda resolução de PEND-SGR-02)
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-011** → impacto em **MOD-007** (Backend — Amendment)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-011, US-MOD-007-F03, PEND-SGR-02
 - **nivel_arquitetura:** 2
 - **tipo:** Backend — amendment em MOD-007-F03
@@ -104,6 +104,7 @@ Funcionalidade: Amendment current_record_state no motor de avaliação
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Amendment current_record_state, 4 cenários Gherkin. |
+| 1.1.0 | 2026-03-19 | arquitetura | APPROVED. PEND-SGR-02 resolvida. Cascata do épico US-MOD-011. |
 
 ---
 

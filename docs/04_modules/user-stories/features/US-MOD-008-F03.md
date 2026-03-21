@@ -1,16 +1,16 @@
 # US-MOD-008-F03 — API: Motor de Execução (BullMQ + Outbox + Retry + DLQ)
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-008** (Integração Dinâmica — Backend)
 **Referências Normativas:** DOC-DEV-001 §4.3, DOC-ARC-001, DOC-ARC-003
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-008, US-MOD-008-F01, US-MOD-008-F02, US-MOD-006, DOC-DEV-001 §4.3, DOC-ARC-003
 - **nivel_arquitetura:** 2 (Outbox Pattern, BullMQ, retry backoff exponencial, DLQ, audit log)
 - **tipo:** Backend — motor assíncrono
@@ -190,7 +190,7 @@ DLQ monitoring: a cada 60s escaneia logs DLQ sem notificação → notificação
 - [x] BullMQ já na stack (MOD-004), Redis disponível
 - [x] Outbox Pattern documentado com 6 passos
 - [x] Gherkin com 8 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 9. Definition of Done (DoD)
 
@@ -209,6 +209,7 @@ DLQ monitoring: a cada 60s escaneia logs DLQ sem notificação → notificação
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Motor BullMQ + Outbox + Retry + DLQ, 8 cenários Gherkin, domain events. |
+| 1.1.0 | 2026-03-19 | arquitetura | Promoção READY → APPROVED (cascata do épico US-MOD-008 v1.2.0). |
 
 ---
 

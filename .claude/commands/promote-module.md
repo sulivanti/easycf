@@ -11,6 +11,46 @@ Orquestra o fluxo completo de revisao e promocao de features/epicos para READY.
 $ARGUMENTS deve conter o caminho do modulo (ex: `docs/04_modules/mod-000-foundation/`).
 Opcionalmente pode incluir seletor de lote (ex: `F01,F02,F03`). Se nao fornecido, promove todas as features.
 
+## Definition of Ready (Gate 0) — Obrigatorio
+
+Antes de iniciar a promocao, **todos** os criterios abaixo DEVEM ser atendidos. Se qualquer gate falhar, **ABORTE** e informe o usuario qual criterio nao foi atendido.
+
+```text
+Gate 0 — Definition of Ready (DoR)
+├── [DoR-1] Todos PENDENTEs resolvidos?
+│   └── Leia pen-{NNN}-pendente.md. Todo item DEVE ter status IMPLEMENTADA, CANCELADA ou DECIDIDA.
+│       Itens ABERTA ou EM_ANALISE → ABORTE: "PENDENTE-XXX ainda aberto. Resolva antes de promover."
+│
+├── [DoR-2] Todos arquivos de requisito existem?
+│   └── Verifique existencia de: BR-{NNN}.md, FR-{NNN}.md, DATA-{NNN}.md, SEC-{NNN}.md,
+│       INT-{NNN}.md, UX-{NNN}.md, NFR-{NNN}.md em requirements/
+│       Faltando → ABORTE: "Arquivo {pilar}-{NNN}.md nao encontrado."
+│
+├── [DoR-3] Zero erros de lint no modulo?
+│   └── Execute `node .agents/scripts/lint-docs.js`. Erros → ABORTE: "Lint falhou com N erros."
+│
+├── [DoR-4] Screen manifests validados?
+│   └── Se o modulo possui telas (UX-{NNN}.md referencia manifests), verifique que os YAMLs
+│       em docs/05_manifests/screens/ existem e sao validos. Se nao ha telas, pule este gate.
+│
+├── [DoR-5] ADRs documentados conforme nivel de arquitetura?
+│   └── Leia mod.md campo architecture_level e conte ADRs em adr/:
+│       Nivel 0-1: minimo 1 ADR
+│       Nivel 2:   minimo 3 ADRs
+│       Insuficiente → ABORTE: "Nivel {N} requer minimo {M} ADRs, encontrados {X}."
+│
+├── [DoR-6] CHANGELOG atualizado?
+│   └── Verifique que CHANGELOG.md possui entrada com a versao de promocao.
+│       Sem entrada → ABORTE: "CHANGELOG.md sem entrada para versao de promocao."
+│
+└── [DoR-7] Bloqueios cross-modulo resolvidos?
+    └── Consulte docs/04_modules/DEPENDENCY-GRAPH.md §3 (Bloqueios).
+        Se o modulo consta como bloqueado (BLK-*) e o bloqueador nao esta implementado:
+        AVISE: "Bloqueio BLK-XXX: {detalhe}. Confirme para prosseguir mesmo assim."
+```
+
+> **Referencia:** DOC-ESC-001 (niveis de arquitetura), DOC-DEP-001 (DEPENDENCY-GRAPH.md §3 bloqueios).
+
 ## Fluxo de Promocao (Passo → Skill)
 
 | # | Passo | Skill/Acao | Detalhe |

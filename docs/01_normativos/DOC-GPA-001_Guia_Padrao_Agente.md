@@ -175,13 +175,13 @@ Este guia define:
 - Agentes DEV **MUST** preencher `result.contract_refs.ex_ids` quando aplicarem exemplos normativos (`EX-*`).
 - Itens gerados **MUST** manter `metadata.referencias_exemplos` alinhado a `contract_refs.ex_ids`.
 
-### 5.4 "O que o DEV deve citar/gerar" (amarração com EX-OAS, SEC-EventMatrix, DATA-003, UX-010)
+### 5.4 "O que o DEV deve citar/gerar" (amarração com EX-OAS, SEC-002, DATA-003, UX-010)
 
 Quando o módulo envolver **eventos/timeline/notificações e permissões**, os DEV Agents **MUST**:
 
 **(A) SEC (AGN-DEV-06)**
 
-- Criar a subseção **SEC-EventMatrix — Matriz de Autorização de Eventos (Emit/View/Notify)** e incorporar os princípios e matriz (patch oficial).
+- Criar a subseção **SEC-002 — Matriz de Autorização de Eventos (Emit/View/Notify)** e incorporar os princípios e matriz (patch oficial).
 
 **(B) DATA (AGN-DEV-04)**
 
@@ -207,7 +207,7 @@ Separar por "norma" gera sobreposição de arquivos e conflito ("paradoxo do pin
 
 - Endpoints **timeline/notifications** que expõem "quem pode" **MUST** documentar `x-permissions` no OpenAPI (documentação; enforcement real é comando + ACL/tenant).
 - Para OpenAPI base/lint/ui/test, usar **EX-OAS-001..004** (definidos no consolidado).
-- Para eventos e permissões, respeitar **SEC-EventMatrix** e **DATA-003** (catálogo).
+- Para eventos e permissões, respeitar **SEC-002** e **DATA-003** (catálogo).
 - Para UX, mapear ações de **UX-010** em rotas/eventos de domínio quando aplicável.
 
 ---
@@ -277,5 +277,5 @@ Registrar por execução: `run_id`, `agent_id`, `attempt`, `timestamp`, `status`
 
 ## 10) Changelog
 
-- 1.2.0 (2026-02-27): Amarração explícita DEV/COD com EX-OAS-*, SEC-EventMatrix, DATA-003 e UX-010; reforço de `x-permissions` como documentação; reforço de rastreabilidade para Gate EX-CI-007.
+- 1.2.0 (2026-02-27): Amarração explícita DEV/COD com EX-OAS-*, SEC-002, DATA-003 e UX-010; reforço de `x-permissions` como documentação; reforço de rastreabilidade para Gate EX-CI-007.
 - 1.1.0 (2026-02-22): Base (11 DEV + 6 COD), envelope JSON e runtime.

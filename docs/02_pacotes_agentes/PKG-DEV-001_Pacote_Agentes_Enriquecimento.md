@@ -1,7 +1,8 @@
 # PKG-DEV-001 — Pacote 1: Agentes de Enriquecimento do DOC-DEV-001 (11 agentes)
 
-**Versão:** 1.3  
-**Data:** 2026-03-02  
+**id:** PKG-DEV-001
+**Versão:** 1.3
+**Data:** 2026-03-02
 **Base:** DOC-DEV-001 + DOC-ESC-001 + DOC-GNP-00 v2.0 + DOC-GPA-001 + UX-010 + Events↔Permissions Pack
 
 Este pacote define **11 agentes especialistas** para enriquecer o **DOC-DEV-001** com alta granularidade (produção/automação).
@@ -218,7 +219,7 @@ Propósito: definir FR-xxx (Tópico 4.1) com "Done funcional", dependências e c
 Regras:
 - Saída: UM ÚNICO JSON válido no envelope DOC-AGN-BASE. Sem Markdown.
 - Se houver side-effect, avalie idempotência; se incerto, pergunte.
-- Se envolver timeline/notifications, sinalize e force dependências com DATA-003 e SEC-EventMatrix.
+- Se envolver timeline/notifications, sinalize e force dependências com DATA-003 e SEC-002.
 Retorne 1 item entity=FR.
 ```
 
@@ -232,7 +233,7 @@ Retorne 1 item entity=FR.
 
 - Modelar entidades/tabelas/constraints e **DATA-003 (Domain Events)** quando houver auditoria/timeline/outbox.
 - Se houver eventos: **MUST** incluir o catálogo obrigatório de eventos (origem/comando, emit, view, notify, outbox/dedupe, sensibilidade, política de payload).
-- **MUST** referenciar `SEC-EventMatrix` quando definir Notify/retention/masking.
+- **MUST** referenciar `SEC-002` quando definir Notify/retention/masking.
 
 ### `data` (DATA)
 
@@ -276,7 +277,7 @@ Regras:
 - MUST herdar o Modelo Foundation (DOC-DEV-000): Não recrie entidades base como users, tenants, ou credentials. Apenas crie relacionamentos (FKs) para UUIDs de users ou tenants quando necessário.
 - Se houver auditoria/timeline/notificações/outbox:
   - MUST definir DATA-003 e preencher Catálogo de Eventos (origem, emit, view, notify, outbox, sensibilidade, payload) conforme patch.
-  - MUST referenciar SEC-EventMatrix para regras de Notify/mascaramento/retenção.
+  - MUST referenciar SEC-002 para regras de Notify/mascaramento/retenção.
 Retorne 1 item entity=DATA.
 ```
 
@@ -306,10 +307,10 @@ Retorne 1 item entity=DATA.
 
 **Alvo:** DOC-DEV-001 → Tópico 4.4 (SEC-xxx)
 
-### Responsabilidade (inclui SEC-EventMatrix)
+### Responsabilidade (inclui SEC-002)
 
 - Definir authn/authz, classificação, retenção, mascaramento, LGPD, auditoria e proteções.
-- Se o módulo usar `domain_events`/`notifications`: **MUST** criar/atualizar a subseção **SEC-EventMatrix — Matriz de Autorização de Eventos (Emit/View/Notify)**, seguindo princípios (Emit comando, View ACL+tenant).
+- Se o módulo usar `domain_events`/`notifications`: **MUST** criar/atualizar a subseção **SEC-002 — Matriz de Autorização de Eventos (Emit/View/Notify)**, seguindo princípios (Emit comando, View ACL+tenant).
 
 ### `data` (SEC)
 
@@ -324,7 +325,7 @@ Retorne 1 item entity=DATA.
   "row_level_authz": "domain_events/notifications MUST filtrar tenant_id e respeitar ACL",
   "event_authz_matrix": {
     "enabled": true,
-    "matrix_ref_id": "SEC-EventMatrix",
+    "matrix_ref_id": "SEC-002",
     "rules": [
       { "action": "approve", "event_type": "x.entity.approved", "emit_perm": "x:approve", "view": "canRead(entity)+tenant", "notify": "requester+owner+watchers" }
     ]
@@ -343,7 +344,7 @@ Regras:
 - Saída: UM ÚNICO JSON válido no envelope DOC-AGN-BASE. Sem Markdown.
 - MUST herdar o Modelo Foundation (DOC-DEV-000): Não especifique fluxos complexos e avulsos de Login, JWT ou RBAC-base a menos que pedido. Use sempre as definições `@RequireScope` baseadas na arquitetura padrão. E assuma `tenant_id` como filtro mandatório.
 - Se envolver domain_events/notifications:
-  - MUST incluir princípios Emit/View/Notify e criar a seção SEC-EventMatrix (matriz).
+  - MUST incluir princípios Emit/View/Notify e criar a seção SEC-002 (matriz).
   - MUST reforçar filtro tenant_id + ACL na leitura.
 Retorne 1 item entity=SEC.
 ```
@@ -486,7 +487,7 @@ Retorne 1 item entity=UX.
 - Rastreabilidade (`rastreia_para`) aponta só para IDs existentes.
 - Se houver timeline/notifications/eventos:
 
-  - SEC deve conter **SEC-EventMatrix**.
+  - SEC deve conter **SEC-002**.
   - DATA-003 deve conter catálogo com Emit/View/Notify/outbox/sensibilidade.
   - UX deve referenciar ações do **UX-010**.
 
@@ -495,5 +496,5 @@ Retorne 1 item entity=UX.
 ## 13) Changelog
 
 - v1.3 (2026-03-02): Adição do subtópico 0.7 que obriga o uso de skills do diretório `.claude/commands`.
-- v1.2 (2026-02-27): Amarração explícita com SEC-EventMatrix, DATA-003 (catálogo obrigatório), UX-010 (action_id) e alinhamento com EX-OAS no ciclo DEV↔COD.
+- v1.2 (2026-02-27): Amarração explícita com SEC-002, DATA-003 (catálogo obrigatório), UX-010 (action_id) e alinhamento com EX-OAS no ciclo DEV↔COD.
 - v1.1 (2026-02-22): Base do pacote (11 agentes) + structured-first + contract_refs.

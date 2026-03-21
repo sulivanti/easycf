@@ -1,16 +1,16 @@
 # US-MOD-006-F02 — API: Gates, Responsáveis e Eventos
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-18
 **Módulo Destino:** **MOD-006** (Execução de Casos — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
-- **status_agil:** READY
-- **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **status_agil:** APPROVED
+- **owner:** Marcos Sulivan
+- **data_ultima_revisao:** 2026-03-18
 - **rastreia_para:** US-MOD-006, US-MOD-006-F01, US-MOD-004-F02, US-MOD-000-F06
 - **nivel_arquitetura:** 2 (resolução de gates, atribuições com vigência, audit trail)
 - **tipo:** Backend — cria novos endpoints
@@ -214,7 +214,7 @@ Funcionalidade: API Gates, Responsáveis e Eventos
 - [x] `process_roles` seed criado (RESPONSAVEL, APROVADOR, APOIO, CONSULTA, AUDITOR)
 - [x] Gherkin com 14 cenários cobrindo gates, responsáveis, eventos e timeline
 - [x] Estrutura da timeline JSON documentada
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED ✅ (2026-03-18)
 
 ## 8. Definition of Done (DoD)
 
@@ -232,6 +232,7 @@ Funcionalidade: API Gates, Responsáveis e Eventos
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Gates + Responsáveis + Eventos + Timeline, 14 cenários Gherkin, domain events. |
+| 1.1.0 | 2026-03-18 | Marcos Sulivan | Revisão final e promoção para APPROVED. |
 
 ---
 

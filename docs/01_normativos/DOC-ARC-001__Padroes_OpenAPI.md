@@ -100,7 +100,156 @@ Um endpoint só é "Done" se:
   - **View:** ACL da entity originária + tenant
   - `visibility_level/sensitivity_level`: guard-rail/mascaramento
 
-> Ver regras completas em: DOC-FND-000 §3 (SEC-EventMatrix — Matriz de Autorização de Eventos)
+> Ver regras completas em: DOC-FND-000 §3 (SEC-002 — Matriz de Autorização de Eventos)
+
+---
+
+---
+
+## Apêndice — Exemplos Canônicos (EX-*)
+
+> Âncoras referenciáveis por módulos via `referencias_exemplos`. Cada ID é único e rastreável pelo Gate de IDs (EX-CI-007).
+
+### EX-API-001 — Endpoint CRUD completo (padrão OpenAPI)
+
+Exemplo de endpoint de listagem com todos os headers, paginação, segurança e error responses obrigatórios.
+
+```yaml
+# apps/api/openapi/v1.yaml (trecho)
+paths:
+  /api/v1/users:
+    get:
+      operationId: users_list
+      tags: [Users]
+      summary: Lista usuários do tenant
+      description: Retorna lista paginada de usuários ativos com filtros opcionais.
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1, default: 1 }
+        - name: page_size
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - name: search
+          in: query
+          schema: { type: string }
+          description: Busca por nome ou e-mail
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista paginada
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/UserSummary' }
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      operationId: users_create
+      tags: [Users]
+      summary: Cria um novo usuário
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateUserInput' }
+      responses:
+        '201':
+          description: Usuário criado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+```
+
+### EX-PAGE-001 — Paginação padronizada (offset e cursor)
+
+Padrões de paginação para listagens CRUD (offset) e timelines/histórico (cursor).
+
+```yaml
+# Offset Pagination (listagens CRUD simples)
+components:
+  schemas:
+    PaginationMeta:
+      type: object
+      required: [page, page_size, total, total_pages]
+      properties:
+        page: { type: integer, example: 1 }
+        page_size: { type: integer, example: 20 }
+        total: { type: integer, example: 150 }
+        total_pages: { type: integer, example: 8 }
+```
+
+```yaml
+# Cursor Pagination (timelines, notifications, histórico)
+components:
+  schemas:
+    CursorPaginationMeta:
+      type: object
+      required: [limit, has_more]
+      properties:
+        limit: { type: integer, example: 50 }
+        next_cursor: { type: string, nullable: true, example: "eyJpZCI6MTAwfQ==" }
+        has_more: { type: boolean, example: true }
+
+  parameters:
+    CursorParam:
+      name: cursor
+      in: query
+      schema: { type: string }
+      description: Cursor opaco retornado em meta.next_cursor
+    LimitParam:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 50 }
+```
+
+```typescript
+// Uso no handler (cursor pagination):
+const { limit = 50, cursor } = request.query;
+const decodedCursor = cursor ? decodeCursor(cursor) : null;
+
+const rows = await db
+  .select()
+  .from(events)
+  .where(
+    and(
+      eq(events.tenant_id, tenantId),
+      decodedCursor ? lt(events.id, decodedCursor.id) : undefined,
+    ),
+  )
+  .orderBy(desc(events.created_at))
+  .limit(limit + 1); // +1 para detectar has_more
+
+const hasMore = rows.length > limit;
+const data = hasMore ? rows.slice(0, limit) : rows;
+
+return {
+  data,
+  meta: {
+    limit,
+    has_more: hasMore,
+    next_cursor: hasMore ? encodeCursor({ id: data[data.length - 1].id }) : null,
+  },
+};
+```
 
 ---
 

@@ -1,15 +1,15 @@
 # US-MOD-010-F05 — UX: Monitor de Execuções MCP (UX-MCP-002)
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-010** (MCP e Automação Governada — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 
 ## Metadados de Governança
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-010, US-MOD-010-F03, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — monitor de execuções MCP
@@ -94,6 +94,7 @@ Funcionalidade: Monitor de Execuções MCP — UX-MCP-002
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Monitor de execuções, 5 cenários Gherkin, manifest UX-MCP-002. |
+| 1.1.0 | 2026-03-19 | Marcos Sulivan | APPROVED em cascata com épico US-MOD-010 v1.2.0. |
 
 ---
 

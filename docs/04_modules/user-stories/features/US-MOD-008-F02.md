@@ -1,16 +1,16 @@
 # US-MOD-008-F02 — API: Mapeamentos de Campos e Parâmetros
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-008** (Integração Dinâmica — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-008, US-MOD-008-F01
 - **nivel_arquitetura:** 2 (mapeamento dinâmico, transform_expr, condition_expr, mascaramento)
 - **tipo:** Backend — cria novos endpoints
@@ -128,7 +128,7 @@ Funcionalidade: Mapeamentos de Campos e Parâmetros
 - [x] Lista de campos alvo do Protheus disponível como seed
 - [x] 5 tipos de mapeamento documentados
 - [x] Gherkin com 8 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 7. Definition of Done (DoD)
 
@@ -145,6 +145,7 @@ Funcionalidade: Mapeamentos de Campos e Parâmetros
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Mapeamentos + Parâmetros, 8 cenários Gherkin. |
+| 1.1.0 | 2026-03-19 | arquitetura | Promoção READY → APPROVED (cascata do épico US-MOD-008 v1.2.0). |
 
 ---
 

@@ -17,7 +17,7 @@
 - **evidencias:** *(adicionar links de PR/issue ao longo do refinamento)*
 - **wave_entrega:** Wave 1
 - **epico_pai:** US-MOD-000
-- **manifests_vinculados:** ux-user-002
+- **manifests_vinculados:** ux-usr-002
 - **pendencias:** N/A
 
 ---

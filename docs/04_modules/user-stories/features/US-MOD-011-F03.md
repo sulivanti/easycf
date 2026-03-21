@@ -1,15 +1,15 @@
 # US-MOD-011-F03 — UX: Formulário de Alteração de Registro (UX-SGR-002)
 
-**Status Ágil:** `READY` (aguarda PEND-SGR-02 — F01)
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-011** (SmartGrid — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010
 
 ## Metadados de Governança
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-011, US-MOD-011-F01, US-MOD-007-F03
 - **tipo:** UX — formulário de alteração
 - **epico_pai:** US-MOD-011
@@ -87,6 +87,7 @@ Funcionalidade: Formulário de Alteração — UX-SGR-002
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Formulário de alteração, 4 cenários Gherkin, manifest UX-SGR-002. |
+| 1.1.0 | 2026-03-19 | arquitetura | APPROVED. PEND-SGR-02 resolvida. Cascata do épico US-MOD-011. |
 
 ---
 

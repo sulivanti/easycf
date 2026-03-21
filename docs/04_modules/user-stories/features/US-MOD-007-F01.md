@@ -1,18 +1,18 @@
 # US-MOD-007-F01 — API: Enquadradores, Objetos-Alvo e Regras de Incidência
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.2.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-007** (Parametrização Contextual — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-007, US-MOD-003, DOC-ARC-001
-- **nivel_arquitetura:** 2 (enquadradores com vigência, regras de priorização, detecção de conflitos)
+- **nivel_arquitetura:** 2 (enquadradores com vigência, detecção de conflitos config-time, UNIQUE constraint)
 - **tipo:** Backend — cria novos endpoints
 - **epico_pai:** US-MOD-007
 - **manifests_vinculados:** N/A
@@ -27,22 +27,24 @@ Como **analista funcional**, quero definir os enquadradores de contexto, os obje
 
 ---
 
-## 2. Regra de Priorização (GAP 2 resolvido)
+## 2. Resolução de Conflito em Duas Camadas (GAP 2 resolvido)
+
+> **Decisão técnica 2026-03-15:** Campo `priority` removido de `incidence_rules`. Conflito é resolvido em duas camadas.
 
 ```
-Quando N regras de incidência se aplicam ao mesmo objeto:
+CAMADA 1 — Config-time (cadastro):
+  UNIQUE(framer_id, target_object_id) impede duplicação.
+  Ao salvar regra, sistema verifica se já existe regra para o mesmo
+  enquadrador + objeto. Se houver → 422 "Conflito de incidência detectado."
 
-  1. Priority mais baixa (numericamente) = maior precedência
-     Prioridade 1 sobrepõe prioridade 50 em campos CONFLITANTES.
+CAMADA 2 — Runtime (safety net):
+  Se por exceção (dados legados, race condition) dois contextos
+  conflitantes coexistirem, a regra mais RESTRITIVA sempre vence:
+    HIDE > SHOW, SET_REQUIRED > SET_OPTIONAL, domínio menor prevalece.
+  Campos NÃO conflitantes são MESCLADOS (union, não substituição).
 
-  2. Campos NÃO conflitantes são MESCLADOS (union, não substituição)
-
-  3. Conflito irresolvível (mesmo campo, mesma prioridade):
-     → Sistema usa a regra mais ESPECÍFICA (framer_type mais específico vence genérico)
-     → Se ainda empate: avisa o admin no UX-PARAM-001 com badge "Conflito detectado"
-
-  4. condition_expr (futura): permite condições JSON para incidência condicional.
-     Na versão 1: condição sempre verdadeira (campo nullable, ignorado pelo motor v1)
+condition_expr (futura): permite condições JSON para incidência condicional.
+  Na versão 1: condição sempre verdadeira (campo nullable, ignorado pelo motor v1).
 ```
 
 ---
@@ -53,7 +55,7 @@ Quando N regras de incidência se aplicam ao mesmo objeto:
 - CRUD de Tipos de Enquadrador (catálogo: OPERACAO, CLASSE_PRODUTO, TIPO_DOCUMENTO, CONTEXTO_PROCESSO)
 - CRUD de Enquadradores com vigência (`valid_from`/`valid_until`), código imutável, expiração automática
 - CRUD de Objetos-Alvo com campos-alvo (field_key, field_type, is_system)
-- CRUD de Regras de Incidência com prioridade, vigência e detecção de conflitos
+- CRUD de Regras de Incidência com vigência, UNIQUE constraint e detecção de conflitos config-time
 - Domain events para todas as operações
 
 ### Não inclui
@@ -107,11 +109,6 @@ Funcionalidade: API Enquadradores, Objetos e Regras de Incidência
     Quando POST /admin/incidence-rules com mesmo framer_id + target_object_id
     Então 422: "Conflito de incidência detectado. Resolva o conflito antes de salvar."
 
-  Cenário: Listar regras com conflitos detectados
-    Dado que por exceção existem 2 regras incidentes para o mesmo objeto
-    Quando GET /admin/incidence-rules?target_object_id=uuid
-    Então a resposta inclui: conflicts_detected=true e lista dos campos conflitantes
-
   Cenário: RBAC: scope obrigatório
     Dado que caller não tem param:framer:read
     Quando GET /admin/framers
@@ -136,8 +133,8 @@ Funcionalidade: API Enquadradores, Objetos e Regras de Incidência
 
 1. `codigo` imutável após criação em framers e target_objects
 2. `valid_until` nos framers: background job expira (mesmo job do MOD-004 pode ser estendido)
-3. UNIQUE `(framer_id, target_object_id)` em incidence_rules — sem duplicatas
-4. Conflito de prioridade detectado e alertado no response de listagem
+3. UNIQUE `(framer_id, target_object_id)` em incidence_rules — conflito bloqueado no cadastro com 422
+4. Campo `priority` removido — resolução por restritividade no runtime (safety net)
 5. `condition_expr`: nullable em v1, preparado para rule engine em v2
 
 ---
@@ -146,14 +143,14 @@ Funcionalidade: API Enquadradores, Objetos e Regras de Incidência
 
 - [x] Modelo definido (framer_types, framers, target_objects, target_fields, incidence_rules)
 - [x] Seed de framer_types padrão (OPERACAO, CLASSE_PRODUTO, TIPO_DOCUMENTO, CONTEXTO_PROCESSO)
-- [x] Gherkin com 8 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Gherkin com 7 cenários
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 8. Definition of Done (DoD)
 
 - [ ] CRUD completo com RBAC
 - [ ] Expiração de framers testada via background job
-- [ ] Conflito de prioridade detectado no response
+- [ ] Conflito bloqueado no cadastro (UNIQUE constraint + 422)
 - [ ] codigo imutável validado
 - [ ] Evidências documentadas (PR/issue)
 
@@ -164,6 +161,8 @@ Funcionalidade: API Enquadradores, Objetos e Regras de Incidência
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. CRUD Enquadradores + Objetos + Incidências, 8 cenários Gherkin, domain events. |
+| 1.1.0 | 2026-03-18 | Marcos Sulivan | Alinha com épico v1.1.0: remove campo priority, substitui regra de priorização por resolução em duas camadas (config-time block + runtime safety net), remove cenário de listagem com conflitos detectados. |
+| 1.2.0 | 2026-03-19 | Marcos Sulivan | Revisão final e promoção READY → APPROVED. |
 
 ---
 

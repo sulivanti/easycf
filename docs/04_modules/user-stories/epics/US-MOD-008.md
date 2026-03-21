@@ -1,17 +1,17 @@
 # US-MOD-008 — Integração Dinâmica Protheus/TOTVS (Épico)
 
-**Status Ágil:** `READY`
-**Versão:** 1.1.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.2.0
+**Data:** 2026-03-19
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-008** (Integração Dinâmica)
 **Épico de Negócio:** EP07
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** EP07, doc 04_Integracoes_Aprovacoes_e_Automacao_Governada §2–3, US-MOD-007, US-MOD-006, US-MOD-000-F07, DOC-DEV-001 §4.3, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (Outbox Pattern, BullMQ, retry com backoff, DLQ, audit log)
 - **evidencias:** N/A
@@ -151,7 +151,7 @@ Funcionalidade: Épico Integração Dinâmica MOD-008
 - [x] Features F01–F05 com Gherkin completo
 - [x] Screen Manifests UX-INTEG-001, UX-INTEG-002 criados
 - [x] Novos escopos mapeados para MOD-000-F12
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 7. Definition of Done (DoD)
 
@@ -177,11 +177,11 @@ US-MOD-008
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-008-F01](../features/US-MOD-008-F01.md) | API Catálogo de serviços + rotinas de integração | Backend | `READY` |
-| [US-MOD-008-F02](../features/US-MOD-008-F02.md) | API Mapeamentos de campos e parâmetros | Backend | `READY` |
-| [US-MOD-008-F03](../features/US-MOD-008-F03.md) | API Motor de execução (BullMQ + Outbox + DLQ) | Backend | `READY` |
-| [US-MOD-008-F04](../features/US-MOD-008-F04.md) | UX Editor de rotinas de integração | UX | `READY` |
-| [US-MOD-008-F05](../features/US-MOD-008-F05.md) | UX Monitor de integrações | UX | `READY` |
+| [US-MOD-008-F01](../features/US-MOD-008-F01.md) | API Catálogo de serviços + rotinas de integração | Backend | `APPROVED` |
+| [US-MOD-008-F02](../features/US-MOD-008-F02.md) | API Mapeamentos de campos e parâmetros | Backend | `APPROVED` |
+| [US-MOD-008-F03](../features/US-MOD-008-F03.md) | API Motor de execução (BullMQ + Outbox + DLQ) | Backend | `APPROVED` |
+| [US-MOD-008-F04](../features/US-MOD-008-F04.md) | UX Editor de rotinas de integração | UX | `APPROVED` |
+| [US-MOD-008-F05](../features/US-MOD-008-F05.md) | UX Monitor de integrações | UX | `APPROVED` |
 
 ---
 
@@ -331,6 +331,7 @@ US-MOD-008
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. Herança MOD-007, 6 tabelas, motor BullMQ, Outbox, DLQ, 5 features. |
 | 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: concurrency via env var INTEGRATION_CONCURRENCY, princípio de mapeamento WS Protheus, nota sobre limite conexões Protheus. Owner atualizado. |
+| 1.2.0 | 2026-03-19 | arquitetura | Revisão final e promoção READY → APPROVED. Validado: escopo, herança MOD-007, fluxo completo, 6 tabelas, 6 scopes, 47 cenários Gherkin. Cascata para F01-F05. |
 
 ---
 

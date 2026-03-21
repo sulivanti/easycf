@@ -1,16 +1,16 @@
 # US-MOD-008-F01 — API: Catálogo de Serviços e Rotinas de Integração
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-008** (Integração Dinâmica — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-008, US-MOD-007-F02, DOC-ARC-001
 - **nivel_arquitetura:** 2 (credenciais criptografadas, herança MOD-007, trigger events)
 - **tipo:** Backend — cria novos endpoints
@@ -153,7 +153,7 @@ Funcionalidade: Catálogo de Serviços e Rotinas de Integração
 - [x] MOD-007 em READY (herança de rotinas)
 - [x] Seed de integration_services de HML disponível para testes
 - [x] Gherkin com 9 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 8. Definition of Done (DoD)
 
@@ -170,6 +170,7 @@ Funcionalidade: Catálogo de Serviços e Rotinas de Integração
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Catálogo de serviços + rotinas de integração, 9 cenários Gherkin, domain events. |
+| 1.1.0 | 2026-03-19 | arquitetura | Promoção READY → APPROVED (cascata do épico US-MOD-008 v1.2.0). |
 
 ---
 

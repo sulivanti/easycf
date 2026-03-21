@@ -1,7 +1,7 @@
 # ============================================================
 # Screen Manifest — UX-USR-001
 # Tela: Listagem de Usuários (MOD-002)
-# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# Schema: v1 | Versão: 1.1.0 | Data: 2026-03-17
 # ============================================================
 # UX-First: MOD-002 é exclusivamente frontend.
 # Todos os endpoints são consumidos de MOD-000-F05 e F06.
@@ -9,6 +9,7 @@
 # Paginação cursor-based, filtros sincronizados com URL.
 # ============================================================
 
+schema_version: "v1"
 manifest_version: 1
 screen_id: UX-USR-001
 name: Listagem de Usuários
@@ -36,30 +37,32 @@ telemetry_defaults:
     - X-Correlation-ID
 
 permissions:
-  read: users:read
-  write: users:write
-  delete: users:delete
+  read: users:user:read
+  write: users:user:write
+  delete: users:user:delete
 
 actions:
   - action: view
     client_only: false
     operation_ids:
       - users_list
-    permission: users:read
+      - roles_list
+    permission: users:user:read
     # Skeleton loading durante carregamento inicial
+    # roles_list carrega select de perfis para filtro
 
   - action: search
     client_only: false
     operation_ids:
       - users_list
-    permission: users:read
+    permission: users:user:read
     # Debounce 400ms — busca por nome ou e-mail
 
   - action: filter
     client_only: false
     operation_ids:
       - users_list
-    permission: users:read
+    permission: users:user:read
     # Filtros: status (ACTIVE|PENDING|BLOCKED|INACTIVE), role_id
     # Sincronizados com query params da URL para deep link
 
@@ -67,21 +70,20 @@ actions:
     client_only: false
     operation_ids:
       - users_list
-    permission: users:read
+    permission: users:user:read
     # Cursor-based: append, nunca substituição
 
   - action: create
-    client_only: false
-    operation_ids:
-      - users_create
-    permission: users:write
-    # Botão "Novo Usuário" visível apenas com scope
+    client_only: true
+    operation_ids: []
+    permission: users:user:write
+    # Botão "Novo Usuário" — navegação para /usuarios/novo (API em UX-USR-002)
 
   - action: deactivate
     client_only: false
     operation_ids:
       - users_delete
-    permission: users:delete
+    permission: users:user:delete
     # Modal de confirmação obrigatório — usa nome, NUNCA e-mail (LGPD)
 
 ui_rules:

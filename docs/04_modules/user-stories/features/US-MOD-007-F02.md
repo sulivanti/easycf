@@ -1,16 +1,16 @@
 # US-MOD-007-F02 — API: Rotinas de Comportamento, Itens e Versionamento
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-007** (Parametrização Contextual — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-007, US-MOD-007-F01
 - **nivel_arquitetura:** 2 (versionamento de rotinas, itens parametrizados, integração com MOD-006)
 - **tipo:** Backend — cria novos endpoints
@@ -156,7 +156,7 @@ Funcionalidade: API Rotinas de Comportamento e Versionamento
 - [x] `target_fields` seed para os objetos usados
 - [x] 7 tipos de item documentados com campos
 - [x] Gherkin com 8 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 9. Definition of Done (DoD)
 
@@ -174,6 +174,7 @@ Funcionalidade: API Rotinas de Comportamento e Versionamento
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. CRUD Rotinas + Itens + Versionamento, 8 cenários Gherkin, domain events. |
+| 1.1.0 | 2026-03-19 | Marcos Sulivan | Revisão final e promoção READY → APPROVED. |
 
 ---
 

@@ -1,15 +1,15 @@
 # US-MOD-010-F02 — API: Gateway e Motor de Despacho MCP
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-010** (MCP e Automação Governada — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 
 ## Metadados de Governança
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-010, US-MOD-010-F01, US-MOD-009, DOC-ARC-001
 - **nivel_arquitetura:** 2
 - **tipo:** Backend — gateway de entrada MCP
@@ -136,6 +136,7 @@ Funcionalidade: Gateway e Motor de Despacho MCP
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Gateway + Motor de Despacho, 9 cenários Gherkin, domain events. |
+| 1.1.0 | 2026-03-19 | Marcos Sulivan | APPROVED em cascata com épico US-MOD-010 v1.2.0. |
 
 ---
 

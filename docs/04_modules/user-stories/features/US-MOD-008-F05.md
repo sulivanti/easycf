@@ -1,16 +1,16 @@
 # US-MOD-008-F05 — UX: Monitor de Integrações (UX-INTEG-002)
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.1.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-008** (Integração Dinâmica — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-008, US-MOD-008-F03, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — monitor de integrações com DLQ
@@ -139,7 +139,7 @@ Funcionalidade: Monitor de Integrações — UX-INTEG-002
 - [x] Manifest UX-INTEG-002 criado
 - [x] F03 em READY (motor de execução com logs)
 - [x] Gherkin com 10 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 7. Definition of Done (DoD)
 
@@ -159,6 +159,7 @@ Funcionalidade: Monitor de Integrações — UX-INTEG-002
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Monitor com DLQ, 10 cenários Gherkin, manifest UX-INTEG-002. |
+| 1.1.0 | 2026-03-19 | arquitetura | Promoção READY → APPROVED (cascata do épico US-MOD-008 v1.2.0). |
 
 ---
 

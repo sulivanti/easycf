@@ -1,8 +1,8 @@
 # US-MOD-002-F01 — Listagem de Usuários
 
 **Status Ágil:** `READY`
-**Versão:** 1.1.0
-**Data:** 2026-03-16
+**Versão:** 1.2.0
+**Data:** 2026-03-17
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-002** (Gestão de Usuários)
 
@@ -10,11 +10,11 @@
 
 - **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-16
+- **data_ultima_revisao:** 2026-03-17
 - **rastreia_para:** US-MOD-002, US-MOD-000-F05, US-MOD-000-F06, DOC-UX-011, DOC-UX-012, SEC-000-01, LGPD-BASE-001
 - **nivel_arquitetura:** 1
 - **operationIds consumidos:** `users_list`, `users_delete`, `roles_list`
-- **evidencias:** DoR verificado, conteúdo revisado (2026-03-16)
+- **evidencias:** Revisão cruzada com Foundation §2.2: scopes alinhados, cenários de erro e scope coverage ampliados (2026-03-17)
 - **wave_entrega:** Wave 1
 - **epico_pai:** US-MOD-002
 - **manifests_vinculados:** ux-usr-001
@@ -108,6 +108,14 @@ Funcionalidade: Listagem de Usuários — UX-USR-001
     Então a URL volta para /usuarios sem query params
     E a listagem recarrega sem filtros aplicados
 
+  # ── Erros de carregamento ────────────────────────────────────
+  Cenário: Erro ao carregar lista de usuários
+    Dado que o usuário acessa /usuarios
+    Quando GET /api/v1/users retorna 500
+    Então o skeleton é removido
+    E um Toast de erro exibe: "Não foi possível carregar a lista de usuários." + correlationId
+    E a tela exibe estado de erro com botão "Tentar novamente"
+
   # ── Ações por linha ──────────────────────────────────────────
   Cenário: Botão "Novo Usuário" visível apenas com scope correto
     Dado que o usuário tem scope "users:user:write"
@@ -119,11 +127,24 @@ Funcionalidade: Listagem de Usuários — UX-USR-001
     Dado que o usuário tem apenas scope "users:user:read" (sem :write)
     Então o botão "Novo Usuário" NÃO deve estar presente na tela
 
-  Cenário: Ação "Reenviar convite" visível apenas para usuários PENDING
-    Dado que a tabela exibe um usuário com status PENDING
+  Cenário: Ação "Reenviar convite" visível apenas para usuários PENDING com scope de escrita
+    Dado que o usuário tem scope "users:user:write"
+    E a tabela exibe um usuário com status PENDING
     Então o dropdown de ações desse usuário deve incluir "Reenviar convite"
     Quando o admin clica em "Reenviar convite"
     Então é redirecionado para /usuarios/:id/convite
+
+  Cenário: Ação "Desativar" visível apenas com scope de exclusão
+    Dado que o usuário tem scope "users:user:delete"
+    Então o dropdown de ações de cada usuário deve incluir "Desativar"
+
+  Cenário: Ação "Desativar" ausente sem scope de exclusão
+    Dado que o usuário NÃO tem scope "users:user:delete"
+    Então o dropdown de ações NÃO deve incluir "Desativar"
+
+  Cenário: Ação "Desativar" desabilitada para usuários INACTIVE
+    Dado que a tabela exibe um usuário com status INACTIVE
+    Então a opção "Desativar" no dropdown NÃO deve estar disponível para esse usuário
 
   Cenário: Ação "Desativar" abre modal de confirmação
     Dado que o admin clica em "Desativar" no dropdown de um usuário
@@ -166,8 +187,11 @@ Funcionalidade: Listagem de Usuários — UX-USR-001
 - [ ] Busca com debounce de 400ms
 - [ ] Paginação cursor-based (append na tabela)
 - [ ] Modal de desativação sem e-mail do usuário
-- [ ] Visibilidade de botões por scope (write vs. read)
+- [ ] Visibilidade do botão "Novo Usuário" por scope `users:user:write`
+- [ ] Visibilidade da ação "Desativar" por scope `users:user:delete`
+- [ ] Ação "Desativar" desabilitada para status INACTIVE
 - [ ] Estado vazio com CTA
+- [ ] Estado de erro com retry ao falhar carregamento da lista
 - [ ] Testes de integração com mock de diferentes scopes e estados
 
 ---
@@ -181,12 +205,13 @@ Funcionalidade: Listagem de Usuários — UX-USR-001
 ## 7. Regras Críticas
 
 1. Scope `users:user:read` obrigatório — sem ele, redirect para /dashboard com Toast
-2. Ações de escrita (criar, desativar) visíveis apenas com scope `users:user:write`
-3. Modal de desativação usa **nome** do usuário, **nunca o e-mail** (LGPD)
-4. Filtros sincronizados com query params para deep link e navegação com "Voltar"
-5. Paginação cursor-based: append, nunca substituição da lista
-6. Busca: debounce 400ms — sem chamada por keystroke
-7. Após desativação: linha atualizada inline (sem reload da página)
+2. Botão "Novo Usuário" visível apenas com scope `users:user:write`
+3. Ação "Desativar" visível apenas com scope `users:user:delete`; desabilitada para usuários INACTIVE
+4. Modal de desativação usa **nome** do usuário, **nunca o e-mail** (LGPD)
+5. Filtros sincronizados com query params para deep link e navegação com "Voltar"
+6. Paginação cursor-based: append, nunca substituição da lista
+7. Busca: debounce 400ms — sem chamada por keystroke
+8. Após desativação: linha atualizada inline (sem reload da página)
 
 ---
 
@@ -194,4 +219,6 @@ Funcionalidade: Listagem de Usuários — UX-USR-001
 
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
+| 1.2.0 | 2026-03-17 | arquitetura | Revisão cruzada: scope `users:user:delete` para desativar (alinhado DOC-FND-000 §2.2), cenários de erro GET 500, visibilidade por scope granular, desativar disabled para INACTIVE. |
+| 1.1.0 | 2026-03-16 | arquitetura | DoR verificado, conteúdo revisado. |
 | 1.0.0 | 2026-03-15 | arquitetura | Criação no padrão ECF. Feature cascade do MOD-002. |

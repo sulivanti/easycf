@@ -1,6 +1,6 @@
 # US-MOD-009-F04 — UX: Inbox de Aprovações (UX-APROV-001)
 
-**Status Ágil:** `READY`
+**Status Ágil:** `APPROVED`
 **Versão:** 1.0.0
 **Data:** 2026-03-15
 **Módulo Destino:** **MOD-009** (Aprovações e Alçadas — UX)
@@ -9,7 +9,7 @@
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-009, US-MOD-009-F02, US-MOD-009-F03, DOC-UX-010
@@ -127,7 +127,7 @@ Funcionalidade: Inbox de Aprovações — UX-APROV-001
 - [x] Manifest UX-APROV-001 criado
 - [x] F02/F03 em READY
 - [x] Gherkin com 11 cenários
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (cascata do épico 2026-03-19)
 
 ## 7. Definition of Done (DoD)
 

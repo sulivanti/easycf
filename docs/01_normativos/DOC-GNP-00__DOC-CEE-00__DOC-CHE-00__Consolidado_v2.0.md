@@ -198,5 +198,257 @@ Snippet referência:
 >
 > Princípio: **não usar "permissão no evento" como fonte de verdade**; Emit = comando, View = ACL+tenant.
 
-- Patch SEC: `SEC-EventMatrix` (Matriz Emit/View/Notify)
+- Patch SEC: `SEC-002` (Matriz Emit/View/Notify)
 - Patch DATA: `DATA-003` com catálogo obrigatório e rastreável
+
+---
+
+# (ANEXO ADITIVO) Infraestrutura e Observabilidade — EX-IDEMP-001, EX-RES-001, EX-OBS-001, EX-TRACE-001, EX-DB-001, EX-NAME-001
+
+> Exemplos canônicos de padrões de infraestrutura, resiliência e observabilidade. Âncoras para o Gate de IDs (EX-CI-007).
+
+## EX-IDEMP-001 — Idempotência em operações de escrita
+
+Operações de escrita com efeito colateral DEVEM suportar `Idempotency-Key`. O middleware abaixo previne reprocessamento.
+
+```typescript
+// apps/api/src/infra/middleware/idempotency.ts
+import { FastifyRequest, FastifyReply } from 'fastify';
+import { redis } from '../cache/redis-client';
+
+const IDEMPOTENCY_TTL = 86400; // 24h
+
+export async function idempotencyGuard(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const key = request.headers['idempotency-key'] as string | undefined;
+  if (!key) return; // sem chave = sem proteção (endpoints que não exigem)
+
+  const cacheKey = `idempotency:${request.user.tenant_id}:${key}`;
+  const cached = await redis.get(cacheKey);
+
+  if (cached) {
+    const previous = JSON.parse(cached);
+    return reply.status(previous.status).send(previous.body);
+  }
+
+  // Armazena após resposta (hook onSend)
+  reply.raw.on('finish', async () => {
+    // Salva somente para 2xx
+    if (reply.statusCode >= 200 && reply.statusCode < 300) {
+      await redis.setex(
+        cacheKey,
+        IDEMPOTENCY_TTL,
+        JSON.stringify({ status: reply.statusCode, body: reply.payload }),
+      );
+    }
+  });
+}
+```
+
+## EX-RES-001 — Resiliência com retry e circuit breaker
+
+Chamadas a serviços externos ou integrações DEVEM implementar retry com backoff exponencial e circuit breaker para evitar cascata de falhas.
+
+```typescript
+// apps/api/src/infra/resilience/retry-with-breaker.ts
+
+interface RetryOptions {
+  maxRetries: number;
+  baseDelayMs: number;
+  circuitThreshold: number; // falhas consecutivas para abrir circuito
+}
+
+const DEFAULT_OPTIONS: RetryOptions = {
+  maxRetries: 3,
+  baseDelayMs: 200,
+  circuitThreshold: 5,
+};
+
+let consecutiveFailures = 0;
+let circuitOpen = false;
+let circuitOpenUntil = 0;
+
+export async function withResilience<T>(
+  fn: () => Promise<T>,
+  opts: Partial<RetryOptions> = {},
+): Promise<T> {
+  const { maxRetries, baseDelayMs, circuitThreshold } = {
+    ...DEFAULT_OPTIONS,
+    ...opts,
+  };
+
+  if (circuitOpen && Date.now() < circuitOpenUntil) {
+    throw new Error('Circuit breaker OPEN — request rejected');
+  }
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await fn();
+      consecutiveFailures = 0;
+      circuitOpen = false;
+      return result;
+    } catch (err) {
+      consecutiveFailures++;
+      if (consecutiveFailures >= circuitThreshold) {
+        circuitOpen = true;
+        circuitOpenUntil = Date.now() + 30_000; // 30s cooldown
+      }
+      if (attempt === maxRetries) throw err;
+      await new Promise((r) =>
+        setTimeout(r, baseDelayMs * Math.pow(2, attempt)),
+      );
+    }
+  }
+  throw new Error('Unreachable');
+}
+
+// Uso:
+const result = await withResilience(() => externalService.call(payload), {
+  maxRetries: 3,
+  baseDelayMs: 500,
+});
+```
+
+## EX-OBS-001 — Observabilidade e telemetria estruturada
+
+Todo módulo DEVE emitir logs estruturados com campos padronizados. O padrão garante rastreabilidade end-to-end.
+
+```typescript
+// apps/api/src/infra/observability/structured-logger.ts
+import pino from 'pino';
+
+export const logger = pino({
+  level: process.env.LOG_LEVEL ?? 'info',
+  formatters: {
+    level: (label) => ({ level: label }),
+  },
+  serializers: {
+    req: (req) => ({
+      method: req.method,
+      url: req.url,
+      correlation_id: req.headers['x-correlation-id'],
+      tenant_id: req.user?.tenant_id,
+    }),
+  },
+});
+
+// Padrão de log por operação:
+logger.info({
+  event: 'user_created',
+  correlation_id: request.headers['x-correlation-id'],
+  tenant_id: request.user.tenant_id,
+  actor_id: request.user.id,
+  entity_id: createdUser.id,
+  duration_ms: elapsed,
+});
+
+// Métricas expostas para Prometheus/Grafana:
+// - http_requests_total{method, path, status}
+// - http_request_duration_seconds{method, path}
+// - domain_events_emitted_total{event_type, module}
+// - background_jobs_duration_seconds{job_name, status}
+```
+
+## EX-TRACE-001 — Rastreabilidade com correlation_id
+
+Toda requisição DEVE propagar `X-Correlation-ID` do request ao response, logs, domain events e jobs assíncronos. Se não recebido, o middleware DEVE gerar um UUID v4.
+
+```typescript
+// apps/api/src/infra/middleware/correlation-id.ts
+import { FastifyRequest, FastifyReply } from 'fastify';
+import { randomUUID } from 'crypto';
+
+export async function correlationIdHook(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const correlationId =
+    (request.headers['x-correlation-id'] as string) ?? randomUUID();
+
+  // Injeta no request para uso nos handlers/use cases
+  request.correlationId = correlationId;
+
+  // Propaga no response
+  reply.header('X-Correlation-ID', correlationId);
+}
+
+// Propagação para domain events e jobs:
+const event = {
+  event_type: 'UserCreated',
+  correlation_id: request.correlationId,
+  actor_id: request.user.id,
+  tenant_id: request.user.tenant_id,
+  payload: { user_id: user.id },
+  occurred_at: new Date().toISOString(),
+};
+
+// Propagação para BullMQ jobs:
+await queue.add('send-welcome-email', {
+  ...jobData,
+  correlation_id: request.correlationId,
+});
+```
+
+## EX-DB-001 — Campos obrigatórios em tabelas (padrão de schema)
+
+Toda tabela do sistema DEVE incluir os campos base abaixo. O padrão garante auditoria, multi-tenancy e soft-delete uniformes.
+
+```typescript
+// apps/api/src/infra/db/base-columns.ts
+import { pgTable, uuid, timestamp, varchar } from 'drizzle-orm/pg-core';
+
+// Campos MUST em toda tabela:
+export const baseColumns = {
+  id: uuid('id').primaryKey().defaultRandom(),
+  tenant_id: uuid('tenant_id').notNull(), // RLS — isolamento por tenant
+  created_at: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updated_at: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  created_by: uuid('created_by').notNull(), // actor_id (quem criou)
+  updated_by: uuid('updated_by').notNull(), // actor_id (última alteração)
+  deleted_at: timestamp('deleted_at', { withTimezone: true }), // soft-delete
+};
+
+// Uso:
+export const users = pgTable('users', {
+  ...baseColumns,
+  email: varchar('email', { length: 255 }).notNull(),
+  name: varchar('name', { length: 255 }).notNull(),
+  // ...campos específicos
+});
+
+// Índice obrigatório para RLS:
+// CREATE INDEX idx_users_tenant_id ON users(tenant_id);
+// CREATE INDEX idx_users_tenant_deleted ON users(tenant_id, deleted_at);
+```
+
+## EX-NAME-001 — Naming convention (banco, API, código)
+
+Convenção de nomenclatura padronizada para garantir consistência entre camadas.
+
+```
+## Banco de Dados (PostgreSQL)
+- Tabelas: snake_case, plural (ex: users, org_units, process_cycles)
+- Colunas: snake_case (ex: tenant_id, created_at, deleted_at)
+- Índices: idx_{tabela}_{colunas} (ex: idx_users_tenant_id)
+- Foreign keys: fk_{tabela}_{referencia} (ex: fk_users_role_id)
+- Constraints: chk_{tabela}_{regra} (ex: chk_users_email_format)
+
+## API (endpoints)
+- Paths: kebab-case, plural (ex: /api/v1/org-units, /api/v1/process-cycles)
+- Query params: snake_case (ex: ?page_size=20&sort_by=created_at)
+- Body fields: camelCase (ex: { tenantId, createdAt, orgUnitId })
+- Headers: Title-Case-Hyphen (ex: X-Correlation-ID, Idempotency-Key)
+
+## Código (TypeScript)
+- Arquivos: kebab-case (ex: user-repository.ts, create-user.use-case.ts)
+- Classes/Interfaces: PascalCase (ex: UserRepository, CreateUserUseCase)
+- Variáveis/funções: camelCase (ex: findByTenantId, userScopes)
+- Constantes: UPPER_SNAKE_CASE (ex: MAX_PAGE_SIZE, IDEMPOTENCY_TTL)
+- Enums: PascalCase (membros UPPER_SNAKE_CASE)
+```

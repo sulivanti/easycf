@@ -1,8 +1,8 @@
 # US-MOD-002-F03 — Fluxo de Convite e Ativação de Usuário
 
 **Status Ágil:** `READY`
-**Versão:** 1.1.0
-**Data:** 2026-03-16
+**Versão:** 1.2.0
+**Data:** 2026-03-17
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-002** (Gestão de Usuários)
 
@@ -10,11 +10,11 @@
 
 - **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-16
+- **data_ultima_revisao:** 2026-03-17
 - **rastreia_para:** US-MOD-002, US-MOD-000-F05, DOC-UX-012, LGPD-BASE-001
 - **nivel_arquitetura:** 1
 - **operationIds consumidos:** `users_get`, `users_invite_resend`
-- **evidencias:** DoR verificado, conteúdo revisado (2026-03-16)
+- **evidencias:** Revisão cruzada: cenário de acesso e 404 adicionados, regra de scope documentada (2026-03-17)
 - **wave_entrega:** Wave 1
 - **epico_pai:** US-MOD-002
 - **manifests_vinculados:** ux-usr-003
@@ -66,6 +66,13 @@ Como **administrador**, quero uma tela para acompanhar o status do convite de um
 ```gherkin
 Funcionalidade: Fluxo de Convite e Ativação — UX-USR-003
 
+  # ── Acesso e Permissão ───────────────────────────────────────
+  Cenário: Admin sem permissão é redirecionado
+    Dado que o usuário está autenticado sem scope "users:user:read"
+    Quando ele tenta acessar /usuarios/:id/convite
+    Então deve ser redirecionado para /usuarios
+    E um Toast deve exibir: "Sem permissão para acessar esta seção."
+
   # ── Carregamento e Status ────────────────────────────────────
   Cenário: Skeleton durante carregamento dos dados do convite
     Dado que o admin acessa /usuarios/:id/convite
@@ -102,6 +109,13 @@ Funcionalidade: Fluxo de Convite e Ativação — UX-USR-003
     Dado que GET /api/v1/users/:id retorna { status: "INACTIVE" }
     Então o card exibe badge cinza "Inativo"
     E o botão "Reenviar convite" NÃO deve ser exibido
+
+  Cenário: Usuário não encontrado (404)
+    Dado que o admin acessa /usuarios/:id/convite com um ID inválido
+    Quando GET /api/v1/users/:id retorna 404
+    Então a tela exibe mensagem inline: "Usuário não encontrado."
+    E o botão "Reenviar convite" NÃO deve ser exibido
+    E o breadcrumb oferece link para retornar à listagem
 
   # ── Reenvio de Convite ───────────────────────────────────────
   Cenário: Reenvio bem-sucedido
@@ -174,12 +188,13 @@ Funcionalidade: Fluxo de Convite e Ativação — UX-USR-003
 
 ## 8. Regras Críticas
 
-1. **Título e conteúdo da tela usam nome** — nunca o e-mail (LGPD)
-2. **Botão "Reenviar"** disponível apenas para `status=PENDING`; para BLOCKED: desabilitado com tooltip; para ACTIVE/INACTIVE: não renderizado
-3. **Cooldown de 60s** após reenvio: countdown em tempo real, sem reload, sem chamada de API
-4. **Toast de sucesso**: genérico sem e-mail — "Convite reenviado com sucesso."
-5. **Erro de reenvio**: não inicia cooldown — usuário pode tentar novamente imediatamente
-6. **Amendment obrigatório**: `users_invite_resend` deve ser criado no MOD-000-F05 **antes** do scaffolding desta feature
+1. Scope `users:user:read` obrigatório — sem ele, redirect para /usuarios com Toast
+2. **Título e conteúdo da tela usam nome** — nunca o e-mail (LGPD)
+3. **Botão "Reenviar"** disponível apenas para `status=PENDING`; para BLOCKED: desabilitado com tooltip; para ACTIVE/INACTIVE: não renderizado
+4. **Cooldown de 60s** após reenvio: countdown em tempo real, sem reload, sem chamada de API
+5. **Toast de sucesso**: genérico sem e-mail — "Convite reenviado com sucesso."
+6. **Erro de reenvio**: não inicia cooldown — usuário pode tentar novamente imediatamente
+7. **Amendment obrigatório**: `users_invite_resend` deve ser criado no MOD-000-F05 **antes** do scaffolding desta feature
 
 ---
 
@@ -187,4 +202,6 @@ Funcionalidade: Fluxo de Convite e Ativação — UX-USR-003
 
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
+| 1.2.0 | 2026-03-17 | arquitetura | Revisão cruzada: cenário de acesso (guard sem scope), cenário 404 (usuário não encontrado), regra de scope nas Regras Críticas. |
+| 1.1.0 | 2026-03-16 | arquitetura | DoR verificado, conteúdo revisado. |
 | 1.0.0 | 2026-03-15 | arquitetura | Criação no padrão ECF. Amendment documentado, cooldown 60s, todos os estados mapeados, proteção PII completa. |

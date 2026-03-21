@@ -1,17 +1,17 @@
 # US-MOD-007-F05 — UX: Cadastro de Rotinas (UX-ROTINA-001)
 
-**Status Ágil:** `READY`
-**Versão:** 1.0.0
-**Data:** 2026-03-15
+**Status Ágil:** `APPROVED`
+**Versão:** 1.2.0
+**Data:** 2026-03-19
 **Módulo Destino:** **MOD-007** (Parametrização Contextual — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 **operationIds consumidos:** `admin_routines_list/create/get`, `admin_routines_publish/fork`, `admin_routine_items_create/update/delete`, `routine_engine_evaluate`
 
 ## Metadados de Governança
 
-- **status_agil:** READY
+- **status_agil:** APPROVED
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-007, US-MOD-007-F02, US-MOD-007-F03, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — editor de rotinas com versionamento
@@ -161,7 +161,7 @@ Funcionalidade: Cadastro de Rotinas — UX-ROTINA-001
 2. **Auto-save de itens**: debounce 600ms — sem botão "Salvar" explícito por campo
 3. **Fork**: campo "Motivo" obrigatório (min 10 chars) — armazenado em `routine_version_history`
 4. **PUBLISHED**: editor completamente readonly — banner sempre visível
-5. **Preview (dry-run)**: NÃO cria domain_events, NÃO invalida cache Redis
+5. **Preview (dry-run)**: NÃO cria domain_events
 6. **is_blocking=true**: badge vermelho visível na listagem + no preview — rastreabilidade clara
 
 ---
@@ -171,7 +171,7 @@ Funcionalidade: Cadastro de Rotinas — UX-ROTINA-001
 - [x] Manifest UX-ROTINA-001 criado
 - [x] F02/F03 em READY (APIs e motor consumidos)
 - [x] Gherkin com 13 cenários cobrindo editor, publicação, fork e preview
-- [ ] Owner confirmar READY → APPROVED
+- [x] Owner confirmar READY → APPROVED (2026-03-19)
 
 ## 7. Definition of Done (DoD)
 
@@ -192,6 +192,8 @@ Funcionalidade: Cadastro de Rotinas — UX-ROTINA-001
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação. Editor split-view, 13 cenários Gherkin, manifest UX-ROTINA-001. |
+| 1.1.0 | 2026-03-18 | Marcos Sulivan | Alinha com épico v1.1.0: remove referência a cache Redis no dry-run. |
+| 1.2.0 | 2026-03-19 | Marcos Sulivan | Revisão final e promoção READY → APPROVED. |
 
 ---
 

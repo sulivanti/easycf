@@ -312,6 +312,25 @@ validateEmitterIntegrity(request, {
 });
 ```
 
+### EX-THREAT-001 — Modelo de ameaças reutilizável (Threat Model)
+
+Template de tabela de ameaças que TODO módulo com requisitos de segurança (SEC-xxx) DEVE incluir. Cobre vetores comuns de frontend e backend.
+
+```markdown
+## Modelo de Ameaças — MOD-XXX
+
+| Ameaça | Vetor | Mitigação | Ref |
+|---|---|---|---|
+| Exfiltração de PII | Logs, responses, exports | Mascaramento via middleware (EX-PII-001), campos `sensitivity: pii` | DOC-FND-000 §2.1 |
+| Token hijacking (XSS) | localStorage, cookies inseguros | httpOnly + Secure + SameSite=Strict, CSP headers | DOC-FND-000 §2.2 |
+| Scope escalation | Manipulação de role/scope no JWT | RBAC server-side (EX-AUTH-001), validação por endpoint | DOC-FND-000 §2.3 |
+| CSRF | Form submissions cross-origin | SameSite cookies, CSRF token no header | OWASP CSRF Prevention |
+| Replay attack | Reuso de requests capturados | Idempotency key (EX-IDEMP-001), expiração de nonce | DOC-GNP-00 (EX-IDEMP-001) |
+| Enumeração de recursos | Brute-force em IDs sequenciais | UUIDs v4, rate limiting, respostas uniformes (404 vs 403) | DOC-ARC-001 (EX-API-001) |
+| SQL Injection | Inputs não sanitizados | Parameterized queries (Drizzle ORM), input validation | OWASP SQLi Prevention |
+| Tenant data leak | Query sem filtro RLS | tenant_id obrigatório em todas as queries (EX-DB-001) | DOC-FND-000 §2.4 |
+```
+
 ---
 
 ## CHANGELOG

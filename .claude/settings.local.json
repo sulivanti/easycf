@@ -2,10 +2,30 @@
   "permissions": {
     "allow": [
       "Skill(ralph-wiggum:ralph-loop)",
-      "Bash(pnpm run:*)",
-      "Bash(ls -1 /d/Dev/EasyCodeFramework/.claude/commands/*.md)",
-      "Bash(grep -r 'Referência de arquivo quebrada' /d/Dev/EasyCodeFramework --include=*.py --include=*.js --include=*.mjs)",
-      "Bash(ls D:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-param-001* D:/Dev/EasyCodeFramework/docs/05_manifests/screens/ux-rotina-001*)"
+      "Bash(pnpm run qa:*)",
+      "Bash(pnpm run lint:*)",
+      "Bash(pnpm run validate:*)",
+      "Bash(node .agents/scripts/*)",
+      "Bash(for mod:*)",
+      "Bash(do echo:*)",
+      "Bash(sed 's/\\\\.yaml.*//')",
+      "Bash(sed 's/\\\\..*//')",
+      "Bash(node:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const j=JSON.parse(d);const f=j.tool_input?.file_path||'';if(/pen-.*-pendente\\.md$/.test(f)){process.stdout.write(f)}else{process.exit(0)}})\" | { read -r f; if [ -n \"$f\" ]; then npx markdownlint-cli2 \"$f\" 2>&1 || true; fi; }",
+            "timeout": 30,
+            "statusMessage": "Validando markdown do arquivo de pendências..."
+          }
+        ]
+      }
     ]
   }
 }

@@ -1,7 +1,8 @@
 # PKG-DEV-001 — Pacote 1: Agentes de Enriquecimento do DOC-DEV-001 (11 agentes)
 
-**Versão:** 1.3  
-**Data:** 2026-03-02  
+**id:** PKG-DEV-001
+**Versão:** 1.3
+**Data:** 2026-03-02
 **Base:** DOC-DEV-001 + DOC-ESC-001 + DOC-GNP-00 v2.0 + DOC-GPA-001 + UX-010 + Events↔Permissions Pack
 
 Este pacote define **11 agentes especialistas** para enriquecer o **DOC-DEV-001** com alta granularidade (produção/automação).

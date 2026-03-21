@@ -11,9 +11,41 @@ Permitir que a arquitetura recue um passo: destrói a documentação canônica g
 
 $ARGUMENTS deve conter o ID do módulo e motivo (ex: `MOD-012 "especificação mudou"`). Se não fornecido, pergunte ao usuário.
 
+Flags opcionais:
+- `--dry-run` — apenas lista o que seria destruído, sem executar
+- `--no-backup` — pula criação de backup (não recomendado)
+
 ## PASSO 1: Verificação de Segurança (Gate de Implementação)
 
-Um módulo só pode sofrer rollback se **nenhum código técnico** (Fastify, Drizzle, rotas, testes) tiver sido gerado. Confirme com o usuário antes de prosseguir.
+Um módulo só pode sofrer rollback se **nenhum código técnico** (Fastify, Drizzle, rotas, testes) tiver sido gerado.
+
+Verifique se existem arquivos em `apps/api/src/modules/{mod}/`. Se existirem, **aborte**: `"Módulo já possui código gerado. Rollback não é seguro — use git revert ou remova manualmente."`
+
+Confirme com o usuário antes de prosseguir, listando o que será destruído:
+
+```
+## Rollback — MOD-{ID}
+
+### Arquivos que serão destruídos:
+- docs/04_modules/mod-{ID}-{nome}/ ({N} arquivos)
+
+### User Stories que serão revertidas:
+- US-MOD-{ID}-*.md → status alterado para TODO/REJECTED
+
+Confirma? (sim/não)
+```
+
+Se `--dry-run`, exiba a lista acima e **pare** sem executar.
+
+## PASSO 1.5: Backup (a menos que `--no-backup`)
+
+Antes de destruir, crie um backup via git stash ou tag:
+
+```bash
+git stash push -m "rollback-mod-{ID}-backup" -- docs/04_modules/mod-{ID}-*/
+```
+
+Informe ao usuário: `"Backup criado em git stash. Para restaurar: git stash pop"`
 
 ## PASSO 2: Reversão da User Story
 

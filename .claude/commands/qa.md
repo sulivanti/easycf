@@ -1,6 +1,13 @@
 # Skill: qa_assistant
 
-Pipeline de qualidade para validação de documentação, manifestos e integridade geral do projeto.
+Pipeline de qualidade para validação de **sintaxe e integridade** de arquivos do projeto (links, markdown, YAML schemas). Executa npm scripts de linting.
+
+> **Relação com `/validate-all`:** Esta skill é invocada automaticamente como primeiro passo do `/validate-all`. Use `/qa` isoladamente para diagnóstico rápido de integridade. Use `/validate-all` para validação completa pré-promoção (inclui `/qa` + validações semânticas via LLM).
+
+| Cenário | Skill |
+|---|---|
+| Quero checar se links e markdown estão OK | `/qa` |
+| Quero validar um módulo antes de promover | `/validate-all` (inclui `/qa`) |
 
 ## Argumento
 

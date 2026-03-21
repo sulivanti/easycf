@@ -1,9 +1,9 @@
 # DOC-DEV-001 — Documento de Especificação Executável (TS + Node + Vite/React | OpenAPI/Swagger)
 
 - **id:** DOC-DEV-001
-- **version:** 1.5.0
+- **version:** 1.6.0
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-15
+- **data_ultima_revisao:** 2026-03-20
 - **owner:** arquitetura
 - **scope:** global (norma canônica do projeto)
 
@@ -15,6 +15,7 @@
 
 | Versão | Data       | Responsável | Descrição |
 |--------|------------|-------------|-----------|
+| 1.6.0  | 2026-03-20 | arquitetura | §0.4: Documenta escopo de IDs (local ao módulo vs. globalmente único). Notação qualificada `MOD-XXX/ARTEFATO-YYY` para referências cross-módulo. Classificação cross-cutting vs. domínio com templates base para DATA-003 e SEC-002. |
 | 1.5.0  | 2026-03-15 | arquitetura | Correções: remoção de REFINING, renumeração de seções, unificação para forge-module, Vite/React. Metadados duplicados removidos do rodapé. |
 | 1.4.0  | 2026-03-04 | arquitetura | Promovido a norma canônica em `01_normativos`. CHANGELOG embutido. Skill `forge-module` referenciada na regra de uso. |
 | 1.3.0  | 2026-02-28 | arquitetura | Versão inicial como template. Seções de OpenAPI, testes automáticos e arquitetura C4. |
@@ -98,17 +99,40 @@ Todo item técnico com ID (MOD/BR/FR/DATA/INT/SEC/UX/NFR/ADR/PENDENTE) que resid
 
 ### 0.4 Padrão de IDs (-\d{3})
 
-- **MOD-XXX** Módulos/recursos do sistema
-- **BR-XXX** Regras de negócio
-- **FR-XXX** Requisitos funcionais
-- **DATA-XXX** Dados/entidades/contratos de persistência
-- **INT-XXX** Integrações/contratos externos
-- **SEC-XXX** Segurança/compliance
-- **UX-XXX** UX/jornadas/mensagens
-- **NFR-XXX** Não-funcionais
-- **ADR-XXX** Decisões arquiteturais
+#### Escopo dos IDs: local ao módulo
+
+Os IDs de artefato (`BR-001`, `DATA-003`, `SEC-002`, etc.) são **locais ao módulo** — não globalmente únicos no repositório. Cada módulo possui o seu próprio `DATA-003`, `SEC-002`, `FR-001`, etc., pois os IDs representam **tipos de artefato padronizados pelo template**, não identificadores únicos do projeto.
+
+- **Disambiguação:** quando necessário referenciar um artefato de outro módulo, usar a notação qualificada `MOD-XXX/ARTEFATO-YYY` (ex: `MOD-003/DATA-003`). Dentro do próprio módulo, o ID curto é suficiente.
+- **Busca por tipo:** uma busca por `DATA-003` retorna **todas as instâncias** (uma por módulo) — esse é o comportamento esperado, pois permite visão consolidada cross-módulo do mesmo tipo de artefato (ex: todos os catálogos de domain events).
+- **Path como referência canônica:** a localização física do artefato (`docs/04_modules/mod-XXX-nome/requirements/data/DATA-003.md`) é a referência canônica inequívoca.
+
+#### Classificação de artefatos: cross-cutting vs. domínio
+
+Os artefatos de um módulo se dividem em duas categorias:
+
+- **Artefatos cross-cutting** (governança de eventos): definem regras de governança que seguem uma **estrutura canônica** derivada de DOC-ARC-003 e DOC-FND-000 §3. Possuem boilerplate padronizado (Princípios MUST, Glossário, Campos mínimos) que **NÃO DEVE** ser reinventado por agentes — deve ser copiado do template base em `docs/04_modules/_templates/`.
+  - **DATA-003** — Catálogo de Domain Events (template: `_templates/DATA-003-template.md`)
+  - **SEC-002** — Matriz de Autorização de Eventos (template: `_templates/SEC-002-template.md`)
+
+- **Artefatos de domínio** (conteúdo específico): possuem estrutura livre e conteúdo 100% específico do módulo. Cada módulo define suas próprias regras de negócio, requisitos funcionais, modelos de dados, etc. — sem boilerplate compartilhado além do header de automação.
+  - **BR-XXX**, **FR-XXX**, **DATA-001**, **INT-XXX**, **SEC-001**, **UX-XXX**, **NFR-XXX**, **ADR-XXX**, **PENDENTE-XXX**
+
+> **Regra para agentes enriquecedores:** ao criar DATA-003 ou SEC-002, o agente DEVE usar o template base como ponto de partida e enriquecer **apenas** a seção de conteúdo específico do módulo (catálogo de eventos / matriz de autorização). O boilerplate canônico é imutável.
+
+#### Catálogo de prefixos
+
+- **MOD-XXX** Módulos/recursos do sistema (ID **globalmente único**)
+- **BR-XXX** Regras de negócio (local ao módulo)
+- **FR-XXX** Requisitos funcionais (local ao módulo)
+- **DATA-XXX** Dados/entidades/contratos de persistência (local ao módulo)
+- **INT-XXX** Integrações/contratos externos (local ao módulo)
+- **SEC-XXX** Segurança/compliance (local ao módulo)
+- **UX-XXX** UX/jornadas/mensagens (local ao módulo)
+- **NFR-XXX** Não-funcionais (local ao módulo)
+- **ADR-XXX** Decisões arquiteturais (local ao módulo)
 - **FIX-XXX** Correções de bugs/hotfixes (usado principalmente no Pull Request)
-- **PENDENTE-XXX** Pendências (sem perguntas — sempre com impacto e opções)
+- **PENDENTE-XXX** Pendências (sem perguntas — sempre com impacto e opções, local ao módulo)
 
 ---
 
@@ -1304,6 +1328,62 @@ As automações cruzarão o "Quê" (User Story) com o "Como" (DOC-DEV-001) autom
 ## Apêndice — Exemplos Canônicos (EX-*)
 
 > Âncoras referenciáveis por módulos via `referencias_exemplos`. Cada ID é único e rastreável pelo Gate de IDs (EX-CI-007).
+
+### EX-DEV-001 — Envelope de artefato de especificação (padrão genérico)
+
+Estrutura mínima de metadados que TODO artefato de requisito (BR-xxx, DATA-xxx, FR-xxx, SEC-xxx, etc.) DEVE conter no cabeçalho. Garante rastreabilidade e governança.
+
+```markdown
+> ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+
+# <TIPO>-<NNN> — <Título descritivo>
+
+- **estado_item:** DRAFT | READY | APPROVED
+- **owner:** <nome ou papel>
+- **data_ultima_revisao:** YYYY-MM-DD
+- **rastreia_para:** US-MOD-XXX-FNN, DOC-DEV-001, DOC-FND-000
+- **referencias_exemplos:** EX-DEV-001
+- **evidencias:** N/A | link para teste/validação
+
+---
+
+## 1. <Primeira seção do artefato>
+...
+```
+
+### EX-ADR-001 — Template de ADR (Architecture Decision Record)
+
+Estrutura canônica para documentar decisões arquiteturais nos módulos. Cada ADR reside em `<módulo>/adr/ADR-NNN.md`.
+
+```markdown
+# ADR-NNN — <Título da decisão>
+
+- **Status:** PROPOSED | ACCEPTED | DEPRECATED | SUPERSEDED by ADR-XXX
+- **Data:** YYYY-MM-DD
+- **Autor:** <nome ou papel>
+- **Módulo:** MOD-XXX
+
+## Contexto
+
+<Descreva as forças, restrições e motivações que levaram a esta decisão.>
+
+## Decisão
+
+<O que foi decidido. Seja específico e referenciável.>
+
+## Consequências
+
+- **Positivas:** <benefícios concretos>
+- **Negativas:** <trade-offs aceitos>
+- **Riscos:** <riscos residuais e mitigações>
+
+## Alternativas Consideradas
+
+| Alternativa | Prós | Contras | Motivo da rejeição |
+|---|---|---|---|
+| <opção A> | ... | ... | ... |
+| <opção B> | ... | ... | ... |
+```
 
 ### EX-DATA-001 — Modelo de dados canônico (padrão DATA-xxx)
 

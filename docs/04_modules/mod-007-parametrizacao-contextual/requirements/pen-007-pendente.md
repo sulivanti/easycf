@@ -4,13 +4,13 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) — Batch 4: opções/recomendações detalhadas, PEN-004..PEN-006 adicionados |
-| 0.3.0  | 2026-03-19 | arquitetura | PEN-002 decidida+implementada: Opção 1 (job independente, isolamento > DRY) |
-| 0.4.0  | 2026-03-19 | arquitetura | PEN-004 decidida+implementada: Opção 3 (flag auto_deprecate_previous, default=false) |
-| 0.5.0  | 2026-03-19 | arquitetura | PEN-003 decidida+implementada: Opção 2 (tabela auxiliar routine_integration_config, MOD-008 responsável pela migração) |
-| 0.6.0  | 2026-03-19 | arquitetura | PEN-001 decidida+implementada: Opção 1 (JSONLogic como engine v2 para condition_expr) |
-| 0.7.0  | 2026-03-19 | arquitetura | PEN-005 implementada (hard limit configurável por tenant), PEN-006 implementada (flag dry_run no evaluate) |
-> | 0.8.0  | 2026-03-20 | AGN-DEV-10  | Re-enriquecimento PENDENTE Batch 4 — PEN-007/PEN-008 adicionados (auto-deprecate links, bulk items) |
+> | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) — Batch 4: opções/recomendações detalhadas, PENDENTE-004..PENDENTE-006 adicionados |
+| 0.3.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida+implementada: Opção 1 (job independente, isolamento > DRY) |
+| 0.4.0  | 2026-03-19 | arquitetura | PENDENTE-004 decidida+implementada: Opção 3 (flag auto_deprecate_previous, default=false) |
+| 0.5.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida+implementada: Opção 2 (tabela auxiliar routine_integration_config, MOD-008 responsável pela migração) |
+| 0.6.0  | 2026-03-19 | arquitetura | PENDENTE-001 decidida+implementada: Opção 1 (JSONLogic como engine v2 para condition_expr) |
+| 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada (hard limit configurável por tenant), PENDENTE-006 implementada (flag dry_run no evaluate) |
+> | 0.8.0  | 2026-03-20 | AGN-DEV-10  | Re-enriquecimento PENDENTE Batch 4 — PEN-007/PENDENTE-008 adicionados (auto-deprecate links, bulk items) |
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
 
 # PEN-007 — Questões Abertas da Parametrização Contextual e Rotinas
@@ -22,7 +22,7 @@
 
 ---
 
-## PEN-001 — condition_expr: Escopo e Sintaxe (v2)
+## PENDENTE-001 — condition_expr: Escopo e Sintaxe (v2)
 
 - **Descrição:** O campo `condition_expr` em `incidence_rules` e `routine_items` é nullable em v1 (motor ignora). Em v2, será necessário definir a sintaxe JSON do rule engine (ex: JSONLogic, CEL, custom DSL). O campo existe no schema (DATA-007) como `jsonb nullable` mas não é avaliado pelo motor em v1.
 - **Impacto:** F01 (incidence_rules), F02 (routine_items), F03 (motor de avaliação — passo 3 precisará interpretar condition_expr)
@@ -45,7 +45,7 @@
 
 ---
 
-## PEN-002 — Background Job de Expiração: Compartilhar com MOD-004?
+## PENDENTE-002 — Background Job de Expiração: Compartilhar com MOD-004?
 
 - **Descrição:** O job de expiração de enquadradores (`framer-expiration.job.ts`, BR-002) usa o mesmo padrão do job de expiração de `access_delegations` no MOD-004. Ambos verificam `valid_until < now()` e mudam status para INACTIVE/EXPIRED.
 - **Impacto:** F01 (enquadradores), INT-007 (integração MOD-004), NFR-007 (resiliência do job)
@@ -68,7 +68,7 @@
 
 ---
 
-## PEN-003 — Rotina de Integração (MOD-008): Campos Específicos
+## PENDENTE-003 — Rotina de Integração (MOD-008): Campos Específicos
 
 - **Descrição:** MOD-008 herdará `behavior_routines` com `routine_type=INTEGRATION`. A tabela `behavior_routines` já possui o campo `routine_type` (varchar) com valor default `BEHAVIOR`. MOD-008 adicionará registros com `routine_type=INTEGRATION` e possivelmente campos específicos (ex: `integration_target`, `mapping_config`, `retry_policy`).
 - **Impacto:** DATA-007 (behavior_routines), INT-007 (INT-004), schema de migração
@@ -90,7 +90,7 @@
 
 ---
 
-## PEN-004 — Fork Auto-Depreca Versão Anterior?
+## PENDENTE-004 — Fork Auto-Depreca Versão Anterior?
 
 - **Descrição:** Ao fazer fork de rotina PUBLISHED, a versão original permanece PUBLISHED. Isso permite que duas versões da mesma rotina (original e fork após publicação) coexistam como PUBLISHED, potencialmente vinculadas a regras de incidência diferentes. A questão é se o fork deveria auto-deprecar a versão anterior automaticamente.
 - **Impacto:** BR-008 (fork), BR-012 (deprecação), FR-005, FR-008, UX-007 (fluxo de fork)
@@ -113,7 +113,7 @@
 
 ---
 
-## PEN-005 — Limites de Itens por Rotina e Regras por Enquadrador
+## PENDENTE-005 — Limites de Itens por Rotina e Regras por Enquadrador
 
 - **Descrição:** NFR-007 define SLOs baseados em "até 10 regras de incidência ativas e 50 routine_items". Contudo, não há limite técnico (constraint) impedindo a criação de mais itens ou regras. Se um administrador criar 500 itens em uma rotina ou 100 regras para um enquadrador, o motor pode exceder o SLO.
 - **Impacto:** NFR-001 (performance motor), NFR-007, FR-006 (itens), FR-004 (regras)
@@ -136,7 +136,7 @@
 
 ---
 
-## PEN-006 — Auditoria de Dry-Run: Persistir ou Não?
+## PENDENTE-006 — Auditoria de Dry-Run: Persistir ou Não?
 
 - **Descrição:** O UX de dry-run (preview do motor) chama `POST /routine-engine/evaluate` com dados reais. Atualmente, o motor emite domain event `routine.applied` para toda avaliação com efeito (BR-010). Dry-runs do UX gerariam domain events "falsos" que poluiriam a timeline de auditoria.
 - **Impacto:** BR-010 (domain events condicionais), DATA-003 (EVT-012), UX-007 (dry-run preview), SEC-007 (auditoria)
@@ -156,3 +156,119 @@
 > **Justificativa:** Menor impacto no schema de endpoints (25 endpoints já definidos). Motor reutiliza toda a lógica, apenas suprime emissão do domain event routine.applied (EVT-012). Response inclui `dry_run: true`. Sem persistência de efeitos.
 > **Artefato de saída:** FR-007 (flag dry_run adicionado ao FR-009, supressão de domain event)
 > **Implementado em:** FR-007
+
+---
+
+## PENDENTE-007 — Auto-Deprecate: Migração Automática de routine_incidence_links
+
+- **status:** ABERTA
+- **severidade:** MEDIA
+- **dominio:** ARC
+- **tipo:** DEC-TEC
+- **origem:** ENRICH
+- **criado_em:** 2026-03-20
+- **criado_por:** AGN-DEV-10
+- **modulo:** MOD-007
+- **rastreia_para:** BR-008, BR-012, FR-008, ADR-003, PENDENTE-004, DATA-007
+- **tags:** auto-deprecate, incidence-links, migration
+- **sla_data:** —
+- **dependencias:** []
+
+### Questao
+
+Quando `auto_deprecate_previous: true` e acionado no publish (PENDENTE-004), a versao PUBLISHED anterior e marcada como DEPRECATED. Contudo, os `routine_incidence_links` que apontavam para a versao deprecada continuam existindo no banco. O motor de avaliacao (passo 2) filtra apenas rotinas PUBLISHED, entao esses links ficam "orfaos" (existem mas nao sao usados). A questao e: esses links devem ser automaticamente migrados para a nova versao, removidos, ou mantidos como historico?
+
+### Impacto
+
+Sem decisao, links orfaos acumulam no banco sem proposito funcional. Administradores podem se confundir ao ver regras de incidencia "vinculadas" a rotinas que nao estao mais ativas. O UX da matriz de incidencia precisa decidir como exibir esses links.
+
+### Opcoes
+
+**Opcao A — Migrar links automaticamente:**
+Na operacao de publish com `auto_deprecate_previous: true`, copiar todos os `routine_incidence_links` da versao deprecada para a nova versao publicada (se o fork ja nao os copiou). Remover links da versao deprecada.
+- Pros: Zero links orfaos; transicao transparente para o administrador; motor continua funcionando sem gaps
+- Contras: Operacao de publish fica mais complexa (transacao maior); se o fork ja copiou links, pode haver duplicatas
+
+**Opcao B — Manter links como historico:**
+Links da versao deprecada permanecem no banco. Motor ignora (filtra PUBLISHED). UX exibe com badge "inativo".
+- Pros: Historico completo; auditoria de quais regras estavam vinculadas a cada versao; operacao de publish simples
+- Contras: Acumulo de links orfaos; UX precisa de filtro/badge para distinguir links ativos de inativos
+
+**Opcao C — Remover links da versao deprecada:**
+Na operacao de auto-deprecate, soft-delete dos links da versao deprecada.
+- Pros: Banco limpo; sem ambiguidade no UX
+- Contras: Perde historico de vinculacao; nao pode "reativar" versao deprecada com links intactos
+
+### Recomendacao
+
+Opcao B (manter como historico) — o fork ja copia links para a nova versao (ADR-003 ponto 3), entao a nova versao publicada ja tera seus proprios links. Links da versao deprecada servem como historico de auditoria. Motor ignora automaticamente (filtra PUBLISHED). UX deve exibir badge "versao deprecada" nos links inativos.
+
+### Acao Sugerida (se aplicavel)
+
+| Skill | Proposito | Quando executar |
+|---|---|---|
+| `/update-specification FR-007` | Adicionar nota sobre links orfaos no FR-008 (fork) | Apos decisao |
+| `/update-specification UX-007` | Adicionar badge "versao deprecada" na matriz de incidencia | Apos decisao |
+
+### Resolucao (preenchido quando DECIDIDA)
+
+> **Decisao:** —
+> **Decidido por:** — em —
+> **Justificativa:** —
+> **Artefato de saida:** —
+> **Implementado em:** —
+
+---
+
+## PENDENTE-008 — Bulk Create de Routine Items na Operacao de Fork
+
+- **status:** ABERTA
+- **severidade:** BAIXA
+- **dominio:** ARC
+- **tipo:** DEC-TEC
+- **origem:** ENRICH
+- **criado_em:** 2026-03-20
+- **criado_por:** AGN-DEV-10
+- **modulo:** MOD-007
+- **rastreia_para:** FR-005, FR-007, ADR-003, DATA-007, NFR-006
+- **tags:** fork, bulk-create, performance, routine-items
+- **sla_data:** —
+- **dependencias:** []
+
+### Questao
+
+A operacao de fork (FR-005, ADR-003) copia todos os `routine_items` da versao original para a nova rotina DRAFT. Se uma rotina tem 50 itens (limite maximo — NFR-006), o fork executa 50 INSERTs individuais. A questao e: a copia deve ser feita via bulk INSERT (um unico statement) ou itens individuais dentro da mesma transacao?
+
+### Impacto
+
+Com 50 itens, 50 INSERTs individuais na mesma transacao sao aceitaveis em termos de performance (< 100ms). Contudo, se o limite configuravel por tenant (PENDENTE-005) for aumentado significativamente (ex: 200 itens), a abordagem individual pode impactar latencia do fork. A decisao afeta a implementacao do use-case `fork-routine.ts`.
+
+### Opcoes
+
+**Opcao A — Bulk INSERT (unico statement):**
+`INSERT INTO routine_items (...) SELECT ... FROM routine_items WHERE routine_id = :original_id` com novos UUIDs gerados no banco.
+- Pros: Performance otima independente do numero de itens; unico round-trip ao banco; transacao mais curta
+- Contras: UUIDs gerados no banco (nao no aplicativo); domain events de criacao de itens nao sao emitidos individualmente (fork e um evento unico)
+
+**Opcao B — Itens individuais na mesma transacao:**
+Loop no aplicativo com INSERT por item. Todos dentro de uma unica transacao.
+- Pros: UUIDs gerados no aplicativo (consistente com fluxo normal de criacao); cada item pode ter validacao individual; mais familiar para desenvolvedores
+- Contras: N round-trips ao banco (N = numero de itens); transacao mais longa; performance degrada com mais itens
+
+### Recomendacao
+
+Opcao A (bulk INSERT) — para o fork, nao e necessario emitir domain event por item (o evento `routine.forked` ja cobre a operacao). UUIDs podem ser gerados via `gen_random_uuid()` no PostgreSQL. Performance constante independente do numero de itens. Consistente com a decisao de simplicidade operacional (ADR-001, ADR-005).
+
+### Acao Sugerida (se aplicavel)
+
+| Skill | Proposito | Quando executar |
+|---|---|---|
+| N/A | Decisao tecnica de implementacao — impacta apenas `fork-routine.ts` | Durante implementacao |
+
+### Resolucao (preenchido quando DECIDIDA)
+
+> **Decisao:** —
+> **Decidido por:** — em —
+> **Justificativa:** —
+> **Artefato de saida:** —
+> **Implementado em:** —

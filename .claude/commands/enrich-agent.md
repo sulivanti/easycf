@@ -59,7 +59,13 @@ Adote o **system prompt** definido em PKG-DEV-001 para este agente. Internalize:
 
 ## PASSO 5: Gerar Enriquecimento
 
-Produza mentalmente o JSON estruturado conforme o schema `data` do seu agente em PKG-DEV-001.
+Com base no contexto ingerido (PASSO 3) e na persona assumida (PASSO 4), gere o conteúdo do artefato **diretamente em Markdown**, seguindo a estrutura definida na seção `pkg_section` do agente em PKG-DEV-001.
+
+O fluxo é:
+1. Leia a seção do agente em PKG-DEV-001 para entender os campos esperados (schema `data`)
+2. Preencha cada campo com dados derivados do `mod.md`, requisitos existentes e normativos
+3. Para campos sem informação suficiente, registre em `missing_info` — **não invente dados**
+4. Escreva o resultado como Markdown estruturado (não como JSON) no arquivo alvo
 
 Checklist obrigatório antes de escrever:
 
@@ -75,17 +81,20 @@ Checklist obrigatório antes de escrever:
 Se houver auditoria/timeline/notificações:
 - **MUST** incluir catálogo DATA-003 com: `event_type`, `origin_command`, `emit_permission`, `view_rule`, `notify`, `sensitivity_level`, `maskable_fields`
 - **MUST** referenciar SEC-002
+- **MUST** usar o template base `docs/04_modules/_templates/DATA-003-template.md` como ponto de partida (DOC-DEV-001 §0.4). O boilerplate canônico (Princípios MUST, Campos mínimos, Índices padrão) é **imutável** — enriquecer **apenas** a seção "Catálogo de Domain Events" com os eventos específicos do módulo.
 
 ### Regra especial para AGN-DEV-06 (SEC)
 
 Se houver domain_events/notifications:
 - **MUST** incluir seção SEC-002 (Emit/View/Notify)
 - **MUST** reforçar filtro `tenant_id` + ACL
+- **MUST** usar o template base `docs/04_modules/_templates/SEC-002-template.md` como ponto de partida (DOC-DEV-001 §0.4). O boilerplate canônico (Princípios MUST, Glossário) é **imutável** — enriquecer **apenas** a seção "Matriz de Autorização" com os eventos específicos do módulo.
 
 ### Regra especial para AGN-DEV-07 (UX)
 
 - **MUST** usar `action_id` do catálogo UX-010 (ex: `view_history`, `share_manage`, `approve`, `reject`)
 - **SHOULD** mapear para endpoints e event_types
+- **MUST** usar path relativo correto para manifests YAML. De `requirements/ux/UX-NNN.md`, a profundidade é **4 níveis** até `docs/`: `../../../../05_manifests/screens/<id>.yaml`. De `user-stories/features/US-*.md`, a profundidade é **3 níveis**: `../../../05_manifests/screens/<id>.yaml`. **NUNCA** usar 3 níveis a partir de `requirements/ux/`.
 
 ### Regra especial para AGN-DEV-11 (VAL)
 

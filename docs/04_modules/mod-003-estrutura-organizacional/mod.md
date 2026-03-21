@@ -9,7 +9,7 @@
 - **estado_item:** DRAFT
 - **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-17
-- **architecture_level:** 1
+- **architecture_level:** 2
 - **rastreia_para:** US-MOD-003, US-MOD-003-F01, US-MOD-003-F02, US-MOD-003-F03, US-MOD-003-F04, DOC-DEV-001, DOC-ESC-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-UX-012, DOC-FND-000, MOD-000, US-MOD-000-F07, US-MOD-000-F12, LGPD-BASE-001
 - **evidencias:** N/A
 
@@ -42,22 +42,29 @@ Módulo full-stack que implementa a hierarquia organizacional formal de 5 nívei
 
 ## 3. Nível de Arquitetura
 
-**Nível 1 — Clean Leve** (DOC-ESC-001)
+**Nível 2 — DDD-lite + Clean Completo** (DOC-ESC-001)
 
 Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas próprias. É o primeiro módulo verdadeiramente full-stack depois do Foundation. Modelo de dados: `org_units` (N1–N4) + `org_unit_tenant_links` (N4→N5). N5 = tenant existente do MOD-000-F07 — não cria tabela paralela.
 
-### Justificativa (DOC-ESC-001 §4)
+### Justificativa (DOC-ESC-001 §4.2)
 
-**Score de gatilhos:** 1 (multi-tenant/escopo por tenant)
+**Score de gatilhos:** 5/6
 
-**Gatilhos Nível 1 atendidos:**
+| # | Gatilho | Atendido | Evidência |
+|---|---------|----------|-----------|
+| 1 | Estado/workflow com máquina de estados | **SIM** | Transições `ACTIVE`→`INACTIVE` via soft-delete, restore (`INACTIVE`→`ACTIVE`), bloqueio de delete com filhos ativos — 4 transições com guarda condicional |
+| 2 | Compliance/auditoria obrigatória | **SIM** | `LGPD-BASE-001` referenciado; domain events obrigatórios em todas as operações de escrita (`org.unit_created/updated/deleted/restored`, `org.tenant_linked/unlinked`); `sensitivity_level` declarado por evento |
+| 3 | Concorrência/consistência | **SIM** | `Idempotency-Key` com TTL 60s em create e link_tenant; CTE recursivo com prevenção de loop (validação de ancestralidade antes de aceitar `parent_id`); `codigo` imutável pós-criação; constraint de unicidade `(org_unit_id, tenant_id)` |
+| 4 | Integrações externas críticas | **NÃO** | Depende de MOD-000 (Foundation) — integração interna, não externa |
+| 5 | Multi-tenant com RLS e escopo por cliente | **SIM** | Tabela `org_units` é cross-tenant (ADR-003); vinculação N4→N5 via `org_unit_tenant_links`; escopos `org:unit:read/write/delete` registrados no catálogo DOC-FND-000 §2.2 |
+| 6 | Regras cruzadas/reuso alto entre módulos | **SIM** | Estrutura organizacional é referência canônica de pertencimento para todos os módulos — MOD-004 (identidade avançada), processos, rotinas e integrações referenciam `org_units` como hierarquia |
 
-- Regra de negócio não-trivial: hierarquia organizacional de 5 níveis com validação de parentesco (nó pai deve existir e ser do nível imediatamente superior), profundidade máxima N1→N4, e vinculação N4→N5 (tenant)
-- Testabilidade com mocks: use cases de CRUD hierárquico + tree query CTE requerem isolamento de repositório para testes unitários
+**Gatilhos Nível 1 também atendidos (base):**
+
+- Regra de negócio não-trivial: hierarquia de 5 níveis com validação de parentesco, profundidade máxima N1→N4, e vinculação N4→N5
+- Testabilidade com mocks: use cases de CRUD hierárquico + tree query CTE requerem isolamento de repositório
 - Integração com módulo externo: depende de MOD-000 Foundation (tenants, catálogo de escopos, auth, domain_events)
 - Múltiplos endpoints alterando o mesmo recurso: create, update, soft-delete e restore sobre `org_units`
-
-**Gatilhos Nível 2 NÃO atendidos:** sem workflow/estados, sem dinheiro/compliance, sem concorrência forte, sem invariantes cruzando coleções
 
 ## 4. Dependências
 

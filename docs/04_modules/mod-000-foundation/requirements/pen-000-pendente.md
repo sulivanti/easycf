@@ -4,20 +4,24 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 0.19.0 | 2026-03-20 | validate-all  | Adição PENDENTE-011 — decisão unificação Login+Recuperação em UX-AUTH-001 vs split UX-AUTH-002 |
+> | 0.18.0 | 2026-03-20 | validate-all  | Adição PENDENTE-010 — divergência Screen IDs UX-000 (UX-USER-xxx) vs manifests (UX-USR-xxx) |
+> | 0.17.0 | 2026-03-20 | validate-all  | Adição PENDENTE-009 — ux-auth-001 atribuição módulo errada (MOD-001→MOD-000) |
+> | 0.16.0 | 2026-03-20 | validate-all  | Adição PENDENTE-008 — manifests ux-usr-001/002/003 incompatíveis com schema v1 (reescrita) |
 > | 0.15.0 | 2026-03-18 | Marcos Sulivan | Implementação PENDENTE-005 — BR-013 v0.6.0 (401→422 nos cenários token expirado/usado) |
-| 0.14.0 | 2026-03-18 | Marcos Sulivan | Decisão PENDENTE-005 opção A — 422 Unprocessable Entity para token de reset expirado |
-| 0.13.0 | 2026-03-18 | usuário     | Implementação PENDENTE-003 — DATA-000 §7 nota chave amigável tenant_users |
-| 0.12.0 | 2026-03-18 | usuário     | Decisão PENDENTE-003 opção A — expor userId+tenantCode concatenado (sem mudança schema) |
-| 0.11.0 | 2026-03-18 | usuário     | Implementação PENDENTE-004 — amendment DOC-PADRAO-005-C01 (max_attachments, CON-005, Gate STR-6) |
-| 0.10.0 | 2026-03-18 | usuário     | Decisão PENDENTE-004 opção C — limite de anexos configurável por entity_type (DOC-PADRAO-005) |
-| 0.9.0  | 2026-03-18 | usuário     | Decisão PENDENTE-002 opção B — rotação refresh token a cada uso (OAuth2 BCP) |
+> | 0.14.0 | 2026-03-18 | Marcos Sulivan | Decisão PENDENTE-005 opção A — 422 Unprocessable Entity para token de reset expirado |
+> | 0.13.0 | 2026-03-18 | usuário     | Implementação PENDENTE-003 — DATA-000 §7 nota chave amigável tenant_users |
+> | 0.12.0 | 2026-03-18 | usuário     | Decisão PENDENTE-003 opção A — expor userId+tenantCode concatenado (sem mudança schema) |
+> | 0.11.0 | 2026-03-18 | usuário     | Implementação PENDENTE-004 — amendment DOC-PADRAO-005-C01 (max_attachments, CON-005, Gate STR-6) |
+> | 0.10.0 | 2026-03-18 | usuário     | Decisão PENDENTE-004 opção C — limite de anexos configurável por entity_type (DOC-PADRAO-005) |
+> | 0.9.0  | 2026-03-18 | usuário     | Decisão PENDENTE-002 opção B — rotação refresh token a cada uso (OAuth2 BCP) |
 > | 0.8.0  | 2026-03-18 | AGN-DEV-09  | Implementação PENDENTE-001 — ADR-004 + FR-016 atualizado com fluxo Identity Linking SSO |
 > | 0.7.0  | 2026-03-18 | usuário     | Implementação PENDENTE-007 — DOC-FND-000 §2.2 atualizado com scopes storage 3-seg |
 > | 0.6.0  | 2026-03-18 | usuário     | Decisão PENDENTE-007 opção A — registrar scopes storage 3-seg em DOC-FND-000 §2.2 |
 > | 0.5.0  | 2026-03-18 | usuário     | Decisão PENDENTE-001 opção B — confirmação via senha nativa antes de vincular SSO |
 > | 0.4.0  | 2026-03-18 | usuário     | Implementação PENDENTE-006 — SEC-000, SEC-002, DATA-000 corrigidos para 3-seg |
-| 0.3.0  | 2026-03-18 | usuário     | Decisão PENDENTE-006 opção A — migração scopes 3-segmentos em cascata |
-| 0.2.0  | 2026-03-17 | AGN-DEV-10  | Adição PENDENTE-005/006/007 — findings de validação AGN-DEV-11 + divergência BR-013/FR-017 |
+> | 0.3.0  | 2026-03-18 | usuário     | Decisão PENDENTE-006 opção A — migração scopes 3-segmentos em cascata |
+> | 0.2.0  | 2026-03-17 | AGN-DEV-10  | Adição PENDENTE-005/006/007 — findings de validação AGN-DEV-11 + divergência BR-013/FR-017 |
 > | 0.1.0  | 2026-03-15 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) |
 
 # PEN-000 — Questões Abertas do Foundation
@@ -410,9 +414,239 @@ Opção A — registrar com formato 3-seg. Storage é funcionalidade transversal
 
 ---
 
+## PENDENTE-008 — Screen manifests ux-usr-001/002/003 incompatíveis com schema v1
+
+- **status:** ABERTA
+- **severidade:** CRÍTICA
+- **domínio:** UX
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE-ALL (Fase 3)
+- **criado_em:** 2026-03-20
+- **criado_por:** validate-all
+- **modulo:** MOD-000
+- **rastreia_para:** UX-000, DOC-UX-010, screen-manifest.v1.schema.json
+- **tags:** screen-manifest, schema-v1, migração, reescrita
+- **sla_data:** —
+- **dependencias:** []
+
+### Questão
+
+Os 3 screen manifests de gestão de usuários (`ux-usr-001.users-list.yaml`, `ux-usr-002.user-form.yaml`, `ux-usr-003.user-invite.yaml`) foram escritos contra uma versão anterior/informal do formato e **nunca foram migrados** para o schema JSON v1 (`screen-manifest.v1.schema.json`). A divergência é estrutural — não se trata de campos faltantes isolados:
+
+| Problema | Detalhe |
+|---|---|
+| 4 campos obrigatórios ausentes | `type`, `module`, `route`, `auth_required` |
+| 6 campos extras (additionalProperties: false) | `manifest_version`, `entity_type`, `routes`, `permissions`, `ui_rules`, `error_mapping` |
+| Formato `actions` incompatível | Usam `action`/`client_only`/`operation_ids`/`permission` em vez de `id`/`label`/`type`/`operation_id`/`requires_scope` |
+| Formato `telemetry_defaults` incompatível | Usam `event_name`/`required_fields`/`propagate_headers` em vez de `package`/`include_tenant_id`/`propagate_correlation_id`/`capture_duration_ms` |
+
+### Impacto
+
+- Gate CI (`validate:manifests`) falha para os 3 manifests — bloqueador de promoção
+- Screen manifests não podem ser consumidos por pipelines de geração de código
+- 33 violações críticas reportadas na validação Fase 3
+
+### Opções
+
+**Opção A — Reescrita completa no formato schema v1:**
+Migrar os dados semânticos (action_ids, scopes, operations — que estão corretos) para a estrutura canônica do schema v1.
+
+- Prós: Resolução definitiva, passa Gate CI, habilita geração de código
+- Contras: Trabalho manual significativo (3 manifests)
+
+**Opção B — Evoluir o schema v1 para aceitar campos legados:**
+Adicionar campos opcionais ao schema para retrocompatibilidade.
+
+- Prós: Zero reescrita de manifests existentes
+- Contras: Polui o schema com campos legados, divergência com normativos, debt permanente
+
+### Recomendação
+
+Opção A — reescrita. Os dados semânticos estão corretos; apenas a estrutura precisa ser migrada.
+
+### Ação Sugerida (se aplicável)
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| Edição direta manifests | Reescrever ux-usr-001/002/003 no formato schema v1, migrando dados semânticos | Imediato (DRAFT) |
+| `/validate-all` | Re-validar após reescrita | Após correção |
+
+---
+
+## PENDENTE-009 — ux-auth-001 com atribuição de módulo errada (MOD-001 → MOD-000)
+
+- **status:** ABERTA
+- **severidade:** ALTA
+- **domínio:** UX
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE-ALL (Fase 3)
+- **criado_em:** 2026-03-20
+- **criado_por:** validate-all
+- **modulo:** MOD-000
+- **rastreia_para:** UX-000 §UX-001, US-MOD-000-F01, US-MOD-000-F02
+- **tags:** screen-manifest, module-attribution, ux-auth-001
+- **sla_data:** —
+- **dependencias:** []
+
+### Questão
+
+O manifest `ux-auth-001.login.yaml` declara `module: "MOD-001"` e `linked_stories: ["US-MOD-001", "US-MOD-001-F01", "US-MOD-001-F02"]`, porém o fluxo de autenticação (Login/Logout/MFA) pertence ao **MOD-000 (Foundation)** conforme UX-000 §UX-001 e §UX-002, que rastreiam para `US-MOD-000-F01` e `US-MOD-000-F02`.
+
+### Impacto
+
+- Rastreabilidade cruzada módulo ↔ manifest quebrada
+- Queries de cobertura por módulo excluem este manifest do MOD-000
+- Pode causar conflito se MOD-001 tiver seus próprios manifests de auth
+
+### Opções
+
+**Opção A — Corrigir referências para MOD-000:**
+Alterar `module: "MOD-000"`, header comment para "MOD-000 (Foundation)", e `linked_stories` para `["US-MOD-000", "US-MOD-000-F01", "US-MOD-000-F02"]`.
+
+- Prós: Alinha com UX-000, corrige rastreabilidade
+- Contras: Nenhum relevante
+
+**Opção B — Manter MOD-001 e atualizar UX-000:**
+Se a autenticação foi intencionalmente movida para MOD-001.
+
+- Prós: Nenhum — contradiz a arquitetura documentada
+- Contras: Foundation sem auth não faz sentido
+
+### Recomendação
+
+Opção A — corrigir o manifest. A autenticação é inequivocamente Foundation (MOD-000).
+
+### Ação Sugerida (se aplicável)
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| Edição direta ux-auth-001 | Corrigir `module`, header e `linked_stories` | Imediato |
+
+---
+
+## PENDENTE-010 — Divergência de Screen IDs entre UX-000 e manifests (UX-USER vs UX-USR)
+
+- **status:** ABERTA
+- **severidade:** MÉDIA
+- **domínio:** UX
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE-ALL (Fase 3)
+- **criado_em:** 2026-03-20
+- **criado_por:** validate-all
+- **modulo:** MOD-000
+- **rastreia_para:** UX-000 §UX-004, UX-000 §UX-005
+- **tags:** screen-id, nomenclatura, rastreabilidade
+- **sla_data:** —
+- **dependencias:** [PENDENTE-008]
+
+### Questão
+
+UX-000 define Screen IDs com prefixo `UX-USER-` (ex: `UX-USER-001` para Gestão de Usuários, `UX-USER-002` para Perfil), enquanto os manifests usam prefixo `UX-USR-` (ex: `UX-USR-001`, `UX-USR-002`, `UX-USR-003`). Além da divergência de nomenclatura, há conflito semântico: UX-000 define `UX-USER-002` como "Perfil do Usuário" mas o manifest `ux-usr-002` é um "Formulário de Cadastro".
+
+### Impacto
+
+- Rastreabilidade UX-000 ↔ manifests quebrada
+- Ambiguidade sobre qual tela cada Screen ID representa
+- Validações cruzadas falham por não encontrar correspondência
+
+### Opções
+
+**Opção A — Padronizar em UX-USR- (curto):**
+Atualizar UX-000 para usar `UX-USR-001/002/003` e ajustar a semântica (001=list, 002=form, 003=invite).
+
+- Prós: Consistente com manifests existentes e padrão de nomes curtos (`AUTH`, `USR`, `ORG`)
+- Contras: Requer atualizar UX-000
+
+**Opção B — Padronizar em UX-USER- (longo):**
+Renomear manifests para `ux-user-001/002/003` e alinhar com UX-000.
+
+- Prós: Consistente com UX-000 atual
+- Contras: Requer renomear 3 manifests e atualizar todas as referências
+
+**Opção C — Manter ambos com mapeamento explícito:**
+Documentar equivalência `UX-USER-xxx ↔ UX-USR-xxx` em UX-000.
+
+- Prós: Nenhuma mudança de arquivo
+- Contras: Complexidade desnecessária, debt de nomenclatura permanente
+
+### Recomendação
+
+Opção A — padronizar em `UX-USR-` (curto). Alinhado com padrão dos demais domínios (`AUTH`, `ORG`, `ROLE`, `TENANT`).
+
+### Ação Sugerida (se aplicável)
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| Edição direta UX-000 | Atualizar Screen IDs para UX-USR-xxx e alinhar semântica | Após decisão |
+
+---
+
+## PENDENTE-011 — Decisão sobre unificação Login + Recuperação de Senha em UX-AUTH-001
+
+- **status:** ABERTA
+- **severidade:** MÉDIA
+- **domínio:** UX
+- **tipo:** DEC-TEC
+- **origem:** VALIDATE-ALL (Fase 3)
+- **criado_em:** 2026-03-20
+- **criado_por:** validate-all
+- **modulo:** MOD-000
+- **rastreia_para:** UX-000 §UX-001, UX-000 §UX-002, US-MOD-000-F01, US-MOD-000-F04
+- **tags:** screen-manifest, auth, login, forgot-password, UX-AUTH
+- **sla_data:** —
+- **dependencias:** [PENDENTE-009]
+
+### Questão
+
+UX-000 define duas jornadas separadas com Screen IDs distintos:
+
+- **UX-001 (UX-AUTH-001):** Login / Logout / MFA
+- **UX-002 (UX-AUTH-002):** Recuperação de Senha (forgot + reset)
+
+Porém o manifest `ux-auth-001.login.yaml` **unifica ambas** numa única rota `/login` com 3 painéis (login, forgot-password, reset-password). Também falta o fluxo MFA descrito em UX-001.
+
+### Impacto
+
+- Divergência entre spec (UX-000) e implementação declarada (manifest)
+- Cobertura de telas: UX-AUTH-002 não tem manifest próprio
+- Fluxo MFA sem representação em nenhum manifest
+
+### Opções
+
+**Opção A — Manter unificado e atualizar UX-000:**
+Aceitar que login + recuperação vivem na mesma rota (SPA comum). Unificar UX-001/UX-002 em UX-000 sob `UX-AUTH-001`. Adicionar painel MFA ao manifest.
+
+- Prós: Reflete UX real (SPAs frequentemente unificam auth flows na mesma rota), manifest já existe e funciona
+- Contras: Requer atualizar UX-000, painel MFA precisa ser adicionado
+
+**Opção B — Separar em dois manifests:**
+Criar `ux-auth-002.forgot-password.yaml` e remover painéis forgot/reset do `ux-auth-001`.
+
+- Prós: Consistente com UX-000 atual, Screen IDs 1:1 com manifests
+- Contras: Na prática são a mesma rota SPA, separar pode ser artificial
+
+**Opção C — Separar em três manifests:**
+`ux-auth-001` (login+MFA), `ux-auth-002` (forgot), `ux-auth-003` (reset).
+
+- Prós: Granularidade máxima, rastreabilidade precisa
+- Contras: Over-engineering para fluxo simples, 3 manifests para 1 rota
+
+### Recomendação
+
+Opção A — manter unificado. Login + forgot + reset + MFA na mesma rota é padrão de mercado em SPAs. Atualizar UX-000 para refletir a unificação e adicionar painel MFA ao manifest.
+
+### Ação Sugerida (se aplicável)
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| Edição direta UX-000 | Unificar UX-001/UX-002 sob UX-AUTH-001 | Após decisão |
+| Edição direta ux-auth-001 | Adicionar painel MFA (ação submit_mfa, endpoint /auth/mfa/verify) | Após decisão |
+
+---
+
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-18
-- **rastreia_para:** US-MOD-000, US-MOD-000-F03, US-MOD-000-F01, US-MOD-000-F04, US-MOD-000-F09, US-MOD-000-F16, FR-000, FR-017, BR-013, SEC-000, SEC-002, INT-000, DATA-000, DOC-FND-000
-- **referencias_exemplos:** PKG-DEV-001 §12 (checagens mínimas AGN-DEV-11), DOC-FND-000 §2.1-§2.2 (scopes canônicos), DOC-ARC-003B (Gate 3)
-- **evidencias:** PENDENTE-001 a 004: lacunas de enriquecimento pilares (2026-03-15). PENDENTE-005: divergência BR-013 vs FR-017 (status code). PENDENTE-006/007: findings AGN-DEV-11 validação cruzada (2026-03-17).
+- **data_ultima_revisao:** 2026-03-20
+- **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F02, US-MOD-000-F03, US-MOD-000-F04, US-MOD-000-F05, US-MOD-000-F09, US-MOD-000-F16, FR-000, FR-017, BR-013, SEC-000, SEC-002, INT-000, DATA-000, DOC-FND-000, UX-000, DOC-UX-010
+- **referencias_exemplos:** PKG-DEV-001 §12 (checagens mínimas AGN-DEV-11), DOC-FND-000 §2.1-§2.2 (scopes canônicos), DOC-ARC-003B (Gate 3), screen-manifest.v1.schema.json
+- **evidencias:** PENDENTE-001 a 004: lacunas de enriquecimento pilares (2026-03-15). PENDENTE-005: divergência BR-013 vs FR-017 (status code). PENDENTE-006/007: findings AGN-DEV-11 validação cruzada (2026-03-17). PENDENTE-008 a 011: findings validate-all Fase 3 — screen manifests (2026-03-20).

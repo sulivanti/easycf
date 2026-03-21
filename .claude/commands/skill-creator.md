@@ -24,12 +24,26 @@ Entenda o que o usuário quer:
 
 ### 3. Escrever Comando Claude Code
 
-Crie o arquivo em `.claude/commands/{nome}.md` com:
+Leia o template padrão em `.agents/templates/skill-template.md` e use-o como base.
 
-- Título: `# Skill: nome-da-skill`
-- Seção de argumento com `$ARGUMENTS`
-- Corpo com: objetivo, gatilhos, parâmetros, passos de execução, formato de saída
+Crie o arquivo em `.claude/commands/{nome}.md` seguindo a estrutura do template:
+
+| Seção | Obrigatória | Quando usar |
+|---|---|---|
+| `# Skill: nome` + descrição | Sim | Sempre |
+| `## Argumento` | Sim | Sempre |
+| `## Gates` | Se houver pré-condições | Skills com validações de estado (DRAFT/READY, existência de arquivo) |
+| `## PASSO N — Título` | Sim | Sempre (usar `##` para passos, `###` para subpassos — nunca `####`) |
+| `## Error Handling` | Se a skill modifica arquivos | Skills destrutivas ou que podem falhar |
+| `## Notas` | Opcional | Informações complementares |
+
+Regras de formatação:
 - Sem frontmatter YAML (markdown puro)
+- Headings: máximo 3 níveis (`##`, `###` — nunca `####`)
+- Passos nomeados como `PASSO N — Título` (não "Fase", "Step", "Etapa")
+- Pré-condições nomeadas como `Gate N — Título` (não "Validação", "Check")
+- Skills destrutivas DEVEM ter `--dry-run` e backup
+- Último passo DEVE ser relatório de execução
 
 ### 5. Criar Test Cases
 

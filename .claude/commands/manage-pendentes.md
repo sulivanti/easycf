@@ -1,9 +1,36 @@
 # Skill: manage-pendentes
 
-Gerencia o ciclo de vida completo de pendências (PENDENTE-XXX) dentro de módulos. Permite criar, listar, analisar, decidir, implementar e reportar pendências seguindo o modelo TEMPLATE-PENDENTE.
+Gerencia o ciclo de vida completo de pendências dentro de módulos. Permite criar, listar, analisar, decidir, implementar e reportar pendências.
 
 > **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json`
-> **Modelo:** `docs/04_modules/@incorporar/TEMPLATE-PENDENTE.md`
+
+## Convenção de Nomenclatura
+
+Dois prefixos distintos para dois conceitos diferentes:
+
+| Prefixo | Conceito | Exemplo | Resolução |
+|---|---|---|---|
+| `PEN-{NNN}` | **Arquivo** de pendências do módulo (container) | `PEN-002` | `mod-002-*/requirements/pen-002-pendente.md` |
+| `PENDENTE-{NNN}` | **Item individual** dentro do arquivo | `PENDENTE-001` | Seção `## PENDENTE-001` dentro de `pen-002-pendente.md` |
+
+- 1 arquivo `PEN-{NNN}` por módulo — todas as pendências do módulo ficam no mesmo arquivo
+- Cada item recebe `PENDENTE-{seq}` sequencial (001, 002, ...)
+- O número do `PEN` sempre corresponde ao número do `MOD` (PEN-002 = MOD-002)
+
+## SLA de Resolução
+
+Toda pendência criada DEVE ser resolvida (IMPLEMENTADA ou CANCELADA) dentro do prazo abaixo. A skill `report` verifica conformidade e sinaliza itens vencidos.
+
+| Severidade | SLA | Regra |
+|---|---|---|
+| BLOQUEANTE | **7 dias** | Impede promoção do módulo. Escalar ao owner imediatamente. |
+| ALTA | **14 dias** | Escalar ao owner se não houver progresso após 7 dias. |
+| MÉDIA | **30 dias** | Revisão na próxima sessão de planejamento. |
+| BAIXA | **90 dias** | Pode ser adiada, mas não esquecida. Reavaliar se ainda relevante. |
+
+- **`sla_data`** é preenchido automaticamente na criação: `criado_em + SLA da severidade`
+- Se o módulo está em processo de promoção (`/promote-module`), o Gate DoR-1 bloqueará se houver PENDENTEs ABERTA/EM_ANÁLISE — independente do SLA
+- O `report` usa emojis de SLA: ✅ dentro do prazo, ⚠️ < 3 dias para vencer, ❌ vencido
 
 ## Argumento
 

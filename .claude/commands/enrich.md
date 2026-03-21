@@ -4,6 +4,18 @@ Orquestra os agentes de enriquecimento PKG-DEV-001 para um módulo, respeitando 
 
 > **Caminhos:** `.agents/paths.json` | **Registro:** `.agents/enrichment-registry.json` | **Contexto normativo:** `.agents/context-map.json` → `enrich`
 
+## Quando usar qual skill de enriquecimento
+
+| Situação | Skill | Exemplo |
+|---|---|---|
+| Preciso rodar **1 agente** em **1 módulo** | `/enrich-agent` | `/enrich-agent docs/04_modules/mod-002-gestao-usuarios/ AGN-DEV-04` |
+| Preciso rodar **vários agentes** em **1 módulo** | `/enrich` (esta skill) | `/enrich docs/04_modules/mod-002-gestao-usuarios/` |
+| Preciso rodar agentes em **vários módulos** | `/enrich-all` | `/enrich-all mod-007,mod-008,mod-009` |
+
+**Regra geral:** use a skill mais granular que resolve seu caso. `/enrich-agent` é mais rápido e consome menos contexto. `/enrich` orquestra a ordem correta entre pilares. `/enrich-all` é para operações em lote.
+
+---
+
 ## Argumento
 
 $ARGUMENTS deve conter:
@@ -31,18 +43,19 @@ Leia o `mod.md` do módulo informado.
 Leia `.agents/enrichment-registry.json`.
 
 ### Se `all`:
-Use a sequência definida em `execution_phases`:
+Use a sequência definida em `execution_phases` do registry:
 
 | Fase | Agentes | Label |
 |------|---------|-------|
 | 1 | AGN-DEV-01 | Escala e escopo |
 | 2 | AGN-DEV-02, AGN-DEV-03 | Regras de negócio e requisitos funcionais |
 | 3 | AGN-DEV-04 | Modelo de dados e eventos |
-| 4 | AGN-DEV-05, AGN-DEV-08 | Integrações e NFR |
+| 4 | AGN-DEV-05 | Integrações |
 | 5 | AGN-DEV-06 | Segurança e SEC-002 |
-| 6 | AGN-DEV-07 | UX e jornadas |
-| 7 | AGN-DEV-09, AGN-DEV-10 | ADR e pendências |
-| 8 | AGN-DEV-11 | Validação cruzada |
+| 6 | AGN-DEV-07, AGN-DEV-08 | UX e NFR |
+| 7 | AGN-DEV-09 | ADR |
+| 8 | AGN-DEV-10 | Pendências |
+| 9 | AGN-DEV-11 | Validação cruzada |
 
 ### Se ID único ou lista:
 Ordene os agentes selecionados pela ordem de fases acima. Se AGN-DEV-11 estiver na lista, mova-o para o final.
@@ -67,10 +80,9 @@ Ordene os agentes selecionados pela ordem de fases acima. Se AGN-DEV-11 estiver 
 Se o seletor for `all`, informe ao usuário:
 
 > **Nota:** A execução de todos os 11 agentes em uma única conversa acumula contexto progressivamente. Para módulos grandes ou complexos, considere executar em batches:
-> - Batch 1: `AGN-DEV-01,AGN-DEV-02,AGN-DEV-03`
-> - Batch 2: `AGN-DEV-04,AGN-DEV-05,AGN-DEV-06`
-> - Batch 3: `AGN-DEV-07,AGN-DEV-08,AGN-DEV-09,AGN-DEV-10`
-> - Batch 4: `AGN-DEV-11` (validação)
+> - Batch 1: `AGN-DEV-01,AGN-DEV-02,AGN-DEV-03,AGN-DEV-04` (fundação + negócio + dados)
+> - Batch 2: `AGN-DEV-05,AGN-DEV-06,AGN-DEV-07,AGN-DEV-08` (integrações + segurança + UX + NFR)
+> - Batch 3: `AGN-DEV-09,AGN-DEV-10,AGN-DEV-11` (ADR + pendências + validação)
 
 Pergunte se deseja continuar com `all` ou usar batches. Se o usuário confirmar `all`, prossiga.
 

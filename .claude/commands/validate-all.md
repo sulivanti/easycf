@@ -6,6 +6,22 @@ Orquestra a Fase 3 de validação pré-promoção, executando todas as skills de
 
 > Cada skill individual mantém sua configuração e regras separadas. Esta skill apenas orquestra a execução e consolida o relatório.
 
+## Hierarquia de validação
+
+Esta skill é o **orquestrador pai** de todas as validações. A relação é:
+
+```
+/validate-all  (orquestrador — validação completa pré-promoção)
+├── /qa                 (sintaxe: npm lint scripts — links, markdown, YAML schemas)
+├── /validate-manifest  (semântica: manifests vs schema v1 e catálogo de scopes)
+├── /validate-openapi   (semântica: contratos OpenAPI vs DOC-ARC-001)
+├── /validate-drizzle   (semântica: schemas Drizzle vs regras DOC-GNP-00)
+└── /validate-endpoint  (semântica: handlers Fastify vs contratos e normativos)
+```
+
+- `/qa` valida **integridade de arquivos** (links quebrados, formatação markdown, YAML parseable) via `pnpm run` scripts
+- As demais validam **conformidade semântica** com normativos (LLM lê e julga o conteúdo)
+
 ## Argumento
 
 $ARGUMENTS deve conter o caminho do módulo (ex: `docs/04_modules/mod-001-backoffice-admin/`).

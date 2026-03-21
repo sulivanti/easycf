@@ -190,6 +190,17 @@ apps/web/src/modules/mcp/
 
 ---
 
+## 1.7 Dependências
+
+- **Depende de:** MOD-000 (Foundation) — auth, RBAC scopes (`mcp:*`), domain events, audit trail
+- **Depende de:** MOD-004 (Identidade Avançada) — scopes delegados para agentes MCP
+- **Depende de:** MOD-007 (Parametrização Contextual) — motor de parametrização para configuração dinâmica
+- **Depende de:** MOD-008 (Integração Protheus) — integrações externas acionadas via MCP
+- **Depende de:** MOD-009 (Movimentos sob Aprovação) — policy CONTROLLED para movimentos que requerem aprovação
+- **Dependentes:** Nenhum (módulo folha)
+
+---
+
 ## 2. Diferença Agente MCP vs. Conta Técnica
 
 | | Conta Técnica (MOD-004 futuro) | Agente MCP |

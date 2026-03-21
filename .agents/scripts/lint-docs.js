@@ -9,6 +9,12 @@ const NORMATIVOS_DIR = path.resolve(__dirname, '..', '..', pathsConfig.paths.nor
 
 let errors = [];
 
+// Arquivos excluídos do lint de referências EX-* e §N (relatórios, não artefatos normativos)
+const LINT_EXCLUDE_PATTERNS = [
+    /AUDITORIA[^/\\]*\.md$/i,
+    /CHANGELOG\.md$/i,
+];
+
 function walkDir(dir, callback) {
     if (!fs.existsSync(dir)) return;
     const files = fs.readdirSync(dir);
@@ -159,9 +165,10 @@ walkDir(NORMATIVOS_DIR, (filePath) => {
     });
 });
 
-// 2) Coleta referências em todo docs/
+// 2) Coleta referências em todo docs/ (excluindo relatórios)
 walkDir(DOCS_DIR, (filePath) => {
     if (!filePath.endsWith('.md')) return;
+    if (LINT_EXCLUDE_PATTERNS.some(p => p.test(filePath))) return;
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     lines.forEach((line, i) => {
@@ -208,9 +215,10 @@ walkDir(NORMATIVOS_DIR, (filePath) => {
     });
 });
 
-// Busca referências DOC-XXX-NNN §N ou DOC-XXX-NNN (§N)
+// Busca referências DOC-XXX-NNN §N ou DOC-XXX-NNN (§N) (excluindo relatórios)
 walkDir(DOCS_DIR, (filePath) => {
     if (!filePath.endsWith('.md')) return;
+    if (LINT_EXCLUDE_PATTERNS.some(p => p.test(filePath))) return;
     const content = fs.readFileSync(filePath, 'utf8');
     content.split('\n').forEach((line, i) => {
         const secRefs = [...line.matchAll(/(DOC-[A-Z]+-\d+[A-Z]?)\s*§(\d+)/gi)];
@@ -257,23 +265,135 @@ const contextMapPath = path.resolve(__dirname, '../context-map.json');
 if (fs.existsSync(contextMapPath)) {
     const contextMap = JSON.parse(fs.readFileSync(contextMapPath, 'utf8'));
     const existingDocIds = new Set();
-    walkDir(NORMATIVOS_DIR, (fp) => {
-        if (!fp.endsWith('.md')) return;
-        const c = fs.readFileSync(fp, 'utf8');
-        const m = c.match(/\*\*id:\*\*\s*(DOC-[A-Z]+-\d+[A-Z]?)/i);
-        if (m) existingDocIds.add(m[1]);
-    });
+    const PACOTES_DIR = path.resolve(__dirname, '..', '..', pathsConfig.paths.pacotes_agentes || 'docs/02_pacotes_agentes/');
+    const MODULES_DIR_D = path.resolve(__dirname, '..', '..', pathsConfig.paths.modules || 'docs/04_modules/');
+    const docSearchDirs = [NORMATIVOS_DIR, PACOTES_DIR, MODULES_DIR_D];
+    for (const dir of docSearchDirs) {
+        walkDir(dir, (fp) => {
+            if (!fp.endsWith('.md')) return;
+            const c = fs.readFileSync(fp, 'utf8');
+            const m = c.match(/\*\*id:\*\*\s*([A-Z]+-[A-Z]+-\d+[A-Z]?)/i);
+            if (m) existingDocIds.add(m[1]);
+        });
+    }
 
     for (const [skill, config] of Object.entries(contextMap.skills || {})) {
         for (const dep of (config.docs || [])) {
             if (!existingDocIds.has(dep.id)) {
-                errors.push(`[Erro] context-map.json: skill '${skill}' referencia doc '${dep.id}' que não existe em ${pathsConfig.paths.normativos}`);
+                errors.push(`[Erro] context-map.json: skill '${skill}' referencia doc '${dep.id}' que não existe em normativos/ ou pacotes_agentes/`);
             }
         }
     }
     console.log(`    ${Object.keys(contextMap.skills || {}).length} skills validadas contra ${existingDocIds.size} documentos.`);
 } else {
     console.log('    context-map.json não encontrado, pulando validação.');
+}
+
+// ============================================================
+// PASS E: Validação de dependências cross-módulo (ciclos)
+// ============================================================
+
+console.log('  [Pass E] Validando dependências cross-módulo (ciclos)...');
+
+const MODULES_DIR = path.resolve(__dirname, '..', '..', pathsConfig.paths.modules || 'docs/04_modules/');
+const depGraphPath = path.join(MODULES_DIR, 'DEPENDENCY-GRAPH.md');
+
+if (fs.existsSync(depGraphPath)) {
+    const depContent = fs.readFileSync(depGraphPath, 'utf8');
+
+    // Extrai bloco YAML entre BEGIN:DEPENDENCY_GRAPH e END:DEPENDENCY_GRAPH
+    const graphMatch = depContent.match(/<!-- BEGIN:DEPENDENCY_GRAPH -->\s*```yaml\s*([\s\S]*?)```\s*<!-- END:DEPENDENCY_GRAPH -->/);
+    if (graphMatch) {
+        const graphBlock = graphMatch[1];
+        const graph = {}; // { "MOD-000": ["MOD-001", ...] }
+
+        // Parse simples do YAML (não precisa de lib)
+        for (const line of graphBlock.split('\n')) {
+            const m = line.match(/^\s*(MOD-\d{3}):\s*\[(.*)\]/);
+            if (m) {
+                const modId = m[1];
+                const deps = m[2]
+                    .split(',')
+                    .map(s => s.trim())
+                    .filter(s => s.startsWith('MOD-'));
+                graph[modId] = deps;
+            }
+        }
+
+        // DFS para detectar ciclos
+        const visited = new Set();
+        const inStack = new Set();
+        const cyclePaths = [];
+
+        function dfs(node, pathSoFar) {
+            if (inStack.has(node)) {
+                const cycleStart = pathSoFar.indexOf(node);
+                cyclePaths.push(pathSoFar.slice(cycleStart).concat(node));
+                return;
+            }
+            if (visited.has(node)) return;
+
+            visited.add(node);
+            inStack.add(node);
+            for (const dep of (graph[node] || [])) {
+                dfs(dep, [...pathSoFar, node]);
+            }
+            inStack.delete(node);
+        }
+
+        for (const modId of Object.keys(graph)) {
+            dfs(modId, []);
+        }
+
+        if (cyclePaths.length > 0) {
+            for (const cycle of cyclePaths) {
+                errors.push(`[Erro] Ciclo de dependência detectado: ${cycle.join(' → ')}`);
+            }
+        }
+
+        // Valida que cada mod.md §4 é consistente com o grafo central
+        for (const [modId, expectedDeps] of Object.entries(graph)) {
+            const modDirName = fs.readdirSync(MODULES_DIR).find(d => d.startsWith(modId.toLowerCase().replace('-', '-')));
+            if (!modDirName) continue;
+            const modMdPath = path.join(MODULES_DIR, modDirName, 'mod.md');
+            if (!fs.existsSync(modMdPath)) continue;
+
+            const modContent = fs.readFileSync(modMdPath, 'utf8');
+            // Extrai dependências de §4 (formato "**Depende de:**" ou tabela "| MOD-XXX |")
+            const declaredDeps = new Set();
+            // Localiza seção de dependências (## 4. Dependências ou ## N.N Dependências)
+            const depSectionMatch = modContent.match(/## [\d.]+\s*Dependências([\s\S]*?)(?=\n## |\n---\s*\n## |$)/i);
+            const depSection = depSectionMatch ? depSectionMatch[0] : '';
+            // Formato 1: "**Depende de:** MOD-XXX"
+            const depLines = depSection.match(/\*\*Depende de:\*\*\s*(.*)/g) || [];
+            for (const line of depLines) {
+                const refs = [...line.matchAll(/MOD-\d{3}/g)];
+                for (const ref of refs) declaredDeps.add(ref[0]);
+            }
+            // Formato 2: tabela "| MOD-XXX | Relação | Detalhe |"
+            const tableLines = depSection.match(/\|\s*MOD-\d{3}\s*\|/g) || [];
+            for (const tl of tableLines) {
+                const refs = [...tl.matchAll(/MOD-\d{3}/g)];
+                for (const ref of refs) declaredDeps.add(ref[0]);
+            }
+            // Caso especial: MOD-000 não depende de ninguém
+            if (modId === 'MOD-000' && declaredDeps.size === 0) continue;
+            // Caso especial: "Nenhum módulo" = sem dependências
+            if (depSection.match(/nenhum/i) && expectedDeps.length === 0) continue;
+
+            for (const expected of expectedDeps) {
+                if (!declaredDeps.has(expected)) {
+                    errors.push(`[Aviso] ${modId}/mod.md §4 não declara dependência de ${expected} (presente no DEPENDENCY-GRAPH.md)`);
+                }
+            }
+        }
+
+        console.log(`    ${Object.keys(graph).length} módulos, ${cyclePaths.length} ciclos detectados.`);
+    } else {
+        console.log('    DEPENDENCY-GRAPH.md encontrado mas sem bloco YAML delimitado.');
+    }
+} else {
+    console.log('    DEPENDENCY-GRAPH.md não encontrado, pulando validação de ciclos.');
 }
 
 // ============================================================

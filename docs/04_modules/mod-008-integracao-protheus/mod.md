@@ -121,11 +121,11 @@ Módulo com domínio rico: Outbox Pattern garantindo atomicidade entre transaç�
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-008-F01](../../user-stories/features/US-MOD-008-F01.md) | API Catálogo de serviços + rotinas de integração | Backend | `APPROVED` |
-| [US-MOD-008-F02](../../user-stories/features/US-MOD-008-F02.md) | API Mapeamentos de campos e parâmetros | Backend | `APPROVED` |
-| [US-MOD-008-F03](../../user-stories/features/US-MOD-008-F03.md) | API Motor de execução (BullMQ + Outbox + DLQ) | Backend | `APPROVED` |
-| [US-MOD-008-F04](../../user-stories/features/US-MOD-008-F04.md) | UX Editor de rotinas de integração | UX | `APPROVED` |
-| [US-MOD-008-F05](../../user-stories/features/US-MOD-008-F05.md) | UX Monitor de integrações | UX | `APPROVED` |
+| [US-MOD-008-F01](../user-stories/features/US-MOD-008-F01.md) | API Catálogo de serviços + rotinas de integração | Backend | `APPROVED` |
+| [US-MOD-008-F02](../user-stories/features/US-MOD-008-F02.md) | API Mapeamentos de campos e parâmetros | Backend | `APPROVED` |
+| [US-MOD-008-F03](../user-stories/features/US-MOD-008-F03.md) | API Motor de execução (BullMQ + Outbox + DLQ) | Backend | `APPROVED` |
+| [US-MOD-008-F04](../user-stories/features/US-MOD-008-F04.md) | UX Editor de rotinas de integração | UX | `APPROVED` |
+| [US-MOD-008-F05](../user-stories/features/US-MOD-008-F05.md) | UX Monitor de integrações | UX | `APPROVED` |
 
 ---
 

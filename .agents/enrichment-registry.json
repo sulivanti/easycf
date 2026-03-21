@@ -45,7 +45,7 @@
       "target_path": "requirements/int/",
       "pkg_section": "§6",
       "required_docs": ["DOC-DEV-001"],
-      "depends_on": ["AGN-DEV-01"]
+      "depends_on": ["AGN-DEV-01", "AGN-DEV-04"]
     },
     "AGN-DEV-06": {
       "name": "SEC",
@@ -72,7 +72,7 @@
       "target_path": "requirements/nfr/",
       "pkg_section": "§9",
       "required_docs": ["DOC-DEV-001"],
-      "depends_on": ["AGN-DEV-01"]
+      "depends_on": ["AGN-DEV-01", "AGN-DEV-05", "AGN-DEV-06"]
     },
     "AGN-DEV-09": {
       "name": "ADR",
@@ -88,12 +88,12 @@
       "entity": "PENDENTE",
       "target_topic": "6",
       "target_path": "requirements/",
-      "target_file": "pen-{NNN}-pendente.md",
       "pkg_section": "§11",
       "required_docs": ["DOC-DEV-001"],
-      "skill_prompt": "docs/04_modules/@incorporar/SKILL-PROMPT-PENDENTE.md",
-      "skill_command": ".claude/commands/manage-pendentes.md",
-      "depends_on": []
+      "depends_on": [
+        "AGN-DEV-01", "AGN-DEV-02", "AGN-DEV-03", "AGN-DEV-04", "AGN-DEV-05",
+        "AGN-DEV-06", "AGN-DEV-07", "AGN-DEV-08", "AGN-DEV-09"
+      ]
     },
     "AGN-DEV-11": {
       "name": "DEV-VAL",
@@ -109,16 +109,17 @@
     }
   },
   "execution_phases": {
-    "description": "Ordem topológica recomendada para modo 'all'",
+    "description": "Ordem topológica recomendada para modo 'all'. Respeita depends_on de cada agente.",
     "phases": [
       { "phase": 1, "agents": ["AGN-DEV-01"], "label": "Escala e escopo" },
       { "phase": 2, "agents": ["AGN-DEV-02", "AGN-DEV-03"], "label": "Regras de negócio e requisitos funcionais" },
       { "phase": 3, "agents": ["AGN-DEV-04"], "label": "Modelo de dados e eventos" },
-      { "phase": 4, "agents": ["AGN-DEV-05", "AGN-DEV-08"], "label": "Integrações e NFR" },
+      { "phase": 4, "agents": ["AGN-DEV-05"], "label": "Integrações" },
       { "phase": 5, "agents": ["AGN-DEV-06"], "label": "Segurança e SEC-002" },
-      { "phase": 6, "agents": ["AGN-DEV-07"], "label": "UX e jornadas" },
-      { "phase": 7, "agents": ["AGN-DEV-09", "AGN-DEV-10"], "label": "ADR e pendências" },
-      { "phase": 8, "agents": ["AGN-DEV-11"], "label": "Validação cruzada" }
+      { "phase": 6, "agents": ["AGN-DEV-07", "AGN-DEV-08"], "label": "UX e NFR" },
+      { "phase": 7, "agents": ["AGN-DEV-09"], "label": "ADR" },
+      { "phase": 8, "agents": ["AGN-DEV-10"], "label": "Pendências" },
+      { "phase": 9, "agents": ["AGN-DEV-11"], "label": "Validação cruzada" }
     ]
   }
 }

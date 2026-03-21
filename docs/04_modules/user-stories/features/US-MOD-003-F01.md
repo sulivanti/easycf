@@ -11,7 +11,7 @@
 - **status_agil:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-15
-- **rastreia_para:** US-MOD-003, US-MOD-000-F07, US-MOD-000-F12, DOC-DEV-001, DOC-ARC-001, LGPD-BASE-001
+- **rastreia_para:** US-MOD-003, US-MOD-000-F07, US-MOD-000-F12, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, LGPD-BASE-001
 - **nivel_arquitetura:** 1 (CRUD + soft delete + CTE tree query)
 - **tipo:** Backend — cria novos endpoints
 

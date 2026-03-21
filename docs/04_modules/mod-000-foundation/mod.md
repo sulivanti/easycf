@@ -120,7 +120,7 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos do Foundation (34 entradas)
 - [UX-000](requirements/ux/UX-000.md) — Jornadas e Fluxos do Foundation (8 telas/jornadas)
 - [NFR-000](requirements/nfr/NFR-000.md) — Requisitos Não Funcionais do Foundation (SLOs, observabilidade, DR)
-- [PEN-000](requirements/pen-000-pendente.md) — Questões Abertas do Foundation (7 pendências)
+- [PEN-000](requirements/pen-000-pendente.md) — Questões Abertas do Foundation (11 pendências: 7 implementadas, 4 abertas — Fase 3)
 <!-- end index -->
 
 ## 7. Decisões (ADR)

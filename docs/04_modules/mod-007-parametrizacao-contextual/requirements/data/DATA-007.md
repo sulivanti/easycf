@@ -166,7 +166,7 @@ Regras de incidencia que vinculam enquadradores a objetos-alvo. UNIQUE constrain
 | `id` | uuid | PK | SIM | Identificador unico |
 | `framer_id` | uuid | FK context_framers(id) NOT NULL | SIM | Enquadrador vinculado |
 | `target_object_id` | uuid | FK target_objects(id) NOT NULL | SIM | Objeto-alvo vinculado |
-| `condition_expr` | text | — | NAO | Expressao futura (JSON rule engine v2 — PEN-001) |
+| `condition_expr` | text | — | NAO | Expressao futura (JSON rule engine v2 — PENDENTE-001) |
 | `valid_from` | timestamptz | NOT NULL | SIM | Inicio da vigencia |
 | `valid_until` | timestamptz | — | NAO | Fim da vigencia |
 | `status` | varchar(20) | NOT NULL DEFAULT 'ACTIVE' | SIM | ACTIVE ou INACTIVE |
@@ -252,7 +252,7 @@ Itens parametrizaveis dentro de uma rotina. 7 tipos de item com 8 acoes possivei
 | `target_field_id` | uuid | FK target_fields(id) | NAO | Campo-alvo (nullable para itens cross-field) |
 | `action` | varchar(30) | NOT NULL | SIM | SHOW, HIDE, SET_REQUIRED, SET_OPTIONAL, SET_DEFAULT, RESTRICT_DOMAIN, VALIDATE, REQUIRE_EVIDENCE |
 | `value` | jsonb | — | NAO | Valor parametrizado (ex: default value, domain list, validation rule) |
-| `condition_expr` | text | — | NAO | Condicao de aplicacao (v2 — PEN-001) |
+| `condition_expr` | text | — | NAO | Condicao de aplicacao (v2 — PENDENTE-001) |
 | `validation_message` | varchar(500) | — | NAO | Mensagem exibida para itens tipo VALIDATION |
 | `is_blocking` | boolean | NOT NULL DEFAULT false | SIM | true = bloqueia transicao no MOD-006 (FR-009) |
 | `ordem` | integer | NOT NULL | SIM | Ordem de avaliacao no motor (sequencial) |
@@ -365,7 +365,7 @@ Historico de versionamento de rotinas. Registra cada fork com justificativa obri
 
 ---
 
-## Nota: Limites Configuraveis por Tenant (PEN-007/PEN-005)
+## Nota: Limites Configuraveis por Tenant (PEN-007/PENDENTE-005)
 
 Os limites operacionais abaixo sao configurados externamente via `tenant_config` (MOD-000 Foundation). O MOD-007 consulta esses limites no momento de validacao e retorna 422 `LIMIT_EXCEEDED` quando excedidos:
 

@@ -278,5 +278,5 @@
 | **Outbox** | Nenhum evento deste modulo usa outbox pattern (todos sao intra-sistema) |
 | **Retencao** | Padrao Foundation (configuravel por tenant) |
 | **Emissao condicional** | `routine.applied` so emitido quando applied_routines > 0 (BR-010) |
-| **Supressao dry_run** | Quando `dry_run: true` no request de avaliacao, o motor executa passos 1-5 normalmente mas **NAO** persiste `routine.applied` (EVT-012). Sem side-effects (FR-009, PEN-007/PEN-006). |
+| **Supressao dry_run** | Quando `dry_run: true` no request de avaliacao, o motor executa passos 1-5 normalmente mas **NAO** persiste `routine.applied` (EVT-012). Sem side-effects (FR-009, PEN-007/PENDENTE-006). |
 | **Mascaramento** | `change_reason` truncado a 200 chars em `routine.forked`; `value` jsonb NAO incluido em `routine.item_added` |

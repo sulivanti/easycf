@@ -6,6 +6,15 @@ Cria uma emenda (amendment) governada para detalhar, corrigir ou revisar especif
 
 > **Ciclo de vida:** Stubs em `DRAFT` são enriquecidos diretamente. Esta skill é ativada **somente** quando o documento alvo já atingiu `READY` (ou `ACEITA` para ADRs). Se o arquivo está em `DRAFT`, edite-o diretamente — não use esta skill.
 
+## Relação com `/update-specification`
+
+| Estado do documento | Skill correta |
+|---|---|
+| `DRAFT` | `/update-specification` (edição direta) |
+| `READY` ou `ACEITA` | `/create-amendment` (esta skill) |
+
+O `/update-specification` detecta o estado e delega automaticamente para esta skill quando o documento é `READY`. Você também pode invocar `/create-amendment` diretamente.
+
 ## Argumento
 
 $ARGUMENTS deve conter o ID do requisito, pilar e natureza (ex: `FR-001 melhoria "adicionar endpoint restore"`). Se não fornecido, pergunte ao usuário:

@@ -48,6 +48,7 @@ Sem esses mecanismos, toda exceção de acesso é feita de forma implícita (ris
 ## 3. Escopo do Épico
 
 ### Inclui
+
 - API de vínculo usuário ↔ nó organizacional (`user_org_scopes`) — tipo PRIMARY ou SECONDARY
 - API de compartilhamento controlado com vigência obrigatória (`access_shares`)
 - API de delegação temporária com TTL obrigatório (`access_delegations`)
@@ -57,6 +58,7 @@ Sem esses mecanismos, toda exceção de acesso é feita de forma implícita (ris
 - Novos escopos no catálogo: `identity:org_scope:*`, `identity:share:*`
 
 ### Não inclui
+
 - Revisão periódica formal de acessos — roadmap Wave 3 (requer gestão de campanhas de revisão)
 - Governança de concessão de acesso com fluxo de aprovação — MOD-009 (Aprovações e Alçadas)
 - Contas técnicas e agentes associados — roadmap futuro (Wave 4+)

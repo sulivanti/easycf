@@ -30,6 +30,7 @@ Como **arquiteto de integração**, quero editar rotinas de integração em uma 
 ## 2. Escopo
 
 ### Inclui
+
 - Listagem filtrada por routine_type=INTEGRATION com coluna de serviço destino
 - Aba Config HTTP: serviço, método, endpoint template, timeout, retry, trigger events
 - Aba Mapeamentos: CRUD drag-and-drop com formulário adaptativo por tipo
@@ -40,6 +41,7 @@ Como **arquiteto de integração**, quero editar rotinas de integração em uma 
 - Modo readonly para PUBLISHED em todas as abas
 
 ### Não inclui
+
 - APIs de backend — US-MOD-008-F01, F02, F03
 - Monitor de integrações — US-MOD-008-F05
 

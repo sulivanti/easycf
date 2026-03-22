@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -19,6 +20,7 @@ O campo `delegated_scopes` é armazenado como `jsonb` (array de strings) no Post
 **Validar `delegated_scopes` no service layer via regex `*:(approve|execute|sign)$`, rejeitando com 422 antes de qualquer persistência.**
 
 O service itera sobre o array `delegated_scopes` e testa cada escopo contra o pattern:
+
 ```
 /:(approve|execute|sign)$/
 ```

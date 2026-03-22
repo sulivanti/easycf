@@ -49,6 +49,7 @@ O sistema precisa suportar **agentes de automação (MCP)** que possam executar 
 ## 2. Regra-Mãe de Não-Bypass
 
 Consequências técnicas:
+
 - **Agente MCP tem escopos próprios** — não herda escopos do usuário vinculado
 - **Escopos bloqueados** (`*:delete`, `*:approve`, `approval:decide`, `approval:override`, `*:sign`, `*:execute`) **nunca podem ser atribuídos a agentes MCP** (Phase 1 — permanente)
 - **Política CONTROLLED** sempre exige que a decisão final seja de um humano com `approval:decide`
@@ -58,6 +59,7 @@ Consequências técnicas:
 
 **Phase 1 (agora — permanente):**
 Escopos permanentemente bloqueados para agentes MCP:
+
 - `*:delete` — exclusões nunca permitidas a agentes
 - `*:approve` — aprovações nunca permitidas a agentes
 - `approval:decide` — decisão de aprovação
@@ -67,9 +69,11 @@ Escopos permanentemente bloqueados para agentes MCP:
 
 **Phase 2 (após MCP testado e validado em produção):**
 Escopos que podem ser liberados sob condições:
+
 - `*:create` — criação de objetos
 
 Condições para liberação Phase 2:
+
 1. MCP testado e validado em ambiente de produção
 2. Aprovação explícita do owner (Marcos Sulivan)
 3. Configuração **per-agent** (não global) — cada agente recebe liberação individual
@@ -78,6 +82,7 @@ Condições para liberação Phase 2:
 ### 2.2 Detecção de Privilege Escalation
 
 Tentativas de escalada de privilégio (agente tentando usar escopos bloqueados ou injetar escopos no payload) são classificadas como:
+
 - **sensitivity_level=2** (alto) — evento `mcp.privilege_escalation_attempt`
 - Alerta imediato no monitor **UX-MCP-002** (badge vermelho "Escalada de Privilégio")
 - Registrado em `mcp_executions` com status=BLOCKED
@@ -110,6 +115,7 @@ Tentativas de escalada de privilégio (agente tentando usar escopos bloqueados o
 ## 5. Escopo
 
 ### Inclui
+
 - API: Cadastro de Agentes MCP (identidade técnica governada)
 - API: Catálogo de Ações MCP com tipos e políticas de execução
 - API: Endpoint de recebimento de solicitações MCP (gateway de entrada)
@@ -119,6 +125,7 @@ Tentativas de escalada de privilégio (agente tentando usar escopos bloqueados o
 - UX: Monitor de Execuções MCP (UX-MCP-002)
 
 ### Não inclui
+
 - Protocolo MCP em si (Model Context Protocol) — implementado pelo agente externo
 - Conta técnica sem vínculo MCP — roadmap Wave 5+ (MOD-004 extensão)
 - Revisão periódica de permissões de agentes — roadmap Wave 6
@@ -208,6 +215,7 @@ US-MOD-010
 ## 10. Modelo de Dados Completo
 
 ### `mcp_agents` — Agentes MCP
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -226,6 +234,7 @@ US-MOD-010
 **Constraint crítica (Phase 1):** `allowed_scopes` NUNCA pode conter `*:delete`, `*:approve`, `approval:decide`, `approval:override`, `*:sign`, `*:execute`. Veja §2.1 para roadmap Phase 2 (`*:create`).
 
 ### `mcp_action_types` — Tipos de Ação MCP
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |
@@ -235,6 +244,7 @@ US-MOD-010
 | `can_approve` | boolean | Sempre false (agentes não aprovam) |
 
 ### `mcp_actions` — Catálogo de Ações MCP
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -251,6 +261,7 @@ US-MOD-010
 | `created_by` | uuid | FK→users | |
 
 ### `mcp_executions` — Log de Execuções
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -269,6 +280,7 @@ US-MOD-010
 | `completed_at` | timestamp | nullable | |
 
 ### `mcp_agent_action_links` — Agente ↔ Ação
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |

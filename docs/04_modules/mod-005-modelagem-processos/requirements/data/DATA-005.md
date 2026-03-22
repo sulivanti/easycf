@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -53,10 +54,12 @@ process_cycles (1)
 | `deleted_at` | timestamptz | NÃO | nullable | Soft delete — somente DRAFT/DEPRECATED (BR-005) |
 
 **Constraints:**
+
 - `UNIQUE(tenant_id, codigo, version)` — unicidade de código+versão por tenant
 - `CHECK(status IN ('DRAFT', 'PUBLISHED', 'DEPRECATED'))`
 
 **Indexes:**
+
 - `idx_cycles_tenant_status` → `(tenant_id, status)` — listagem filtrada
 - `idx_cycles_parent` → `(parent_cycle_id)` WHERE parent_cycle_id IS NOT NULL — histórico de versões
 
@@ -77,10 +80,12 @@ process_cycles (1)
 | `deleted_at` | timestamptz | NÃO | nullable | Bloqueado se estágios ativos (BR-005) |
 
 **Constraints:**
+
 - `UNIQUE(cycle_id, codigo) WHERE deleted_at IS NULL` — unicidade por ciclo
 - `UNIQUE(cycle_id, ordem) WHERE deleted_at IS NULL` — sem duplicata de ordem
 
 **Indexes:**
+
 - `idx_macro_stages_cycle_ordem` → `(cycle_id, ordem)` — ordenação natural
 
 ---
@@ -106,15 +111,18 @@ process_cycles (1)
 | `deleted_at` | timestamptz | NÃO | nullable | Bloqueado se instâncias ativas no MOD-006 (BR-005) |
 
 **Constraints:**
+
 - `UNIQUE(macro_stage_id, codigo) WHERE deleted_at IS NULL`
 - `UNIQUE(cycle_id) WHERE is_initial=true AND deleted_at IS NULL` — partial unique index nativo (ADR-001, Opção B aceita)
 
 **Indexes:**
+
 - `idx_stages_macro_ordem` → `(macro_stage_id, ordem)` — ordenação natural
 - `idx_stages_initial_unique` → `UNIQUE(cycle_id) WHERE is_initial=true AND deleted_at IS NULL` — garante BR-002 no nível de banco
 - `idx_stages_cycle` → `(cycle_id)` — simplifica validação cross-ciclo (BR-008) e query /flow
 
 **Trigger de consistência (ADR-001):**
+
 ```sql
 -- Popula cycle_id automaticamente a partir de macro_stage_id
 CREATE TRIGGER trg_stages_set_cycle_id
@@ -141,10 +149,12 @@ CREATE TRIGGER trg_stages_set_cycle_id
 | `deleted_at` | timestamptz | NÃO | nullable | |
 
 **Constraints:**
+
 - `CHECK(gate_type IN ('APPROVAL', 'DOCUMENT', 'CHECKLIST', 'INFORMATIVE'))`
 - `UNIQUE(stage_id, ordem) WHERE deleted_at IS NULL`
 
 **Indexes:**
+
 - `idx_gates_stage_ordem` → `(stage_id, ordem)` — avaliação sequencial
 
 ---
@@ -167,9 +177,11 @@ CREATE TRIGGER trg_stages_set_cycle_id
 | `deleted_at` | timestamptz | NÃO | nullable | |
 
 **Constraints:**
+
 - `UNIQUE(tenant_id, codigo) WHERE deleted_at IS NULL`
 
 **Indexes:**
+
 - `idx_process_roles_tenant` → `(tenant_id)` — listagem por tenant
 
 ---
@@ -187,9 +199,11 @@ CREATE TRIGGER trg_stages_set_cycle_id
 | `created_at` | timestamptz | SIM | NOT NULL, default now() | |
 
 **Constraints:**
+
 - `UNIQUE(stage_id, role_id)` — sem duplicata de papel por estágio
 
 **Indexes:**
+
 - `idx_stage_roles_stage` → `(stage_id)` — listar papéis do estágio
 - `idx_stage_roles_role` → `(role_id)` — reverse lookup
 
@@ -212,10 +226,12 @@ CREATE TRIGGER trg_stages_set_cycle_id
 | `updated_at` | timestamptz | SIM | NOT NULL, default now() | |
 
 **Constraints:**
+
 - `UNIQUE(from_stage_id, to_stage_id, nome)` — sem duplicata de transição nomeada
 - `CHECK(from_stage_id != to_stage_id)` — sem auto-transição (BR-008)
 
 **Indexes:**
+
 - `idx_transitions_from` → `(from_stage_id)` — transições de saída
 - `idx_transitions_to` → `(to_stage_id)` — transições de entrada
 

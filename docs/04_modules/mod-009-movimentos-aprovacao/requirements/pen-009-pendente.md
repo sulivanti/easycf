@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -7,6 +8,7 @@
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.5.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento Batch 4 — pendências identificadas a partir de cross-reading de todos os artefatos do módulo |
 > | 0.6.0  | 2026-03-19 | arquitetura | PEN-009-001 decidida (Opção 1 — domain event outbox) + PEN-009-002 implementada (Amendment DOC-FND-000-M03) |
+>
 | 0.7.0  | 2026-03-19 | arquitetura | PEN-009-003 implementada (dry_run body field), PEN-009-004 implementada (in-app MVP), PEN-009-006 implementada (endpoint retry) |
 > | 0.8.0  | 2026-03-19 | arquitetura | PEN-009-007 implementada (polling 60s MVP, SSE roadmap pós-MVP) |
 > | 0.9.0  | 2026-03-19 | arquitetura | PEN-009-005 implementada (sem particionamento MVP, apenas índices; threshold 5M para range mensal PostgreSQL 14+) |

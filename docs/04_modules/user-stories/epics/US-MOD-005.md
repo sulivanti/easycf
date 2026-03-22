@@ -77,6 +77,7 @@ O vínculo entre um Papel e um usuário/role real é feito na **atribuição de 
 ## 5. Escopo
 
 ### Inclui
+
 - API CRUD de Ciclos com versionamento (DRAFT → PUBLISHED → DEPRECATED)
 - API CRUD de Macroetapas vinculadas a ciclos
 - API CRUD de Estágios vinculados a macroetapas
@@ -88,6 +89,7 @@ O vínculo entre um Papel e um usuário/role real é feito na **atribuição de 
 - Configurador de estágio detalhado (UX-PROC-002) — gates, papéis, transições
 
 ### Não inclui
+
 - Abertura de instâncias concretas de ciclo — MOD-006
 - Execução de gates e atribuição de responsáveis — MOD-006
 - Parametrização contextual de comportamentos por estágio — MOD-007
@@ -172,6 +174,7 @@ US-MOD-005
 ## 10. Modelo de Dados Completo
 
 ### `process_cycles` — Ciclos
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -187,6 +190,7 @@ US-MOD-005
 | `deleted_at` | timestamp | nullable | Soft delete (somente DRAFT/DEPRECATED) |
 
 ### `process_macro_stages` — Macroetapas
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -198,6 +202,7 @@ US-MOD-005
 | `deleted_at` | timestamp | nullable | |
 
 ### `process_stages` — Estágios
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -214,6 +219,7 @@ US-MOD-005
 | `deleted_at` | timestamp | nullable | Bloqueado se instâncias ativas |
 
 ### `process_gates` — Gates
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -227,6 +233,7 @@ US-MOD-005
 | `deleted_at` | timestamp | nullable | |
 
 ### `process_roles` — Papéis (catálogo global)
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -238,6 +245,7 @@ US-MOD-005
 | `deleted_at` | timestamp | nullable | |
 
 ### `stage_role_links` — Estágio × Papel
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -249,6 +257,7 @@ US-MOD-005
 | UNIQUE | | `(stage_id, role_id)` | |
 
 ### `stage_transitions` — Transições
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |

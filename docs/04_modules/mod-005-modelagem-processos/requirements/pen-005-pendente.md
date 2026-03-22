@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -7,6 +8,7 @@
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-17 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) |
 > | 0.3.0  | 2026-03-17 | AGN-DEV-10  | Re-enriquecimento PENDENTE — Q7, Q8, Q9 adicionadas (domain events update/delete, DELETE process_roles, ADR-002 status) |
+>
 | 0.4.0  | 2026-03-18 | arquitetura | Q8 DECIDIDA → IMPLEMENTADA — Opção A (DELETE /admin/process-roles/:id adicionado ao INT-005 §1.7) |
 | 0.5.0  | 2026-03-18 | Marcos Sulivan | Q9 ABERTA → IMPLEMENTADA — Opção A (ADR-002 status: proposed → accepted) |
 | 0.6.0  | 2026-03-18 | Marcos Sulivan | Q7 ABERTA → DECIDIDA — Opção A (adicionar eventos UPDATE/DELETE ao DATA-003) |
@@ -93,11 +95,13 @@ Sem eventos de update/delete, a timeline do ciclo mostra apenas criacoes. Altera
 
 **Opcao A --- Adicionar eventos de UPDATE e DELETE ao DATA-003:**
 Expandir o catalogo com ~9 eventos adicionais (cycle_updated, stage_updated, stage_deleted, gate_updated, gate_deleted, macro_stage_updated, macro_stage_deleted, transition_deleted, role_unlinked).
+
 - Pros: Timeline completa; auditoria plena; consistencia com Dogma 6
 - Contras: Mais eventos a emitir; maior volume na tabela domain_events
 
 **Opcao B --- Manter apenas eventos de criacao (MVP):**
 Adiar eventos de update/delete para fase posterior.
+
 - Pros: Menos complexidade no MVP; volume menor
 - Contras: Timeline incompleta; auditoria parcial; pode violar Dogma 6 da DOC-ARC-003
 
@@ -142,11 +146,13 @@ Administradores nao conseguem desativar papeis obsoletos do catalogo global. Sem
 
 **Opcao A --- Adicionar DELETE /admin/process-roles/:id:**
 Endpoint de soft delete com validacao: papel com `stage_role_links` ativos retorna 422.
+
 - Pros: Catalogo gerenciavel; consistencia com padrao CRUD
 - Contras: +1 endpoint (26 total); validacao de vinculos necessaria
 
 **Opcao B --- Manter sem DELETE (catálogo append-only):**
 Papeis obsoletos nao sao removidos, apenas ignorados.
+
 - Pros: Simplicidade; sem risco de remover papel referenciado
 - Contras: Catalogo cresce indefinidamente; UX degradada
 
@@ -200,11 +206,13 @@ Baixo impacto pratico (a decisao ja esta implementada nos artefatos), mas cria i
 
 **Opcao A --- Aceitar ADR-002 formalmente:**
 Alterar status para `accepted` no arquivo ADR-002.md.
+
 - Pros: Consistencia; governanca correta
 - Contras: Nenhum
 
 **Opcao B --- Manter como proposed:**
 Aguardar revisao formal do comite.
+
 - Pros: Processo de aprovacao respeitado
 - Contras: Inconsistencia com artefatos que ja implementam a decisao
 

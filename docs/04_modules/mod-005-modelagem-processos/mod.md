@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 
@@ -45,14 +46,14 @@ Módulo responsável pela **modelagem de processos** (blueprint), definindo como
 
 **Nível 2 — DDD-lite + Full Clean** (DOC-ESC-001 §7)
 
-Módulo com domínio rico: máquina de estados (DRAFT → PUBLISHED → DEPRECATED), invariantes de integridade (estágio inicial único, imutabilidade de PUBLISHED, deleção protegida), grafo de transições com validações cross-entidade, e fork atômico de estrutura completa. Possui 7 tabelas próprias, 26 endpoints administrativos, 19 domain events, e integração com MOD-000 (RBAC + audit trail) e MOD-006 (integridade referencial em runtime). 13 requisitos funcionais (FR-001 a FR-013), 10 regras de negócio (BR-001 a BR-010), 4 ADRs aceitas, e 2 telas UX (editor visual + configurador de estágio).
+Módulo com domínio rico: máquina de estados (DRAFT → PUBLISHED → DEPRECATED), invariantes de integridade (estágio inicial único, imutabilidade de PUBLISHED, deleção protegida), grafo de transições com validações cross-entidade, e fork atômico de estrutura completa. Possui 7 tabelas próprias, 26 endpoints administrativos, 19 domain events, e integração com MOD-000 (RBAC + audit trail) e MOD-006 (integridade referencial em runtime). 13 requisitos funcionais (FR-001 a FR-013), 12 regras de negócio (BR-001 a BR-012), 4 ADRs aceitas, e 2 telas UX (editor visual + configurador de estágio).
 
 ### Justificativa (Score DOC-ESC-001 §4.2: 5/6)
 
 | Gatilho | Presente | Evidência |
 |---|---|---|
 | Estado/workflow | **SIM** | Máquina de estados DRAFT → PUBLISHED → DEPRECATED; ciclo publicado é imutável; fork como único caminho de mudança |
-| Compliance/auditoria | **SIM** | 9 domain events (DATA-003), audit trail via DOC-ARC-003, imutabilidade como controle de integridade documental |
+| Compliance/auditoria | **SIM** | 19 domain events (DATA-003), audit trail via DOC-ARC-003, imutabilidade como controle de integridade documental |
 | Concorrência/consistência | **SIM** | Integridade referencial com MOD-006 (deleção protegida de estágios com instâncias ativas), estágio inicial único por ciclo (partial unique index), fork atômico copiando 7 tabelas com novos IDs |
 | Integrações externas críticas | **NÃO** | Sem providers externos; integra apenas módulos internos (MOD-000, MOD-006) |
 | Multi-tenant/escopo por cliente | **SIM** | `tenant_id` obrigatório em todas as queries (DOC-FND-000 §3), ACL via 4 scopes `process:cycle:*` |

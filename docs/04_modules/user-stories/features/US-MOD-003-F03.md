@@ -5,6 +5,7 @@
 **operationIds consumidos:** `org_units_create`, `org_units_update`, `org_units_list`, `org_units_get`
 
 ## Metadados de Governança
+
 - **status_agil:** READY | **owner:** arquitetura
 - **rastreia_para:** US-MOD-003, US-MOD-003-F01, DOC-UX-012, DOC-ARC-003
 

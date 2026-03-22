@@ -25,6 +25,7 @@
 O módulo Backoffice Admin requer uma tela de Login com fluxo integrado de Recuperação de Senha (sem reload de página) e um Application Shell persistente (Sidebar + Header + Breadcrumb) que envolva todas as rotas protegidas.
 
 Esta feature formaliza os contratos de UX para:
+
 - `UX-AUTH-001` — tela de Login, Recuperação de Senha e Reset de Senha
 - `UX-SHELL-001` — Application Shell (layout wrapper das rotas autenticadas)
 
@@ -33,6 +34,7 @@ Esta feature formaliza os contratos de UX para:
 ## 2. A Solução (Linguagem de Negócio)
 
 Como **usuário administrador**, quero:
+
 - Fazer login de forma segura, sem mensagens que revelem se meu e-mail existe
 - Recuperar minha senha via e-mail sem sair da tela atual
 - Após autenticado, navegar com layout consistente filtrado pelas minhas permissões

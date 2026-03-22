@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -66,11 +67,13 @@ case_instances          → O CASO em si (status geral, datas, objeto de negóci
 | `updated_at` | timestamptz | NOT NULL DEFAULT now() | Atualizado via trigger ou application |
 
 **Constraints:**
+
 - CHECK: `status IN ('OPEN','COMPLETED','CANCELLED','ON_HOLD')`
 - CHECK: `cancelled_at IS NOT NULL` quando `status = 'CANCELLED'` (enforced via application — BR-011)
 - CHECK: `cancellation_reason IS NOT NULL` quando `status = 'CANCELLED'` (enforced via application)
 
 **Indexes:**
+
 - `idx_case_instances_tenant_status` — (tenant_id, status) — filtro principal da listagem
 - `idx_case_instances_cycle` — (cycle_id) — filtro por ciclo
 - `idx_case_instances_codigo` — UNIQUE (codigo) — busca por código amigável
@@ -79,6 +82,7 @@ case_instances          → O CASO em si (status geral, datas, objeto de negóci
 - `idx_case_instances_org_unit` — (org_unit_id) WHERE org_unit_id IS NOT NULL — filtro por área organizacional
 
 **Value Objects associados:**
+
 - `CaseStatus`: OPEN | COMPLETED | CANCELLED | ON_HOLD — com transições válidas (BR-012)
 
 ### 2.2 `stage_history` — Histórico de Estágio (Append-only)
@@ -96,11 +100,13 @@ case_instances          → O CASO em si (status geral, datas, objeto de negóci
 | `evidence` | jsonb | nullable | `{ type: 'note'\|'file', content?, url? }` |
 
 **Invariantes:**
+
 - Append-only: registros NUNCA são editados ou deletados
 - `from_stage_id = null` apenas no primeiro registro (abertura do caso)
 - `transition_id` referencia transição válida do blueprint frozen (cycle_version_id)
 
 **Indexes:**
+
 - `idx_stage_history_case` — (case_id, transitioned_at DESC) — timeline por caso
 - `idx_stage_history_tenant` — via JOIN com case_instances (tenant isolation)
 
@@ -121,21 +127,25 @@ case_instances          → O CASO em si (status geral, datas, objeto de negóci
 | `checklist_items` | jsonb | nullable | `[{ id, label, checked }]` para CHECKLIST gates |
 
 **Constraints:**
+
 - UNIQUE (case_id, gate_id) — Um gate por caso
 - CHECK: `status IN ('PENDING','RESOLVED','WAIVED','REJECTED')`
 - CHECK: `decision IN ('APPROVED','REJECTED','WAIVED')` quando `decision IS NOT NULL`
 
 **Invariantes:**
+
 - Criados automaticamente com status=PENDING ao entrar em novo estágio (FR-001, FR-002)
 - Gate INFORMATIVE nunca bloqueia transição (BR-005)
 - Gate APPROVAL requer can_approve=true no papel do usuário (BR-008)
 - Resolução de CHECKLIST requer todos os itens checked=true (BR-013)
 
 **Value Objects associados:**
+
 - `GateResolutionStatus`: PENDING | RESOLVED | WAIVED | REJECTED
 - `GateDecision`: APPROVED | REJECTED | WAIVED
 
 **Indexes:**
+
 - `idx_gate_instances_case_status` — (case_id, status) — verificação de gates pendentes no motor de transição
 - `idx_gate_instances_case_stage` — (case_id, stage_id) — listagem de gates por estágio
 
@@ -156,6 +166,7 @@ case_instances          → O CASO em si (status geral, datas, objeto de negóci
 | `delegation_id` | uuid | FK→access_delegations.id, nullable | Se atribuição veio de delegação MOD-004 (BR-015) |
 
 **Invariantes:**
+
 - No máximo UMA atribuição ativa por (case_id, stage_id, process_role_id) — enforced via application (BR-007)
 - Reatribuição DEVE desativar anterior antes de criar novo (BR-007)
 - Atribuição com delegation_id expira junto com a delegação (BR-015)
@@ -163,6 +174,7 @@ case_instances          → O CASO em si (status geral, datas, objeto de negóci
 - Soft-toggle: registros nunca são deletados, apenas desativados (is_active=false)
 
 **Indexes:**
+
 - `idx_case_assignments_case_active` — (case_id, is_active) WHERE is_active=true — atribuições ativas do caso
 - `idx_case_assignments_user` — (user_id, is_active) WHERE is_active=true — filtro "Minha responsabilidade" (FR-009)
 - `idx_case_assignments_delegation` — (delegation_id) WHERE delegation_id IS NOT NULL — expiração via delegação
@@ -182,11 +194,13 @@ case_instances          → O CASO em si (status geral, datas, objeto de negóci
 | `stage_id` | uuid | FK→process_stages.id NOT NULL | Estágio no momento do evento |
 
 **Invariantes:**
+
 - Append-only: registros NUNCA são editados ou deletados
 - `event_type=REOPENED` causa side-effect no aggregate (status→OPEN, completed_at→null, current_stage_id→target_stage_id) — BR-016. Payload DEVE incluir `target_stage_id` (UUID, NOT NULL, FK→process_stages.id do mesmo cycle_id). Gates do estágio destino recriados como PENDING. Ref: PEN-006/PENDENTE-005 Opção B
 - `event_type=STAGE_TRANSITIONED` é registrado automaticamente pelo motor de transição (FR-002)
 
 **Indexes:**
+
 - `idx_case_events_case` — (case_id, created_at DESC) — timeline por caso
 - `idx_case_events_type` — (case_id, event_type) — filtragem por tipo de evento
 
@@ -269,6 +283,7 @@ ON_HOLD   COMPLETED  CANCELLED
 ```
 
 Transições válidas (BR-012):
+
 - OPEN → ON_HOLD (hold)
 - OPEN → COMPLETED (transição para estágio terminal — BR-004)
 - OPEN → CANCELLED (cancel — BR-011)

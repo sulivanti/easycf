@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -11,6 +12,7 @@
 > | 0.6.0  | 2026-03-18 | usuário     | Adição 3 eventos scope.* (FR-010): scope.created/updated/deleted. Total: 34 events |
 > | 0.5.0  | 2026-03-18 | usuário     | Esclarecimento: origin_command é identificador descritivo, não scope (resolve BLQ-3 validate-all) |
 > | 0.4.0  | 2026-03-18 | usuário     | Adição evento `user.invite_resent` (FR-006, resolve BLQ-001 do validate-all) |
+>
 | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Alinhamento emit_permission com scopes 3-seg DOC-FND-000 v1.2.0 |
 
 # DATA-003 — Catálogo de Domain Events do Foundation

@@ -7,6 +7,7 @@
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -28,6 +29,7 @@ Como **usuário operacional**, quero editar um registro existente respeitando o 
 ## 2. Escopo
 
 ### Inclui
+
 - Avaliação com `current_record_state` ao abrir (F01 amendment)
 - Status bloqueante impede abertura do formulário
 - Campos editáveis = visible_fields não bloqueados; campos bloqueados = readonly com cadeado
@@ -36,6 +38,7 @@ Como **usuário operacional**, quero editar um registro existente respeitando o 
 - Formulário sempre em tela separada (nunca inline)
 
 ### Não inclui
+
 - Grade de inclusão — US-MOD-011-F02
 - Grade de exclusão — US-MOD-011-F04
 

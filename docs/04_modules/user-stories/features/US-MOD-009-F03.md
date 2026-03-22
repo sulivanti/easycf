@@ -30,6 +30,7 @@ Como **aprovador**, quero um inbox com todos os movimentos pendentes para minha 
 ## 2. Escopo
 
 ### Inclui
+
 - Inbox do aprovador (`GET /my/approvals`) filtrado por alçada pessoal
 - Aprovação e reprovação com parecer obrigatório
 - Cadeia de aprovação em níveis (nível 1 aprovado → nível 2 criado)
@@ -41,6 +42,7 @@ Como **aprovador**, quero um inbox com todos os movimentos pendentes para minha 
 - Rastreabilidade integral em `movement_history`
 
 ### Não inclui
+
 - Regras de controle e alçada — US-MOD-009-F01
 - Motor de interceptação — US-MOD-009-F02
 - Interfaces UX — US-MOD-009-F04, F05

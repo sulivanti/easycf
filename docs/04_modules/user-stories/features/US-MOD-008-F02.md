@@ -42,6 +42,7 @@ Como **arquiteto de integração**, quero definir como cada campo do Integrador 
 ## 3. Escopo
 
 ### Inclui
+
 - CRUD de mapeamentos com 5 tipos (FIELD, PARAM, HEADER, FIXED_VALUE, DERIVED)
 - CRUD de parâmetros técnicos com 4 tipos (FIXED, DERIVED_FROM_TENANT, DERIVED_FROM_CONTEXT, HEADER)
 - Campos required: ausência aborta execução antes do HTTP
@@ -51,6 +52,7 @@ Como **arquiteto de integração**, quero definir como cada campo do Integrador 
 - Ordem do payload preservada conforme campo `ordem`
 
 ### Não inclui
+
 - Catálogo de serviços e config HTTP — US-MOD-008-F01
 - Motor de execução — US-MOD-008-F03
 - Interface de editor — US-MOD-008-F04

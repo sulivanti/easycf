@@ -59,6 +59,7 @@ Regras:
 ## 4. Escopo
 
 ### Inclui
+
 - CRUD de Rotinas de Comportamento com ciclo DRAFT → PUBLISHED → DEPRECATED
 - CRUD de Itens de Rotina com 7 tipos (FIELD_VISIBILITY, REQUIRED, DEFAULT, DOMAIN, DERIVATION, VALIDATION, EVIDENCE)
 - Fork de rotina PUBLISHED com cópia de itens e links de incidência
@@ -67,6 +68,7 @@ Regras:
 - Validação: PUBLISHED imutável, publicação exige ao menos 1 item
 
 ### Não inclui
+
 - Enquadradores e regras de incidência — US-MOD-007-F01
 - Motor de avaliação — US-MOD-007-F03
 - Interface de cadastro — US-MOD-007-F05

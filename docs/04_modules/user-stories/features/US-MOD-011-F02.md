@@ -8,6 +8,7 @@
 **operationIds consumidos:** `routine_engine_evaluate`, `admin_framers_list`
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -29,6 +30,7 @@ Como **usuário operacional**, quero preencher múltiplos registros em uma grade
 ## 2. Escopo
 
 ### Inclui
+
 - Grade com colunas definidas por `visible_fields` do motor, defaults pré-preenchidos
 - Validação por linha (motor 1 por vez) com status ✅ ❌ ⚠️
 - "Salvar" habilitado somente com 100% ✅
@@ -38,6 +40,7 @@ Como **usuário operacional**, quero preencher múltiplos registros em uma grade
 - Limite configurável de linhas por sessão
 
 ### Não inclui
+
 - Ações em massa — US-MOD-011-F05
 - Alteração de registro — US-MOD-011-F03
 - Exclusão em massa — US-MOD-011-F04

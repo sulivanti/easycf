@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -6,6 +7,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.12.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → IMPLEMENTADA — FR-007, INT-006, DATA-003 v0.5.0 (submit_change_password) |
+>
 | 0.11.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → DECIDIDA (Opção A) — Criar FR-007, INT-006, UIActionEnvelope |
 | 0.10.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-002 → IMPLEMENTADA — Opção B (FR-004 v0.7.0, UX-001 v0.5.0) |
 | 0.9.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-002 → DECIDIDA (Opção B) |
@@ -88,11 +90,13 @@ UX (primeira impressão do admin sem permissões), suporte (chamados por "tela e
 
 **Opção A — Sidebar vazia é aceitável:**
 O Dashboard já explica a situação com "Nenhum módulo disponível para seu perfil."
+
 - Prós: Zero complexidade; já implementado no Dashboard
 - Contras: Sidebar completamente vazia pode parecer bug; usuário pode não notar mensagem do Dashboard
 
 **Opção B — Sidebar exibe mensagem "Nenhum módulo configurado" com ícone informativo:**
 Quando `scopes=[]`, Sidebar exibe item placeholder com ícone `Info` e texto explicativo.
+
 - Prós: UX clara; contexto imediato; reduz chamados de suporte
 - Contras: Componente extra na Sidebar (complexidade mínima)
 
@@ -141,11 +145,13 @@ Sem especificação, o fluxo de alteração de senha será implementado sem crit
 
 **Opção A — Criar FR-007, INT-006 e UIActionEnvelope para "Alterar Senha":**
 Especificar o fluxo completo: modal no ProfileWidget, campos senha_atual + nova_senha + confirmar, POST /auth/change-password, domain event `auth.password_changed` (DOC-FND-000 §1.2).
+
 - Prós: Cobertura completa, rastreabilidade, testes E2E definidos
 - Contras: Escopo adicional no MOD-001 (mais um FR + INT)
 
 **Opção B — Adiar para MOD-002 ou sprint futuro:**
 Marcar "Alterar Senha" como "roadmap futuro" no ProfileWidget dropdown (desabilitado ou oculto).
+
 - Prós: Reduz escopo do MOD-001
 - Contras: ProfileWidget entregue com funcionalidade incompleta, UX confusa
 
@@ -201,11 +207,13 @@ Se o Foundation ativar MFA para algum tenant antes do MOD-001 especificar a tela
 
 **Opcao A — Especificar tela MFA minima no MOD-001 (UX-MFA-001):**
 Criar FR, UX e INT para um fluxo MFA basico (input de codigo TOTP, validacao, redirect). Mover MFA de "Nao Inclui" para "Inclui" no mod.md.
+
 - Pros: Evita rota orfao, cobertura completa
 - Contras: Aumenta escopo significativamente
 
 **Opcao B — Manter MFA como roadmap, mas adicionar fallback no redirect:**
 Se `mfa_required=true` e a rota /login/mfa nao existe, exibir Toast informativo: "MFA requerido. Contate o administrador." e nao redirecionar.
+
 - Pros: Escopo minimo, sem tela branca, graceful degradation
 - Contras: Funcionalidade MFA indisponivel ate ser especificada
 

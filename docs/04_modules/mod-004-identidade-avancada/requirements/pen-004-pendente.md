@@ -1,10 +1,12 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-17 | AGN-DEV-10  | Criação Batch 4 (enrich-agent) |
+>
 | 0.2.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-001 → DECIDIDA (Opção A) |
 | 0.3.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-001 → IMPLEMENTADA (DOC-FND-000 §2.2) |
 | 0.4.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → IMPLEMENTADA — Opção A (TTL 300s no cache Redis, INT-001.1 v0.4.0) |
@@ -61,11 +63,13 @@ Sem o registro no catálogo canônico, o Gate 3 do CI falhará ao validar os Scr
 
 **Opção A — PR para DOC-FND-000 §2.2 agora:**
 Registrar os 8 scopes no catálogo canônico imediatamente, seguindo o padrão de 3 segmentos já adotado.
+
 - Prós: desbloqueia Gate 3; rastreabilidade imediata; padrão seguido
 - Contras: requer revisão da DOC-FND-000 (documento normativo)
 
 **Opção B — Registrar junto com a primeira implementação:**
 Adiar o registro para quando o primeiro PR de código do MOD-004 for aberto.
+
 - Prós: registro junto com implementação real; menos churn em docs
 - Contras: Gate 3 falha até o PR; outros módulos não podem referenciar os scopes antecipadamente
 
@@ -120,11 +124,13 @@ Sem contrato explícito, cada módulo consumidor pode implementar o consumo de f
 
 **Opção A — Documentar contrato de exposição em INT-001:**
 Adicionar seção INT-001.5 com o contrato que o MOD-004 expõe: tabela `user_org_scopes` via JOIN direto (banco compartilhado), com campos, índices e regras de filtragem documentados.
+
 - Prós: contrato explícito; impacto avaliável em mudanças; padrão INT reaproveitável
 - Contras: pode ser prematuro se os módulos consumidores ainda não estão especificados
 
 **Opção B — Delegar aos módulos consumidores:**
 Cada MOD-005/006/007/008 documenta em seu próprio INT como consome `user_org_scopes`.
+
 - Prós: responsabilidade do consumidor; documentação onde é usada
 - Contras: risco de inconsistência; sem visão centralizada no MOD-004
 
@@ -179,11 +185,13 @@ Sem TTL no cache, uma falha dupla (Worker parado + Redis DEL falhando) pode mant
 
 **Opção A — TTL no cache (ex: 5 minutos):**
 Definir TTL na chave `auth:org_scope:user:{userId}` igual ao intervalo do job de expiração. O cache auto-expira mesmo se a invalidação explícita falhar.
+
 - Prós: safety net contra falha dupla; comportamento previsível; alinhado com OKR-3 (< 5min)
 - Contras: cache miss mais frequente (a cada 5 min mesmo sem mutação); leve aumento de carga no DB
 
 **Opção B — Invalidação pura (sem TTL):**
 Confiar exclusivamente no `DEL` explícito. Se falhar, o próximo acesso usa cache stale até a próxima mutação.
+
 - Prós: cache hit máximo; sem round-trips desnecessários ao DB
 - Contras: risco de stale cache em falha dupla; sem safety net
 

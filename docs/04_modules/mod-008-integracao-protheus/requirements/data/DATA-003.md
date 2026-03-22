@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -102,6 +103,7 @@
 | `dedupe_key` | text | NÃO | `integration_call_logs.id` para eventos de execução |
 
 **Indexes padrão (DOC-FND-000):**
+
 - `(tenant_id, entity_type, entity_id, created_at DESC)` — timeline por entidade
 - `(tenant_id, event_type, created_at DESC)` — busca por tipo de evento
 

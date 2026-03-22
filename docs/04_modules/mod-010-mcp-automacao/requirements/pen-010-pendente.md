@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -7,6 +8,7 @@
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) — 6 pendências identificadas |
 > | 0.3.0  | 2026-03-19 | arquitetura | PENDENTE-001 implementada (Opção B — endpoint Phase 2 enable) + PENDENTE-004 implementada (Amendment DOC-FND-000-M04) |
+>
 | 0.4.0  | 2026-03-19 | arquitetura | PENDENTE-005 decidida (Opção A — callback HTTP MOD-009→MOD-010) |
 | 0.5.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada — INT-010 §INT-007, INT-009 §4.3.3, DATA-010 status expandido |
 | 0.6.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida (Opção A — DIRECT como orchestration port, strategy pattern) |
@@ -63,11 +65,13 @@ Sem definicao concreta, a implementacao da Phase 2 ficara ambigua. O dev pode im
 
 **Opcao A — Flag via PATCH com validacao de owner:**
 Habilitar `phase2_create_enabled` via `PATCH /admin/mcp-agents/:id` com campo `phase2_create_enabled: true`. Validacao: o admin que faz o PATCH DEVE ser o `owner_user_id` do agente OU ter scope especifico `mcp:agent:phase2-enable`. Evento `mcp.agent.scopes_updated` (EVT-003) emitido com detalhe da habilitacao.
+
 - Pros: Simples, reutiliza endpoint existente, auditoria via EVT-003
 - Contras: Mistura configuracao de seguranca com edicao geral; risco de habilitacao acidental
 
 **Opcao B — Endpoint dedicado com confirmacao:**
 Criar `POST /admin/mcp-agents/:id/enable-phase2` com body `{ "reason": "motivo" }`. Scope requerido: `mcp:agent:write` + `mcp:agent:phase2-enable`. Resposta inclui confirmacao explicita. Evento dedicado `mcp.agent.phase2_enabled`.
+
 - Pros: Separacao clara, auditoria dedicada, impossivel habilitar acidentalmente
 - Contras: Endpoint adicional, scope adicional a registrar no Foundation
 
@@ -123,11 +127,13 @@ O dev que criar a migration precisa de um valor concreto. Se `true`, acoes do ti
 
 **Opcao A — Default `false` (conservador):**
 PREPARAR comeca com `can_be_direct=false`. Admin pode solicitar alteracao via amendment/configuracao. Alinha com o principio de menor privilegio.
+
 - Pros: Seguro por padrao, alinhado com compliance
 - Contras: Acoes de preparacao de baixo risco (ex: montar preview de pedido) exigiriam CONTROLLED desnecessariamente
 
 **Opcao B — Default `true` (pragmatico):**
 PREPARAR comeca com `can_be_direct=true`. Justificativa: preparar dados sem persistir (preview) e uma operacao de leitura enriquecida.
+
 - Pros: Pragmatico para casos comuns, menos overhead no gateway
 - Contras: Pode permitir DIRECT para preparacoes com side-effects nao previstos
 
@@ -177,11 +183,13 @@ Sem logica concreta, o dev precisara inventar o mecanismo de despacho DIRECT. Po
 
 **Opcao A — DIRECT como orchestration port:**
 `McpDispatcher` recebe a acao e chama um `ActionExecutor` port (interface). Cada acao DIRECT tem um executor registrado via DI (strategy pattern). O executor produz o `result_payload`. Se `linked_routine_id` presente, avalia rotina MOD-007 ANTES. Se `linked_integration_id` presente, enfileira job MOD-008 APOS execucao (post-processing).
+
 - Pros: Extensivel, testavel, cada acao pode ter logica propria
 - Contras: Requer registry de executors; complexidade de setup
 
 **Opcao B — DIRECT como proxy generico:**
 DIRECT simplesmente chama um endpoint generico `/api/v1/internal/{target_object_type}/{action_code}` com o payload do agente. O modulo alvo implementa o endpoint. MOD-010 nao sabe o que a acao faz internamente.
+
 - Pros: Desacoplamento total, MOD-010 so roteia
 - Contras: Menos controle, dificil garantir timeouts e metricas; endpoint generico pode nao existir
 
@@ -226,11 +234,13 @@ Sem o amendment, o RBAC do Foundation nao reconhece scopes `mcp:*` e todos os en
 
 **Opcao A — Amendment criado pelo MOD-010 (self-service):**
 O proprio pipeline de deploy do MOD-010 inclui migration que registra os scopes na tabela de permissoes do Foundation. O amendment e documentado no MOD-010.
+
 - Pros: Autonomia do time, deploy independente
 - Contras: Viola principio de ownership (Foundation e dono do catalogo de scopes)
 
 **Opcao B — Amendment criado pelo time Foundation:**
 O time do MOD-000 cria o amendment MOD-000-F12 com os 6 scopes. MOD-010 depende desse amendment antes do deploy.
+
 - Pros: Ownership correto, catalogo centralizado
 - Contras: Dependencia cross-team, potencial bloqueio por calendario
 
@@ -286,11 +296,13 @@ Sem callback, execucoes CONTROLLED ficam permanentemente em `CONTROLLED_PENDING`
 
 **Opcao A — Callback HTTP do MOD-009:**
 MOD-009 chama `POST /api/v1/internal/mcp/executions/{execution_id}/movement-callback` com resultado da decisao. MOD-010 atualiza `mcp_executions.status` para `APPROVED`/`REJECTED` e emite evento.
+
 - Pros: Notificacao imediata, implementacao straightforward
 - Contras: Requer endpoint adicional no MOD-010 + configuracao no MOD-009
 
 **Opcao B — Domain event do MOD-009:**
 MOD-009 emite `movement.decided` como domain event. MOD-010 consome via subscriber e atualiza `mcp_executions`.
+
 - Pros: Desacoplado, reutiliza infra de eventos
 - Contras: Latencia adicional (outbox delay), eventual consistency
 
@@ -346,11 +358,13 @@ Impacto baixo — o modulo funciona sem e-mail (notificacoes in-app sao suficien
 
 **Opcao A — Usar servico de notificacao do Foundation:**
 MOD-000 ja tem (ou tera) um `NotificationService` que abstrai canais (in-app, e-mail, webhook). MOD-010 usa o servico existente passando `channels: ["in-app", "email"]`.
+
 - Pros: Reutiliza infra, configuracao centralizada
 - Contras: Dependencia do Foundation ter o servico pronto
 
 **Opcao B — Configuracao propria com SMTP direto:**
 MOD-010 configura envio de e-mail via variavel de ambiente (`MCP_SMTP_*`). Envia diretamente via nodemailer.
+
 - Pros: Autonomia, sem dependencia
 - Contras: Duplicacao de configuracao SMTP, inconsistencia com outros modulos
 

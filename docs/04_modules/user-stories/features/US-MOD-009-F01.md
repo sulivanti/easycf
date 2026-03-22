@@ -40,12 +40,14 @@ Exemplo: Pedido de Venda com valor > R$ 50.000
 ## 3. Escopo
 
 ### Inclui
+
 - CRUD de Regras de Controle de Gravação (object_type, operation_type, origin_types, valor, prioridade, vigência)
 - CRUD de Regras de Alçada com níveis em cadeia (approver_type, timeout, escalada)
 - Validação: `allow_self_approve` default false — controle de auto-aprovação por suficiência de escopo (ver épico §3.1)
 - Prioridade e vigência respeitadas pelo motor
 
 ### Não inclui
+
 - Motor de controle (interceptação) — US-MOD-009-F02
 - Inbox e execução — US-MOD-009-F03
 - Interfaces UX — US-MOD-009-F04, F05

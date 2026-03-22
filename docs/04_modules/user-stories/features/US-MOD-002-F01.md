@@ -31,6 +31,7 @@ Como **administrador**, quero uma tela com a lista de todos os usuários do sist
 ## 2. Escopo
 
 ### Inclui
+
 - Listagem paginada (cursor-based) de usuários com skeleton durante loading
 - Filtros: busca textual (debounce 400ms), status, perfil de acesso
 - Filtros sincronizados com query params da URL (deep link)
@@ -39,6 +40,7 @@ Como **administrador**, quero uma tela com a lista de todos os usuários do sist
 - Estado vazio com CTA de criação
 
 ### Não inclui
+
 - Edição de usuário — roadmap futuro (F04)
 - Detalhe completo do usuário — roadmap futuro
 - Importação em massa

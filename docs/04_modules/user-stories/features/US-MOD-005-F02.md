@@ -41,6 +41,7 @@ Como **analista de processos**, quero configurar os pontos de controle (gates), 
 ## 3. Escopo
 
 ### Inclui
+
 - CRUD de Gates vinculados a estágios com 4 tipos (APPROVAL, DOCUMENT, CHECKLIST, INFORMATIVE)
 - Ordenação de gates com avaliação sequencial
 - Catálogo global de Papéis de processo com flag `can_approve`
@@ -49,6 +50,7 @@ Como **analista de processos**, quero configurar os pontos de controle (gates), 
 - Validações: cross-ciclo rejeitado, auto-transição rejeitada, `gate_required`, `evidence_required`, `allowed_roles`
 
 ### Não inclui
+
 - CRUD de Ciclos, Macroetapas e Estágios — US-MOD-005-F01
 - Avaliação de gates em runtime (resolução) — MOD-006
 - Atribuição de responsáveis reais a papéis — MOD-006

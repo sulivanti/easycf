@@ -5,9 +5,11 @@
 # ============================================================
 
 schema_version: "v1"
+manifest_version: 1
 screen_id: "UX-PROC-002"
 name: "Configurador de Estágio"
 type: detail
+entity_type: process_stage
 module: "MOD-005"
 route: '#embedded'   # painel lateral dentro de UX-PROC-001 — sem rota própria
 auth_required: true
@@ -18,11 +20,43 @@ linked_stories:
   - "US-MOD-005"
   - "US-MOD-005-F04"
 
+routes:
+  - path: /api/v1/admin/stages/{id}
+    method: PATCH
+  - path: /api/v1/admin/stages/{sid}/gates
+    method: POST
+  - path: /api/v1/admin/gates/{id}
+    method: PATCH
+  - path: /api/v1/admin/gates/{id}
+    method: DELETE
+  - path: /api/v1/admin/process-roles
+    method: GET
+  - path: /api/v1/admin/stages/{sid}/roles
+    method: POST
+  - path: /api/v1/admin/stages/{sid}/roles/{rid}
+    method: DELETE
+  - path: /api/v1/admin/stage-transitions
+    method: POST
+  - path: /api/v1/admin/stage-transitions/{id}
+    method: DELETE
+
 telemetry_defaults:
   package: "@easycf/ui-telemetry"
+  event_name: process.stage_config_viewed
   include_tenant_id: true
   propagate_correlation_id: true
   capture_duration_ms: true
+  required_fields:
+    - screen_id
+    - tenant_id
+    - correlation_id
+  propagate_headers:
+    - X-Correlation-ID
+
+permissions:
+  read: process:cycle:read
+  write: process:cycle:write
+  delete: process:cycle:delete
 
 panels:
   - id: "info"
@@ -173,6 +207,56 @@ actions:
       strategy: toast
       include_correlation_id: true
       user_message: "Não foi possível remover a transição."
+
+ui_rules:
+  action_visibility:
+    strategy: hide_if_no_permission
+  action_enablement:
+    - action: update_stage
+      enabled_when: "cycle.status === 'DRAFT'"
+    - action: create_gate
+      enabled_when: "cycle.status === 'DRAFT'"
+    - action: update_gate
+      enabled_when: "cycle.status === 'DRAFT'"
+    - action: delete_gate
+      enabled_when: "cycle.status === 'DRAFT'"
+    - action: link_role
+      enabled_when: "cycle.status === 'DRAFT'"
+    - action: unlink_role
+      enabled_when: "cycle.status === 'DRAFT'"
+    - action: create_transition
+      enabled_when: "cycle.status === 'DRAFT'"
+    - action: delete_transition
+      enabled_when: "cycle.status === 'DRAFT'"
+
+error_mapping:
+  default_user_message: Ocorreu um erro inesperado. Tente novamente ou contate o suporte.
+  http_status:
+    '401':
+      user_message: Sessão expirada. Faça login novamente.
+      ui:
+        type: modal
+        level: error
+    '403':
+      user_message: Sem permissão para configurar este estágio.
+      ui:
+        type: toast
+        level: error
+    '409':
+      user_message: Conflito detectado. O estágio pode ter sido alterado por outro usuário.
+      ui:
+        type: toast
+        level: warning
+    '422':
+      user_message: Dados inválidos. Verifique os campos e tente novamente.
+      ui:
+        type: inline
+        level: error
+    '500':
+      user_message: Erro interno do servidor. Contate o suporte.
+      ui:
+        type: toast
+        level: error
 
 components:
 

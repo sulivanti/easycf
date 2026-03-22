@@ -42,6 +42,7 @@ auth_config armazenado:
 ## 3. Escopo
 
 ### Inclui
+
 - CRUD de Serviços de Destino com auth_config criptografado e mascarado
 - Criação de rotinas com `routine_type=INTEGRATION` (herda MOD-007)
 - Configuração HTTP: método, endpoint template com variáveis, timeout, retry, backoff
@@ -49,6 +50,7 @@ auth_config armazenado:
 - Fork herda config HTTP + mapeamentos + params
 
 ### Não inclui
+
 - Mapeamentos de campos e parâmetros — US-MOD-008-F02
 - Motor de execução — US-MOD-008-F03
 - Interfaces de editor — US-MOD-008-F04

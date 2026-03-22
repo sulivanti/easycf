@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -49,14 +50,17 @@ Catalogo de tipos de enquadrador. Tipos pre-definidos: OPERACAO, CLASSE_PRODUTO,
 | `updated_at` | timestamptz | NOT NULL DEFAULT now() | SIM | Data de atualizacao |
 
 **Constraints:**
+
 - PK: `id`
 - UNIQUE: `(tenant_id, codigo)` — codigo unico por tenant
 - FK: `created_by` -> `users(id)` (MOD-000)
 
 **Indexes:**
+
 - `idx_framer_types_tenant_codigo` UNIQUE (tenant_id, codigo)
 
 **Notas de Migracao:**
+
 - Seed inicial com 4 tipos: OPERACAO, CLASSE_PRODUTO, TIPO_DOCUMENTO, CONTEXTO_PROCESSO
 - `codigo` deve ser convertido para uppercase via trigger ou application layer
 
@@ -83,6 +87,7 @@ Enquadradores de contexto com vigencia e versionamento. Representam contextos de
 | `deleted_at` | timestamptz | — | NAO | Soft-delete timestamp |
 
 **Constraints:**
+
 - PK: `id`
 - UNIQUE: `(tenant_id, codigo)` — codigo unico por tenant
 - FK: `framer_type_id` -> `context_framer_types(id)`
@@ -91,12 +96,14 @@ Enquadradores de contexto com vigencia e versionamento. Representam contextos de
 - CHECK: `valid_until IS NULL OR valid_until > valid_from`
 
 **Indexes:**
+
 - `idx_framers_tenant_codigo` UNIQUE (tenant_id, codigo)
 - `idx_framers_type_status` (framer_type_id, status) WHERE deleted_at IS NULL
 - `idx_framers_vigencia` (valid_from, valid_until) WHERE status = 'ACTIVE' AND deleted_at IS NULL
 - `idx_framers_tenant_status` (tenant_id, status) WHERE deleted_at IS NULL
 
 **Notas de Migracao:**
+
 - `codigo` imutabilidade enforced via application layer (BR-001)
 - Background job `framer-expiration.job.ts` executa periodicamente para expirar enquadradores com `valid_until < now()` (BR-002)
 
@@ -118,13 +125,16 @@ Objetos de negocio parametrizaveis. Representam entidades de outros modulos cujo
 | `updated_at` | timestamptz | NOT NULL DEFAULT now() | SIM | Data de atualizacao |
 
 **Constraints:**
+
 - PK: `id`
 - UNIQUE: `(tenant_id, codigo)` — codigo unico por tenant
 
 **Indexes:**
+
 - `idx_target_objects_tenant_codigo` UNIQUE (tenant_id, codigo)
 
 **Notas de Migracao:**
+
 - `codigo` imutabilidade enforced via application layer (BR-001)
 
 ---
@@ -146,12 +156,14 @@ Campos individuais de objetos-alvo que podem ter comportamento alterado por iten
 | `updated_at` | timestamptz | NOT NULL DEFAULT now() | SIM | Data de atualizacao |
 
 **Constraints:**
+
 - PK: `id`
 - UNIQUE: `(target_object_id, field_key)` — campo unico por objeto
 - FK: `target_object_id` -> `target_objects(id)` ON DELETE CASCADE
 - CHECK: `field_type IN ('TEXT', 'NUMBER', 'DATE', 'SELECT', 'BOOLEAN', 'FILE')`
 
 **Indexes:**
+
 - `idx_fields_object_key` UNIQUE (target_object_id, field_key)
 - `idx_fields_tenant` (tenant_id)
 
@@ -176,6 +188,7 @@ Regras de incidencia que vinculam enquadradores a objetos-alvo. UNIQUE constrain
 | `updated_at` | timestamptz | NOT NULL DEFAULT now() | SIM | Data de atualizacao |
 
 **Constraints:**
+
 - PK: `id`
 - UNIQUE: `(tenant_id, framer_id, target_object_id)` — conflito bloqueado no cadastro (BR-003). Retorna 422 em violacao.
 - FK: `framer_id` -> `context_framers(id)`
@@ -187,6 +200,7 @@ Regras de incidencia que vinculam enquadradores a objetos-alvo. UNIQUE constrain
 **Nota:** Campo `priority` foi **removido** (BR-011). Resolucao de conflitos e feita exclusivamente por restritividade no runtime (BR-004).
 
 **Indexes:**
+
 - `idx_incidence_tenant_framer_object` UNIQUE (tenant_id, framer_id, target_object_id)
 - `idx_incidence_status_vigencia` (status, valid_from, valid_until) WHERE status = 'ACTIVE'
 - `idx_incidence_framer` (framer_id) — join no motor
@@ -216,6 +230,7 @@ Rotinas de comportamento com ciclo de vida DRAFT -> PUBLISHED -> DEPRECATED. Agg
 | `deleted_at` | timestamptz | — | NAO | Soft-delete (so em DRAFT) |
 
 **Constraints:**
+
 - PK: `id`
 - UNIQUE: `(tenant_id, codigo)` — codigo unico por tenant
 - FK: `parent_routine_id` -> `behavior_routines(id)` — self-ref para fork
@@ -225,6 +240,7 @@ Rotinas de comportamento com ciclo de vida DRAFT -> PUBLISHED -> DEPRECATED. Agg
 - CHECK: `routine_type IN ('BEHAVIOR', 'INTEGRATION')`
 
 **Invariantes do Aggregate Root (application layer):**
+
 - PUBLISHED e imutavel — rejeita PATCH com 422 (BR-005)
 - Publicacao exige >= 1 item (BR-006)
 - Fork so de PUBLISHED (BR-008)
@@ -232,6 +248,7 @@ Rotinas de comportamento com ciclo de vida DRAFT -> PUBLISHED -> DEPRECATED. Agg
 - DEPRECATED nao aceita novos vinculos (BR-012)
 
 **Indexes:**
+
 - `idx_routines_tenant_codigo` UNIQUE (tenant_id, codigo)
 - `idx_routines_status` (status) WHERE deleted_at IS NULL
 - `idx_routines_type_status` (routine_type, status) WHERE deleted_at IS NULL
@@ -260,6 +277,7 @@ Itens parametrizaveis dentro de uma rotina. 7 tipos de item com 8 acoes possivei
 | `updated_at` | timestamptz | NOT NULL DEFAULT now() | SIM | Data de atualizacao |
 
 **Constraints:**
+
 - PK: `id`
 - FK: `routine_id` -> `behavior_routines(id)` ON DELETE CASCADE
 - FK: `target_field_id` -> `target_fields(id)`
@@ -267,10 +285,12 @@ Itens parametrizaveis dentro de uma rotina. 7 tipos de item com 8 acoes possivei
 - CHECK: `action IN ('SHOW', 'HIDE', 'SET_REQUIRED', 'SET_OPTIONAL', 'SET_DEFAULT', 'RESTRICT_DOMAIN', 'VALIDATE', 'REQUIRE_EVIDENCE')`
 
 **Indexes:**
+
 - `idx_items_routine_ordem` (routine_id, ordem) — avaliacao sequencial no motor
 - `idx_items_target_field` (target_field_id) WHERE target_field_id IS NOT NULL
 
 **Notas:**
+
 - Edicao/remocao de itens so permitida quando rotina pai em DRAFT (BR-005)
 - `ordem` define sequencia de execucao no passo 3 do motor (FR-009)
 
@@ -288,16 +308,19 @@ Tabela de associacao N:N entre rotinas PUBLISHED e regras de incidencia. So perm
 | `created_at` | timestamptz | NOT NULL DEFAULT now() | SIM | Data de criacao |
 
 **Constraints:**
+
 - PK: `id`
 - UNIQUE: `(routine_id, incidence_rule_id)` — impede duplicata
 - FK: `routine_id` -> `behavior_routines(id)` ON DELETE CASCADE
 - FK: `incidence_rule_id` -> `incidence_rules(id)`
 
 **Invariantes (application layer):**
+
 - So permite vincular rotinas com status=PUBLISHED (BR-007)
 - Nao permite vincular rotinas DEPRECATED (BR-012)
 
 **Indexes:**
+
 - `idx_links_routine_incidence` UNIQUE (routine_id, incidence_rule_id)
 - `idx_links_incidence` (incidence_rule_id) — join no motor de avaliacao
 
@@ -317,6 +340,7 @@ Historico de versionamento de rotinas. Registra cada fork com justificativa obri
 | `changed_at` | timestamptz | NOT NULL DEFAULT now() | SIM | Data do fork |
 
 **Constraints:**
+
 - PK: `id`
 - FK: `routine_id` -> `behavior_routines(id)`
 - FK: `previous_version_id` -> `behavior_routines(id)`
@@ -324,6 +348,7 @@ Historico de versionamento de rotinas. Registra cada fork com justificativa obri
 - CHECK: `length(change_reason) >= 10`
 
 **Indexes:**
+
 - `idx_version_history_routine` (routine_id) — timeline de versoes
 - `idx_version_history_previous` (previous_version_id) — ancestralidade
 

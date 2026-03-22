@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -18,6 +19,7 @@
 ## Campos Obrigatórios Padrão (DOC-DEV-001 DATA-010)
 
 Todas as tabelas deste módulo incluem os campos padrão:
+
 - `id` (uuid, PK, NOT NULL)
 - `tenant_id` (uuid, FK → tenants.id, NOT NULL — Row-Level Security)
 - `created_at` (timestamptz, NOT NULL, default now())

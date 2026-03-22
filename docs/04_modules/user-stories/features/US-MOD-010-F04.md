@@ -7,6 +7,7 @@
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -29,6 +30,7 @@ Como **administrador de governança**, quero gerenciar agentes MCP, o catálogo 
 ## 2. Escopo
 
 ### Inclui
+
 - Tabela de agentes com status, CRUD via drawer, revogação com motivo
 - Modal de API key exibida uma única vez (com checkbox obrigatório para fechar)
 - Rotação de key com aviso de invalidação imediata
@@ -38,6 +40,7 @@ Como **administrador de governança**, quero gerenciar agentes MCP, o catálogo 
 - Drawer de criação de ação com select de política e vínculos MOD-007/008
 
 ### Não inclui
+
 - APIs de backend — US-MOD-010-F01, F02, F03
 - Monitor de execuções — US-MOD-010-F05
 

@@ -30,6 +30,7 @@ Como **usuário operacional ou gestor**, quero uma listagem de todos os casos co
 ## 2. Escopo
 
 ### Inclui
+
 - Tabela de casos com colunas: código, ciclo, estágio, status, meu papel, gates pendentes, data abertura
 - Filtros: ciclo (PUBLISHED), status, estágio atual, "Minha responsabilidade", date range
 - Persistência de filtros na URL (deep link)
@@ -40,6 +41,7 @@ Como **usuário operacional ou gestor**, quero uma listagem de todos os casos co
 - Estado vazio com CTA contextual
 
 ### Não inclui
+
 - Painel de detalhe do caso — US-MOD-006-F03
 - APIs de backend — US-MOD-006-F01, US-MOD-006-F02
 - Relatórios e dashboards — escopo futuro

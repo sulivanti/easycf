@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - Emenda sobre documento base em estado READY.
 > - Para novas emendas, use a skill `create-amendment`.
 

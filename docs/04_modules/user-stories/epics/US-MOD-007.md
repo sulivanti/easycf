@@ -95,6 +95,7 @@ Se `blocking_validations` não vazio → MOD-006 bloqueia a transição com 422.
 ## 5. Escopo
 
 ### Inclui (Wave 3)
+
 - API CRUD de Tipos de Enquadrador e Enquadradores com versionamento
 - API CRUD de Objetos-Alvo e Campos-Alvo
 - API CRUD de Regras de Incidência (enquadrador → objeto + vigência + UNIQUE constraint)
@@ -106,6 +107,7 @@ Se `blocking_validations` não vazio → MOD-006 bloqueia a transição com 422.
 - UX Cadastro de Rotinas (UX-ROTINA-001)
 
 ### Não inclui
+
 - Rotinas de Integração (Protheus) — MOD-008
 - Motor de aprovação de rotinas via fluxo formal — MOD-009
 - Avaliação de regras em batch/importação em massa — roadmap futuro
@@ -197,6 +199,7 @@ US-MOD-007
 ## 10. Modelo de Dados Completo
 
 ### `context_framer_types` — Tipos de Enquadrador
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |
@@ -206,6 +209,7 @@ US-MOD-007
 | `created_by` | uuid FK→users | |
 
 ### `context_framers` — Enquadradores
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -220,6 +224,7 @@ US-MOD-007
 | `deleted_at` | timestamp | nullable | |
 
 ### `target_objects` — Objetos-Alvo
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |
@@ -229,6 +234,7 @@ US-MOD-007
 | `descricao` | text | |
 
 ### `target_fields` — Campos-Alvo
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |
@@ -239,6 +245,7 @@ US-MOD-007
 | `is_system` | boolean | true = campo definido pelo sistema, não editável pelo admin |
 
 ### `incidence_rules` — Regras de Incidência
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -252,6 +259,7 @@ US-MOD-007
 | UNIQUE | | `(framer_id, target_object_id)` | Um enquadrador por objeto por incidência |
 
 ### `behavior_routines` — Rotinas de Comportamento
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -267,6 +275,7 @@ US-MOD-007
 | `deleted_at` | timestamp | nullable | Só em DRAFT |
 
 ### `routine_items` — Itens da Rotina
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |
@@ -281,6 +290,7 @@ US-MOD-007
 | `ordem` | integer | NOT NULL | Ordem de avaliação |
 
 ### `routine_incidence_links` — Rotina ↔ Incidência
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |
@@ -289,6 +299,7 @@ US-MOD-007
 | UNIQUE | | `(routine_id, incidence_rule_id)` | |
 
 ### `routine_version_history` — Histórico de Versões
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |

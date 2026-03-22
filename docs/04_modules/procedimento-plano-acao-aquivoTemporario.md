@@ -157,7 +157,6 @@ obs.: d - the 3 screen manifests (ux-auth-001, ux-shell-001, ux-dash-001) and th
 ── Fase 1: Gênese do Módulo ──
 Forjar módulo consumindo US-MOD-001
 
-
 ── Fase 0: Pré-Módulo ──
 
 1    (manual)    Revisar e finalizar épico US-MOD-001:    status_agil = DRAFT    status_agil = READY

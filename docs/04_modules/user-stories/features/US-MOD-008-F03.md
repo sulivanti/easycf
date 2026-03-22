@@ -63,6 +63,7 @@ WORKER DE EXECUÇÃO
 ## 3. Escopo
 
 ### Inclui
+
 - Endpoint `POST /integration-engine/execute` (disparo manual/programático)
 - Outbox Pattern: INSERT log DENTRO da transação de negócio
 - Worker BullMQ com concurrency controlada por env var `INTEGRATION_CONCURRENCY` (default 10) — ajustável por ops sem deploy
@@ -73,6 +74,7 @@ WORKER DE EXECUÇÃO
 - Domain events para cada estado (queued, completed, failed, dlq, reprocessed)
 
 ### Não inclui
+
 - Catálogo de serviços e rotinas — US-MOD-008-F01
 - Mapeamentos de campos — US-MOD-008-F02
 - Monitor UX — US-MOD-008-F05

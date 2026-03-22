@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -58,16 +59,19 @@ Segurança (account takeover risk), UX (experiência de primeiro login SSO)
 
 **Opção A — Vinculação automática:**
 Vincular automaticamente se o e-mail do SSO provider bater.
+
 - Prós: UX fluida, zero fricção
 - Contras: Risco de account takeover se provider for comprometido
 
 **Opção B — Confirmação via senha nativa:**
 Exigir que o usuário confirme via senha nativa antes de vincular SSO.
+
 - Prós: Seguro contra account takeover, prova posse da conta existente
 - Contras: Pior UX (exige passo extra no primeiro login SSO)
 
 **Opção C — Conta separada + merge admin:**
 Criar conta separada com flag SSO e deixar admin mesclar.
+
 - Prós: Nenhum risco automático
 - Contras: Complexidade operacional alta, duplicação de dados
 
@@ -115,16 +119,19 @@ Segurança (janela de risco se token vazado), UX (frequência de re-login)
 
 **Opção A — TTL fixo:**
 TTL fixo de 30 dias desde criação.
+
 - Prós: Mais simples de implementar, comportamento previsível
 - Contras: Janela de risco fixa — token vazado permanece válido por até 30 dias
 
 **Opção B — Rotação a cada refresh:**
 Novo refresh_token emitido a cada uso, antigo invalidado imediatamente.
+
 - Prós: Seguro — token vazado é detectado na próxima rotação (reuse detection), alinhado com OAuth2 BCP (RFC 6749 / draft-ietf-oauth-security-topics)
 - Contras: Complexidade de implementação (token families, reuse detection, race conditions em múltiplas abas)
 
 **Opção C — Sliding window:**
 Renova TTL a cada uso com máximo absoluto de 90 dias.
+
 - Prós: Melhor UX (usuário ativo nunca é deslogado), janela de risco reduzida
 - Contras: Mais complexo, max absoluto ainda permite janelas longas
 
@@ -172,16 +179,19 @@ Integrações, APIs externas, importação/exportação
 
 **Opção A — Expor `userId+tenantCode` concatenado:**
 Sem mudança no schema. A chave amigável é derivada em runtime.
+
 - Prós: Zero mudança em DDL, simplicidade, sem migração
 - Contras: Chave composta pode ser menos ergonômica para integrações
 
 **Opção B — Adicionar campo `codigo` ao pivot:**
 Consistência com padrão de código amigável das demais entidades.
+
 - Prós: Consistência com padrão do projeto, chave única simples
 - Contras: Complexidade em PK composta, migração necessária, overhead de unicidade
 
 **Opção C — Sem código amigável:**
 Integrações usam UUIDs diretamente.
+
 - Prós: Nenhuma mudança, UUIDs já são únicos
 - Contras: UUIDs não são human-readable, dificulta importação/exportação manual
 
@@ -229,16 +239,19 @@ Performance (queries), custos de storage, UX
 
 **Opção A — Sem limite explícito:**
 Confiança na paginação e purge.
+
 - Prós: Simplicidade, nenhuma restrição artificial
 - Contras: Risco de abuso, queries lentas com muitos anexos por entidade
 
 **Opção B — Limite global (ex: 50 anexos por entidade):**
 Limite único aplicado a todas as entidades.
+
 - Prós: Simples de implementar
 - Contras: Pode ser restritivo demais para alguns tipos e permissivo demais para outros
 
 **Opção C — Limite configurável por entity_type em DOC-PADRAO-005:**
 Cada entity_type define seu próprio limite máximo de anexos.
+
 - Prós: Flexível — avatar pode ter limite 1, contratos podem ter 50. Governança por padrão normativo
 - Contras: Mais complexo, requer manutenção do catálogo de limites
 
@@ -292,16 +305,19 @@ Contrato da API (código de status), consistência de especificação, testes de
 
 **Opção A — `422 Unprocessable Entity`:**
 Semanticamente correto (a entidade "token" não é processável porque expirou). Consistente com a regra de que 401 é reservado para falha de autenticação real (JWT/sessão). Alinhado com RFC 9457 §16.11.
+
 - Prós: Semântica precisa; 401 reservado para falha de sessão/JWT; FR-017 já define 422; alinhado com RFC 9457
 - Contras: Nenhum relevante
 
 **Opção B — `401 Unauthorized`:**
 Indica que o token não é mais uma credencial válida.
+
 - Prós: Simples; indica credencial inválida
 - Contras: Confunde com falha de sessão/JWT; semanticamente impreciso (token de reset não é credencial de autenticação)
 
 **Opção C — `410 Gone`:**
 O recurso (token) existiu mas não existe mais.
+
 - Prós: Semântica precisa
 - Contras: Pouco convencional para APIs REST modernas; pode confundir clientes
 
@@ -380,16 +396,19 @@ Gate 3 (DOC-ARC-003B) — CI DEVE falhar se encontrar scope não registrado. Scr
 
 **Opção A — Registrar como scopes fundacionais 3-seg:**
 Registrar `storage:upload` e `storage:read` em DOC-FND-000 §2.2 como scopes fundacionais (formato 3-seg: `storage:file:upload`, `storage:file:read`).
+
 - Prós: Consistência total com padrão 3-seg, storage tratado como domínio próprio
 - Contras: Requer atualizar DOC-FND-000 e SEC-000
 
 **Opção B — Remover e derivar do scope da entidade:**
 Remover de SEC-000 e tratar upload como operação derivada do scope da entidade proprietária (ex: `users:user:write` permite upload de avatar).
+
 - Prós: Menos scopes no catálogo
 - Contras: Perde granularidade, dificuldade de auditoria de operações de storage
 
 **Opção C — Registrar como scopes genéricos 2-seg:**
 Registrar como scopes genéricos 2-seg (`storage:upload`, `storage:read`).
+
 - Prós: Mais simples
 - Contras: Diverge do padrão 3-seg já adotado
 

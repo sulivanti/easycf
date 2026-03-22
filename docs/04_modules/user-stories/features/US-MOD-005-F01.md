@@ -45,6 +45,7 @@ DRAFT ──► PUBLISHED ──► DEPRECATED
 ## 3. Escopo
 
 ### Inclui
+
 - CRUD completo de Ciclos com máquina de estados (DRAFT → PUBLISHED → DEPRECATED)
 - Fork de ciclo publicado criando nova versão DRAFT
 - CRUD de Macroetapas vinculadas a ciclos com ordenação relativa
@@ -53,6 +54,7 @@ DRAFT ──► PUBLISHED ──► DEPRECATED
 - Validações de integridade: estágio inicial único, publicação exige initial, deleção protegida
 
 ### Não inclui
+
 - Gates, papéis e transições — US-MOD-005-F02
 - Editor visual — US-MOD-005-F03
 - Configurador de estágio — US-MOD-005-F04

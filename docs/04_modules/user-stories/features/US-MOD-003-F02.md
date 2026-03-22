@@ -5,6 +5,7 @@
 **Referências:** US-MOD-003, US-MOD-003-F01, DOC-UX-011, DOC-UX-012
 
 ## Metadados de Governança
+
 - **status_agil:** READY | **owner:** arquitetura
 - **rastreia_para:** US-MOD-003, US-MOD-003-F01, DOC-UX-011, DOC-UX-012, DOC-ARC-003
 - **nivel_arquitetura:** 1 | **operationIds consumidos:** `org_units_tree`, `org_units_delete`, `org_units_link_tenant`, `org_units_unlink_tenant`, `domain_events_list_by_entity` (MOD-000)

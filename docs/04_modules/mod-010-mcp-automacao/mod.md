@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -219,6 +220,7 @@ apps/web/src/modules/mcp/
 ### 3.1 Blocklist de Escopos — Phase 1 (Permanente)
 
 Escopos permanentemente bloqueados para agentes MCP:
+
 - `*:delete` — exclusões nunca permitidas a agentes
 - `*:approve` — aprovações nunca permitidas a agentes
 - `approval:decide` — decisão de aprovação
@@ -229,6 +231,7 @@ Escopos permanentemente bloqueados para agentes MCP:
 ### 3.2 Phase 2 (Liberação per-agent)
 
 Escopos que podem ser liberados sob condições após MCP testado em produção:
+
 - `*:create` — criação de objetos
 
 Condições: aprovação explícita do owner, configuração per-agent (não global), registro em auditoria.

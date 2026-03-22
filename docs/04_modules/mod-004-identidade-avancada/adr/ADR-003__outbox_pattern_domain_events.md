@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -19,6 +20,7 @@ O problema fundamental é garantir **at-least-once delivery** sem perda de event
 **Utilizar o Outbox Pattern: INSERT do domain event na mesma transação SQL da mutação da entidade. Um Worker separado (BullMQ) faz claim do outbox e processa/publica os eventos.**
 
 Fluxo:
+
 1. Service executa mutação (INSERT/UPDATE na tabela de negócio)
 2. Na mesma transação: INSERT na tabela `domain_events` com `processed_at = NULL`
 3. COMMIT atômico

@@ -36,12 +36,14 @@ Mecanismo pelo qual um *usuário* transfere um subconjunto de suas próprias per
 ## 2. Regras Fundamentais
 
 ### access_shares
+
 - **Validação de autorização por scope**: Usuário com scope `identity:share:authorize` **pode** ser simultaneamente `grantor_id` e `authorized_by` (auto-autorização permitida). Sem esse scope, `authorized_by` deve ser diferente de `grantor_id` — validado no service (sem CHECK constraint no banco)
 - `valid_until` obrigatório — não existe compartilhamento permanente via este mecanismo
 - `reason` obrigatório — rastreabilidade
 - Revogação disponível a qualquer momento pelo `authorized_by` ou por admin com scope `identity:share:revoke`
 
 ### access_delegations
+
 - `valid_until` obrigatório — não existe delegação permanente
 - `delegated_scopes` NUNCA pode conter `*:approve`, `*:execute`, `*:sign` — validado no service
 - O delegatee não pode sub-delegar (sem re-delegação em cadeia)

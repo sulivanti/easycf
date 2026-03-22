@@ -26,6 +26,7 @@ O pacote `@easycf/ui-telemetry` (definido em US-MOD-000-F13) exporta o contrato 
 
 **Diferencial em relação à US-MOD-000-F13:**
 F13 **define e exporta** o pacote. Esta story especifica **como integrá-lo nas 3 telas do Shell**, com:
+
 - `tenant_id` ausente em ações pré-autenticação (UX-AUTH-001)
 - `tenant_id` presente em ações pós-autenticação (UX-SHELL-001, UX-DASH-001)
 - `X-Correlation-ID` propagado em toda requisição HTTP não-client_only

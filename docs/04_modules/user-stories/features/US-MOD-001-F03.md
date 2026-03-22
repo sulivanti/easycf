@@ -29,6 +29,7 @@ Após o login bem-sucedido, o administrador precisa de uma tela inicial que apre
 ## 2. A Solução (Linguagem de Negócio)
 
 Como **administrador autenticado**, ao entrar no sistema quero ver:
+
 - Uma saudação personalizada com meu nome (dados de `/auth/me`)
 - Atalhos apenas para os módulos aos quais tenho acesso
 - Feedback visual durante o carregamento (skeleton screen)

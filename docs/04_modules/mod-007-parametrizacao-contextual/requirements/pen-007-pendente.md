@@ -1,10 +1,12 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) — Batch 4: opções/recomendações detalhadas, PENDENTE-004..PENDENTE-006 adicionados |
+>
 | 0.3.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida+implementada: Opção 1 (job independente, isolamento > DRY) |
 | 0.4.0  | 2026-03-19 | arquitetura | PENDENTE-004 decidida+implementada: Opção 3 (flag auto_deprecate_previous, default=false) |
 | 0.5.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida+implementada: Opção 2 (tabela auxiliar routine_integration_config, MOD-008 responsável pela migração) |
@@ -186,16 +188,19 @@ Sem decisao, links orfaos acumulam no banco sem proposito funcional. Administrad
 
 **Opcao A — Migrar links automaticamente:**
 Na operacao de publish com `auto_deprecate_previous: true`, copiar todos os `routine_incidence_links` da versao deprecada para a nova versao publicada (se o fork ja nao os copiou). Remover links da versao deprecada.
+
 - Pros: Zero links orfaos; transicao transparente para o administrador; motor continua funcionando sem gaps
 - Contras: Operacao de publish fica mais complexa (transacao maior); se o fork ja copiou links, pode haver duplicatas
 
 **Opcao B — Manter links como historico:**
 Links da versao deprecada permanecem no banco. Motor ignora (filtra PUBLISHED). UX exibe com badge "inativo".
+
 - Pros: Historico completo; auditoria de quais regras estavam vinculadas a cada versao; operacao de publish simples
 - Contras: Acumulo de links orfaos; UX precisa de filtro/badge para distinguir links ativos de inativos
 
 **Opcao C — Remover links da versao deprecada:**
 Na operacao de auto-deprecate, soft-delete dos links da versao deprecada.
+
 - Pros: Banco limpo; sem ambiguidade no UX
 - Contras: Perde historico de vinculacao; nao pode "reativar" versao deprecada com links intactos
 
@@ -247,11 +252,13 @@ Com 50 itens, 50 INSERTs individuais na mesma transacao sao aceitaveis em termos
 
 **Opcao A — Bulk INSERT (unico statement):**
 `INSERT INTO routine_items (...) SELECT ... FROM routine_items WHERE routine_id = :original_id` com novos UUIDs gerados no banco.
+
 - Pros: Performance otima independente do numero de itens; unico round-trip ao banco; transacao mais curta
 - Contras: UUIDs gerados no banco (nao no aplicativo); domain events de criacao de itens nao sao emitidos individualmente (fork e um evento unico)
 
 **Opcao B — Itens individuais na mesma transacao:**
 Loop no aplicativo com INSERT por item. Todos dentro de uma unica transacao.
+
 - Pros: UUIDs gerados no aplicativo (consistente com fluxo normal de criacao); cada item pode ter validacao individual; mais familiar para desenvolvedores
 - Contras: N round-trips ao banco (N = numero de itens); transacao mais longa; performance degrada com mais itens
 

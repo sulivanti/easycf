@@ -31,6 +31,7 @@ Como **analista de processos**, quero configurar cada estágio com seus gates, p
 ## 2. Escopo
 
 ### Inclui
+
 - Painel lateral (drawer direito) integrado ao canvas de F03
 - 4 abas: Informações, Gates, Papéis, Transições
 - Edição inline de nome/descrição do estágio com save
@@ -44,6 +45,7 @@ Como **analista de processos**, quero configurar cada estágio com seus gates, p
 - Modo readonly para ciclo PUBLISHED em todas as abas
 
 ### Não inclui
+
 - Canvas e grafo visual — US-MOD-005-F03
 - APIs de backend — US-MOD-005-F01, US-MOD-005-F02
 - Avaliação de gates em runtime — MOD-006

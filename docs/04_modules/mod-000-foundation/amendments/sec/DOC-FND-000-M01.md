@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - Emenda sobre documento normativo em estado ACTIVE.
 > - Para novas emendas, use a skill `create-amendment`.
 

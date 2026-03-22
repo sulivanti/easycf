@@ -29,6 +29,7 @@
 > `POST /api/v1/users/:id/invite/resend` — operationId: `users_invite_resend`
 >
 > **Contrato mínimo do endpoint:**
+>
 > - Requer scope: `users:user:write`
 > - Status permitidos: apenas usuários com `status=PENDING`
 > - Gera novo token de ativação (invalida o anterior)
@@ -48,6 +49,7 @@ Como **administrador**, quero uma tela para acompanhar o status do convite de um
 ## 3. Escopo
 
 ### Inclui
+
 - Visualização do status atual do convite (PENDING / ACTIVE / BLOCKED / INACTIVE)
 - Botão de reenvio com cooldown de 60s (anti-spam)
 - Alerta visual quando token está expirado
@@ -55,6 +57,7 @@ Como **administrador**, quero uma tela para acompanhar o status do convite de um
 - Proteção LGPD: nome do usuário na tela, nunca o e-mail
 
 ### Não inclui
+
 - Geração de link de ativação para copiar — funcionalidade futura
 - Cancelamento do convite — roadmap futuro
 - Tela de ativação pelo próprio usuário — fora do backoffice admin

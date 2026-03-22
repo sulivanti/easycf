@@ -1,10 +1,12 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.10.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-002 → IMPLEMENTADA — known limitation v1 documentada em BR-004 v0.2.0 |
+>
 | 0.9.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → IMPLEMENTADA — Opção A (ADR-002 v0.2.0, copy.ts structure) |
 | 0.8.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → DECIDIDA (Opção A) |
 | 0.7.0  | 2026-03-18 | usuário     | PENDENTE-002 decidida — Opção A (cooldown client-side, known limitation v1) |
@@ -69,11 +71,13 @@ O endpoint `POST /api/v1/users/:id/invite/resend` (operationId: `users_invite_re
 
 **Opção A — Criar amendment no MOD-000-F05 (Recomendada):**
 Usar `/create-amendment` no MOD-000-F05 para adicionar o endpoint. Contrato mínimo já documentado em US-MOD-002-F03 §1.
+
 - Prós: resolve o bloqueio definitivamente; contrato já especificado (scope, status, outbox, idempotência); alinhado com padrão do Foundation
 - Contras: depende de revisão/aprovação do owner do MOD-000
 
 **Opção B — Stub temporário no frontend:**
 Implementar F03 com endpoint mockado e feature flag. Habilitar quando o amendment for criado.
+
 - Prós: permite iniciar o scaffolding de F03 imediatamente
 - Contras: complexidade adicional de feature flag sem benefício real; risco de divergência entre mock e contrato final; trabalho descartável
 
@@ -140,16 +144,19 @@ BR-004 define cooldown de 60s client-side no botão "Reenviar convite". **O que 
 
 **Opção A — Aceitar cooldown apenas client-side (Recomendada para v1):**
 O cooldown client-side é suficiente para o caso de uso nominal (admin bem-intencionado). O rate limiting genérico do gateway protege contra abuso sistemático. Documentar a limitação como "known limitation v1".
+
 - Pros: zero complexidade adicional; rate limiting do gateway cobre cenário de abuso
 - Contras: admin pode contornar cooldown via múltiplas abas (cenário improvável em backoffice interno)
 
 **Opção B — Sincronizar cooldown via BroadcastChannel API:**
 Usar `BroadcastChannel` para sincronizar timer entre abas do mesmo origin.
+
 - Pros: cooldown consistente cross-tab; sem round-trip ao backend
 - Contras: complexidade adicional; `BroadcastChannel` requer polyfill em Safari < 15.4; benefício marginal para backoffice interno
 
 **Opção C — Rate limiting específico no backend (MOD-000-F05):**
 Solicitar amendment no MOD-000-F05 para rate limiting por `user_id + invite_resend` (ex: 1 reenvio a cada 60s por user).
+
 - Pros: proteção server-side real; independente do frontend
 - Contras: requer amendment adicional no MOD-000; complexidade de implementação no backend; já existe rate limiting genérico no gateway
 
@@ -199,11 +206,13 @@ O ADR-002 (PII-Safe UI Pattern) determina que todas as mensagens de feedback (to
 
 **Opção A — Object map com plain strings (Recomendada):**
 Objeto TypeScript com chaves semânticas e valores string. Parâmetros seguros via template function quando necessário (ex: `deactivateModal: (name: string) => \`O usuário ${name} perderá acesso imediatamente.\``).
+
 - Pros: simples; type-safe; auditável via grep; sem dependência de lib de i18n
 - Contras: sem suporte nativo a pluralização ou locales múltiplos (aceitável — backoffice apenas pt-BR)
 
 **Opção B — Lib de i18n (react-intl, i18next):**
 Usar biblioteca de internacionalização com arquivos de mensagens.
+
 - Pros: suporte a pluralização, formatação de datas, múltiplos locales futuramente
 - Contras: over-engineering para backoffice pt-BR only; dependência adicional; complexidade de setup
 

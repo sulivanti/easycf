@@ -7,6 +7,7 @@
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -45,6 +46,7 @@ POST /api/v1/mcp/execute
 ## 3. Escopo
 
 ### Inclui
+
 - Endpoint `POST /mcp/execute` (autenticação por API key, não JWT)
 - Algoritmo de 8 passos com validação sequencial
 - Despacho DIRECT: executa e retorna 200
@@ -53,6 +55,7 @@ POST /api/v1/mcp/execute
 - Detecção de tentativa de escalada de privilégio no payload
 
 ### Não inclui
+
 - Cadastro de agentes e ações — US-MOD-010-F01
 - Log de execuções (consulta) — US-MOD-010-F03
 

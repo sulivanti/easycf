@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -9,6 +10,7 @@
 > | 0.3.0  | 2026-03-19 | arquitetura | PENDENTE-001 decidida: Opção B (tabela simples + trigger de migração) |
 > | 0.4.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida: Opção A (retenção 6 meses + archive S3 com anonimização PII) |
 > | 0.5.0  | 2026-03-19 | arquitetura | PENDENTE-004 implementada: Opção B+A (ticket Protheus + fallback default=10 + monitoramento) |
+>
 | 0.6.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida+implementada: Opção A (cache Redis OAuth2, lock distribuído, mid-flight expiry) |
 | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada: Opção A (seed automático HML com WireMock) |
 | 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-001 implementada: Opção B (tabela simples + trigger migração 10M; alerta 5M no NFR-008) |
@@ -20,7 +22,6 @@
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
 - **rastreia_para:** US-MOD-008, MOD-008, NFR-008, SEC-008, INT-008, DATA-008
-
 
 ---
 
@@ -67,11 +68,13 @@ Degradação progressiva de performance em GET /admin/integration-logs e na quer
 
 **Opção A — Particionamento nativo PostgreSQL por range (queued_at) mensal desde o início:**
 Criar a tabela como partitioned table com partições mensais automáticas via pg_partman ou cron job.
+
 - Prós: Zero migração futura; performance previsível desde o dia 1; queries com filtro de período aproveitam partition pruning.
 - Contras: Complexidade adicional no setup inicial; overhead de gerenciar partições; FKs para tabelas partitioned exigem cuidado no PostgreSQL (FKs em partitions são parcialmente suportadas a partir do PG 12+).
 
 **Opção B — Tabela simples com trigger de migração quando volume atingir 10M:**
 Iniciar com tabela não-particionada. Monitorar volume via métrica. Quando atingir 10M, executar migração para partitioned table.
+
 - Prós: Simplicidade inicial; menor overhead de setup; sem complexidade de partitions até ser necessário.
 - Contras: Migração disruptiva (ALTER TABLE para partitioned exige lock ou pg_repack); risco de degradação antes da migração ser executada; dívida técnica acumulada.
 
@@ -126,11 +129,13 @@ Sem política definida, o sistema pode acumular PII transitória indefinidamente
 
 **Opção A — Retenção de 6 meses em hot storage + archive para cold (S3) com anonimização de PII:**
 Após 6 meses, mover registros para S3 (JSON comprimido) com PII anonimizada nos campos request_payload e response_body. Registros no banco são deletados (exceto metadados: id, status, correlation_id, duration_ms).
+
 - Prós: Compliance LGPD; custo otimizado; rastreabilidade mantida via metadados.
 - Contras: Complexidade de implementação (job de archive + pipeline de anonimização); queries históricas exigem consulta ao S3.
 
 **Opção B — Retenção indefinida com anonimização in-place dos campos PII após 90 dias:**
 Manter todos os registros no PostgreSQL, mas executar job de anonimização que substitui PII em request_payload e response_body por hashes após 90 dias.
+
 - Prós: Sem infraestrutura de cold storage; queries históricas continuam no PostgreSQL.
 - Contras: Custo de storage mais alto; anonimização in-place modifica registro de auditoria (conflito com imutabilidade BR-009).
 
@@ -186,11 +191,13 @@ Sem definição, chamadas OAUTH2 podem falhar com 401 quando o token expira entr
 
 **Opção A — Cache de token em Redis com TTL = expires_in - 60s, renovação lazy:**
 Armazenar access_token em Redis com chave `oauth2:token:{service_id}:{tenant_id}`. Qualquer worker verifica Redis antes de chamar o token endpoint. Se expirado, um único worker renova (lock distribuído) e os demais aguardam.
+
 - Prós: Token compartilhado entre workers; mínimo de chamadas ao token endpoint; lock previne thundering herd.
 - Contras: Dependência adicional do Redis para auth; complexidade de lock distribuído.
 
 **Opção B — Cache em memória por worker, sem compartilhamento:**
 Cada worker mantém seu próprio cache de tokens. Expiração individual.
+
 - Prós: Simplicidade; sem lock distribuído.
 - Contras: N workers = até N chamadas simultâneas ao token endpoint; overhead no Protheus; tokens podem divergir.
 
@@ -241,11 +248,13 @@ Concurrency muito alta: Protheus retorna 429 ou degrada, gerando DLQs em massa. 
 
 **Opção A — Manter default=10 e ajustar empiricamente em produção:**
 Deploy com INTEGRATION_CONCURRENCY=10. Monitorar métricas de rate limit 429 e DLQ count. Ajustar iterativamente.
+
 - Prós: Pragmático; não bloqueia desenvolvimento; ajuste dinâmico via env var sem redeploy.
 - Contras: Risco de DLQ em massa na primeira semana de produção se o limite real for < 10.
 
 **Opção B — Solicitar ao time Protheus o limit real antes do go-live:**
 Obter documentação oficial do Protheus sobre conexões simultâneas e rate limits por tenant/IP.
+
 - Prós: Dado concreto; configuração segura desde o go-live.
 - Contras: Dependência externa; pode atrasar se o time Protheus não responder a tempo.
 
@@ -299,11 +308,13 @@ Sem seed de HML, testes de integração e E2E que dependem do BR-012 (teste HML)
 
 **Opção A — Seed automático no migration/setup com serviço HML mock:**
 Criar migration seed que insere `integration_services` com `environment=HML`, `base_url` apontando para mock server (WireMock ou similar), `auth_type=NONE`, `status=ACTIVE`. Seed executado em ambientes DEV e HML.
+
 - Prós: Testes automatizados funcionam sem setup manual; DoR de F01 satisfeito; mock server provido pela infra de testes.
 - Contras: Seed precisa ser mantido; mock server precisa ser configurado para simular respostas Protheus.
 
 **Opção B — Seed manual documentado em README:**
 Documentar os comandos de seed no README. Desenvolvedores executam manualmente.
+
 - Prós: Zero código extra de seed.
 - Contras: Propício a erro humano; bloqueador para CI/CD automatizado; violaria a regra de automação obrigatória (DOC-DEV-001 §0.2).
 

@@ -30,6 +30,7 @@ Como **usuário com papel no processo**, quero resolver gates, registrar eventos
 ## 2. Escopo
 
 ### Inclui
+
 - Resolução de gates por tipo (APPROVAL com decisão, DOCUMENT com upload, CHECKLIST com itens)
 - Dispensa de gate obrigatório (waive) com escopo especial e motivo auditado
 - Atribuição e reatribuição de responsáveis por papel do estágio
@@ -40,6 +41,7 @@ Como **usuário com papel no processo**, quero resolver gates, registrar eventos
 - Validação: papel required=true sem atribuição bloqueia motor de transição
 
 ### Não inclui
+
 - Motor de transição e abertura de caso — US-MOD-006-F01
 - Interface do painel de caso — US-MOD-006-F03
 - Listagem de casos — US-MOD-006-F04

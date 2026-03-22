@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -6,6 +7,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-19 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
+>
 | 0.3.0  | 2026-03-19 | arquitetura | mcp_executions.status: adiciona CONTROLLED_APPROVED e CONTROLLED_REJECTED (PEN-010/PENDENTE-005) |
 | 0.4.0  | 2026-03-19 | arquitetura | mcp_action_types seed: PREPARAR can_be_direct=false (PEN-010/PENDENTE-002) |
 

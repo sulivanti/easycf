@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -222,6 +223,7 @@
 ## Regras de FK (MUST)
 
 Todas as foreign keys usam **ON DELETE RESTRICT** salvo:
+
 - `approval_rules.escalation_rule_id → approval_rules` usa **ON DELETE SET NULL** (escalada é opcional; remover a regra alvo não invalida a regra corrente).
 
 **Justificativa:** Movimentos controlados e suas decisões são registros de compliance — exclusão em cascata é inaceitável. Remoção de usuário, tenant, ou regra de controle com movimentos associados deve ser bloqueada no application layer (soft-delete obrigatório).

@@ -31,6 +31,7 @@ Como **administrador**, quero um formulário para criar novos usuários escolhen
 ## 2. Escopo
 
 ### Inclui
+
 - Dois modos de criação via abas: "Enviar Convite" (padrão) e "Senha Temporária"
 - Campos obrigatórios e opcionais com validação inline por campo
 - Select de perfil de acesso populado dinamicamente via `roles_list`
@@ -39,6 +40,7 @@ Como **administrador**, quero um formulário para criar novos usuários escolhen
 - Toast de sucesso sem e-mail (proteção LGPD) + redirect automático
 
 ### Não inclui
+
 - Edição de usuários existentes — roadmap futuro
 - Upload de avatar — roadmap futuro (via MOD-000-F16)
 - Associação de filial — gerenciada via MOD-000-F09

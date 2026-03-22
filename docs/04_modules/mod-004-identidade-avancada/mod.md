@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 
@@ -17,6 +18,7 @@
 ## 1. Objetivo
 
 Módulo de identidade avançada que complementa o MOD-000 (identidade operacional básica) e o MOD-003 (estrutura organizacional) com três mecanismos:
+
 1. **Escopo de área organizacional** — vincula usuários a nós N1–N4 da estrutura org (`user_org_scopes`), delimitando em qual área cada identidade atua.
 2. **Compartilhamento controlado** — expande visibilidade de recursos além do escopo principal com motivo, autorizador e vigência obrigatória (`access_shares`).
 3. **Delegação temporária** — transfere subconjunto de permissões por TTL definido, sem poder decisório (`access_delegations`).
@@ -24,6 +26,7 @@ Módulo de identidade avançada que complementa o MOD-000 (identidade operaciona
 ## 2. Escopo
 
 ### Inclui
+
 - API de vínculo usuário ↔ nó organizacional (`user_org_scopes`) — tipo PRIMARY ou SECONDARY
 - API de compartilhamento controlado com vigência obrigatória (`access_shares`)
 - API de delegação temporária com TTL obrigatório (`access_delegations`)
@@ -33,6 +36,7 @@ Módulo de identidade avançada que complementa o MOD-000 (identidade operaciona
 - Novos escopos no catálogo: `identity:org_scope:*`, `identity:share:*`, `identity:delegation:*`
 
 ### Não inclui
+
 - Revisão periódica formal de acessos — roadmap Wave 3 (requer gestão de campanhas de revisão)
 - Governança de concessão de acesso com fluxo de aprovação — MOD-009 (Aprovações e Alçadas)
 - Contas técnicas e agentes associados — roadmap futuro (Wave 4+)
@@ -167,11 +171,13 @@ apps/web/src/modules/identity-advanced/
 ## 5. Premissas e Restrições
 
 ### Premissas
+
 - MOD-000 (Foundation) e MOD-003 (Estrutura Organizacional) estão implementados e proveem `users`, `roles`, `tenant_users` e `org_units`
 - Redis já está disponível no cluster como broker BullMQ (DOC-PADRAO-001)
 - O catálogo de scopes do Foundation (DOC-FND-000 §2) aceita novos scopes via PR
 
 ### Restrições
+
 - **LGPD:** payloads de domain events contêm apenas IDs e status (sem PII)
 - **Redis:** uso restrito a cache efêmero e fila BullMQ (DOC-DEV-001 DATA-013 — proibido como banco primário)
 - **Delegação:** NUNCA pode conter escopos `:approve`, `:execute`, `:sign` — regra inegociável

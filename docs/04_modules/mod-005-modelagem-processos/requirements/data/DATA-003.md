@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -7,6 +8,7 @@
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-17 | AGN-DEV-04  | Enriquecimento DATA-003 (enrich-agent) |
 > | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Re-enriquecimento DATA-003 — ui_actions + operation_ids (DOC-ARC-003 §3), ponte UI-API-Domain |
+>
 | 0.4.0  | 2026-03-18 | AGN-DEV-04  | Enriquecimento DATA-003 — eventos UPDATE/DELETE adicionados (PEN-005 Q7 Opção A) |
 
 # DATA-003 — Catálogo de Domain Events da Modelagem de Processos
@@ -124,6 +126,7 @@
 | `dedupe_key` | text | NÃO | Não utilizado neste módulo |
 
 **Indexes padrão (DOC-FND-000):**
+
 - `(tenant_id, entity_type, entity_id, created_at DESC)` — timeline por entidade
 - `(tenant_id, event_type, created_at DESC)` — busca por tipo de evento
 

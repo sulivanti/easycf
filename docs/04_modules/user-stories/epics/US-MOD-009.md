@@ -82,6 +82,7 @@ A segregação padrão (solicitante ≠ aprovador) é mantida como regra geral. 
 > **Se o solicitante possui o scope de aprovação exigido pela alçada do movimento (`required_scope` da `approval_rules`), o sistema cria e aprova automaticamente o movimento sem enviá-lo ao inbox.**
 
 **Fluxo da auto-aprovação:**
+
 1. Motor de controle identifica operação controlada
 2. Cria `controlled_movement` (status=PENDING_APPROVAL)
 3. Verifica se `requested_by` possui o `required_scope` da `approval_rules` aplicável
@@ -91,6 +92,7 @@ A segregação padrão (solicitante ≠ aprovador) é mantida como regra geral. 
 7. Se NÃO: fluxo normal de aprovação com inbox
 
 **Condições:**
+
 - O solicitante deve possuir exatamente o `required_scope` exigido pela `approval_rules` da alçada
 - O registro em `movement_history` inclui o scope usado como justificativa
 - Auditável: todo auto-approve aparece no histórico do movimento
@@ -100,6 +102,7 @@ A segregação padrão (solicitante ≠ aprovador) é mantida como regra geral. 
 ## 4. Escopo
 
 ### Inclui
+
 - API: Regras de Controle de Gravação (define quais operações são controladas)
 - API: Regras de Alçada (define quem aprova e sob quais critérios)
 - API: Motor de Controle (intercepta operações e gera movimentos controlados)
@@ -110,6 +113,7 @@ A segregação padrão (solicitante ≠ aprovador) é mantida como regra geral. 
 - UX: Configurador de Regras de Controle e Alçada (UX-APROV-002)
 
 ### Não inclui
+
 - Gates de processo (dentro de fluxo de estágio) — MOD-006
 - Delegação de identidade — MOD-004
 - Agentes MCP disparando movimentos — MOD-010 (MCP como origem)
@@ -210,6 +214,7 @@ US-MOD-009
 ## 9. Modelo de Dados Completo
 
 ### `movement_control_rules` — Regras de Controle de Gravação
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -227,6 +232,7 @@ US-MOD-009
 | `created_by` | uuid | FK→users | |
 
 ### `approval_rules` — Regras de Alçada
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -240,6 +246,7 @@ US-MOD-009
 | `allow_self_approve` | boolean | default false | Controle de auto-aprovação por suficiência de escopo. Default false = segregação padrão. Quando true, habilita auto-aprovação se solicitante possui required_scope (ver §3.1). |
 
 ### `controlled_movements` — Movimentos Controlados
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -261,6 +268,7 @@ US-MOD-009
 | `cancellation_reason` | text | nullable | |
 
 ### `approval_instances` — Instâncias de Aprovação
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -277,6 +285,7 @@ US-MOD-009
 | — | | Segregação validada no service layer | Permite exceção de auto-aprovação por scope (§3.1). Log obrigatório em movement_history. |
 
 ### `movement_executions` — Execuções de Movimentos
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -289,6 +298,7 @@ US-MOD-009
 | `retry_of` | uuid | FK→movement_executions, nullable | Para reexecução |
 
 ### `movement_history` — Histórico Integral do Movimento
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -299,6 +309,7 @@ US-MOD-009
 | `payload` | jsonb | nullable | Dados relevantes do evento |
 
 ### `movement_override_log` — Registro de Overrides
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |

@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -6,6 +7,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-19 | AGN-DEV-04  | Enriquecimento DATA — 6 tabelas completas com campos, tipos, constraints, índices, FKs, soft-delete |
+>
 | 0.3.0  | 2026-03-19 | arquitetura | §5 — Seed data HML para testes (PEN-008/PENDENTE-005) |
 
 # DATA-008 — Modelo de Dados da Integração Dinâmica Protheus
@@ -66,7 +68,7 @@ integration_services (1)
 | `tenant_id` | uuid | SIM | FK→tenants(id) NOT NULL | Isolamento multi-tenant (DOC-FND-000) |
 | `codigo` | varchar(50) | SIM | NOT NULL | Ex: PROTHEUS-PROD, PROTHEUS-HML |
 | `nome` | varchar(200) | SIM | NOT NULL | Nome amigável do serviço |
-| `base_url` | varchar(500) | SIM | NOT NULL | Ex: https://protheus.empresa.com/rest |
+| `base_url` | varchar(500) | SIM | NOT NULL | Ex: <https://protheus.empresa.com/rest> |
 | `auth_type` | varchar(20) | SIM | NOT NULL, CHECK IN ('NONE','BASIC','BEARER','OAUTH2') | Tipo de autenticação |
 | `auth_config` | jsonb | NÃO | nullable | Credenciais criptografadas (AES-256). NUNCA retornado em GET (BR-002) |
 | `timeout_ms` | integer | SIM | NOT NULL, default 30000 | Timeout padrão para chamadas ao serviço |
@@ -78,6 +80,7 @@ integration_services (1)
 | `deleted_at` | timestamptz | NÃO | nullable | Soft delete |
 
 **Constraints:**
+
 - `UNIQUE(tenant_id, codigo) WHERE deleted_at IS NULL` — unicidade de código por tenant
 - `CHECK(auth_type IN ('NONE', 'BASIC', 'BEARER', 'OAUTH2'))`
 - `CHECK(status IN ('ACTIVE', 'INACTIVE'))`
@@ -87,6 +90,7 @@ integration_services (1)
 - FK `created_by` → `users(id)` ON DELETE RESTRICT
 
 **Indexes:**
+
 - `idx_integration_services_tenant_id` → `(tenant_id)`
 - `idx_integration_services_tenant_codigo` → `(tenant_id, codigo) WHERE deleted_at IS NULL` — suporta UNIQUE
 - `idx_integration_services_tenant_status` → `(tenant_id, status) WHERE deleted_at IS NULL` — listagem filtrada
@@ -119,6 +123,7 @@ integration_services (1)
 | `deleted_at` | timestamptz | NÃO | nullable | Soft delete |
 
 **Constraints:**
+
 - `UNIQUE(routine_id) WHERE deleted_at IS NULL` — extensão 1:1
 - `CHECK(http_method IN ('GET', 'POST', 'PUT', 'PATCH', 'DELETE'))`
 - `CHECK(retry_max >= 0 AND retry_max <= 10)`
@@ -129,6 +134,7 @@ integration_services (1)
 - FK `service_id` → `integration_services(id)` ON DELETE RESTRICT
 
 **Indexes:**
+
 - `idx_integration_routines_tenant_id` → `(tenant_id)`
 - `idx_integration_routines_routine_id` → `(routine_id) WHERE deleted_at IS NULL` — suporta UNIQUE
 - `idx_integration_routines_service_id` → `(service_id) WHERE deleted_at IS NULL` — busca por serviço
@@ -163,6 +169,7 @@ integration_services (1)
 | `deleted_at` | timestamptz | NÃO | nullable | Soft delete |
 
 **Constraints:**
+
 - `UNIQUE(routine_id, source_field, target_field) WHERE deleted_at IS NULL` — impede duplicata de mapeamento
 - `CHECK(mapping_type IN ('FIELD', 'PARAM', 'HEADER', 'FIXED_VALUE', 'DERIVED'))`
 - `CHECK(ordem >= 1)`
@@ -170,6 +177,7 @@ integration_services (1)
 - FK `routine_id` → `behavior_routines(id)` ON DELETE RESTRICT
 
 **Indexes:**
+
 - `idx_field_mappings_tenant_id` → `(tenant_id)`
 - `idx_field_mappings_routine_ordem` → `(routine_id, ordem) WHERE deleted_at IS NULL` — ordenação natural
 - `idx_field_mappings_routine_unique` → `(routine_id, source_field, target_field) WHERE deleted_at IS NULL` — suporta UNIQUE
@@ -199,12 +207,14 @@ integration_services (1)
 | `deleted_at` | timestamptz | NÃO | nullable | Soft delete |
 
 **Constraints:**
+
 - `UNIQUE(routine_id, param_key) WHERE deleted_at IS NULL` — unicidade de chave por rotina
 - `CHECK(param_type IN ('FIXED', 'DERIVED_FROM_TENANT', 'DERIVED_FROM_CONTEXT', 'HEADER'))`
 - FK `tenant_id` → `tenants(id)` ON DELETE RESTRICT
 - FK `routine_id` → `behavior_routines(id)` ON DELETE RESTRICT
 
 **Indexes:**
+
 - `idx_integration_params_tenant_id` → `(tenant_id)`
 - `idx_integration_params_routine_key` → `(routine_id, param_key) WHERE deleted_at IS NULL` — suporta UNIQUE
 
@@ -245,6 +255,7 @@ integration_services (1)
 | `updated_at` | timestamptz | SIM | NOT NULL, default now() | |
 
 **Constraints:**
+
 - `CHECK(status IN ('QUEUED', 'RUNNING', 'SUCCESS', 'FAILED', 'DLQ', 'REPROCESSED'))`
 - `CHECK(attempt_number >= 1)`
 - `CHECK(duration_ms IS NULL OR duration_ms >= 0)`
@@ -256,6 +267,7 @@ integration_services (1)
 - FK `reprocessed_by` → `users(id)` ON DELETE RESTRICT
 
 **Indexes:**
+
 - `idx_call_logs_tenant_id` → `(tenant_id)`
 - `idx_call_logs_tenant_status` → `(tenant_id, status)` — filtro por status (DLQ monitoring)
 - `idx_call_logs_tenant_routine_queued` → `(tenant_id, routine_id, queued_at DESC)` — listagem de logs por rotina
@@ -288,6 +300,7 @@ integration_services (1)
 | `updated_at` | timestamptz | SIM | NOT NULL, default now() | |
 
 **Constraints:**
+
 - `CHECK(status IN ('PENDING', 'EXECUTED', 'CANCELLED'))`
 - `CHECK(length(reason) >= 10)` — justificativa mínima 10 chars
 - FK `tenant_id` → `tenants(id)` ON DELETE RESTRICT
@@ -296,6 +309,7 @@ integration_services (1)
 - FK `new_log_id` → `integration_call_logs(id)` ON DELETE RESTRICT
 
 **Indexes:**
+
 - `idx_reprocess_requests_tenant_id` → `(tenant_id)`
 - `idx_reprocess_requests_original_log` → `(original_log_id)` — busca por log original
 - `idx_reprocess_requests_tenant_status` → `(tenant_id, status)` — filtro por status

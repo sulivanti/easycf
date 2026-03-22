@@ -7,6 +7,7 @@
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -28,6 +29,7 @@ Como **usuário operacional na grade de inclusão**, quero aplicar operações e
 ## 2. Escopo
 
 ### Inclui
+
 - Toolbar oculta (não desabilitada) quando nenhuma linha selecionada
 - "Aplicar valor": select coluna + input valor → preenche em todas as linhas marcadas
 - "Limpar coluna": select coluna → remove valor em todas as linhas marcadas
@@ -35,6 +37,7 @@ Como **usuário operacional na grade de inclusão**, quero aplicar operações e
 - Status das linhas afetadas volta a neutro após qualquer ação
 
 ### Não inclui
+
 - Grade de inclusão (container) — US-MOD-011-F02
 - Validação — coberta pela F02
 

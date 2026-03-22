@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -6,6 +7,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.2.0  | 2026-03-17 | AGN-DEV-10  | Enriquecimento Batch 4: PENDENTE-006 (filtro view_history), revisao de pendencias abertas |
 > | 0.8.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-004 → IMPLEMENTADA — Opção A (NFR-001 v0.3.0 §7.1, FR-001 v0.3.0) |
+>
 | 0.7.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-004 → DECIDIDA (Opção A) |
 | 0.3.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-006 → DECIDIDA (Opção A) |
 > | 0.6.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-002 → IMPLEMENTADA — Opção A (INT-001 v0.3.0, INT-007) |
@@ -52,11 +54,13 @@ Se for MOD-000, não precisamos de endpoint novo. Se for proxy, precisamos de FR
 
 **Opção A — Consumir diretamente do MOD-000:**
 Usar `GET /api/v1/domain-events?entity_type=org_unit&entity_id=:id` (MOD-000).
+
 - Prós: Sem duplicação de endpoint; frontend já conhece o contrato; zero código novo no MOD-003
 - Contras: Acoplamento do frontend ao endpoint do MOD-000
 
 **Opção B — Criar proxy no MOD-003:**
 Criar `GET /api/v1/org-units/:id/history` no MOD-003 como proxy.
+
 - Prós: Encapsulamento; URL semântica por recurso
 - Contras: Duplicação de lógica; FR adicional; manutenção extra
 
@@ -107,16 +111,19 @@ Sem definição, o sistema pode degradar silenciosamente ou bloquear sem mensage
 
 **Opção A — Warning no response header:**
 Emitir `X-Limit-Warning` no response header ao criar nó quando `count > 400` (80% do soft limit).
+
 - Prós: Warning precoce permite planejamento; não bloqueia operações legítimas; transparente para integrações via header
 - Contras: Requer lógica de contagem no endpoint de criação; header pode ser ignorado por clientes
 
 **Opção B — Hard block com 422:**
 Bloquear criação com HTTP 422 ao atingir 500 nós.
+
 - Prós: Previne degradação garantida; comportamento explícito
 - Contras: Bloqueia operações legítimas; pode causar incidentes em produção
 
 **Opção C — Apenas métricas/alertas internos:**
 Sem impacto no usuário; apenas métricas Prometheus/Grafana e alertas para ops.
+
 - Prós: Zero impacto no fluxo do usuário; monitoramento passivo
 - Contras: Administrador não sabe que está perto do limite; reação apenas pós-degradação
 
@@ -167,11 +174,13 @@ Se a implementacao do frontend seguir o texto de UX-001 e filtrar por `tenant_id
 
 **Opcao A --- Corrigir texto de UX-001:**
 Remover a mencao a `(filtrado por tenant_id)` e substituir por `(protegido por org:unit:read)` no passo 3 da jornada "Ver Historico".
+
 - Pros: Alinha com ADR-003 e SEC-002; correcao simples de documentacao
 - Contras: Nenhum
 
 **Opcao B --- Manter filtro por tenant_id como fallback:**
 Aceitar ambos filtros (tenant_id OU RBAC) no endpoint de domain-events do MOD-000.
+
 - Pros: Flexibilidade para modulos com e sem tenant_id
 - Contras: Complexidade no endpoint MOD-000; contradiz ADR-003 que diz explicitamente "nao filtrar por tenant_id"
 

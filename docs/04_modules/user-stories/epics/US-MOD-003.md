@@ -55,6 +55,7 @@ tenant_id    FK → tenants.id       (N5)
 ```
 
 Implicações:
+
 - Uma Subunidade (N4) pode ter **múltiplos estabelecimentos** (N5/tenants) vinculados
 - Um Tenant (N5) pode estar vinculado a **apenas uma** Subunidade N4 por vez
 - N5 nunca é criado pelo MOD-003 — é gerenciado pelo MOD-000-F07 (filiais)
@@ -77,6 +78,7 @@ O MOD-003 precisa de novos endpoints (`/org-units`) **e** de novas telas. É o p
 ## 4. Escopo
 
 ### Inclui
+
 - API CRUD de unidades organizacionais N1–N4 com soft delete
 - Tree query para visualização hierárquica (CTE recursivo)
 - Vinculação N4 → N5 (tenant existente do MOD-000-F07)
@@ -85,6 +87,7 @@ O MOD-003 precisa de novos endpoints (`/org-units`) **e** de novas telas. É o p
 - Novos escopos no catálogo MOD-000-F12: `org:unit:read`, `org:unit:write`, `org:unit:delete`
 
 ### Não inclui
+
 - Gestão de usuários dentro de cada nó — MOD-004
 - Regras de acesso por estrutura org. — MOD-004
 - Importação em massa de hierarquia — roadmap futuro

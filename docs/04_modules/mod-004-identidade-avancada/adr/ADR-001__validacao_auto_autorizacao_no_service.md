@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -13,6 +14,7 @@
 O modelo `access_shares` possui campos `grantor_id` e `authorized_by`. A regra original (v1.0.0 do épico) exigia `authorized_by ≠ grantor_id` como regra absoluta, implementada via CHECK constraint no banco.
 
 Em 2026-03-15, durante a revisão do épico US-MOD-004 (v1.1.0), foi decidido que a segregação deveria ser **condicional** ao scope `identity:share:authorize`:
+
 - **Com scope:** auto-autorização permitida (grantor = authorized_by)
 - **Sem scope:** segregação mantida (grantor ≠ authorized_by)
 
@@ -23,6 +25,7 @@ Um CHECK constraint no banco não consegue avaliar o token JWT do caller (scopes
 **Validar `authorized_by ≠ grantor_id` exclusivamente no service (use case), sem CHECK constraint no banco.**
 
 O service verifica:
+
 1. Se `grantor_id == authorized_by`: consulta se o caller possui scope `identity:share:authorize`
 2. Se possui → permite (201)
 3. Se não possui → rejeita (422: "Sem scope 'identity:share:authorize', o autorizador deve ser diferente do solicitante.")

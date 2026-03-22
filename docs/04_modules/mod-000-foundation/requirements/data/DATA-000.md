@@ -1,4 +1,5 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
+>
 > - **Status DRAFT:** Enriqueça o conteúdo deste arquivo diretamente.
 > - **Status READY:** NÃO EDITE DIRETAMENTE. Use a skill `create-amendment`.
 >
@@ -7,6 +8,7 @@
 > | 0.1.0  | 2026-03-15 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-15 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
 > | 0.5.0  | 2026-03-18 | usuário     | Nota chave amigável tenant_users: concatenação userId+tenantCode em runtime (PENDENTE-003 opção A) |
+>
 | 0.4.0  | 2026-03-18 | usuário     | Correção CHECK regex role_permissions 2-seg → 3-seg (PENDENTE-006, DOC-FND-000 §2.1) |
 | 0.3.0  | 2026-03-17 | AGN-DEV-04  | Revisão metadata (data_ultima_revisao) |
 
@@ -147,6 +149,7 @@ Toda entidade principal do Foundation DEVE conter:
 | `dedupe_key` | text | NULL | | Para idempotência outbox |
 
 **Índices obrigatórios:**
+
 - `(tenant_id, entity_type, entity_id, created_at DESC)` — timeline
 - `(tenant_id, event_type, created_at DESC)` — filtro por tipo
 - `UNIQUE(tenant_id, dedupe_key)` WHERE dedupe_key IS NOT NULL — dedupe

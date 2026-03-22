@@ -7,6 +7,7 @@
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -28,6 +29,7 @@ Como **usuário operacional**, quero selecionar múltiplos registros, verificar 
 ## 2. Escopo
 
 ### Inclui
+
 - Validação prévia por registro (motor com `current_record_state`)
 - Classificação: registros liberados vs. bloqueados (com motivo)
 - Exclusão apenas dos liberados (`deleted_at + status=INACTIVE`)
@@ -35,6 +37,7 @@ Como **usuário operacional**, quero selecionar múltiplos registros, verificar 
 - Feedback por registro após execução
 
 ### Não inclui
+
 - Grade de inclusão — US-MOD-011-F02
 - Formulário de alteração — US-MOD-011-F03
 

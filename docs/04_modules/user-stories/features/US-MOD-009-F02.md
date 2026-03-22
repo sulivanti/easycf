@@ -46,6 +46,7 @@ MOTOR:
 ## 3. Escopo
 
 ### Inclui
+
 - Endpoint `POST /movement-engine/evaluate` (síncrono)
 - Avaliação de regras por prioridade, valor, origem e vigência
 - Criação de `controlled_movements` e `approval_instances` nível 1
@@ -53,6 +54,7 @@ MOTOR:
 - X-Correlation-ID propagado ao movimento
 
 ### Não inclui
+
 - Regras de controle e alçada (configuração) — US-MOD-009-F01
 - Inbox e decisão de aprovação — US-MOD-009-F03
 

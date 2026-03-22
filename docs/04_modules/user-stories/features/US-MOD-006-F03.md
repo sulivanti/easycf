@@ -30,6 +30,7 @@ Como **usuário operacional**, quero ver tudo sobre o meu caso em uma única tel
 ## 2. Escopo
 
 ### Inclui
+
 - Header com código do caso, ciclo, status e estágio atual
 - Barra de progresso por macroetapas (concluída / atual / futura)
 - Botões de transição habilitados/desabilitados conforme gates e papéis
@@ -41,6 +42,7 @@ Como **usuário operacional**, quero ver tudo sobre o meu caso em uma única tel
 - Modo readonly para casos COMPLETED/CANCELLED
 
 ### Não inclui
+
 - APIs de backend — US-MOD-006-F01, US-MOD-006-F02
 - Listagem de casos — US-MOD-006-F04
 - Editor de blueprint — US-MOD-005-F03

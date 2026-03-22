@@ -91,6 +91,7 @@ MOTOR DE INTEGRAÇÃO
 ## 4. Escopo
 
 ### Inclui
+
 - Catálogo de Serviços de Destino (integration_services): URL, autenticação, timeout
 - Rotinas de Integração com mapeamento de campos e parâmetros (herda MOD-007)
 - Motor de Execução assíncrono via BullMQ (Outbox Pattern, retry, DLQ)
@@ -100,6 +101,7 @@ MOTOR DE INTEGRAÇÃO
 - UX Monitor de Integrações (log + DLQ + reprocessamento)
 
 ### Não inclui
+
 - Controle de movimentos sob aprovação — MOD-009
 - Agentes MCP disparando integrações — MOD-010
 - Integração com outros sistemas além de Protheus/TOTVS Wave 4 — roadmap futuro
@@ -188,12 +190,13 @@ US-MOD-008
 ## 9. Modelo de Dados
 
 ### `integration_services` — Serviços de Destino
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
 | `codigo` | varchar(50) | UNIQUE NOT NULL | ex: PROTHEUS-PROD, PROTHEUS-HML |
 | `nome` | varchar(200) | NOT NULL | |
-| `base_url` | varchar | NOT NULL | ex: https://protheus.empresa.com/rest |
+| `base_url` | varchar | NOT NULL | ex: <https://protheus.empresa.com/rest> |
 | `auth_type` | varchar | NONE\|BASIC\|BEARER\|OAUTH2 | |
 | `auth_config` | jsonb | nullable | Credenciais criptografadas (não retornadas em GET) |
 | `timeout_ms` | integer | default 30000 | |
@@ -202,6 +205,7 @@ US-MOD-008
 | `created_by` | uuid | FK→users | |
 
 ### `integration_routines` — Extensão das Rotinas de Integração
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -216,6 +220,7 @@ US-MOD-008
 | `trigger_events` | jsonb | nullable | Array de event_types que disparam esta rotina |
 
 ### `integration_field_mappings` — Mapeamento de Campos
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |
@@ -230,6 +235,7 @@ US-MOD-008
 | `ordem` | integer | NOT NULL | Ordem de montagem do payload |
 
 ### `integration_params` — Parâmetros Técnicos
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |
@@ -241,6 +247,7 @@ US-MOD-008
 | `is_sensitive` | boolean | default false | true = nunca logado |
 
 ### `integration_call_logs` — Log de Chamadas
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -265,6 +272,7 @@ US-MOD-008
 | `reprocessed_by` | uuid | FK→users, nullable | |
 
 ### `integration_reprocess_requests` — Reprocessamentos
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | uuid PK | |

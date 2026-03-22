@@ -133,6 +133,15 @@
         { "id": "DOC-DEV-001", "sections": ["§lifecycle"], "reason": "Validar estado_item antes de destruir — módulos READY requerem confirmação extra" },
         { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1"], "reason": "Verificar dependentes antes de deletar — módulos com dependentes não podem ser removidos sem confirmação" }
       ]
+    },
+    "action-plan": {
+      "docs": [
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle", "§metadata"], "reason": "Ciclo de vida DRAFT/READY e metadados para diagnosticar estado do módulo" },
+        { "id": "DOC-DEV-002", "sections": ["§4.1"], "reason": "Regras de promoção, Definition of Ready e pipeline Mermaid" },
+        { "id": "DOC-ESC-001", "sections": ["§4.2", "§6"], "reason": "Scoring de nível arquitetural e ADRs mínimos por nível" },
+        { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1", "§3", "§5"], "reason": "Grafo de adjacência, bloqueios e ordem topológica para dependências e posição na cadeia" }
+      ],
+      "delegates_to": []
     }
   }
 }

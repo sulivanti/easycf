@@ -76,6 +76,7 @@ SmartGrid (MOD-011) — interpreta e renderiza
 ## 5. Escopo
 
 ### Inclui
+
 - Componente de grade editável com inclusão, alteração e exclusão em massa
 - Integração com `routine-engine/evaluate` por linha (um objeto por vez)
 - Validação visual por linha com estados ✅ ❌ ⚠️
@@ -87,6 +88,7 @@ SmartGrid (MOD-011) — interpreta e renderiza
 - Amendment no MOD-007: suporte ao contexto de `current_record_state` no motor (PEND-SGR-02)
 
 ### Não inclui
+
 - Configuração de Operações — permanece no MOD-007 (UX-ROTINA-001)
 - Persistência de rascunhos no servidor
 - Endpoint batch de validação

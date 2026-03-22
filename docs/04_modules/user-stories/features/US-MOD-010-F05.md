@@ -7,6 +7,7 @@
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -29,6 +30,7 @@ Como **administrador de governança**, quero monitorar todas as execuções MCP 
 ## 2. Escopo
 
 ### Inclui
+
 - Header com métricas (24h): total, DIRECT_SUCCESS %, CONTROLLED_PENDING #, BLOCKED #
 - Badge vermelho para privilege_escalation_attempts
 - Tabela com filtros (agente, ação, status, data range) e paginação cursor-based
@@ -36,6 +38,7 @@ Como **administrador de governança**, quero monitorar todas as execuções MCP 
 - Link para movimento vinculado (→ UX-APROV-001) se CONTROLLED_PENDING
 
 ### Não inclui
+
 - APIs de backend — US-MOD-010-F01, F02, F03
 - Gestão de agentes — US-MOD-010-F04
 

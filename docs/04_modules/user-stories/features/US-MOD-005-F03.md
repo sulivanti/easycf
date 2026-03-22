@@ -31,6 +31,7 @@ Como **analista de processos**, quero um editor visual de fluxo onde posso criar
 ## 2. Escopo
 
 ### Inclui
+
 - Canvas infinito com grafo de nós (estágios) e arestas (transições)
 - Swimlanes por macroetapa com cores distintas (até 8 predefinidas)
 - Criação de estágio via duplo clique no canvas
@@ -44,6 +45,7 @@ Como **analista de processos**, quero um editor visual de fluxo onde posso criar
 - Integração com painel UX-PROC-002 via ícone de configuração
 
 ### Não inclui
+
 - Configuração detalhada de estágio (gates, papéis, transições) — US-MOD-005-F04
 - APIs de backend — US-MOD-005-F01, US-MOD-005-F02
 - Execução de instâncias — MOD-006

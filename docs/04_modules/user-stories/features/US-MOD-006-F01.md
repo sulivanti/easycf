@@ -65,6 +65,7 @@ MOTOR (executa em ordem, para no primeiro erro):
 ## 3. Escopo
 
 ### Inclui
+
 - Abertura de caso vinculado a ciclo PUBLISHED com freeze do `cycle_version_id`
 - Geração automática de `codigo` (padrão `CASO-{YYYY}-{SEQ5}`)
 - Criação automática de `gate_instances` PENDING ao entrar em estágio
@@ -74,6 +75,7 @@ MOTOR (executa em ordem, para no primeiro erro):
 - Domain events para todas as operações
 
 ### Não inclui
+
 - Resolução de gates (aprovação, documento, checklist) — US-MOD-006-F02
 - Atribuição e reatribuição de responsáveis — US-MOD-006-F02
 - Registro de eventos avulsos — US-MOD-006-F02

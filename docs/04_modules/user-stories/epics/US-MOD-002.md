@@ -174,6 +174,7 @@ createdAt, deletedAt             departamento varchar (nullable)
 ```
 
 Status relevantes para o UX:
+
 - `ACTIVE` → usuário ativo (pode logar)
 - `PENDING` → convite enviado, aguardando ativação
 - `BLOCKED` → bloqueado pelo admin

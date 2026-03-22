@@ -81,6 +81,7 @@ Antes de executar qualquer transição, o motor avalia em sequência:
 ## 4. Escopo
 
 ### Inclui
+
 - API para abrir instâncias de caso sobre ciclos PUBLISHED (F01)
 - Motor de transição de estágios com validação de gates e papéis (F01)
 - API de resolução de gates (aprovação, documento, checklist) (F02)
@@ -90,6 +91,7 @@ Antes de executar qualquer transição, o motor avalia em sequência:
 - Listagem de casos ativos com filtros (UX-CASE-002) (F04)
 
 ### Não inclui
+
 - Abertura de caso com fluxo de aprovação prévia — MOD-009
 - Parametrização contextual de comportamento por enquadrador — MOD-007
 - Integração com Protheus disparada por transição — MOD-008
@@ -178,6 +180,7 @@ US-MOD-006
 ## 9. Modelo de Dados Completo
 
 ### `case_instances` — Instância do Caso
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -198,6 +201,7 @@ US-MOD-006
 | `created_at`, `updated_at` | timestamp | | |
 
 ### `stage_history` — Histórico de Estágio
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -211,6 +215,7 @@ US-MOD-006
 | `evidence` | jsonb | nullable | `{ type: 'note'\|'file', content, url }` |
 
 ### `gate_instances` — Instância de Gate
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -227,6 +232,7 @@ US-MOD-006
 | UNIQUE | | `(case_id, gate_id)` | Um gate por caso |
 
 ### `case_assignments` — Atribuição de Responsáveis
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |
@@ -242,6 +248,7 @@ US-MOD-006
 | `delegation_id` | uuid | FK→access_delegations.id, nullable | Se atribuição veio de delegação MOD-004 |
 
 ### `case_events` — Eventos Avulsos do Caso
+
 | Campo | Tipo | Constraint | Descrição |
 |---|---|---|---|
 | `id` | uuid | PK | |

@@ -31,6 +31,7 @@ Como **aprovador**, quero um inbox centralizado com todos os movimentos pendente
 ## 2. Escopo
 
 ### Inclui
+
 - Inbox pessoal com cards por movimento pendente (contagem, countdown de prazo)
 - Badge na sidebar com contagem de pendências (atualiza 60s)
 - Detalhe split-view com resumo, operação, cadeia de aprovação, histórico
@@ -42,6 +43,7 @@ Como **aprovador**, quero um inbox centralizado com todos os movimentos pendente
 - Segregação visual: botões desabilitados se caller=solicitante
 
 ### Não inclui
+
 - APIs de backend — US-MOD-009-F01, F02, F03
 - Configurador de regras — US-MOD-009-F05
 

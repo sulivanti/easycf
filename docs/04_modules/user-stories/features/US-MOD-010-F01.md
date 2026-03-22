@@ -7,6 +7,7 @@
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -40,6 +41,7 @@ AUTENTICAÇÃO: header X-MCP-Agent-Key → bcrypt.compare
 ## 3. Escopo
 
 ### Inclui
+
 - CRUD de Agentes MCP com API key bcrypt, escopos permitidos, revogação
 - Rotação de API key com invalidação imediata
 - CRUD de Tipos de Ação (CONSULTAR, PREPARAR, SUBMETER, EXECUTAR, MONITORAR)
@@ -48,6 +50,7 @@ AUTENTICAÇÃO: header X-MCP-Agent-Key → bcrypt.compare
 - Bloqueio de escopos de aprovação em agentes
 
 ### Não inclui
+
 - Gateway e motor de despacho — US-MOD-010-F02
 - Log de execuções — US-MOD-010-F03
 - Interfaces UX — US-MOD-010-F04, F05

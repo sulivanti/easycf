@@ -58,7 +58,9 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 ```
 
 ### Fase 2: Enriquecimento — CONCLUIDO
+>
 > **Decision tree de enriquecimento:**
+>
 > ```
 > Quero enriquecer todos os modulos elegiveis?
 > ├── SIM → /enrich-all (sequencial, com checkpoint e --dry-run/--resume)
@@ -82,8 +84,8 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 
 ### Fase 3: Validacao — PENDENTE
 
-
 > **Decision tree de validacao:**
+>
 > ```
 > Quero validar tudo de uma vez?
 > ├── SIM → /validate-all (orquestra todos, pula os que nao tem artefato)
@@ -213,6 +215,7 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 ### Gestao de Pendencias (qualquer momento)
 
 > **Decision tree de pendencias:**
+>
 > ```
 > O que preciso fazer com pendencias?
 > ├── Ver situacao atual       → /manage-pendentes list PEN-000

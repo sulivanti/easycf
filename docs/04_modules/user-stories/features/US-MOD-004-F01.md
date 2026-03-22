@@ -37,6 +37,7 @@ São dimensões ORTOGONAIS. Criar um não implica criar o outro.
 ```
 
 **scope_type:**
+
 - `PRIMARY`: área principal do usuário (máximo 1 por usuário)
 - `SECONDARY`: áreas adicionais (sem limite explícito, mas auditável)
 

@@ -7,6 +7,7 @@
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -43,12 +44,14 @@ body (DEPOIS — com amendment):
 ## 3. Escopo
 
 ### Inclui
+
 - Campo `current_record_state` nullable no request do motor
 - Avaliação de `condition_expr` contra campos do `current_record_state`
 - Campos ausentes → condição avaliada como false (degradação suave)
 - Cache Redis bypass quando `current_record_state` presente
 
 ### Não inclui
+
 - Novos tipos de routine_item
 - Interfaces UX (são features separadas F02–F05)
 

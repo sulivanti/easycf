@@ -31,6 +31,7 @@ Como **administrador funcional**, quero um editor de rotinas onde posso criar, c
 ## 2. Escopo
 
 ### Inclui
+
 - Listagem de rotinas com filtro por status (DRAFT/PUBLISHED/DEPRECATED)
 - Editor split-view (lista à esquerda, editor de itens à direita)
 - Formulário adaptativo por tipo de item (7 tipos com campos dinâmicos)
@@ -43,6 +44,7 @@ Como **administrador funcional**, quero um editor de rotinas onde posso criar, c
 - Timeline de histórico de versões com ancestralidade visual
 
 ### Não inclui
+
 - Configurador de enquadradores — US-MOD-007-F04
 - Motor de avaliação — US-MOD-007-F03
 - APIs de backend — US-MOD-007-F02

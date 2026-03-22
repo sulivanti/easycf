@@ -7,6 +7,7 @@
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
+
 - **status_agil:** APPROVED
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-19
@@ -29,6 +30,7 @@ Como **administrador de governança**, quero consultar o log completo de execuç
 ## 2. Escopo
 
 ### Inclui
+
 - `GET /admin/mcp-executions` com filtros e paginação cursor-based
 - `GET /admin/mcp-executions/:id` com detalhe incluindo movimento vinculado
 - Payload sanitizado (dados sensíveis mascarados pelo servidor)
@@ -36,6 +38,7 @@ Como **administrador de governança**, quero consultar o log completo de execuç
 - API key jamais exposta em nenhum endpoint
 
 ### Não inclui
+
 - Cadastro de agentes e ações — US-MOD-010-F01
 - Gateway de execução — US-MOD-010-F02
 - Interfaces UX — US-MOD-010-F04, F05

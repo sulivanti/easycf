@@ -31,6 +31,7 @@ Como **analista funcional**, quero gerenciar enquadradores de contexto, visualiz
 ## 2. Escopo
 
 ### Inclui
+
 - Tabela de enquadradores com filtro por tipo, CRUD via drawer, inativação com modal de impacto
 - Painel de Objetos-Alvo com campos expandíveis e adição de campos
 - Matriz visual de incidência (enquadradores × objetos) com badges de status (ACTIVE/INACTIVE)
@@ -40,6 +41,7 @@ Como **analista funcional**, quero gerenciar enquadradores de contexto, visualiz
 - codigo uppercase automático e imutável
 
 ### Não inclui
+
 - CRUD de rotinas e editor de itens — US-MOD-007-F05
 - Motor de avaliação — US-MOD-007-F03
 - APIs de backend — US-MOD-007-F01

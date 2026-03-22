@@ -30,6 +30,7 @@ Como **administrador de governança**, quero configurar visualmente as regras de
 ## 2. Escopo
 
 ### Inclui
+
 - Tabela de regras de controle com drawer de criação/edição
 - Toggle "Por valor" para critério de threshold
 - Cadeia de alçada visual em cards horizontais conectados por setas
@@ -39,6 +40,7 @@ Como **administrador de governança**, quero configurar visualmente as regras de
 - Vigência expirada com badge visual
 
 ### Não inclui
+
 - APIs de backend — US-MOD-009-F01, F02, F03
 - Inbox de aprovações — US-MOD-009-F04
 

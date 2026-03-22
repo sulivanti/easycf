@@ -30,6 +30,7 @@ Como **operador de integrações**, quero monitorar o status de todas as chamada
 ## 2. Escopo
 
 ### Inclui
+
 - Header com métricas do dia (total, taxa de sucesso, DLQ count)
 - Tabela de logs com status badges, auto-refresh para RUNNING/QUEUED (30s)
 - Filtros: rotina, status, serviço, correlation_id, período (URL sync)
@@ -42,6 +43,7 @@ Como **operador de integrações**, quero monitorar o status de todas as chamada
 - Link "Ver caso" para navegação ao caso vinculado
 
 ### Não inclui
+
 - APIs de backend — US-MOD-008-F01, F02, F03
 - Editor de rotinas — US-MOD-008-F04
 

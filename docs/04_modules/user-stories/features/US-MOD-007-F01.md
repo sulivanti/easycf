@@ -52,6 +52,7 @@ condition_expr (futura): permite condições JSON para incidência condicional.
 ## 3. Escopo
 
 ### Inclui
+
 - CRUD de Tipos de Enquadrador (catálogo: OPERACAO, CLASSE_PRODUTO, TIPO_DOCUMENTO, CONTEXTO_PROCESSO)
 - CRUD de Enquadradores com vigência (`valid_from`/`valid_until`), código imutável, expiração automática
 - CRUD de Objetos-Alvo com campos-alvo (field_key, field_type, is_system)
@@ -59,6 +60,7 @@ condition_expr (futura): permite condições JSON para incidência condicional.
 - Domain events para todas as operações
 
 ### Não inclui
+
 - Rotinas de comportamento e seus itens — US-MOD-007-F02
 - Motor de avaliação — US-MOD-007-F03
 - Interface de configuração — US-MOD-007-F04

@@ -84,12 +84,14 @@ PASSO 6: Persistir em domain_events (GAP 4 resolvido)
 ## 3. Escopo
 
 ### Inclui
+
 - Endpoint `POST /routine-engine/evaluate` (runtime, sem cache)
 - Algoritmo de mescla com resolução por restritividade (6 passos)
 - Registro de `routine.applied` em domain_events (apenas com efeito)
 - Retorno de `blocking_validations` para integração com MOD-006
 
 ### Não inclui
+
 - CRUD de enquadradores e regras — US-MOD-007-F01
 - CRUD de rotinas e itens — US-MOD-007-F02
 - Interfaces de configuração — US-MOD-007-F04, F05

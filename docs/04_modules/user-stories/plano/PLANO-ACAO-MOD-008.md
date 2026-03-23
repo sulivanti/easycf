@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-008 Integracao Dinamica Protheus/TOTVS
 
-> **Versao:** 2.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Versao:** 2.1.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
 > **Estado atual do modulo:** DRAFT (v0.2.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
 >
-> Fases 0-3 concluidas (validate-all PASS em 2026-03-22). Fase 4 PENDENTE — bloqueada por PENDENTE-004 (1 ABERTA). Proximo passo: resolver PENDENTE-004 (limite real concurrency Protheus) e executar `/promote-module`.
+> Fases 0-3 concluidas (validate-all PASS em 2026-03-22). PENDENTE-004 resolvida (limite Protheus confirmado: default=10, max=20). Proximo passo: executar `/promote-module`.
 
 ---
 
@@ -15,7 +15,7 @@
 | Features F01-F05 | 5/5 APPROVED | F01 (Catalogo+Rotinas), F02 (Mapeamentos+Params), F03 (Motor BullMQ+Outbox+DLQ), F04 (UX Editor), F05 (UX Monitor) |
 | Scaffold (forge-module) | CONCLUIDO | mod-008-integracao-protheus/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-11 confirmados em 4 batches, v0.7.0, 7/8 pendentes resolvidas |
-| PENDENTEs | 1 ABERTA | 8 total: 7 IMPLEMENTADA (001-003, 005-008), 1 ABERTA (PENDENTE-004: limite concurrency Protheus) |
+| PENDENTEs | 0 ABERTA | 8 total: 8/8 IMPLEMENTADA (PENDENTE-004 resolvida 2026-03-23: default=10, max=20) |
 | ADRs | 4 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 a ADR-004) |
 | Amendments | 0 | Nenhum |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
@@ -111,7 +111,7 @@ O enriquecimento foi executado em 4 batches, com todos os 11 agentes confirmados
 | 1 | PENDENTE-001 | IMPLEMENTADA | ALTA | Tabela simples + trigger migracao 10M |
 | 2 | PENDENTE-002 | IMPLEMENTADA | ALTA | Retencao 6 meses hot + archive S3 anonimizado |
 | 3 | PENDENTE-003 | IMPLEMENTADA | MEDIA | Cache Redis OAuth2, lock distribuido, mid-flight expiry |
-| 4 | PENDENTE-004 | **ABERTA** | **ALTA** | **Limite real concurrency Protheus — aguardando time Protheus** |
+| 4 | ~~PENDENTE-004~~ | IMPLEMENTADA | ALTA | Limite confirmado: default=10, max=20 (2026-03-23) |
 | 5 | PENDENTE-005 | IMPLEMENTADA | MEDIA | Seed automatico HML com WireMock |
 | 6 | PENDENTE-006 | IMPLEMENTADA | BLOQUEANTE | YAML key duplicada corrigida em ux-integ-001 |
 | 7 | PENDENTE-007 | IMPLEMENTADA | MEDIA | navigate_to_case type corrigido em ux-integ-002 |
@@ -167,9 +167,9 @@ O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis 
 | 4 | /validate-drizzle | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | schema.ts |
 | 5 | /validate-endpoint | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | routes/*.route.ts |
 
-### Fase 4: Promocao — PENDENTE (BLOQUEADA)
+### Fase 4: Promocao — PENDENTE
 
-A Fase 3 esta concluida, porem a promocao esta **bloqueada** por PENDENTE-004 (1 pendencia ABERTA). O DoR-1 exige 0 pendencias ABERTA ou EM_ANALISE. A PENDENTE-004 e do tipo DEP-EXT (dependencia externa — limite real de concurrency do Protheus em producao). Acao necessaria: obter resposta do time Protheus e implementar a pendencia.
+Fase 3 concluida e todas as 8 pendencias IMPLEMENTADA. PENDENTE-004 (limite concurrency Protheus) resolvida em 2026-03-23 com valor confirmado: default=10, max=20. DoR 7/7 atendido — modulo elegivel para promocao imediata.
 
 ```
 6    /promote-module        Promocao DRAFT -> READY:                          BLOQUEADA
@@ -187,7 +187,7 @@ A Fase 3 esta concluida, porem a promocao esta **bloqueada** por PENDENTE-004 (1
 
 | # | Criterio | Status | Evidencia |
 |---|----------|--------|-----------|
-| DoR-1 | 0 pendentes ABERTA ou EM_ANALISE | **NAO** | **1 ABERTA: PENDENTE-004 (limite concurrency Protheus)** |
+| DoR-1 | 0 pendentes ABERTA ou EM_ANALISE | **SIM** | 8/8 IMPLEMENTADA (PENDENTE-004 resolvida 2026-03-23) |
 | DoR-2 | Todos os pilares com artefato | SIM | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1) = 10/10 |
 | DoR-3 | ADRs minimos para Nivel 2 (3+) | SIM | 4 ADRs (ADR-001 a ADR-004) |
 | DoR-4 | Epico APPROVED | SIM | US-MOD-008 APPROVED v1.2.0 |
@@ -195,11 +195,11 @@ A Fase 3 esta concluida, porem a promocao esta **bloqueada** por PENDENTE-004 (1
 | DoR-6 | Screen Manifests validados | SIM | 2/2 PASS (ux-integ-001, ux-integ-002) |
 | DoR-7 | /qa verde | SIM | validate-all PASS 2026-03-22 |
 
-> **Resultado:** 6/7 criterios atendidos. **Bloqueio: DoR-1** — PENDENTE-004 deve ser resolvida (IMPLEMENTADA ou CANCELADA) antes da promocao.
+> **Resultado:** 7/7 criterios atendidos. Modulo elegivel para promocao imediata.
 
 **Bloqueadores para Promocao:**
 
-1. **PENDENTE-004 (ABERTA):** Limite real de concurrency do Protheus em producao. Tipo DEP-EXT — requer informacao do time Protheus sobre conexoes simultaneas e rate limits. Fallback ja implementado (default=10, monitoramento, alerta 429>5%). Para desbloquear: obter dado do Protheus e marcar como IMPLEMENTADA, ou aceitar o fallback e marcar como DECIDIDA/IMPLEMENTADA.
+Nenhum bloqueador. PENDENTE-004 resolvida em 2026-03-23 (limite confirmado: default=10, max=20).
 
 ### Fase 5: Pos-READY — SOB DEMANDA
 
@@ -245,7 +245,7 @@ A Fase 3 esta concluida, porem a promocao esta **bloqueada** por PENDENTE-004 (1
 | 1 | PENDENTE-001 | IMPLEMENTADA | ALTA | Tabela simples + trigger migracao 10M |
 | 2 | PENDENTE-002 | IMPLEMENTADA | ALTA | Retencao 6m hot + archive S3 anonimizado |
 | 3 | PENDENTE-003 | IMPLEMENTADA | MEDIA | Cache Redis OAuth2 com lock distribuido |
-| 4 | PENDENTE-004 | **ABERTA** | **ALTA** | **Aguardando time Protheus — fallback=10 com monitoramento** |
+| 4 | ~~PENDENTE-004~~ | IMPLEMENTADA | ALTA | Limite confirmado default=10, max=20 (2026-03-23) |
 | 5 | PENDENTE-005 | IMPLEMENTADA | MEDIA | Seed automatico HML com WireMock |
 | 6 | PENDENTE-006 | IMPLEMENTADA | BLOQUEANTE | YAML key duplicada corrigida |
 | 7 | PENDENTE-007 | IMPLEMENTADA | MEDIA | Action type corrigido |
@@ -279,20 +279,21 @@ A Fase 3 esta concluida, porem a promocao esta **bloqueada** por PENDENTE-004 (1
 | Heranca MOD-007 | Herda behavior_routines com routine_type=INTEGRATION. Versionamento imutavel (DRAFT->PUBLISHED->DEPRECATED), fork com copia. Tabela auxiliar routine_integration_config via extensao 1:1 (ADR-003). |
 | Outbox Pattern | Garantia de entrega: INSERT call_log dentro da transacao de negocio (atomicidade). BullMQ dedupe via jobId = call_log.id. Retry backoff exponencial. DLQ governada com justificativa obrigatoria. ADR-001, ADR-002. |
 | Credenciais criptografadas | auth_config em AES-256 via secret do ambiente. Nunca retornadas em GET. Mascaradas em logs e domain events. ADR-004. |
-| PENDENTE-004 (bloqueante) | Limite real de concurrency do Protheus nao documentado. Default INTEGRATION_CONCURRENCY=10 com monitoramento. Tipo DEP-EXT — requer acao do time Protheus. Bloqueia DoR-1 para promocao. |
+| PENDENTE-004 (resolvida) | Limite real confirmado pelo time Protheus: INTEGRATION_CONCURRENCY default=10, max=20. NFR-008 atualizado. Nao bloqueia mais a promocao. |
 | BLK-004 | Bloqueio externo: MOD-005 (processos) precisa prover blueprints para rotinas de integracao. Nao bloqueia promocao do MOD-008, mas afeta implementacao. |
 | OAuth2 com Redis | Cache de token em Redis com TTL=expires_in-60s, lock distribuido via SET NX EX, interceptor de 401 para mid-flight expiry. Decisao PENDENTE-003. |
 
 ## Checklist Rapido — O que Falta para READY
 
-- [ ] Resolver PENDENTE-004 (limite concurrency Protheus) — obter dado do time Protheus ou aceitar fallback
+- [x] Resolver PENDENTE-004 (limite concurrency Protheus) — confirmado default=10, max=20 ✅
 - [ ] Executar `/promote-module mod-008` (Fase 4)
 
-> **Nota:** PENDENTE-004 e o unico bloqueador. O fallback (default=10 com monitoramento) ja esta implementado no NFR-008. Se a equipe decidir que o fallback e suficiente, a pendencia pode ser marcada como IMPLEMENTADA e o modulo promovido imediatamente. MOD-010 aguarda MOD-008 READY para consumir integracoes externas via MCP.
+> **Nota:** Todas as 8 pendencias estao IMPLEMENTADA. DoR 7/7 atendido. MOD-008 esta pronto para promocao. MOD-010 aguarda MOD-008 READY para consumir integracoes externas via MCP.
 
 ## CHANGELOG deste Documento
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 2.1.0 | 2026-03-23 | PENDENTE-004 → IMPLEMENTADA (limite Protheus confirmado: default=10, max=20). DoR 7/7 atendido. Fase 4 desbloqueada — pronto para /promote-module |
 | 2.0.0 | 2026-03-23 | Recriacao: Fases 0-3 CONCLUIDAS (validate-all PASS 2026-03-22), Fase 4 BLOQUEADA por PENDENTE-004 (1 ABERTA), PENDENTE-006/007/008 agora IMPLEMENTADA, DoR 6/7 (DoR-1 falha), BLK-004 documentado |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 5 pendentes resolvidas (001-005), rastreio de agentes, mapa de cobertura de validadores, particularidades Outbox/BullMQ/DLQ/heranca MOD-007 |

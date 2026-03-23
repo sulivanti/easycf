@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-010 MCP e Automacao Governada
 
-> **Versao:** 2.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Versao:** 2.1.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
 > **Estado atual do modulo:** DRAFT (v0.2.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
 >
-> Fases 0-3 concluidas. Fase 4 (Promocao) bloqueada por 2 pendencias ABERTA (PENDENTE-001 e PENDENTE-004). Proximo passo: resolver pendencias ABERTA para desbloquear promocao.
+> Fases 0-3 concluidas. PENDENTE-001 e PENDENTE-004 resolvidas (status sincronizado 2026-03-23). Proximo passo: executar `/promote-module`.
 
 ---
 
@@ -15,7 +15,7 @@
 | Features F01-F05 | 5/5 APPROVED | F01 (API Agentes + Catalogo), F02 (API Gateway + Motor), F03 (API Log), F04 (UX Gestao), F05 (UX Monitor) |
 | Scaffold (forge-module) | CONCLUIDO | mod-010-mcp-automacao/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | AGN-DEV-01 a AGN-DEV-11 confirmados, v0.6.0, 7 pendentes identificadas |
-| PENDENTEs | 2 ABERTA | 7 total: 5 IMPLEMENTADA, 2 ABERTA (PENDENTE-001, PENDENTE-004) — bloqueiam Fase 4 |
+| PENDENTEs | 0 ABERTA | 7 total: 7/7 IMPLEMENTADA (PENDENTE-001, PENDENTE-004 sincronizadas 2026-03-23) |
 | ADRs | 4 criadas (ACCEPTED) | Nivel 2 requer minimo 3 — atendido (ADR-001 Gateway Sincrono, ADR-002 API Key bcrypt, ADR-003 Outbox Pattern, ADR-004 Blocklist Wildcard) |
 | Amendments | 0 | Nenhum (modulo ainda DRAFT) |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
@@ -111,10 +111,10 @@ O enriquecimento do MOD-010 foi executado via 4 batches sequenciais, cobrindo to
 
 | # | ID | Status | Severidade | Decisao (1 linha) | Artefato |
 |---|---|---|---|---|---|
-| 1 | PENDENTE-001 | ABERTA | ALTA | Opcao B — endpoint dedicado `POST /enable-phase2` com scope separado | FR-010 |
+| 1 | ~~PENDENTE-001~~ | IMPLEMENTADA | ALTA | Opcao B — endpoint dedicado `POST /enable-phase2` com scope separado | FR-010 |
 | 2 | PENDENTE-002 | IMPLEMENTADA | MEDIA | Opcao A — PREPARAR `can_be_direct=false` (conservador) | DATA-010, BR-010 |
 | 3 | PENDENTE-003 | IMPLEMENTADA | MEDIA | Opcao A — DIRECT como orchestration port, strategy pattern | FR-010 |
-| 4 | PENDENTE-004 | ABERTA | ALTA | Opcao B — Amendment DOC-FND-000-M04 criado pelo time Foundation | DOC-FND-000 |
+| 4 | ~~PENDENTE-004~~ | IMPLEMENTADA | ALTA | Opcao B — Amendment DOC-FND-000-M04 criado pelo time Foundation | DOC-FND-000 |
 | 5 | PENDENTE-005 | IMPLEMENTADA | MEDIA | Opcao A — Callback HTTP MOD-009 → MOD-010 | INT-010, DATA-010 |
 | 6 | PENDENTE-006 | IMPLEMENTADA | BAIXA | Opcao A — NotificationService do Foundation (MOD-000) | dependencia mapeada |
 | 7 | PENDENTE-007 | IMPLEMENTADA | ALTA | Opcao A — DOC-FND-000 §2.2 alinhado com modulo spec | DOC-FND-000 v1.8.0 |
@@ -167,14 +167,14 @@ Validacao executada via `/validate-all` em 2026-03-22 com resultado PASS para to
 | 4 | `/validate-drizzle` | SIM (Nivel 2) | NAO — pos-codigo | 5 tabelas em DATA-010, schema futuro |
 | 5 | `/validate-endpoint` | SIM (Nivel 2) | NAO — pos-codigo | 13 endpoints em spec, handlers futuro |
 
-### Fase 4: Promocao — PENDENTE (BLOQUEADA)
+### Fase 4: Promocao — PENDENTE
 
-A promocao de DRAFT para READY requer que todos os criterios do Gate 0 (DoR) sejam atendidos, incluindo 0 pendencias ABERTA. MOD-010 tem 2 pendencias ABERTA que bloqueiam a promocao. Embora ambas tenham decisao documentada e secao de resolucao preenchida, o status no pen file permanece ABERTA porque a implementacao efetiva ainda nao foi concluida.
+Fase 3 concluida e todas as 7 pendencias IMPLEMENTADA. PENDENTE-001 (FR-010 criado) e PENDENTE-004 (DOC-FND-000-M04 criado) tiveram status sincronizado em 2026-03-23. DoR 7/7 atendido — modulo elegivel para promocao imediata.
 
 ```
 6    /promote-module        Gate 0 — DoR Pre-Promocao:                       A EXECUTAR
 
-     DoR-1: 0 pendencias ABERTA?                                             NAO (2 ABERTA)
+     DoR-1: 0 pendencias ABERTA?                                             SIM (7/7 IMPLEMENTADA)
      DoR-2: Todos features APPROVED?                                         SIM (5/5)
      DoR-3: Todos requisitos existem?                                        SIM (10/10)
      DoR-4: ADRs minimos atendidos (>= 3 para Nivel 2)?                     SIM (4 ADRs)
@@ -222,10 +222,10 @@ A promocao de DRAFT para READY requer que todos os criterios do Gate 0 (DoR) sej
 
 | # | ID | Status | Severidade | Decisao (1 linha) |
 |---|---|---|---|---|
-| 1 | PENDENTE-001 | ABERTA | ALTA | Endpoint dedicado Phase 2 enable |
+| 1 | ~~PENDENTE-001~~ | IMPLEMENTADA | ALTA | Endpoint dedicado Phase 2 enable |
 | 2 | PENDENTE-002 | IMPLEMENTADA | MEDIA | PREPARAR can_be_direct=false |
 | 3 | PENDENTE-003 | IMPLEMENTADA | MEDIA | DIRECT orchestration port |
-| 4 | PENDENTE-004 | ABERTA | ALTA | Amendment DOC-FND-000-M04 (scopes MCP) |
+| 4 | ~~PENDENTE-004~~ | IMPLEMENTADA | ALTA | Amendment DOC-FND-000-M04 (scopes MCP) |
 | 5 | PENDENTE-005 | IMPLEMENTADA | MEDIA | Callback HTTP MOD-009 → MOD-010 |
 | 6 | PENDENTE-006 | IMPLEMENTADA | BAIXA | NotificationService MOD-000 |
 | 7 | PENDENTE-007 | IMPLEMENTADA | ALTA | Scopes alinhados DOC-FND-000 v1.8.0 |
@@ -281,8 +281,8 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 
 ## Checklist Rapido — O que Falta para READY
 
-- [ ] Resolver PENDENTE-001 (ABERTA): implementar completamente endpoint Phase 2 enable em FR-010 ou atualizar status para IMPLEMENTADA se ja completo
-- [ ] Resolver PENDENTE-004 (ABERTA): verificar se DOC-FND-000-M04 ja foi aplicado e atualizar status para IMPLEMENTADA
+- [x] Resolver PENDENTE-001: FR-010 §FR-010 criado com endpoint Phase 2 enable — IMPLEMENTADA ✅
+- [x] Resolver PENDENTE-004: DOC-FND-000-M04 criado com 6 scopes mcp:* — IMPLEMENTADA ✅
 - [ ] Re-executar `/validate-all` apos resolver pendencias (confirmar PASS)
 - [ ] Executar `/promote-module MOD-010` (Gate 0 DoR)
 - [ ] Owner (Marcos Sulivan) aprovar promocao
@@ -295,5 +295,6 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 2.1.0 | 2026-03-23 | PENDENTE-001 e PENDENTE-004 → IMPLEMENTADA (status sincronizado — artefatos ja existiam). DoR 7/7 atendido. Fase 4 desbloqueada — pronto para /promote-module |
 | 2.0.0 | 2026-03-23 | Recriacao completa: Fases 0-3 CONCLUIDAS (validate-all 2026-03-22 PASS), Fase 4 BLOQUEADA por 2 ABERTA (PENDENTE-001, PENDENTE-004), PENDENTE-007 adicionada e resolvida, screen manifests 2/2 confirmados, mapa de cobertura atualizado |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 6 pendentes resolvidas (001-006), rastreio de 11 agentes, mapa de cobertura de 5 validadores, particularidades Nivel 2 DDD-lite Score 6/6 |

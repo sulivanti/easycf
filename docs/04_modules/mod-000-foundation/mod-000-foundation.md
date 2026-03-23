@@ -12,10 +12,10 @@
 # MOD-000 — Foundation (Framework de Automação / Geradores)
 
 - **id:** MOD-000
-- **version:** 0.10.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-GNP-00, DOC-ESC-001, DOC-GPA-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-PADRAO-001, DOC-PADRAO-002, DOC-PADRAO-004, DOC-PADRAO-005, DOC-FND-000
 - **evidencias:** N/A
 

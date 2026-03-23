@@ -150,9 +150,9 @@
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F02, US-MOD-000-F03, US-MOD-000-F04, US-MOD-000-F05, US-MOD-000-F06, US-MOD-000-F07, US-MOD-000-F09, US-MOD-000-F10, US-MOD-000-F16, US-MOD-000-F17, DOC-ARC-003, DOC-FND-000, FR-000, SEC-000, SEC-002
 - **referencias_exemplos:** DOC-ARC-003 §1-§4 (6 dogmas, UIActionEnvelope, timeline), DOC-FND-000 §1.2 (session events), §2.1-§2.2 (scopes canônicos 3 seg.), §3 (SEC-002)
 - **evidencias:** Extraído de US-MOD-000-F01 §4.5/§4.9, F05 §4.6, F06 §4.6, F07 §4.4/§4.5, F09 §4.4. emit_permission alinhado com DOC-FND-000 v1.2.0. auth.sso_linked adicionado (ADR-004). Total: 35 events

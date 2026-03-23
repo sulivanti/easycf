@@ -284,7 +284,7 @@ Documenta a decisão de adotar *State-stored + Domain Events + Inbox/Outbox* par
 
 | Módulo                                            | Status   | Descrição                                            | Nível Arch      |
 |---------------------------------------------------|----------|------------------------------------------------------|-----------------|
-| mod-000-foundation *(pendente forge-module)* | READY    | Identidade, IAM, Auditoria, Core Components          | N0 — Núcleo     |
+| mod-000-foundation                            | READY    | Identidade, IAM, Auditoria, Core Components          | N2 — DDD-lite + Clean |
 | mod-001-backoffice-admin                          | DRAFT    | Shell de Auth, App Shell, Dashboard Admin (UX-First) | N1 — Clean Leve |
 
 ---

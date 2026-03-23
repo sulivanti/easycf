@@ -177,9 +177,9 @@ erDiagram
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F05, US-MOD-000-F06, US-MOD-000-F07, US-MOD-000-F09, FR-000, BR-000, SEC-000, DOC-FND-000, DOC-ARC-003
 - **referencias_exemplos:** DOC-FND-000 §1-§3 (contratos auth/RBAC/events), DOC-ARC-003 §1-§4 (rastreabilidade)
 - **evidencias:** Extraído de US-MOD-000-F01, F05, F06, F07, F09

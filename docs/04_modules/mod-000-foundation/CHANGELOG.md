@@ -23,12 +23,12 @@ flowchart TD
     style E1  fill:#27AE60,color:#fff,stroke:#1E8449
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E4  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E5  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E4  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
-*O módulo está na **Etapa 4** — desenvolvimento DRAFT em ritmo acelerado.*
+*O módulo está na **Etapa 5** — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.*
 
 ---
 
@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, 9 requisitos (BR/FR/DATA/DATA-003/SEC/SEC-002/INT/UX/NFR), 4 ADRs selados. Épico + 17 features já READY. Ciclo de estabilidade avança para Etapa 5. |
 | 0.10.0 | 2026-03-19 | manage-pendentes | Amendment DOC-FND-000-M02: 7º scope process:case:reopen registrado no catálogo canônico §2.2. Ref: PEN-006 PENDENTE-001. Total: 7 scopes process:case:*. |
 | 0.9.0 | 2026-03-19 | manage-pendentes | Amendment DOC-FND-000-M01: 6 scopes process:case:* registrados no catálogo canônico §2.2 (MOD-006). Ref: PEN-006 PENDENTE-004. |
 | 0.8.2 | 2026-03-18 | usuário | DATA-000 §7: nota chave amigável tenant_users — concatenação userId+tenantCode em runtime (PENDENTE-003 opção A). |

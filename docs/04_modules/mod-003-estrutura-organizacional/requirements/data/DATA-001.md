@@ -134,9 +134,9 @@ erDiagram
 
 > **Nota arquitetural:** A tabela `org_units` é **cross-tenant por design** — não possui coluna `tenant_id`. A hierarquia organizacional abrange múltiplos tenants por natureza. O isolamento de acesso é feito via RBAC (`@RequireScope`) e não via RLS por tenant. Ver ADR-003.
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-003, US-MOD-003-F01, US-MOD-003-F04, FR-001, FR-004, FR-005, BR-001, BR-002, BR-003, BR-005, BR-006, BR-008, BR-009, BR-010, BR-011, BR-012, DATA-003, SEC-001, SEC-002, ADR-003, INT-001
 - **referencias_exemplos:** EX-CI-005, EX-CI-007, EX-CI-006
 - **evidencias:** N/A

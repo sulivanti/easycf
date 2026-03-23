@@ -23,12 +23,12 @@ flowchart TD
     style E1  fill:#27AE60,color:#fff,stroke:#1E8449
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E4  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E5  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E4  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
-*O módulo está na **Etapa 4** — stubs gerados em DRAFT, desenvolvimento em ritmo acelerado.*
+*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
 
 ---
 
@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Épico + 4 features já READY. Ciclo de estabilidade avança para Etapa 5. |
 | 0.2.1 | 2026-03-18 | Marcos Sulivan | Correção UX-001 passo 3 jornada Ver Histórico: `(filtrado por tenant_id)` → `(protegido por org:unit:read)`. Alinha com ADR-003/SEC-002 (org_units cross-tenant). Resolve PENDENTE-006. |
 | 0.2.0 | 2026-03-17 | arquitetura | Amendments US-MOD-003-M01 e US-MOD-003-F01-M01: inclui F04 (Restore) no épico (tree §8, tabela §8, endpoints §10) e adiciona evento org.unit_restored à tabela de F01. Resolve PENDENTE-001. Corrige view_rule de F04 (remove tenantMatch — ADR-003). |
 | 0.1.1 | 2026-03-17 | arquitetura | Amendment FR-001-C01: documenta estratégia de constraint catch (PostgreSQL 23505 → 409) para unicidade de codigo. Resolve PENDENTE-005. |

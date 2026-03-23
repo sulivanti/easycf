@@ -6,10 +6,10 @@
 # MOD-003 — Estrutura Organizacional
 
 - **id:** MOD-003
-- **version:** 0.3.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **architecture_level:** 2
 - **rastreia_para:** US-MOD-003, US-MOD-003-F01, US-MOD-003-F02, US-MOD-003-F03, US-MOD-003-F04, DOC-DEV-001, DOC-ESC-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-UX-012, DOC-FND-000, MOD-000, US-MOD-000-F07, US-MOD-000-F12, LGPD-BASE-001
 - **evidencias:** N/A
@@ -96,7 +96,7 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 | [US-MOD-003-F01](../user-stories/features/US-MOD-003-F01.md) | API Core — CRUD + Tree Query + Vinculação N5 | **Backend** | `READY` |
 | [US-MOD-003-F02](../user-stories/features/US-MOD-003-F02.md) | Árvore Organizacional (UX-ORG-001) | **UX** | `READY` |
 | [US-MOD-003-F03](../user-stories/features/US-MOD-003-F03.md) | Formulário de Nó Organizacional (UX-ORG-002) | **UX** | `READY` |
-| [US-MOD-003-F04](../user-stories/features/US-MOD-003-F04.md) | Restore de Unidade Organizacional | **Backend + UX** | `TODO` |
+| [US-MOD-003-F04](../user-stories/features/US-MOD-003-F04.md) | Restore de Unidade Organizacional | **Backend + UX** | `READY` |
 
 ## 6. Itens Base (Canônicos) e Links
 

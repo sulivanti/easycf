@@ -198,9 +198,9 @@ Opcao A --- Corrigir o texto de UX-001 para alinhar com ADR-003 e SEC-002. A con
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-003, FR-001, FR-004, BR-008, BR-009, DATA-001, NFR-001, UX-001, ADR-003, ADR-004, SEC-002, DATA-003, INT-001
 - **referencias_exemplos:** EX-CI-007
 - **evidencias:** N/A

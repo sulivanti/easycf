@@ -166,9 +166,9 @@ O MOD-003 é **full-stack** com endpoints próprios. Cada operação de escrita 
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-003, US-MOD-003-F01, US-MOD-003-F04, FR-001, FR-003, FR-004, BR-001, BR-012, ADR-003, DOC-ARC-003, DOC-FND-000, SEC-001, SEC-002, INT-004
 - **referencias_exemplos:** EX-CI-007, EX-CI-006
 - **evidencias:** N/A

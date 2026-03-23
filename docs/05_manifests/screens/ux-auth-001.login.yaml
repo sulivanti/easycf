@@ -1,24 +1,24 @@
 # ============================================================
 # Screen Manifest — UX-AUTH-001
 # Tela: Login + Recuperação de Senha + Reset de Senha
-# Módulo: MOD-001 (Backoffice Admin)
-# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-15
+# Módulo: MOD-000 (Foundation)
+# Schema: v1 | Versão: 1.1.0 | Data: 2026-03-22
 # ============================================================
 
 schema_version: "v1"
 screen_id: "UX-AUTH-001"
 name: "Login e Recuperação de Senha"
 type: auth
-module: "MOD-001"
+module: "MOD-000"
 route: "/login"
 auth_required: false
 pre_auth: true
 layout: centered
 
 linked_stories:
-  - "US-MOD-001"       # épico pai — governa o ciclo de aprovação
-  - "US-MOD-001-F01"   # Shell de Autenticação e Layout Base
-  - "US-MOD-001-F02"   # Telemetria de UI e Rastreabilidade do Shell
+  - "US-MOD-000"       # épico pai Foundation
+  - "US-MOD-000-F01"   # Autenticação e Gestão de Sessão
+  - "US-MOD-000-F02"   # RBAC e Autorização
 
 telemetry_defaults:
   package: "@easycf/ui-telemetry"
@@ -43,6 +43,12 @@ panels:
     default: false
     # Painel ativado via URL: /login?token=<reset_token>
     actions_scope: [submit_reset_password]
+
+  - id: "mfa"
+    label: "Verificação MFA"
+    default: false
+    # Painel ativado quando login retorna { mfa_required: true, temp_token }
+    actions_scope: [submit_mfa, navigate_to_login]
 
 # ─── AÇÕES ───────────────────────────────────────────────────
 actions:
@@ -119,6 +125,25 @@ actions:
     telemetry_override:
       include_tenant_id: false
 
+  # ── Painel: mfa ──────────────────────────────────────────────
+  - id: submit_mfa
+    label: "Verificar código MFA (TOTP)"
+    type: submit
+    operation_id: auth_mfa_verify
+    http_method: POST
+    endpoint: "/api/v1/auth/mfa/verify"
+    client_only: false
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      enumeration_safe: false
+      user_message: "Código inválido. Tente novamente."
+    telemetry_override:
+      include_tenant_id: false
+    notes: "Recebe temp_token (do login) + totp_code. Retorna access_token + refresh_token se válido."
+
 # ─── COMPONENTES ─────────────────────────────────────────────
 components:
 
@@ -145,6 +170,12 @@ components:
     description: "Formulário com campos nova_senha e confirmar_senha. Token lido do query param ?token=. Valida política de senha inline antes do submit."
     conditional: "panel == 'reset-password'"
     actions_used: [submit_reset_password]
+
+  - id: "mfa-form"
+    name: "MfaForm"
+    description: "Formulário com campo totp_code (6 dígitos, auto-focus, auto-submit ao completar). Link 'Voltar ao login' para cancelar. temp_token mantido em memória (não localStorage)."
+    conditional: "panel == 'mfa'"
+    actions_used: [submit_mfa, navigate_to_login]
 
   - id: "auth-toast-error"
     name: "AuthToastError"
@@ -187,6 +218,10 @@ notes: |
   - Reset OK (200):          Toast de sucesso + redirect para /login (painel login, sem token na URL)
 
 changelog:
+  - version: "1.1.0"
+    date: "2026-03-22"
+    author: "arquitetura"
+    description: "Correção módulo MOD-001→MOD-000; linked_stories para US-MOD-000-F01/F02; painel MFA + ação submit_mfa + componente MfaForm adicionados."
   - version: "1.0.0"
     date: "2026-03-15"
     author: "arquitetura"

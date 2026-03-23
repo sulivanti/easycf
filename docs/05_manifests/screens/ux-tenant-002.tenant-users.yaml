@@ -1,0 +1,183 @@
+# ============================================================
+# Screen Manifest — UX-TENANT-002
+# Tela: Vinculação Usuário-Filial
+# Módulo: MOD-000 (Foundation)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-22
+# ============================================================
+# Lista de usuários vinculados a uma filial específica.
+# Vincular/desvincular usuários, alterar role no contexto.
+# Acessível via ação "Usuários" na tela de filiais.
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-TENANT-002"
+name: "Usuários da Filial"
+type: list
+module: "MOD-000"
+route: "/tenants/:id/users"
+auth_required: true
+layout: shell
+
+linked_stories:
+  - "US-MOD-000"
+  - "US-MOD-000-F08"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+# ─── AÇÕES ───────────────────────────────────────────────────
+actions:
+
+  - id: load_tenant_users
+    label: "Carregar usuários vinculados à filial"
+    type: view
+    operation_id: tenant_users_list
+    http_method: GET
+    endpoint: "/api/v1/tenants/:id/users"
+    client_only: false
+    requires_scope: ["tenants:branch:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os usuários da filial."
+
+  - id: add_user_to_tenant
+    label: "Vincular usuário à filial"
+    type: submit
+    operation_id: tenant_users_add
+    http_method: POST
+    endpoint: "/api/v1/tenants/:id/users"
+    client_only: false
+    requires_scope: ["tenants:branch:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível vincular o usuário."
+    notes: "Body: { userId, roleId }. Select de usuários não-vinculados + select de role."
+
+  - id: update_user_role
+    label: "Alterar role do usuário na filial"
+    type: submit
+    operation_id: tenant_users_update
+    http_method: PUT
+    endpoint: "/api/v1/tenants/:id/users/:userId"
+    client_only: false
+    requires_scope: ["tenants:branch:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível alterar o papel do usuário."
+
+  - id: suspend_user
+    label: "Suspender usuário na filial"
+    type: submit
+    operation_id: tenant_users_update
+    http_method: PATCH
+    endpoint: "/api/v1/tenants/:id/users/:userId"
+    client_only: false
+    requires_scope: ["tenants:branch:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível suspender o usuário."
+    notes: "PATCH com { status: 'BLOCKED' }. Modal de confirmação obrigatório."
+
+  - id: remove_user_from_tenant
+    label: "Desvincular usuário da filial"
+    type: submit
+    operation_id: tenant_users_remove
+    http_method: DELETE
+    endpoint: "/api/v1/tenants/:id/users/:userId"
+    client_only: false
+    requires_scope: ["tenants:branch:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível desvincular o usuário."
+    notes: "Modal de confirmação obrigatório. Não pode desvincular o último admin da filial (422)."
+
+  - id: navigate_back
+    label: "Voltar para lista de filiais"
+    type: navigate
+    client_only: true
+    loading_state: none
+    requires_scope: ["tenants:branch:read"]
+
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
+
+  - id: "tenant-users-header"
+    name: "TenantUsersHeader"
+    description: |
+      Cabeçalho com título "Usuários da Filial '{nome}'", contador de membros,
+      botão "Voltar" e botão "Vincular Usuário" (visível com scope tenants:branch:write).
+    actions_used: [add_user_to_tenant, navigate_back]
+
+  - id: "tenant-users-table"
+    name: "TenantUsersTable"
+    description: |
+      Tabela de membros da filial com colunas:
+        - Nome do usuário
+        - E-mail (mascarado — LGPD)
+        - Role na filial (select inline para alteração rápida)
+        - Status badge: ACTIVE=verde, BLOCKED=vermelho
+        - Ações: Alterar Role | Suspender | Desvincular
+      Estado vazio: "Nenhum usuário vinculado a esta filial."
+    actions_used: [load_tenant_users, update_user_role, suspend_user, remove_user_from_tenant]
+
+  - id: "add-user-drawer"
+    name: "AddUserDrawer"
+    description: |
+      Drawer lateral para vincular novo usuário:
+        - Search/select de usuários disponíveis (não vinculados à filial)
+        - Select de role para o contexto da filial
+      Debounce 400ms na busca de usuários.
+    actions_used: [add_user_to_tenant]
+
+  - id: "suspend-user-modal"
+    name: "SuspendUserModal"
+    description: |
+      Modal de confirmação para suspender usuário.
+      Título: "Suspender usuário?"
+      Corpo: "O usuário '{nome}' perderá acesso a esta filial."
+      LGPD: exibe NOME, nunca e-mail.
+    actions_used: [suspend_user]
+
+  - id: "remove-user-modal"
+    name: "RemoveUserModal"
+    description: |
+      Modal de confirmação para desvincular usuário.
+      Título: "Desvincular usuário?"
+      Corpo: "O usuário '{nome}' será removido desta filial."
+      Bloqueado se é o último admin (422 do backend + validação client-side).
+    actions_used: [remove_user_from_tenant]
+
+# ─── NAVEGAÇÃO ───────────────────────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+# ─── REGRAS OBRIGATÓRIAS ────────────────────────────────────
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Scope tenants:branch:read obrigatório para visualização — sem ele, redirect /dashboard com Toast.
+  2. Scope tenants:branch:write obrigatório para vincular/desvincular/suspender. Botões ocultos sem scope.
+  3. LGPD: e-mail mascarado na tabela e NUNCA exibido em modais ou toasts. Apenas nome.
+  4. Último admin da filial não pode ser desvinculado nem suspenso (proteção contra lockout).
+  5. Modal de confirmação OBRIGATÓRIO para suspender e desvincular.
+  6. Role do usuário editável inline via select na tabela (salva automaticamente).
+  7. Domain events: tenant_user.added, tenant_user.role_changed, tenant_user.blocked, tenant_user.removed.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-22"
+    author: "arquitetura"
+    description: "Criação inicial. Gestão de membros da filial com vinculação, alteração de role, suspensão e desvinculação."

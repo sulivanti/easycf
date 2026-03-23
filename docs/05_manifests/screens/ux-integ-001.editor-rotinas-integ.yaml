@@ -13,7 +13,7 @@ route: "/integracoes/rotinas"
 auth_required: true
 pre_auth: false
 layout: shell
-notes: "Extensão de UX-ROTINA-001 do MOD-007. Mesmo split-view; abas adicionais específicas de integração."
+# Extensão de UX-ROTINA-001 do MOD-007. Mesmo split-view; abas adicionais específicas de integração.
 
 linked_stories:
   - "US-MOD-008"

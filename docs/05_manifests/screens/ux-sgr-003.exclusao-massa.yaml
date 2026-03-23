@@ -46,7 +46,7 @@ actions:
     operation_id: null
     http_method: DELETE
     endpoint: null
-    notes: "operationId depende do módulo destino. Executa soft delete: deleted_at + status=INACTIVE."
+    notes: "DYNAMIC ENDPOINT: operation_id e endpoint resolvidos em runtime via target_endpoints do context_framer tipo OPERACAO (PEND-SGR-04). Executa soft delete: deleted_at + status=INACTIVE."
     requires_scope: []
     loading_state: button
     error_handling:

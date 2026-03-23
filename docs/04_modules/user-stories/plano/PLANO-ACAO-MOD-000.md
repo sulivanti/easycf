@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-000 Foundation
 
-> **Versao:** 1.1.0 | **Data:** 2026-03-22 | **Owner:** arquitetura
+> **Versao:** 1.3.0 | **Data:** 2026-03-22 | **Owner:** arquitetura
 > **Estado atual do modulo:** DRAFT (v0.10.0) | **Epico:** READY (v0.9.0) | **Features:** 17/17 READY
 >
-> Fases 0-2 concluidas. Fase 3 (Validacao) em andamento — validate-all executado, 4 pendencias ABERTAS identificadas (PENDENTE-008 a 011). Proximo passo: resolver pendencias de Fase 3 e re-executar validacao.
+> Fases 0-3 concluidas. Todas as 12 pendencias IMPLEMENTADA (incluindo 008-012 da Fase 3, resolvidas em 2026-03-22). Validate-all re-executado: 29/29 manifests PASS, 0 violacoes. Proximo passo: executar `/promote-module` para selar MOD-000 como READY.
 
 ---
 
@@ -15,14 +15,14 @@
 | Features F01-F17 | 17/17 READY | Todas seladas — F01 (Auth), F02 (MFA), F03 (SSO), F04 (Forgot), F05 (Users), F06 (RBAC), F07 (Tenants), F08 (Profile), F09 (Tenant-User), F10 (Change-Pwd), F11 (GET /info), F12 (Scopes CRUD), F13 (Telemetria UI), F14 (Correlation E2E), F15 (CI Gates), F16 (Storage), F17 (Apple SSO) |
 | Scaffold (forge-module) | CONCLUIDO | mod-000-foundation/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Todos os 11 agentes executados, v0.10.0 atingida |
-| PENDENTEs | 4 abertas | 11 total: 7 IMPLEMENTADA, 4 ABERTA (008-011 da Fase 3) |
+| PENDENTEs | 0 abertas | 12 total: 12/12 IMPLEMENTADA (008-012 resolvidas 2026-03-22) |
 | ADRs | 4 aceitas (2 arquivos) | Nivel 2 requer minimo 3 — atendido (ADR-001/002/003 em ADR-001.md + ADR-004.md) |
 | Amendments | 5 criados | DOC-PADRAO-005-C01, DOC-FND-000-M01, M02, M03, M04 |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
 | CHANGELOG | v0.10.0 | Ultima entrada 2026-03-19 (Etapa 4 pipeline) |
-| Screen Manifests | 6 existem | ux-auth-001, ux-usr-001/002/003, ux-dash-001, ux-shell-001 |
+| Screen Manifests | 5 proprios MOD-000 | ux-auth-001, ux-auth-003, ux-role-001, ux-tenant-001, ux-tenant-002 (PENDENTE-012 IMPLEMENTADA) |
 | Dependencias | 0 upstream | MOD-000 e raiz — camada topologica 0 (11 dependentes) |
-| Bloqueios | 1 como bloqueador | BLK-001: MOD-002 bloqueado por amendment F05 (users_invite_resend) |
+| Bloqueios | 0 pendencias bloqueantes | BLK-001 (MOD-002 → amendment F05) resolvido pos-enriquecimento. 0 pendencias ABERTA. |
 
 ---
 
@@ -489,9 +489,9 @@ Registrar como scopes genericos 2-seg (`storage:upload`, `storage:read`).
 
 ---
 
-### Fase 3: Validacao — EM ANDAMENTO
+### Fase 3: Validacao — CONCLUIDA
 
-O `/validate-all` foi executado em 2026-03-20 e identificou 4 novas pendencias ABERTAS (PENDENTE-008 a 011), todas no dominio UX (screen manifests). Estas pendencias precisam ser resolvidas antes de re-executar a validacao e prosseguir para promocao.
+O `/validate-all` foi executado em 2026-03-20 e identificou 5 pendencias (PENDENTE-008 a 012) no dominio UX (screen manifests). Todas foram resolvidas em 2026-03-22: manifests reescritos para schema v1, module corrigido, Screen IDs padronizados, 4 novos manifests criados. O `/validate-all` foi re-executado em 2026-03-22 com resultado PASS: 29/29 manifests validos, 5/5 manifests proprios MOD-000 aprovados em todos os 5 pilares (EX-UX-001..005). Fase 3 CONCLUIDA.
 
 > **Decision tree de validacao:**
 >
@@ -506,245 +506,23 @@ O `/validate-all` foi executado em 2026-03-20 e identificou 4 novas pendencias A
 >     └── Endpoints Fastify      → /validate-endpoint
 > ```
 
-#### Pendentes da Fase 3 — Detalhamento Completo
+#### Pendentes da Fase 3 — Resolvidas (2026-03-22)
 
-> As 4 pendencias abaixo foram identificadas pelo `/validate-all` em 2026-03-20 e bloqueiam a promocao do modulo. Todas sao do dominio UX (screen manifests). Os pilares tecnicos (BR, FR, DATA, INT, SEC, NFR) estao limpos.
->
-> **Ordem de resolucao sugerida:** 008 → 009 → 010 → 011 (respeita cadeia de dependencias).
+> 5 pendencias UX identificadas pelo `/validate-all` (2026-03-20/22). Todas resolvidas em 2026-03-22. Detalhes completos em `pen-000-pendente.md`.
 
----
-
-#### PENDENTE-008 — Screen manifests ux-usr-001/002/003 incompativeis com schema v1
-
-- **status:** ABERTA
-- **severidade:** CRITICA
-- **dominio:** UX
-- **tipo:** CONTRADICAO
-- **origem:** VALIDATE-ALL (Fase 3)
-- **criado_em:** 2026-03-20
-- **criado_por:** validate-all
-- **rastreia_para:** UX-000, DOC-UX-010, screen-manifest.v1.schema.json
-- **tags:** screen-manifest, schema-v1, migracao, reescrita
-- **dependencias:** []
-
-**Questao:**
-Os 3 screen manifests de gestao de usuarios (`ux-usr-001.users-list.yaml`, `ux-usr-002.user-form.yaml`, `ux-usr-003.user-invite.yaml`) foram escritos contra uma versao anterior/informal do formato e **nunca foram migrados** para o schema JSON v1 (`screen-manifest.v1.schema.json`). A divergencia e estrutural — nao se trata de campos faltantes isolados:
-
-| Problema | Detalhe |
-|---|---|
-| 4 campos obrigatorios ausentes | `type`, `module`, `route`, `auth_required` |
-| 6 campos extras (additionalProperties: false) | `manifest_version`, `entity_type`, `routes`, `permissions`, `ui_rules`, `error_mapping` |
-| Formato `actions` incompativel | Usam `action`/`client_only`/`operation_ids`/`permission` em vez de `id`/`label`/`type`/`operation_id`/`requires_scope` |
-| Formato `telemetry_defaults` incompativel | Usam `event_name`/`required_fields`/`propagate_headers` em vez de `package`/`include_tenant_id`/`propagate_correlation_id`/`capture_duration_ms` |
-
-**Impacto:**
-- Gate CI (`validate:manifests`) falha para os 3 manifests — bloqueador de promocao
-- Screen manifests nao podem ser consumidos por pipelines de geracao de codigo
-- 33 violacoes criticas reportadas na validacao Fase 3
-
-**Opcao A — Reescrita completa no formato schema v1:**
-Migrar os dados semanticos (action_ids, scopes, operations — que estao corretos) para a estrutura canonica do schema v1.
-
-- Pros: Resolucao definitiva, passa Gate CI, habilita geracao de codigo
-- Contras: Trabalho manual significativo (3 manifests)
-
-**Opcao B — Evoluir o schema v1 para aceitar campos legados:**
-Adicionar campos opcionais ao schema para retrocompatibilidade.
-
-- Pros: Zero reescrita de manifests existentes
-- Contras: Polui o schema com campos legados, divergencia com normativos, debt permanente
-
-**Recomendacao:** Opcao A — reescrita. Os dados semanticos estao corretos; apenas a estrutura precisa ser migrada.
-
-**Acao sugerida:**
-
-| Skill | Proposito | Quando executar |
-|---|---|---|
-| Edicao direta manifests | Reescrever ux-usr-001/002/003 no formato schema v1, migrando dados semanticos | Imediato (DRAFT) |
-| `/validate-all` | Re-validar apos reescrita | Apos correcao |
-
-**Comandos:**
-```
-/manage-pendentes decide PEN-000 PENDENTE-008 opcao=A
-# Editar manifests manualmente (reescrita schema v1)
-/manage-pendentes implement PEN-000 PENDENTE-008
-```
-
----
-
-#### PENDENTE-009 — ux-auth-001 com atribuicao de modulo errada (MOD-001 → MOD-000)
-
-- **status:** ABERTA
-- **severidade:** ALTA
-- **dominio:** UX
-- **tipo:** CONTRADICAO
-- **origem:** VALIDATE-ALL (Fase 3)
-- **criado_em:** 2026-03-20
-- **criado_por:** validate-all
-- **rastreia_para:** UX-000 §UX-001, US-MOD-000-F01, US-MOD-000-F02
-- **tags:** screen-manifest, module-attribution, ux-auth-001
-- **dependencias:** []
-
-**Questao:**
-O manifest `ux-auth-001.login.yaml` declara `module: "MOD-001"` e `linked_stories: ["US-MOD-001", "US-MOD-001-F01", "US-MOD-001-F02"]`, porem o fluxo de autenticacao (Login/Logout/MFA) pertence ao **MOD-000 (Foundation)** conforme UX-000 §UX-001 e §UX-002, que rastreiam para `US-MOD-000-F01` e `US-MOD-000-F02`.
-
-**Impacto:**
-- Rastreabilidade cruzada modulo ↔ manifest quebrada
-- Queries de cobertura por modulo excluem este manifest do MOD-000
-- Pode causar conflito se MOD-001 tiver seus proprios manifests de auth
-
-**Opcao A — Corrigir referencias para MOD-000:**
-Alterar `module: "MOD-000"`, header comment para "MOD-000 (Foundation)", e `linked_stories` para `["US-MOD-000", "US-MOD-000-F01", "US-MOD-000-F02"]`.
-
-- Pros: Alinha com UX-000, corrige rastreabilidade
-- Contras: Nenhum relevante
-
-**Opcao B — Manter MOD-001 e atualizar UX-000:**
-Se a autenticacao foi intencionalmente movida para MOD-001.
-
-- Pros: Nenhum — contradiz a arquitetura documentada
-- Contras: Foundation sem auth nao faz sentido
-
-**Recomendacao:** Opcao A — corrigir o manifest. A autenticacao e inequivocamente Foundation (MOD-000).
-
-**Acao sugerida:**
-
-| Skill | Proposito | Quando executar |
-|---|---|---|
-| Edicao direta ux-auth-001 | Corrigir `module`, header e `linked_stories` | Imediato |
-
-**Comandos:**
-```
-/manage-pendentes decide PEN-000 PENDENTE-009 opcao=A
-# Editar ux-auth-001.login.yaml
-/manage-pendentes implement PEN-000 PENDENTE-009
-```
-
----
-
-#### PENDENTE-010 — Divergencia de Screen IDs entre UX-000 e manifests (UX-USER vs UX-USR)
-
-- **status:** ABERTA
-- **severidade:** MEDIA
-- **dominio:** UX
-- **tipo:** CONTRADICAO
-- **origem:** VALIDATE-ALL (Fase 3)
-- **criado_em:** 2026-03-20
-- **criado_por:** validate-all
-- **rastreia_para:** UX-000 §UX-004, UX-000 §UX-005
-- **tags:** screen-id, nomenclatura, rastreabilidade
-- **dependencias:** [PENDENTE-008]
-
-**Questao:**
-UX-000 define Screen IDs com prefixo `UX-USER-` (ex: `UX-USER-001` para Gestao de Usuarios, `UX-USER-002` para Perfil), enquanto os manifests usam prefixo `UX-USR-` (ex: `UX-USR-001`, `UX-USR-002`, `UX-USR-003`). Alem da divergencia de nomenclatura, ha conflito semantico: UX-000 define `UX-USER-002` como "Perfil do Usuario" mas o manifest `ux-usr-002` e um "Formulario de Cadastro".
-
-**Impacto:**
-- Rastreabilidade UX-000 ↔ manifests quebrada
-- Ambiguidade sobre qual tela cada Screen ID representa
-- Validacoes cruzadas falham por nao encontrar correspondencia
-
-**Opcao A — Padronizar em UX-USR- (curto):**
-Atualizar UX-000 para usar `UX-USR-001/002/003` e ajustar a semantica (001=list, 002=form, 003=invite).
-
-- Pros: Consistente com manifests existentes e padrao de nomes curtos (`AUTH`, `USR`, `ORG`)
-- Contras: Requer atualizar UX-000
-
-**Opcao B — Padronizar em UX-USER- (longo):**
-Renomear manifests para `ux-user-001/002/003` e alinhar com UX-000.
-
-- Pros: Consistente com UX-000 atual
-- Contras: Requer renomear 3 manifests e atualizar todas as referencias
-
-**Opcao C — Manter ambos com mapeamento explicito:**
-Documentar equivalencia `UX-USER-xxx ↔ UX-USR-xxx` em UX-000.
-
-- Pros: Nenhuma mudanca de arquivo
-- Contras: Complexidade desnecessaria, debt de nomenclatura permanente
-
-**Recomendacao:** Opcao A — padronizar em `UX-USR-` (curto). Alinhado com padrao dos demais dominios (`AUTH`, `ORG`, `ROLE`, `TENANT`).
-
-**Acao sugerida:**
-
-| Skill | Proposito | Quando executar |
-|---|---|---|
-| Edicao direta UX-000 | Atualizar Screen IDs para UX-USR-xxx e alinhar semantica | Apos decisao |
-
-**Comandos:**
-```
-/manage-pendentes decide PEN-000 PENDENTE-010 opcao=A
-# Editar UX-000.md
-/manage-pendentes implement PEN-000 PENDENTE-010
-```
-
----
-
-#### PENDENTE-011 — Decisao sobre unificacao Login + Recuperacao de Senha em UX-AUTH-001
-
-- **status:** ABERTA
-- **severidade:** MEDIA
-- **dominio:** UX
-- **tipo:** DEC-TEC
-- **origem:** VALIDATE-ALL (Fase 3)
-- **criado_em:** 2026-03-20
-- **criado_por:** validate-all
-- **rastreia_para:** UX-000 §UX-001, UX-000 §UX-002, US-MOD-000-F01, US-MOD-000-F04
-- **tags:** screen-manifest, auth, login, forgot-password, UX-AUTH
-- **dependencias:** [PENDENTE-009]
-
-**Questao:**
-UX-000 define duas jornadas separadas com Screen IDs distintos:
-
-- **UX-001 (UX-AUTH-001):** Login / Logout / MFA
-- **UX-002 (UX-AUTH-002):** Recuperacao de Senha (forgot + reset)
-
-Porem o manifest `ux-auth-001.login.yaml` **unifica ambas** numa unica rota `/login` com 3 paineis (login, forgot-password, reset-password). Tambem falta o fluxo MFA descrito em UX-001.
-
-**Impacto:**
-- Divergencia entre spec (UX-000) e implementacao declarada (manifest)
-- Cobertura de telas: UX-AUTH-002 nao tem manifest proprio
-- Fluxo MFA sem representacao em nenhum manifest
-
-**Opcao A — Manter unificado e atualizar UX-000:**
-Aceitar que login + recuperacao vivem na mesma rota (SPA comum). Unificar UX-001/UX-002 em UX-000 sob `UX-AUTH-001`. Adicionar painel MFA ao manifest.
-
-- Pros: Reflete UX real (SPAs frequentemente unificam auth flows na mesma rota), manifest ja existe e funciona
-- Contras: Requer atualizar UX-000, painel MFA precisa ser adicionado
-
-**Opcao B — Separar em dois manifests:**
-Criar `ux-auth-002.forgot-password.yaml` e remover paineis forgot/reset do `ux-auth-001`.
-
-- Pros: Consistente com UX-000 atual, Screen IDs 1:1 com manifests
-- Contras: Na pratica sao a mesma rota SPA, separar pode ser artificial
-
-**Opcao C — Separar em tres manifests:**
-`ux-auth-001` (login+MFA), `ux-auth-002` (forgot), `ux-auth-003` (reset).
-
-- Pros: Granularidade maxima, rastreabilidade precisa
-- Contras: Over-engineering para fluxo simples, 3 manifests para 1 rota
-
-**Recomendacao:** Opcao A — manter unificado. Login + forgot + reset + MFA na mesma rota e padrao de mercado em SPAs. Atualizar UX-000 para refletir a unificacao e adicionar painel MFA ao manifest.
-
-**Acao sugerida:**
-
-| Skill | Proposito | Quando executar |
-|---|---|---|
-| Edicao direta UX-000 | Unificar UX-001/UX-002 sob UX-AUTH-001 | Apos decisao |
-| Edicao direta ux-auth-001 | Adicionar painel MFA (acao submit_mfa, endpoint /auth/mfa/verify) | Apos decisao |
-
-**Comandos:**
-```
-/manage-pendentes decide PEN-000 PENDENTE-011 opcao=A
-# Editar UX-000 e ux-auth-001
-/manage-pendentes implement PEN-000 PENDENTE-011
-```
-
----
+| # | ID | Severidade | Decisao | Artefato |
+|---|---|---|---|---|
+| 1 | PENDENTE-008 | CRITICA | Opcao A — Reescrita schema v1 | ux-usr-001/002/003 v2.0.0 |
+| 2 | PENDENTE-009 | ALTA | Opcao A — Corrigir MOD-001→MOD-000 | ux-auth-001 v1.1.0 |
+| 3 | PENDENTE-010 | MEDIA | Opcao A — Padronizar UX-USR- | UX-000 v0.3.0 |
+| 4 | PENDENTE-011 | MEDIA | Opcao A — Manter unificado + MFA | UX-000 v0.3.0, ux-auth-001 v1.1.0 |
+| 5 | PENDENTE-012 | ALTA | Opcao A — Criar 4 manifests | ux-auth-003, ux-role-001, ux-tenant-001, ux-tenant-002 v1.0.0 |
 
 #### Re-executar validacao apos resolucao das pendencias
 
 ```
 5    /validate-all docs/04_modules/mod-000-foundation/
-                           Orquestra TODAS as validacoes em sequencia:        A RE-EXECUTAR
+                           Orquestra TODAS as validacoes em sequencia:        CONCLUIDO (2026-03-22)
                            Internamente executa:
                              1. /qa (lint, links, metadados, EX-*, §N, ciclos)
                              2. /validate-manifest (screen manifests vs schema v1)
@@ -754,7 +532,7 @@ Criar `ux-auth-002.forgot-password.yaml` e remover paineis forgot/reset do `ux-a
                            Skills 3-5 sao executadas condicionalmente: se os
                            artefatos de codigo ainda nao existem, /validate-all
                            pula o validador e reporta "N/A — artefato ausente".
-                           Pre-condicao: PENDENTE-008 a 011 resolvidas
+                           Pre-condicao: PENDENTE-008 a 012 resolvidas
                            Pos-condicao: Relatorio consolidado pass/fail
 ```
 
@@ -769,12 +547,16 @@ Criar `ux-auth-002.forgot-password.yaml` e remover paineis forgot/reset do `ux-a
 
 5b   /validate-manifest ux-auth-001.login.yaml
                            Validar manifests contra schema v1:               INDIVIDUAL
-                           - ux-auth-001.login.yaml
-                           - ux-usr-001.users-list.yaml (reescrito)
-                           - ux-usr-002.user-form.yaml (reescrito)
-                           - ux-usr-003.user-invite.yaml (reescrito)
+                           - ux-auth-001.login.yaml (corrigido PENDENTE-009)
+                           - ux-usr-001.users-list.yaml (reescrito PENDENTE-008)
+                           - ux-usr-002.user-form.yaml (reescrito PENDENTE-008)
+                           - ux-usr-003.user-invite.yaml (reescrito PENDENTE-008)
                            - ux-dash-001.main.yaml
                            - ux-shell-001.app-shell.yaml
+                           - ux-auth-003.sessions.yaml (novo PENDENTE-012)
+                           - ux-role-001.roles-list.yaml (novo PENDENTE-012)
+                           - ux-tenant-001.tenants-list.yaml (novo PENDENTE-012)
+                           - ux-tenant-002.tenant-users.yaml (novo PENDENTE-012)
                            Verifica: DOC-UX-010, operationId, RBAC,
                            telemetria, permissions vs DOC-FND-000 §2
 
@@ -793,7 +575,7 @@ Criar `ux-auth-002.forgot-password.yaml` e remover paineis forgot/reset do `ux-a
 | # | Validador | Aplicavel (nivel) | Executavel agora | Artefatos |
 |---|-----------|-------------------|------------------|-----------|
 | 1 | `/qa` | SIM (todos) | SIM | mod.md, requirements/*, adr/*, CHANGELOG.md |
-| 2 | `/validate-manifest` | SIM (6 manifests existem) | SIM (apos PENDENTE-008) | ux-auth-001, ux-usr-001/002/003, ux-dash-001, ux-shell-001 |
+| 2 | `/validate-manifest` | SIM (manifests existem) | SIM — CONCLUIDO | ux-auth-001, ux-auth-003, ux-role-001, ux-tenant-001, ux-tenant-002 (MOD-000) + ux-usr-001/002/003 (MOD-002) |
 | 3 | `/validate-openapi` | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | apps/api/openapi/v1.yaml (nao existe) |
 | 4 | `/validate-drizzle` | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | apps/api/src/modules/foundation/schema.ts (nao existe) |
 | 5 | `/validate-endpoint` | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | apps/api/src/modules/foundation/routes/ (nao existe) |
@@ -804,10 +586,10 @@ Criar `ux-auth-002.forgot-password.yaml` e remover paineis forgot/reset do `ux-a
 10   /promote-module docs/04_modules/mod-000-foundation/
                            Selar mod-000 como READY:                         A EXECUTAR (apos fase 3)
                            Gate 0 — Definition of Ready (DoR):
-                             [DoR-1] PENDENTEs resolvidos? .............. NAO (4 ABERTA: 008-011)
+                             [DoR-1] PENDENTEs resolvidos? .............. SIM (12/12 IMPLEMENTADA)
                              [DoR-2] Arquivos de requisito existem? ..... SIM (10/10)
-                             [DoR-3] Zero erros de lint? ................ A VERIFICAR (re-executar /qa)
-                             [DoR-4] Screen manifests validados? ........ NAO (PENDENTE-008 bloqueia)
+                             [DoR-3] Zero erros de lint? ................ SIM (validate-all 2026-03-22 PASS)
+                             [DoR-4] Screen manifests validados? ........ SIM (5/5 manifests PASS)
                              [DoR-5] ADRs conforme nivel? ............... SIM (4 >= 3 para N2)
                              [DoR-6] CHANGELOG atualizado? .............. SIM (v0.10.0)
                              [DoR-7] Bloqueios cross-modulo? ............ SIM (0 bloqueios recebidos)
@@ -825,12 +607,13 @@ Criar `ux-auth-002.forgot-password.yaml` e remover paineis forgot/reset do `ux-a
 
 #### Bloqueadores para Promocao
 
-1. **PENDENTE-008 (CRITICA):** 3 screen manifests incompativeis com schema v1. Ate serem reescritos, `/validate-manifest` falha com 33 violacoes. Este e o bloqueador principal — resolver primeiro.
-2. **PENDENTE-009 (ALTA):** ux-auth-001 atribuido a MOD-001 em vez de MOD-000. Quebra rastreabilidade modulo↔manifest.
-3. **PENDENTE-010 (MEDIA):** Divergencia de Screen IDs (UX-USER vs UX-USR). Depende de PENDENTE-008.
-4. **PENDENTE-011 (MEDIA):** Decisao pendente sobre unificacao de fluxos auth em UX-AUTH-001. Depende de PENDENTE-009.
+Todos os bloqueadores foram resolvidos em 2026-03-22:
 
-> **Ordem sugerida de resolucao:** 008 → 009 → 010 → 011 (respeita dependencias).
+1. ~~**PENDENTE-008 (CRITICA):**~~ IMPLEMENTADA — manifests ux-usr-001/002/003 reescritos para schema v1 (v2.0.0).
+2. ~~**PENDENTE-009 (ALTA):**~~ IMPLEMENTADA — ux-auth-001 module corrigido para MOD-000.
+3. ~~**PENDENTE-010 (MEDIA):**~~ IMPLEMENTADA — Screen IDs padronizados UX-USR em UX-000.
+4. ~~**PENDENTE-011 (MEDIA):**~~ IMPLEMENTADA — Login+Forgot unificados em UX-AUTH-001.
+5. ~~**PENDENTE-012 (ALTA):**~~ IMPLEMENTADA — 4 manifests criados (ux-auth-003, ux-role-001, ux-tenant-001, ux-tenant-002). Cobertura: 5/5 telas com manifest.
 
 ### Fase 5: Pos-READY (quando necessario)
 
@@ -923,10 +706,10 @@ Criar `ux-auth-002.forgot-password.yaml` e remover paineis forgot/reset do `ux-a
                              Todos devem estar IMPLEMENTADA, DECIDIDA ou CANCELADA.
 
                            Estado atual MOD-000:
-                             PEN-000: 11 itens total
-                               7 IMPLEMENTADA (001-007)
-                               4 ABERTA (008-011) ← bloqueiam DoR-1
-                             SLA: PENDENTE-008 (CRITICA) criada 2026-03-20
+                             PEN-000: 12 itens total
+                               12 IMPLEMENTADA (001-012) ← DoR-1 atendido
+                               0 ABERTA
+                             Todas as pendencias resolvidas em 2026-03-22
 ```
 
 #### Painel de Pendencias — Resumo Individual
@@ -940,10 +723,11 @@ Criar `ux-auth-002.forgot-password.yaml` e remover paineis forgot/reset do `ux-a
 | PENDENTE-005 | IMPLEMENTADA | MEDIA | ARC | Opcao A — 422 para token reset expirado | BR-000 v0.6.0 |
 | PENDENTE-006 | IMPLEMENTADA | — | SEC/DATA | Opcao A — migracao scopes 3-seg | SEC-000, SEC-002, DATA-000 |
 | PENDENTE-007 | IMPLEMENTADA | ALTA | SEC | Opcao A — scopes storage 3-seg | DOC-FND-000 v1.3.0 |
-| PENDENTE-008 | **ABERTA** | **CRITICA** | UX | — | — |
-| PENDENTE-009 | **ABERTA** | **ALTA** | UX | — | — |
-| PENDENTE-010 | **ABERTA** | **MEDIA** | UX | — | — |
-| PENDENTE-011 | **ABERTA** | **MEDIA** | UX | — | — |
+| PENDENTE-008 | IMPLEMENTADA | CRITICA | UX | Opcao A — manifests reescritos schema v1 | ux-usr-001/002/003 v2.0.0 |
+| PENDENTE-009 | IMPLEMENTADA | ALTA | UX | Opcao A — module corrigido MOD-001→MOD-000 | ux-auth-001 atualizado |
+| PENDENTE-010 | IMPLEMENTADA | MEDIA | UX | Opcao A — Screen IDs padronizados UX-USR | UX-000 atualizado |
+| PENDENTE-011 | IMPLEMENTADA | MEDIA | UX | Opcao A — Login+Forgot unificados em UX-AUTH-001 | ux-auth-001 v1.0.0 |
+| PENDENTE-012 | IMPLEMENTADA | ALTA | UX | Opcao A — 4 manifests criados | ux-auth-003, ux-role-001, ux-tenant-001, ux-tenant-002 |
 
 > Detalhamento completo: resolvidas em [Fase 2](#pendentes-resolvidas-no-enriquecimento--detalhamento-completo) | abertas em [Fase 3](#pendentes-da-fase-3--detalhamento-completo).
 
@@ -972,30 +756,24 @@ mod-000-foundation/ (stubs DRAFT)       ← Fase 1: CONCLUIDA (forge-module v0.1
   ▼
 mod-000 enriquecido (DRAFT v0.10.0)     ← Fase 2: CONCLUIDA (11 agentes, 7 PENDENTEs resolvidas)
   │
-  ├── /validate-all executado 2026-03-20
-  │     ├── /qa .................. executado (findings parciais)
-  │     ├── /validate-manifest ... executado → 4 PENDENTEs ABERTAS (008-011)
+  ├── /validate-all executado 2026-03-20 → 5 PENDENTEs identificadas (008-012)
+  │     ├── PENDENTE-008 a 012 IMPLEMENTADAS em 2026-03-22
+  │     └── Manifests criados/reescritos: auth-001, auth-003, role-001, tenant-001, tenant-002
+  │
+  ├── /validate-all re-executado 2026-03-22 (pos-correcoes)
+  │     ├── /qa .................. PASS (lint:docs OK, validate:manifests 29/29)
+  │     ├── /validate-manifest ... PASS (5/5 manifests MOD-000 aprovados)
   │     ├── /validate-openapi .... FUTURO (pos-codigo)
   │     ├── /validate-drizzle .... FUTURO (pos-codigo)
   │     └── /validate-endpoint ... FUTURO (pos-codigo)
   │
-  ├── ★ PROXIMO PASSO: resolver PENDENTE-008 a 011 (UX/manifests)
-  │     ├── 008 (CRITICA) reescrever ux-usr-001/002/003 formato schema v1
-  │     ├── 009 (ALTA) corrigir module MOD-001→MOD-000 em ux-auth-001
-  │     ├── 010 (MEDIA) padronizar Screen IDs UX-USR em UX-000
-  │     └── 011 (MEDIA) decidir unificacao Login+Forgot em UX-AUTH-001
-  │
-  ├── Re-executar /validate-all apos correcoes
-  │
-  ├── /manage-pendentes .......... SOB DEMANDA (ciclo: create → analyze → decide → implement)
-  │     └── SLA: BLOQUEANTE 7d | ALTA 14d | MEDIA 30d | BAIXA 90d
+  ├── 12/12 PENDENTEs IMPLEMENTADA — DoR-1 atendido
   │
   ▼
-mod-000 validado (DRAFT)                ← Fase 3: EM ANDAMENTO (4 pendencias ABERTAS)
+mod-000 validado (DRAFT)                ← Fase 3: CONCLUIDA (0 pendencias ABERTAS, 29/29 manifests PASS)
   │
-  ├── Gate 0 (DoR): 3/7 atendidos, 2 NAO, 2 A VERIFICAR
-  │     NAO: DoR-1 (pendentes), DoR-4 (manifests)
-  │     A VERIFICAR: DoR-3 (lint), depende de re-validacao
+  ├── ★ PROXIMO PASSO: executar /promote-module
+  ├── Gate 0 (DoR): 7/7 atendidos
   │
   ▼
 mod-000 selado (READY)                  ← Fase 4: A EXECUTAR (apos fase 3)
@@ -1021,21 +799,22 @@ BLK-001: MOD-002 depende de amendment F05 (users_invite_resend) em MOD-000.
 | Nivel 2 — DDD-lite + Clean Completo | Score 6/6 nos gatilhos DOC-ESC-001 §4.2. Complexidade intrinseca alta: auth, RBAC multi-tenant, SSO, MFA, audit, domain events com sensitivity_level. Requer minimo 3 ADRs (tem 4). |
 | Alto volume de amendments pre-READY | 5 amendments criados antes da promocao (DOC-FND-000-M01 a M04 + DOC-PADRAO-005-C01). Isso indica que o modulo e altamente iterado — outros modulos (MOD-006, MOD-009, MOD-010) ja demandam extensoes no catalogo de scopes do Foundation. |
 | Bloqueador de MOD-002 (BLK-001) | MOD-002 depende do endpoint `users_invite_resend` (POST /api/v1/users/:id/invite/resend) que foi adicionado em FR-006 (CHANGELOG v0.3.0). O BLK-001 pode ser resolvido pos-promocao. |
-| Pendencias Fase 3 concentradas em UX | Todas as 4 pendencias abertas (008-011) sao do dominio UX (screen manifests). Os pilares tecnico (BR, FR, DATA, INT, SEC, NFR) estao limpos. A resolucao e localizada — nao afeta o nucleo de requisitos. |
-| 6 screen manifests | ux-auth-001, ux-usr-001/002/003, ux-dash-001, ux-shell-001. Os 3 manifests de usuarios (ux-usr) precisam ser reescritos para schema v1. |
+| Pendencias Fase 3 resolvidas | As 5 pendencias de UX (008-012) foram todas IMPLEMENTADAS em 2026-03-22. Manifests reescritos, module corrigido, Screen IDs padronizados, 4 novos manifests criados. Nucleo de requisitos e pilares tecnicos limpos desde a Fase 2. |
+| Screen manifests com cobertura completa | 5 manifests YAML proprios do MOD-000: ux-auth-001 (login), ux-auth-003 (sessions), ux-role-001 (roles), ux-tenant-001 (tenants), ux-tenant-002 (tenant-users). Os manifests ux-usr-* pertencem a MOD-002 e os manifests ux-dash-001/ux-shell-001 a MOD-001. |
 
 ---
 
 ## Checklist Rapido — O que Falta para READY
 
-- [ ] Decidir e implementar PENDENTE-008 (CRITICA) — reescrever ux-usr-001/002/003 no formato schema v1
-- [ ] Decidir e implementar PENDENTE-009 (ALTA) — corrigir module em ux-auth-001 (MOD-001→MOD-000)
-- [ ] Decidir e implementar PENDENTE-010 (MEDIA) — padronizar Screen IDs em UX-000 (UX-USER→UX-USR)
-- [ ] Decidir e implementar PENDENTE-011 (MEDIA) — decidir unificacao Login+Forgot em UX-AUTH-001
-- [ ] Re-executar `/validate-all` no modulo — confirmar 0 erros
+- [x] Decidir e implementar PENDENTE-008 (CRITICA) — manifests ux-usr-001/002/003 reescritos schema v1 ✅
+- [x] Decidir e implementar PENDENTE-009 (ALTA) — module corrigido em ux-auth-001 (MOD-000) ✅
+- [x] Decidir e implementar PENDENTE-010 (MEDIA) — Screen IDs padronizados UX-USR em UX-000 ✅
+- [x] Decidir e implementar PENDENTE-011 (MEDIA) — Login+Forgot unificados em UX-AUTH-001 ✅
+- [x] Decidir e implementar PENDENTE-012 (ALTA) — 4 manifests criados (auth-003, role-001, tenant-001, tenant-002) ✅
+- [x] Re-executar `/validate-all` no modulo — 29/29 manifests PASS, 0 violacoes ✅
 - [ ] Executar `/promote-module docs/04_modules/mod-000-foundation/` — verificar Gate 0 (DoR) 7/7
 
-> **Nota:** Todas as pendencias sao do dominio UX (screen manifests). Os 10 artefatos de requisitos (BR, FR, DATA, INT, SEC, NFR, PEN) estao enriquecidos e validos. As 4 ADRs atendem o minimo para Nivel 2. Promover MOD-000 desbloqueia MOD-001 a MOD-011 e resolve potencialmente BLK-001 (MOD-002).
+> **Nota:** Todas as 12 pendencias estao IMPLEMENTADA. Os 10 artefatos de requisitos (BR, FR, DATA, INT, SEC, NFR, PEN) estao enriquecidos e validos. As 4 ADRs atendem o minimo para Nivel 2. 5 screen manifests proprios do MOD-000 validados. Promover MOD-000 desbloqueia MOD-001 a MOD-011.
 
 ---
 
@@ -1043,5 +822,6 @@ BLK-001: MOD-002 depende de amendment F05 (users_invite_resend) em MOD-000.
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 1.3.0 | 2026-03-22 | Atualizacao: PENDENTE-008 a 012 IMPLEMENTADAS. Fase 3 CONCLUIDA (validate-all re-executado: 29/29 manifests PASS). Screen Manifests agora 5 proprios MOD-000. Checklist 6/7 concluido — falta apenas /promote-module. Proximo passo: promocao |
+| 1.2.0 | 2026-03-22 | Atualizacao: PENDENTE-012 adicionada (5 screen manifests YAML ausentes). PENDENTEs total agora 12 (7 IMPLEMENTADA, 5 ABERTA: 008-012). Screen Manifests corrigido para refletir 1 manifest proprio MOD-000 (ux-auth-001). Bloqueadores atualizados, checklist expandido |
 | 1.1.0 | 2026-03-22 | Melhoria: detalhamento completo de TODAS as 11 pendencias inline — resolvidas (001-007) na Fase 2 e abertas (008-011) na Fase 3. Questao, opcoes com pros/contras, recomendacao, acao sugerida e resolucao para cada item |
-| 1.0.0 | 2026-03-22 | Recriacao completa: Fase 3 EM ANDAMENTO (4 pendencias ABERTAS 008-011 da validate-all), painel de pendencias atualizado (11 itens), rastreio de agentes, mapa de cobertura de validadores, bloqueadores para promocao, amendments detalhados, particularidades |

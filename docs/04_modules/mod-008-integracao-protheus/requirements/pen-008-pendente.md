@@ -15,12 +15,13 @@
 | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada: Opção A (seed automático HML com WireMock) |
 | 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-001 implementada: Opção B (tabela simples + trigger migração 10M; alerta 5M no NFR-008) |
 | 0.9.0  | 2026-03-19 | arquitetura | PENDENTE-002 implementada: Opção A (retenção 6 meses hot + archive S3 anonimizado; original purgado) |
+| 1.0.0  | 2026-03-22 | arquitetura | Sincronização status body: PENDENTE-006/007/008 → IMPLEMENTADA (correções já aplicadas em manifests e DOC-FND-000) |
 
 # PEN-008 — Questões Abertas da Integração Dinâmica Protheus
 
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-22
 - **rastreia_para:** US-MOD-008, MOD-008, NFR-008, SEC-008, INT-008, DATA-008
 
 ---
@@ -34,6 +35,9 @@
 | 3 | PENDENTE-003 | 🟡 MÉDIA | INT | LACUNA | ✅ IMPLEMENTADA | ~~Suporte a OAuth2 refresh token para Protheus~~ |
 | 4 | PENDENTE-004 | 🟠 ALTA | INT | DEP-EXT | 🟢 IMPLEMENTADA | Limite real de concurrency do Protheus em produção |
 | 5 | PENDENTE-005 | 🟡 MÉDIA | INFRA | LACUNA | ✅ IMPLEMENTADA | Seed de integration_services de HML para testes |
+| 6 | PENDENTE-006 | 🔴 BLOQUEANTE | UX | CONTRADIÇÃO | ✅ IMPLEMENTADA | ~~YAML key duplicada `notes` em ux-integ-001~~ |
+| 7 | PENDENTE-007 | 🟡 MÉDIA | UX | CONTRADIÇÃO | ✅ IMPLEMENTADA | ~~Action `navigate_to_case` type mismatch em ux-integ-002~~ |
+| 8 | PENDENTE-008 | 🟠 ALTA | UX | LACUNA | ✅ IMPLEMENTADA | ~~Scopes `integration:*` não registrados em DOC-FND-000 §2.2~~ |
 
 ---
 
@@ -335,3 +339,118 @@ Opção A — seed automático com mock server. Incluir na definição de DoR de
 > **Justificativa:** Testes automatizados funcionam sem setup manual. DoR de F01 satisfeito. Mock server (WireMock) provido pela infra de testes. Seed mantido como migration seed para garantir reprodutibilidade. Incluir no DoR de F01: "Seed de HML com mock server disponível em ambiente de testes."
 > **Artefato de saída:** DATA-008 (seed HML adicionado)
 > **Implementado em:** DATA-008
+
+---
+
+## ~~PENDENTE-006 — YAML key duplicada `notes` em ux-integ-001~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** BLOQUEANTE
+- **dominio:** UX
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-22
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-22
+- **decidido_por:** arquitetura
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-22
+- **modulo:** MOD-008
+- **rastreia_para:** ux-integ-001.editor-rotinas-integ.yaml
+- **tags:** yaml, gate-1, manifest, bloqueante
+- **sla_data:** —
+- **dependencias:** []
+
+### Questao
+
+O manifest `ux-integ-001.editor-rotinas-integ.yaml` contém chave YAML duplicada `notes` (linhas 16 e 250). YAML spec §3.2.1.3 proíbe chaves duplicadas no mesmo mapping. Parsers estritos falham ou ignoram silenciosamente um dos valores. O script `validate:manifests` já reporta este erro.
+
+### Impacto
+
+Gate 1 (DOC-ARC-003B) FAIL. Bloqueio de promoção. O manifest não pode ser consumido de forma confiável por ferramentas CI.
+
+### Acao Sugerida
+
+Renomear a primeira ocorrência `notes:` (linha 16) para `description:` ou mover o bloco de notas da linha 250 para dentro de um campo diferente.
+
+### Resolução
+
+> **Decisão:** Opção A — Remover chave YAML duplicada `notes`
+> **Decidido por:** arquitetura em 2026-03-22
+> **Justificativa:** Primeira ocorrência (linha 16) convertida para comentário `#`. Chave `notes:` única restante na linha 250. Gate 1 verde.
+> **Artefato de saída:** ux-integ-001.editor-rotinas-integ.yaml corrigido
+> **Implementado em:** 2026-03-22
+
+---
+
+## ~~PENDENTE-007 — Action `navigate_to_case` type mismatch em ux-integ-002~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **dominio:** UX
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-22
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-22
+- **decidido_por:** arquitetura
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-22
+- **modulo:** MOD-008
+- **rastreia_para:** ux-integ-002.monitor-integracoes.yaml
+- **tags:** gate-2, manifest, action-type
+- **sla_data:** —
+- **dependencias:** []
+
+### Questao
+
+A ação `navigate_to_case` no manifest `ux-integ-002` usa `type: navigate` mas não possui `operation_id`, `http_method`, nem `endpoint`. Também declara `client_only: true`. Se é puramente client-side, o `type` deveria ser `client_only` (não `navigate`). Gate 2 exige que ações não-client_only tenham campos backend.
+
+### Impacto
+
+Gate 2 (DOC-ARC-003B) FAIL. Violação média — corrigível mudando `type: navigate` para `type: client_only`.
+
+### Resolução
+
+> **Decisão:** Opção A — Corrigir `type: navigate` → `type: client_only`
+> **Decidido por:** arquitetura em 2026-03-22
+> **Justificativa:** Ação é puramente client-side (navegação sem chamada backend). `type: client_only` com `client_only: true` é o formato correto. Gate 2 verde.
+> **Artefato de saída:** ux-integ-002.monitor-integracoes.yaml corrigido
+> **Implementado em:** 2026-03-22
+
+---
+
+## ~~PENDENTE-008 — Scopes `integration:*` não registrados em DOC-FND-000 §2.2~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** ALTA
+- **dominio:** UX
+- **tipo:** LACUNA
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-22
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-22
+- **decidido_por:** arquitetura
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-22
+- **modulo:** MOD-008
+- **rastreia_para:** DOC-FND-000, ux-integ-001, ux-integ-002, SEC-008
+- **tags:** scopes, rbac, amendment, gate-3
+- **sla_data:** —
+- **dependencias:** []
+
+### Questao
+
+Os manifests ux-integ-001 e ux-integ-002 referenciam scopes `integration:*` que NÃO existem no catálogo canônico DOC-FND-000 §2.2: `integration:service:read`, `integration:routine:write`, `integration:execute`, `integration:log:read`, `integration:log:reprocess`. O módulo spec (seção 8) referencia Amendment MOD-000-F12, mas este só foi aplicado para scopes `mcp:*`. Scopes `integration:*` nunca foram registrados.
+
+### Impacto
+
+Gate 3 falha para ambos manifests MOD-008. Bloqueio de promoção para READY.
+
+### Resolução
+
+> **Decisão:** Opção A — Registrar 5 scopes `integration:*` em DOC-FND-000 §2.2
+> **Decidido por:** arquitetura em 2026-03-22
+> **Justificativa:** 5 scopes registrados diretamente em DOC-FND-000 §2.2: `integration:service:read`, `integration:service:write`, `integration:routine:write`, `integration:execute`, `integration:log:read`, `integration:log:reprocess`. Gate 3 verde para ambos manifests MOD-008.
+> **Artefato de saída:** DOC-FND-000 §2.2 (scopes integration:* nas linhas 119-124)
+> **Implementado em:** DOC-FND-000 v1.8.0

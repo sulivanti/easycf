@@ -119,9 +119,9 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [INT-000](requirements/int/INT-000.md) — Integrações e Contratos do Foundation (6 integrações)
 - [SEC-000](requirements/sec/SEC-000.md) — Segurança e Compliance do Foundation (8 seções)
 - [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos do Foundation (34 entradas)
-- [UX-000](requirements/ux/UX-000.md) — Jornadas e Fluxos do Foundation (8 telas/jornadas)
+- [UX-000](requirements/ux/UX-000.md) — Jornadas e Fluxos do Foundation (8 telas/jornadas, v0.3.0)
 - [NFR-000](requirements/nfr/NFR-000.md) — Requisitos Não Funcionais do Foundation (SLOs, observabilidade, DR)
-- [PEN-000](requirements/pen-000-pendente.md) — Questões Abertas do Foundation (11 pendências: 7 implementadas, 4 abertas — Fase 3)
+- [PEN-000](requirements/pen-000-pendente.md) — Questões Abertas do Foundation (12 pendências: 12/12 IMPLEMENTADA)
 <!-- end index -->
 
 ## 7. Decisões (ADR)
@@ -139,4 +139,6 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [DOC-PADRAO-005-C01](amendments/normativos/DOC-PADRAO-005-C01.md) — Limites de anexos configuráveis por entity_type (PENDENTE-004)
 - [DOC-FND-000-M01](amendments/sec/DOC-FND-000-M01.md) — 6 scopes process:case:* registrados no catálogo canônico §2.2 (MOD-006, PEN-006 PENDENTE-004)
 - [DOC-FND-000-M02](amendments/sec/DOC-FND-000-M02.md) — 7º scope process:case:reopen no catálogo §2.2 (PEN-006 PENDENTE-001)
+- [DOC-FND-000-M03](amendments/sec/DOC-FND-000-M03.md) — 7 scopes approval:* registrados no catálogo §2.2 (MOD-009, PEN-009 PENDENTE-002)
+- [DOC-FND-000-M04](amendments/sec/DOC-FND-000-M04.md) — 6 scopes mcp:* registrados no catálogo §2.2 (MOD-010, PEN-010 PENDENTE-004)
 <!-- end amendments-index -->

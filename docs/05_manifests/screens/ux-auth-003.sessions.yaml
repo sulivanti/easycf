@@ -1,0 +1,145 @@
+# ============================================================
+# Screen Manifest — UX-AUTH-003
+# Tela: Gestão de Sessões Ativas (Kill-Switch)
+# Módulo: MOD-000 (Foundation)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-22
+# ============================================================
+# Self-service: opera sobre sessões do usuário autenticado.
+# Revogação individual ou em massa (kill-switch).
+# Acessível via perfil do usuário.
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-AUTH-003"
+name: "Gestão de Sessões Ativas"
+type: list
+module: "MOD-000"
+route: "/perfil/sessoes"
+auth_required: true
+layout: shell
+
+linked_stories:
+  - "US-MOD-000"
+  - "US-MOD-000-F01"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+# ─── AÇÕES ───────────────────────────────────────────────────
+actions:
+
+  - id: load_sessions
+    label: "Carregar lista de sessões ativas"
+    type: view
+    operation_id: auth_sessions_list
+    http_method: GET
+    endpoint: "/api/v1/auth/sessions"
+    client_only: false
+    requires_scope: []
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar as sessões."
+    notes: "Self-service: retorna apenas sessões do usuário autenticado. Inclui device, IP, data de criação."
+
+  - id: revoke_session
+    label: "Encerrar sessão individual"
+    type: submit
+    operation_id: auth_sessions_revoke
+    http_method: DELETE
+    endpoint: "/api/v1/auth/sessions/:id"
+    client_only: false
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível encerrar a sessão."
+    notes: "Revoga uma sessão específica. Não permite revogar a sessão atual (validação client-side + backend)."
+
+  - id: revoke_all_sessions
+    label: "Encerrar todas as outras sessões"
+    type: submit
+    operation_id: auth_sessions_revoke_all
+    http_method: DELETE
+    endpoint: "/api/v1/auth/sessions"
+    client_only: false
+    requires_scope: []
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível encerrar as sessões."
+    notes: "Revoga todas as sessões EXCETO a atual. Modal de confirmação obrigatório."
+
+  - id: navigate_back
+    label: "Voltar para o perfil"
+    type: navigate
+    client_only: true
+    loading_state: none
+
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
+
+  - id: "sessions-header"
+    name: "SessionsPageHeader"
+    description: |
+      Cabeçalho com título "Sessões Ativas", contador de sessões e botão "Voltar".
+      Botão "Encerrar todas" (destructive) visível quando há mais de 1 sessão.
+    actions_used: [revoke_all_sessions, navigate_back]
+
+  - id: "sessions-list"
+    name: "SessionsList"
+    description: |
+      Lista de sessões ativas do usuário com colunas:
+        - Device / User-Agent (ícone desktop/mobile)
+        - IP (parcialmente mascarado: 192.168.*.*)
+        - Data de criação (relative time: "há 2 horas")
+        - Status badge: "Atual" (verde) para sessão ativa, "Outra" (cinza) para demais
+        - Botão "Encerrar" por linha (desabilitado na sessão atual)
+      Skeleton loading durante carregamento.
+      Estado vazio: "Nenhuma outra sessão ativa."
+    actions_used: [load_sessions, revoke_session]
+
+  - id: "revoke-session-modal"
+    name: "RevokeSessionModal"
+    description: |
+      Modal de confirmação para revogação individual.
+      Título: "Encerrar sessão?"
+      Corpo: "O dispositivo '{device}' será desconectado."
+      Botões: "Cancelar" e "Encerrar" (destructive, isLoading durante DELETE).
+    actions_used: [revoke_session]
+
+  - id: "revoke-all-modal"
+    name: "RevokeAllModal"
+    description: |
+      Modal de confirmação para kill-switch.
+      Título: "Encerrar todas as sessões?"
+      Corpo: "Todos os outros dispositivos serão desconectados. Você permanecerá logado neste dispositivo."
+      Botões: "Cancelar" e "Encerrar todas" (destructive, isLoading durante DELETE).
+    actions_used: [revoke_all_sessions]
+
+# ─── NAVEGAÇÃO ───────────────────────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+# ─── REGRAS OBRIGATÓRIAS ────────────────────────────────────
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Self-service: sem scopes específicos, apenas autenticação (endpoints /auth/sessions operam sobre o usuário logado).
+  2. Sessão ATUAL nunca pode ser revogada individualmente (botão "Encerrar" desabilitado + badge "Atual").
+  3. "Encerrar todas" revoga apenas as OUTRAS sessões — sessão atual permanece intacta.
+  4. Modal de confirmação OBRIGATÓRIO para ambas as ações de revogação.
+  5. IP parcialmente mascarado por privacidade (apenas 2 primeiros octetos visíveis).
+  6. Domain events: session.revoked (individual), session.revoked_all (bulk).
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-22"
+    author: "arquitetura"
+    description: "Criação inicial. Gestão de sessões ativas com revogação individual e kill-switch."

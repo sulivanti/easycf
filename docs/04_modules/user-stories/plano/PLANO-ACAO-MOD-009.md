@@ -1,9 +1,9 @@
-# Procedimento — Plano de Acao MOD-009 Movimentos sob Aprovacao
+# Procedimento — Plano de Acao MOD-009 Movimentos sob Aprovacao (Aprovacoes e Alcadas)
 
-> **Versao:** 1.0.0 | **Data:** 2026-03-22 | **Owner:** arquitetura
-> **Estado atual do modulo:** DRAFT (v0.9.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
+> **Versao:** 2.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** DRAFT (v0.5.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
 >
-> Fases 0-2 concluidas. Proximo passo: Fase 3 (Validacao) — executar `/validate-all`.
+> Fases 0-3 concluidas (validate-all PASS em 2026-03-22). Proximo passo: Fase 4 (Promocao) — executar `/promote-module`.
 
 ---
 
@@ -11,18 +11,19 @@
 
 | Item | Estado | Detalhe |
 |------|--------|---------|
-| Epico US-MOD-009 | APPROVED (v1.2.0) | DoR completo, 5 features vinculadas, 4 criterios de alcada, 7 tabelas, 13 endpoints |
-| Features F01-F05 | 5/5 APPROVED | F01 (Regras de Controle + Alcada), F02 (Motor de Controle), F03 (Inbox + Execucao + Override), F04 (UX Inbox), F05 (UX Configurador) |
+| Epico US-MOD-009 | APPROVED (v1.2.0) | DoR completo, 5 features vinculadas, principio "origem nao e autorizacao" documentado |
+| Features F01-F05 | 5/5 APPROVED | F01 (Regras de controle+alcada), F02 (Motor de controle), F03 (Inbox+execucao+override), F04 (UX Inbox), F05 (UX Configurador regras) |
 | Scaffold (forge-module) | CONCLUIDO | mod-009-movimentos-aprovacao/ com estrutura completa |
-| Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-11 confirmados, v0.9.0, 7 pendentes resolvidas |
-| PENDENTEs | 0 abertas | 7 total: 7 IMPLEMENTADA |
-| ADRs | 4 aceitas | Nivel 2 requer minimo 2 — atendido (ADR-001 Motor Sincrono, ADR-002 Segregacao Auto-Aprovacao, ADR-003 Outbox Pattern, ADR-004 Override 20 chars) |
+| Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-11 confirmados em 4 batches, v0.9.0, todas as pendentes resolvidas |
+| PENDENTEs | 0 abertas | 7 total: 7 IMPLEMENTADA (001-007) |
+| ADRs | 4 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 a ADR-004) |
 | Amendments | 0 | Nenhum |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v0.9.0 | Ultima entrada 2026-03-19 (Etapa 4 — PEN-009-005 particionamento) |
-| Screen Manifests | 2/2 existem | ux-aprov-001 (Inbox Aprovacoes), ux-aprov-002 (Configurador Regras) |
+| CHANGELOG | v0.9.0 | Ultima entrada 2026-03-19 |
+| Screen Manifests | 2/2 existem | UX-APROV-001, UX-APROV-002 |
 | Dependencias | 3 upstream (MOD-000, MOD-004, MOD-006) | Consome Foundation core, delegacoes de acesso, case_id opcional |
-| Bloqueios | 0 | Nenhum BLK-* afeta MOD-009 |
+| Dependentes | 1 downstream (MOD-010) | MOD-010 consome policy CONTROLLED para movimentos |
+| Bloqueios | 0 | Nenhum BLK-* afeta MOD-009 diretamente |
 
 ---
 
@@ -34,521 +35,143 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 
 ### Fase 0: Pre-Modulo — CONCLUIDA
 
-O epico US-MOD-009 define o modulo de controle de movimentos sob aprovacao — interceptacao de operacoes criticas que exigem decisao formal antes de gerar efeito. O principio central e "Origem nao e autorizacao": API, integracao sistemica e MCP podem iniciar solicitacoes, mas nao contornam alcada. O modulo implementa motor de controle sincrono com 4 criterios combinaveis (VALUE, HIERARCHY, ORIGIN, OBJECT+OPERATION), cadeias de aprovacao multinivel com timeout e escalada, inbox de aprovacoes, override auditado e rastreabilidade integral via 7 tabelas e 13 domain events.
+O epico US-MOD-009 define o modulo de controle de movimentos sob aprovacao — interceptacao de operacoes criticas que exigem decisao formal antes de gerar efeito. Principio central: "Origem nao e autorizacao" — API, integracao sistemica e MCP podem iniciar solicitacoes, mas nao contornam alcada. Score 6/6 (todos os gatilhos presentes). Motor de controle sincrono com 4 criterios combinaveis (VALUE, HIERARCHY, ORIGIN, OBJECT+OPERATION), cadeias de aprovacao multinivel com timeout e escalada, segregacao de funcoes com excecao por scope, override auditado. 7 tabelas proprias, 13 endpoints, 13 domain events, 7 escopos.
 
 ```
 1    (manual)              Revisar e finalizar epico US-MOD-009:             CONCLUIDO
                            - Escopo fechado (5 features: 3 Backend + 2 UX)  status_agil = APPROVED
-                           - 4 criterios de alcada definidos                 v1.2.0
-                           - Principio "origem nao e autorizacao"
-                           - Segregacao com excecao auto-aprovacao por scope
-                           - 7 tabelas, 13 endpoints, 13 domain events
-                           - DoR completo
+                           - Principio "origem nao e autorizacao" definido    v1.2.0
+                           - 4 criterios combinaveis de alcada
+                           - Segregacao com excecao de auto-aprovacao
+                           - DoR 100% completo
                            Arquivo: docs/04_modules/user-stories/epics/US-MOD-009.md
 
 2    (manual)              Revisar e finalizar features F01-F05:             CONCLUIDO
-                           - F01: API Regras de Controle + Alcada            5/5 APPROVED
-                           - F02: API Motor de Controle (interceptacao)
-                           - F03: API Inbox + Execucao + Override
-                           - F04: UX Inbox de Aprovacoes (UX-APROV-001)
-                           - F05: UX Configurador de Regras (UX-APROV-002)
-                           Arquivos: docs/04_modules/user-stories/features/US-MOD-009-F{01..05}.md
+                           - F01: API Regras de controle + alcada            5/5 APPROVED
+                           - F02: API Motor de controle (interceptacao)
+                           - F03: API Inbox + execucao + override
+                           - F04: UX Inbox de aprovacoes
+                           - F05: UX Configurador de regras
 ```
 
 ### Fase 1: Genese do Modulo — CONCLUIDA
 
-Modulo de dominio rico (Nivel 2 — DDD-lite + Full Clean) com aggregate root `ControlledMovement`, 4 value objects, 4 domain services, 7 tabelas e 13 endpoints. Scaffoldado em 2026-03-19 via `forge-module` a partir de US-MOD-009 (APPROVED).
+O scaffold do modulo foi gerado via `forge-module`, criando a estrutura completa de 7 tabelas, 13 endpoints, 5 features e 13 domain events. Modulo ortogonal ao MOD-006 Gates: Gates operam dentro de fluxos de processo; Movimentos operam em qualquer operacao critica.
 
 ```
-3    /forge-module MOD-009  Scaffold completo gerado:                        CONCLUIDO
-                           mod-009-movimentos-aprovacao.md, CHANGELOG.md,   v0.1.0 (2026-03-19)
-                           requirements/ (br/, fr/, data/, int/, sec/,
-                           ux/, nfr/), adr/, amendments/
+3    /forge-module          Scaffold gerado:                                 CONCLUIDO
+                           - mod-009-movimentos-aprovacao/                   v0.1.0
+                           - CHANGELOG.md
+                           - requirements/ (BR, FR, DATA, INT, SEC, UX, NFR, PEN)
+                           - adr/
+                           - 7 tabelas, 13 endpoints, 5 features, 13 domain events
                            Stubs obrigatorios: DATA-003, SEC-002
-                           Pasta: docs/04_modules/mod-009-movimentos-aprovacao/
 ```
 
-### Fase 2: Enriquecimento — CONCLUIDO
+### Fase 2: Enriquecimento — CONCLUIDA
 
-O enriquecimento do MOD-009 foi completo — todos os agentes rodaram em 2026-03-19 em 4 batches sequenciais. Durante o processo, 7 pendencias foram identificadas e todas resolvidas. Destaque para PEN-009-001 (callback pos-aprovacao via domain event outbox) e PEN-009-002 (amendment MOD-000-F12 para registro de 7 scopes approval:*).
+O enriquecimento foi executado em 4 batches completos, com todos os 11 agentes confirmados. Destaque para o dominio rico do modulo: aggregate root ControlledMovement, 4 value objects (MovementStatus, ApprovalDecision, OriginType, ApprovalCriteria), 4 domain services (ControlEngine, ApprovalChainResolver, OverrideAuditor, AutoApprovalService). Todas as 7 pendencias foram identificadas e implementadas durante o enriquecimento.
 
 > **Decision tree de enriquecimento:**
->
-> ```
 > Quero enriquecer todos os modulos elegiveis?
-> +-- SIM -> /enrich-all (sequencial, com checkpoint e --dry-run/--resume)
-> +-- NAO -> Qual escopo?
->     +-- Todos agentes de 1 modulo  -> /enrich mod-009
->     +-- 1 agente especifico        -> /enrich-agent AGN-DEV-XX mod-009
-> ```
+> |- SIM -> /enrich-all (sequencial, com checkpoint e --dry-run/--resume)
+> |-- NAO -> Qual escopo?
+>     |- Todos agentes de 1 modulo  -> /enrich mod-NNN
+>     |-- 1 agente especifico        -> /enrich-agent AGN-DEV-XX mod-NNN
 
 ```
-4    /enrich docs/04_modules/mod-009-movimentos-aprovacao/
-                           Agentes executados sobre mod-009:                 CONCLUIDO
-                           AGN-DEV-01 (MOD), AGN-DEV-02 (BR),              v0.9.0 (2026-03-19)
-                           AGN-DEV-03 (FR), AGN-DEV-04 (DATA),
-                           AGN-DEV-05 (INT), AGN-DEV-06 (SEC),
-                           AGN-DEV-07 (UX), AGN-DEV-08 (NFR),
-                           AGN-DEV-09 (ADR), AGN-DEV-10 (PEN),
-                           AGN-DEV-11 (CROSS-VALIDATION)
-                           7 pendentes criadas e resolvidas (001-007)
+4    /enrich                Enriquecimento completo (11 agentes):            CONCLUIDO
+                           Batch 1: AGN-DEV-01 (MOD/Escala), AGN-DEV-02 (BR), AGN-DEV-03 (FR)
+                           Batch 2: AGN-DEV-04 (DATA), AGN-DEV-05 (INT), AGN-DEV-08 (NFR)
+                           Batch 3: AGN-DEV-06 (SEC), AGN-DEV-07 (UX)
+                           Batch 4: AGN-DEV-09 (ADR), AGN-DEV-10 (PENDENTE), AGN-DEV-11 (VAL)
+                           Resultado: v0.9.0, 4 ADRs, 7 pendentes implementadas
 ```
 
-#### Rastreio de Agentes — MOD-009
+**Rastreio de agentes:**
 
 | # | Agente | Pilar | Artefato | Status | Evidencia |
 |---|--------|-------|----------|--------|-----------|
-| 1 | AGN-DEV-01 | MOD/Escala | mod-009-movimentos-aprovacao.md | CONCLUIDO | CHANGELOG v0.2.0 — narrativa expandida, aggregate root, value objects, domain services, module_paths, score 6/6 |
-| 2 | AGN-DEV-02 | BR | BR-009.md | CONCLUIDO | v0.2.0 — Gherkin BDD adicionado a BR-001..BR-009, impactos explicitos |
-| 3 | AGN-DEV-03 | FR | FR-009.md | CONCLUIDO | v0.2.0 — Gherkin BDD adicionado a FR-001..FR-008, idempotency e timeline flags completos |
-| 4 | AGN-DEV-04 | DATA | DATA-009.md, DATA-003.md | CONCLUIDO | DATA-009 v0.3.0 (FK ON DELETE RESTRICT, indices hot-query, campos padrao), DATA-003 v0.3.0 (formato expandido por evento PKG-DEV-001 §5, outbox, notify, maskable_fields) |
-| 5 | AGN-DEV-05 | INT | INT-009.md | CONCLUIDO | v0.3.0 — request/response JSON completos para 13 endpoints, erros RFC 9457, middleware/hook integration pattern, async failure behavior |
-| 6 | AGN-DEV-06 | SEC | SEC-009.md, SEC-002.md | CONCLUIDO | SEC-009 v0.4.0 (segregacao/auto-aprovacao/cancelamento/override, Gherkin BDD, LGPD, auditoria), SEC-002 v0.4.0 (retencao por categoria, maskable_fields, Gherkin enforcement) |
-| 7 | AGN-DEV-07 | UX | UX-009.md | CONCLUIDO | v0.4.0 — action_ids DOC-UX-010 (11 acoes inbox + 9 acoes configurador), state machines, acessibilidade WCAG 2.1 AA, responsive, estados loading/error/empty, mapeamento action-endpoint-event (16 entradas), Gherkin BDD |
-| 8 | AGN-DEV-08 | NFR | NFR-009.md | CONCLUIDO | v0.3.0 — SLOs detalhados (baseline/alvo P95/P99), healthcheck, DR (RPO=0, RTO<15min), limites (5 niveis, 200 regras, 10K pendentes, 256KB payload), observabilidade completa (logging, 10 metricas Prometheus, traces OpenTelemetry, 4 dashboards, 8 alertas) |
-| 9 | AGN-DEV-09 | ADR | ADR-001, ADR-002, ADR-003, ADR-004 | CONCLUIDO | 4 ADRs criadas e aceitas |
-| 10 | AGN-DEV-10 | PEN | pen-009-pendente.md | CONCLUIDO | v0.5.0 — 7 pendentes criadas, todas implementadas |
-| 11 | AGN-DEV-11 | CROSS | cross-validation | CONCLUIDO | IDs, metadata, rastreabilidade, cobertura de eventos, scopes, endpoints, SLOs verificados |
-
-#### Pendentes Resolvidas no Enriquecimento — Detalhamento Completo
-
-> As 7 pendencias abaixo foram identificadas durante o enriquecimento e todas foram decididas e implementadas em 2026-03-19.
-
----
-
-##### ~~PEN-009-001 — Callback de Execucao Pos-Aprovacao~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** ALTA
-- **dominio:** INT-009, FR-009
-- **tipo:** decisao_tecnica
-- **origem:** ENRICH
-- **criado_em:** 2026-03-19
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** INT-009 §4.3, ADR-003, DATA-003 (evento 7), NFR-009 §5.3
-- **tags:** callback, domain-event, outbox, pos-aprovacao
-- **dependencias:** []
-- **decidido_em:** 2026-03-19
-- **decidido_por:** Marcos Sulivan
-- **opcao_escolhida:** 1
-
-**Questao:**
-Quando o ultimo nivel da cadeia aprova um movimento, MOD-009 precisa notificar o modulo chamador para executar a operacao original usando `operation_payload`. O mecanismo de callback nao estava definido.
-
-**Impacto:**
-Sem callback, movimentos aprovados ficam em APPROVED indefinidamente, sem execucao da operacao original. Bloqueante para implementacao de FR-005 e INT-009 §4.3.
-
-**Opcao 1 — Domain event com outbox (assincrono):**
-MOD-009 emite `movement.approved` com `is_final_level: true`. Modulo chamador consome o evento e executa. Garantia at-least-once via outbox.
-
-- Pros: Desacoplamento, garantia de entrega, alinhado com ADR-003
-- Contras: Eventual consistency — pode haver delay entre aprovacao e execucao
-
-**Opcao 2 — HTTP webhook (sincrono):**
-MOD-009 chama endpoint do modulo chamador via HTTP POST com `operation_payload`.
-
-- Pros: Execucao imediata
-- Contras: Acoplamento runtime, retry management mais complexo
-
-**Opcao 3 — Hybrid:**
-Domain event como trigger + HTTP callback como fallback.
-
-- Pros: Maxima confiabilidade
-- Contras: Complexidade operacional elevada
-
-**Recomendacao:** Opcao 1 — Domain event com outbox, alinhado com ADR-003 e padrao ja estabelecido para eventos 4-13.
-
-**Resolucao:**
-
-> **Decisao:** Opcao 1 — Domain event com outbox (assincrono)
-> **Decidido por:** Marcos Sulivan em 2026-03-19
-> **Justificativa:** Alinhado com ADR-003 e padrao estabelecido para eventos 4-13. MOD-009 emite `movement.approved` com `is_final_level: true`. Modulo chamador consome e executa. Garantia at-least-once via outbox.
-> **Artefato de saida:** INT-009 §4.3 — contrato completo do callback event `movement.approved`
-> **Implementado em:** 2026-03-19
-
----
-
-##### ~~PEN-009-002 — Amendment MOD-000-F12 para Registro de Scopes~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** ALTA
-- **dominio:** SEC-009, MOD-000
-- **tipo:** amendment
-- **origem:** ENRICH
-- **criado_em:** 2026-03-19
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** mod.md §8, SEC-009 §2, INT-009 §8
-- **tags:** scopes, rbac, amendment, mod-000
-- **dependencias:** []
-- **decidido_em:** 2026-03-19
-- **decidido_por:** Marcos Sulivan
-- **opcao_escolhida:** 1
-
-**Questao:**
-O MOD-009 define 7 scopes RBAC (`approval:rule:read`, `approval:rule:write`, `approval:engine:evaluate`, `approval:movement:read`, `approval:movement:write`, `approval:decide`, `approval:override`). Esses scopes devem ser registrados no catalogo de scopes do DOC-FND-000 §2.2 via amendment MOD-000-F12. Sem esse amendment, nenhum endpoint do MOD-009 e acessivel.
-
-**Impacto:**
-Bloqueante para deployment — scopes nao existem no catalogo MOD-000 ate amendment ser aplicado. Nenhum endpoint funciona sem os scopes registrados.
-
-**Opcao 1 — Amendment formal MOD-000-F12:**
-Criar documento de amendment seguindo padrao do framework, com os 7 scopes + descricoes + categorizacao.
-
-- Pros: Rastreabilidade completa, segue padrao do framework
-- Contras: Requer criacao de artefato documental
-
-**Opcao 2 — Registro via migration SQL:**
-Inserir scopes diretamente na tabela `scopes` do MOD-000.
-
-- Pros: Rapido
-- Contras: Sem rastreabilidade documental
-
-**Recomendacao:** Opcao 1 — Amendment formal, garante rastreabilidade.
-
-**Resolucao:**
-
-> **Decisao:** Opcao 1 — Amendment formal DOC-FND-000-M03
-> **Decidido por:** Marcos Sulivan em 2026-03-19
-> **Justificativa:** Garante rastreabilidade e segue o padrao do framework. 7 scopes approval:* registrados no catalogo canonico DOC-FND-000 §2.2 com descricoes e categorizacao conforme SEC-009 §2.
-> **Artefato de saida:** DOC-FND-000-M03 amendment (7 scopes approval:*). DOC-FND-000 v1.5.0 -> v1.6.0.
-> **Implementado em:** 2026-03-19
-
----
-
-##### ~~PEN-009-003 — Dry-Run Mode para Simulacao do Motor~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** MEDIA
-- **dominio:** UX-009, INT-009
-- **tipo:** funcionalidade
-- **origem:** ENRICH
-- **criado_em:** 2026-03-19
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** UX-009 (act-config-simulate), INT-009 §2.2.1, FR-009 (FR-003)
-- **tags:** dry-run, simulacao, motor, configurador
-- **dependencias:** []
-- **decidido_em:** 2026-03-19
-- **decidido_por:** Marcos Sulivan
-- **opcao_escolhida:** 3
-
-**Questao:**
-A tela UX-APROV-002 (Configurador de Regras) possui botao "Simular motor" (`act-config-simulate`) que chama `POST /movement-engine/evaluate` com `dry_run=true`. O contrato API para o modo dry-run nao estava especificado em INT-009.
-
-**Impacto:**
-Sem contrato dry-run, o botao de simulacao no configurador nao tem especificacao de backend. Administradores nao podem testar regras antes de ativar.
-
-**Opcao 1 — Query param `?dry_run=true`:**
-Simples, mas mistura concerns no mesmo endpoint.
-
-- Pros: Simplicidade
-- Contras: Mistura concerns
-
-**Opcao 2 — Endpoint separado `POST /movement-engine/simulate`:**
-Semantica clara.
-
-- Pros: Separacao de responsabilidades
-- Contras: Duplica logica do motor
-
-**Opcao 3 — Body field `dry_run: true`:**
-Integrado ao contrato existente.
-
-- Pros: Menor impacto no contrato, motor avalia normalmente e skip INSERT
-- Contras: Campo adicional no body
-
-**Recomendacao:** Opcao 3 — Body field, menor impacto no contrato existente.
-
-**Resolucao:**
-
-> **Decisao:** Opcao 3 — Body field `dry_run: true` no POST /movement-engine/evaluate
-> **Decidido por:** Marcos Sulivan em 2026-03-19
-> **Justificativa:** Motor avalia normalmente e skip INSERT se dry_run=true. Sem criar registros em controlled_movements, approval_instances, movement_history. Sem emitir domain events. Menor impacto no contrato existente.
-> **Artefato de saida:** INT-009 §2.2.1 — campo dry_run adicionado ao evaluate
-> **Implementado em:** 2026-03-19
-
----
-
-##### ~~PEN-009-004 — Canal de Notificacao para Aprovadores~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** MEDIA
-- **dominio:** INT-009, NFR-009
-- **tipo:** decisao_tecnica
-- **origem:** ENRICH
-- **criado_em:** 2026-03-19
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** DATA-003 (notify.recipients_rule), NFR-009 §5.1, INT-009 §5
-- **tags:** notificacao, in-app, email, aprovadores
-- **dependencias:** []
-- **decidido_em:** 2026-03-19
-- **decidido_por:** Marcos Sulivan
-- **opcao_escolhida:** 1
-
-**Questao:**
-DATA-003 define `notify.enabled=true` para eventos 4-13 com `notify.recipients_rule` detalhado, mas nao especificava o canal de entrega (email, notificacao in-app, push, ou combinacao).
-
-**Impacto:**
-O mecanismo de entrega afeta implementacao do outbox consumer e dependencias em servicos externos. Sem definicao, aprovadores podem nao ser notificados.
-
-**Opcao 1 — In-app apenas:**
-Notificacao no inbox do aprovador (badge + lista). Sem dependencia externa.
-
-- Pros: Simples, sem dependencia externa
-- Contras: Aprovador precisa estar logado para ver
-
-**Opcao 2 — Email + in-app:**
-Notificacao dupla.
-
-- Pros: Visibilidade offline
-- Contras: Dependencia de servico de email, risco de spam
-
-**Opcao 3 — Configuravel por tenant/usuario:**
-Maxima flexibilidade.
-
-- Pros: Cada tenant/usuario define canais preferidos
-- Contras: Maior complexidade
-
-**Recomendacao:** Opcao 1 — In-app como MVP; email como enhancement configuravel por tenant no roadmap.
-
-**Resolucao:**
-
-> **Decisao:** Opcao 1 — In-app como MVP
-> **Decidido por:** Marcos Sulivan em 2026-03-19
-> **Justificativa:** Notificacao no inbox do aprovador (badge + lista) via SidebarBadge. Sem dependencia externa. Outbox consumer grava notificacao na tabela de notificacoes in-app. Email como canal adicional configuravel por tenant no roadmap pos-MVP.
-> **Artefato de saida:** INT-009 §5 — canal notificacao in-app documentado
-> **Implementado em:** 2026-03-19
-
----
-
-##### ~~PEN-009-005 — Estrategia de Particionamento de `movement_history`~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** BAIXA
-- **dominio:** DATA-009
-- **tipo:** decisao_tecnica
-- **origem:** ENRICH
-- **criado_em:** 2026-03-19
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** NFR-009 §10, DATA-009 (tabela 6)
-- **tags:** particionamento, movement-history, postgresql, performance
-- **dependencias:** []
-- **decidido_em:** 2026-03-19
-- **decidido_por:** Marcos Sulivan
-- **opcao_escolhida:** 3
-
-**Questao:**
-NFR-009 §10 identifica que volumes acima de 10M registros por tenant em `movement_history` exigem particionamento por `created_at`. A decisao sobre tipo de particionamento e implementacao estava pendente.
-
-**Impacto:**
-Sem estrategia definida, queries em movement_history degradam a partir de 10M registros. Performance de auditoria e timeline comprometida.
-
-**Opcao 1 — Range partitioning por mes (nativo PostgreSQL 14+):**
-Cada particao = 1 mes. Prune automatico em queries com filtro de data.
-
-- Pros: Prune automatico, alinhado com PostgreSQL nativo
-- Contras: Complexidade de migrations, muitas particoes ao longo do tempo
-
-**Opcao 2 — Range partitioning por trimestre:**
-Menos particoes, mais dados por particao.
-
-- Pros: Menos particoes para gerenciar
-- Contras: Prune menos granular
-
-**Opcao 3 — Sem particionamento, apenas indices:**
-Suficiente ate 10M registros.
-
-- Pros: Zero complexidade, indices existentes em DATA-009 suficientes
-- Contras: Degradacao apos 10M registros
-
-**Recomendacao:** Opcao 3 — Sem particionamento no MVP; range por mes quando volume atingir threshold.
-
-**Resolucao:**
-
-> **Decisao:** Opcao 3 — Sem particionamento no MVP, apenas indices. Suficiente ate 10M registros. Range por mes (nativo PostgreSQL 14+) quando volume atingir 5M (alerta preventivo).
-> **Decidido por:** Marcos Sulivan em 2026-03-19
-> **Justificativa:** Indices existentes em DATA-009 sao suficientes para o MVP. Monitorar via metrica count de movement_history. Threshold de 5M registros para acionar migracao para range partitioning por mes (PostgreSQL 14+ nativo). Evita complexidade prematura sem sacrificar performance futura.
-> **Artefato de saida:** Decisao registrada; threshold 5M para acionar migracao para range partitioning mensal. Monitoramento via metrica count de movement_history.
-> **Implementado em:** 2026-03-19
-
----
-
-##### ~~PEN-009-006 — Endpoint de Reprocessamento de Movimento FAILED~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** MEDIA
-- **dominio:** FR-009, INT-009
-- **tipo:** funcionalidade
-- **origem:** ENRICH
-- **criado_em:** 2026-03-19
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** DATA-009 (movement_executions.retry_of), INT-009 §5.3, NFR-009 §5.3
-- **tags:** retry, reprocessamento, failed, endpoint
-- **dependencias:** []
-- **decidido_em:** 2026-03-19
-- **decidido_por:** Marcos Sulivan
-- **opcao_escolhida:** 1
-
-**Questao:**
-DATA-009 preve campo `retry_of` (FK) em `movement_executions` para cadeia de retentativas. INT-009 §5.3 menciona reprocessamento possivel. No entanto, nao existia endpoint definido em INT-009 para disparar reprocessamento manual de um movimento com status FAILED.
-
-**Impacto:**
-Sem endpoint, movimentos FAILED ficam em estado terminal sem possibilidade de reexecucao. Admin depende de scripts manuais para retry.
-
-**Opcao 1 — `POST /api/v1/movements/:id/retry`:**
-Endpoint dedicado com scope `approval:override`.
-
-- Pros: Controle explicito, auditavel, scope restrito
-- Contras: Endpoint adicional
-
-**Opcao 2 — Retry automatico via outbox reprocessing:**
-Re-emitir `movement.approved` para trigger automatico.
-
-- Pros: Sem endpoint novo
-- Contras: Menos controle para o admin
-
-**Opcao 3 — Admin manual via dashboard:**
-Sem endpoint dedicado; admin re-executa via scripts.
-
-- Pros: Zero implementacao
-- Contras: Sem auditoria, sem rastreabilidade, alto risco operacional
-
-**Recomendacao:** Opcao 1 — Endpoint dedicado com scope `approval:override`, operacao excepcional similar ao override.
-
-**Resolucao:**
-
-> **Decisao:** Opcao 1 — Endpoint dedicado POST /api/v1/movements/:id/retry
-> **Decidido por:** Marcos Sulivan em 2026-03-19
-> **Justificativa:** Scope: approval:override. Cria novo registro em movement_executions com retry_of=original_id. Re-emite movement.approved para trigger execucao. Operacao excepcional com auditoria completa. Evento: movement.retried.
-> **Artefato de saida:** INT-009 — endpoint retry adicionado
-> **Implementado em:** 2026-03-19
-
----
-
-##### ~~PEN-009-007 — Notificacao Real-Time para Inbox~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** BAIXA
-- **dominio:** UX-009
-- **tipo:** funcionalidade
-- **origem:** ENRICH
-- **criado_em:** 2026-03-19
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** UX-009 (SidebarBadge, act-aprov-refresh)
-- **tags:** real-time, polling, sse, websocket, inbox
-- **dependencias:** []
-- **decidido_em:** 2026-03-19
-- **decidido_por:** arquitetura
-- **opcao_escolhida:** 1
-
-**Questao:**
-UX-009 define `SidebarBadge` que atualiza a cada 60s via polling. Para melhor UX, notificacao real-time (WebSocket ou SSE) permitiria atualizacao imediata do badge e da lista quando novos movimentos chegam ao inbox do aprovador.
-
-**Impacto:**
-Com polling 60s, aprovadores podem esperar ate 1 minuto para ver novos movimentos. Em cenarios de alta urgencia, o delay pode ser inaceitavel.
-
-**Opcao 1 — Polling a cada 60s (atual):**
-Simples, funcional, sem infraestrutura adicional.
-
-- Pros: Zero complexidade, funcional
-- Contras: Delay de ate 60s
-
-**Opcao 2 — WebSocket:**
-Atualizacao imediata.
-
-- Pros: Push imediato
-- Contras: Infraestrutura de WebSocket (connection management, scaling)
-
-**Opcao 3 — SSE (Server-Sent Events):**
-Mais simples que WebSocket para push unidirecional.
-
-- Pros: Compativel com load balancers HTTP/2, mais simples que WebSocket
-- Contras: Unidirecional apenas
-
-**Recomendacao:** Opcao 1 — Polling como MVP; SSE como enhancement pos-MVP apos validacao de UX.
-
-**Resolucao:**
-
-> **Decisao:** Opcao 1 — Polling a cada 60s como MVP. SSE (Server-Sent Events) como enhancement pos-MVP apos validacao de UX.
-> **Decidido por:** arquitetura em 2026-03-19
-> **Justificativa:** Polling a cada 60s e simples, funcional e nao requer infraestrutura adicional. SSE (opcao 3) e mais adequado que WebSocket para push unidirecional e compativel com load balancers HTTP/2, ficando no roadmap pos-MVP apos validacao de UX com usuarios reais.
-> **Artefato de saida:** Decisao registrada. SSE no roadmap pos-MVP como enhancement de UX-009 (SidebarBadge).
-> **Implementado em:** 2026-03-19
-
----
-
-### Fase 3: Validacao — PENDENTE
-
-O `/validate-all` ainda nao foi executado para o MOD-009. Com o enriquecimento completo e todas as pendencias resolvidas, o proximo passo e executar a validacao.
+| 1 | AGN-DEV-01 | MOD/Escala | mod-009-movimentos-aprovacao.md | CONCLUIDO | v0.5.0 — aggregate root, value objects, domain services |
+| 2 | AGN-DEV-02 | BR | BR-009.md | CONCLUIDO | Gherkin BDD para BR-001..BR-009, impactos explicitos |
+| 3 | AGN-DEV-03 | FR | FR-009.md | CONCLUIDO | Gherkin para FR-001..FR-008, idempotency e timeline flags |
+| 4 | AGN-DEV-04 | DATA | DATA-009.md, DATA-003.md | CONCLUIDO | FK ON DELETE RESTRICT, indices hot-query, formato individual por evento |
+| 5 | AGN-DEV-05 | INT | INT-009.md | CONCLUIDO | 13 endpoints com JSON completos, erros RFC 9457, async failure |
+| 6 | AGN-DEV-06 | SEC | SEC-009.md, SEC-002.md | CONCLUIDO | Segregacao/auto-aprovacao detalhada, LGPD Art. 18, retencao por categoria |
+| 7 | AGN-DEV-07 | UX | UX-009.md | CONCLUIDO | action_ids DOC-UX-010 (20 acoes), state machines, WCAG 2.1 AA |
+| 8 | AGN-DEV-08 | NFR | NFR-009.md | CONCLUIDO | SLOs detalhados, DR (RPO=0, RTO<15min), 10 metricas Prometheus |
+| 9 | AGN-DEV-09 | ADR | ADR-001 a ADR-004 | CONCLUIDO | 4 ADRs criadas |
+| 10 | AGN-DEV-10 | PENDENTE | pen-009-pendente.md | CONCLUIDO | 7 pendentes identificadas |
+| 11 | AGN-DEV-11 | VAL | Cross-validation | CONCLUIDO | IDs, metadata, rastreabilidade verificados |
+
+**Pendentes resolvidas — tabela-resumo:**
+
+| # | ID | Status | Severidade | Decisao (1 linha) |
+|---|---|---|---|---|
+| 1 | PEN-009-001 | IMPLEMENTADA | ALTA | Domain event com outbox (assincrono) para callback pos-aprovacao |
+| 2 | PEN-009-002 | IMPLEMENTADA | ALTA | Amendment DOC-FND-000-M03 — 7 scopes approval:* registrados |
+| 3 | PEN-009-003 | IMPLEMENTADA | MEDIA | Body field dry_run: true no evaluate (sem side-effects) |
+| 4 | PEN-009-004 | IMPLEMENTADA | MEDIA | In-app como MVP, email configuravel no roadmap |
+| 5 | PEN-009-005 | IMPLEMENTADA | BAIXA | Sem particionamento MVP, apenas indices (threshold 5M) |
+| 6 | PEN-009-006 | IMPLEMENTADA | MEDIA | Endpoint dedicado POST /movements/:id/retry |
+| 7 | PEN-009-007 | IMPLEMENTADA | BAIXA | Polling 60s MVP, SSE roadmap pos-MVP |
+
+> Detalhes completos: requirements/pen-009-pendente.md
+
+### Fase 3: Validacao — CONCLUIDA
+
+O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis passaram. Os scopes `approval:*` ja estavam registrados em DOC-FND-000 via amendment DOC-FND-000-M03 (PEN-009-002), garantindo Gate 3 verde para os manifests.
 
 > **Decision tree de validacao:**
->
-> ```
 > Quero validar tudo de uma vez?
-> +-- SIM -> /validate-all (orquestra todos, pula os que nao tem artefato)
-> +-- NAO -> Qual pilar?
->     +-- Sintaxe/links/metadados -> /qa
->     +-- Screen manifests       -> /validate-manifest
->     +-- Contratos OpenAPI      -> /validate-openapi
->     +-- Schemas Drizzle        -> /validate-drizzle
->     +-- Endpoints Fastify      -> /validate-endpoint
-> ```
+> |- SIM -> /validate-all (orquestra todos, pula os que nao tem artefato)
+> |-- NAO -> Qual pilar?
+>     |- Sintaxe/links/metadados -> /qa
+>     |- Screen manifests       -> /validate-manifest
+>     |- Contratos OpenAPI      -> /validate-openapi
+>     |- Schemas Drizzle        -> /validate-drizzle
+>     |-- Endpoints Fastify      -> /validate-endpoint
 
 ```
-5    /validate-all docs/04_modules/mod-009-movimentos-aprovacao/
-                           Orquestra TODAS as validacoes em sequencia:        A EXECUTAR
-                           Internamente executa:
-                             1. /qa (lint, links, metadados, EX-*, §N, ciclos)
-                             2. /validate-manifest (screen manifests vs schema v1)
-                             3. /validate-openapi (contratos OpenAPI vs INT-009)
-                             4. /validate-drizzle (schemas Drizzle vs DATA-009)
-                             5. /validate-endpoint (handlers Fastify vs INT-009)
-                           Pre-condicao: Enriquecimento concluido
-                           Pos-condicao: Relatorio consolidado pass/fail
+5a   /qa                    Validacao de sintaxe, links e metadados:          PASS
+                           - Todos os artefatos com metadata valido
+                           - Links internos resolvidos
+                           - IDs consistentes
+
+5b   /validate-manifest     Validacao dos Screen Manifests:                   PASS
+                           - ux-aprov-001.inbox-aprovacoes.yaml: PASS
+                           - ux-aprov-002.config-regras.yaml: PASS
+                           - Gates 1-3 verdes (YAML valido, actions consistentes, scopes registrados)
+
+5c   /validate-openapi      Validacao de contratos OpenAPI:                   FUTURO (pos-codigo)
+                           Artefato: apps/api/openapi/mod-009-movimentos-aprovacao.yaml
+                           Aplicavel (Nivel 2), mas arquivo de codigo nao existe ainda
+
+5d   /validate-drizzle      Validacao de schemas Drizzle:                     FUTURO (pos-codigo)
+                           Artefato: src/modules/movement-approval/schema.ts
+                           Aplicavel (Nivel 2), mas arquivo de codigo nao existe ainda
+
+5e   /validate-endpoint     Validacao de endpoints Fastify:                   FUTURO (pos-codigo)
+                           Artefato: src/modules/movement-approval/routes/
+                           Aplicavel (Nivel 2), mas arquivo de codigo nao existe ainda
 ```
 
-> **Alternativa:** Executar validadores individuais:
-
-```
-5a   /qa docs/04_modules/mod-009-movimentos-aprovacao/
-                           Diagnostico de sintaxe e integridade:              INDIVIDUAL
-                           - lint:docs (Pass A-E: EX-*, §N, IDs, context-map, ciclos)
-                           - Consistencia de metadados (estado_item, owner)
-                           - Dead links, DoR alignment
-
-5b   /validate-manifest ux-aprov-001.inbox-aprovacoes.yaml
-                           Validar manifests contra schema v1:               INDIVIDUAL
-                           - ux-aprov-001.inbox-aprovacoes.yaml
-                           - ux-aprov-002.config-regras.yaml
-                           Verifica: DOC-UX-010, operationId, RBAC,
-                           action_ids, state machines, permissions
-
-5c   /validate-openapi mod-009                                               INDIVIDUAL
-5d   /validate-drizzle mod-009                                               INDIVIDUAL
-5e   /validate-endpoint mod-009                                              INDIVIDUAL
-```
-
-#### Validadores Aplicaveis — Mapa de Cobertura
+**Validadores Aplicaveis — Mapa de Cobertura:**
 
 | # | Validador | Aplicavel (nivel) | Executavel agora | Artefatos |
 |---|-----------|-------------------|------------------|-----------|
-| 1 | `/qa` | SIM (todos) | SIM | mod-009-movimentos-aprovacao.md, requirements/*, adr/*, CHANGELOG.md |
-| 2 | `/validate-manifest` | SIM (2 manifests existem) | SIM | ux-aprov-001, ux-aprov-002 |
-| 3 | `/validate-openapi` | SIM (13 endpoints definidos) | SIM | INT-009 (contratos OpenAPI) |
-| 4 | `/validate-drizzle` | SIM (7 tabelas definidas) | SIM | DATA-009 (7 tabelas) |
-| 5 | `/validate-endpoint` | SIM (13 handlers previstos) | SIM | INT-009 (13 endpoints) |
+| 1 | /qa | SIM (todos) | SIM — PASS | Todos os .md do modulo |
+| 2 | /validate-manifest | SIM (manifests existem) | SIM — PASS | ux-aprov-001, ux-aprov-002 |
+| 3 | /validate-openapi | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | openapi/mod-009-*.yaml |
+| 4 | /validate-drizzle | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | schema.ts |
+| 5 | /validate-endpoint | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | routes/*.route.ts |
 
 ### Fase 4: Promocao — PENDENTE
 
-```
-10   /promote-module docs/04_modules/mod-009-movimentos-aprovacao/
-                           Selar mod-009 como READY:                         A EXECUTAR (apos fase 3)
-                           Gate 0 — Definition of Ready (DoR):
-                             [DoR-1] PENDENTEs resolvidos? .............. SIM (7/7 IMPLEMENTADA)
-                             [DoR-2] Arquivos de requisito existem? ..... SIM (10/10)
-                             [DoR-3] Zero erros de lint? ................ A VERIFICAR (executar /qa)
-                             [DoR-4] Screen manifests validados? ........ A VERIFICAR (executar /validate-manifest)
-                             [DoR-5] ADRs conforme nivel? ............... SIM (4 >= 2 para N2)
-                             [DoR-6] CHANGELOG atualizado? .............. SIM (v0.9.0)
-                             [DoR-7] Bloqueios cross-modulo? ............ SIM (0 bloqueios)
+Com a Fase 3 concluida e todas as pendentes resolvidas (0 ABERTA), o modulo esta elegivel para promocao a READY. O Gate 0 (DoR) deve ser verificado antes de executar `/promote-module`.
 
+```
+6    /promote-module        Promocao DRAFT -> READY:                          A EXECUTAR
                            Fluxo interno:
                              Step 1: /qa (pre-check)
                              Step 2: Promover estado_item DRAFT->READY
@@ -559,41 +182,47 @@ O `/validate-all` ainda nao foi executado para o MOD-009. Com o enriquecimento c
                            Pos-condicao: estado_item = READY, INDEX.md atualizado, commit
 ```
 
-> **Nota:** MOD-009 depende de MOD-000 (Foundation), MOD-004 (Identidade Avancada) e MOD-006 (Execucao de Casos). A promocao do MOD-009 pode ocorrer independentemente — o DoR nao exige que dependencias upstream estejam READY (apenas que existam). Porem, o codigo so pode ser gerado quando as dependencias upstream estiverem READY (endpoints implementados).
+**Gate 0 — Definition of Ready (DoR) Check:**
 
-### Fase 5: Pos-READY (quando necessario)
+| # | Criterio | Status | Evidencia |
+|---|----------|--------|-----------|
+| DoR-1 | 0 pendentes ABERTA ou EM_ANALISE | SIM | 7/7 IMPLEMENTADA |
+| DoR-2 | Todos os pilares com artefato | SIM | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1) = 10/10 |
+| DoR-3 | ADRs minimos para Nivel 2 (3+) | SIM | 4 ADRs (ADR-001 a ADR-004) |
+| DoR-4 | Epico APPROVED | SIM | US-MOD-009 APPROVED v1.2.0 |
+| DoR-5 | Todas as features APPROVED | SIM | 5/5 APPROVED |
+| DoR-6 | Screen Manifests validados | SIM | 2/2 PASS (ux-aprov-001, ux-aprov-002) |
+| DoR-7 | /qa verde | SIM | validate-all PASS 2026-03-22 |
+
+> **Resultado:** Todos os criterios DoR atendidos. Modulo elegivel para promocao.
+
+### Fase 5: Pos-READY — SOB DEMANDA
 
 ```
-11   /update-specification docs/04_modules/mod-009-movimentos-aprovacao/requirements/fr/FR-009.md
-                           Se spec precisa de ajuste apos READY:             SOB DEMANDA
+7    /update-specification  Se spec precisa de ajuste apos READY:             SOB DEMANDA
                            Detecta estado_item=READY -> delega para
                            /create-amendment automaticamente
 
-12   /create-amendment FR-009 melhoria "descricao"
-                           Criar amendment formal:                           SOB DEMANDA
+8    /create-amendment      Criar amendment formal:                           SOB DEMANDA
                            Naming: {Pilar}-{ID}-{Natureza}{Seq}.md
-                           Caso de uso previsto: endpoint retry (se contrato
-                           mudar apos READY), SSE enhancement (quando
-                           validacao UX indicar necessidade)
+                           Caso de uso previsto: ajustes pos-go-live,
+                           SSE para real-time inbox, email como canal adicional
 ```
 
-### Gestao de Pendencias (qualquer momento)
+### Gestao de Pendencias
 
 > **Decision tree de pendencias:**
->
-> ```
 > O que preciso fazer com pendencias?
-> +-- Ver situacao atual       -> /manage-pendentes list PEN-009
-> +-- Criar nova pendencia     -> /manage-pendentes create PEN-009
-> +-- Analisar opcoes          -> /manage-pendentes analyze PEN-009 PEN-009-XXX
-> +-- Registrar decisao        -> /manage-pendentes decide PEN-009 PEN-009-XXX opcao=X
-> +-- Implementar decisao      -> /manage-pendentes implement PEN-009 PEN-009-XXX
-> +-- Cancelar pendencia       -> /manage-pendentes cancel PEN-009 PEN-009-XXX
-> +-- Relatorio consolidado    -> /manage-pendentes report PEN-009
-> ```
+> |- Ver situacao atual       -> /manage-pendentes list PEN-009
+> |- Criar nova pendencia     -> /manage-pendentes create PEN-009
+> |- Analisar opcoes          -> /manage-pendentes analyze PEN-009 PENDENTE-XXX
+> |- Registrar decisao        -> /manage-pendentes decide PEN-009 PENDENTE-XXX opcao=X
+> |- Implementar decisao      -> /manage-pendentes implement PEN-009 PENDENTE-XXX
+> |- Cancelar pendencia       -> /manage-pendentes cancel PEN-009 PENDENTE-XXX
+> |-- Relatorio consolidado    -> /manage-pendentes report PEN-009
 
 ```
-16   /manage-pendentes list PEN-009
+9    /manage-pendentes list PEN-009
                            Estado atual MOD-009:
                              PEN-009: 7 itens total
                                7 IMPLEMENTADA (001-007)
@@ -601,97 +230,58 @@ O `/validate-all` ainda nao foi executado para o MOD-009. Com o enriquecimento c
                              SLA: nenhum vencido
 ```
 
-#### Painel de Pendencias — Resumo Individual
+**Pendencias — resumo compacto:**
 
-| PENDENTE | Status | Sev. | Dominio | Decisao | Artefato de saida |
-|----------|--------|------|---------|---------|-------------------|
-| PEN-009-001 | IMPLEMENTADA | ALTA | INT-009, FR-009 | Opcao 1 — Domain event com outbox (assincrono) | INT-009 §4.3 |
-| PEN-009-002 | IMPLEMENTADA | ALTA | SEC-009, MOD-000 | Opcao 1 — Amendment formal DOC-FND-000-M03 | DOC-FND-000-M03 |
-| PEN-009-003 | IMPLEMENTADA | MEDIA | UX-009, INT-009 | Opcao 3 — Body field dry_run no evaluate | INT-009 §2.2.1 |
-| PEN-009-004 | IMPLEMENTADA | MEDIA | INT-009, NFR-009 | Opcao 1 — In-app como MVP | INT-009 §5 |
-| PEN-009-005 | IMPLEMENTADA | BAIXA | DATA-009 | Opcao 3 — Sem particionamento MVP, indices | Decisao registrada |
-| PEN-009-006 | IMPLEMENTADA | MEDIA | FR-009, INT-009 | Opcao 1 — Endpoint POST /movements/:id/retry | INT-009 |
-| PEN-009-007 | IMPLEMENTADA | BAIXA | UX-009 | Opcao 1 — Polling 60s MVP, SSE roadmap | Decisao registrada |
+| # | ID | Status | Severidade | Decisao (1 linha) |
+|---|---|---|---|---|
+| 1 | PEN-009-001 | IMPLEMENTADA | ALTA | Domain event outbox para callback pos-aprovacao |
+| 2 | PEN-009-002 | IMPLEMENTADA | ALTA | Amendment DOC-FND-000-M03 (7 scopes) |
+| 3 | PEN-009-003 | IMPLEMENTADA | MEDIA | dry_run body field no evaluate |
+| 4 | PEN-009-004 | IMPLEMENTADA | MEDIA | In-app MVP para notificacoes |
+| 5 | PEN-009-005 | IMPLEMENTADA | BAIXA | Sem particionamento MVP (threshold 5M) |
+| 6 | PEN-009-006 | IMPLEMENTADA | MEDIA | Endpoint retry dedicado |
+| 7 | PEN-009-007 | IMPLEMENTADA | BAIXA | Polling 60s MVP (SSE roadmap) |
 
-> Detalhamento completo: ver [Fase 2](#pendentes-resolvidas-no-enriquecimento--detalhamento-completo).
-
-### Utilitarios (qualquer momento)
-
-```
-14   /git commit            Commit semantico apos qualquer alteracao           SOB DEMANDA
-                           Formato: docs(mod-009): <descricao>
-
-15   /update-index          Atualizar indices se criou/removeu arquivos       SOB DEMANDA
-                           INDEX.md sincronizado
-
-17   /readme-blueprint      Atualizar README.md do repositorio               SOB DEMANDA
-```
+> Detalhes completos: requirements/pen-009-pendente.md
 
 ---
 
 ## Resumo Visual do Fluxo MOD-009
 
 ```
-US-MOD-009 (APPROVED v1.2.0)             <- Fase 0: CONCLUIDA
-  |  5/5 features APPROVED (3 Backend + 2 UX)
-  v
-mod-009-movimentos-aprovacao/ (stubs DRAFT) <- Fase 1: CONCLUIDA (forge-module v0.1.0)
-  |
-  v
-mod-009 enriquecido (DRAFT v0.9.0)        <- Fase 2: CONCLUIDA (11 agentes, 7 PENDENTEs resolvidas)
-  |
-  +-- * PROXIMO PASSO: /validate-all
-  |     +-- /qa .................. A EXECUTAR
-  |     +-- /validate-manifest ... A EXECUTAR (2 manifests)
-  |     +-- /validate-openapi .... A EXECUTAR (13 endpoints)
-  |     +-- /validate-drizzle .... A EXECUTAR (7 tabelas)
-  |     +-- /validate-endpoint ... A EXECUTAR (13 handlers)
-  |
-  v
-mod-009 validado (DRAFT)                  <- Fase 3: A EXECUTAR
-  |
-  +-- Gate 0 (DoR): 5/7 atendidos, 2 A VERIFICAR (lint + manifests)
-  |
-  v
-mod-009 selado (READY)                    <- Fase 4: A EXECUTAR (apos fase 3)
-  |
-  v
-mod-009 + amendments/                     <- Fase 5: SOB DEMANDA (0 amendments)
+  [Fase 0]         [Fase 1]         [Fase 2]           [Fase 3]         [Fase 4]       [Fase 5]
+  Pre-Modulo  -->  Genese     -->  Enriquecimento -->  Validacao   -->  Promocao  -->  Pos-READY
+  CONCLUIDA        CONCLUIDA       CONCLUIDA           CONCLUIDA        <<<AQUI>>>     SOB DEMANDA
+  Epico APPROVED   Scaffold v0.1   11 agentes OK       validate-all     /promote       amendments
+  5/5 features     7 tabelas       4 ADRs, 7 PEN       PASS 2026-03-22  DoR 7/7 OK     quando necessario
+                                   (0 abertas)
 
-Dependencias upstream: MOD-000 (Foundation), MOD-004 (Identidade), MOD-006 (Execucao) — camada topologica 5.
-MOD-009 prove motor de controle para MOD-010 (MCP como origem de movimentos).
+  Dependencias upstream: MOD-000 -> MOD-004 -> MOD-006 -> MOD-009
+  Camada topologica: 5
+  Dependentes downstream: MOD-010 (policy CONTROLLED para movimentos)
 ```
-
----
 
 ## Particularidades do MOD-009
 
 | Aspecto | Detalhe |
 |---------|---------|
-| Dominio rico (Nivel 2) | Motor de controle sincrono com 4 criterios combinaveis de alcada. Aggregate root `ControlledMovement` centraliza invariantes. 4 value objects, 4 domain services. Score 6/6 — todos os gatilhos presentes (estado/workflow, compliance/auditoria, concorrencia, integracoes, multi-tenant, regras cruzadas). |
-| 7 tabelas proprias | `movement_control_rules`, `approval_rules`, `controlled_movements`, `approval_instances`, `movement_executions`, `movement_history`, `movement_override_log`. Rastreabilidade integral via `movement_history` com 11 event_types. |
-| 13 endpoints | 5 admin (regras), 1 motor (evaluate), 4 movimentos (list/get/cancel/override), 3 inbox (list/approve/reject). Endpoint retry adicionado via PEN-009-006. |
-| 13 domain events | 3 administrativos (sincrono simples) + 10 de movimentos (outbox pattern, ADR-003). Notificacao in-app via outbox consumer. |
-| 7 scopes RBAC | Registrados via amendment DOC-FND-000-M03. Segregacao de funcoes com excecao de auto-aprovacao por scope (ADR-002, allow_self_approve=true). |
-| 4 ADRs para Nivel 2 | ADR-001 (Motor Sincrono), ADR-002 (Segregacao + Auto-Aprovacao), ADR-003 (Outbox Pattern eventos 4-13), ADR-004 (Override 20 chars). Excede o minimo de 2 ADRs para Nivel 2. |
-| Principio "Origem nao e autorizacao" | API, integracao sistemica e MCP podem iniciar solicitacoes, mas nao contornam alcada. origin_type IN ['API', 'MCP', 'AGENT'] pode ser configurado para sempre exigir aprovacao humana. |
-| MOD-009 vs MOD-006 | Ortogonais: MOD-006 Gates operam dentro de fluxos de processo (transicoes de estagio); MOD-009 Movimentos operam em qualquer operacao critica (com ou sem processo). MOD-009 consome `case_id` opcional de MOD-006. |
-| Dependencia tripla upstream | MOD-000 (auth, RBAC, events), MOD-004 (scopes para auto-approval), MOD-006 (case_id opcional). Camada topologica 5 (implementacao apos MOD-006). |
-
----
+| Nivel de Arquitetura | Nivel 2 (DDD-lite + Full Clean) — score 6/6, todos os gatilhos presentes. Dominio rico com aggregate root ControlledMovement e 4 domain services. |
+| Principio "Origem nao e autorizacao" | API, integracao sistemica e MCP podem iniciar solicitacoes, mas nao contornam alcada. Toda operacao controlada passa pelo motor independente da origem. |
+| Ortogonalidade com MOD-006 Gates | MOD-006 Gates operam dentro de fluxos de processo (transicao de estagio). MOD-009 Movimentos operam em qualquer operacao critica (com ou sem processo). Complementares, nao concorrentes. |
+| 4 criterios combinaveis | VALUE (valor > threshold), HIERARCHY (nivel organizacional), ORIGIN (API/MCP/AGENT sempre controlado), OBJECT+OPERATION (ex: DELETE produto). Combinacao permite alcadas complexas. |
+| Auto-aprovacao por scope | Excecao documentada a segregacao: se solicitante possui required_scope da alcada, movimento e AUTO_APPROVED sem inbox. Registrado em movement_history com event_type=AUTO_APPROVED_BY_SCOPE. ADR-002. |
+| Override auditado | Justificativa minima 20 chars, scope approval:override, registro imutavel em movement_override_log. ADR-004. |
+| Motor sincrono | Motor de controle avalia regras sincronamente (diferente do MOD-008 que e assincrono). Retorna 202 quando intercepta operacao. ADR-001. |
 
 ## Checklist Rapido — O que Falta para READY
 
-- [ ] Executar `/validate-all docs/04_modules/mod-009-movimentos-aprovacao/` — /qa + /validate-manifest + /validate-openapi + /validate-drizzle + /validate-endpoint
-- [ ] Corrigir eventuais erros encontrados
-- [ ] Executar `/promote-module docs/04_modules/mod-009-movimentos-aprovacao/` — verificar Gate 0 (DoR) 7/7
+- [ ] Executar `/promote-module mod-009` (Fase 4)
 
-> **Nota:** Todas as 7 pendencias ja estao IMPLEMENTADA. Os 10 artefatos de requisitos estao enriquecidos. As 4 ADRs excedem o minimo para Nivel 2. Nao ha bloqueios (BLK-*) afetando MOD-009. As dependencias upstream (MOD-000, MOD-004, MOD-006) estao DRAFT mas isso nao impede a promocao da especificacao — apenas a geracao de codigo.
-
----
+> **Nota:** Todos os criterios DoR (1-7) estao atendidos. Modulo pronto para promocao imediata. MOD-010 aguarda MOD-009 READY para consumir policy CONTROLLED para movimentos.
 
 ## CHANGELOG deste Documento
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 2.0.0 | 2026-03-23 | Recriacao: Fases 0-3 CONCLUIDAS (validate-all PASS 2026-03-22), Fase 4 PENDENTE, 0 pendencias abertas, DoR 7/7 atendido, modulo elegivel para promocao |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 7 pendentes resolvidas (001-007), rastreio de 11 agentes, mapa de cobertura de 5 validadores, particularidades de dominio rico Nivel 2 |

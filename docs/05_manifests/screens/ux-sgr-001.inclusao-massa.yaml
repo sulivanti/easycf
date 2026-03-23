@@ -3,9 +3,8 @@
 # Tela: Grade de Inclusão em Massa
 # Módulo: MOD-011 (SmartGrid) | Schema: v1 | Data: 2026-03-15
 # ============================================================
-# ⚠️ PENDÊNCIA PEND-SGR-01: Este manifest está DRAFT até a definição
-# do contrato de mapeamento resultado-do-motor → estado visual da linha.
-# Promover para READY após resolução.
+# PEND-SGR-01 RESOLVIDA. PEND-SGR-04 RESOLVIDA (target_endpoints).
+# Ações submit com operation_id: null usam endpoint dinâmico via context_framer.
 # ============================================================
 
 schema_version: "v1"
@@ -65,7 +64,7 @@ actions:
     operation_id: null
     http_method: POST
     endpoint: null
-    notes: "operationId depende do módulo destino. Habilitado SOMENTE quando todas as linhas têm ✅."
+    notes: "DYNAMIC ENDPOINT: operation_id e endpoint resolvidos em runtime via target_endpoints do context_framer tipo OPERACAO (PEND-SGR-04). Habilitado SOMENTE quando todas as linhas têm ✅."
     requires_scope: []
     loading_state: button
     error_handling:

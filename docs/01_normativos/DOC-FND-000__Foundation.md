@@ -1,7 +1,7 @@
 # DOC-FND-000 — Contratos Fundacionais (Foundation)
 
 - **id:** DOC-FND-000
-- **version:** 1.7.0
+- **version:** 1.8.0
 - **status:** ACTIVE
 - **data_ultima_revisao:** 2026-03-18
 - **owner:** arquitetura
@@ -106,8 +106,22 @@ O Foundation define os scopes base do sistema. Todo módulo que adiciona novos s
 | `mcp:agent:write` | MOD-010 | Criar e editar agentes MCP |
 | `mcp:agent:revoke` | MOD-010 | Revogar agentes MCP (irreversível) |
 | `mcp:agent:phase2-enable` | MOD-010 | Habilitar Phase 2 create para agente individual |
-| `mcp:key:rotate` | MOD-010 | Rotacionar API key de agente MCP |
-| `mcp:execution:read` | MOD-010 | Visualizar log de execuções MCP |
+| `mcp:action:read` | MOD-010 | Ver catálogo de ações MCP |
+| `mcp:action:write` | MOD-010 | Criar e editar ações do catálogo MCP |
+| `mcp:log:read` | MOD-010 | Visualizar execuções MCP e logs |
+| `param:framer:read` | MOD-007 | Ver enquadradores, tipos, objetos, campos e regras |
+| `param:framer:write` | MOD-007 | Criar e editar enquadradores e regras de incidência |
+| `param:framer:delete` | MOD-007 | Inativar enquadradores e regras |
+| `param:routine:read` | MOD-007 | Ver rotinas, itens e histórico |
+| `param:routine:write` | MOD-007 | Criar e editar rotinas (somente DRAFT) |
+| `param:routine:publish` | MOD-007 | Publicar rotina (DRAFT → PUBLISHED) |
+| `param:engine:evaluate` | MOD-007 | Chamar o motor de avaliação (usado por MOD-006 e frontend) |
+| `integration:service:read` | MOD-008 | Ver catálogo de serviços de destino |
+| `integration:service:write` | MOD-008 | Criar e editar serviços (credenciais mascaradas) |
+| `integration:routine:write` | MOD-008 | Configurar rotinas de integração (HTTP, mapeamentos, params) |
+| `integration:execute` | MOD-008 | Disparar execução manual de integração |
+| `integration:log:read` | MOD-008 | Ver logs de chamadas de integração |
+| `integration:log:reprocess` | MOD-008 | Reprocessar chamadas em DLQ |
 
 > **Regra de validação (Gate 3 — DOC-ARC-003B):** Todo scope referenciado em Screen Manifests DEVE existir neste catálogo. O CI DEVE falhar se encontrar scope não registrado.
 

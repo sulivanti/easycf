@@ -14,12 +14,13 @@
 | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada (hard limit configurável por tenant), PENDENTE-006 implementada (flag dry_run no evaluate) |
 > | 0.8.0  | 2026-03-20 | AGN-DEV-10  | Re-enriquecimento PENDENTE Batch 4 — PEN-007/PENDENTE-008 adicionados (auto-deprecate links, bulk items) |
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
+| 0.9.0  | 2026-03-22 | arquitetura | PENDENTE-007→IMPLEMENTADA (Opção B: links como histórico), PENDENTE-008→IMPLEMENTADA (Opção A: bulk INSERT) |
 
 # PEN-007 — Questões Abertas da Parametrização Contextual e Rotinas
 
 - **estado_item:** DRAFT
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-20
+- **data_ultima_revisao:** 2026-03-22
 - **rastreia_para:** US-MOD-007, BR-007, FR-007, INT-007, DATA-007, SEC-007, NFR-007, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005, ADR-006
 
 ---
@@ -161,15 +162,19 @@
 
 ---
 
-## PENDENTE-007 — Auto-Deprecate: Migração Automática de routine_incidence_links
+## ~~PENDENTE-007 — Auto-Deprecate: Migração Automática de routine_incidence_links~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** MEDIA
 - **dominio:** ARC
 - **tipo:** DEC-TEC
 - **origem:** ENRICH
 - **criado_em:** 2026-03-20
 - **criado_por:** AGN-DEV-10
+- **decidido_em:** 2026-03-22
+- **decidido_por:** arquitetura
+- **opcao_escolhida:** B
+- **implementado_em:** 2026-03-22
 - **modulo:** MOD-007
 - **rastreia_para:** BR-008, BR-012, FR-008, ADR-003, PENDENTE-004, DATA-007
 - **tags:** auto-deprecate, incidence-links, migration
@@ -215,25 +220,29 @@ Opcao B (manter como historico) — o fork ja copia links para a nova versao (AD
 | `/update-specification FR-007` | Adicionar nota sobre links orfaos no FR-008 (fork) | Apos decisao |
 | `/update-specification UX-007` | Adicionar badge "versao deprecada" na matriz de incidencia | Apos decisao |
 
-### Resolucao (preenchido quando DECIDIDA)
+### Resolucao
 
-> **Decisao:** —
-> **Decidido por:** — em —
-> **Justificativa:** —
-> **Artefato de saida:** —
-> **Implementado em:** —
+> **Decisao:** Opcao B — Manter links como historico
+> **Decidido por:** arquitetura em 2026-03-22
+> **Justificativa:** Fork ja copia links para nova versao (ADR-003 ponto 3). Links da versao deprecada servem como historico de auditoria. Motor ignora automaticamente (filtra PUBLISHED). FR-007 FR-008 atualizado com nota sobre links orfaos. UX-007 UX-ROTINA-001 atualizado com badge "versao deprecada" na matriz de incidencia.
+> **Artefato de saida:** FR-007 (nota FR-008), UX-007 (badge versao deprecada)
+> **Implementado em:** 2026-03-22
 
 ---
 
-## PENDENTE-008 — Bulk Create de Routine Items na Operacao de Fork
+## ~~PENDENTE-008 — Bulk Create de Routine Items na Operacao de Fork~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** BAIXA
 - **dominio:** ARC
 - **tipo:** DEC-TEC
 - **origem:** ENRICH
 - **criado_em:** 2026-03-20
 - **criado_por:** AGN-DEV-10
+- **decidido_em:** 2026-03-22
+- **decidido_por:** arquitetura
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-22
 - **modulo:** MOD-007
 - **rastreia_para:** FR-005, FR-007, ADR-003, DATA-007, NFR-006
 - **tags:** fork, bulk-create, performance, routine-items
@@ -272,10 +281,49 @@ Opcao A (bulk INSERT) — para o fork, nao e necessario emitir domain event por 
 |---|---|---|
 | N/A | Decisao tecnica de implementacao — impacta apenas `fork-routine.ts` | Durante implementacao |
 
-### Resolucao (preenchido quando DECIDIDA)
+### Resolucao
 
-> **Decisao:** —
-> **Decidido por:** — em —
-> **Justificativa:** —
-> **Artefato de saida:** —
-> **Implementado em:** —
+> **Decisao:** Opcao A — Bulk INSERT (unico statement)
+> **Decidido por:** arquitetura em 2026-03-22
+> **Justificativa:** Fork e evento unico (`routine.forked`), nao necessita domain event por item. `gen_random_uuid()` no PostgreSQL gera UUIDs. Performance constante. Consistente com ADR-001/ADR-005 (simplicidade operacional). Decisao tecnica de implementacao para `fork-routine.ts` — sem domain event por item, sem validacao individual (itens ja validados na versao original).
+> **Artefato de saida:** PEN-007 (decisao documentada — implementacao efetiva no `fork-routine.ts` durante codificacao)
+> **Implementado em:** 2026-03-22 (decisao; codigo em sprint futuro)
+
+---
+
+## PENDENTE-009 — ~~Scopes `param:*` não registrados em DOC-FND-000 §2.2~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** ALTA
+- **dominio:** UX
+- **tipo:** LACUNA
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-22
+- **criado_por:** validate-all
+- **modulo:** MOD-007
+- **rastreia_para:** DOC-FND-000, ux-param-001, ux-rotina-001, SEC-007
+- **tags:** scopes, rbac, amendment, gate-3
+- **sla_data:** —
+- **dependencias:** []
+
+### Questao
+
+Os manifests que consomem scopes `param:*` (ux-param-001, ux-rotina-001) e MOD-011 (ux-sgr-001/002/003 via `param:engine:evaluate`) referenciam 7 scopes que NÃO existem no catálogo canônico DOC-FND-000 §2.2: `param:framer:read`, `param:framer:write`, `param:framer:delete`, `param:routine:read`, `param:routine:write`, `param:routine:publish`, `param:engine:evaluate`. O módulo spec (seção 8) referencia "Amendment MOD-000-F12" como veículo de registro, mas este amendment só foi aplicado para scopes `mcp:*` (MOD-010). Os scopes `param:*` nunca foram registrados.
+
+### Impacto
+
+Gate 3 (DOC-ARC-003B) falha para TODOS os manifests de MOD-007 e para os 3 manifests de MOD-011 que herdam `param:engine:evaluate`. Bloqueio de promoção para READY.
+
+### Acao Sugerida
+
+| Skill | Proposito | Quando executar |
+|---|---|---|
+| `/create-amendment MOD-000` | Registrar 7 scopes `param:*` em DOC-FND-000 §2.2 | Imediatamente (pré-requisito de promoção) |
+
+### Resolucao
+
+> **Decisao:** 7 scopes `param:*` registrados diretamente em DOC-FND-000 §2.2 v1.8.0
+> **Decidido por:** validate-all em 2026-03-22
+> **Justificativa:** Gate 3 (DOC-ARC-003B) exige que todos os scopes referenciados em Screen Manifests existam no catálogo canônico.
+> **Artefato de saida:** DOC-FND-000 v1.8.0 — 7 scopes adicionados: param:framer:read/write/delete, param:routine:read/write/publish, param:engine:evaluate
+> **Implementado em:** DOC-FND-000 v1.8.0

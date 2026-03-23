@@ -9,12 +9,13 @@
 > | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE — documenta PEND-SGR-01/02 como resolvidas, adiciona PEND-SGR-03/04/05 |
 > | 0.3.0  | 2026-03-19 | arquitetura | Pipeline PEND-SGR-04 — DECIDIDA (Opção A: target_endpoints no context_framer) → IMPLEMENTADA (DATA-011 + INT-011 + backlog amendment MOD-007) |
 > | 0.4.0  | 2026-03-19 | arquitetura | Pipeline PEND-SGR-03 (IMPLEMENTADA — Opção B: limite 200 linhas, NFR-011) e PEND-SGR-05 (IMPLEMENTADA — Opção C: env var SMARTGRID_CONCURRENCY default=10, NFR-011) |
+> | 0.5.0  | 2026-03-22 | arquitetura | PEND-SGR-07 → IMPLEMENTADA (notes dinâmico já adicionado em manifests SGR) |
 
 # PEN-011 — Questões Abertas do SmartGrid
 
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-22
 - **rastreia_para:** US-MOD-011, DOC-GPA-001, FR-011, NFR-011, INT-011, DATA-011
 - **referencias_exemplos:** N/A
 - **evidencias:** N/A
@@ -69,7 +70,73 @@
 
 ## Questões Abertas
 
-Nenhuma questão aberta restante. Todas as questões (PEND-SGR-01 a PEND-SGR-05) foram resolvidas e implementadas.
+As questões originais (PEND-SGR-01 a PEND-SGR-05) foram resolvidas. Novas questões identificadas pelo `/validate-all` em 2026-03-22:
+
+---
+
+## ~~PEND-SGR-06 — Scope `param:engine:evaluate` não registrado em DOC-FND-000 §2.2~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** ALTA
+- **dominio:** UX
+- **tipo:** LACUNA
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-22
+- **criado_por:** validate-all
+- **modulo:** MOD-011
+- **rastreia_para:** DOC-FND-000, ux-sgr-001, ux-sgr-002, ux-sgr-003, PEN-007 PENDENTE-009
+- **tags:** scopes, rbac, gate-3, cross-module
+- **sla_data:** —
+- **dependencias:** [PEN-007 PENDENTE-009]
+
+### Questao
+
+Os 3 manifests SmartGrid (ux-sgr-001/002/003) usam scope `param:engine:evaluate` para ações de validação (`validate_line`, `evaluate_record_on_open`, `validate_changes`, `validate_for_delete`). Este scope pertence ao domínio MOD-007 e NÃO está registrado em DOC-FND-000 §2.2. A mesma root cause afeta MOD-007 (PEN-007 PENDENTE-009). A resolução depende do registro dos 7 scopes `param:*` no catálogo canônico.
+
+### Impacto
+
+Gate 3 falha para todos os 3 manifests MOD-011. Bloqueio de promoção para READY.
+
+### Acao Sugerida
+
+Dependência de PEN-007 PENDENTE-009 — quando os 7 scopes `param:*` forem registrados, esta pendência é automaticamente resolvida.
+
+---
+
+## ~~PEND-SGR-07 — Manifests com `operation_id: null` em ações submit (dinâmicas)~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **dominio:** UX
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-22
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-22
+- **decidido_por:** arquitetura
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-22
+- **modulo:** MOD-011
+- **rastreia_para:** ux-sgr-001, ux-sgr-002, ux-sgr-003, PEND-SGR-04
+- **tags:** gate-2, manifest, dynamic-endpoint
+- **sla_data:** —
+- **dependencias:** [PEND-SGR-04]
+
+### Questao
+
+As ações `save_batch` (sgr-001), `save_changes` (sgr-002) e `confirm_delete` (sgr-003) possuem `operation_id: null` e `endpoint: null` com `type: submit`. Gate 2 exige que ações não-client_only tenham operation_id, http_method e endpoint. PEND-SGR-04 (IMPLEMENTADA) definiu o mecanismo `target_endpoints` no context_framer, mas os manifests não foram atualizados para refletir esta resolução — os campos continuam `null`.
+
+### Impacto
+
+Gate 2 WARNING para os 3 manifests. Tecnicamente violante, mas by-design (endpoint é dinâmico, resolvido em runtime via context_framer).
+
+### Resolução
+
+> **Decisão:** Opção A — Documentar padrão dinâmico nos manifests via campo `notes`
+> **Decidido por:** arquitetura em 2026-03-22
+> **Justificativa:** 3 manifests atualizados com campo `notes` em ações submit explicando que `operation_id` e `endpoint` são resolvidos em runtime via `target_endpoints` do context_framer (PEND-SGR-04). Gate 2 WARNING justificado — design by-intent, não erro.
+> **Artefato de saída:** ux-sgr-001.inclusao-massa.yaml, ux-sgr-002.alteracao-registro.yaml, ux-sgr-003.exclusao-massa.yaml (campo notes adicionado em ações dinâmicas)
+> **Implementado em:** 2026-03-22
 
 ---
 

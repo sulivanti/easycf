@@ -15,12 +15,13 @@
 | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-003 implementada — FR-010 §FR-007 lógica DIRECT dispatch detalhada |
 | 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida+implementada — PREPARAR can_be_direct=false (DATA-010 seed + BR-007) |
 | 0.9.0  | 2026-03-19 | arquitetura | PENDENTE-006 decidida+implementada — Opcao A (NotificationService MOD-000). Dependencia MOD-000 mapeada. |
+| 1.0.0  | 2026-03-22 | arquitetura | PENDENTE-007 → IMPLEMENTADA (scopes MCP alinhados em DOC-FND-000 v1.8.0) |
 
 # PEN-010 — Questões Abertas de MCP e Automação Governada
 
 - **estado_item:** DRAFT
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-22
 - **rastreia_para:** US-MOD-010, MOD-010, BR-010, FR-010, SEC-010, INT-010
 
 ---
@@ -35,6 +36,7 @@
 | 4 | PENDENTE-004 | 🟠 ALTA | 🟢 IMPLEMENTADA | INT | Amendment MOD-000-F12: registro de scopes no Foundation |
 | 5 | PENDENTE-005 | 🟡 MEDIA | ✅ IMPLEMENTADA | INT | ~~Callback pos-aprovacao MOD-009 → MOD-010~~ |
 | 6 | PENDENTE-006 | 🟢 BAIXA | ✅ IMPLEMENTADA | INFRA | ~~Canal de notificacao para privilege escalation (e-mail config)~~ |
+| 7 | PENDENTE-007 | 🟠 ALTA | ✅ IMPLEMENTADA | UX | ~~Scopes MCP nos manifests divergem do catálogo canônico~~ |
 
 ---
 
@@ -379,3 +381,50 @@ Opcao A — alinhar com Foundation. Se servico de e-mail nao existir ainda, regi
 > **Justificativa:** Reutiliza infraestrutura centralizada, evita duplicacao de configuracao SMTP por modulo. Alinhado com principio de ownership — Foundation e dono da infra transversal. Opcao B (SMTP direto) descartada por duplicacao e inconsistencia.
 > **Artefato de saida:** Dependencia MOD-000 (NotificationService multi-canal) mapeada. MOD-000 ainda NAO possui NotificationService — deve ser implementado como servico multi-canal (in-app + email + webhook) para atender MOD-010 e demais modulos.
 > **Implementado em:** PEN-010 v0.9.0 (dependencia mapeada; implementacao efetiva depende de MOD-000 NotificationService)
+
+---
+
+## ~~PENDENTE-007 — Scopes MCP nos manifests divergem do catálogo canônico~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** ALTA
+- **dominio:** UX
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-22
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-22
+- **decidido_por:** arquitetura
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-22
+- **modulo:** MOD-010
+- **rastreia_para:** DOC-FND-000, ux-mcp-001, ux-mcp-002, PENDENTE-004
+- **tags:** scopes, rbac, divergence, gate-3
+- **sla_data:** —
+- **dependencias:** [PENDENTE-004]
+
+### Questao
+
+O Amendment DOC-FND-000-M04 (PENDENTE-004) registrou 6 scopes MCP no catálogo canônico: `mcp:agent:read/write/revoke`, `mcp:agent:phase2-enable`, `mcp:key:rotate`, `mcp:execution:read`. Porém, os manifests UX-MCP-001 e UX-MCP-002 usam scopes **diferentes** dos registrados:
+
+| No Catálogo | No Manifest | Usado em |
+|---|---|---|
+| `mcp:key:rotate` | (não usado) | — |
+| `mcp:execution:read` | (não usado) | — |
+| (não registrado) | `mcp:action:read` | ux-mcp-001 |
+| (não registrado) | `mcp:action:write` | ux-mcp-001 |
+| (não registrado) | `mcp:log:read` | ux-mcp-002 |
+
+O módulo spec (seção 7) define `mcp:action:read/write` e `mcp:log:read`, divergindo do que foi registrado no amendment.
+
+### Impacto
+
+Gate 3 falha para ambos manifests MOD-010. O catálogo canônico e o módulo spec estão desalinhados.
+
+### Resolução
+
+> **Decisão:** Opção A — Alinhar DOC-FND-000 §2.2 com módulo spec
+> **Decidido por:** arquitetura em 2026-03-22
+> **Justificativa:** Catálogo atualizado: `mcp:key:rotate` e `mcp:execution:read` removidos; `mcp:action:read`, `mcp:action:write`, `mcp:log:read` adicionados. Scopes agora alinham com módulo spec seção 7 e manifests. Gate 3 verde.
+> **Artefato de saída:** DOC-FND-000 §2.2 (scopes MCP linhas 105-111)
+> **Implementado em:** DOC-FND-000 v1.8.0

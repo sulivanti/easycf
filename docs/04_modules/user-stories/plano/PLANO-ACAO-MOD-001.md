@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-001 Backoffice Admin
 
-> **Versao:** 1.0.0 | **Data:** 2026-03-22 | **Owner:** arquitetura
+> **Versao:** 2.0.0 | **Data:** 2026-03-23 | **Owner:** arquitetura
 > **Estado atual do modulo:** DRAFT (v0.10.0) | **Epico:** READY (v0.5.0) | **Features:** 3/3 READY
 >
-> Fases 0-2 concluidas. Proximo passo: Fase 3 (Validacao) — executar `/validate-all`.
+> Fases 0-3 concluidas (validate-all PASS 2026-03-22). Proximo passo: Fase 4 (Promocao) — executar `/promote-module`.
 
 ---
 
@@ -53,7 +53,7 @@ O epico US-MOD-001 define o primeiro modulo de negocio construido sobre o Founda
 
 ### Fase 1: Genese do Modulo — CONCLUIDA
 
-Primeiro modulo full-stack pos-Foundation. Scaffoldado em 2026-03-16 apos rollback de uma tentativa anterior (v0.3.0 do epico registra rollback de scaffold destruido).
+Primeiro modulo UX-First pos-Foundation. Scaffoldado em 2026-03-16 apos rollback de uma tentativa anterior (v0.3.0 do epico registra rollback de scaffold destruido).
 
 ```
 3    /forge-module MOD-001  Scaffold completo gerado:                        CONCLUIDO
@@ -64,19 +64,16 @@ Primeiro modulo full-stack pos-Foundation. Scaffoldado em 2026-03-16 apos rollba
                            Pasta: docs/04_modules/mod-001-backoffice-admin/
 ```
 
-### Fase 2: Enriquecimento — CONCLUIDO
+### Fase 2: Enriquecimento — CONCLUIDA
 
 O enriquecimento do MOD-001 foi completo — todos os agentes rodaram entre 2026-03-16 e 2026-03-18. Durante o processo, 4 pendencias foram identificadas e todas resolvidas. Destaque para PENDENTE-003 que expandiu o escopo com FR-007 (Alterar Senha) e INT-006.
 
 > **Decision tree de enriquecimento:**
->
-> ```
 > Quero enriquecer todos os modulos elegiveis?
 > ├── SIM → /enrich-all (sequencial, com checkpoint e --dry-run/--resume)
 > └── NAO → Qual escopo?
 >     ├── Todos agentes de 1 modulo  → /enrich mod-001
 >     └── 1 agente especifico        → /enrich-agent AGN-DEV-XX mod-001
-> ```
 
 ```
 4    /enrich docs/04_modules/mod-001-backoffice-admin/
@@ -104,216 +101,22 @@ O enriquecimento do MOD-001 foi completo — todos os agentes rodaram entre 2026
 | 9 | AGN-DEV-09 | ADR | ADR-001, ADR-002, ADR-003 | CONCLUIDO | 3 ADRs criadas e aceitas |
 | 10 | AGN-DEV-10 | PEN | pen-001-pendente.md | CONCLUIDO | v0.12.0 — 4 pendentes criadas e resolvidas |
 
-#### Pendentes Resolvidas no Enriquecimento — Detalhamento Completo
+#### Pendentes Resolvidas — Resumo Compacto
 
-> As 4 pendencias abaixo foram identificadas durante o enriquecimento e todas foram decididas e implementadas em 2026-03-18.
+| # | ID | Status | Sev. | Decisao (resumo) | Artefato |
+|---|-----|--------|------|-------------------|----------|
+| 1 | PENDENTE-001 | IMPLEMENTADA | MEDIA | Opcao C — React Query/SWR cache 30s | FR-004, FR-005 |
+| 2 | PENDENTE-002 | IMPLEMENTADA | BAIXA | Opcao B — Sidebar empty state com icone | FR-004, UX-001 |
+| 3 | PENDENTE-003 | IMPLEMENTADA | ALTA | Opcao A — FR-007 + INT-006 Alterar Senha | FR-007, INT-006, DATA-003 |
+| 4 | PENDENTE-004 | IMPLEMENTADA | MEDIA | Opcao B — fallback defensivo MFA redirect | FR-001 v0.6.0 |
 
----
+> Detalhes completos: requirements/pen-001-pendente.md
 
-##### ~~PENDENTE-001 — Estrategia de Cache de auth_me entre Shell e Dashboard~~
+### Fase 3: Validacao — CONCLUIDA
 
-- **status:** IMPLEMENTADA
-- **severidade:** MEDIA
-- **dominio:** ARC
-- **tipo:** DEC-TEC
-- **origem:** ENRICH
-- **criado_em:** 2026-03-16
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** FR-004, FR-005, INT-002, INT-005
-- **tags:** cache, auth-me, react-query, performance
-- **dependencias:** []
-- **decidido_em:** 2026-03-18
-- **decidido_por:** usuario
-- **opcao_escolhida:** C
-
-**Questao:**
-O Shell (UX-SHELL-001) e o Dashboard (UX-DASH-001) ambos chamam `GET /auth/me` ao montar. Devem compartilhar o resultado via React Context/cache ou cada componente faz sua propria chamada?
-
-**Impacto:**
-Performance (chamada duplicada), consistencia (dados sempre frescos vs. stale), complexidade (cache management)
-
-**Opcao A — Cada componente chama auth_me independentemente:**
-Simplicidade maxima, 2 requisicoes no carregamento inicial.
-
-- Pros: Zero complexidade, sem gerenciamento de cache
-- Contras: Chamada duplicada, desperdicio de banda
-
-**Opcao B — Shell chama auth_me e injeta via React Context:**
-1 requisicao, mas acoplamento Shell↔Dashboard.
-
-- Pros: 1 requisicao, dados compartilhados
-- Contras: Acoplamento Shell↔Dashboard, Context precisa ser mantido
-
-**Opcao C — React Query/SWR com cache de 30s:**
-1 requisicao efetiva, cache automatico, sem acoplamento.
-
-- Pros: 1 requisicao efetiva, cache automatico entre Shell e Dashboard, sem acoplamento direto
-- Contras: Dependencia de lib de cache (React Query ou SWR)
-
-**Recomendacao:** Opcao C (React Query/SWR) — balance entre performance e simplicidade.
-
-**Resolucao:**
-
-> **Decisao:** Opcao C — React Query/SWR com cache de 30s
-> **Decidido por:** usuario em 2026-03-18
-> **Justificativa:** Cache TTL curto (30s) garante dados frescos sem duplicar chamadas. Shell e Dashboard compartilham resultado via query key sem acoplamento direto. Se lib de cache ja existe no projeto, custo zero de adocao.
-> **Artefato de saida:** FR-004 v0.5.0, FR-005 v0.4.0 — clausula de cache auth_me adicionada
-> **Implementado em:** 2026-03-18
-
----
-
-##### ~~PENDENTE-002 — Comportamento do Shell quando auth_me retorna scopes vazios~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** BAIXA
-- **dominio:** UX
-- **tipo:** LACUNA
-- **origem:** ENRICH
-- **criado_em:** 2026-03-16
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** FR-004, UX-001, BR-005
-- **tags:** sidebar, empty-state, scopes, ux
-- **dependencias:** []
-- **decidido_em:** 2026-03-18
-- **decidido_por:** Marcos Sulivan
-- **opcao_escolhida:** B
-
-**Questao:**
-Se auth_me retorna `scopes=[]`, o Dashboard mostra "Nenhum modulo disponivel". Mas a Sidebar tambem fica completamente vazia — apenas o Header com ProfileWidget e visivel. Isso e aceitavel do ponto de vista UX ou devemos exibir um estado vazio explicativo na Sidebar?
-
-**Impacto:**
-UX (primeira impressao do admin sem permissoes), suporte (chamados por "tela em branco").
-
-**Opcao A — Sidebar vazia e aceitavel:**
-O Dashboard ja explica a situacao com "Nenhum modulo disponivel para seu perfil."
-
-- Pros: Zero complexidade; ja implementado no Dashboard
-- Contras: Sidebar completamente vazia pode parecer bug; usuario pode nao notar mensagem do Dashboard
-
-**Opcao B — Sidebar exibe mensagem "Nenhum modulo configurado" com icone informativo:**
-Quando `scopes=[]`, Sidebar exibe item placeholder com icone `Info` e texto explicativo.
-
-- Pros: UX clara; contexto imediato; reduz chamados de suporte
-- Contras: Componente extra na Sidebar (complexidade minima)
-
-**Recomendacao:** Opcao B — melhora a UX sem complexidade adicional.
-
-**Resolucao:**
-
-> **Decisao:** Opcao B — Sidebar exibe mensagem "Nenhum modulo configurado" com icone informativo
-> **Decidido por:** Marcos Sulivan em 2026-03-18
-> **Justificativa:** Sidebar com mensagem explicativa melhora UX sem complexidade. Evita percepcao de "tela quebrada" e reduz chamados de suporte. O Dashboard ja trata scopes=[] com mensagem propria, mas Sidebar vazia sem contexto confunde o usuario.
-> **Artefato de saida:** FR-004 v0.7.0 (empty state Sidebar), UX-001 v0.5.0 (UX-002 empty state atualizado)
-> **Implementado em:** 2026-03-18
-
----
-
-##### ~~PENDENTE-003 — Fluxo de "Alterar Senha" no ProfileWidget~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** ALTA
-- **dominio:** BIZ
-- **tipo:** LACUNA
-- **origem:** ENRICH
-- **criado_em:** 2026-03-17
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** FR-004, UX-001, INT-001, DOC-FND-000
-- **tags:** alterar-senha, profile-widget, lacuna-fr
-- **dependencias:** []
-- **decidido_em:** 2026-03-18
-- **decidido_por:** Marcos Sulivan
-- **opcao_escolhida:** A
-
-**Questao:**
-O dropdown do ProfileWidget (FR-004, UX-002) lista a acao "Alterar Senha", que deveria disparar `POST /auth/change-password` (DOC-FND-000 §1.3). Porem, nao existe nenhum FR dedicado ao fluxo de alteracao de senha (campos senha_atual + nova_senha + confirmar_nova_senha), nenhum INT documentando o contrato desse endpoint e nenhum UIActionEnvelope correspondente em DATA-003.
-
-**Impacto:**
-Sem especificacao, o fluxo de alteracao de senha sera implementado sem criterios de aceite definidos. Omissao pode levar a inconsistencias de UX, falta de telemetria e ausencia de testes E2E.
-
-**Opcao A — Criar FR-007, INT-006 e UIActionEnvelope para "Alterar Senha":**
-Especificar o fluxo completo: modal no ProfileWidget, campos senha_atual + nova_senha + confirmar, POST /auth/change-password, domain event `auth.password_changed`.
-
-- Pros: Cobertura completa, rastreabilidade, testes E2E definidos
-- Contras: Escopo adicional no MOD-001 (mais um FR + INT)
-
-**Opcao B — Adiar para MOD-002 ou sprint futuro:**
-Marcar "Alterar Senha" como "roadmap futuro" no ProfileWidget dropdown (desabilitado ou oculto).
-
-- Pros: Reduz escopo do MOD-001
-- Contras: ProfileWidget entregue com funcionalidade incompleta, UX confusa
-
-**Recomendacao:** Opcao A — o fluxo de alteracao de senha e parte natural do Shell de autenticacao e o endpoint ja existe no Foundation.
-
-**Acao sugerida:**
-
-| Skill | Proposito | Quando executar |
-|---|---|---|
-| `/enrich-agent mod-001 AGN-DEV-03` | Criar FR-007 (Alterar Senha) | Apos decisao |
-| `/enrich-agent mod-001 AGN-DEV-05` | Criar INT-006 (change-password) | Apos FR-007 |
-
-**Resolucao:**
-
-> **Decisao:** Opcao A — Criar FR-007, INT-006 e UIActionEnvelope para "Alterar Senha"
-> **Decidido por:** Marcos Sulivan em 2026-03-18
-> **Justificativa:** O fluxo de alteracao de senha e parte natural do Shell de autenticacao e o endpoint ja existe no Foundation (DOC-FND-000 §1.3). O custo de especificar e baixo (FR-007 + INT-006 + 1 UIActionEnvelope) e a UX fica completa. Adiar (Opcao B) entregaria ProfileWidget com funcionalidade incompleta.
-> **Artefato de saida:** FR-007 v0.1.0 (Alterar Senha via modal ProfileWidget), INT-006 v0.1.0 (POST /auth/change-password), DATA-003 v0.5.0 (UIActionEnvelope submit_change_password), INT-001 v0.5.0 (tabela resumo atualizada)
-> **Implementado em:** 2026-03-18
-
----
-
-##### ~~PENDENTE-004 — Tela MFA (/login/mfa) referenciada mas nao especificada~~
-
-- **status:** IMPLEMENTADA
-- **severidade:** MEDIA
-- **dominio:** BIZ
-- **tipo:** LACUNA
-- **origem:** ENRICH
-- **criado_em:** 2026-03-17
-- **criado_por:** AGN-DEV-10
-- **rastreia_para:** FR-001, UX-001, MOD-001
-- **tags:** mfa, login, roadmap, lacuna-ux
-- **dependencias:** []
-- **decidido_em:** 2026-03-18
-- **decidido_por:** usuario
-- **opcao_escolhida:** B
-
-**Questao:**
-FR-001 especifica que login com `mfa_required=true` redireciona para `/login/mfa?session=temp_token`. Porem, o mod.md §2 lista "MFA/TOTP na tela de login (UX-MFA-001 — roadmap futuro)" no escopo "Nao Inclui". Nao ha FR, UX, INT ou Screen Manifest para a tela MFA. Se o MOD-000 ja suporta MFA, o redirect vai para uma rota inexistente.
-
-**Impacto:**
-Se o Foundation ativar MFA para algum tenant antes do MOD-001 especificar a tela, o usuario sera redirecionado para uma rota sem componente — resultando em 404 ou tela branca (viola principio Zero-Blank-Screen, ADR-003).
-
-**Opcao A — Especificar tela MFA minima no MOD-001 (UX-MFA-001):**
-Criar FR, UX e INT para um fluxo MFA basico. Mover MFA de "Nao Inclui" para "Inclui" no mod.md.
-
-- Pros: Evita rota orfao, cobertura completa
-- Contras: Aumenta escopo significativamente
-
-**Opcao B — Manter MFA como roadmap, mas adicionar fallback no redirect:**
-Se `mfa_required=true` e a rota /login/mfa nao existe, exibir Toast informativo: "MFA requerido. Contate o administrador." e nao redirecionar.
-
-- Pros: Escopo minimo, sem tela branca, graceful degradation
-- Contras: Funcionalidade MFA indisponivel ate ser especificada
-
-**Recomendacao:** Opcao B — manter MFA como roadmap, mas implementar fallback defensivo. Garante Zero-Blank-Screen (ADR-003).
-
-**Resolucao:**
-
-> **Decisao:** Opcao B — Manter MFA como roadmap, mas adicionar fallback no redirect
-> **Decidido por:** usuario em 2026-03-18
-> **Justificativa:** MFA permanece roadmap futuro (mod.md §2). Fallback defensivo evita rota orfao/tela branca caso MOD-000 ative MFA antes da tela ser especificada. Zero-Blank-Screen (ADR-003) preservado.
-> **Artefato de saida:** FR-001 v0.6.0 — fallback defensivo mfa_required (Toast + nao redireciona)
-> **Implementado em:** 2026-03-18
-
----
-
-### Fase 3: Validacao — PENDENTE
-
-O `/validate-all` ainda nao foi executado para o MOD-001. Com o enriquecimento completo e todas as pendencias resolvidas, o proximo passo e executar a validacao.
+O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis retornaram PASS (29/29 manifests globais aprovados). O MOD-001 passou em todos os checks aplicaveis.
 
 > **Decision tree de validacao:**
->
-> ```
 > Quero validar tudo de uma vez?
 > ├── SIM → /validate-all (orquestra todos, pula os que nao tem artefato)
 > └── NAO → Qual pilar?
@@ -322,63 +125,42 @@ O `/validate-all` ainda nao foi executado para o MOD-001. Com o enriquecimento c
 >     ├── Contratos OpenAPI      → /validate-openapi
 >     ├── Schemas Drizzle        → /validate-drizzle
 >     └── Endpoints Fastify      → /validate-endpoint
-> ```
 
 ```
 5    /validate-all docs/04_modules/mod-001-backoffice-admin/
-                           Orquestra TODAS as validacoes em sequencia:        A EXECUTAR
-                           Internamente executa:
-                             1. /qa (lint, links, metadados, EX-*, §N, ciclos)
-                             2. /validate-manifest (screen manifests vs schema v1)
+                           Orquestra TODAS as validacoes em sequencia:        CONCLUIDO (2026-03-22)
+                           Internamente executa:                              PASS
+                             1. /qa .......................... PASS
+                             2. /validate-manifest ........... PASS (3 manifests)
                              3. /validate-openapi → N/A (UX-First, sem backend)
                              4. /validate-drizzle → N/A (UX-First, sem entidades)
                              5. /validate-endpoint → N/A (UX-First, sem handlers)
-                           Pre-condicao: Enriquecimento concluido
-                           Pos-condicao: Relatorio consolidado pass/fail
-```
-
-> **Alternativa:** Executar validadores individuais:
-
-```
-5a   /qa docs/04_modules/mod-001-backoffice-admin/
-                           Diagnostico de sintaxe e integridade:              INDIVIDUAL
-                           - lint:docs (Pass A-E: EX-*, §N, IDs, context-map, ciclos)
-                           - Consistencia de metadados (estado_item, owner)
-                           - Dead links, DoR alignment
-
-5b   /validate-manifest ux-auth-001.login.yaml
-                           Validar manifests contra schema v1:               INDIVIDUAL
-                           - ux-auth-001.login.yaml
-                           - ux-shell-001.app-shell.yaml
-                           - ux-dash-001.main.yaml
-                           Verifica: DOC-UX-010, operationId, RBAC,
-                           telemetria pre/pos-auth, permissions
-
-5c   /validate-openapi                                                       N/A (UX-First)
-5d   /validate-drizzle                                                       N/A (UX-First)
-5e   /validate-endpoint                                                      N/A (UX-First)
+                           Pre-condicao: Enriquecimento concluido ✓
+                           Pos-condicao: Relatorio consolidado PASS
 ```
 
 #### Validadores Aplicaveis — Mapa de Cobertura
 
-| # | Validador | Aplicavel (nivel) | Executavel agora | Artefatos |
-|---|-----------|-------------------|------------------|-----------|
-| 1 | `/qa` | SIM (todos) | SIM | mod-001-backoffice-admin.md, requirements/*, adr/*, CHANGELOG.md |
-| 2 | `/validate-manifest` | SIM (3 manifests existem) | SIM | ux-auth-001, ux-shell-001, ux-dash-001 |
+| # | Validador | Aplicavel (nivel) | Resultado | Artefatos |
+|---|-----------|-------------------|-----------|-----------|
+| 1 | `/qa` | SIM (todos) | PASS | mod-001-backoffice-admin.md, requirements/*, adr/*, CHANGELOG.md |
+| 2 | `/validate-manifest` | SIM (3 manifests existem) | PASS | ux-auth-001, ux-shell-001, ux-dash-001 |
 | 3 | `/validate-openapi` | N/A | N/A | UX-First — sem backend proprio (endpoints sao do MOD-000) |
 | 4 | `/validate-drizzle` | N/A | N/A | UX-First — sem entidades de banco proprias |
 | 5 | `/validate-endpoint` | N/A | N/A | UX-First — sem handlers Fastify proprios |
 
 ### Fase 4: Promocao — PENDENTE
 
+Com a Fase 3 concluida com sucesso, o modulo esta apto para promocao. Todos os criterios do Gate 0 (DoR) estao atendidos.
+
 ```
 10   /promote-module docs/04_modules/mod-001-backoffice-admin/
-                           Selar mod-001 como READY:                         A EXECUTAR (apos fase 3)
+                           Selar mod-001 como READY:                         A EXECUTAR
                            Gate 0 — Definition of Ready (DoR):
                              [DoR-1] PENDENTEs resolvidos? .............. SIM (4/4 IMPLEMENTADA)
                              [DoR-2] Arquivos de requisito existem? ..... SIM (12/12)
-                             [DoR-3] Zero erros de lint? ................ A VERIFICAR (executar /qa)
-                             [DoR-4] Screen manifests validados? ........ A VERIFICAR (executar /validate-manifest)
+                             [DoR-3] Zero erros de lint? ................ SIM (validate-all PASS)
+                             [DoR-4] Screen manifests validados? ........ SIM (validate-all PASS)
                              [DoR-5] ADRs conforme nivel? ............... SIM (3 >= 1 para N1)
                              [DoR-6] CHANGELOG atualizado? .............. SIM (v0.9.1)
                              [DoR-7] Bloqueios cross-modulo? ............ SIM (0 bloqueios)
@@ -413,8 +195,6 @@ O `/validate-all` ainda nao foi executado para o MOD-001. Com o enriquecimento c
 ### Gestao de Pendencias (qualquer momento)
 
 > **Decision tree de pendencias:**
->
-> ```
 > O que preciso fazer com pendencias?
 > ├── Ver situacao atual       → /manage-pendentes list PEN-001
 > ├── Criar nova pendencia     → /manage-pendentes create PEN-001
@@ -423,7 +203,6 @@ O `/validate-all` ainda nao foi executado para o MOD-001. Com o enriquecimento c
 > ├── Implementar decisao      → /manage-pendentes implement PEN-001 PENDENTE-XXX
 > ├── Cancelar pendencia       → /manage-pendentes cancel PEN-001 PENDENTE-XXX
 > └── Relatorio consolidado    → /manage-pendentes report PEN-001
-> ```
 
 ```
 16   /manage-pendentes list PEN-001
@@ -434,16 +213,14 @@ O `/validate-all` ainda nao foi executado para o MOD-001. Com o enriquecimento c
                              SLA: nenhum vencido
 ```
 
-#### Painel de Pendencias — Resumo Individual
+| # | ID | Status | Sev. | Decisao (resumo) | Artefato |
+|---|-----|--------|------|-------------------|----------|
+| 1 | PENDENTE-001 | IMPLEMENTADA | MEDIA | Opcao C — React Query/SWR cache 30s | FR-004, FR-005 |
+| 2 | PENDENTE-002 | IMPLEMENTADA | BAIXA | Opcao B — Sidebar empty state | FR-004, UX-001 |
+| 3 | PENDENTE-003 | IMPLEMENTADA | ALTA | Opcao A — FR-007 + INT-006 Alterar Senha | FR-007, INT-006, DATA-003 |
+| 4 | PENDENTE-004 | IMPLEMENTADA | MEDIA | Opcao B — fallback MFA redirect | FR-001 v0.6.0 |
 
-| PENDENTE | Status | Sev. | Dominio | Decisao | Artefato de saida |
-|----------|--------|------|---------|---------|-------------------|
-| PENDENTE-001 | IMPLEMENTADA | MEDIA | ARC | Opcao C — React Query/SWR cache 30s | FR-004, FR-005 |
-| PENDENTE-002 | IMPLEMENTADA | BAIXA | UX | Opcao B — Sidebar empty state com icone | FR-004, UX-001 |
-| PENDENTE-003 | IMPLEMENTADA | ALTA | BIZ | Opcao A — FR-007 + INT-006 Alterar Senha | FR-007, INT-006, DATA-003, INT-001 |
-| PENDENTE-004 | IMPLEMENTADA | MEDIA | BIZ | Opcao B — fallback defensivo MFA redirect | FR-001 v0.6.0 |
-
-> Detalhamento completo: ver [Fase 2](#pendentes-resolvidas-no-enriquecimento--detalhamento-completo).
+> Detalhes completos: requirements/pen-001-pendente.md
 
 ### Utilitarios (qualquer momento)
 
@@ -470,20 +247,14 @@ mod-001-backoffice-admin/ (stubs DRAFT) ← Fase 1: CONCLUIDA (forge-module v0.1
   ▼
 mod-001 enriquecido (DRAFT v0.10.0)     ← Fase 2: CONCLUIDA (10 agentes, 4 PENDENTEs resolvidas)
   │
-  ├── ★ PROXIMO PASSO: /validate-all
-  │     ├── /qa .................. A EXECUTAR
-  │     ├── /validate-manifest ... A EXECUTAR (3 manifests)
-  │     ├── /validate-openapi .... N/A (UX-First)
-  │     ├── /validate-drizzle .... N/A (UX-First)
-  │     └── /validate-endpoint ... N/A (UX-First)
+  ▼
+mod-001 validado (DRAFT)                ← Fase 3: CONCLUIDA (validate-all PASS 2026-03-22)
+  │
+  ├── ★ PROXIMO PASSO: /promote-module
+  │     Gate 0 (DoR): 7/7 atendidos
   │
   ▼
-mod-001 validado (DRAFT)                ← Fase 3: A EXECUTAR
-  │
-  ├── Gate 0 (DoR): 5/7 atendidos, 2 A VERIFICAR (lint + manifests)
-  │
-  ▼
-mod-001 selado (READY)                  ← Fase 4: A EXECUTAR (apos fase 3)
+mod-001 selado (READY)                  ← Fase 4: A EXECUTAR
   │
   ▼
 mod-001 + amendments/                   ← Fase 5: SOB DEMANDA (0 amendments)
@@ -509,11 +280,9 @@ MOD-001 prove Application Shell para MOD-002+ (Sidebar, Header, Breadcrumb).
 
 ## Checklist Rapido — O que Falta para READY
 
-- [ ] Executar `/validate-all docs/04_modules/mod-001-backoffice-admin/` — /qa + /validate-manifest
-- [ ] Corrigir eventuais erros encontrados
 - [ ] Executar `/promote-module docs/04_modules/mod-001-backoffice-admin/` — verificar Gate 0 (DoR) 7/7
 
-> **Nota:** Todas as 4 pendencias ja estao IMPLEMENTADA. Os 12 artefatos de requisitos estao enriquecidos. As 3 ADRs excedem o minimo para Nivel 1. Nao ha bloqueios (BLK-*) afetando MOD-001. A unica dependencia upstream (MOD-000) esta DRAFT mas isso nao impede a promocao da especificacao — apenas a geracao de codigo.
+> **Nota:** Todas as 4 pendencias ja estao IMPLEMENTADA. Os 12 artefatos de requisitos estao enriquecidos. As 3 ADRs excedem o minimo para Nivel 1. Nao ha bloqueios (BLK-*) afetando MOD-001. A validacao (Fase 3) foi concluida com PASS em 2026-03-22. A unica dependencia upstream (MOD-000) esta DRAFT mas isso nao impede a promocao da especificacao — apenas a geracao de codigo.
 
 ---
 
@@ -521,4 +290,5 @@ MOD-001 prove Application Shell para MOD-002+ (Sidebar, Header, Breadcrumb).
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
-| 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 4 pendentes resolvidas (001-004), rastreio de agentes, mapa de cobertura de validadores, particularidades UX-First |
+| 2.0.0 | 2026-03-23 | Recriacao: Fase 3 atualizada para CONCLUIDA (validate-all PASS 2026-03-22), Gate 0 DoR 7/7 atendidos, Fase 4 como proximo passo, pendencias em formato compacto com referencia ao pen file |
+| 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 4 pendentes resolvidas, rastreio de agentes, mapa de cobertura de validadores, particularidades UX-First |

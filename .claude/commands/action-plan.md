@@ -326,7 +326,7 @@ O plano deve ser um **documento hibrido**: estrutura rigorosa do template (PASSO
 
 5. **Fase 2 — Rastreio de agentes** — Quando o enriquecimento estiver EM ANDAMENTO ou CONCLUIDO, incluir **tabela de rastreio de agentes** (fora do bloco de codigo) com colunas: #, Agente, Pilar, Artefato, Status, Evidencia. Isso permite auditoria de quais agentes rodaram e quais faltam.
 
-6. **Fase 2 — Pendentes resolvidas** — Se houver pendentes resolvidas durante o enriquecimento, incluir **tabela de pendentes** (fora do bloco de codigo) com colunas: PENDENTE, Status, Severidade, Decisao, Artefato de saida.
+6. **Fase 2 — Pendentes resolvidas** — Se houver pendentes resolvidas durante o enriquecimento, incluir apenas **tabela-resumo compacta** (fora do bloco de codigo) com colunas: #, ID, Severidade, Decisao (1 linha), Artefato. **NAO** duplicar questoes, opcoes ou resolucoes — referenciar `pen-NNN-pendente.md` para detalhes completos.
 
 7. **Fase 2 — O que falta** — Se o enriquecimento estiver EM ANDAMENTO, incluir secao explicativa "O que falta para completar o enriquecimento" com itens numerados e comandos sugeridos.
 
@@ -346,7 +346,7 @@ O plano deve ser um **documento hibrido**: estrutura rigorosa do template (PASSO
 
 13. **Gate 0 (DoR)** — Na Fase 4, preencher cada criterio DoR-1 a DoR-7 com `SIM`, `NAO` ou `A VERIFICAR` baseado nos dados reais.
 
-14. **Gestao de Pendencias — Painel individual** — Apos o bloco padrao de SLA/ciclo de vida, incluir tabela "Painel de Pendencias — Resumo Individual" com colunas: PENDENTE, Status, Sev., Dominio, Decisao, Artefato de saida. Isso consolida o estado de cada pendencia em um unico lugar.
+14. **Gestao de Pendencias — Referencia** — Apos o bloco padrao de SLA/ciclo de vida, incluir apenas uma tabela-resumo compacta (1 linha por pendencia) com colunas: #, ID, Status, Severidade, Decisao (1 linha). **NAO** duplicar blocos detalhados de pendencias (questao, opcoes, resolucao) — esses dados vivem exclusivamente em `pen-NNN-pendente.md`. Adicionar link: `> Detalhes completos: requirements/pen-NNN-pendente.md`.
 
 15. **Resumo Visual** — Adaptar o diagrama ASCII mostrando o fluxo com marcacao de estado atual e proximo passo. Incluir nota sobre dependencias upstream e posicao na cadeia topologica.
 

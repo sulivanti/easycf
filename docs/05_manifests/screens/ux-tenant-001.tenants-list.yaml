@@ -1,0 +1,219 @@
+# ============================================================
+# Screen Manifest — UX-TENANT-001
+# Tela: Gestão de Filiais (Tenants)
+# Módulo: MOD-000 (Foundation)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-22
+# ============================================================
+# CRUD de filiais/tenants com ativação/bloqueio.
+# Tenant principal (is_primary=true) não pode ser excluído.
+# Status: ACTIVE, BLOCKED.
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-TENANT-001"
+name: "Gestão de Filiais"
+type: list
+module: "MOD-000"
+route: "/tenants"
+auth_required: true
+layout: shell
+
+linked_stories:
+  - "US-MOD-000"
+  - "US-MOD-000-F07"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+# ─── AÇÕES ───────────────────────────────────────────────────
+actions:
+
+  - id: load_tenants
+    label: "Carregar lista de filiais"
+    type: view
+    operation_id: tenants_list
+    http_method: GET
+    endpoint: "/api/v1/tenants"
+    client_only: false
+    requires_scope: ["tenants:branch:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar as filiais."
+
+  - id: create_tenant
+    label: "Criar nova filial"
+    type: submit
+    operation_id: tenants_create
+    http_method: POST
+    endpoint: "/api/v1/tenants"
+    client_only: false
+    requires_scope: ["tenants:branch:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar a filial."
+    notes: "Campos: código (único), nome, CNPJ (validação inline), endereço, status=ACTIVE."
+
+  - id: update_tenant
+    label: "Editar dados da filial"
+    type: submit
+    operation_id: tenants_update
+    http_method: PATCH
+    endpoint: "/api/v1/tenants/:id"
+    client_only: false
+    requires_scope: ["tenants:branch:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível atualizar a filial."
+
+  - id: deactivate_tenant
+    label: "Bloquear filial"
+    type: submit
+    operation_id: tenants_update
+    http_method: PATCH
+    endpoint: "/api/v1/tenants/:id"
+    client_only: false
+    requires_scope: ["tenants:branch:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível bloquear a filial."
+    notes: "PATCH com { status: 'BLOCKED' }. Modal de confirmação obrigatório. Tenant principal não pode ser bloqueado."
+
+  - id: activate_tenant
+    label: "Desbloquear filial"
+    type: submit
+    operation_id: tenants_update
+    http_method: PATCH
+    endpoint: "/api/v1/tenants/:id"
+    client_only: false
+    requires_scope: ["tenants:branch:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível desbloquear a filial."
+    notes: "PATCH com { status: 'ACTIVE' }."
+
+  - id: delete_tenant
+    label: "Excluir filial"
+    type: submit
+    operation_id: tenants_delete
+    http_method: DELETE
+    endpoint: "/api/v1/tenants/:id"
+    client_only: false
+    requires_scope: ["tenants:branch:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível excluir a filial."
+    notes: "Soft-delete. Tenant principal (is_primary=true) não pode ser excluído (422). Modal de confirmação obrigatório."
+
+  - id: view_tenant_history
+    label: "Ver histórico de alterações da filial"
+    type: view
+    operation_id: entities_history
+    http_method: GET
+    endpoint: "/api/v1/entities/tenant/:id/history"
+    client_only: false
+    requires_scope: ["tenants:branch:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar o histórico."
+
+  - id: navigate_to_users
+    label: "Navegar para usuários vinculados à filial"
+    type: navigate
+    client_only: true
+    loading_state: none
+    requires_scope: ["tenants:branch:read"]
+
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
+
+  - id: "tenants-header"
+    name: "TenantsPageHeader"
+    description: |
+      Cabeçalho com título "Gestão de Filiais", contador de filiais ativas
+      e botão "Nova Filial" (visível com scope tenants:branch:write).
+    actions_used: [create_tenant]
+
+  - id: "tenants-table"
+    name: "TenantsTable"
+    description: |
+      Tabela de filiais com colunas: Código, Nome, CNPJ, Status (badge colorido), Nº de Usuários, Ações.
+      Status badges: ACTIVE=verde, BLOCKED=vermelho.
+      Menu de ações: Editar | Usuários | Bloquear/Desbloquear | Histórico | Excluir.
+      Tenant principal: badge "Principal", sem botão excluir/bloquear.
+      Estado vazio: "Nenhuma filial cadastrada."
+    actions_used: [load_tenants, deactivate_tenant, activate_tenant, delete_tenant, navigate_to_users]
+
+  - id: "tenant-drawer"
+    name: "TenantDrawer"
+    description: |
+      Drawer lateral para criar/editar filial:
+        - Código (text, obrigatório, imutável após criação)
+        - Nome (text, obrigatório)
+        - CNPJ (text, validação inline de formato e dígitos)
+        - Endereço (campos estruturados)
+      Validação inline para código duplicado (409).
+    actions_used: [create_tenant, update_tenant]
+
+  - id: "tenant-history-panel"
+    name: "TenantHistoryPanel"
+    description: |
+      Painel de histórico com timeline: data, autor, tipo de mudança, diff de campos.
+    actions_used: [view_tenant_history]
+
+  - id: "deactivate-tenant-modal"
+    name: "DeactivateTenantModal"
+    description: |
+      Modal de confirmação para bloquear filial.
+      Título: "Bloquear filial?"
+      Corpo: "A filial '{nome}' será bloqueada. Usuários vinculados perderão acesso."
+      Botões: "Cancelar" e "Bloquear" (destructive).
+    actions_used: [deactivate_tenant]
+
+  - id: "delete-tenant-modal"
+    name: "DeleteTenantModal"
+    description: |
+      Modal de confirmação para excluir filial.
+      Título: "Excluir filial?"
+      Corpo: "A filial '{nome}' será removida permanentemente."
+      Bloqueado se is_primary=true.
+      Botões: "Cancelar" e "Excluir" (destructive).
+    actions_used: [delete_tenant]
+
+# ─── NAVEGAÇÃO ───────────────────────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+# ─── REGRAS OBRIGATÓRIAS ────────────────────────────────────
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Scope tenants:branch:read obrigatório — sem ele, redirect /dashboard com Toast.
+  2. Scope tenants:branch:write obrigatório para criar/editar/bloquear/excluir. Botões ocultos sem scope.
+  3. Tenant principal (is_primary=true): badge "Principal", sem ações de bloqueio ou exclusão.
+  4. Bloqueio de filial afeta TODOS os usuários vinculados — modal deve alertar sobre impacto.
+  5. CNPJ validado inline (formato + dígitos verificadores).
+  6. Código da filial imutável após criação (campo disabled no modo edição).
+  7. Domain events: tenant.created, tenant.updated, tenant.status_changed, tenant.deleted.
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-22"
+    author: "arquitetura"
+    description: "Criação inicial. CRUD de filiais com bloqueio/desbloqueio, proteção de tenant principal e histórico."

@@ -22,7 +22,16 @@
       "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/*/requirements -type f)",
       "Bash(grep:*)",
       "Bash(find /d/Dev/EasyCodeFramework/apps/api/src/modules -type d -name *org* -o -name *identity* -o -name *process* -o -name *case*)",
-      "Bash(do printf:*)"
+      "Bash(do printf:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/mod-004-identidade-avancada/requirements -type f -name *.md)",
+      "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/mod-005-modelagem-processos/requirements -type f -name *.md)",
+      "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/mod-006-execucao-casos/requirements -type f -name *.md)",
+      "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/mod-007-parametrizacao-contextual/requirements -type f -name *.md)",
+      "Bash(for dir:*)",
+      "Bash(do basename:*)",
+      "Read(//d/Dev/EasyCodeFramework/$dir/**)"
     ]
   },
   "hooks": {

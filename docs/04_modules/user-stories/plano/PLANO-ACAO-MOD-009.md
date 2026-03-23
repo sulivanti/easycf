@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-009 Movimentos sob Aprovacao (Aprovacoes e Alcadas)
 
-> **Versao:** 2.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** DRAFT (v0.5.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
+> **Versao:** 2.1.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
 >
-> Fases 0-3 concluidas (validate-all PASS em 2026-03-22). Proximo passo: Fase 4 (Promocao) — executar `/promote-module`.
+> Fases 0-4 concluidas (modulo promovido a READY em 2026-03-23). Proximo passo: Fase 5 (Geracao de Codigo) — executar `/app-scaffold all` para criar scaffold de apps, depois `/codegen mod-009`.
 
 ---
 
@@ -15,11 +15,12 @@
 | Features F01-F05 | 5/5 APPROVED | F01 (Regras de controle+alcada), F02 (Motor de controle), F03 (Inbox+execucao+override), F04 (UX Inbox), F05 (UX Configurador regras) |
 | Scaffold (forge-module) | CONCLUIDO | mod-009-movimentos-aprovacao/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-11 confirmados em 4 batches, v0.9.0, todas as pendentes resolvidas |
+| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ nao existe ainda; 0 arquivos de codigo gerados |
 | PENDENTEs | 0 abertas | 7 total: 7 IMPLEMENTADA (001-007) |
 | ADRs | 4 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 a ADR-004) |
 | Amendments | 0 | Nenhum |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v0.9.0 | Ultima entrada 2026-03-19 |
+| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 — Promocao DRAFT->READY |
 | Screen Manifests | 2/2 existem | UX-APROV-001, UX-APROV-002 |
 | Dependencias | 3 upstream (MOD-000, MOD-004, MOD-006) | Consome Foundation core, delegacoes de acesso, case_id opcional |
 | Dependentes | 1 downstream (MOD-010) | MOD-010 consome policy CONTROLLED para movimentos |
@@ -73,11 +74,14 @@ O scaffold do modulo foi gerado via `forge-module`, criando a estrutura completa
 O enriquecimento foi executado em 4 batches completos, com todos os 11 agentes confirmados. Destaque para o dominio rico do modulo: aggregate root ControlledMovement, 4 value objects (MovementStatus, ApprovalDecision, OriginType, ApprovalCriteria), 4 domain services (ControlEngine, ApprovalChainResolver, OverrideAuditor, AutoApprovalService). Todas as 7 pendencias foram identificadas e implementadas durante o enriquecimento.
 
 > **Decision tree de enriquecimento:**
+>
+> ```
 > Quero enriquecer todos os modulos elegiveis?
-> |- SIM -> /enrich-all (sequencial, com checkpoint e --dry-run/--resume)
-> |-- NAO -> Qual escopo?
->     |- Todos agentes de 1 modulo  -> /enrich mod-NNN
->     |-- 1 agente especifico        -> /enrich-agent AGN-DEV-XX mod-NNN
+> ├── SIM → /enrich-all (sequencial, com checkpoint e --dry-run/--resume)
+> └── NAO → Qual escopo?
+>     ├── Todos agentes de 1 modulo  → /enrich mod-NNN
+>     └── 1 agente especifico        → /enrich-agent AGN-DEV-XX mod-NNN
+> ```
 
 ```
 4    /enrich                Enriquecimento completo (11 agentes):            CONCLUIDO
@@ -123,14 +127,17 @@ O enriquecimento foi executado em 4 batches completos, com todos os 11 agentes c
 O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis passaram. Os scopes `approval:*` ja estavam registrados em DOC-FND-000 via amendment DOC-FND-000-M03 (PEN-009-002), garantindo Gate 3 verde para os manifests.
 
 > **Decision tree de validacao:**
+>
+> ```
 > Quero validar tudo de uma vez?
-> |- SIM -> /validate-all (orquestra todos, pula os que nao tem artefato)
-> |-- NAO -> Qual pilar?
->     |- Sintaxe/links/metadados -> /qa
->     |- Screen manifests       -> /validate-manifest
->     |- Contratos OpenAPI      -> /validate-openapi
->     |- Schemas Drizzle        -> /validate-drizzle
->     |-- Endpoints Fastify      -> /validate-endpoint
+> ├── SIM → /validate-all (orquestra todos, pula os que nao tem artefato)
+> └── NAO → Qual pilar?
+>     ├── Sintaxe/links/metadados → /qa
+>     ├── Screen manifests       → /validate-manifest
+>     ├── Contratos OpenAPI      → /validate-openapi
+>     ├── Schemas Drizzle        → /validate-drizzle
+>     └── Endpoints Fastify      → /validate-endpoint
+> ```
 
 ```
 5a   /qa                    Validacao de sintaxe, links e metadados:          PASS
@@ -166,20 +173,17 @@ O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis 
 | 4 | /validate-drizzle | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | schema.ts |
 | 5 | /validate-endpoint | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | routes/*.route.ts |
 
-### Fase 4: Promocao — PENDENTE
+### Fase 4: Promocao — CONCLUIDA
 
-Com a Fase 3 concluida e todas as pendentes resolvidas (0 ABERTA), o modulo esta elegivel para promocao a READY. O Gate 0 (DoR) deve ser verificado antes de executar `/promote-module`.
+O modulo foi promovido a READY em 2026-03-23 via `/promote-module`. Todos os criterios DoR (1-7) foram atendidos previamente. O manifesto avancou de v0.5.0 (DRAFT) para v1.0.0 (READY), e o CHANGELOG registra a promocao como Etapa 5 do ciclo de estabilidade. A partir deste ponto, qualquer alteracao ao modulo requer amendment formal via `/create-amendment`.
 
 ```
-6    /promote-module        Promocao DRAFT -> READY:                          A EXECUTAR
-                           Fluxo interno:
-                             Step 1: /qa (pre-check)
-                             Step 2: Promover estado_item DRAFT->READY
-                             Step 3: /qa (pos-check)
-                             Step 4: /update-index
-                             Step 5: /git commit
-                           Pre-condicao: QA verde, DoR-1..7 atendidos
-                           Pos-condicao: estado_item = READY, INDEX.md atualizado, commit
+6    /promote-module        Promocao DRAFT -> READY:                          CONCLUIDO
+                           - estado_item: DRAFT -> READY                      v1.0.0
+                           - Manifesto: v0.5.0 -> v1.0.0
+                           - CHANGELOG: Etapa 5 (Selo READY)
+                           - Todos os requisitos e ADRs selados
+                           - Data: 2026-03-23
 ```
 
 **Gate 0 — Definition of Ready (DoR) Check:**
@@ -194,16 +198,67 @@ Com a Fase 3 concluida e todas as pendentes resolvidas (0 ABERTA), o modulo esta
 | DoR-6 | Screen Manifests validados | SIM | 2/2 PASS (ux-aprov-001, ux-aprov-002) |
 | DoR-7 | /qa verde | SIM | validate-all PASS 2026-03-22 |
 
-> **Resultado:** Todos os criterios DoR atendidos. Modulo elegivel para promocao.
+> **Resultado:** Todos os criterios DoR atendidos. Modulo promovido a READY em 2026-03-23.
 
-### Fase 5: Pos-READY — SOB DEMANDA
+### Fase 5: Geracao de Codigo — NAO INICIADA
+
+O modulo esta READY (pre-requisito para codegen atendido), mas o scaffold de aplicacao (apps/api/, apps/web/) ainda nao existe. O primeiro passo e executar `/app-scaffold all` para criar a estrutura base dos projetos, e em seguida `/codegen mod-009` para gerar codigo em todas as 6 camadas aplicaveis ao Nivel 2. MOD-009 esta na camada topologica 5, o que significa que MOD-000, MOD-004 e MOD-006 devem ter codigo gerado antes (ordem topologica).
+
+> **Decision tree de codegen:**
+>
+> ```
+> Preciso gerar codigo para os modulos?
+> ├── Scaffold existe? (apps/api/, apps/web/)
+> │   └── NAO → /app-scaffold all (one-time, cria apps/api e apps/web)
+> └── SIM → Qual escopo?
+>     ├── Todos modulos READY (ordem topologica)  → /codegen-all (--dry-run para preview)
+>     ├── Todos agentes de 1 modulo               → /codegen mod-NNN
+>     └── 1 agente especifico                     → /codegen-agent mod-NNN AGN-COD-XX
+> ```
 
 ```
-7    /update-specification  Se spec precisa de ajuste apos READY:             SOB DEMANDA
+7    /app-scaffold all      Criar scaffold de aplicacoes:                     A EXECUTAR
+                           - apps/api/ (Fastify + Drizzle + OpenAPI)
+                           - apps/web/ (React + Vite + TanStack)
+                           Pre-requisito one-time para todos os modulos
+
+8    /codegen mod-009       Gerar codigo em todas as camadas:                 A EXECUTAR
+                           Nivel 2 — todos os 6 agentes aplicaveis:
+                           Fase 1: AGN-COD-DB (migrations, schemas Drizzle)
+                           Fase 2: AGN-COD-CORE (domain: aggregates, VOs, services)
+                           Fase 3: AGN-COD-APP (use cases, ports, DTOs)
+                           Fase 4: AGN-COD-API (routes, controllers, OpenAPI)
+                           Fase 5: AGN-COD-WEB (screens, components, data layer)
+                           Fase 6: AGN-COD-VAL (validacao cruzada)
+                           Pre-condicao: /app-scaffold concluido
+```
+
+**Rastreio de agentes COD:**
+
+| # | Agente | Camada | Path | Status | Arquivos |
+|---|--------|--------|------|--------|----------|
+| 1 | AGN-COD-DB | infrastructure | apps/api/src/modules/movement-approval/infrastructure/db/ | A EXECUTAR | 0 |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/movement-approval/domain/ | A EXECUTAR | 0 |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/movement-approval/application/ | A EXECUTAR | 0 |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/movement-approval/presentation/ | A EXECUTAR | 0 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/movement-approval/ | A EXECUTAR | 0 |
+| 6 | AGN-COD-VAL | validation | (cross-validation) | A EXECUTAR | 0 |
+
+**Pre-requisitos para codegen MOD-009:**
+
+1. **Scaffold apps/** — `apps/api/package.json` e `apps/web/package.json` nao existem. Executar `/app-scaffold all` primeiro.
+2. **Dependencias upstream com codigo** — Na ordem topologica, MOD-000 (camada 0), MOD-004 (camada 2) e MOD-006 (camada 4) devem ter codigo gerado antes de MOD-009 (camada 5). Isso garante que imports cross-module (scope-checker, delegacoes, case_id) resolvam corretamente.
+
+### Fase 6: Pos-READY — SOB DEMANDA
+
+O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ate o momento. Alteracoes futuras ao modulo (pos-go-live, ajustes, novas funcionalidades como SSE para real-time inbox ou email como canal adicional) devem ser feitas exclusivamente via `/create-amendment`.
+
+```
+9    /update-specification  Se spec precisa de ajuste apos READY:             SOB DEMANDA
                            Detecta estado_item=READY -> delega para
                            /create-amendment automaticamente
 
-8    /create-amendment      Criar amendment formal:                           SOB DEMANDA
+10   /create-amendment      Criar amendment formal:                           SOB DEMANDA
                            Naming: {Pilar}-{ID}-{Natureza}{Seq}.md
                            Caso de uso previsto: ajustes pos-go-live,
                            SSE para real-time inbox, email como canal adicional
@@ -212,17 +267,20 @@ Com a Fase 3 concluida e todas as pendentes resolvidas (0 ABERTA), o modulo esta
 ### Gestao de Pendencias
 
 > **Decision tree de pendencias:**
+>
+> ```
 > O que preciso fazer com pendencias?
-> |- Ver situacao atual       -> /manage-pendentes list PEN-009
-> |- Criar nova pendencia     -> /manage-pendentes create PEN-009
-> |- Analisar opcoes          -> /manage-pendentes analyze PEN-009 PENDENTE-XXX
-> |- Registrar decisao        -> /manage-pendentes decide PEN-009 PENDENTE-XXX opcao=X
-> |- Implementar decisao      -> /manage-pendentes implement PEN-009 PENDENTE-XXX
-> |- Cancelar pendencia       -> /manage-pendentes cancel PEN-009 PENDENTE-XXX
-> |-- Relatorio consolidado    -> /manage-pendentes report PEN-009
+> ├── Ver situacao atual       → /manage-pendentes list PEN-009
+> ├── Criar nova pendencia     → /manage-pendentes create PEN-009
+> ├── Analisar opcoes          → /manage-pendentes analyze PEN-009 PENDENTE-XXX
+> ├── Registrar decisao        → /manage-pendentes decide PEN-009 PENDENTE-XXX opcao=X
+> ├── Implementar decisao      → /manage-pendentes implement PEN-009 PENDENTE-XXX
+> ├── Cancelar pendencia       → /manage-pendentes cancel PEN-009 PENDENTE-XXX
+> └── Relatorio consolidado    → /manage-pendentes report PEN-009
+> ```
 
 ```
-9    /manage-pendentes list PEN-009
+11   /manage-pendentes list PEN-009
                            Estado atual MOD-009:
                              PEN-009: 7 itens total
                                7 IMPLEMENTADA (001-007)
@@ -244,19 +302,28 @@ Com a Fase 3 concluida e todas as pendentes resolvidas (0 ABERTA), o modulo esta
 
 > Detalhes completos: requirements/pen-009-pendente.md
 
+### Utilitarios
+
+```
+12   /action-plan mod-009   Atualizar este plano (re-diagnostico):            SOB DEMANDA
+     --update               Preserva CHANGELOG, re-avalia todas as fases
+
+13   /update-index          Atualizar INDEX.md apos qualquer mudanca:         SOB DEMANDA
+```
+
 ---
 
 ## Resumo Visual do Fluxo MOD-009
 
 ```
-  [Fase 0]         [Fase 1]         [Fase 2]           [Fase 3]         [Fase 4]       [Fase 5]
-  Pre-Modulo  -->  Genese     -->  Enriquecimento -->  Validacao   -->  Promocao  -->  Pos-READY
-  CONCLUIDA        CONCLUIDA       CONCLUIDA           CONCLUIDA        <<<AQUI>>>     SOB DEMANDA
-  Epico APPROVED   Scaffold v0.1   11 agentes OK       validate-all     /promote       amendments
-  5/5 features     7 tabelas       4 ADRs, 7 PEN       PASS 2026-03-22  DoR 7/7 OK     quando necessario
-                                   (0 abertas)
+  [Fase 0]         [Fase 1]         [Fase 2]           [Fase 3]         [Fase 4]         [Fase 5]         [Fase 6]
+  Pre-Modulo  -->  Genese     -->  Enriquecimento -->  Validacao   -->  Promocao   -->  Codegen    -->  Pos-READY
+  CONCLUIDA        CONCLUIDA       CONCLUIDA           CONCLUIDA        CONCLUIDA        <<<AQUI>>>       SOB DEMANDA
+  Epico APPROVED   Scaffold v0.1   11 agentes OK       validate-all     READY v1.0.0     /app-scaffold    amendments
+  5/5 features     7 tabelas       4 ADRs, 7 PEN       PASS 2026-03-22  DoR 7/7 OK       + /codegen       quando necessario
+                                   (0 abertas)                          2026-03-23       6 agentes COD
 
-  Dependencias upstream: MOD-000 -> MOD-004 -> MOD-006 -> MOD-009
+  Dependencias upstream: MOD-000 → MOD-004 → MOD-006 → MOD-009
   Camada topologica: 5
   Dependentes downstream: MOD-010 (policy CONTROLLED para movimentos)
 ```
@@ -265,23 +332,28 @@ Com a Fase 3 concluida e todas as pendentes resolvidas (0 ABERTA), o modulo esta
 
 | Aspecto | Detalhe |
 |---------|---------|
-| Nivel de Arquitetura | Nivel 2 (DDD-lite + Full Clean) — score 6/6, todos os gatilhos presentes. Dominio rico com aggregate root ControlledMovement e 4 domain services. |
-| Principio "Origem nao e autorizacao" | API, integracao sistemica e MCP podem iniciar solicitacoes, mas nao contornam alcada. Toda operacao controlada passa pelo motor independente da origem. |
-| Ortogonalidade com MOD-006 Gates | MOD-006 Gates operam dentro de fluxos de processo (transicao de estagio). MOD-009 Movimentos operam em qualquer operacao critica (com ou sem processo). Complementares, nao concorrentes. |
-| 4 criterios combinaveis | VALUE (valor > threshold), HIERARCHY (nivel organizacional), ORIGIN (API/MCP/AGENT sempre controlado), OBJECT+OPERATION (ex: DELETE produto). Combinacao permite alcadas complexas. |
-| Auto-aprovacao por scope | Excecao documentada a segregacao: se solicitante possui required_scope da alcada, movimento e AUTO_APPROVED sem inbox. Registrado em movement_history com event_type=AUTO_APPROVED_BY_SCOPE. ADR-002. |
-| Override auditado | Justificativa minima 20 chars, scope approval:override, registro imutavel em movement_override_log. ADR-004. |
-| Motor sincrono | Motor de controle avalia regras sincronamente (diferente do MOD-008 que e assincrono). Retorna 202 quando intercepta operacao. ADR-001. |
+| Nivel de Arquitetura | Nivel 2 (DDD-lite + Full Clean) — score 6/6, todos os gatilhos presentes. Dominio rico com aggregate root ControlledMovement e 4 domain services. Todos os 6 agentes COD aplicaveis. |
+| Principio "Origem nao e autorizacao" | API, integracao sistemica e MCP podem iniciar solicitacoes, mas nao contornam alcada. Toda operacao controlada passa pelo motor independente da origem. Impacto no codegen: OriginType como value object obrigatorio em todas as chamadas ao motor. |
+| Ortogonalidade com MOD-006 Gates | MOD-006 Gates operam dentro de fluxos de processo (transicao de estagio). MOD-009 Movimentos operam em qualquer operacao critica (com ou sem processo). Complementares, nao concorrentes. Impacto no codegen: `case_id` e FK opcional em `controlled_movements`. |
+| 4 criterios combinaveis | VALUE (valor > threshold), HIERARCHY (nivel organizacional), ORIGIN (API/MCP/AGENT sempre controlado), OBJECT+OPERATION (ex: DELETE produto). Combinacao permite alcadas complexas. Impacto no codegen: ApprovalCriteria como value object combinavel no domain. |
+| Auto-aprovacao por scope | Excecao documentada a segregacao: se solicitante possui required_scope da alcada, movimento e AUTO_APPROVED sem inbox. Registrado em movement_history com event_type=AUTO_APPROVED_BY_SCOPE. ADR-002. Impacto no codegen: AutoApprovalService como domain service dedicado. |
+| Override auditado | Justificativa minima 20 chars, scope approval:override, registro imutavel em movement_override_log. ADR-004. Impacto no codegen: OverrideAuditor como domain service com validacao de pre-condicoes. |
+| Motor sincrono | Motor de controle avalia regras sincronamente (diferente do MOD-008 que e assincrono). Retorna 202 quando intercepta operacao. ADR-001. Impacto no codegen: ControlEngine como domain service sincrono na camada application. |
+| Codegen — ordem topologica | MOD-009 esta na camada 5. Depende de MOD-000 (camada 0), MOD-004 (camada 2) e MOD-006 (camada 4) terem codigo gerado antes para resolver imports cross-module (scope-checker do MOD-000, delegacoes do MOD-004, case_id do MOD-006). |
 
-## Checklist Rapido — O que Falta para READY
+## Checklist Rapido — O que Falta para Codegen
 
-- [ ] Executar `/promote-module mod-009` (Fase 4)
+- [ ] Executar `/app-scaffold all` (cria apps/api/ e apps/web/ — one-time)
+- [ ] Garantir codegen de dependencias upstream: MOD-000, MOD-004, MOD-006
+- [ ] Executar `/codegen mod-009` (6 agentes: DB, CORE, APP, API, WEB, VAL)
+- [ ] Executar validadores pos-codigo: `/validate-openapi`, `/validate-drizzle`, `/validate-endpoint`
 
-> **Nota:** Todos os criterios DoR (1-7) estao atendidos. Modulo pronto para promocao imediata. MOD-010 aguarda MOD-009 READY para consumir policy CONTROLLED para movimentos.
+> **Nota:** Modulo READY desde 2026-03-23. Especificacao completa e selada. MOD-010 aguarda MOD-009 com codigo gerado para consumir policy CONTROLLED para movimentos via imports cross-module.
 
 ## CHANGELOG deste Documento
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 2.1.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (modulo promovido DRAFT->READY v1.0.0 em 2026-03-23), Fase 5 (Codegen) adicionada como NAO INICIADA com rastreio de 6 agentes COD, Fase 6 (Pos-READY) renumerada, checklist atualizado para foco em codegen |
 | 2.0.0 | 2026-03-23 | Recriacao: Fases 0-3 CONCLUIDAS (validate-all PASS 2026-03-22), Fase 4 PENDENTE, 0 pendencias abertas, DoR 7/7 atendido, modulo elegivel para promocao |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 7 pendentes resolvidas (001-007), rastreio de 11 agentes, mapa de cobertura de 5 validadores, particularidades de dominio rico Nivel 2 |

@@ -136,6 +136,29 @@ Leia `docs/04_modules/DEPENDENCY-GRAPH.md`:
 - Bloqueios conhecidos que afetam este modulo (secao §3, filtrar BLK-* onde modulo_bloqueado = MOD-NNN)
 - Camada topologica do modulo (secao §5)
 
+### 1.11 — Codigo gerado (apps/api e apps/web)
+
+Resolva o slug do modulo a partir de `module_paths` (API ou Web).
+
+Verifique existencia de arquivos de codigo nas camadas:
+
+| Camada | Path a verificar | O que contar |
+|--------|-------------------|--------------|
+| Scaffold | `apps/api/package.json`, `apps/web/package.json` | Existencia |
+| Infrastructure | `apps/api/src/modules/{slug}/infrastructure/` | Arquivos `.ts` |
+| Domain | `apps/api/src/modules/{slug}/domain/` | Arquivos `.ts` |
+| Application | `apps/api/src/modules/{slug}/application/` | Arquivos `.ts` |
+| Presentation | `apps/api/src/modules/{slug}/presentation/` | Arquivos `.ts` |
+| DB | `apps/api/db/migrations/`, `apps/api/db/schema/` | Arquivos relacionados ao modulo |
+| OpenAPI | `apps/api/openapi/` | Arquivos `.yaml` relacionados |
+| Test | `apps/api/test/` | Arquivos de teste relacionados |
+| Web | `apps/web/src/modules/{slug}/` | Arquivos `.ts`/`.tsx` |
+
+Registre:
+- Contagem total de arquivos de codigo gerados
+- Quais camadas tem arquivos (indica quais agentes COD ja rodaram)
+- Se scaffold existe (pre-requisito para codegen)
+
 ---
 
 ## PASSO 2 — Diagnostico de Fases
@@ -200,12 +223,35 @@ estado_item do manifesto do módulo?
 └── DRAFT → Fase 4: PENDENTE (requer Fase 3 completa)
 ```
 
-### Fase 5: Pos-READY
+### Fase 5: Geracao de Codigo
+
+Determinar o estado da geracao de codigo a partir dos dados coletados em 1.11:
+
+1. **Scaffold** — verificar se `apps/api/package.json` e `apps/web/package.json` existem (pre-requisito)
+2. **Arquivos de codigo** — verificar existencia em `apps/api/src/modules/{slug}/` e `apps/web/src/modules/{slug}/`
+3. **Camadas com codigo** — mapear quais camadas tem arquivos (infrastructure, domain, application, presentation, web)
+
+```text
+estado_item == READY? (pre-requisito para codegen)
+├── NAO → Fase 5: BLOQUEADA (requer Fase 4 completa)
+└── SIM
+    ├── Scaffold nao existe (apps/api/package.json) → Fase 5: NAO INICIADA (executar /app-scaffold)
+    ├── Scaffold existe mas nenhum arquivo de codigo do modulo
+    │   → Fase 5: NAO INICIADA (executar /codegen)
+    ├── Algumas camadas tem arquivos mas nao todas as aplicaveis ao nivel
+    │   → Fase 5: EM ANDAMENTO (listar camadas pendentes)
+    └── Todas as camadas aplicaveis ao nivel tem arquivos + validacao COD-VAL executada
+        → Fase 5: CONCLUIDA
+```
+
+> Nota: A deteccao de quais agentes COD rodaram e baseada na existencia de arquivos nas camadas. Para modulos Nivel 0 (WEB only), apenas a camada Web precisa ter arquivos. Para Nivel 1 (sem CORE), a camada Domain nao e exigida.
+
+### Fase 6: Pos-READY
 
 ```text
 Amendments existem?
-├── SIM → Fase 5: EM USO (listar amendments)
-└── NAO → Fase 5: SOB DEMANDA
+├── SIM → Fase 6: EM USO (listar amendments)
+└── NAO → Fase 6: SOB DEMANDA
 ```
 
 ---
@@ -279,7 +325,8 @@ O documento DEVE seguir a estrutura exata abaixo. Substitua as variaveis `{...}`
 ### Fase 2: Enriquecimento — {STATUS_FASE_2}
 ### Fase 3: Validacao — {STATUS_FASE_3}
 ### Fase 4: Promocao — {STATUS_FASE_4}
-### Fase 5: Pos-READY — {STATUS_FASE_5}
+### Fase 5: Geracao de Codigo — {STATUS_FASE_5}
+### Fase 6: Pos-READY — {STATUS_FASE_6}
 ### Gestao de Pendencias
 ### Utilitarios
 
@@ -305,6 +352,7 @@ O plano deve ser um **documento hibrido**: estrutura rigorosa do template (PASSO
 | Features F01-F{NN} | {N}/{TOTAL} READY | {descricao detalhada — listar features nao-READY} |
 | Scaffold (forge-module) | {CONCLUIDO/PENDENTE} | {pasta}/ com estrutura completa |
 | Enriquecimento (11 agentes) | {CONCLUIDO/EM ANDAMENTO/PENDENTE} | {descricao — quantos agentes, o que falta} |
+| Codegen (6 agentes) | {CONCLUIDO/EM ANDAMENTO/NAO INICIADO/BLOQUEADO} | {descricao — scaffold ok?, camadas com codigo, agentes pendentes} |
 | PENDENTEs | {N_ABERTAS} abertas | {TOTAL}/{TOTAL} {status_summary} |
 | ADRs | {N} criadas ({status}) | Nivel {L} requer minimo {M} — {atendido/nao atendido} |
 | Amendments | {N} criados | {nomes dos amendments e contexto} |
@@ -334,31 +382,44 @@ O plano deve ser um **documento hibrido**: estrutura rigorosa do template (PASSO
 
 9. **Fase 4 — Bloqueadores explicitos** — Se houver bloqueadores alem do DoR padrao (features TODO, agentes faltando, dependencia upstream nao-READY), listar em secao "Bloqueadores para Promocao" com itens numerados e explicacao do que fazer.
 
-10. **Fase 5 — Contexto dos amendments** — Se houver amendments, incluir descricao de cada um com 1 linha de contexto explicando o que resolve e quando foi criado (pre-READY vs pos-READY).
+10. **Fase 5 — Rastreio de agentes COD** — Quando o codegen estiver EM ANDAMENTO ou CONCLUIDO, incluir **tabela de rastreio de agentes** (fora do bloco de codigo) com colunas: #, Agente, Camada, Path, Status, Arquivos. Isso permite auditoria de quais agentes COD rodaram e quais faltam. Para agentes skippados por nivel, marcar como `N/A (Nivel {N})`.
 
-11. **Decision trees** — Incluir os 3 decision trees padrao (enriquecimento, validacao, pendencias) nos locais corretos — copiar ipsis literis do template abaixo.
+11. **Fase 5 — Scaffold e pre-requisitos** — Incluir verificacao de scaffold (apps/api/package.json, apps/web/package.json) e comando `/app-scaffold` se nao existir. Incluir nota sobre ordem topologica e dependencias upstream que precisam ter codigo gerado antes.
 
-12. **Validadores** — Na Fase 3, listar TODOS os 5 validadores nos blocos 5a-5e. Marcar como:
+12. **Fase 6 — Contexto dos amendments** — Se houver amendments, incluir descricao de cada um com 1 linha de contexto explicando o que resolve e quando foi criado (pre-READY vs pos-READY).
+
+13. **Decision trees** — Incluir os 4 decision trees padrao (enriquecimento, validacao, codegen, pendencias) nos locais corretos — copiar ipsis literis do template abaixo. **IMPORTANTE:** Cada decision tree DEVE usar blockquote (`>`) com bloco de codigo interno (` ``` ` dentro do `>`). Sem o bloco de codigo interno, o markdown colapsa as linhas da arvore em um unico paragrafo. Formato correto:
+    ```
+    > **Decision tree de X:**
+    >
+    > ```
+    > Linha 1
+    > ├── ...
+    > └── ...
+    > ```
+    ```
+
+14. **Validadores** — Na Fase 3, listar TODOS os 5 validadores nos blocos 5a-5e. Marcar como:
     - `A EXECUTAR` — aplicavel e pendente
     - `N/A` — nao aplicavel (com justificativa baseada no nivel/natureza do modulo)
     - `INDIVIDUAL` — para os passos 5a-5e alternativos
     - `FUTURO (pos-codigo)` — aplicavel mas artefato de codigo nao existe ainda
 
-13. **Gate 0 (DoR)** — Na Fase 4, preencher cada criterio DoR-1 a DoR-7 com `SIM`, `NAO` ou `A VERIFICAR` baseado nos dados reais.
+15. **Gate 0 (DoR)** — Na Fase 4, preencher cada criterio DoR-1 a DoR-7 com `SIM`, `NAO` ou `A VERIFICAR` baseado nos dados reais.
 
-14. **Gestao de Pendencias — Referencia** — Apos o bloco padrao de SLA/ciclo de vida, incluir apenas uma tabela-resumo compacta (1 linha por pendencia) com colunas: #, ID, Status, Severidade, Decisao (1 linha). **NAO** duplicar blocos detalhados de pendencias (questao, opcoes, resolucao) — esses dados vivem exclusivamente em `pen-NNN-pendente.md`. Adicionar link: `> Detalhes completos: requirements/pen-NNN-pendente.md`.
+16. **Gestao de Pendencias — Referencia** — Apos o bloco padrao de SLA/ciclo de vida, incluir apenas uma tabela-resumo compacta (1 linha por pendencia) com colunas: #, ID, Status, Severidade, Decisao (1 linha). **NAO** duplicar blocos detalhados de pendencias (questao, opcoes, resolucao) — esses dados vivem exclusivamente em `pen-NNN-pendente.md`. Adicionar link: `> Detalhes completos: requirements/pen-NNN-pendente.md`.
 
-15. **Resumo Visual** — Adaptar o diagrama ASCII mostrando o fluxo com marcacao de estado atual e proximo passo. Incluir nota sobre dependencias upstream e posicao na cadeia topologica.
+17. **Resumo Visual** — Adaptar o diagrama ASCII mostrando o fluxo com marcacao de estado atual e proximo passo. Incluir nota sobre dependencias upstream e posicao na cadeia topologica.
 
-16. **Particularidades** — Incluir descricoes detalhadas (nao apenas factuais). Explicar o impacto de cada particularidade e por que importa.
+18. **Particularidades** — Incluir descricoes detalhadas (nao apenas factuais). Explicar o impacto de cada particularidade e por que importa.
 
-17. **Checklist Rapido** — Listar apenas os itens que faltam para READY. Se o modulo ja e READY, mostrar checklist vazio com nota "Modulo ja esta READY." Incluir nota final sobre dependencias e impacto downstream.
+19. **Checklist Rapido** — Listar apenas os itens que faltam para READY. Se o modulo ja e READY, mostrar checklist de codegen com itens pendentes. Incluir nota final sobre dependencias e impacto downstream.
 
-18. **CHANGELOG do Documento** — Se `--update`, adicionar nova entrada preservando historico. Se criacao, iniciar com v1.0.0.
+20. **CHANGELOG do Documento** — Se `--update`, adicionar nova entrada preservando historico. Se criacao, iniciar com v1.0.0.
 
 ### Decision Trees Padrao
 
-Incluir estes blocos nos locais indicados (Fase 2, Fase 3, Gestao de Pendencias):
+Incluir estes blocos nos locais indicados (Fase 2, Fase 3, Fase 5, Gestao de Pendencias):
 
 **Decision tree de enriquecimento (antes da Fase 2):**
 ```
@@ -381,6 +442,18 @@ Incluir estes blocos nos locais indicados (Fase 2, Fase 3, Gestao de Pendencias)
 >     ├── Contratos OpenAPI      → /validate-openapi
 >     ├── Schemas Drizzle        → /validate-drizzle
 >     └── Endpoints Fastify      → /validate-endpoint
+```
+
+**Decision tree de codegen (antes da Fase 5):**
+```
+> **Decision tree de codegen:**
+> Preciso gerar codigo para os modulos?
+> ├── Scaffold existe? (apps/api/, apps/web/)
+> │   └── NAO → /app-scaffold all (one-time, cria apps/api e apps/web)
+> └── SIM → Qual escopo?
+>     ├── Todos modulos READY (ordem topologica)  → /codegen-all (--dry-run para preview)
+>     ├── Todos agentes de 1 modulo               → /codegen mod-NNN
+>     └── 1 agente especifico                     → /codegen-agent mod-NNN AGN-COD-XX
 ```
 
 **Decision tree de pendencias (secao Gestao de Pendencias):**
@@ -472,7 +545,8 @@ Emita no chat:
 | 2 | Enriquecimento | {CONCLUIDA/EM ANDAMENTO/NAO INICIADA} |
 | 3 | Validacao | {CONCLUIDA/EM ANDAMENTO/PENDENTE} |
 | 4 | Promocao | {CONCLUIDA/PENDENTE} |
-| 5 | Pos-READY | {EM USO/SOB DEMANDA} |
+| 5 | Geracao de Codigo | {CONCLUIDA/EM ANDAMENTO/NAO INICIADA/BLOQUEADA} |
+| 6 | Pos-READY | {EM USO/SOB DEMANDA} |
 
 ### Metricas
 - Requirements: {N}/{N} existem
@@ -507,5 +581,5 @@ Emita no chat:
 - Esta skill e **read-heavy**: le muitos arquivos mas so grava 1 (o plano de acao). Nao modifica nenhum artefato do modulo.
 - O plano e um **documento derivado** — pode ser recriado a qualquer momento a partir do estado real dos artefatos.
 - Para modulos ainda nao scaffoldados (pre-Fase 1), a skill ainda pode gerar um plano minimo com Fases 0-1 detalhadas e demais como "NAO INICIADA".
-- Os decision trees de enriquecimento, validacao e pendencias sao **identicos** para todos os modulos — sao blocos reutilizaveis do template.
+- Os decision trees de enriquecimento, validacao, codegen e pendencias sao **identicos** para todos os modulos — sao blocos reutilizaveis do template.
 - A secao "Particularidades" so deve ser incluida se o modulo tem diferencas significativas em relacao ao padrao (nivel, natureza, bloqueios).

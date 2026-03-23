@@ -18,8 +18,12 @@
     "index":               "docs/INDEX.md",
     "user_stories":        "docs/04_modules/user-stories/",
     "enrichment_registry": ".agents/enrichment-registry.json",
+    "codegen_registry":    ".agents/codegen-registry.json",
     "context_map":         ".agents/context-map.json",
     "pkg_dev_001":         "docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md",
+    "pkg_cod_001":         "docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md",
+    "api_modules":         "apps/api/src/modules/",
+    "web_modules":         "apps/web/src/modules/",
     "skill_templates":     ".agents/templates/"
   },
   "_notes": {

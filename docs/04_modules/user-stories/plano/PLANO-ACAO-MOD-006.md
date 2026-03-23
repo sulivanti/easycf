@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-006 Execucao de Casos
 
-> **Versao:** 2.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** DRAFT (v0.4.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 4/4 APPROVED
+> **Versao:** 3.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 4/4 APPROVED
 >
-> Fases 0-3 concluidas (validate-all PASS em 2026-03-22). Proximo passo: Fase 4 (Promocao) — executar `/promote-module`.
+> Fases 0-4 concluidas (promocao DRAFT→READY em 2026-03-23). Proximo passo: Fase 5 (Geracao de Codigo) — executar `/app-scaffold all` e depois `/codegen mod-006`.
 
 ---
 
@@ -15,14 +15,15 @@
 | Features F01-F04 | 4/4 APPROVED | F01 (API: abertura+motor transicao), F02 (API: gates+responsaveis+eventos), F03 (UX: painel caso+timeline), F04 (UX: listagem casos) |
 | Scaffold (forge-module) | CONCLUIDO | mod-006-execucao-casos/ com estrutura completa Nivel 2 |
 | Enriquecimento (10 agentes) | CONCLUIDO | AGN-DEV-01 a AGN-DEV-10 confirmados via CHANGELOG + requirements, v0.4.0, 5 pendentes resolvidas |
+| Codegen (6 agentes) | NAO INICIADO | Scaffold de app nao existe (apps/api/, apps/web/). Pre-requisito: /app-scaffold all. Nenhum arquivo de codigo gerado |
 | PENDENTEs | 0 abertas | 5 total: 5 IMPLEMENTADA (001-005) |
-| ADRs | 5 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 motor atomico, ADR-002 freeze cycle_version, ADR-003 3 historicos, ADR-004 optimistic locking, ADR-005 background job expiracao) |
+| ADRs | 5 criadas (seladas READY) | Nivel 2 requer minimo 3 — atendido (ADR-001 motor atomico, ADR-002 freeze cycle_version, ADR-003 3 historicos, ADR-004 optimistic locking, ADR-005 background job expiracao) |
 | Amendments | 0 proprios (2 cross-module) | DOC-FND-000-M01 (6 scopes process:case:*) e DOC-FND-000-M02 (scope reopen) criados no Foundation |
-| Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v0.4.0 | Ultima entrada 2026-03-19 (AGN-DEV-10 PEN). Pipeline Mermaid Etapa 4 (stale — enriquecimento concluido) |
+| Requirements | 10/10 existem (selados READY) | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
+| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (promote-module). Pipeline Mermaid Etapa 5 (Selo READY) |
 | Screen Manifests | 2/2 existem | ux-case-001.painel-caso, ux-case-002.listagem-casos |
 | Dependencias | 4 upstream (MOD-000, MOD-003, MOD-004, MOD-005) | Consome auth/RBAC de MOD-000, org_units de MOD-003, delegacoes de MOD-004, blueprints de MOD-005 |
-| Bloqueios | 1 recebido (BLK-002) | MOD-006 bloqueado por MOD-005 (blueprints + cycle_version_id freeze devem estar implementados) |
+| Bloqueios | 1 recebido (BLK-002) | MOD-006 bloqueado por MOD-005 (blueprints + cycle_version_id freeze devem estar implementados) — afeta codegen, nao spec |
 
 ---
 
@@ -186,38 +187,100 @@ O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifest
 | 4 | `/validate-drizzle` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/src/modules/case-execution/domain/ — nao existe |
 | 5 | `/validate-endpoint` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/src/modules/case-execution/presentation/routes/ — nao existe |
 
-### Fase 4: Promocao — PENDENTE
+### Fase 4: Promocao — CONCLUIDA
+
+A promocao do MOD-006 foi executada em 2026-03-23 via `/promote-module`. O manifesto foi selado como READY v1.0.0 com todos os requisitos e ADRs selados. O CHANGELOG do modulo registra a entrada v1.0.0 com responsavel `promote-module`. O pipeline Mermaid avancou para Etapa 5 (Selo READY). O BLK-002 (MOD-005 → MOD-006) nao impediu a promocao da especificacao — afeta apenas a geracao de codigo.
 
 ```
 10   /promote-module docs/04_modules/mod-006-execucao-casos/
-                           Selar mod-006 como READY:                         A EXECUTAR
+                           Selar mod-006 como READY:                         CONCLUIDO (2026-03-23)
                            Gate 0 — Definition of Ready (DoR):
                              [DoR-1] PENDENTEs resolvidos? .............. SIM (5/5 IMPLEMENTADA)
                              [DoR-2] Arquivos de requisito existem? ..... SIM (10/10)
                              [DoR-3] Zero erros de lint? ................ SIM (validate-all 2026-03-22 PASS)
                              [DoR-4] Screen manifests validados? ........ SIM (2/2 manifests PASS)
                              [DoR-5] ADRs conforme nivel? ............... SIM (5 >= 3 para N2)
-                             [DoR-6] CHANGELOG atualizado? .............. SIM (v0.4.0)
-                             [DoR-7] Bloqueios cross-modulo? ............ ATENCAO (BLK-002 recebido de MOD-005)
+                             [DoR-6] CHANGELOG atualizado? .............. SIM (v1.0.0)
+                             [DoR-7] Bloqueios cross-modulo? ............ OK (BLK-002 afeta codegen, nao spec)
 
-                           Fluxo interno:
-                             Step 1: /qa (pre-check)
+                           Fluxo interno executado:
+                             Step 1: /qa (pre-check) — PASS
                              Step 2: Promover estado_item DRAFT→READY
-                             Step 3: /qa (pos-check)
+                             Step 3: /qa (pos-check) — PASS
                              Step 4: /update-index
                              Step 5: /git commit
-                           Pre-condicao: QA verde, DoR-1..7 atendidos
-                           Pos-condicao: estado_item = READY, INDEX.md atualizado, commit
+                           Resultado: estado_item = READY, version = 1.0.0, INDEX.md atualizado
 ```
 
-> **Nota sobre BLK-002:** MOD-006 recebe bloqueio BLK-002 (depende de blueprints publicados + `cycle_version_id` freeze de MOD-005). Isso afeta a **implementacao de codigo**, nao a promocao de especificacao. O DoR avalia completude da especificacao. MOD-006 pode ser promovido a READY independentemente do estado do MOD-005 — mas a geracao de codigo requer MOD-000 → MOD-003 → MOD-004 → MOD-005 → MOD-006 sequencial.
+### Fase 5: Geracao de Codigo — NAO INICIADA
 
-#### Bloqueadores para Promocao
+O MOD-006 esta READY e elegivel para geracao de codigo. Porem, o scaffold de aplicacao (apps/api/ e apps/web/) ainda nao existe — pre-requisito para qualquer agente COD. Alem disso, como Nivel 2, todos os 6 agentes COD sao aplicaveis (AGN-COD-DB, AGN-COD-CORE, AGN-COD-APP, AGN-COD-API, AGN-COD-WEB, AGN-COD-VAL). A cadeia de dependencias requer que MOD-000 → MOD-003 → MOD-004 → MOD-005 tenham codigo gerado antes do MOD-006 (ordem topologica camada 4).
 
-1. **BLK-002 (MOD-005 → MOD-006):** Blueprints + `cycle_version_id` freeze devem estar implementados. Impacto: implementacao de codigo, nao especificacao. MOD-005 ainda DRAFT.
-2. **CHANGELOG Mermaid stale:** Pipeline Mermaid mostra Etapa 4 (enriquecimento em andamento), mas o enriquecimento ja esta concluido. Deve ser corrigido para Etapa 5 antes da promocao.
+> **Decision tree de codegen:**
+>
+> ```
+> Preciso gerar codigo para os modulos?
+> ├── Scaffold existe? (apps/api/, apps/web/)
+> │   └── NAO → /app-scaffold all (one-time, cria apps/api e apps/web)
+> └── SIM → Qual escopo?
+>     ├── Todos modulos READY (ordem topologica)  → /codegen-all (--dry-run para preview)
+>     ├── Todos agentes de 1 modulo               → /codegen mod-006
+>     └── 1 agente especifico                     → /codegen-agent mod-006 AGN-COD-XX
+> ```
 
-### Fase 5: Pos-READY (quando necessario)
+```
+6    /app-scaffold all      Criar scaffold de aplicacao (one-time):          A EXECUTAR
+                           - apps/api/ (Fastify + Drizzle + OpenAPI)
+                           - apps/web/ (React + Vite + TanStack)
+                           Pre-condicao: Pelo menos 1 modulo READY
+                           Pos-condicao: apps/api/package.json, apps/web/package.json
+
+7    /codegen mod-006       Gerar codigo para MOD-006 (6 agentes):           A EXECUTAR
+                           Executar na ordem de dependencia:
+                             AGN-COD-DB   → infrastructure/db/ (schema Drizzle, migrations)
+                             AGN-COD-CORE → domain/ (aggregates, entities, value-objects, services)
+                             AGN-COD-APP  → application/ (use-cases, ports, DTOs)
+                             AGN-COD-API  → presentation/ (routes, controllers, validators, OpenAPI)
+                             AGN-COD-WEB  → apps/web/src/modules/case-execution/ (screens, components)
+                             AGN-COD-VAL  → validacao global (cross-layer consistency)
+                           Pre-condicao: /app-scaffold concluido, dependencias upstream com codigo
+                           Pos-condicao: Codigo gerado em todas as camadas, validadores pos-codigo PASS
+```
+
+#### Rastreio de Agentes COD — MOD-006
+
+| # | Agente | Camada | Path | Status | Arquivos |
+|---|--------|--------|------|--------|----------|
+| 1 | AGN-COD-DB | infrastructure | apps/api/src/modules/case-execution/infrastructure/ | A EXECUTAR | 0 |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/case-execution/domain/ | A EXECUTAR | 0 |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/case-execution/application/ | A EXECUTAR | 0 |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/case-execution/presentation/ | A EXECUTAR | 0 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/case-execution/ | A EXECUTAR | 0 |
+| 6 | AGN-COD-VAL | validation | (cross-layer) | A EXECUTAR | 0 |
+
+#### Pre-requisitos para Codegen
+
+1. **Scaffold de aplicacao:** `apps/api/package.json` e `apps/web/package.json` nao existem. Executar `/app-scaffold all` primeiro.
+2. **Ordem topologica:** MOD-006 esta na camada 4. Dependencias upstream (MOD-000, MOD-003, MOD-004, MOD-005) devem ter codigo gerado antes. Verificar status de codegen desses modulos.
+3. **BLK-002:** Blueprints do MOD-005 + `cycle_version_id` freeze devem estar implementados em codigo. Enquanto MOD-005 nao tiver codigo, MOD-006 nao pode implementar a integracao BlueprintReaderPort.
+
+```
+8    /validate-openapi mod-006
+                           Validar contrato OpenAPI apos geracao:            FUTURO (pos-codigo)
+                           apps/api/openapi/mod-006-execucao-casos.yaml
+
+9    /validate-drizzle mod-006
+                           Validar schemas Drizzle apos geracao:             FUTURO (pos-codigo)
+                           apps/api/src/modules/case-execution/infrastructure/
+
+10   /validate-endpoint mod-006
+                           Validar endpoints Fastify apos geracao:           FUTURO (pos-codigo)
+                           apps/api/src/modules/case-execution/presentation/
+```
+
+### Fase 6: Pos-READY — SOB DEMANDA
+
+O modulo esta READY e selado. Qualquer alteracao futura requer amendment formal via `/create-amendment`. Nao ha amendments proprios do MOD-006 ate o momento. Os 2 amendments cross-module (DOC-FND-000-M01 e DOC-FND-000-M02) foram criados durante o enriquecimento para registrar scopes no Foundation.
 
 ```
 11   /update-specification docs/04_modules/mod-006-execucao-casos/requirements/fr/FR-006.md
@@ -233,6 +296,13 @@ O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifest
                            - Integracao com MOD-008 (trigger Protheus por transicao)
                            - Fluxo de aprovacao previa via MOD-009
 ```
+
+#### Contexto dos Amendments Cross-Module
+
+| Amendment | Modulo alvo | Contexto | Quando criado |
+|-----------|-------------|----------|---------------|
+| DOC-FND-000-M01 | MOD-000 (Foundation) | Registra 6 scopes `process:case:*` no catalogo canonico DOC-FND-000 §2.2. Desbloqueio do Gate CI para screen manifests. | Pre-READY (2026-03-19, durante enriquecimento) |
+| DOC-FND-000-M02 | MOD-000 (Foundation) | Registra scope `process:case:reopen` para acao excepcional de reabertura de caso COMPLETED. | Pre-READY (2026-03-19, durante enriquecimento) |
 
 ### Gestao de Pendencias (qualquer momento)
 
@@ -287,34 +357,39 @@ O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifest
 ## Resumo Visual do Fluxo MOD-006
 
 ```
-US-MOD-006 (APPROVED v1.2.0)           ← Fase 0: CONCLUIDA
-  │  4/4 features APPROVED (2 backend + 2 UX)
-  │  Nivel 2 — DDD-lite + Full Clean (score 5/6)
-  ▼
-mod-006-execucao-casos/ (stubs DRAFT)  ← Fase 1: CONCLUIDA (forge-module v0.1.0)
-  │
-  ▼
-mod-006 enriquecido (DRAFT v0.4.0)    ← Fase 2: CONCLUIDA (10 agentes, 5 PENDENTEs resolvidas)
-  │
-  ▼
-mod-006 validado (DRAFT)               ← Fase 3: CONCLUIDA (validate-all 2026-03-22 PASS, 29/29)
-  │  ├── /qa .................. PASS
-  │  ├── /validate-manifest ... PASS (2 manifests)
-  │  ├── /validate-openapi .... FUTURO (pos-codigo)
-  │  ├── /validate-drizzle .... FUTURO (pos-codigo)
-  │  └── /validate-endpoint ... FUTURO (pos-codigo)
-  │
-  ├── ★ PROXIMO PASSO: executar /promote-module
-  ├── Gate 0 (DoR): 6/7 atendidos, 1 ATENCAO (BLK-002 — nao bloqueia spec)
-  │
-  ▼
-mod-006 selado (READY)                 ← Fase 4: A EXECUTAR
-  │
-  ▼
-mod-006 + amendments/                  ← Fase 5: SOB DEMANDA (0 amendments proprios)
+US-MOD-006 (APPROVED v1.2.0)           <- Fase 0: CONCLUIDA
+  |  4/4 features APPROVED (2 backend + 2 UX)
+  |  Nivel 2 — DDD-lite + Full Clean (score 5/6)
+  v
+mod-006-execucao-casos/ (stubs DRAFT)  <- Fase 1: CONCLUIDA (forge-module v0.1.0)
+  |
+  v
+mod-006 enriquecido (DRAFT v0.4.0)    <- Fase 2: CONCLUIDA (10 agentes, 5 PENDENTEs resolvidas)
+  |
+  v
+mod-006 validado (DRAFT)               <- Fase 3: CONCLUIDA (validate-all 2026-03-22 PASS, 29/29)
+  |  +-- /qa .................. PASS
+  |  +-- /validate-manifest ... PASS (2 manifests)
+  |  +-- /validate-openapi .... FUTURO (pos-codigo)
+  |  +-- /validate-drizzle .... FUTURO (pos-codigo)
+  |  +-- /validate-endpoint ... FUTURO (pos-codigo)
+  |
+  v
+mod-006 selado (READY v1.0.0)          <- Fase 4: CONCLUIDA (promote-module 2026-03-23)
+  |  Gate 0 (DoR): 7/7 atendidos
+  |
+  +-- * PROXIMO PASSO: /app-scaffold all + /codegen mod-006
+  |
+  v
+mod-006 codigo gerado                  <- Fase 5: NAO INICIADA (scaffold app nao existe)
+  |  6 agentes COD aplicaveis (Nivel 2)
+  |  Pre-requisito: apps/api/ + apps/web/ + codegen upstream
+  |
+  v
+mod-006 + amendments/                  <- Fase 6: SOB DEMANDA (0 amendments proprios)
 
 Dependencias upstream: MOD-000 + MOD-003 + MOD-004 + MOD-005
-Camada topologica: 4 (implementar apos MOD-000 → MOD-003 → MOD-004 → MOD-005)
+Camada topologica: 4 (implementar apos MOD-000 -> MOD-003 -> MOD-004 -> MOD-005)
 Dependentes downstream: MOD-007 (Parametrizacao), MOD-008 (Protheus), MOD-009 (Aprovacao)
 Bloqueio recebido: BLK-002 — blueprints + cycle_version_id freeze de MOD-005 (implementacao, nao spec)
 Amendments cross-module: DOC-FND-000-M01 (6 scopes), DOC-FND-000-M02 (scope reopen)
@@ -331,20 +406,25 @@ Amendments cross-module: DOC-FND-000-M01 (6 scopes), DOC-FND-000-M02 (scope reop
 | 3 historicos independentes | stage_history, gate_instances e case_events/case_assignments sao historicos independentes com timeline intercalada. Um estagio pode durar dias e ter 3 reatribuicoes sem mudanca de estagio. ADR-003 documenta esta decisao e suas implicacoes para queries e performance. |
 | Freeze de cycle_version_id | O caso nunca "sente" mudancas no blueprint. Ao abrir, captura `cycle_version_id` vigente. Fork ou atualizacao no MOD-005 nao afeta instancias em andamento. ADR-002 documenta esta decisao e a separacao blueprint/execucao. |
 | 2 amendments cross-module no Foundation | PENDENTE-004 e PENDENTE-001 resultaram em 2 amendments no MOD-000: DOC-FND-000-M01 (6 scopes process:case:*) e DOC-FND-000-M02 (scope process:case:reopen). Isso demonstra o impacto cross-module do MOD-006 sobre o catalogo de scopes do Foundation. |
-| CHANGELOG Mermaid stale | Pipeline Mermaid mostra Etapa 4 (enriquecimento em andamento), mas o enriquecimento esta integralmente concluido com 10 agentes e 5 pendencias resolvidas. Deve ser corrigido para Etapa 5 antes da promocao. |
-| BLK-002 e cadeia de dependencias longa | MOD-006 esta na camada topologica 4 com a cadeia mais longa: MOD-000 → MOD-003 → MOD-004 → MOD-005 → MOD-006. O BLK-002 (blueprints publicados) e a dependencia mais critica para implementacao. A especificacao pode ser promovida independentemente. |
+| BLK-002 e cadeia de dependencias longa | MOD-006 esta na camada topologica 4 com a cadeia mais longa: MOD-000 → MOD-003 → MOD-004 → MOD-005 → MOD-006. O BLK-002 (blueprints publicados) e a dependencia mais critica para implementacao. A especificacao ja esta READY independentemente. |
 | 5 ADRs — maior quantidade do projeto | Excede significativamente o minimo de 3 ADRs para Nivel 2. Cada ADR resolve um problema arquitetural especifico: atomicidade do motor, freeze de versao, historicos independentes, concorrencia otimista, e expiracao de atribuicoes via background job. |
+| Nivel 2 completo com todas as 6 camadas COD | Como modulo DDD-lite + Full Clean (score 5/6), todos os 6 agentes COD sao aplicaveis. Isso inclui AGN-COD-CORE (domain layer) que e exclusivo de Nivel 2. A estrutura de codigo prevista inclui aggregates, entities, value-objects, domain-services, domain-events, use-cases, ports e DTOs. |
 
 ---
 
-## Checklist Rapido — O que Falta para READY
+## Checklist Rapido — O que Falta para Codigo
 
 - [x] Enriquecimento completo (10 agentes, 5 pendencias resolvidas)
 - [x] Executar `/validate-all` — /qa + /validate-manifest PASS (2026-03-22)
-- [ ] Corrigir pipeline Mermaid no CHANGELOG.md (E4 → E5 concluida)
-- [ ] Executar `/promote-module docs/04_modules/mod-006-execucao-casos/` — verificar Gate 0 (DoR)
+- [x] Executar `/promote-module` — READY v1.0.0 (2026-03-23)
+- [ ] Executar `/app-scaffold all` — criar apps/api/ e apps/web/ (pre-requisito one-time)
+- [ ] Verificar codegen de dependencias upstream (MOD-000, MOD-003, MOD-004, MOD-005)
+- [ ] Executar `/codegen mod-006` — gerar codigo nas 6 camadas (DB, CORE, APP, API, WEB, VAL)
+- [ ] Executar `/validate-openapi` — validar contrato OpenAPI gerado
+- [ ] Executar `/validate-drizzle` — validar schemas Drizzle gerados
+- [ ] Executar `/validate-endpoint` — validar endpoints Fastify gerados
 
-> **Nota:** Todas as 5 pendencias estao IMPLEMENTADA. Os 10 artefatos de requisitos estao enriquecidos e validados. As 5 ADRs excedem o minimo para Nivel 2. Nao ha pendencias abertas. O BLK-002 (MOD-005 → MOD-006) afeta implementacao de codigo, nao promocao de especificacao. Os 2 amendments cross-module (DOC-FND-000-M01 e M02) ja foram implementados no Foundation. A promocao do MOD-006 e pre-requisito para que MOD-007 (Parametrizacao), MOD-008 (Protheus) e MOD-009 (Aprovacao) avancem na camada seguinte.
+> **Nota:** A especificacao esta completa e selada (READY v1.0.0). Todas as 5 pendencias estao IMPLEMENTADA. Os 10 artefatos de requisitos e 5 ADRs estao selados. O proximo marco e a geracao de codigo, que depende do scaffold de aplicacao e da ordem topologica. O BLK-002 (MOD-005 → MOD-006) exige que os blueprints do MOD-005 estejam implementados em codigo antes que o MOD-006 possa implementar BlueprintReaderPort e DelegationCheckerPort. A geracao de codigo do MOD-006 desbloqueia MOD-007 (Parametrizacao), MOD-008 (Protheus) e MOD-009 (Aprovacao) na camada seguinte.
 
 ---
 
@@ -352,5 +432,6 @@ Amendments cross-module: DOC-FND-000-M01 (6 scopes), DOC-FND-000-M02 (scope reop
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 3.0.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (promote-module 2026-03-23, READY v1.0.0). Fase 5 NAO INICIADA (codegen). CHANGELOG Mermaid corrigido (Etapa 5). Checklist atualizado para foco em codegen. Rastreio de 6 agentes COD adicionado. Pre-requisitos de codegen detalhados (scaffold + ordem topologica + BLK-002) |
 | 2.0.0 | 2026-03-23 | Recriacao: Fase 3 CONCLUIDA (validate-all 2026-03-22 PASS 29/29 manifests). Fase 4 PENDENTE. DoR Gate 0 6/7 (BLK-002 nao bloqueia spec). Rastreio de 10 agentes via CHANGELOG+requirements. Pendencias compactadas (referencia pen file). 2 amendments cross-module. Proximo passo: /promote-module |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 5 pendentes resolvidas (001-005), rastreio de 10 agentes, mapa de cobertura de 5 validadores, particularidades Nivel 2 DDD-lite, bloqueio BLK-002, 2 amendments cross-module |

@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-004 Identidade Avancada
 
-> **Versao:** 3.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** DRAFT (v0.9.0) | **Epico:** READY (v1.1.0) | **Features:** 4/4 READY
+> **Versao:** 4.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.1.0) | **Features:** 4/4 READY
 >
-> Fases 0-3 concluidas (validate-all PASS em 2026-03-22). Proximo passo: Fase 4 (Promocao) — executar `/promote-module`.
+> Fases 0-4 concluidas (promocao DRAFT->READY em 2026-03-23). Proximo passo: Fase 5 (Geracao de Codigo) — executar `/app-scaffold all` seguido de `/codegen mod-004`.
 
 ---
 
@@ -11,17 +11,18 @@
 
 | Item | Estado | Detalhe |
 |------|--------|---------|
-| Epico US-MOD-004 | READY (v1.1.0) | DoR 7/8 completo (falta owner confirmar APPROVED), 4 features vinculadas, EP02 |
+| Epico US-MOD-004 | READY (v1.1.0) | DoR completo, 4 features vinculadas, EP02 |
 | Features F01-F04 | 4/4 READY | F01 (API: user_org_scopes), F02 (API: shares+delegations+job expiracao), F03 (UX: escopo org), F04 (UX: painel shares/delegations) |
 | Scaffold (forge-module) | CONCLUIDO | mod-004-identidade-avancada/ com estrutura completa Nivel 2 |
 | Enriquecimento (10 agentes) | CONCLUIDO | Agentes 01-10 confirmados, v0.9.0, 3 pendentes resolvidas |
+| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ nao existe. Executar /app-scaffold all primeiro, depois /codegen mod-004 |
 | PENDENTEs | 0 abertas | 3 total: 3 IMPLEMENTADA |
 | ADRs | 4 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 auto-auth service, ADR-002 tenant_id RLS, ADR-003 outbox pattern, ADR-004 regex escopos proibidos) |
 | Amendments | 0 | Nenhum |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v0.9.0 | Ultima entrada 2026-03-17 (AGN-DEV-08 NFR) |
+| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (promote-module DRAFT->READY) |
 | Screen Manifests | 2/2 existem | ux-idn-001.org-scope, ux-idn-002.shares-delegations |
-| Dependencias | 2 upstream (MOD-000, MOD-003) | Consome auth/RBAC/events de MOD-000 e org_units de MOD-003 |
+| Dependencias | 2 upstream (MOD-000, MOD-003) | Ambos READY (v1.0.0). Consome auth/RBAC/events de MOD-000 e org_units de MOD-003 |
 | Bloqueios | 0 sobre MOD-004 | Nenhum BLK-* afeta MOD-004. MOD-004 emite BLK-003 (MOD-005 depende de org_scopes) |
 
 ---
@@ -34,7 +35,7 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 
 ### Fase 0: Pre-Modulo — CONCLUIDA
 
-O epico US-MOD-004 define a camada de identidade avancada que preenche a lacuna entre MOD-000 (identidade operacional basica — quem pode fazer o que em qual filial) e MOD-003 (estrutura organizacional — onde a organizacao existe). Tres mecanismos — escopo de area organizacional (`user_org_scopes`), compartilhamento controlado (`access_shares`) e delegacao temporaria (`access_delegations`) — resolvem o problema "em qual area organizacional um usuario atua". Com 4 features cobrindo backend (F01, F02) e frontend (F03, F04), o modulo foi aprovado como READY com DoR quase completo (7/8 — falta confirmacao formal APPROVED pelo owner).
+O epico US-MOD-004 define a camada de identidade avancada que preenche a lacuna entre MOD-000 (identidade operacional basica — quem pode fazer o que em qual filial) e MOD-003 (estrutura organizacional — onde a organizacao existe). Tres mecanismos — escopo de area organizacional (`user_org_scopes`), compartilhamento controlado (`access_shares`) e delegacao temporaria (`access_delegations`) — resolvem o problema "em qual area organizacional um usuario atua". Com 4 features cobrindo backend (F01, F02) e frontend (F03, F04), o modulo foi aprovado como READY com DoR completo.
 
 ```
 1    (manual)              Revisar e finalizar epico US-MOD-004:             CONCLUIDO
@@ -183,41 +184,88 @@ O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifest
 | 4 | `/validate-drizzle` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/src/modules/identity-advanced/domain/ — nao existe |
 | 5 | `/validate-endpoint` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/src/modules/identity-advanced/presentation/routes/ — nao existe |
 
-### Fase 4: Promocao — PENDENTE
+### Fase 4: Promocao — CONCLUIDA
+
+A promocao do MOD-004 foi executada em 2026-03-23 via `/promote-module`, avancando `estado_item` de DRAFT (v0.9.0) para READY (v1.0.0). O Gate 0 (DoR) foi atendido em todos os 7 criterios. O CHANGELOG do modulo registra a Etapa 5 (Selo READY) no pipeline Mermaid. Todos os requisitos e ADRs foram selados como READY. Esta promocao torna o MOD-004 elegivel para geracao de codigo (Fase 5).
 
 ```
-10   /promote-module docs/04_modules/mod-004-identidade-avancada/
-                           Selar mod-004 como READY:                         A EXECUTAR
+6    /promote-module docs/04_modules/mod-004-identidade-avancada/
+                           Selar mod-004 como READY:                         CONCLUIDO (2026-03-23)
                            Gate 0 — Definition of Ready (DoR):
                              [DoR-1] PENDENTEs resolvidos? .............. SIM (3/3 IMPLEMENTADA)
                              [DoR-2] Arquivos de requisito existem? ..... SIM (10/10)
                              [DoR-3] Zero erros de lint? ................ SIM (validate-all 2026-03-22 PASS)
                              [DoR-4] Screen manifests validados? ........ SIM (2/2 manifests PASS)
                              [DoR-5] ADRs conforme nivel? ............... SIM (4 >= 3 para N2)
-                             [DoR-6] CHANGELOG atualizado? .............. SIM (v0.9.0)
+                             [DoR-6] CHANGELOG atualizado? .............. SIM (v1.0.0)
                              [DoR-7] Bloqueios cross-modulo? ............ SIM (0 bloqueios sobre MOD-004)
 
-                           Fluxo interno:
-                             Step 1: /qa (pre-check)
-                             Step 2: Promover estado_item DRAFT→READY
-                             Step 3: /qa (pos-check)
+                           Fluxo interno executado:
+                             Step 1: /qa (pre-check) — PASS
+                             Step 2: Promover estado_item DRAFT→READY (v1.0.0)
+                             Step 3: /qa (pos-check) — PASS
                              Step 4: /update-index
                              Step 5: /git commit
-                           Pre-condicao: QA verde, DoR-1..7 atendidos
                            Pos-condicao: estado_item = READY, INDEX.md atualizado, commit
 ```
 
-> **Nota:** MOD-004 depende de MOD-000 (Foundation) e MOD-003 (Estrutura Organizacional), ambos ainda DRAFT. A promocao do MOD-004 pode ocorrer independentemente — o DoR nao exige que dependencias upstream estejam READY (apenas que existam). Porem, o codigo so pode ser gerado quando MOD-000 e MOD-003 estiverem READY (endpoints implementados). Rota sequencial ideal: MOD-000 → MOD-003 → MOD-004.
+### Fase 5: Geracao de Codigo — NAO INICIADA
 
-### Fase 5: Pos-READY (quando necessario)
+O MOD-004 e agora READY (v1.0.0) e elegivel para geracao de codigo. As dependencias upstream (MOD-000 e MOD-003) tambem estao READY, o que significa que a cadeia topologica esta desbloqueada. Porem, o scaffold de aplicacao (`apps/api/`, `apps/web/`) ainda nao existe — e necessario executar `/app-scaffold all` antes de rodar qualquer agente COD. O MOD-004 e Nivel 2, portanto todos os 6 agentes COD sao aplicaveis (DB, CORE, APP, API, WEB, VAL).
+
+> **Decision tree de codegen:**
+>
+> ```
+> Preciso gerar codigo para os modulos?
+> ├── Scaffold existe? (apps/api/, apps/web/)
+> │   └── NAO → /app-scaffold all (one-time, cria apps/api e apps/web)
+> └── SIM → Qual escopo?
+>     ├── Todos modulos READY (ordem topologica)  → /codegen-all (--dry-run para preview)
+>     ├── Todos agentes de 1 modulo               → /codegen mod-004
+>     └── 1 agente especifico                     → /codegen-agent mod-004 AGN-COD-XX
+> ```
 
 ```
-11   /update-specification docs/04_modules/mod-004-identidade-avancada/requirements/fr/FR-001.md
+7    /app-scaffold all      Criar scaffold de aplicacao:                      A EXECUTAR
+                           - apps/api/ (Fastify + Drizzle + BullMQ)
+                           - apps/web/ (React + TanStack)
+                           Pre-condicao: Nenhuma (one-time setup)
+                           Pos-condicao: package.json, tsconfig, estrutura base
+
+8    /codegen mod-004       Gerar codigo para todas as camadas:               A EXECUTAR
+                           Nivel 2 — todos os 6 agentes aplicaveis
+                           Slug: identity-advanced
+                           Pre-condicao: /app-scaffold concluido
+                           Pos-condicao: Codigo gerado em apps/api + apps/web
+```
+
+#### Rastreio de Agentes COD — MOD-004
+
+| # | Agente | Camada | Path | Status | Arquivos |
+|---|--------|--------|------|--------|----------|
+| 1 | AGN-COD-DB | infrastructure | apps/api/src/modules/identity-advanced/infrastructure/, apps/api/db/ | A EXECUTAR | 0 |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/identity-advanced/domain/ | A EXECUTAR | 0 |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/identity-advanced/application/ | A EXECUTAR | 0 |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/identity-advanced/presentation/, apps/api/openapi/ | A EXECUTAR | 0 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/identity-advanced/ | A EXECUTAR | 0 |
+| 6 | AGN-COD-VAL | validation | (cross-layer) | A EXECUTAR | 0 |
+
+#### Scaffold e Pre-requisitos
+
+- **apps/api/package.json:** NAO EXISTE — executar `/app-scaffold all`
+- **apps/web/package.json:** NAO EXISTE — executar `/app-scaffold all`
+- **Dependencias upstream com codigo:** MOD-000 (READY) e MOD-003 (READY) — ambos elegiveis para codegen. Ordem topologica ideal: MOD-000 → MOD-003 → MOD-004.
+- **Nota:** O `/codegen-all` respeita a ordem topologica automaticamente. Se preferir gerar apenas MOD-004, assegure que MOD-000 e MOD-003 ja tenham codigo gerado (tabelas referenciadas por FK e APIs consumidas).
+
+### Fase 6: Pos-READY — SOB DEMANDA
+
+```
+9    /update-specification docs/04_modules/mod-004-identidade-avancada/requirements/fr/FR-001.md
                            Se spec precisa de ajuste apos READY:             SOB DEMANDA
                            Detecta estado_item=READY → delega para
                            /create-amendment automaticamente
 
-12   /create-amendment FR-001 melhoria "descricao"
+10   /create-amendment FR-001 melhoria "descricao"
                            Criar amendment formal:                           SOB DEMANDA
                            Naming: {Pilar}-{ID}-{Natureza}{Seq}.md
                            Casos de uso previstos:
@@ -241,7 +289,7 @@ O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifest
 > ```
 
 ```
-16   /manage-pendentes list PEN-004
+11   /manage-pendentes list PEN-004
                            Estado atual MOD-004:
                              PEN-004: 3 itens total
                                3 IMPLEMENTADA (001-003)
@@ -262,13 +310,13 @@ O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifest
 ### Utilitarios (qualquer momento)
 
 ```
-14   /git commit            Commit semantico apos qualquer alteracao           SOB DEMANDA
+12   /git commit            Commit semantico apos qualquer alteracao           SOB DEMANDA
                            Formato: docs(mod-004): <descricao>
 
-15   /update-index          Atualizar indices se criou/removeu arquivos       SOB DEMANDA
+13   /update-index          Atualizar indices se criou/removeu arquivos       SOB DEMANDA
                            INDEX.md sincronizado
 
-17   /readme-blueprint      Atualizar README.md do repositorio               SOB DEMANDA
+14   /readme-blueprint      Atualizar README.md do repositorio               SOB DEMANDA
 ```
 
 ---
@@ -293,16 +341,21 @@ mod-004 validado (DRAFT)                ← Fase 3: CONCLUIDA (validate-all 2026
   │  ├── /validate-drizzle .... FUTURO (pos-codigo)
   │  └── /validate-endpoint ... FUTURO (pos-codigo)
   │
-  ├── ★ PROXIMO PASSO: executar /promote-module
-  ├── Gate 0 (DoR): 7/7 atendidos
+  ▼
+mod-004 selado (READY v1.0.0)          ← Fase 4: CONCLUIDA (promote-module 2026-03-23)
+  │  Gate 0 (DoR): 7/7 atendidos
+  │
+  ├── ★ PROXIMO PASSO: /app-scaffold all → /codegen mod-004
   │
   ▼
-mod-004 selado (READY)                  ← Fase 4: A EXECUTAR
+mod-004 codigo gerado                  ← Fase 5: NAO INICIADA (scaffold nao existe)
+  │  6 agentes COD aplicaveis (Nivel 2): DB, CORE, APP, API, WEB, VAL
+  │  Slug: identity-advanced
   │
   ▼
-mod-004 + amendments/                   ← Fase 5: SOB DEMANDA (0 amendments)
+mod-004 + amendments/                  ← Fase 6: SOB DEMANDA (0 amendments)
 
-Dependencias upstream: MOD-000 (Foundation) + MOD-003 (Estrutura Organizacional)
+Dependencias upstream: MOD-000 (Foundation, READY v1.0.0) + MOD-003 (Estrutura Org, READY v1.0.0)
 Camada topologica: 2 (implementar apos MOD-000 e MOD-003)
 Dependentes downstream: MOD-005 (Processos), MOD-006 (Execucao), MOD-007 (Parametrizacao), MOD-008 (Protheus), MOD-009 (Aprovacoes)
 Bloqueio emitido: BLK-003 — MOD-005 depende de org_scopes de MOD-004
@@ -319,17 +372,23 @@ Bloqueio emitido: BLK-003 — MOD-005 depende de org_scopes de MOD-004
 | Regra inegociavel de delegacao | Delegacoes NUNCA podem conter escopos `:approve`, `:execute`, `:sign` — invariante de dominio protegido por regex no service (ADR-004). Esta regra impede que delegatarios tomem decisoes em nome do delegante, preservando segregacao de responsabilidade. |
 | Validacao de autorizacao por scope (nao CHECK constraint) | Auto-autorizacao em compartilhamentos (`grantor_id = authorized_by`) e permitida condicionalmente ao scope `identity:share:authorize` — validacao no service, nao no banco (ADR-001). Decisao tecnica de 2026-03-15 removeu CHECK constraint absoluto. |
 | 4 ADRs para Nivel 2 | Excede o minimo de 3 ADRs. ADR-001 (auto-auth service), ADR-002 (tenant_id RLS), ADR-003 (outbox pattern), ADR-004 (regex escopos proibidos). A riqueza de ADRs reflete decisoes arquiteturais nao-obvias do dominio de identidade. |
-| Dependencias upstream ambas em DRAFT | MOD-000 e MOD-003 sao pre-requisitos na camada topologica e ambos ainda estao em DRAFT. A promocao de especificacao do MOD-004 nao depende do estado dos upstream, mas a implementacao de codigo sim. Rota sequencial ideal: MOD-000 → MOD-003 → MOD-004. |
+| Dependencias upstream READY | MOD-000 (v1.0.0) e MOD-003 (v1.0.0) estao ambos READY. A cadeia topologica esta totalmente desbloqueada para geracao de codigo. Rota sequencial ideal: MOD-000 → MOD-003 → MOD-004. |
+| Codegen elegivel — 6 agentes | Nivel 2 qualifica para todos os 6 agentes COD: DB (migracoes+schemas), CORE (aggregates+VOs+domain events), APP (use cases+ports), API (endpoints+OpenAPI), WEB (telas+forms), VAL (validacao cruzada). Slug de codigo: `identity-advanced`. |
 
 ---
 
-## Checklist Rapido — O que Falta para READY
+## Checklist Rapido — O que Falta para Codigo
 
+- [x] Epico READY (v1.1.0) — 4/4 features READY
 - [x] Enriquecimento completo (10 agentes, 3 pendencias resolvidas)
-- [x] Executar `/validate-all` — /qa + /validate-manifest PASS (2026-03-22)
-- [ ] Executar `/promote-module docs/04_modules/mod-004-identidade-avancada/` — verificar Gate 0 (DoR) 7/7
+- [x] Validacao PASS (validate-all 2026-03-22)
+- [x] Promocao READY (v1.0.0, 2026-03-23)
+- [x] Dependencias upstream READY (MOD-000 v1.0.0, MOD-003 v1.0.0)
+- [ ] Executar `/app-scaffold all` — criar apps/api/ e apps/web/ (one-time, se ainda nao existe)
+- [ ] Executar `/codegen mod-004` (ou `/codegen-all` para todos os modulos READY em ordem topologica)
+- [ ] Validacao pos-codigo: `/validate-openapi`, `/validate-drizzle`, `/validate-endpoint`
 
-> **Nota:** Todas as 3 pendencias ja estao IMPLEMENTADA. Os 10 artefatos de requisitos estao enriquecidos e validados. As 4 ADRs excedem o minimo para Nivel 2. Nao ha bloqueios (BLK-*) afetando MOD-004. As dependencias upstream (MOD-000, MOD-003) estao DRAFT mas isso nao impede a promocao da especificacao — apenas a geracao de codigo. A promocao do MOD-004 desbloqueia BLK-003 e habilita MOD-005 (Processos) a avancar.
+> **Nota:** O scaffold de aplicacao (`/app-scaffold all`) e um passo one-time que cria a estrutura base de `apps/api/` e `apps/web/`. Apos o scaffold, `/codegen mod-004` gera codigo nas 6 camadas (DB, CORE, APP, API, WEB, VAL) para o slug `identity-advanced`. A geracao de codigo do MOD-004 depende de MOD-000 e MOD-003 terem codigo gerado primeiro (FKs e APIs consumidas). Usar `/codegen-all` garante a ordem topologica automaticamente.
 
 ---
 
@@ -337,6 +396,7 @@ Bloqueio emitido: BLK-003 — MOD-005 depende de org_scopes de MOD-004
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 4.0.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (promote-module 2026-03-23, DRAFT v0.9.0→READY v1.0.0). Fase 5 (Codegen) adicionada como NAO INICIADA com rastreio de 6 agentes COD. Dependencias upstream MOD-000 e MOD-003 agora READY. Checklist atualizado para fase de codigo. Proximo passo: /app-scaffold all → /codegen mod-004 |
 | 3.0.0 | 2026-03-23 | Recriacao: Fase 3 CONCLUIDA (validate-all 2026-03-22 PASS 29/29 manifests). Fase 4 PENDENTE. DoR Gate 0 7/7 atendidos. Pendencias compactadas (referencia pen file). Proximo passo: /promote-module |
 | 2.0.0 | 2026-03-22 | Reescrita completa no formato padrao (sem acentos): Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 3 pendentes resolvidas (001-003), rastreio de 10 agentes, mapa de cobertura de validadores, particularidades Nivel 2 com cache Redis, 4 ADRs, dependencias upstream |
 | 1.0.0 | 2026-03-21 | Criacao inicial. Diagnostico: Fase 2 concluida (10 agentes, 3 pendencias resolvidas). Pronto para Fase 3 (validacao) |

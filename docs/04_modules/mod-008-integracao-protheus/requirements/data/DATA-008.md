@@ -14,9 +14,9 @@
 
 > Permitir gerar **modelo**, **migração**, **queries** e **contratos** sem inferência arriscada.
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-008, US-MOD-008-F01, US-MOD-008-F02, US-MOD-008-F03, BR-008, FR-008, SEC-008, DATA-003, INT-008, DOC-FND-000
 - **referencias_exemplos:** EX-DEV-001 (Envelope DATA)
 - **evidencias:** N/A

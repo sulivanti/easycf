@@ -12,9 +12,9 @@
 
 > Habilita linha do tempo (Thread), auditoria, Outbox e automação de notificações.
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-008, US-MOD-008-F01, US-MOD-008-F03, BR-008, FR-008, SEC-002, SEC-008, DOC-ARC-003, DOC-FND-000
 - **referencias_exemplos:** EX-DEV-001 (Envelope DATA-003)
 - **evidencias:** N/A
@@ -120,9 +120,9 @@
 4. `request_headers` com campos sensíveis mascarados antes de inclusão no payload (BR-004)
 5. `causation_id` utilizado para encadear: `call_queued` → `call_completed`/`call_failed` → `call_dlq` → `call_reprocessed`
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-008, US-MOD-008-F01, US-MOD-008-F03, BR-008, FR-008, SEC-002, SEC-008, DOC-ARC-003, DOC-FND-000, INT-008
 - **referencias_exemplos:** EX-DATA-003
 - **evidencias:** N/A

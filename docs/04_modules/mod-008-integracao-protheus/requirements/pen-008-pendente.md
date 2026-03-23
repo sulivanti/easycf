@@ -15,13 +15,14 @@
 | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada: Opção A (seed automático HML com WireMock) |
 | 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-001 implementada: Opção B (tabela simples + trigger migração 10M; alerta 5M no NFR-008) |
 | 0.9.0  | 2026-03-19 | arquitetura | PENDENTE-002 implementada: Opção A (retenção 6 meses hot + archive S3 anonimizado; original purgado) |
+| 1.1.0  | 2026-03-23 | Marcos Sulivan | PENDENTE-004 → IMPLEMENTADA — limite real confirmado: default=10, max=20 conexões simultâneas |
 | 1.0.0  | 2026-03-22 | arquitetura | Sincronização status body: PENDENTE-006/007/008 → IMPLEMENTADA (correções já aplicadas em manifests e DOC-FND-000) |
 
 # PEN-008 — Questões Abertas da Integração Dinâmica Protheus
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-22
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-008, MOD-008, NFR-008, SEC-008, INT-008, DATA-008
 
 ---
@@ -225,9 +226,9 @@ Opção A — cache em Redis com lock distribuído. Redis já está na stack (Bu
 
 ---
 
-## PENDENTE-004 — Limite Real de Concurrency do Protheus em Produção
+## ~~PENDENTE-004 — Limite Real de Concurrency do Protheus em Produção~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** ALTA
 - **domínio:** INT
 - **tipo:** DEP-EXT
@@ -239,6 +240,10 @@ Opção A — cache em Redis com lock distribuído. Redis já está na stack (Bu
 - **tags:** concurrency, Protheus, rate-limit, performance
 - **sla_data:** —
 - **dependencias:** []
+- **decidido_em:** 2026-03-19
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** B+A
+- **implementado_em:** 2026-03-23
 
 ### Questão
 
@@ -277,8 +282,8 @@ Opção B como ação paralela (solicitar ao time Protheus) + Opção A como fal
 > **Decisão:** Opção B+A — Solicitar ao time Protheus o limite real de conexões simultâneas e rate limits por tenant/IP. Fallback: manter default=10 com monitoramento. Alerta 429>5% (15min window) protege contra sobrecarga.
 > **Decidido por:** Marcos Sulivan em 2026-03-19
 > **Justificativa:** Ação principal: solicitar ao time Protheus documentação oficial de conexões simultâneas e rate limits por tenant/IP em produção. Fallback: deploy com `INTEGRATION_CONCURRENCY=10` e monitoramento de métricas (rate limit 429, DLQ count). Ajuste dinâmico via env var sem redeploy. Alerta `Rate limit 429 > 5% (15min window)` do NFR-008 §6.5 protege contra sobrecarga.
-> **Artefato de saída:** Ticket para time Protheus (ação externa) + NFR-008 atualizado com estratégia de ajuste dinâmico
-> **Implementado em:** NFR-008 §5, §6.5
+> **Artefato de saída:** NFR-008 atualizado com estratégia de ajuste dinâmico. Limite real confirmado pelo time Protheus: default=10, max=20 conexões simultâneas.
+> **Implementado em:** NFR-008 §5, §6.5. Valor confirmado 2026-03-23: INTEGRATION_CONCURRENCY default=10, max=20.
 
 ---
 

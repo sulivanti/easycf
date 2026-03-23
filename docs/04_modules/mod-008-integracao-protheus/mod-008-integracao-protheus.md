@@ -11,10 +11,10 @@
 # MOD-008 — Integração Dinâmica Protheus/TOTVS
 
 - **id:** MOD-008
-- **version:** 0.2.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **architecture_level:** 2 (Outbox Pattern, BullMQ, retry com backoff exponencial, DLQ, audit log, credenciais criptografadas)
 - **rastreia_para:** US-MOD-008, US-MOD-007, US-MOD-006, US-MOD-000-F07, DOC-DEV-001 §4.3, DOC-ARC-001, DOC-ARC-003, DOC-ESC-001, DOC-FND-000
 - **referencias_exemplos:** EX-AUTH-001, EX-PII-001, EX-SEC-001

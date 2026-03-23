@@ -23,12 +23,12 @@ flowchart TD
     style E1  fill:#27AE60,color:#fff,stroke:#1E8449
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E4  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E5  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E4  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
-*O módulo está na **Etapa 4** — Enriquecimento Simultâneo BDD/TDD. Stubs DRAFT prontos para enriquecimento pelos 11 agentes.*
+*O módulo está na **Etapa 5** — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.*
 
 ---
 
@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |
 | 0.1.0 | 2026-03-19 | arquitetura | Baseline Inicial — scaffold gerado via `forge-module` a partir de US-MOD-008 (APPROVED v1.2.0). 6 tabelas, 15 endpoints, 5 features, 6 scopes. Stubs criados: BR-008, FR-008, DATA-008, DATA-003, INT-008, SEC-008, SEC-002, UX-008, NFR-008, pen-008-pendente. Todos os itens em `estado_item: DRAFT`. |
 | 0.2.0 | 2026-03-19 | AGN-DEV-01/02/03 | Enriquecimento Batch 1 — AGN-DEV-01 (MOD/Escala): mod.md enriquecido com summary detalhado, score DOC-ESC-001 6/6, premissas e restrições expandidas. AGN-DEV-02 (BR): 12 regras de negócio (BR-001 a BR-012) com Gherkin extraídas de F01–F05. AGN-DEV-03 (FR): 11 requisitos funcionais (FR-001 a FR-011) com done funcional, dependências e Gherkin extraídos de F01–F05. |
 | 0.3.0 | 2026-03-19 | AGN-DEV-04/05/08 | Enriquecimento Batch 2 — AGN-DEV-04 (DATA): DATA-008 com 6 tabelas completas (campos, tipos, constraints, índices, FKs, soft-delete, volume estimado, queries críticas, migração). DATA-003 com 8 domain events completos (payload, sensitivity, view rule, ponte UI-API-Domain, outbox/dedupe). AGN-DEV-05 (INT): INT-008 com 4 integrações detalhadas (MOD-007 herança, MOD-006 events, MOD-000 Foundation, Protheus/TOTVS HTTP REST), 15 endpoints, contratos de erro, paginação, retry policy. AGN-DEV-08 (NFR): NFR-008 com SLOs p95/p99, limites, observabilidade Prometheus/OpenTelemetry, DLQ monitoring, healthchecks, DR, concorrência, input validation, testabilidade, escalabilidade. |

@@ -43,14 +43,22 @@ O ecossistema adota uma Escala de Arquitetura em Níveis (0, 1 e 2), escalando e
 
 ## Modulos
 
-| Modulo | Epico | Nivel | Status |
-| --- | --- | --- | --- |
-| **MOD-000 — Foundation** | [US-MOD-000](docs/04_modules/user-stories/epics/US-MOD-000.md) | N2 | `DRAFT` |
-| **MOD-001 — Backoffice Admin** | [US-MOD-001](docs/04_modules/user-stories/epics/US-MOD-001.md) | N1 | `DRAFT` |
-| **MOD-002 — Gestao de Usuarios** | [US-MOD-002](docs/04_modules/user-stories/epics/US-MOD-002.md) | — | `READY` |
-| **MOD-003 — Estrutura Organizacional** | [US-MOD-003](docs/04_modules/user-stories/epics/US-MOD-003.md) | N2 | `DRAFT` |
-| **MOD-004 — Identidade Avancada** | [US-MOD-004](docs/04_modules/user-stories/epics/US-MOD-004.md) | N2 | `DRAFT` |
-| **MOD-005 — Modelagem de Processos** | [US-MOD-005](docs/04_modules/user-stories/epics/US-MOD-005.md) | N2 | `DRAFT` |
+| Modulo | Epico | Nivel | Manifests | Status | Pronto p/ READY |
+| --- | --- | --- | --- | --- | --- |
+| **MOD-000 — Foundation** | [US-MOD-000](docs/04_modules/user-stories/epics/US-MOD-000.md) | N2 | 5 | `DRAFT` | SIM |
+| **MOD-001 — Backoffice Admin** | [US-MOD-001](docs/04_modules/user-stories/epics/US-MOD-001.md) | N1 | 2 | `DRAFT` | SIM |
+| **MOD-002 — Gestao de Usuarios** | [US-MOD-002](docs/04_modules/user-stories/epics/US-MOD-002.md) | N1 | 3 | `DRAFT` | SIM |
+| **MOD-003 — Estrutura Organizacional** | [US-MOD-003](docs/04_modules/user-stories/epics/US-MOD-003.md) | N2 | 2 | `DRAFT` | SIM |
+| **MOD-004 — Identidade Avancada** | [US-MOD-004](docs/04_modules/user-stories/epics/US-MOD-004.md) | N2 | 2 | `DRAFT` | SIM |
+| **MOD-005 — Modelagem de Processos** | [US-MOD-005](docs/04_modules/user-stories/epics/US-MOD-005.md) | N2 | 2 | `DRAFT` | SIM |
+| **MOD-006 — Execucao de Casos** | [US-MOD-006](docs/04_modules/user-stories/epics/US-MOD-006.md) | N2 | 2 | `DRAFT` | SIM |
+| **MOD-007 — Parametrizacao Contextual** | [US-MOD-007](docs/04_modules/user-stories/epics/US-MOD-007.md) | N2 | 2 | `DRAFT` | SIM |
+| **MOD-008 — Integracao Protheus** | [US-MOD-008](docs/04_modules/user-stories/epics/US-MOD-008.md) | N2 | 2 | `DRAFT` | 1 PEN |
+| **MOD-009 — Movimentos de Aprovacao** | [US-MOD-009](docs/04_modules/user-stories/epics/US-MOD-009.md) | N2 | 2 | `DRAFT` | SIM |
+| **MOD-010 — MCP e Automacao** | [US-MOD-010](docs/04_modules/user-stories/epics/US-MOD-010.md) | N2 | 2 | `DRAFT` | 2 PEN |
+| **MOD-011 — SmartGrid** | [US-MOD-011](docs/04_modules/user-stories/epics/US-MOD-011.md) | N1 | 3 | `DRAFT` | SIM |
+
+**Resumo:** 12 modulos scaffoldados, enriquecidos e validados (Fase 3 completa). 29 screen manifests validados contra schema v1. 10/12 prontos para promocao imediata. Planos de acao em `docs/04_modules/user-stories/plano/`.
 
 > *Para um indice completo das funcionalidades, ver `docs/INDEX.md`.*
 
@@ -277,7 +285,35 @@ Gera ou atualiza o `README.md` analisando normativos, módulos e manifestos do p
 
 ---
 
-### Validação e Qualidade
+### Ciclo de Vida e Orquestracao
+
+#### `enrich` / `enrich-all` / `enrich-agent`
+
+Enriquece modulos executando os 11 agentes DEV sobre os requisitos (BR, FR, DATA, INT, SEC, UX, NFR, etc.). `enrich` roda todos os agentes em 1 modulo, `enrich-all` sequencial em todos, `enrich-agent` roda 1 agente especifico.
+
+#### `validate-all`
+
+Orquestra a Fase 3 de validacao pre-promocao: executa `/qa`, `/validate-manifest`, `/validate-openapi`, `/validate-drizzle` e `/validate-endpoint` em sequencia, emitindo relatorio consolidado e registrando pendencias via `/manage-pendentes`.
+
+#### `promote-module`
+
+Sela um modulo como READY (imutavel) apos Gate 0 (DoR 7/7). Valida pendencias resolvidas, lint verde, manifests aprovados, ADRs minimos e CHANGELOG atualizado.
+
+#### `action-plan`
+
+Gera ou atualiza o Plano de Acao de um modulo, diagnosticando automaticamente o estado de cada fase (Pre-Modulo, Genese, Enriquecimento, Validacao, Promocao, Pos-READY).
+
+#### `manage-pendentes`
+
+Gerencia o ciclo de vida de pendencias (questoes abertas): create, analyze, decide, implement, cancel, report. Integra com `/action-plan` para propagar atualizacoes.
+
+#### `merge-amendment`
+
+Aplica um amendment aprovado sobre o documento base READY, executando Gates de stale-check e resolucao de conflitos.
+
+---
+
+### Validacao e Qualidade
 
 #### `validate-drizzle-schemas`
 
@@ -511,5 +547,8 @@ Todos os normativos mantêm seus identificadores em caráter imutável para rast
 | **Contratos Fundacionais** | [DOC-FND-000__Foundation.md](docs/01_normativos/DOC-FND-000__Foundation.md) |
 | **Manifestos e Gates CI** | [DOC-ARC-003B__Manifestos_Declarativos_e_Gates_CI.md](docs/01_normativos/DOC-ARC-003B__Manifestos_Declarativos_e_Gates_CI.md) |
 | **Guia Padrão Agente** | [DOC-GPA-001_Guia_Padrao_Agente.md](docs/01_normativos/DOC-GPA-001_Guia_Padrao_Agente.md) |
+| **Fluxo de Agentes** | [DOC-DEV-002_fluxo_agentes_e_governanca.md](docs/01_normativos/DOC-DEV-002_fluxo_agentes_e_governanca.md) |
 
-*(Markdown formatado em UTF-8).*
+**Screen Manifests:** 29 manifestos YAML validados contra schema v1 em `docs/05_manifests/screens/`. Schema: `docs/05_manifests/schemas/screen-manifest.v1.schema.json`.
+
+*(Markdown formatado em UTF-8. Ultima atualizacao: 2026-03-23.)*

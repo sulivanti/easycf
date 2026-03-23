@@ -17,7 +17,12 @@
       "Bash(ls:*)",
       "Bash(npx pnpm:*)",
       "Bash(npx markdownlint-cli2:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(pnpm run:*)",
+      "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/*/requirements -type f)",
+      "Bash(grep:*)",
+      "Bash(find /d/Dev/EasyCodeFramework/apps/api/src/modules -type d -name *org* -o -name *identity* -o -name *process* -o -name *case*)",
+      "Bash(do printf:*)"
     ]
   },
   "hooks": {

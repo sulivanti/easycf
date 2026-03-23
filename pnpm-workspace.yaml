@@ -1,3 +1,4 @@
 packages:
   - "apps/*"
   - "!apps/template-project"
+  - "docs/04_modules/_site"

@@ -15,7 +15,7 @@ import type { Module, Pendente } from "./types.js";
 
 const DOCS_ROOT = path.resolve(
   import.meta.dirname ?? ".",
-  "../../..",
+  "../../../..",
 );
 const PLANO_DIR = path.join(
   DOCS_ROOT,

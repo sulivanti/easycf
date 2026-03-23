@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import path from "node:path";
 
-const docsRoot = path.resolve("..");
+const docsRoot = path.resolve("../..");
 
 export default defineConfig({
   integrations: [react()],

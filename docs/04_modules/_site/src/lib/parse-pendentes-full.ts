@@ -6,7 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const DOCS_ROOT = path.resolve(import.meta.dirname ?? ".", "../../..");
+const DOCS_ROOT = path.resolve(import.meta.dirname ?? ".", "../../../..");
 const MODULES_DIR = path.join(DOCS_ROOT, "04_modules");
 
 // ── Types ────────────────────────────────────────────────────

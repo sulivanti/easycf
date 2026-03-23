@@ -10,9 +10,9 @@
 
 # DATA-003 — Catálogo de Domain Events de MCP e Automação Governada
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-010, US-MOD-010-F01, US-MOD-010-F02, US-MOD-010-F03, FR-010, BR-010, DOC-ARC-003, DOC-FND-000, SEC-002
 - **referencias_exemplos:** EX-SEC-001
 - **evidencias:** N/A

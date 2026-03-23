@@ -11,10 +11,10 @@
 # MOD-010 — MCP e Automação Governada
 
 - **id:** MOD-010
-- **version:** 0.2.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **architecture_level:** 2
 - **rastreia_para:** US-MOD-010, US-MOD-010-F01, US-MOD-010-F02, US-MOD-010-F03, US-MOD-010-F04, US-MOD-010-F05, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, DOC-FND-000, DOC-ESC-001, MOD-000, MOD-004, MOD-007, MOD-008, MOD-009
 - **referencias_exemplos:** EX-ESC-001, EX-AUTH-001, EX-SEC-001
@@ -337,9 +337,9 @@ Detalhes completos em [DATA-010](requirements/data/DATA-010.md).
 
 ## 10. Metadados do item (MOD-010)
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-010, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, DOC-FND-000, DOC-ESC-001
 - **referencias_exemplos:** EX-ESC-001, EX-AUTH-001, EX-SEC-001
 - **evidencias:** N/A

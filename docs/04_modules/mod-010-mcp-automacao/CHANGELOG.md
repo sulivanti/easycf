@@ -23,12 +23,12 @@ flowchart TD
     style E1  fill:#27AE60,color:#fff,stroke:#1E8449
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E4  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E5  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E4  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
-*O módulo está na **Etapa 4** — enriquecimento simultâneo BDD/TDD em andamento.*
+*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
 
 ---
 
@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |
 | 0.6.0 | 2026-03-19 | arquitetura | PENDENTE-006 decidida+implementada — Opcao A (NotificationService MOD-000) escolhida para canal e-mail de privilege escalation. Dependencia MOD-000 NotificationService multi-canal mapeada (MOD-000 ainda nao possui o servico). PEN-010 v0.9.0. |
 | 0.5.0 | 2026-03-19 | AGN-DEV-09, AGN-DEV-10, AGN-DEV-11 | Enriquecimento Batch 4 (final) — AGN-DEV-09: 4 ADRs criadas (ADR-001 Gateway Síncrono, ADR-002 API Key bcrypt, ADR-003 Outbox Pattern, ADR-004 Blocklist Wildcard); mod.md §9 adr-index atualizado. AGN-DEV-10: PEN-010 atualizado com 6 pendências (2 altas: Phase 2 enable e amendment MOD-000-F12; 3 médias: PREPARAR default, DIRECT lógica, callback MOD-009; 1 baixa: e-mail config). AGN-DEV-11: Cross-validation — 2 erros corrigidos (rate limit SEC vs NFR, tenant_id mcp_action_types), 4 warnings documentados, cobertura completa verificada. |
 | 0.4.0 | 2026-03-19 | AGN-DEV-06, AGN-DEV-07 | Enriquecimento Batch 3 — AGN-DEV-06: SEC-010 expandido com 14 seções (authn API key, authz RBAC 6 scopes, blocklist Phase 1/2 com enforcement WRITE+RUNTIME, privilege escalation sensitivity_level=2, segregação de funções, classificação de dados, payload sanitization, isolamento multi-tenant, retenção por entidade, LGPD Art.18 com direitos do titular, auditoria 10 EVTs mapeados, rate limits 6 operações, brute force protection, ciclo de vida API key); SEC-002 expandida com 3 sub-matrizes, maskable_fields detalhados, retenção por categoria, 5 cenários Gherkin BDD. AGN-DEV-07: UX-010 expandido com jornadas completas (UX-MCP-001: 8 passos + 5 estados + 3 state machines + 12 ações DOC-UX-010 + 8 componentes + 26 copy strings; UX-MCP-002: 7 passos + 8 estados + 2 state machines + 7 ações + 3 componentes + 16 copy strings), WCAG 2.1 AA (10 critérios + ARIA/keyboard), responsive 3 breakpoints, mapeamento action→endpoint→domain_event (10 ações), 11 cenários Gherkin BDD. |

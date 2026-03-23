@@ -15,13 +15,14 @@
 | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-003 implementada — FR-010 §FR-007 lógica DIRECT dispatch detalhada |
 | 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida+implementada — PREPARAR can_be_direct=false (DATA-010 seed + BR-007) |
 | 0.9.0  | 2026-03-19 | arquitetura | PENDENTE-006 decidida+implementada — Opcao A (NotificationService MOD-000). Dependencia MOD-000 mapeada. |
+| 1.1.0  | 2026-03-23 | Marcos Sulivan | PENDENTE-001 e PENDENTE-004 → IMPLEMENTADA — status sincronizado (artefatos ja existiam: FR-010 §FR-010, DOC-FND-000-M04) |
 | 1.0.0  | 2026-03-22 | arquitetura | PENDENTE-007 → IMPLEMENTADA (scopes MCP alinhados em DOC-FND-000 v1.8.0) |
 
 # PEN-010 — Questões Abertas de MCP e Automação Governada
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-22
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-010, MOD-010, BR-010, FR-010, SEC-010, INT-010
 
 ---
@@ -40,9 +41,9 @@
 
 ---
 
-## PENDENTE-001 — Phase 2 `*:create`: Mecanismo Exato de Habilitacao Per-Agent
+## ~~PENDENTE-001 — Phase 2 `*:create`: Mecanismo Exato de Habilitacao Per-Agent~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** ALTA
 - **dominio:** SEC
 - **tipo:** LACUNA
@@ -54,6 +55,10 @@
 - **tags:** phase2, create, scopes, per-agent
 - **sla_data:** —
 - **dependencias:** []
+- **decidido_em:** 2026-03-19
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** B
+- **implementado_em:** 2026-03-19
 
 ### Questao
 
@@ -209,9 +214,9 @@ Opcao A — alinha com DDD-lite (Nivel 2) e permite controle fino de observabili
 
 ---
 
-## PENDENTE-004 — Amendment MOD-000-F12: Registro de Scopes no Foundation
+## ~~PENDENTE-004 — Amendment MOD-000-F12: Registro de Scopes no Foundation~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** ALTA
 - **dominio:** INT
 - **tipo:** DEP-EXT
@@ -223,6 +228,10 @@ Opcao A — alinha com DDD-lite (Nivel 2) e permite controle fino de observabili
 - **tags:** amendment, foundation, scopes, rbac, deployment
 - **sla_data:** —
 - **dependencias:** []
+- **decidido_em:** 2026-03-19
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** B
+- **implementado_em:** 2026-03-19
 
 ### Questao
 

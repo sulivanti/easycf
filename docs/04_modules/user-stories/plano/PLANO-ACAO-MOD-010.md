@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-010 MCP e Automacao Governada
 
-> **Versao:** 2.1.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** DRAFT (v0.2.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
+> **Versao:** 3.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.0.0) | **Features:** 5/5 READY
 >
-> Fases 0-3 concluidas. PENDENTE-001 e PENDENTE-004 resolvidas (status sincronizado 2026-03-23). Proximo passo: executar `/promote-module`.
+> Fases 0-4 concluidas. Modulo promovido para READY em 2026-03-23 (commit 5ca283e). Selo imutavel — alteracoes futuras via `/create-amendment`.
 
 ---
 
@@ -167,29 +167,26 @@ Validacao executada via `/validate-all` em 2026-03-22 com resultado PASS para to
 | 4 | `/validate-drizzle` | SIM (Nivel 2) | NAO — pos-codigo | 5 tabelas em DATA-010, schema futuro |
 | 5 | `/validate-endpoint` | SIM (Nivel 2) | NAO — pos-codigo | 13 endpoints em spec, handlers futuro |
 
-### Fase 4: Promocao — PENDENTE
+### Fase 4: Promocao — CONCLUIDA
 
-Fase 3 concluida e todas as 7 pendencias IMPLEMENTADA. PENDENTE-001 (FR-010 criado) e PENDENTE-004 (DOC-FND-000-M04 criado) tiveram status sincronizado em 2026-03-23. DoR 7/7 atendido — modulo elegivel para promocao imediata.
+Modulo promovido para READY (v1.0.0) em 2026-03-23 via `/promote-module`. DoR 7/7 atendido. Todas as 7 pendencias IMPLEMENTADA. Commit: 5ca283e.
 
 ```
-6    /promote-module        Gate 0 — DoR Pre-Promocao:                       A EXECUTAR
-
+6    /promote-module        Gate 0 — DoR Pre-Promocao:                       CONCLUIDO
+                                                                             commit 5ca283e
      DoR-1: 0 pendencias ABERTA?                                             SIM (7/7 IMPLEMENTADA)
      DoR-2: Todos features APPROVED?                                         SIM (5/5)
      DoR-3: Todos requisitos existem?                                        SIM (10/10)
      DoR-4: ADRs minimos atendidos (>= 3 para Nivel 2)?                     SIM (4 ADRs)
      DoR-5: Screen manifests validos?                                        SIM (2/2 PASS)
      DoR-6: validate-all PASS?                                               SIM (2026-03-22)
-     DoR-7: Owner aprova?                                                    A VERIFICAR
+     DoR-7: Owner aprova?                                                    SIM
+                           Resultado: READY v1.0.0 selado                    2026-03-23
 ```
 
 #### Bloqueadores para Promocao
 
-1. **PENDENTE-001 (ABERTA, ALTA):** Phase 2 `*:create` — mecanismo de habilitacao per-agent. A decisao e Opcao B (endpoint dedicado `POST /enable-phase2`), mas o status permanece ABERTA porque o endpoint ainda nao foi completamente especificado em FR-010 com todos os detalhes necessarios para implementacao. Acao: verificar se FR-010 ja contem o FR completo ou se precisa de `/update-specification`.
-
-2. **PENDENTE-004 (ABERTA, ALTA):** Amendment MOD-000-F12 — registro de scopes no Foundation. A decisao e Opcao B (amendment pelo time Foundation) e o DOC-FND-000-M04 ja foi criado (DOC-FND-000 v1.7.0). O status permanece ABERTA possivelmente por falta de atualizacao do pen file. Acao: verificar se implementacao esta completa e atualizar status para IMPLEMENTADA via `/manage-pendentes implement PEN-010 PENDENTE-004`.
-
-> **Nota:** Apos resolver as 2 pendencias ABERTA, re-executar `/validate-all` para confirmar PASS e entao `/promote-module` para promocao.
+Nenhum. Todos resolvidos. Modulo selado READY v1.0.0.
 
 ### Fase 5: Pos-READY — SOB DEMANDA
 
@@ -248,10 +245,10 @@ Fase 3 concluida e todas as 7 pendencias IMPLEMENTADA. PENDENTE-001 (FR-010 cria
 
 ```
 PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──→ PROMOCAO ──→ POS-READY
-    [OK]         [OK]          [OK]              [OK]       [BLOQ]      [futuro]
-                                                              │
-                                                              ├── 2 ABERTA (PENDENTE-001, PENDENTE-004)
-                                                              └── DoR-1 NAO atendido
+    [OK]         [OK]          [OK]              [OK]        [OK]       [sob demanda]
+                                                          READY v1.0.0
+                                                          5ca283e
+                                                          2026-03-23
 ```
 
 **Posicao na cadeia topologica:** Camada 6 (MOD-010 depende de MOD-000, MOD-004, MOD-007, MOD-008, MOD-009). Modulo folha — nenhum modulo depende de MOD-010.
@@ -271,7 +268,7 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 |---------|---------|
 | Nivel de Arquitetura | Nivel 2 — DDD-lite + Clean Completo. Score DOC-ESC-001: 6/6 gatilhos ativados (workflow, compliance, concorrencia, integracoes criticas, multi-tenant, regras cruzadas). Modulo mais complexo do portfolio. |
 | Aggregate Root | `McpAgent` — fronteira transacional clara. Domain Services: McpGateway (8 passos), ScopeBlocklistValidator, McpDispatcher. Value Objects: ExecutionPolicy, AgentStatus, ActionType. |
-| Pendencias ABERTA | 2 pendencias de severidade ALTA bloqueiam promocao. PENDENTE-001 (Phase 2 per-agent enablement) tem decisao documentada mas implementacao incompleta. PENDENTE-004 (amendment MOD-000-F12) pode ja estar implementada — requer verificacao do pen file. |
+| Pendencias | 0 ABERTA. 7/7 IMPLEMENTADA. Modulo selado READY v1.0.0. |
 | Maior contagem de dependencias | 5 dependencias upstream — a maior do portfolio. Posicao de modulo folha na Camada 6 significa que nenhum deploy e bloqueado por MOD-010, mas o proprio MOD-010 depende de muitos modulos estarem prontos. |
 | API Key once-only | Mecanismo de seguranca critico: API key retornada apenas uma vez na criacao, armazenada via bcrypt hash. Nunca retornada em GET. Rotacao gera nova key com idempotencia. |
 | Blocklist em 2 fases | Phase 1 (permanente): 6 padroes de escopo bloqueados. Phase 2 (futuro): `*:create` liberavel per-agent sob condicoes. O mecanismo Phase 2 e justamente PENDENTE-001 que bloqueia promocao. |
@@ -279,15 +276,15 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 
 ---
 
-## Checklist Rapido — O que Falta para READY
+## Checklist Rapido — Status READY
 
-- [x] Resolver PENDENTE-001: FR-010 §FR-010 criado com endpoint Phase 2 enable — IMPLEMENTADA ✅
-- [x] Resolver PENDENTE-004: DOC-FND-000-M04 criado com 6 scopes mcp:* — IMPLEMENTADA ✅
-- [ ] Re-executar `/validate-all` apos resolver pendencias (confirmar PASS)
-- [ ] Executar `/promote-module MOD-010` (Gate 0 DoR)
-- [ ] Owner (Marcos Sulivan) aprovar promocao
+- [x] Resolver PENDENTE-001: FR-010 §FR-010 criado com endpoint Phase 2 enable
+- [x] Resolver PENDENTE-004: DOC-FND-000-M04 criado com 6 scopes mcp:*
+- [x] Re-executar `/validate-all` — PASS
+- [x] Executar `/promote-module MOD-010` — READY v1.0.0 (commit 5ca283e)
+- [x] Owner (Marcos Sulivan) aprovar promocao
 
-> **Nota:** MOD-010 e modulo folha (Camada 6) — sua promocao nao bloqueia nenhum outro modulo. Porem, as dependencias upstream (especialmente MOD-009 e MOD-008) devem estar READY antes do deploy efetivo.
+> **Modulo selado.** READY v1.0.0 em 2026-03-23. Alteracoes futuras via `/create-amendment`.
 
 ---
 
@@ -295,6 +292,7 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 3.0.0 | 2026-03-23 | Fase 4 CONCLUIDA — READY v1.0.0 selado (commit 5ca283e). Resumo visual, checklist e particularidades atualizados |
 | 2.1.0 | 2026-03-23 | PENDENTE-001 e PENDENTE-004 → IMPLEMENTADA (status sincronizado — artefatos ja existiam). DoR 7/7 atendido. Fase 4 desbloqueada — pronto para /promote-module |
 | 2.0.0 | 2026-03-23 | Recriacao completa: Fases 0-3 CONCLUIDAS (validate-all 2026-03-22 PASS), Fase 4 BLOQUEADA por 2 ABERTA (PENDENTE-001, PENDENTE-004), PENDENTE-007 adicionada e resolvida, screen manifests 2/2 confirmados, mapa de cobertura atualizado |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 6 pendentes resolvidas (001-006), rastreio de 11 agentes, mapa de cobertura de 5 validadores, particularidades Nivel 2 DDD-lite Score 6/6 |

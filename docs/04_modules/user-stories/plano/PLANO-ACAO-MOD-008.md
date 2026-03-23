@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-008 Integracao Dinamica Protheus/TOTVS
 
-> **Versao:** 2.1.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** DRAFT (v0.2.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
+> **Versao:** 3.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.0.0) | **Features:** 5/5 READY
 >
-> Fases 0-3 concluidas (validate-all PASS em 2026-03-22). PENDENTE-004 resolvida (limite Protheus confirmado: default=10, max=20). Proximo passo: executar `/promote-module`.
+> Fases 0-4 concluidas. Modulo promovido para READY em 2026-03-23 (commit a61efb9). Selo imutavel — alteracoes futuras via `/create-amendment`.
 
 ---
 
@@ -167,20 +167,19 @@ O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis 
 | 4 | /validate-drizzle | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | schema.ts |
 | 5 | /validate-endpoint | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | routes/*.route.ts |
 
-### Fase 4: Promocao — PENDENTE
+### Fase 4: Promocao — CONCLUIDA
 
-Fase 3 concluida e todas as 8 pendencias IMPLEMENTADA. PENDENTE-004 (limite concurrency Protheus) resolvida em 2026-03-23 com valor confirmado: default=10, max=20. DoR 7/7 atendido — modulo elegivel para promocao imediata.
+Modulo promovido para READY (v1.0.0) em 2026-03-23 via `/promote-module`. DoR 7/7 atendido. Todas as 8 pendencias IMPLEMENTADA. Commit: a61efb9.
 
 ```
-6    /promote-module        Promocao DRAFT -> READY:                          BLOQUEADA
-                           Fluxo interno:
-                             Step 1: /qa (pre-check)
+6    /promote-module        Promocao DRAFT -> READY:                          CONCLUIDO
+                           Fluxo interno:                                     commit a61efb9
+                             Step 1: /qa (pre-check) — PASS                  2026-03-23
                              Step 2: Promover estado_item DRAFT->READY
-                             Step 3: /qa (pos-check)
+                             Step 3: /qa (pos-check) — PASS
                              Step 4: /update-index
                              Step 5: /git commit
-                           Pre-condicao: QA verde, DoR-1..7 atendidos
-                           BLOQUEIO: DoR-1 nao atendido (PENDENTE-004 ABERTA)
+                           Resultado: READY v1.0.0 selado
 ```
 
 **Gate 0 — Definition of Ready (DoR) Check:**
@@ -199,7 +198,7 @@ Fase 3 concluida e todas as 8 pendencias IMPLEMENTADA. PENDENTE-004 (limite conc
 
 **Bloqueadores para Promocao:**
 
-Nenhum bloqueador. PENDENTE-004 resolvida em 2026-03-23 (limite confirmado: default=10, max=20).
+Nenhum. Todos resolvidos. Modulo selado READY v1.0.0.
 
 ### Fase 5: Pos-READY — SOB DEMANDA
 
@@ -260,10 +259,10 @@ Nenhum bloqueador. PENDENTE-004 resolvida em 2026-03-23 (limite confirmado: defa
 ```
   [Fase 0]         [Fase 1]         [Fase 2]           [Fase 3]         [Fase 4]       [Fase 5]
   Pre-Modulo  -->  Genese     -->  Enriquecimento -->  Validacao   -->  Promocao  -->  Pos-READY
-  CONCLUIDA        CONCLUIDA       CONCLUIDA           CONCLUIDA        <<<AQUI>>>     SOB DEMANDA
-  Epico APPROVED   Scaffold v0.1   11 agentes OK       validate-all     BLOQUEADA      amendments
-  5/5 features     6 tabelas       4 ADRs, 8 PEN       PASS 2026-03-22  DoR-1 FALHA    quando necessario
-                                   (1 ABERTA)                            PEND-004
+  CONCLUIDA        CONCLUIDA       CONCLUIDA           CONCLUIDA        CONCLUIDA      SOB DEMANDA
+  Epico APPROVED   Scaffold v0.1   11 agentes OK       validate-all     READY v1.0.0   amendments
+  5/5 features     6 tabelas       4 ADRs, 8 PEN       PASS 2026-03-22  a61efb9        quando necessario
+                                   (8 IMPLEMENTADA)                     2026-03-23
 
   Dependencias upstream: MOD-000 -> MOD-006 -> MOD-007 (heranca)
   Camada topologica: 6
@@ -283,17 +282,18 @@ Nenhum bloqueador. PENDENTE-004 resolvida em 2026-03-23 (limite confirmado: defa
 | BLK-004 | Bloqueio externo: MOD-005 (processos) precisa prover blueprints para rotinas de integracao. Nao bloqueia promocao do MOD-008, mas afeta implementacao. |
 | OAuth2 com Redis | Cache de token em Redis com TTL=expires_in-60s, lock distribuido via SET NX EX, interceptor de 401 para mid-flight expiry. Decisao PENDENTE-003. |
 
-## Checklist Rapido — O que Falta para READY
+## Checklist Rapido — Status READY
 
-- [x] Resolver PENDENTE-004 (limite concurrency Protheus) — confirmado default=10, max=20 ✅
-- [ ] Executar `/promote-module mod-008` (Fase 4)
+- [x] Resolver PENDENTE-004 (limite concurrency Protheus) — confirmado default=10, max=20
+- [x] Executar `/promote-module mod-008` (Fase 4) — READY v1.0.0 (commit a61efb9)
 
-> **Nota:** Todas as 8 pendencias estao IMPLEMENTADA. DoR 7/7 atendido. MOD-008 esta pronto para promocao. MOD-010 aguarda MOD-008 READY para consumir integracoes externas via MCP.
+> **Modulo selado.** READY v1.0.0 em 2026-03-23. Alteracoes futuras via `/create-amendment`.
 
 ## CHANGELOG deste Documento
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 3.0.0 | 2026-03-23 | Fase 4 CONCLUIDA — READY v1.0.0 selado (commit a61efb9). Resumo visual e checklist atualizados |
 | 2.1.0 | 2026-03-23 | PENDENTE-004 → IMPLEMENTADA (limite Protheus confirmado: default=10, max=20). DoR 7/7 atendido. Fase 4 desbloqueada — pronto para /promote-module |
 | 2.0.0 | 2026-03-23 | Recriacao: Fases 0-3 CONCLUIDAS (validate-all PASS 2026-03-22), Fase 4 BLOQUEADA por PENDENTE-004 (1 ABERTA), PENDENTE-006/007/008 agora IMPLEMENTADA, DoR 6/7 (DoR-1 falha), BLK-004 documentado |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 5 pendentes resolvidas (001-005), rastreio de agentes, mapa de cobertura de validadores, particularidades Outbox/BullMQ/DLQ/heranca MOD-007 |

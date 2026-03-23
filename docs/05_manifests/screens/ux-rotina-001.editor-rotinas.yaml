@@ -32,7 +32,6 @@ panels:
   - id: "editor"
     label: "Editor de Itens"
     default: false
-    notes: "Ativado ao selecionar uma rotina na listagem"
 
   - id: "history"
     label: "Histórico de Versões"

@@ -37,6 +37,8 @@ panels:
 
 actions:
   - id: load_agents
+    label: "Carregar lista de agentes MCP"
+    type: view
     operation_id: admin_mcp_agents_list
     http_method: GET
     endpoint: "/api/v1/admin/mcp-agents"
@@ -45,6 +47,8 @@ actions:
     error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível carregar os agentes." }
 
   - id: create_agent
+    label: "Criar novo agente MCP"
+    type: submit
     operation_id: admin_mcp_agents_create
     http_method: POST
     endpoint: "/api/v1/admin/mcp-agents"
@@ -53,6 +57,8 @@ actions:
     error_handling: { strategy: inline, include_correlation_id: true, user_message: "Não foi possível criar o agente." }
 
   - id: revoke_agent
+    label: "Revogar agente MCP (irreversível)"
+    type: submit
     operation_id: admin_mcp_agents_revoke
     http_method: POST
     endpoint: "/api/v1/admin/mcp-agents/:id/revoke"
@@ -61,6 +67,8 @@ actions:
     error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível revogar o agente." }
 
   - id: rotate_key
+    label: "Rotacionar API key do agente"
+    type: submit
     operation_id: admin_mcp_agents_rotate_key
     http_method: POST
     endpoint: "/api/v1/admin/mcp-agents/:id/rotate-key"
@@ -69,6 +77,8 @@ actions:
     error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível rodar a chave." }
 
   - id: load_actions
+    label: "Carregar catálogo de ações MCP"
+    type: view
     operation_id: admin_mcp_actions_list
     http_method: GET
     endpoint: "/api/v1/admin/mcp-actions"
@@ -77,6 +87,8 @@ actions:
     error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível carregar as ações." }
 
   - id: create_action
+    label: "Criar nova ação no catálogo"
+    type: submit
     operation_id: admin_mcp_actions_create
     http_method: POST
     endpoint: "/api/v1/admin/mcp-actions"
@@ -85,6 +97,8 @@ actions:
     error_handling: { strategy: inline, include_correlation_id: true, user_message: "Não foi possível criar a ação." }
 
   - id: grant_action
+    label: "Conceder permissão de ação ao agente"
+    type: submit
     operation_id: admin_mcp_agent_action_grant
     http_method: POST
     endpoint: "/api/v1/admin/mcp-agents/:id/actions"
@@ -93,6 +107,8 @@ actions:
     error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível conceder a ação." }
 
   - id: revoke_action_link
+    label: "Revogar permissão de ação do agente"
+    type: submit
     operation_id: admin_mcp_agent_action_revoke
     http_method: DELETE
     endpoint: "/api/v1/admin/mcp-agents/:id/actions/:actionId"

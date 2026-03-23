@@ -143,7 +143,7 @@ Gera a estrutura completa de documentação de um novo módulo (MOD-XXX) a parti
 
 - Pasta `docs/04_modules/mod-{ID}-{nome}/` com todas as subpastas
 - Stubs de requisitos: `BR-`, `FR-`, `DATA-`, `SEC-`, `UX-`, `NFR-`
-- `mod.md`, `CHANGELOG.md`, `CONVENTIONS.md`, `permissions.yaml`
+- `mod-{ID}-{nome}.md` (manifesto do módulo), `CHANGELOG.md`, `CONVENTIONS.md`, `permissions.yaml`
 - Pastas `amendments/`, `adr/`, `diagrams/`, `snippets/`
 - Todos os documentos com `estado_item: DRAFT`
 
@@ -200,7 +200,7 @@ Cria uma emenda governada para especificações que já estão em estado `READY`
 - **C (Correção):** Corrige erro factual ou bug na especificação
 - **R (Revisão):** Esclarece sem alterar comportamento
 
-**O que gera:** Arquivo `{ID}-{Tipo}{NN}.md` (ex: `FR-001-M02.md`) na pasta `amendments/`. Atualiza o documento base, `mod.md` e `CHANGELOG.md`.
+**O que gera:** Arquivo `{ID}-{Tipo}{NN}.md` (ex: `FR-001-M02.md`) na pasta `amendments/`. Atualiza o documento base, o manifesto do módulo e `CHANGELOG.md`.
 
 **Exemplos:**
 
@@ -430,7 +430,7 @@ Atualiza seções de índice/tabela em arquivos markdown com lista de arquivos d
 **Exemplos:**
 
 ```text
-"Atualizar índice do diretório docs/04_modules em mod.md"
+"Atualizar índice do diretório docs/04_modules no manifesto do módulo"
 "Atualizar o docs/INDEX.md com novos módulos"
 "Reindexar a pasta de amendments"
 ```

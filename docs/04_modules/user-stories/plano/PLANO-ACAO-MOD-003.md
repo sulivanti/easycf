@@ -1,6 +1,6 @@
 # Procedimento — Plano de Acao MOD-003 Estrutura Organizacional
 
-> **Versao:** 1.2.0 | **Data:** 2026-03-21 | **Owner:** Marcos Sulivan
+> **Versao:** 2.0.0 | **Data:** 2026-03-22 | **Owner:** Marcos Sulivan
 > **Estado atual do modulo:** DRAFT (v0.3.0) | **Epico:** READY (v1.1.0) | **Features:** 3/4 READY
 >
 > Fases 0-1 concluidas. Fase 2 em andamento (9/11 agentes, F04 TODO). Proximo passo: completar enriquecimento restante e promover F04 para READY, depois executar validacao completa.
@@ -11,16 +11,16 @@
 
 | Item | Estado | Detalhe |
 |------|--------|---------|
-| Epico US-MOD-003 | READY (v1.1.0) | DoR completo, 4 features vinculadas (F01-F04) |
-| Features F01-F04 | 3/4 READY | F01 READY, F02 READY, F03 READY, F04 TODO (Restore — adicionada pos-scaffold via amendment) |
+| Epico US-MOD-003 | READY (v1.1.0) | DoR completo, 4 features vinculadas (F01-F04), decisao N5=tenant documentada |
+| Features F01-F04 | 3/4 READY | F01 (API Core CRUD + Tree + N5), F02 (Arvore UX-ORG-001), F03 (Formulario UX-ORG-002) — READY. F04 (Restore) — TODO |
 | Scaffold (forge-module) | CONCLUIDO | mod-003-estrutura-organizacional/ com estrutura completa |
 | Enriquecimento (11 agentes) | EM ANDAMENTO | 9 agentes concluidos (AGN-DEV-02 a -10). AGN-DEV-01 e -11 sem evidencia explicita |
-| PENDENTEs | 0 abertas | 6/6 resolvidas (3 IMPLEMENTADA + 3 RESOLVIDA) |
-| ADRs | 4 criadas (DRAFT) | Nivel 2 requer minimo 3 — atendido |
-| Amendments | 3 criados | FR-001-C01, US-MOD-003-M01, US-MOD-003-F01-M01 (todos pre-READY) |
+| PENDENTEs | 0 abertas | 6 total: 3 IMPLEMENTADA + 3 RESOLVIDA |
+| ADRs | 4 criadas (DRAFT) | Nivel 2 requer minimo 3 — atendido (ADR-001 N5=Tenant, ADR-002 CTE Recursivo, ADR-003 Cross-Tenant, ADR-004 Idempotency Fail-Open) |
+| Amendments | 3 criados | FR-001-C01 (constraint catch), US-MOD-003-M01 (F04 no epico), US-MOD-003-F01-M01 (evento restored) — todos pre-READY |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v0.2.1 | Ultima entrada 2026-03-18. Pipeline Etapa 4 (Enriquecimento) |
-| Screen Manifests | 2/2 existem | UX-ORG-001 (org-tree), UX-ORG-002 (org-form) |
+| CHANGELOG | v0.2.1 | Ultima entrada 2026-03-18 (Etapa 4 — Enriquecimento) |
+| Screen Manifests | 2/2 existem | ux-org-001.org-tree.yaml, ux-org-002.org-form.yaml |
 | Dependencias | 1 upstream (MOD-000) | Consome tenants (F07), catalogo de escopos (F12), auth, domain_events |
 | Bloqueios | 0 | Nenhum BLK-* afeta MOD-003 |
 
@@ -34,17 +34,17 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 
 ### Fase 0: Pre-Modulo — CONCLUIDA
 
-Epico US-MOD-003 criado e aprovado como READY (v1.1.0). Define hierarquia organizacional
-formal de 5 niveis (N1-N5) como referencia de pertencimento para todas as entidades de negocio.
+Epico US-MOD-003 criado e aprovado como READY (v1.1.0). Define hierarquia organizacional formal de 5 niveis (N1-N5) como referencia de pertencimento para todas as entidades de negocio. Decisao arquitetural central: N5 = tenant existente do MOD-000-F07, vinculado via `org_unit_tenant_links` — nao cria tabela paralela.
 
 ```
 1    (manual)              Revisar e finalizar epico US-MOD-003:             CONCLUIDO
-                           - Escopo fechado (4 features)                    status_agil = READY
+                           - Escopo fechado (4 features full-stack)          status_agil = READY
                            - F04 (Restore) adicionada pos-scaffold via      v1.1.0
                              amendment US-MOD-003-M01 (2026-03-17)
                            - Gherkin validado nos Criterios de Aceite
                            - DoR completo (owner, dependencias, impacto)
                            - Hierarquia 5 niveis (N1-N5) formalizada
+                           - Decisao N5=tenant documentada e validada
                            Arquivo: docs/04_modules/user-stories/epics/US-MOD-003.md
 
 2    (manual)              Revisar e finalizar features F01-F04:             PARCIAL
@@ -59,7 +59,7 @@ formal de 5 niveis (N1-N5) como referencia de pertencimento para todas as entida
 
 ### Fase 1: Genese do Modulo — CONCLUIDA
 
-Primeiro modulo full-stack (backend + frontend) apos o Foundation. Scaffold gerado em 2026-03-16.
+Primeiro modulo full-stack (backend + frontend) apos o Foundation. Scaffold gerado em 2026-03-16. Nivel 2 (DDD-lite + Clean Completo) com score 5/6 de gatilhos.
 
 ```
 3    /forge-module MOD-003  Scaffold completo gerado:                        CONCLUIDO
@@ -72,6 +72,8 @@ Primeiro modulo full-stack (backend + frontend) apos o Foundation. Scaffold gera
 
 ### Fase 2: Enriquecimento — EM ANDAMENTO
 
+O enriquecimento do MOD-003 esta em andamento — 9 de 11 agentes executados entre 2026-03-16 e 2026-03-18. Durante o processo, 6 pendencias foram identificadas e todas resolvidas. Destaque para PENDENTE-001 que expandiu o escopo com F04 (Restore) e PENDENTE-003 que originou ADR-003 (cross-tenant).
+
 > **Decision tree de enriquecimento:**
 >
 > ```
@@ -81,22 +83,6 @@ Primeiro modulo full-stack (backend + frontend) apos o Foundation. Scaffold gera
 >     ├── Todos agentes de 1 modulo  → /enrich mod-003
 >     └── 1 agente especifico        → /enrich-agent AGN-DEV-XX mod-003
 > ```
-
-#### Rastreio de Agentes Executados
-
-| # | Agente | Pilar | Artefato | Status | Evidencia |
-|---|--------|-------|----------|--------|-----------|
-| 1 | AGN-DEV-01 | MOD/Escala | mod.md | SEM EVIDENCIA | mod.md v0.3.0 — sem header de agente. Pode ter executado sem deixar rastro explicito |
-| 2 | AGN-DEV-02 | BR | BR-001 | CONCLUIDO | v0.2.0 (2026-03-17) — BR-010, BR-011, BR-012 adicionadas |
-| 3 | AGN-DEV-03 | FR | FR-001 | CONCLUIDO | v0.2.0 (2026-03-17) — FR-005 criado, Gherkin expandido |
-| 4 | AGN-DEV-04 | DATA | DATA-001, DATA-003 | CONCLUIDO | v0.2.0 (2026-03-17) — migracao, outbox/dedupe |
-| 5 | AGN-DEV-05 | INT | INT-001 | CONCLUIDO | v0.2.0 (2026-03-17) — contratos, failure behavior |
-| 6 | AGN-DEV-06 | SEC | SEC-001, SEC-002 | CONCLUIDO | v0.2.0 (2026-03-17) — scope mapping, auth matrix |
-| 7 | AGN-DEV-07 | UX | UX-001 | CONCLUIDO | v0.2.0 (2026-03-17) — copy catalog, telemetria |
-| 8 | AGN-DEV-08 | NFR | NFR-001 | CONCLUIDO | v0.2.0 (2026-03-17) — topologia, paginacao |
-| 9 | AGN-DEV-09 | ADR | ADR-001..004 | CONCLUIDO | v0.2.0 (2026-03-17) — rastreabilidade expandida |
-| 10 | AGN-DEV-10 | PEN | PEN-003 | CONCLUIDO | v0.2.0 (2026-03-17) — PENDENTE-006 criada |
-| 11 | AGN-DEV-11 | VAL | (consolidacao) | SEM EVIDENCIA | Sem entrada no CHANGELOG |
 
 ```
 4    /enrich docs/04_modules/mod-003-estrutura-organizacional/
@@ -115,16 +101,255 @@ Primeiro modulo full-stack (backend + frontend) apos o Foundation. Scaffold gera
                            Consolidacao: AGN-DEV-11 (VAL)                   SEM EVIDENCIA
 ```
 
-#### PENDENTEs Resolvidas Durante Enriquecimento
+#### Rastreio de Agentes — MOD-003
 
-| PENDENTE | Status | Severidade | Decisao | Artefato de saida |
-|----------|--------|------------|---------|-------------------|
-| PENDENTE-001 | RESOLVIDA | ALTA | F04 dedicada ao Restore | US-MOD-003-F04, amendments M01 e F01-M01 |
-| PENDENTE-002 | IMPLEMENTADA | MEDIA | Timeline via MOD-000 (Opcao A) | INT-001 v0.3.0, INT-007 |
-| PENDENTE-003 | RESOLVIDA | ALTA | org_units cross-tenant sem tenant_id | ADR-003 (decisao arquitetural) |
-| PENDENTE-004 | IMPLEMENTADA | MEDIA | Soft limit 500 nos, warning header | NFR-001 v0.3.0, FR-001 v0.3.0 |
-| PENDENTE-005 | RESOLVIDA | MEDIA | Constraint catch 23505 → 409 | FR-001-C01 (amendment) |
-| PENDENTE-006 | IMPLEMENTADA | BAIXA | UX-001 filtro por RBAC, nao tenant_id | UX-001 v0.2.1 |
+| # | Agente | Pilar | Artefato | Status | Evidencia |
+|---|--------|-------|----------|--------|-----------|
+| 1 | AGN-DEV-01 | MOD/Escala | mod-003-estrutura-organizacional.md | SEM EVIDENCIA | mod.md v0.3.0 — sem header de agente. Pode ter executado sem deixar rastro explicito |
+| 2 | AGN-DEV-02 | BR | BR-001.md | CONCLUIDO | v0.2.0 (2026-03-17) — BR-010 (parent_id imutavel), BR-011 (nivel maximo N4), BR-012 (idempotencia) |
+| 3 | AGN-DEV-03 | FR | FR-001.md | CONCLUIDO | v0.2.0 (2026-03-17) — FR-005 (listagem flat) criado, Gherkin expandido |
+| 4 | AGN-DEV-04 | DATA | DATA-001.md, DATA-003.md | CONCLUIDO | v0.2.0 (2026-03-17) — migracao, outbox/dedupe, payload schemas |
+| 5 | AGN-DEV-05 | INT | INT-001.md | CONCLUIDO | v0.2.0 (2026-03-17) — contratos detalhados, failure behavior, INT-005 (idempotency) |
+| 6 | AGN-DEV-06 | SEC | SEC-001.md, SEC-002.md | CONCLUIDO | v0.2.0 (2026-03-17) — scope mapping detalhado, operation_ids, auth matrix expandida |
+| 7 | AGN-DEV-07 | UX | UX-001.md | CONCLUIDO | v0.2.0 (2026-03-17) — copy catalog, estados detalhados, telemetria UX-010 |
+| 8 | AGN-DEV-08 | NFR | NFR-001.md | CONCLUIDO | v0.2.0 (2026-03-17) — topologia, testes, deploy, paginacao, projecao de volume |
+| 9 | AGN-DEV-09 | ADR | ADR-001..004 | CONCLUIDO | v0.2.0 (2026-03-17) — rastreabilidade expandida em todas as 4 ADRs |
+| 10 | AGN-DEV-10 | PEN | pen-003-pendente.md | CONCLUIDO | v0.2.0 (2026-03-17) — PENDENTE-006 criada, revisao de pendencias |
+| 11 | AGN-DEV-11 | VAL | (consolidacao) | SEM EVIDENCIA | Sem entrada no CHANGELOG |
+
+#### Pendentes Resolvidas no Enriquecimento — Detalhamento Completo
+
+> As 6 pendencias abaixo foram identificadas durante o enriquecimento e todas foram decididas e implementadas entre 2026-03-16 e 2026-03-18.
+
+---
+
+##### ~~PENDENTE-001 — Restore (FR-004) Coberto por US-MOD-003-F04~~
+
+- **status:** RESOLVIDA
+- **severidade:** ALTA
+- **dominio:** ARC
+- **tipo:** LACUNA
+- **origem:** FORGE
+- **criado_em:** 2026-03-16
+- **criado_por:** AGN-DEV-10
+- **rastreia_para:** US-MOD-003-F04, US-MOD-003-M01, US-MOD-003-F01-M01, FR-004, BR-009, DATA-003
+- **tags:** restore, soft-delete, lifecycle, F04
+
+**Questao:**
+O MOD-003 implementa soft delete (status=INACTIVE + deleted_at) mas nao oferece caminho de volta. Sem restore, o administrador precisaria recriar manualmente o no e reconfigurar vinculos de tenant. Como fechar o ciclo de vida ACTIVE → INACTIVE → ACTIVE?
+
+**Impacto:**
+Sem restore, desativacoes acidentais sao irreversiveis na pratica. Recriacao manual perde o historico de domain events vinculado ao `id` original.
+
+**Resolucao:**
+
+> **Decisao:** Opcao A — Criar feature dedicada US-MOD-003-F04 (Restore)
+> **Decidido por:** arquitetura em 2026-03-17
+> **Justificativa:** Endpoint `PATCH /org-units/:id/restore` (FR-004) com Gherkin completo, BR-009, domain event `org.unit_restored`, UX (toggle inativos + menu contextual). Fecha ciclo de vida sem recriacao manual.
+> **Artefato de saida:** US-MOD-003-F04, amendment US-MOD-003-M01 (F04 no epico), amendment US-MOD-003-F01-M01 (evento org.unit_restored em F01)
+> **Implementado em:** 2026-03-17
+
+---
+
+##### ~~PENDENTE-002 — Endpoint de Timeline/Historico (view_history)~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** MEDIA
+- **dominio:** INT
+- **tipo:** DEC-TEC
+- **origem:** FORGE
+- **criado_em:** 2026-03-16
+- **criado_por:** AGN-DEV-10
+- **rastreia_para:** INT-001, UX-001, FR-001
+- **tags:** view_history, domain-events, timeline
+- **dependencias:** []
+- **decidido_em:** 2026-03-18
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+
+**Questao:**
+A acao `view_history` no UX-ORG-001 consome domain_events filtrados por `entity_type=org_unit`. Esse endpoint pertence ao MOD-000 (Foundation) ou o MOD-003 deve expor um proxy proprio?
+
+**Impacto:**
+Se for MOD-000, nao precisamos de endpoint novo. Se for proxy, precisamos de FR adicional e rota no MOD-003.
+
+**Opcao A — Consumir diretamente do MOD-000:**
+Usar `GET /api/v1/domain-events?entity_type=org_unit&entity_id=:id` (MOD-000).
+
+- Pros: Sem duplicacao de endpoint; frontend ja conhece o contrato; zero codigo novo no MOD-003
+- Contras: Acoplamento do frontend ao endpoint do MOD-000
+
+**Opcao B — Criar proxy no MOD-003:**
+Criar `GET /api/v1/org-units/:id/history` no MOD-003 como proxy.
+
+- Pros: Encapsulamento; URL semantica por recurso
+- Contras: Duplicacao de logica; FR adicional; manutencao extra
+
+**Recomendacao:** Opcao A — consumir do MOD-000 para evitar duplicacao.
+
+**Resolucao:**
+
+> **Decisao:** Opcao A — Consumir diretamente `GET /api/v1/domain-events?entity_type=org_unit&entity_id=:id` (MOD-000)
+> **Decidido por:** Marcos Sulivan em 2026-03-18
+> **Justificativa:** MOD-000 ja expoe o endpoint generico de domain events com filtro por entity_type. Criar proxy no MOD-003 seria duplicacao sem valor agregado. O frontend ja conhece o contrato.
+> **Artefato de saida:** INT-001 v0.3.0 (INT-007 — Consumo de Domain Events para Timeline)
+> **Implementado em:** 2026-03-18
+
+---
+
+##### ~~PENDENTE-003 — org_units e Cross-Tenant (Sem Coluna tenant_id)~~
+
+- **status:** RESOLVIDA
+- **severidade:** ALTA
+- **dominio:** ARC
+- **tipo:** DEC-TEC
+- **origem:** FORGE
+- **criado_em:** 2026-03-16
+- **criado_por:** AGN-DEV-10
+- **rastreia_para:** ADR-003, DATA-001, SEC-001, SEC-002
+- **tags:** cross-tenant, tenant_id, RLS, RBAC
+
+**Questao:**
+O sistema e multi-tenant e a maioria das tabelas possui `tenant_id` como coluna de RLS. A tabela `org_units` define a hierarquia organizacional que **contem** tenants no nivel N5. org_units precisa de um campo `tenant_id` proprio?
+
+**Impacto:**
+Se adicionar `tenant_id`, cria ambiguidade — "de qual tenant e essa arvore?" nao tem resposta clara quando a hierarquia serve justamente para organizar multiplos tenants. Se nao adicionar, foge do padrao Foundation e requer ADR para justificar a excecao.
+
+**Resolucao:**
+
+> **Decisao:** org_units e cross-tenant por design e NAO possui coluna `tenant_id`
+> **Decidido por:** arquitetura em 2026-03-17
+> **Justificativa:** A hierarquia organizacional (N1-N4) abrange multiplos tenants por natureza — sao os tenants (N5) que sao vinculados a hierarquia, nao o contrario. O isolamento de acesso e feito via RBAC (`@RequireScope` com `org:unit:read|write|delete`), nao via RLS por tenant. A coluna `tenant_id` em `org_unit_tenant_links` e FK de vinculo funcional (N4→N5), NAO coluna de isolamento.
+> **Artefato de saida:** ADR-003 (decisao arquitetural documentada), DATA-001 e SEC-001 §7 atualizados, comentario SQL na migration
+> **Implementado em:** 2026-03-17
+
+---
+
+##### ~~PENDENTE-004 — Soft Limit de 500 Nos (Global)~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** MEDIA
+- **dominio:** ARC
+- **tipo:** DEC-TEC
+- **origem:** FORGE
+- **criado_em:** 2026-03-16
+- **criado_por:** AGN-DEV-10
+- **rastreia_para:** NFR-001, FR-001, BR-001
+- **tags:** soft-limit, capacity-planning, warning-header
+- **dependencias:** []
+- **decidido_em:** 2026-03-18
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+
+**Questao:**
+NFR-001 define soft limit de 500 nos org_units (total global — tabela cross-tenant). Qual o comportamento ao atingir o limite?
+
+**Impacto:**
+Sem definicao, o sistema pode degradar silenciosamente ou bloquear sem mensagem clara.
+
+**Opcao A — Warning no response header:**
+Emitir `X-Limit-Warning` no response header ao criar no quando `count > 400` (80% do soft limit).
+
+- Pros: Warning precoce permite planejamento; nao bloqueia operacoes legitimas; transparente para integracoes via header
+- Contras: Requer logica de contagem no endpoint de criacao; header pode ser ignorado por clientes
+
+**Opcao B — Hard block com 422:**
+Bloquear criacao com HTTP 422 ao atingir 500 nos.
+
+- Pros: Previne degradacao garantida; comportamento explicito
+- Contras: Bloqueia operacoes legitimas; pode causar incidentes em producao
+
+**Opcao C — Apenas metricas/alertas internos:**
+Sem impacto no usuario; apenas metricas Prometheus/Grafana e alertas para ops.
+
+- Pros: Zero impacto no fluxo do usuario; monitoramento passivo
+- Contras: Administrador nao sabe que esta perto do limite; reacao apenas pos-degradacao
+
+**Recomendacao:** Opcao A — warning precoce permite planejamento sem bloquear operacoes legitimas.
+
+**Resolucao:**
+
+> **Decisao:** Opcao A — Warning no response header (`X-Limit-Warning`) ao criar no quando count > 400 (80%)
+> **Decidido por:** Marcos Sulivan em 2026-03-18
+> **Justificativa:** Warning precoce via header permite planejamento sem bloquear operacoes legitimas. O administrador recebe aviso ao atingir 80% do soft limit, mantendo a operacao funcional enquanto sinaliza necessidade de acao.
+> **Artefato de saida:** NFR-001 v0.3.0 (§7.1 Comportamento Soft Limit), FR-001 v0.3.0 (Gherkin + Soft Limit Warning)
+> **Implementado em:** 2026-03-18
+
+---
+
+##### ~~PENDENTE-005 — Unicidade Global de codigo (BR-008)~~
+
+- **status:** RESOLVIDA
+- **severidade:** MEDIA
+- **dominio:** FR
+- **tipo:** DEC-TEC
+- **origem:** FORGE
+- **criado_em:** 2026-03-16
+- **criado_por:** AGN-DEV-10
+- **rastreia_para:** BR-008, DATA-001, FR-001, FR-001-C01
+- **tags:** unicidade, constraint-catch, PostgreSQL-23505, 409-conflict
+
+**Questao:**
+Como garantir unicidade global do campo `codigo` em `org_units` (tabela cross-tenant, ADR-003) sem race conditions? Validacao aplicacional previa (SELECT EXISTS) ou catch de constraint violation do banco?
+
+**Impacto:**
+Dois requests simultaneos verificando "codigo livre?" ambos passariam a validacao aplicacional, mas um falharia no INSERT. A estrategia impacta confiabilidade e simplicidade.
+
+**Resolucao:**
+
+> **Decisao:** Usar catch da constraint violation do PostgreSQL (codigo `23505 — unique_violation`) e traduzir para HTTP 409 RFC 9457
+> **Decidido por:** arquitetura em 2026-03-17
+> **Justificativa:** Evita race condition do SELECT+INSERT, simplicidade Nivel 1, padrao RFC 9457 ja configurado no middleware global. Basta mapear o erro PostgreSQL para o response padronizado.
+> **Artefato de saida:** FR-001-C01 (amendment documentando estrategia de constraint catch)
+> **Implementado em:** 2026-03-17
+
+---
+
+##### ~~PENDENTE-006 — Inconsistencia no Filtro de view_history (tenant_id vs RBAC)~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** MEDIA
+- **dominio:** UX
+- **tipo:** CONTRADICAO
+- **origem:** ENRICH
+- **criado_em:** 2026-03-17
+- **criado_por:** AGN-DEV-10
+- **rastreia_para:** UX-001, ADR-003, SEC-002, DATA-003
+- **tags:** view_history, cross-tenant, domain-events
+- **dependencias:** []
+- **decidido_em:** 2026-03-18
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+
+**Questao:**
+Na jornada "Ver Historico do No" em UX-001, o passo 3 diz: `GET /api/v1/domain-events?entity_type=org_unit&entity_id=:id (filtrado por tenant_id)`. Porem, ADR-003 e SEC-002 definem explicitamente que `org_units` e cross-tenant e que domain events com `entity_type=org_unit` sao filtrados via RBAC (`org:unit:read`), NAO por `tenant_id`. A mencao a `tenant_id` na jornada UX contradiz a decisao arquitetural.
+
+**Impacto:**
+Se a implementacao do frontend seguir o texto de UX-001 e filtrar por `tenant_id`, os domain events de org_units nao serao retornados corretamente (pois nao ha tenant_id na tabela org_units).
+
+**Opcao A — Corrigir texto de UX-001:**
+Remover a mencao a `(filtrado por tenant_id)` e substituir por `(protegido por org:unit:read)` no passo 3 da jornada "Ver Historico".
+
+- Pros: Alinha com ADR-003 e SEC-002; correcao simples de documentacao
+- Contras: Nenhum
+
+**Opcao B — Manter filtro por tenant_id como fallback:**
+Aceitar ambos filtros (tenant_id OU RBAC) no endpoint de domain-events do MOD-000.
+
+- Pros: Flexibilidade para modulos com e sem tenant_id
+- Contras: Complexidade no endpoint MOD-000; contradiz ADR-003
+
+**Recomendacao:** Opcao A — Corrigir o texto de UX-001 para alinhar com ADR-003 e SEC-002.
+
+**Resolucao:**
+
+> **Decisao:** Opcao A — Corrigir texto de UX-001
+> **Decidido por:** Marcos Sulivan em 2026-03-18
+> **Justificativa:** ADR-003 e SEC-002 sao autoritativos — org_units e cross-tenant e domain events sao filtrados por RBAC (org:unit:read), nao por tenant_id. A contradicao e puramente documental.
+> **Artefato de saida:** UX-001 v0.2.1 (passo 3 jornada Ver Historico corrigido)
+> **Implementado em:** 2026-03-18
+
+---
 
 #### O que falta para completar o enriquecimento
 
@@ -158,16 +383,6 @@ MOD-003 e Nivel 2 (full-stack), portanto **todos os 5 validadores sao aplicaveis
 >     └── Endpoints Fastify      → /validate-endpoint
 > ```
 
-#### Validadores Aplicaveis — Mapa de Cobertura
-
-| # | Validador | Aplicavel (N2) | Executavel agora | Artefatos |
-|---|-----------|----------------|------------------|-----------|
-| 1 | `/qa` | SIM | SIM | Todos os .md do modulo |
-| 2 | `/validate-manifest` | SIM | SIM | `ux-org-001.org-tree.yaml`, `ux-org-002.org-form.yaml` |
-| 3 | `/validate-openapi` | SIM | NAO (pos-codigo) | `apps/api/openapi/` — nao existe ainda |
-| 4 | `/validate-drizzle` | SIM | NAO (pos-codigo) | `apps/api/src/modules/org-units/schema.ts` — nao existe |
-| 5 | `/validate-endpoint` | SIM | NAO (pos-codigo) | `apps/api/src/modules/org-units/routes/` — nao existe |
-
 ```
 5    /validate-all docs/04_modules/mod-003-estrutura-organizacional/
                            Orquestra TODAS as validacoes em sequencia:        A EXECUTAR
@@ -192,7 +407,7 @@ MOD-003 e Nivel 2 (full-stack), portanto **todos os 5 validadores sao aplicaveis
                            - lint:docs (Pass A-E: EX-*, §N, IDs, context-map, ciclos)
                            - Consistencia de metadados (estado_item, owner)
                            - Dead links, DoR alignment
-                           - Verificar rastreia_para entre mod.md ↔ features ↔ manifests
+                           - Verificar rastreia_para entre mod.md <-> features <-> manifests
                            - Verificar amendments vinculados corretamente (3 existentes)
 
 5b   /validate-manifest ux-org-001.org-tree.yaml
@@ -208,8 +423,8 @@ MOD-003 e Nivel 2 (full-stack), portanto **todos os 5 validadores sao aplicaveis
                            Validar contratos OpenAPI referenciados:           FUTURO (pos-codigo)
                            - CRUD /api/v1/org-units (create, get, update, delete)
                            - GET /api/v1/org-units/tree (CTE recursivo)
-                           - POST /api/v1/org-units/:id/link-tenant
-                           - DELETE /api/v1/org-units/:id/link-tenant/:tenantId
+                           - POST /api/v1/org-units/:id/tenants (link-tenant)
+                           - DELETE /api/v1/org-units/:id/tenants/:tenantId (unlink)
                            - PATCH /api/v1/org-units/:id/restore (F04)
                            Artefato nao existe ainda.
 
@@ -231,6 +446,16 @@ MOD-003 e Nivel 2 (full-stack), portanto **todos os 5 validadores sao aplicaveis
                            - CTE recursivo com prevencao de loop
                            Artefato nao existe ainda.
 ```
+
+#### Validadores Aplicaveis — Mapa de Cobertura
+
+| # | Validador | Aplicavel (N2) | Executavel agora | Artefatos |
+|---|-----------|----------------|------------------|-----------|
+| 1 | `/qa` | SIM | SIM | Todos os .md do modulo |
+| 2 | `/validate-manifest` | SIM | SIM | `ux-org-001.org-tree.yaml`, `ux-org-002.org-form.yaml` |
+| 3 | `/validate-openapi` | SIM | NAO (pos-codigo) | `apps/api/openapi/` — nao existe ainda |
+| 4 | `/validate-drizzle` | SIM | NAO (pos-codigo) | `apps/api/src/modules/org-units/schema.ts` — nao existe |
+| 5 | `/validate-endpoint` | SIM | NAO (pos-codigo) | `apps/api/src/modules/org-units/routes/` — nao existe |
 
 ### Fase 4: Promocao — PENDENTE
 
@@ -269,6 +494,8 @@ Requer Fase 2 concluida (todos os agentes), Fase 3 aprovada (QA verde) e **F04 e
                            Pre-condicao: QA verde (passo 5), DoR-1..7 atendidos, F04 READY
                            Pos-condicao: estado_item = READY, INDEX.md atualizado, commit
 ```
+
+> **Nota:** MOD-003 depende de MOD-000 (Foundation) que ainda esta DRAFT. A promocao do MOD-003 pode ocorrer independentemente — o DoR nao exige que dependencias upstream estejam READY (apenas que existam). Porem, o codigo so pode ser gerado quando MOD-000 estiver READY (endpoints implementados).
 
 ### Fase 5: Pos-READY (quando necessario)
 
@@ -370,9 +597,11 @@ Modulo ainda em DRAFT. Os 3 amendments existentes sao **correcoes feitas durante
 | PENDENTE-001 | RESOLVIDA | ALTA | ARC | F04 dedicada ao Restore | US-MOD-003-F04, amendments M01 e F01-M01 |
 | PENDENTE-002 | IMPLEMENTADA | MEDIA | INT | Timeline via MOD-000 (Opcao A) | INT-001 v0.3.0, INT-007 |
 | PENDENTE-003 | RESOLVIDA | ALTA | ARC | org_units cross-tenant sem tenant_id | ADR-003 (decisao arquitetural) |
-| PENDENTE-004 | IMPLEMENTADA | MEDIA | NFR | Soft limit 500 nos, warning header | NFR-001 v0.3.0, FR-001 v0.3.0 |
+| PENDENTE-004 | IMPLEMENTADA | MEDIA | ARC | Soft limit 500 nos, warning header | NFR-001 v0.3.0, FR-001 v0.3.0 |
 | PENDENTE-005 | RESOLVIDA | MEDIA | FR | Constraint catch 23505 → 409 | FR-001-C01 (amendment) |
-| PENDENTE-006 | IMPLEMENTADA | BAIXA | UX | Filtro view_history por RBAC, nao tenant_id | UX-001 v0.2.1 |
+| PENDENTE-006 | IMPLEMENTADA | MEDIA | UX | Filtro view_history por RBAC, nao tenant_id | UX-001 v0.2.1 |
+
+> Detalhamento completo: ver [Fase 2](#pendentes-resolvidas-no-enriquecimento--detalhamento-completo).
 
 ### Utilitarios (qualquer momento)
 
@@ -400,18 +629,18 @@ US-MOD-003 (READY v1.1.0)              ← Fase 0: CONCLUIDA
   │  3 amendments pre-READY
   │
   ▼
-mod-003-estrutura-organizacional/       ← Fase 1: CONCLUIDA (forge-module)
+mod-003-estrutura-organizacional/       ← Fase 1: CONCLUIDA (forge-module v0.1.0)
   │  (stubs DRAFT)
   │
   ▼
-mod-003 enriquecido (DRAFT v0.3.0)     ← Fase 2: EM ANDAMENTO (9/11 agentes, F04 TODO)
+mod-003 enriquecido (DRAFT v0.3.0)     ← Fase 2: EM ANDAMENTO (9/11 agentes, 6 PENDENTEs resolvidas)
   │
   ├── Completar enriquecimento:
   │     ├── Verificar AGN-DEV-01 (MOD/Escala)
   │     ├── Verificar AGN-DEV-11 (VAL consolidacao)
   │     └── Promover F04 (Restore) para READY
   │
-  ├── /validate-all .............. PROXIMO PASSO (apos enriquecimento completo)
+  ├── ★ PROXIMO PASSO: /validate-all
   │     ├── /qa .................. sintaxe, links, metadados, Pass A-E
   │     ├── /validate-manifest ... screen manifests vs schema v1 (2 manifests)
   │     ├── /validate-openapi .... FUTURO (pos-codigo) — Nivel 2 full-stack
@@ -447,12 +676,14 @@ Camada topologica: 1. Promocao desbloqueia 4+ modulos downstream.
 
 | Aspecto | Detalhe |
 |---------|---------|
-| Primeiro full-stack pos-Foundation | Nivel 2 (DDD-lite + Clean Completo, score 5/6). Primeiro modulo com backend + frontend proprios. Validadores de codigo (OpenAPI, Drizzle, Endpoint) aplicaveis mas so executaveis apos scaffold de codigo |
-| Cross-tenant por design | Tabela `org_units` NAO possui `tenant_id` (ADR-003). Acesso controlado por RBAC (`org:unit:*`), nao por RLS. Esta e uma excecao importante em relacao ao padrao multi-tenant dos demais modulos. Impacta SEC-002, UX-001 (filtros) e qualquer modulo que referencie org_units |
-| F04 adicionada pos-scaffold | Feature de Restore criada via amendment US-MOD-003-M01 depois do primeiro ciclo de enriquecimento. Precisa de revisao dedicada e promocao para READY. O conteudo tecnico ja existe (endpoint em FR-001, evento em DATA-003, UX em UX-001), mas a feature story ainda e TODO |
-| Hub de dependencia | MOD-003 e referenciado por MOD-004 (identidade), MOD-005 (processos), MOD-006 (execucao), MOD-007 (parametrizacao) como hierarquia organizacional canonica. Promocao desbloqueia progresso em 4+ modulos downstream — priorizar |
-| 4 ADRs (acima do minimo) | Score 5/6 justifica Nivel 2 com folga. ADRs documentam decisoes criticas: N5=tenant existente (ADR-001), CTE recursivo vs materialized path (ADR-002), cross-tenant sem tenant_id (ADR-003), idempotencia fail-open via MOD-000 (ADR-004) |
-| 3 amendments pre-READY | FR-001-C01 (constraint catch 23505), US-MOD-003-M01 (F04 no epico), US-MOD-003-F01-M01 (evento org.unit_restored). Todos criados durante enriquecimento como correcoes, nao pos-selagem. Demonstram maturidade iterativa do modulo |
+| Primeiro full-stack pos-Foundation | Nivel 2 (DDD-lite + Clean Completo, score 5/6). Primeiro modulo com backend + frontend proprios. Validadores de codigo (OpenAPI, Drizzle, Endpoint) aplicaveis mas so executaveis apos scaffold de codigo. |
+| Cross-tenant por design | Tabela `org_units` NAO possui `tenant_id` (ADR-003). Acesso controlado por RBAC (`org:unit:*`), nao por RLS. Esta e uma excecao importante em relacao ao padrao multi-tenant dos demais modulos. Impacta SEC-002, UX-001 (filtros) e qualquer modulo que referencie org_units. |
+| F04 adicionada pos-scaffold | Feature de Restore criada via amendment US-MOD-003-M01 depois do primeiro ciclo de enriquecimento. Precisa de revisao dedicada e promocao para READY. O conteudo tecnico ja existe (endpoint em FR-001, evento em DATA-003, UX em UX-001), mas a feature story ainda e TODO. |
+| Hub de dependencia | MOD-003 e referenciado por MOD-004 (identidade), MOD-005 (processos), MOD-006 (execucao), MOD-007 (parametrizacao) como hierarquia organizacional canonica. Promocao desbloqueia progresso em 4+ modulos downstream — priorizar. |
+| 4 ADRs (acima do minimo) | Score 5/6 justifica Nivel 2 com folga. ADRs documentam decisoes criticas: N5=tenant existente (ADR-001), CTE recursivo vs materialized path (ADR-002), cross-tenant sem tenant_id (ADR-003), idempotencia fail-open via MOD-000 (ADR-004). |
+| 3 amendments pre-READY | FR-001-C01 (constraint catch 23505), US-MOD-003-M01 (F04 no epico), US-MOD-003-F01-M01 (evento org.unit_restored). Todos criados durante enriquecimento como correcoes, nao pos-selagem. Demonstram maturidade iterativa do modulo. |
+| Dependencia exclusiva de MOD-000 | Consome tenants (MOD-000-F07), catalogo de escopos (MOD-000-F12), auth e domain_events. Nenhuma integracao externa — todos os endpoints consumidos sao do Foundation. |
+| Escopo expandido pos-enriquecimento | PENDENTE-001 originou F04 (Restore), expandindo de 3 para 4 features. PENDENTE-003 originou ADR-003 (cross-tenant), decisao arquitetural com impacto em SEC-002, UX-001 e modulos downstream. |
 
 ---
 
@@ -468,7 +699,7 @@ Camada topologica: 1. Promocao desbloqueia 4+ modulos downstream.
 
 > **Alternativa:** Se preferir validar por partes, use `/qa` e `/validate-manifest` individualmente (passos 5a-5b).
 
-> **Nota:** MOD-003 so pode ser promovido apos MOD-000 estar READY (dependencia upstream). Adicionalmente, F04 deve estar READY antes da promocao do modulo. Como hub de dependencia, priorizar a promocao do MOD-003 desbloqueia 4 modulos downstream.
+> **Nota:** Todas as 6 pendencias ja estao resolvidas (3 IMPLEMENTADA + 3 RESOLVIDA). Os 10 artefatos de requisitos estao enriquecidos. As 4 ADRs excedem o minimo para Nivel 2. Nao ha bloqueios (BLK-*) afetando MOD-003. A unica dependencia upstream (MOD-000) esta DRAFT mas isso nao impede a promocao da especificacao — apenas a geracao de codigo. Como hub de dependencia, priorizar a promocao do MOD-003 desbloqueia 4+ modulos downstream.
 
 ---
 
@@ -476,6 +707,7 @@ Camada topologica: 1. Promocao desbloqueia 4+ modulos downstream.
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 2.0.0 | 2026-03-22 | Reescrita completa: detalhamento inline das 6 pendentes com questao/opcoes/resolucao (formato MOD-001), rastreio de agentes expandido com evidencias, mapa de cobertura de validadores, particularidades atualizadas |
 | 1.2.0 | 2026-03-21 | Versao hibrida: estrutura padrao (PASSO, decision trees) + riqueza explicativa (tabela de agentes, painel de pendencias, bloqueadores, notas contextuais sobre F04/cross-tenant/amendments) |
 | 1.1.0 | 2026-03-21 | Reescrita: formato padronizado conforme template (PASSO numerados, decision trees, gestao de pendencias completa, resumo visual vertical) |
 | 1.0.0 | 2026-03-21 | Criacao inicial — diagnostico Fase 2 em andamento (9 agentes, F04 TODO, 0 pendentes abertas) |

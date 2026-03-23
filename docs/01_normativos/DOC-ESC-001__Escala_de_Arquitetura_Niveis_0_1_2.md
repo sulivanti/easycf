@@ -511,7 +511,7 @@ Se um módulo ficou "pesado demais":
 
 ### Definições dos Gates de CI
 
-- **EX-ESC-001** — Rubrica de Score Nível 2 (6 Gatilhos): Um módulo é classificado como Nível 2 (DDD Completo) quando atinge ≥ 5 dos 6 gatilhos: (1) Estado/workflow com máquina de estados, (2) Compliance/auditoria obrigatória, (3) Concorrência/consistência eventual, (4) Integrações externas críticas, (5) Multi-tenant com RLS e escopo por cliente, (6) Regras cruzadas ou reuso alto entre módulos. Cada gatilho DEVE ser justificado no `mod.md §4.2` com evidência concreta.
+- **EX-ESC-001** — Rubrica de Score Nível 2 (6 Gatilhos): Um módulo é classificado como Nível 2 (DDD Completo) quando atinge ≥ 5 dos 6 gatilhos: (1) Estado/workflow com máquina de estados, (2) Compliance/auditoria obrigatória, (3) Concorrência/consistência eventual, (4) Integrações externas críticas, (5) Multi-tenant com RLS e escopo por cliente, (6) Regras cruzadas ou reuso alto entre módulos. Cada gatilho DEVE ser justificado no manifesto do módulo (`<dirname>.md`) §4.2 com evidência concreta.
 - **EX-CI-003** — Scan de Dependências e Pinning Seguros: Npm Audit Strict, Trivy, Dependabot.
 - **EX-CI-004** — Validação de Idempotência Criptográfica de Métodos Mutáveis: ESLint customizado com warnings/errors L1 e L2.
 - **EX-CI-005** — Garantia de Migrações Idempotentes e Integridade Tenant: `db-lint.ts` e dry-run isolado.

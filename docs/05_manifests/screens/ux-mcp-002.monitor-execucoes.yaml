@@ -26,6 +26,8 @@ telemetry_defaults:
 
 actions:
   - id: load_executions
+    label: "Carregar lista de execuções MCP"
+    type: view
     operation_id: admin_mcp_executions_list
     http_method: GET
     endpoint: "/api/v1/admin/mcp-executions"
@@ -34,6 +36,8 @@ actions:
     error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível carregar as execuções." }
 
   - id: load_execution_detail
+    label: "Carregar detalhes de uma execução"
+    type: view
     operation_id: admin_mcp_executions_get
     http_method: GET
     endpoint: "/api/v1/admin/mcp-executions/:id"
@@ -42,6 +46,8 @@ actions:
     error_handling: { strategy: toast, include_correlation_id: true, user_message: "Não foi possível carregar o detalhe." }
 
   - id: filter_executions
+    label: "Filtrar execuções MCP"
+    type: view
     operation_id: admin_mcp_executions_list
     http_method: GET
     endpoint: "/api/v1/admin/mcp-executions"
@@ -50,6 +56,7 @@ actions:
     error_handling: { strategy: toast, include_correlation_id: true, user_message: "Erro ao filtrar." }
 
   - id: navigate_to_movement
+    label: "Navegar para o movimento controlado vinculado"
     type: client_only
     client_only: true
     loading_state: none

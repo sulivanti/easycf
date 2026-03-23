@@ -351,11 +351,12 @@ if (fs.existsSync(depGraphPath)) {
             }
         }
 
-        // Valida que cada mod.md §4 é consistente com o grafo central
+        // Valida que cada manifesto do módulo §4 é consistente com o grafo central
         for (const [modId, expectedDeps] of Object.entries(graph)) {
             const modDirName = fs.readdirSync(MODULES_DIR).find(d => d.startsWith(modId.toLowerCase().replace('-', '-')));
             if (!modDirName) continue;
-            const modMdPath = path.join(MODULES_DIR, modDirName, 'mod.md');
+            // Convenção: manifesto do módulo tem mesmo nome do diretório (ex: mod-001-backoffice-admin.md)
+            const modMdPath = path.join(MODULES_DIR, modDirName, modDirName + '.md');
             if (!fs.existsSync(modMdPath)) continue;
 
             const modContent = fs.readFileSync(modMdPath, 'utf8');
@@ -383,7 +384,7 @@ if (fs.existsSync(depGraphPath)) {
 
             for (const expected of expectedDeps) {
                 if (!declaredDeps.has(expected)) {
-                    errors.push(`[Aviso] ${modId}/mod.md §4 não declara dependência de ${expected} (presente no DEPENDENCY-GRAPH.md)`);
+                    errors.push(`[Aviso] ${modId}/${modDirName}.md §4 não declara dependência de ${expected} (presente no DEPENDENCY-GRAPH.md)`);
                 }
             }
         }

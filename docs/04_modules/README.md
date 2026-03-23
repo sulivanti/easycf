@@ -1,7 +1,7 @@
 # 04_modules — Documentação Modular do EasyA2
 
 > **Para agentes GenAI:** Este diretório é a **fonte de verdade técnica por módulo** do sistema EasyA2.
-> Antes de gerar qualquer código, leia o `mod.md` do módulo relevante e os documentos `requirements/` correspondentes.
+> Antes de gerar qualquer código, leia o manifesto do módulo (`<dirname>.md`) relevante e os documentos `requirements/` correspondentes.
 > Jamais referencie arquivos de outros diretórios de documentação como autoridade maior — aqui é onde os requisitos são detalhados.
 
 ---
@@ -21,7 +21,7 @@ A pasta segue o princípio de **rastreabilidade**: qualquer mudança de especifi
 ├── README.md                  ← este arquivo (visão geral da pasta)
 │
 ├── mod-000-foundation/        ← Módulo Nível 0 (núcleo/alicerce)
-│   ├── mod.md                 ← manifesto do módulo
+│   ├── mod-000-foundation.md   ← manifesto do módulo (mesmo nome do diretório)
 │   ├── README.md              ← visão geral e links rápidos
 │   ├── CHANGELOG.md           ← histórico auditável de mudanças (amendments integrados)
 │   ├── CONVENTIONS.md         ← convenções específicas do módulo (nomenclatura, padrões)
@@ -51,7 +51,7 @@ A pasta segue o princípio de **rastreabilidade**: qualquer mudança de especifi
 │   └── snippets/              ← Trechos de código úteis, configs parciais
 │
 ├── mod-001-backoffice-admin/  ← Módulo Nível 1 (exemplo)
-│   ├── mod.md                 ← manifesto do módulo
+│   ├── mod-001-backoffice-admin.md  ← manifesto do módulo (mesmo nome do diretório)
 │   ├── README.md              ← mesma estrutura canônica completa do mod-000...
 │   └── ...                    
 │
@@ -157,9 +157,9 @@ PROPOSTA → APROVADA → INTEGRADA
 
 ---
 
-## 5. Arquivo `mod.md` — Manifesto do Módulo
+## 5. Manifesto do Módulo (`<dirname>.md`)
 
-Todo módulo **obrigatoriamente** possui um `mod.md` com as seguintes seções:
+Todo módulo **obrigatoriamente** possui um arquivo manifesto com o **mesmo nome do diretório** (ex: `mod-001-backoffice-admin/mod-001-backoffice-admin.md`) com as seguintes seções:
 
 ```markdown
 # MOD-NNN — Nome do Módulo
@@ -232,7 +232,7 @@ Cada módulo mantém um `CHANGELOG.md` que é o **índice humano** de todas as m
 
 ## 2026-02-27
 ### Mudanças iniciais (bootstrap do módulo)
-- MOD-001 (canônico): criado mod.md e estrutura por tipo
+- MOD-001 (canônico): criado manifesto do módulo e estrutura por tipo
 
 ### Deltas
 - FR-001-M01 — MELHORIA (PROPOSTA): "Filtro avançado + paginação por cursor"
@@ -297,7 +297,7 @@ Ao criar um novo módulo `mod-NNN-nome` manualmente, siga este checklist obrigat
 
 ```text
 [ ] 1. Criar pasta: docs/04_modules/mod-NNN-nome/
-[ ] 2. Criar mod.md com objetivo, escopo e dependências
+[ ] 2. Criar manifesto do módulo (mod-NNN-nome.md) com objetivo, escopo e dependências
 [ ] 3. Criar requirements/ com subpastas: br/ fr/ data/ int/ sec/ ux/ nfr/ tst/
 [ ] 4. Criar arquivos canônicos: BR-NNN.md, FR-NNN.md, DATA-NNN.md, ...
 [ ] 5. Criar TST-NNN.md com casos obrigatórios mapeados para FR-NNN e SEC-NNN

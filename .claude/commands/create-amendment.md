@@ -95,10 +95,10 @@ Consulte `docs/01_normativos/DOC-DEV-001_especificacao_executavel.md` e o normat
 
 > **IMPORTANTE:** O arquivo base (READY) **NÃO é editado**. Todo o conteúdo novo fica no amendment.
 
-## PASSO 3: Amarração Ascendente (somente em mod.md e CHANGELOG)
+## PASSO 3: Amarração Ascendente (somente no manifesto do módulo e CHANGELOG)
 
-1. **No `mod.md` do módulo:** Adicione o amendment no bloco de índice (`<!-- start index -->`) ou crie seção `## 8. Amendments` se não existir
-2. **NÃO edite o arquivo base READY** — a rastreabilidade é feita via mod.md e CHANGELOG, não via injeção no arquivo selado
+1. **No manifesto do módulo (`<dirname>.md`):** Adicione o amendment no bloco de índice (`<!-- start index -->`) ou crie seção `## 8. Amendments` se não existir
+2. **NÃO edite o arquivo base READY** — a rastreabilidade é feita via manifesto do módulo e CHANGELOG, não via injeção no arquivo selado
 
 ## PASSO 4: Changelog
 
@@ -112,7 +112,7 @@ Consulte `docs/01_normativos/DOC-DEV-001_especificacao_executavel.md` e o normat
 
 ## PASSO 5: Atualização do Índice
 
-Invoque `/project:update-index` para atualizar `mod.md` com o novo amendment.
+Invoque `/project:update-index` para atualizar o manifesto do módulo com o novo amendment.
 
 ## Passo Final: Comunicação
 

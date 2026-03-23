@@ -93,8 +93,11 @@ function run() {
       changedModules.add(moduleDir);
     }
 
-    // Only validate markdown files that are not the changelog or mod.md itself
-    if (file.endsWith('.md') && !file.endsWith('CHANGELOG.md') && !file.endsWith('mod.md')) {
+    // Only validate markdown files that are not the changelog or the module manifest (<dirname>.md)
+    const normalFile = file.replace(/\\/g, '/');
+    const fName = normalFile.split('/').pop();
+    const pDir = normalFile.split('/').slice(-2, -1)[0] || '';
+    if (file.endsWith('.md') && !file.endsWith('CHANGELOG.md') && fName !== pDir + '.md') {
       if (!validateFile(file)) {
         hasErrors = true;
       }

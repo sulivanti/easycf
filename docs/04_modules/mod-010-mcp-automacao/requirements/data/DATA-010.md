@@ -89,7 +89,7 @@
 | codigo | nome | can_be_direct | can_approve |
 |---|---|---|---|
 | CONSULTAR | Consulta de dados | true | false |
-| PREPARAR | Preparação de dados | false | false | <!-- default conservador conforme PEN-010/PENDENTE-002, ajustável por tenant -->
+| PREPARAR | Preparação de dados | false | false |
 | SUBMETER | Submissão para processamento | false | false |
 | EXECUTAR | Execução de operação | false | false |
 | MONITORAR | Monitoramento de status | true | false |

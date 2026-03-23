@@ -30,12 +30,12 @@ Caminho do modulo existe?
 └── NAO → ABORTE: "Modulo nao encontrado em {caminho}. Verifique o path ou execute /forge-module primeiro."
 ```
 
-### Gate 2 — mod.md legivel
+### Gate 2 — Manifesto do módulo legível
 
 ```text
-mod.md possui metadados basicos (id, version, estado_item)?
+O manifesto do módulo (<dirname>.md) possui metadados basicos (id, version, estado_item)?
 ├── SIM → Prossiga
-└── NAO → ABORTE: "mod.md sem metadados validos. O scaffold pode estar incompleto."
+└── NAO → ABORTE: "Manifesto do módulo sem metadados validos. O scaffold pode estar incompleto."
 ```
 
 ---
@@ -44,7 +44,7 @@ mod.md possui metadados basicos (id, version, estado_item)?
 
 Leia os seguintes arquivos e extraia os metadados indicados. Registre internamente cada valor coletado — eles serao usados para preencher o template do plano.
 
-### 1.1 — mod.md (modulo principal)
+### 1.1 — Manifesto do módulo (<dirname>.md)
 
 | Campo | Extrair |
 |-------|---------|
@@ -125,7 +125,7 @@ Extraia:
 
 ### 1.9 — Screen Manifests
 
-Com base nos manifests referenciados no mod.md ou epico, verifique existencia em `docs/05_manifests/screens/`:
+Com base nos manifests referenciados no manifesto do módulo ou epico, verifique existencia em `docs/05_manifests/screens/`:
 - Contagem de manifests existentes
 - IDs (ex: UX-AUTH-001, UX-SHELL-001)
 
@@ -157,7 +157,7 @@ Verificar tambem: todas as features estao READY?
 ### Fase 1: Genese (Scaffold)
 
 ```text
-Pasta mod-NNN-*/ existe com mod.md + CHANGELOG.md + requirements/?
+Pasta mod-NNN-*/ existe com mod-NNN-*.md + CHANGELOG.md + requirements/?
 ├── SIM → Fase 1: CONCLUIDA
 └── NAO → Fase 1: NAO INICIADA (executar /forge-module)
 ```
@@ -195,7 +195,7 @@ Existe relatorio de /validate-all ou /qa verde no modulo?
 ### Fase 4: Promocao
 
 ```text
-estado_item do mod.md?
+estado_item do manifesto do módulo?
 ├── READY → Fase 4: CONCLUIDA
 └── DRAFT → Fase 4: PENDENTE (requer Fase 3 completa)
 ```
@@ -494,7 +494,7 @@ Emita no chat:
 
 | Erro | Causa | Acao |
 |---|---|---|
-| mod.md nao encontrado | Scaffold nao executado | Informe: "Execute `/forge-module` primeiro" |
+| Manifesto do módulo nao encontrado | Scaffold nao executado | Informe: "Execute `/forge-module` primeiro" |
 | Epico nao encontrado | User Story nao criada | Marque Fase 0 como NAO INICIADA, continue |
 | DEPENDENCY-GRAPH.md nao encontrado | Grafo nao criado | Omita secoes de dependencia, avise o usuario |
 | CHANGELOG.md sem pipeline Mermaid | Formato antigo | Infira etapa a partir dos dados coletados |

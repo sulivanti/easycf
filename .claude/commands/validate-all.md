@@ -36,7 +36,7 @@ Se não fornecido, pergunte ao usuário.
 
 ## PASSO 1: Detecção do Módulo
 
-Leia o `mod.md` do módulo informado para extrair:
+Leia o manifesto do módulo (arquivo `<dirname>.md`, ex: `mod-001-backoffice-admin.md`) para extrair:
 
 1. `mod_id` (ex: `MOD-001`)
 2. `tipo` ou contexto do módulo (UX-only, API, full-stack)

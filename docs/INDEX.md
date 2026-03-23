@@ -59,22 +59,22 @@
 
 ## 04 — Módulos (`04_modules`)
 
-Cada módulo possui raiz em `04_modules/` com `mod.md`, `requirements/`, `amendments/`, `adr/`.
+Cada módulo possui raiz em `04_modules/` com `<dirname>.md` (manifesto do módulo), `requirements/`, `amendments/`, `adr/`.
 
 | Módulo | Arquivo Raiz | Estado |
 |---|---|---|
-| MOD-000 — Framework de Automação / Geradores (Foundation) | [mod.md](04_modules/mod-000-foundation/mod.md) | DRAFT |
-| MOD-001 — Backoffice Admin (UX-First Shell) | [mod.md](04_modules/mod-001-backoffice-admin/mod.md) | DRAFT |
-| MOD-002 — Gestão de Usuários (Backoffice) | [mod.md](04_modules/mod-002-gestao-usuarios/mod.md) | DRAFT |
-| MOD-003 — Estrutura Organizacional | [mod.md](04_modules/mod-003-estrutura-organizacional/mod.md) | DRAFT |
-| MOD-004 — Identidade Avançada | [mod.md](04_modules/mod-004-identidade-avancada/mod.md) | DRAFT |
-| MOD-005 — Modelagem de Processos (Blueprint) | [mod.md](04_modules/mod-005-modelagem-processos/mod.md) | DRAFT |
-| MOD-006 — Execução de Casos | [mod.md](04_modules/mod-006-execucao-casos/mod.md) | DRAFT |
-| MOD-007 — Parametrização Contextual e Rotinas | [mod.md](04_modules/mod-007-parametrizacao-contextual/mod.md) | DRAFT |
-| MOD-008 — Integração Dinâmica Protheus/TOTVS | [mod.md](04_modules/mod-008-integracao-protheus/mod.md) | DRAFT |
-| MOD-009 — Movimentos sob Aprovação (Aprovações e Alçadas) | [mod.md](04_modules/mod-009-movimentos-aprovacao/mod.md) | DRAFT |
-| MOD-010 — MCP e Automação Governada | [mod.md](04_modules/mod-010-mcp-automacao/mod.md) | DRAFT |
-| MOD-011 — SmartGrid: Componente de Grade com Edição em Massa | [mod.md](04_modules/mod-011-smartgrid/mod.md) | DRAFT |
+| MOD-000 — Framework de Automação / Geradores (Foundation) | [mod-000-foundation.md](04_modules/mod-000-foundation/mod-000-foundation.md) | DRAFT |
+| MOD-001 — Backoffice Admin (UX-First Shell) | [mod-001-backoffice-admin.md](04_modules/mod-001-backoffice-admin/mod-001-backoffice-admin.md) | DRAFT |
+| MOD-002 — Gestão de Usuários (Backoffice) | [mod-002-gestao-usuarios.md](04_modules/mod-002-gestao-usuarios/mod-002-gestao-usuarios.md) | DRAFT |
+| MOD-003 — Estrutura Organizacional | [mod-003-estrutura-organizacional.md](04_modules/mod-003-estrutura-organizacional/mod-003-estrutura-organizacional.md) | DRAFT |
+| MOD-004 — Identidade Avançada | [mod-004-identidade-avancada.md](04_modules/mod-004-identidade-avancada/mod-004-identidade-avancada.md) | DRAFT |
+| MOD-005 — Modelagem de Processos (Blueprint) | [mod-005-modelagem-processos.md](04_modules/mod-005-modelagem-processos/mod-005-modelagem-processos.md) | DRAFT |
+| MOD-006 — Execução de Casos | [mod-006-execucao-casos.md](04_modules/mod-006-execucao-casos/mod-006-execucao-casos.md) | DRAFT |
+| MOD-007 — Parametrização Contextual e Rotinas | [mod-007-parametrizacao-contextual.md](04_modules/mod-007-parametrizacao-contextual/mod-007-parametrizacao-contextual.md) | DRAFT |
+| MOD-008 — Integração Dinâmica Protheus/TOTVS | [mod-008-integracao-protheus.md](04_modules/mod-008-integracao-protheus/mod-008-integracao-protheus.md) | DRAFT |
+| MOD-009 — Movimentos sob Aprovação (Aprovações e Alçadas) | [mod-009-movimentos-aprovacao.md](04_modules/mod-009-movimentos-aprovacao/mod-009-movimentos-aprovacao.md) | DRAFT |
+| MOD-010 — MCP e Automação Governada | [mod-010-mcp-automacao.md](04_modules/mod-010-mcp-automacao/mod-010-mcp-automacao.md) | DRAFT |
+| MOD-011 — SmartGrid: Componente de Grade com Edição em Massa | [mod-011-smartgrid.md](04_modules/mod-011-smartgrid/mod-011-smartgrid.md) | DRAFT |
 
 ### Features — MOD-002
 
@@ -278,8 +278,8 @@ Quando dois ou mais documentos estabelecerem regras contraditórias, prevalece o
 | Conceito | Definido em | Referenciado por |
 |---|---|---|
 | JWT + Sessions + Kill-Switch | Foundation `IMP-000` | UX-000, UX-001 |
-| Multitenancy (Conceitos) | Foundation `mod.md` | DOC-BD-001 `tenants` |
-| RBAC (`@RequireScope`) | Foundation `mod.md` | UX-001, todos os módulos |
+| Multitenancy (Conceitos) | Foundation `mod-000-foundation.md` | DOC-BD-001 `tenants` |
+| RBAC (`@RequireScope`) | Foundation `mod-000-foundation.md` | UX-001, todos os módulos |
 | Audit Trail (`AuditService`) | Foundation `IMP-000` | UX-000 `SEC-002` |
 | UIActionEnvelope | DOC-ARC-003 §2 | UX-000 §8, DOC-UX-010 |
 | action_keys UX | DOC-UX-010 | UX-000 §8, DOC-ARC-003 §8 |

@@ -128,7 +128,7 @@
 
 | Módulo | Status |
 |--------|--------|
-| MOD-003 | ✅ CORRIGIDO — Promovido para Nível 2 (5/6) com tabela de evidências por gatilho em `mod.md §3` |
+| MOD-003 | ✅ CORRIGIDO — Promovido para Nível 2 (5/6) com tabela de evidências por gatilho no manifesto do módulo §3 |
 | Demais (MOD-000 a 006) | 🔘 NÃO APLICÁVEL — Níveis corretos conforme DOC-ESC-001 |
 
 ### 2.3 Módulos MOD-007 a MOD-011 — ✅ CORRIGIDO
@@ -157,7 +157,7 @@ Grafo de dependências centralizado em [`docs/04_modules/DEPENDENCY-GRAPH.md`](0
 - **Bloqueios conhecidos** (4 BLK-*) com status e razão
 - **Diagrama Mermaid** para visualização
 - **Ordem topológica** de implementação (7 camadas)
-- **Linter Pass E** (`lint-docs.js`) detecta ciclos via DFS e valida consistência `mod.md §4` vs grafo central
+- **Linter Pass E** (`lint-docs.js`) detecta ciclos via DFS e valida consistência do manifesto do módulo §4 vs grafo central
 - **Skills atualizadas** em `context-map.json`: `forge-module`, `enrich`, `promote-module`, `delete-module` consomem DOC-DEP-001
 
 Bloqueios mapeados:
@@ -401,7 +401,7 @@ Migração 2-seg → 3-seg (`dominio:entidade:acao`) documentada em DOC-FND-000 
 | 21 | lint-errors.json zerado (4 → 0) | §1.6 |
 | 22 | DOC-GNP-00 §5 e DOC-ARC-001 §3 referências corrigidas | §8.2 |
 | 23 | DEPENDENCY-GRAPH.md (DOC-DEP-001) criado com grafo, bloqueios, Mermaid, ordem topológica | §2.4 |
-| 24 | Linter Pass E (cycle detection + consistência mod.md §4 vs grafo central) | §2.4 |
+| 24 | Linter Pass E (cycle detection + consistência manifesto do módulo §4 vs grafo central) | §2.4 |
 | 25 | Decision tree enrich/enrich-agent/enrich-all documentado | §3.2 |
 | 26 | Distinção validate-all vs qa e update-specification vs create-amendment documentada | §3.2 |
 | 27 | dry-run + gates + backup em rollback-module e delete-module | §3.2 |

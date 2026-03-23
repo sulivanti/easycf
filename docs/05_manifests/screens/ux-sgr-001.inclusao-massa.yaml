@@ -11,7 +11,7 @@
 schema_version: "v1"
 screen_id: "UX-SGR-001"
 name: "Grade de Inclusão em Massa"
-type: grid
+type: list
 module: "MOD-011"
 route: "/{modulo}/{rotina}/inclusao-em-massa"
 auth_required: true
@@ -63,6 +63,8 @@ actions:
     label: "Salvar todas as linhas válidas"
     type: submit
     operation_id: null
+    http_method: POST
+    endpoint: null
     notes: "operationId depende do módulo destino. Habilitado SOMENTE quando todas as linhas têm ✅."
     requires_scope: []
     loading_state: button

@@ -34,7 +34,7 @@ Gate 0 — Definition of Ready (DoR)
 │       em docs/05_manifests/screens/ existem e sao validos. Se nao ha telas, pule este gate.
 │
 ├── [DoR-5] ADRs documentados conforme nivel de arquitetura?
-│   └── Leia mod.md campo architecture_level e conte ADRs em adr/:
+│   └── Leia o manifesto do módulo (<dirname>.md) campo architecture_level e conte ADRs em adr/:
 │       Nivel 0-1: minimo 1 ADR
 │       Nivel 2:   minimo 3 ADRs
 │       Insuficiente → ABORTE: "Nivel {N} requer minimo {M} ADRs, encontrados {X}."

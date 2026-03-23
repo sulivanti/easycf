@@ -114,7 +114,7 @@ O gateway implementa autenticação por API key (não JWT), validação sequenci
 
 ```text
 docs/04_modules/mod-010-mcp-automacao/
-  mod.md                                    # Este arquivo (MOD-010)
+  mod-010-mcp-automacao.md                  # Este arquivo (MOD-010)
   CHANGELOG.md                              # Histórico de alterações
   requirements/
     br/BR-010.md                            # Regras de negócio

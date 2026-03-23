@@ -29,7 +29,7 @@ Se o status **não for** `READY`, você **ESTÁ PROIBIDO** de gerar qualquer arq
 
 Crie o diretório em `docs/04_modules/mod-{ID}-{nome}/` com a árvore padrão:
 
-- `mod.md`, `CHANGELOG.md`
+- `mod-{ID}-{nome}.md` (manifesto do módulo — mesmo nome do diretório), `CHANGELOG.md`
 - `requirements/` com subpastas: `br/`, `fr/`, `data/`, `int/`, `sec/`, `ux/`, `nfr/`
 - `adr/` (Architecture Decision Records)
 - `tests/` (suíte inicial Vitest)
@@ -63,7 +63,7 @@ Siga `DOC-DEV-002` seção 5 para gerar o pipeline colorido (`Etapa 4 - DRAFT`).
 
 Invoque `/project:update-index` para:
 
-1. Atualizar o `mod.md` interno
+1. Atualizar o manifesto do módulo (`mod-{ID}-{nome}.md`)
 2. Atualizar o `docs/INDEX.md` global
 
 ## Passo Final: Comunicação

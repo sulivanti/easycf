@@ -1,7 +1,8 @@
 # ============================================================
 # Screen Manifest — UX-USR-003
 # Tela: Fluxo de Convite e Ativação de Usuário (MOD-002)
-# Schema: v1 | Versão: 1.1.0 | Data: 2026-03-17
+# Módulo: MOD-002 (Gestão de Usuários)
+# Schema: v1 | Versão: 2.0.0 | Data: 2026-03-22
 # ============================================================
 # Status card por estado: PENDING, ACTIVE, BLOCKED, INACTIVE.
 # Cooldown 60s anti-spam no reenvio de convite.
@@ -10,80 +11,141 @@
 # ============================================================
 
 schema_version: "v1"
-manifest_version: 1
-screen_id: UX-USR-003
-name: Fluxo de Convite e Ativação de Usuário
-entity_type: user
+screen_id: "UX-USR-003"
+name: "Fluxo de Convite e Ativação de Usuário"
+type: detail
+module: "MOD-002"
+route: "/usuarios/:id/convite"
+auth_required: true
+layout: shell
 
 linked_stories:
-  - US-MOD-002
-  - US-MOD-002-F03
-
-routes:
-  - path: /api/v1/users/{id}
-    method: GET
-  - path: /api/v1/users/{id}/invite/resend
-    method: POST
+  - "US-MOD-002"
+  - "US-MOD-002-F03"
 
 telemetry_defaults:
-  event_name: user.invite_status_viewed
-  required_fields:
-    - screen_id
-    - tenant_id
-    - correlation_id
-  propagate_headers:
-    - X-Correlation-ID
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
 
-permissions:
-  read: users:user:read
-  write: users:user:write
-
+# ─── AÇÕES ───────────────────────────────────────────────────
 actions:
-  - action: view
+
+  - id: view_user_invite
+    label: "Carregar dados do usuário e status do convite"
+    type: view
+    operation_id: users_get
+    http_method: GET
+    endpoint: "/api/v1/users/:id"
     client_only: false
-    operation_ids:
-      - users_get
-    permission: users:user:read
-    # Skeleton no card de status durante carregamento
+    requires_scope: ["users:user:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os dados do usuário."
 
-  - action: submit
+  - id: resend_invite
+    label: "Reenviar convite de ativação"
+    type: submit
+    operation_id: users_invite_resend
+    http_method: POST
+    endpoint: "/api/v1/users/:id/invite/resend"
     client_only: false
-    operation_ids:
-      - users_invite_resend
-    permission: users:user:write
-    # Reenviar convite — cooldown 60s após sucesso
+    requires_scope: ["users:user:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível reenviar o convite."
+    notes: "Cooldown 60s anti-spam após reenvio com sucesso."
 
-ui_rules:
-  action_visibility:
-    strategy: hide_if_no_permission
-  action_enablement: []
-  # Regra: submit (reenvio) habilitado apenas quando status == PENDING (ver US-MOD-002-F03)
+  - id: navigate_back
+    label: "Voltar para a listagem de usuários"
+    type: navigate
+    client_only: true
+    loading_state: none
+    requires_scope: ["users:user:read"]
 
-error_mapping:
-  default_user_message: Ocorreu um erro inesperado. Tente novamente ou contate o suporte.
-  http_status:
-    '401':
-      user_message: Sessão expirada. Faça login novamente.
-      ui:
-        type: modal
-        level: error
-    '403':
-      user_message: Sem permissão para reenviar convites.
-      ui:
-        type: toast
-        level: error
-    '404':
-      user_message: Usuário não encontrado.
-      ui:
-        type: inline
-        level: error
-    '422':
-      user_message: Não é possível reenviar convite para este usuário.
-      ui:
-        type: toast
-        level: warning
-    '500':
-      user_message: Não foi possível reenviar o convite.
-      ui:
-        type: toast
-        level: error
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
+
+  - id: "invite-page-header"
+    name: "InvitePageHeader"
+    description: |
+      Cabeçalho com título "Convite de Usuário" e botão "Voltar"
+      que retorna à listagem /usuarios.
+      LGPD: exibe NOME do usuário no título, nunca e-mail.
+    actions_used: [navigate_back]
+
+  - id: "invite-status-card"
+    name: "InviteStatusCard"
+    description: |
+      Card principal com status do convite/ativação do usuário.
+      Exibe:
+        - Nome do usuário (destaque, nunca e-mail — LGPD)
+        - Perfil atribuído
+        - Status badge colorido por estado:
+          PENDING = amarelo ("Convite pendente")
+          ACTIVE = verde ("Usuário ativo")
+          BLOCKED = vermelho ("Usuário bloqueado")
+          INACTIVE = cinza ("Usuário inativo")
+        - Data de envio do convite
+        - Data de ativação (se aplicável)
+      Skeleton loading com placeholder animado durante carregamento.
+    actions_used: [view_user_invite]
+
+  - id: "resend-invite-section"
+    name: "ResendInviteSection"
+    description: |
+      Seção de ação para reenvio do convite.
+      Visível apenas quando status == PENDING.
+      Contém:
+        - Texto explicativo: "O convite enviado para este usuário ainda não foi aceito."
+        - Botão "Reenviar Convite" (primary) — isLoading durante POST
+        - Cooldown visual: após reenvio com sucesso, botão desabilitado por 60s
+          com contador regressivo ("Aguarde Xs para reenviar").
+      LGPD: nenhuma referência a e-mail nesta seção.
+    actions_used: [resend_invite]
+
+  - id: "invite-toast"
+    name: "InviteToast"
+    description: |
+      Toast de sucesso: "Convite reenviado com sucesso."
+      Toast de erro RFC 9457 com correlationId no rodapé.
+      LGPD: NUNCA exibe e-mail — apenas nome do usuário.
+      Posição: top-right, auto-dismiss 6s.
+    actions_used: []
+
+# ─── NAVEGAÇÃO ───────────────────────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+# ─── REGRAS OBRIGATÓRIAS ────────────────────────────────────
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Scope users:user:read obrigatório para visualização — sem ele, redirect /dashboard com Toast.
+  2. Scope users:user:write obrigatório para reenvio de convite.
+     Botão "Reenviar Convite" oculto sem este scope (hide_if_no_permission).
+  3. LGPD: título, card e toasts usam NOME do usuário, NUNCA e-mail.
+     Nenhuma superfície desta tela deve exibir o endereço de e-mail.
+  4. Reenvio habilitado APENAS quando status == PENDING (ver US-MOD-002-F03).
+     Para outros estados, a seção de reenvio é ocultada.
+  5. Cooldown 60s anti-spam: após reenvio com sucesso, botão desabilitado
+     com contador regressivo. Cooldown controlado client-side.
+  6. Status card renderiza estado visual distinto por status:
+     PENDING (amarelo), ACTIVE (verde), BLOCKED (vermelho), INACTIVE (cinza).
+  7. Endpoint users_invite_resend vem do amendment em MOD-000-F05.
+  8. Endpoints consumidos de MOD-000-F05 — MOD-002 é UX-first, sem backend próprio.
+
+changelog:
+  - version: "2.0.0"
+    date: "2026-03-22"
+    author: "arquitetura"
+    description: "Reescrita para schema v1. Ações tipadas, telemetry_defaults padronizado, componentes detalhados, navegação e notas LGPD."
+  - version: "1.1.0"
+    date: "2026-03-17"
+    author: "arquitetura"
+    description: "Formato legado. Fluxo de convite com status card, reenvio com cooldown 60s."

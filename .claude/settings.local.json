@@ -10,7 +10,14 @@
       "Bash(do echo:*)",
       "Bash(sed 's/\\\\.yaml.*//')",
       "Bash(sed 's/\\\\..*//')",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(ls -d D:/Dev/EasyCodeFramework/docs/04_modules/mod-0*)",
+      "Bash(find /d/Dev/EasyCodeFramework -path */template* -o -path */_template*)",
+      "Bash(find /d/Dev/EasyCodeFramework/.agents -type f \\\\\\(-name *.js -o -name *.mjs \\\\\\))",
+      "Bash(ls:*)",
+      "Bash(npx pnpm:*)",
+      "Bash(npx markdownlint-cli2:*)",
+      "Bash(done)"
     ]
   },
   "hooks": {

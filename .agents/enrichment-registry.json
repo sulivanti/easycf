@@ -1,12 +1,12 @@
 {
   "$schema": "enrichment-registry.v1",
-  "description": "Registro centralizado dos 11 agentes de enriquecimento PKG-DEV-001. Mapeia cada agente para seu pilar, docs necessários, target path e dependências de execução.",
+  "description": "Registro centralizado dos 11 agentes de enriquecimento PKG-DEV-001. Mapeia cada agente para seu pilar, docs necessários, target path e dependências de execução. Convenção: '<dirname>.md' significa o arquivo com mesmo nome do diretório do módulo (ex: mod-001-backoffice-admin/mod-001-backoffice-admin.md).",
   "agents": {
     "AGN-DEV-01": {
       "name": "MOD / Escala",
       "entity": "MOD",
       "target_topic": "2",
-      "target_path": "mod.md",
+      "target_path": "<dirname>.md",
       "pkg_section": "§2",
       "required_docs": ["DOC-ESC-001", "DOC-DEV-001"],
       "depends_on": []

@@ -38,7 +38,7 @@ Cada módulo é processado sequencialmente via `/enrich`. Entre módulos, o prog
 
 ## PASSO 1: Descoberta de Módulos
 
-Leia todos os `mod.md` em `docs/04_modules/mod-*/mod.md`.
+Leia todos os manifestos de módulo em `docs/04_modules/mod-*/mod-*.md`.
 
 Para cada módulo:
 - Extraia `estado_item` do frontmatter/metadata

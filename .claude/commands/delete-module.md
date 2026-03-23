@@ -19,7 +19,7 @@ Flags opcionais:
 
 Antes de destruir, verifique se outros módulos dependem deste:
 
-1. Leia cada `mod.md` em `docs/04_modules/mod-*/mod.md`
+1. Leia cada manifesto de módulo em `docs/04_modules/mod-*/mod-*.md`
 2. Procure referências ao módulo alvo na seção de dependências e em `rastreia_para`
 3. Se encontrar dependentes:
 
@@ -44,7 +44,7 @@ Liste todo o conteúdo que será destruído:
 
 ### Arquivos que serão destruídos:
 - docs/04_modules/mod-{ID}-{nome}/ ({N} arquivos, {N} subdiretórios)
-  - mod.md
+  - mod-{ID}-{nome}.md (manifesto do módulo)
   - CHANGELOG.md
   - requirements/ ({N} arquivos)
   - adr/ ({N} arquivos)

@@ -144,7 +144,7 @@ actions:
       user_message: "Não foi possível criar a regra."
 
   - id: update_incidence_rule
-    label: "Editar prioridade ou vigência da regra"
+    label: "Editar vigência da regra de incidência"
     type: submit
     operation_id: admin_incidence_rules_update
     http_method: PATCH
@@ -204,9 +204,9 @@ components:
       Painel "Regras de Incidência" — matriz visual:
         - Linhas: enquadradores ACTIVE
         - Colunas: objetos-alvo disponíveis
-        - Célula: badge com prioridade se regra existe, vazio se não
-        - Célula com conflito (mesma prioridade em campos): badge âmbar "⚠ Conflito"
-        - Clique em célula existente: abre drawer de edição (prioridade, vigência, rotinas vinculadas)
+        - Célula: badge com status/vigência se regra existe, vazio se não
+        - Célula com conflito de restritividade: badge âmbar "⚠ Conflito" (resolução por restritividade — ADR-002)
+        - Clique em célula existente: abre drawer de edição (vigência, rotinas vinculadas)
         - Clique em célula vazia: abre drawer de criação
         - Drawer de edição inclui: seção "Rotinas vinculadas" (lista de behavior_routines PUBLISHED linkadas)
         - Botão "Simular motor" no drawer: dispara preview_evaluation e exibe resultado inline

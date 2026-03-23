@@ -1,7 +1,8 @@
 # ============================================================
 # Screen Manifest — UX-USR-001
 # Tela: Listagem de Usuários (MOD-002)
-# Schema: v1 | Versão: 1.1.0 | Data: 2026-03-17
+# Módulo: MOD-002 (Gestão de Usuários)
+# Schema: v1 | Versão: 2.0.0 | Data: 2026-03-22
 # ============================================================
 # UX-First: MOD-002 é exclusivamente frontend.
 # Todos os endpoints são consumidos de MOD-000-F05 e F06.
@@ -10,108 +11,198 @@
 # ============================================================
 
 schema_version: "v1"
-manifest_version: 1
-screen_id: UX-USR-001
-name: Listagem de Usuários
-entity_type: user
+screen_id: "UX-USR-001"
+name: "Listagem de Usuários"
+type: list
+module: "MOD-002"
+route: "/usuarios"
+auth_required: true
+layout: shell
 
 linked_stories:
-  - US-MOD-002
-  - US-MOD-002-F01
-
-routes:
-  - path: /api/v1/users
-    method: GET
-  - path: /api/v1/users/{id}
-    method: DELETE
-  - path: /api/v1/roles
-    method: GET
+  - "US-MOD-002"
+  - "US-MOD-002-F01"
 
 telemetry_defaults:
-  event_name: user.list_viewed
-  required_fields:
-    - screen_id
-    - tenant_id
-    - correlation_id
-  propagate_headers:
-    - X-Correlation-ID
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
 
-permissions:
-  read: users:user:read
-  write: users:user:write
-  delete: users:user:delete
-
+# ─── AÇÕES ───────────────────────────────────────────────────
 actions:
-  - action: view
-    client_only: false
-    operation_ids:
-      - users_list
-      - roles_list
-    permission: users:user:read
-    # Skeleton loading durante carregamento inicial
-    # roles_list carrega select de perfis para filtro
 
-  - action: search
+  - id: view_users
+    label: "Carregar listagem de usuários e perfis disponíveis"
+    type: view
+    operation_id: users_list
+    http_method: GET
+    endpoint: "/api/v1/users"
     client_only: false
-    operation_ids:
-      - users_list
-    permission: users:user:read
-    # Debounce 400ms — busca por nome ou e-mail
+    requires_scope: ["users:user:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar a lista de usuários."
+    notes: |
+      Skeleton loading durante carregamento inicial.
+      Também dispara roles_list (GET /api/v1/roles) para popular select de perfis no filtro.
 
-  - action: filter
+  - id: load_roles
+    label: "Carregar lista de perfis para filtro"
+    type: view
+    operation_id: roles_list
+    http_method: GET
+    endpoint: "/api/v1/roles"
     client_only: false
-    operation_ids:
-      - users_list
-    permission: users:user:read
-    # Filtros: status (ACTIVE|PENDING|BLOCKED|INACTIVE), role_id
-    # Sincronizados com query params da URL para deep link
+    requires_scope: ["users:user:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os perfis."
 
-  - action: paginate
+  - id: search_users
+    label: "Buscar usuários por nome ou e-mail"
+    type: view
+    operation_id: users_list
+    http_method: GET
+    endpoint: "/api/v1/users"
     client_only: false
-    operation_ids:
-      - users_list
-    permission: users:user:read
-    # Cursor-based: append, nunca substituição
+    requires_scope: ["users:user:read"]
+    loading_state: none
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Erro ao buscar usuários."
+    notes: "Debounce 400ms — busca por nome ou e-mail."
 
-  - action: create
+  - id: filter_users
+    label: "Filtrar usuários por status ou perfil"
+    type: view
+    operation_id: users_list
+    http_method: GET
+    endpoint: "/api/v1/users"
+    client_only: false
+    requires_scope: ["users:user:read"]
+    loading_state: none
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Erro ao filtrar usuários."
+    notes: |
+      Filtros: status (ACTIVE|PENDING|BLOCKED|INACTIVE), role_id.
+      Sincronizados com query params da URL para deep link.
+
+  - id: paginate_users
+    label: "Carregar próxima página de usuários"
+    type: view
+    operation_id: users_list
+    http_method: GET
+    endpoint: "/api/v1/users"
+    client_only: false
+    requires_scope: ["users:user:read"]
+    loading_state: none
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar mais usuários."
+    notes: "Cursor-based: append, nunca substituição."
+
+  - id: navigate_to_create
+    label: "Navegar para formulário de novo usuário"
+    type: navigate
     client_only: true
-    operation_ids: []
-    permission: users:user:write
+    loading_state: none
+    requires_scope: ["users:user:write"]
     # Botão "Novo Usuário" — navegação para /usuarios/novo (API em UX-USR-002)
 
-  - action: deactivate
+  - id: deactivate_user
+    label: "Desativar usuário"
+    type: submit
+    operation_id: users_delete
+    http_method: DELETE
+    endpoint: "/api/v1/users/:id"
     client_only: false
-    operation_ids:
-      - users_delete
-    permission: users:user:delete
-    # Modal de confirmação obrigatório — usa nome, NUNCA e-mail (LGPD)
+    requires_scope: ["users:user:delete"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível desativar o usuário."
+    notes: "Modal de confirmação obrigatório — usa nome, NUNCA e-mail (LGPD)."
 
-ui_rules:
-  action_visibility:
-    strategy: hide_if_no_permission
-  action_enablement: []
-  # Regra: deactivate habilitado apenas quando status != INACTIVE (ver US-MOD-002-F01)
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
 
-error_mapping:
-  default_user_message: Ocorreu um erro inesperado. Tente novamente ou contate o suporte.
-  http_status:
-    '401':
-      user_message: Sessão expirada. Faça login novamente.
-      ui:
-        type: modal
-        level: error
-    '403':
-      user_message: Sem permissão para acessar esta seção.
-      ui:
-        type: toast
-        level: error
-    '422':
-      user_message: Dados inválidos. Verifique os filtros e tente novamente.
-      ui:
-        type: form_validation
-        level: error
-    '500':
-      user_message: Não foi possível carregar a lista de usuários.
-      ui:
-        type: toast
-        level: error
+  - id: "users-page-header"
+    name: "UsersPageHeader"
+    description: |
+      Cabeçalho com título "Gestão de Usuários", contador de usuários ativos
+      e botão "Novo Usuário" (visível apenas com scope users:user:write).
+    actions_used: [navigate_to_create]
+
+  - id: "users-search-bar"
+    name: "UsersSearchBar"
+    description: |
+      Campo de busca com debounce 400ms. Busca por nome ou e-mail.
+      Sincronizado com query param ?q= da URL.
+    actions_used: [search_users]
+
+  - id: "users-filter-panel"
+    name: "UsersFilterPanel"
+    description: |
+      Painel de filtros: select de status (ACTIVE|PENDING|BLOCKED|INACTIVE)
+      e select de perfil (carregado via roles_list).
+      Filtros sincronizados com query params da URL para deep link.
+    actions_used: [filter_users, load_roles]
+
+  - id: "users-table"
+    name: "UsersTable"
+    description: |
+      Tabela de usuários com colunas: Nome, E-mail (mascarado conforme LGPD),
+      Perfil, Status (badge colorido), Data de criação, Ações.
+      Menu de ações por linha: Editar | Ver convite | Desativar.
+      Skeleton loading com N linhas de placeholder animadas.
+      Estado vazio: ilustração + "Nenhum usuário encontrado".
+      Paginação cursor-based: botão "Carregar mais" no rodapé.
+    actions_used: [view_users, paginate_users, deactivate_user]
+
+  - id: "deactivate-user-modal"
+    name: "DeactivateUserModal"
+    description: |
+      Modal de confirmação antes de desativar usuário.
+      Título: "Desativar usuário?"
+      Corpo: "O usuário '{nome}' será desativado e perderá acesso ao sistema."
+      LGPD: exibe NOME, nunca e-mail.
+      Botões: "Cancelar" e "Desativar" (isLoading durante DELETE).
+    actions_used: [deactivate_user]
+
+# ─── NAVEGAÇÃO ───────────────────────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+# ─── REGRAS OBRIGATÓRIAS ────────────────────────────────────
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Scope users:user:read obrigatório — sem ele, redirect /dashboard com Toast.
+  2. Ações de escrita/exclusão visíveis APENAS com scope users:user:write ou users:user:delete.
+     Estratégia: hide_if_no_permission.
+  3. LGPD: e-mail NUNCA aparece em toasts, modais de confirmação ou mensagens de erro.
+     Apenas o nome do usuário pode ser exibido nessas superfícies.
+  4. Paginação cursor-based: append de resultados, nunca substituição da lista.
+  5. Filtros sincronizados com query params da URL (status, role_id, q) para deep link.
+  6. Deactivate habilitado apenas quando status != INACTIVE (ver US-MOD-002-F01).
+  7. Endpoints consumidos de MOD-000-F05 e F06 — MOD-002 é UX-first, sem backend próprio.
+
+changelog:
+  - version: "2.0.0"
+    date: "2026-03-22"
+    author: "arquitetura"
+    description: "Reescrita para schema v1. Ações tipadas, telemetry_defaults padronizado, componentes detalhados, navegação e notas LGPD."
+  - version: "1.1.0"
+    date: "2026-03-17"
+    author: "arquitetura"
+    description: "Formato legado. Listagem com filtros, busca, paginação cursor-based e desativação."

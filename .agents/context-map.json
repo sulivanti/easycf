@@ -105,7 +105,7 @@
       "docs": [
         { "id": "PKG-DEV-001", "path": "docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md", "sections": ["§0"], "reason": "Contrato de execução e envelope padrão" },
         { "id": "DOC-DEV-001", "sections": ["§lifecycle"], "reason": "Ciclo de vida DRAFT/READY" },
-        { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1", "§2"], "reason": "Grafo e tipos de dependência — enriquecimento deve respeitar e atualizar §4 do mod.md" }
+        { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1", "§2"], "reason": "Grafo e tipos de dependência — enriquecimento deve respeitar e atualizar §4 do manifesto do módulo" }
       ]
     },
     "enrich-agent": {

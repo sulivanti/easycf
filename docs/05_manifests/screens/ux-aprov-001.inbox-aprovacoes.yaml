@@ -31,7 +31,6 @@ panels:
   - id: "all"
     label: "Todos os Movimentos"
     default: false
-    notes: "Visível apenas com approval:movement:read"
   - id: "sent"
     label: "Enviados por Mim"
     default: false

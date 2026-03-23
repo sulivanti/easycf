@@ -1,7 +1,8 @@
 # ============================================================
 # Screen Manifest — UX-USR-002
 # Tela: Formulário de Cadastro de Usuário (MOD-002)
-# Schema: v1 | Versão: 1.1.0 | Data: 2026-03-17
+# Módulo: MOD-002 (Gestão de Usuários)
+# Schema: v1 | Versão: 2.0.0 | Data: 2026-03-22
 # ============================================================
 # Dois modos: "Enviar Convite" (padrão) e "Senha Temporária".
 # Idempotency-Key (UUID v4) gerado no mount do formulário.
@@ -10,87 +11,136 @@
 # ============================================================
 
 schema_version: "v1"
-manifest_version: 1
-screen_id: UX-USR-002
-name: Formulário de Cadastro de Usuário
-entity_type: user
+screen_id: "UX-USR-002"
+name: "Formulário de Cadastro de Usuário"
+type: form
+module: "MOD-002"
+route: "/usuarios/novo"
+auth_required: true
+layout: shell
 
 linked_stories:
-  - US-MOD-002
-  - US-MOD-002-F02
-
-routes:
-  - path: /api/v1/users
-    method: POST
-  - path: /api/v1/roles
-    method: GET
+  - "US-MOD-002"
+  - "US-MOD-002-F02"
 
 telemetry_defaults:
-  event_name: user.create_form_viewed
-  required_fields:
-    - screen_id
-    - tenant_id
-    - correlation_id
-  propagate_headers:
-    - X-Correlation-ID
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
 
-permissions:
-  write: users:user:write
-
+# ─── AÇÕES ───────────────────────────────────────────────────
 actions:
-  - action: view
-    client_only: false
-    operation_ids:
-      - roles_list
-    permission: users:user:write
-    # Carrega perfis disponíveis para o select
 
-  - action: create
+  - id: load_roles
+    label: "Carregar perfis disponíveis para o select"
+    type: view
+    operation_id: roles_list
+    http_method: GET
+    endpoint: "/api/v1/roles"
     client_only: false
-    operation_ids:
-      - users_create
-    permission: users:user:write
-    # POST /api/v1/users com Idempotency-Key
-    # Modo convite: { mode: "invite" }
-    # Modo senha: { password, forcePasswordReset: true }
+    requires_scope: ["users:user:write"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os perfis disponíveis."
 
-  - action: cancel
+  - id: create_user
+    label: "Criar novo usuário"
+    type: submit
+    operation_id: users_create
+    http_method: POST
+    endpoint: "/api/v1/users"
+    client_only: false
+    requires_scope: ["users:user:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar o usuário."
+    notes: |
+      POST /api/v1/users com header Idempotency-Key (UUID v4 gerado no mount).
+      Modo convite: { mode: "invite" }
+      Modo senha temporária: { password, forcePasswordReset: true }
+
+  - id: cancel_form
+    label: "Cancelar e voltar para listagem"
+    type: navigate
     client_only: true
-    operation_ids: []
-    permission: users:user:write
+    loading_state: none
+    requires_scope: ["users:user:write"]
     # Descarta formulário e redireciona para /usuarios
 
-ui_rules:
-  action_visibility:
-    strategy: hide_if_no_permission
-  action_enablement: []
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
 
-error_mapping:
-  default_user_message: Não foi possível criar o usuário.
-  http_status:
-    '401':
-      user_message: Sessão expirada. Faça login novamente.
-      ui:
-        type: modal
-        level: error
-    '403':
-      user_message: Sem permissão para criar usuários.
-      ui:
-        type: toast
-        level: error
-    '409':
-      user_message: Este e-mail já está cadastrado no sistema.
-      ui:
-        type: inline
-        level: error
-    '422':
-      user_message: Dados inválidos. Verifique os campos e tente novamente.
-      ui:
-        type: form_validation
-        level: error
-      invalid_fields_path: extensions.invalid_fields
-    '500':
-      user_message: Erro interno do servidor. Contate o suporte.
-      ui:
-        type: toast
-        level: error
+  - id: "user-form-header"
+    name: "UserFormHeader"
+    description: |
+      Cabeçalho com título "Novo Usuário" e botão "Voltar" (ícone + texto)
+      que retorna à listagem /usuarios.
+    actions_used: [cancel_form]
+
+  - id: "user-form-fields"
+    name: "UserFormFields"
+    description: |
+      Formulário com campos:
+        - nome (text, obrigatório)
+        - e-mail (type=email, obrigatório, validação inline)
+        - perfil (select, carregado via roles_list, obrigatório)
+        - modo de ativação (radio: "Enviar Convite" (padrão) | "Senha Temporária")
+        - senha (type=password, visível apenas no modo "Senha Temporária",
+          toggle de visibilidade, validação de política de senha inline)
+      Erros 422: inline por campo (mapeado via extensions.invalid_fields).
+      Erros 409: inline no campo e-mail com mensagem de duplicidade.
+    actions_used: [load_roles, create_user]
+
+  - id: "user-form-actions"
+    name: "UserFormActions"
+    description: |
+      Barra de ações no rodapé do formulário:
+        - Botão "Cancelar" (secondary) — navega para /usuarios
+        - Botão "Criar Usuário" (primary) — isLoading durante POST
+      Idempotency-Key exibido em modo dev para debug.
+    actions_used: [create_user, cancel_form]
+
+  - id: "user-form-toast"
+    name: "UserFormToast"
+    description: |
+      Toast de sucesso após criação. Exibe "Usuário criado com sucesso."
+      LGPD: NUNCA exibe o e-mail no toast — apenas o nome do usuário.
+      Toast de erro RFC 9457 com correlationId no rodapé.
+      Posição: top-right, auto-dismiss 6s.
+    actions_used: []
+
+# ─── NAVEGAÇÃO ───────────────────────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+# ─── REGRAS OBRIGATÓRIAS ────────────────────────────────────
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Scope users:user:write obrigatório — sem ele, redirect /dashboard com Toast.
+  2. Idempotency-Key (UUID v4) DEVE ser gerado no mount do formulário e enviado
+     no header de cada POST. Garante idempotência contra double-submit.
+  3. LGPD: e-mail NUNCA aparece em toasts de sucesso ou erro.
+     Apenas o nome do usuário pode ser exibido nessas superfícies.
+  4. Dois modos de ativação:
+     - "Enviar Convite" (padrão): body { mode: "invite" }
+     - "Senha Temporária": body { password, forcePasswordReset: true }
+  5. Erros 422: validação inline por campo (mapeado via extensions.invalid_fields).
+  6. Erros 409: inline no campo e-mail com mensagem "Este e-mail já está cadastrado".
+  7. Após criação com sucesso: redirect para /usuarios com toast de confirmação.
+  8. Endpoints consumidos de MOD-000-F05 e F06 — MOD-002 é UX-first, sem backend próprio.
+
+changelog:
+  - version: "2.0.0"
+    date: "2026-03-22"
+    author: "arquitetura"
+    description: "Reescrita para schema v1. Ações tipadas, telemetry_defaults padronizado, componentes detalhados, navegação e notas LGPD."
+  - version: "1.1.0"
+    date: "2026-03-17"
+    author: "arquitetura"
+    description: "Formato legado. Formulário com modos convite/senha, idempotency-key e validação inline."

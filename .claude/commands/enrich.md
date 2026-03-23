@@ -33,7 +33,7 @@ Se não fornecido, pergunte ao usuário.
 
 ## PASSO 1: Validação do Módulo
 
-Leia o `mod.md` do módulo informado.
+Leia o manifesto do módulo (arquivo `<dirname>.md`, ex: `mod-001-backoffice-admin.md`).
 
 - Se **não existir**, aborte: `"Módulo não encontrado. Execute /project:forge-module primeiro."`
 - Se `estado_item` for `READY`, aborte: `"Módulo selado como READY. Use /project:create-amendment para alterações."`

@@ -215,7 +215,7 @@ Os artefatos de um módulo se dividem em duas categorias:
 ## MOD-XXX — <Nome do módulo>
 
 - Resumo: ...
-- Doc canônico (módulo): `docs/04_modules/<mod-xxx>/mod.md`
+- Doc canônico (módulo): `docs/04_modules/<mod-xxx>/<mod-xxx>.md`
 - Changelog do módulo: `docs/04_modules/<mod-xxx>/CHANGELOG.md`
 
 ### Itens base (canônicos) e links
@@ -246,7 +246,7 @@ Os artefatos de um módulo se dividem em duas categorias:
 ## MOD-001 — Exemplo (Backoffice Admin)
 
 - Resumo: Administração de usuários, perfis/grupos, permissões por escopo e auditoria.
-- Doc canônico (módulo): `docs/04_modules/mod-001-backoffice-admin/mod.md`
+- Doc canônico (módulo): `docs/04_modules/mod-001-backoffice-admin/mod-001-backoffice-admin.md`
 - Changelog do módulo: `docs/04_modules/mod-001-backoffice-admin/CHANGELOG.md`
 
 ### Itens base (canônicos) e links

@@ -26,7 +26,7 @@ Se o ID não existir no registro, aborte com mensagem de erro.
 
 ## PASSO 2: Gate de Governança
 
-Leia o `mod.md` do módulo informado.
+Leia o manifesto do módulo (arquivo `<dirname>.md`, ex: `mod-001-backoffice-admin.md`).
 
 - Se o módulo **não existir**, aborte: `"Módulo não encontrado. Execute /project:forge-module primeiro."`
 - Se `estado_item` do módulo for `READY`, aborte: `"Módulo selado como READY. Use /project:create-amendment para alterações."`
@@ -63,7 +63,7 @@ Com base no contexto ingerido (PASSO 3) e na persona assumida (PASSO 4), gere o 
 
 O fluxo é:
 1. Leia a seção do agente em PKG-DEV-001 para entender os campos esperados (schema `data`)
-2. Preencha cada campo com dados derivados do `mod.md`, requisitos existentes e normativos
+2. Preencha cada campo com dados derivados do manifesto do módulo, requisitos existentes e normativos
 3. Para campos sem informação suficiente, registre em `missing_info` — **não invente dados**
 4. Escreva o resultado como Markdown estruturado (não como JSON) no arquivo alvo
 
@@ -126,7 +126,7 @@ Se houver domain_events/notifications:
 
 ## PASSO 7: Atualizar Índice
 
-Se novos arquivos foram criados no PASSO 6, invoque `/project:update-index` para atualizar o `mod.md` interno do módulo.
+Se novos arquivos foram criados no PASSO 6, invoque `/project:update-index` para atualizar o manifesto do módulo.
 
 ## PASSO 8: Relatório
 
@@ -151,3 +151,17 @@ Emita no chat um resumo estruturado:
 ### Contract Refs
 - {ex_ids aplicados}
 ```
+
+## PASSO 9: Sincronizar Plano de Ação (apenas AGN-DEV-10)
+
+Se o agente executado foi **AGN-DEV-10** (Pendências):
+
+1. Verifique se o plano já existe: `docs/04_modules/user-stories/plano/PLANO-ACAO-MOD-{NNN}.md`
+2. Se **existe** → invoque `/action-plan {caminho_modulo} --update`
+3. Se **não existe** → invoque `/action-plan {caminho_modulo}` (criação completa)
+
+> **Nota:** Apenas AGN-DEV-10 modifica `pen-{NNN}-pendente.md`.
+> Os demais agentes (AGN-DEV-01 a AGN-DEV-09, AGN-DEV-11) **não** disparam este passo.
+> Adicione ao relatório: `📋 Plano de ação atualizado: PLANO-ACAO-MOD-{NNN}.md`
+
+Para os demais agentes, este passo é **no-op** (skip silencioso).

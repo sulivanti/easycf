@@ -7,7 +7,7 @@
 schema_version: "v1"
 screen_id: "UX-SGR-003"
 name: "Grade de Exclusão em Massa"
-type: grid
+type: list
 module: "MOD-011"
 route: "/{modulo}/{rotina}/exclusao-em-massa"
 auth_required: true
@@ -44,7 +44,9 @@ actions:
     label: "Confirmar e executar exclusão lógica dos registros liberados"
     type: submit
     operation_id: null
-    notes: "operationId depende do módulo destino. Executa soft delete: deleted_at + status=INACTIVE."
+    http_method: DELETE
+    endpoint: null
+    notes: "DYNAMIC ENDPOINT: operation_id e endpoint resolvidos em runtime via target_endpoints do context_framer tipo OPERACAO (PEND-SGR-04). Executa soft delete: deleted_at + status=INACTIVE."
     requires_scope: []
     loading_state: button
     error_handling:

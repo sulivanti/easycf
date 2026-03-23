@@ -1,12 +1,12 @@
 # US-MOD-003-F04 — Restore de Unidade Organizacional
 
-**Status Ágil:** `TODO`
+**Status Ágil:** `READY`
 **Versão:** 1.0.0 | **Data:** 2026-03-17 | **Módulo:** MOD-003
 **operationIds consumidos:** `org_units_restore`
 
 ## Metadados de Governança
 
-- **status_agil:** TODO
+- **status_agil:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-17
 - **rastreia_para:** US-MOD-003, US-MOD-003-F01, US-MOD-003-F02, FR-004, BR-009, DATA-003, SEC-001, SEC-002

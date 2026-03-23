@@ -3,15 +3,14 @@
 # Tela: Grade de Inclusão em Massa
 # Módulo: MOD-011 (SmartGrid) | Schema: v1 | Data: 2026-03-15
 # ============================================================
-# ⚠️ PENDÊNCIA PEND-SGR-01: Este manifest está DRAFT até a definição
-# do contrato de mapeamento resultado-do-motor → estado visual da linha.
-# Promover para READY após resolução.
+# PEND-SGR-01 RESOLVIDA. PEND-SGR-04 RESOLVIDA (target_endpoints).
+# Ações submit com operation_id: null usam endpoint dinâmico via context_framer.
 # ============================================================
 
 schema_version: "v1"
 screen_id: "UX-SGR-001"
 name: "Grade de Inclusão em Massa"
-type: grid
+type: list
 module: "MOD-011"
 route: "/{modulo}/{rotina}/inclusao-em-massa"
 auth_required: true
@@ -63,7 +62,9 @@ actions:
     label: "Salvar todas as linhas válidas"
     type: submit
     operation_id: null
-    notes: "operationId depende do módulo destino. Habilitado SOMENTE quando todas as linhas têm ✅."
+    http_method: POST
+    endpoint: null
+    notes: "DYNAMIC ENDPOINT: operation_id e endpoint resolvidos em runtime via target_endpoints do context_framer tipo OPERACAO (PEND-SGR-04). Habilitado SOMENTE quando todas as linhas têm ✅."
     requires_scope: []
     loading_state: button
     error_handling:

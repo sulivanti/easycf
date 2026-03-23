@@ -82,7 +82,7 @@
 
 - Resumo: ...
 - Nível de Arquitetura: 0 | 1 | 2
-- Doc canônico (módulo): `docs/04_modules/<mod-xxx>/mod.md`
+- Doc canônico (módulo): `docs/04_modules/<mod-xxx>/<mod-xxx>.md`
 
 ### Itens base (canônicos) e links
 

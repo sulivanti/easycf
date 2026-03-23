@@ -56,7 +56,7 @@ Se não fornecido ou incompleto, pergunte ao usuário.
 
 1. Extraia `{NNN}` do argumento — aceite tanto `PEN-XXX` quanto `MOD-XXX` (o número é o mesmo: PEN-002 → MOD-002 → `mod-002-*/`)
 2. Resolva o caminho do módulo: `docs/04_modules/mod-{NNN}-{nome}/`
-3. Leia o `mod.md` para extrair `mod_id` e `estado_item`
+3. Leia o manifesto do módulo (`<dirname>.md`) para extrair `mod_id` e `estado_item`
 4. Localize o arquivo de pendências: `requirements/pen-{NNN}-pendente.md`
    - Se **não existe** e a intenção é `create`: será criado no PASSO adequado
    - Se **não existe** e a intenção é outra: aborte com `"Nenhuma pendência registrada para este módulo. Use /manage-pendentes create PEN-XXX para criar a primeira."`
@@ -66,7 +66,7 @@ Se não fornecido ou incompleto, pergunte ao usuário.
 Leia **obrigatoriamente** e **apenas**:
 
 1. O arquivo `pen-{NNN}-pendente.md` do módulo (se existir)
-2. O `mod.md` do módulo (já lido no PASSO 1)
+2. O manifesto do módulo (já lido no PASSO 1)
 
 > **Nota:** Esta skill já contém todas as regras operacionais (ciclo de vida, classificação, formato). O arquivo `SKILL-PROMPT-PENDENTE.md` é referência para o AGN-DEV-10 durante `/enrich`, **não** precisa ser lido aqui.
 
@@ -349,11 +349,11 @@ ARC: N | SEC: N | BIZ: N | DATA: N | UX: N | INT: N | INFRA: N
 
 Se o arquivo `pen-{NNN}-pendente.md` foi **criado** (não existia antes):
 
-1. Adicione entrada no `mod.md` do módulo na seção de índice:
+1. Adicione entrada no manifesto do módulo (`<dirname>.md`) na seção de índice:
    ```markdown
    - [PEN-{NNN}](requirements/pen-{NNN}-pendente.md) — Questões Abertas do [Nome do Módulo]
    ```
-2. Adicione `PEN-{NNN}` ao campo `rastreia_para` do `mod.md` se ainda não presente.
+2. Adicione `PEN-{NNN}` ao campo `rastreia_para` do manifesto do módulo se ainda não presente.
 
 ---
 
@@ -376,6 +376,22 @@ Emita no chat:
 ### Próximos passos sugeridos
 - {o que fazer em seguida, se aplicável}
 ```
+
+---
+
+## PASSO 6: Sincronizar Plano de Ação
+
+Se a intenção executada **modificou** o arquivo `pen-{NNN}-pendente.md` (ou seja, `create`, `analyze`, `decide`, `implement` ou `cancel`):
+
+1. Verifique se o plano já existe: `docs/04_modules/user-stories/plano/PLANO-ACAO-MOD-{NNN}.md`
+2. Se **existe** → invoque `/action-plan MOD-{NNN} --update`
+3. Se **não existe** → invoque `/action-plan MOD-{NNN}` (criação completa)
+
+> **Nota:** Este passo é automático e silencioso — não requer confirmação do usuário.
+> O relatório de execução (PASSO 5) já foi emitido. Apenas adicione ao final:
+> `📋 Plano de ação atualizado: PLANO-ACAO-MOD-{NNN}.md`
+
+Intenções **read-only** (`list`, `report`) **NÃO** disparam este passo.
 
 ---
 

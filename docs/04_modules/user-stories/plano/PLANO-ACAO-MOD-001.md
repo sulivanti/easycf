@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-001 Backoffice Admin
 
-> **Versao:** 1.0.0 | **Data:** 2026-03-21 | **Owner:** arquitetura
+> **Versao:** 2.0.0 | **Data:** 2026-03-23 | **Owner:** arquitetura
 > **Estado atual do modulo:** DRAFT (v0.10.0) | **Epico:** READY (v0.5.0) | **Features:** 3/3 READY
 >
-> Fases 0-2 ja executadas. Proximo passo: Fase 3 (Validacao).
+> Fases 0-3 concluidas (validate-all PASS 2026-03-22). Proximo passo: Fase 4 (Promocao) — executar `/promote-module`.
 
 ---
 
@@ -11,17 +11,17 @@
 
 | Item | Estado | Detalhe |
 |------|--------|---------|
-| Epico US-MOD-001 | READY (v0.5.0) | DoR completo, 3 features vinculadas |
-| Features F01-F03 | 3/3 READY | Todas seladas |
+| Epico US-MOD-001 | READY (v0.5.0) | DoR completo, 3 features vinculadas, abordagem UX-First |
+| Features F01-F03 | 3/3 READY | F01 (Shell Auth + Layout), F02 (Telemetria UI), F03 (Dashboard Executivo) |
 | Scaffold (forge-module) | CONCLUIDO | mod-001-backoffice-admin/ com estrutura completa |
-| Enriquecimento (11 agentes) | CONCLUIDO | Todos stubs preenchidos, v0.10.0 |
-| PENDENTEs | 0 abertas | 4/4 IMPLEMENTADA |
-| ADRs | 3 criadas (DRAFT) | Nivel 1 requer minimo 1 — atendido |
-| Amendments | 0 criados | Nenhum amendment necessario ate o momento |
-| Requirements | 11/11 existem | BR, FR, FR-007, DATA, DATA-003, INT, INT-006, SEC, SEC-002, UX, NFR |
-| CHANGELOG | v0.12.0 (PEN) / v0.10.0 (MOD) | Ultima entrada 2026-03-18 (PEN) / 2026-03-17 (MOD) |
-| Screen Manifests | 3/3 existem | UX-AUTH-001, UX-SHELL-001, UX-DASH-001 (schema v1) |
-| Dependencias | 1 upstream (MOD-000) | MOD-001 consome auth endpoints do Foundation |
+| Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-10 confirmados, v0.10.0, 4 pendentes resolvidas |
+| PENDENTEs | 0 abertas | 4 total: 4 IMPLEMENTADA |
+| ADRs | 3 aceitas | Nivel 1 requer minimo 1 — atendido (ADR-001 Clean Leve, ADR-002 Telemetria, ADR-003 Zero-Blank-Screen) |
+| Amendments | 0 | Nenhum |
+| Requirements | 12/12 existem | BR(1), FR(2), DATA(2), INT(2), SEC(2), UX(1), NFR(1), PEN(1) |
+| CHANGELOG | v0.9.1 | Ultima entrada 2026-03-17 (Etapa 4 pipeline) |
+| Screen Manifests | 3/3 existem | ux-auth-001, ux-shell-001, ux-dash-001 |
+| Dependencias | 1 upstream (MOD-000) | Consome auth_login, auth_logout, auth_me, auth_forgot_password, auth_reset_password, auth_change_password |
 | Bloqueios | 0 | Nenhum BLK-* afeta MOD-001 |
 
 ---
@@ -34,75 +34,89 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 
 ### Fase 0: Pre-Modulo — CONCLUIDA
 
+O epico US-MOD-001 define o primeiro modulo de negocio construido sobre o Foundation, com abordagem UX-First: Screen Manifests YAML e User Stories orientadas a UX sao definidos **antes** de qualquer geracao de codigo backend. O modulo cobre Shell de Autenticacao, Application Shell e Dashboard Executivo.
+
 ```
 1    (manual)              Revisar e finalizar epico US-MOD-001:             CONCLUIDO
-                           - Escopo fechado (3 features)                   status_agil = READY
-                           - Gherkin validado nos Criterios de Aceite       v0.5.0
-                           - DoR completo (owner, dependencias, impacto)
-                           - Screen Manifests vinculados (3 YAML schema v1)
+                           - Escopo fechado (3 features UX-First)           status_agil = READY
+                           - Gherkin validado (cascata, manifests, telemetria)  v0.5.0
+                           - DoR completo (schema v1, 3 manifests, operationIds)
+                           - Abordagem UX-First formalizada
                            Arquivo: docs/04_modules/user-stories/epics/US-MOD-001.md
 
 2    (manual)              Revisar e finalizar features F01-F03:             CONCLUIDO
-                           - Gherkin detalhado validado                     3/3 READY
-                           - nivel_arquitetura e wave_entrega confirmados
-                           - manifests_vinculados preenchidos
+                           - F01: Shell Auth + Layout Base                  3/3 READY
+                           - F02: Telemetria UI e Rastreabilidade
+                           - F03: Dashboard Administrativo Executivo
                            Arquivos: docs/04_modules/user-stories/features/US-MOD-001-F{01..03}.md
 ```
 
 ### Fase 1: Genese do Modulo — CONCLUIDA
 
+Primeiro modulo UX-First pos-Foundation. Scaffoldado em 2026-03-16 apos rollback de uma tentativa anterior (v0.3.0 do epico registra rollback de scaffold destruido).
+
 ```
 3    /forge-module MOD-001  Scaffold completo gerado:                        CONCLUIDO
-                           mod.md, CHANGELOG.md, requirements/              v0.1.0 (2026-03-16)
-                           (br/, fr/, data/, int/, sec/, ux/, nfr/),
-                           adr/, amendments/
-                           Stubs obrigatorios criados: DATA-003, SEC-002
+                           mod-001-backoffice-admin.md, CHANGELOG.md,       v0.1.0 (2026-03-16)
+                           requirements/ (br/, fr/, data/, int/, sec/,
+                           ux/, nfr/), adr/, amendments/
+                           Stubs obrigatorios: DATA-003, SEC-002
                            Pasta: docs/04_modules/mod-001-backoffice-admin/
 ```
 
-### Fase 2: Enriquecimento — CONCLUIDO
->
+### Fase 2: Enriquecimento — CONCLUIDA
+
+O enriquecimento do MOD-001 foi completo — todos os agentes rodaram entre 2026-03-16 e 2026-03-18. Durante o processo, 4 pendencias foram identificadas e todas resolvidas. Destaque para PENDENTE-003 que expandiu o escopo com FR-007 (Alterar Senha) e INT-006.
+
 > **Decision tree de enriquecimento:**
->
-> ```
 > Quero enriquecer todos os modulos elegiveis?
 > ├── SIM → /enrich-all (sequencial, com checkpoint e --dry-run/--resume)
 > └── NAO → Qual escopo?
 >     ├── Todos agentes de 1 modulo  → /enrich mod-001
 >     └── 1 agente especifico        → /enrich-agent AGN-DEV-XX mod-001
-> ```
 
 ```
 4    /enrich docs/04_modules/mod-001-backoffice-admin/
-                           11 agentes executados sobre mod-001:              CONCLUIDO
-                           Fase exec 1: AGN-DEV-01 (MOD — Nivel 1)         v0.10.0 (2026-03-17)
-                           Fase exec 2: AGN-DEV-02 (BR)
-                           Fase exec 3: AGN-DEV-03 (FR)
-                           Fase exec 4: AGN-DEV-04 (DATA + eventos)
-                           Fase exec 5: AGN-DEV-05 (INT), AGN-DEV-08 (NFR)
-                           Fase exec 6: AGN-DEV-06 (SEC + EventMatrix)
-                           Fase exec 7: AGN-DEV-07 (UX — manifests)
-                           Fase exec 8: AGN-DEV-09 (ADR — 3 criadas), AGN-DEV-10 (PEN — 4 implementadas)
-                           Fase exec 9: AGN-DEV-11 (VAL — validacao cruzada)
-
-                           PENDENTEs resolvidas durante enriquecimento:
-                           - PENDENTE-001: Cache auth_me → Opcao C (React Query 30s TTL)
-                           - PENDENTE-002: Empty State Sidebar → Opcao B (mensagem "Nenhum modulo")
-                           - PENDENTE-003: Alterar Senha no ProfileWidget → Opcao A (FR-007 + INT-006)
-                           - PENDENTE-004: Tela MFA → Opcao B (roadmap, fallback defensivo)
-
-                           Artefatos criados durante resolucao de PENDENTEs:
-                           - FR-007 v0.1.0 (Alteracao de Senha via ProfileWidget)
-                           - INT-006 v0.1.0 (POST /auth/change-password)
-                           - DATA-003 v0.5.0 (UIActionEnvelope submit_change_password)
-                           - FR-001 v0.7.0 (fallback defensivo MFA redirect)
+                           Agentes executados sobre mod-001:                 CONCLUIDO
+                           AGN-DEV-01 (MOD), AGN-DEV-02 (BR),              v0.10.0 (2026-03-17)
+                           AGN-DEV-03 (FR), AGN-DEV-04 (DATA),
+                           AGN-DEV-05 (INT), AGN-DEV-06 (SEC),
+                           AGN-DEV-07 (UX), AGN-DEV-08 (NFR),
+                           AGN-DEV-09 (ADR), AGN-DEV-10 (PEN)
+                           4 pendentes criadas e resolvidas (001-004)
 ```
 
-### Fase 3: Validacao — PENDENTE
+#### Rastreio de Agentes — MOD-001
+
+| # | Agente | Pilar | Artefato | Status | Evidencia |
+|---|--------|-------|----------|--------|-----------|
+| 1 | AGN-DEV-01 | MOD/Escala | mod-001-backoffice-admin.md | CONCLUIDO | CHANGELOG v0.2.0, v0.9.1 — Nivel 1 confirmado, pipeline corrigido |
+| 2 | AGN-DEV-02 | BR | BR-001.md | CONCLUIDO | v0.4.0 — BR-009/BR-010 adicionadas (skeleton timeout, erro 5xx) |
+| 3 | AGN-DEV-03 | FR | FR-001.md, FR-007.md | CONCLUIDO | FR-001 v0.4.0, FR-007 v0.1.0 (Alterar Senha — PENDENTE-003) |
+| 4 | AGN-DEV-04 | DATA | DATA-001.md, DATA-003.md | CONCLUIDO | DATA-001 v0.4.0, DATA-003 v0.5.0 (UIActionEnvelope change_password) |
+| 5 | AGN-DEV-05 | INT | INT-001.md, INT-006.md | CONCLUIDO | INT-001 v0.5.0, INT-006 v0.1.0 (POST /auth/change-password) |
+| 6 | AGN-DEV-06 | SEC | SEC-001.md, SEC-002.md | CONCLUIDO | SEC-001 v0.4.0, SEC-002 v0.5.0 (auth.password_changed na matriz) |
+| 7 | AGN-DEV-07 | UX | UX-001.md | CONCLUIDO | v0.6.0 — mapeamento Acoes→Endpoints→Events, submit_change_password |
+| 8 | AGN-DEV-08 | NFR | NFR-001.md | CONCLUIDO | v0.4.0 — zero-blank-screen, resiliencia, telemetria retry |
+| 9 | AGN-DEV-09 | ADR | ADR-001, ADR-002, ADR-003 | CONCLUIDO | 3 ADRs criadas e aceitas |
+| 10 | AGN-DEV-10 | PEN | pen-001-pendente.md | CONCLUIDO | v0.12.0 — 4 pendentes criadas e resolvidas |
+
+#### Pendentes Resolvidas — Resumo Compacto
+
+| # | ID | Status | Sev. | Decisao (resumo) | Artefato |
+|---|-----|--------|------|-------------------|----------|
+| 1 | PENDENTE-001 | IMPLEMENTADA | MEDIA | Opcao C — React Query/SWR cache 30s | FR-004, FR-005 |
+| 2 | PENDENTE-002 | IMPLEMENTADA | BAIXA | Opcao B — Sidebar empty state com icone | FR-004, UX-001 |
+| 3 | PENDENTE-003 | IMPLEMENTADA | ALTA | Opcao A — FR-007 + INT-006 Alterar Senha | FR-007, INT-006, DATA-003 |
+| 4 | PENDENTE-004 | IMPLEMENTADA | MEDIA | Opcao B — fallback defensivo MFA redirect | FR-001 v0.6.0 |
+
+> Detalhes completos: requirements/pen-001-pendente.md
+
+### Fase 3: Validacao — CONCLUIDA
+
+O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis retornaram PASS (29/29 manifests globais aprovados). O MOD-001 passou em todos os checks aplicaveis.
 
 > **Decision tree de validacao:**
->
-> ```
 > Quero validar tudo de uma vez?
 > ├── SIM → /validate-all (orquestra todos, pula os que nao tem artefato)
 > └── NAO → Qual pilar?
@@ -111,78 +125,57 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 >     ├── Contratos OpenAPI      → /validate-openapi
 >     ├── Schemas Drizzle        → /validate-drizzle
 >     └── Endpoints Fastify      → /validate-endpoint
-> ```
 
 ```
 5    /validate-all docs/04_modules/mod-001-backoffice-admin/
-                           Orquestra TODAS as validacoes em sequencia:        A EXECUTAR
-                           Internamente executa:
-                             1. /qa (lint, links, metadados, EX-*, §N, ciclos)
-                             2. /validate-manifest (screen manifests vs schema v1)
-                             3. /validate-openapi (contratos Spectral — se existirem)
-                             4. /validate-drizzle (schemas Drizzle — N/A para Nivel 1 UX-First)
-                             5. /validate-endpoint (handlers Fastify — N/A para Nivel 1 UX-First)
-                           Skills 3-5 serao N/A: MOD-001 e UX-First sem backend proprio.
-                           Apenas /qa e /validate-manifest sao aplicaveis.
-                           Pre-condicao: Enriquecimento concluido
-                           Pos-condicao: Relatorio consolidado pass/fail
+                           Orquestra TODAS as validacoes em sequencia:        CONCLUIDO (2026-03-22)
+                           Internamente executa:                              PASS
+                             1. /qa .......................... PASS
+                             2. /validate-manifest ........... PASS (3 manifests)
+                             3. /validate-openapi → N/A (UX-First, sem backend)
+                             4. /validate-drizzle → N/A (UX-First, sem entidades)
+                             5. /validate-endpoint → N/A (UX-First, sem handlers)
+                           Pre-condicao: Enriquecimento concluido ✓
+                           Pos-condicao: Relatorio consolidado PASS
 ```
 
-> **Alternativa:** Executar validadores individuais quando quiser focar em um pilar:
+#### Validadores Aplicaveis — Mapa de Cobertura
 
-```
-5a   /qa docs/04_modules/mod-001-backoffice-admin/
-                           Diagnostico de sintaxe e integridade:              INDIVIDUAL
-                           - lint:docs (Pass A-E: EX-*, §N, IDs, context-map, ciclos)
-                           - Consistencia de metadados (estado_item, owner)
-                           - Dead links, DoR alignment
-                           - Verificar rastreia_para entre mod.md ↔ features ↔ manifests
-
-5b   /validate-manifest ux-auth-001.login.yaml
-                           Validar manifests contra schema v1:               INDIVIDUAL
-                           - ux-auth-001.login.yaml (auth, /login, pre_auth=true)
-                           - ux-shell-001.app-shell.yaml (shell, /*, post_auth)
-                           - ux-dash-001.main.yaml (dashboard, /dashboard, post_auth)
-                           Verifica: DOC-UX-010, operationId, RBAC,
-                           telemetria (include_tenant_id pre/pos), permissions,
-                           linked_stories referenciando US-MOD-001
-
-5c   /validate-openapi     N/A — MOD-001 nao possui backend proprio.         N/A
-                           Endpoints consumidos pertencem ao MOD-000.
-                           Validar paridade operationId ↔ manifest via /qa.
-
-5d   /validate-drizzle     N/A — MOD-001 e UX-First (Nivel 1),              N/A
-                           sem entidades de banco proprio.
-                           Modelo de dados e consumidor do MOD-000.
-
-5e   /validate-endpoint    N/A — MOD-001 nao possui handlers Fastify.        N/A
-                           Frontend-only, consome API do MOD-000.
-```
+| # | Validador | Aplicavel (nivel) | Resultado | Artefatos |
+|---|-----------|-------------------|-----------|-----------|
+| 1 | `/qa` | SIM (todos) | PASS | mod-001-backoffice-admin.md, requirements/*, adr/*, CHANGELOG.md |
+| 2 | `/validate-manifest` | SIM (3 manifests existem) | PASS | ux-auth-001, ux-shell-001, ux-dash-001 |
+| 3 | `/validate-openapi` | N/A | N/A | UX-First — sem backend proprio (endpoints sao do MOD-000) |
+| 4 | `/validate-drizzle` | N/A | N/A | UX-First — sem entidades de banco proprias |
+| 5 | `/validate-endpoint` | N/A | N/A | UX-First — sem handlers Fastify proprios |
 
 ### Fase 4: Promocao — PENDENTE
 
+Com a Fase 3 concluida com sucesso, o modulo esta apto para promocao. Todos os criterios do Gate 0 (DoR) estao atendidos.
+
 ```
 10   /promote-module docs/04_modules/mod-001-backoffice-admin/
-                           Selar mod-001 como READY:                         A EXECUTAR (apos fase 3)
+                           Selar mod-001 como READY:                         A EXECUTAR
                            Gate 0 — Definition of Ready (DoR):
                              [DoR-1] PENDENTEs resolvidos? .............. SIM (4/4 IMPLEMENTADA)
-                             [DoR-2] Arquivos de requisito existem? ..... SIM (11/11)
-                             [DoR-3] Zero erros de lint? ................ A VERIFICAR (passo 5)
-                             [DoR-4] Screen manifests validados? ........ A VERIFICAR (passo 5b)
+                             [DoR-2] Arquivos de requisito existem? ..... SIM (12/12)
+                             [DoR-3] Zero erros de lint? ................ SIM (validate-all PASS)
+                             [DoR-4] Screen manifests validados? ........ SIM (validate-all PASS)
                              [DoR-5] ADRs conforme nivel? ............... SIM (3 >= 1 para N1)
-                             [DoR-6] CHANGELOG atualizado? .............. SIM (v0.12.0 PEN)
+                             [DoR-6] CHANGELOG atualizado? .............. SIM (v0.9.1)
                              [DoR-7] Bloqueios cross-modulo? ............ SIM (0 bloqueios)
 
                            Fluxo interno:
                              Step 1: /qa (pre-check)
-                             Step 2: Promover epico DRAFT→READY (ja READY)
-                             Step 3: Promover features em lotes (ja READY)
-                             Step 4: /qa (pos-check)
-                             Step 5: /update-index
-                             Step 6: /git commit
-                           Pre-condicao: QA verde (passo 5), DoR-1..7 atendidos
+                             Step 2: Promover estado_item DRAFT→READY
+                             Step 3: /qa (pos-check)
+                             Step 4: /update-index
+                             Step 5: /git commit
+                           Pre-condicao: QA verde, DoR-1..7 atendidos
                            Pos-condicao: estado_item = READY, INDEX.md atualizado, commit
 ```
+
+> **Nota:** MOD-001 depende de MOD-000 (Foundation) que ainda esta DRAFT. A promocao do MOD-001 pode ocorrer independentemente — o DoR nao exige que dependencias upstream estejam READY (apenas que existam). Porem, o codigo so pode ser gerado quando MOD-000 estiver READY (endpoints implementados).
 
 ### Fase 5: Pos-READY (quando necessario)
 
@@ -192,30 +185,16 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
                            Detecta estado_item=READY → delega para
                            /create-amendment automaticamente
 
-12   /create-amendment FR-001 melhoria "adicionar campo X"
+12   /create-amendment FR-001 melhoria "adicionar tela MFA"
                            Criar amendment formal:                           SOB DEMANDA
-                           Ex: BR-001-M01.md (melhoria)
-                           Ex: SEC-001-C01.md (correcao)
-                           Preserva documento base intacto
                            Naming: {Pilar}-{ID}-{Natureza}{Seq}.md
-
-13   /merge-amendment docs/04_modules/mod-001-backoffice-admin/amendments/...
-                           Aplicar amendment no documento base:              SOB DEMANDA
-                           Gate 1: Amendment APPROVED ou DRAFT (com confirmacao)
-                           Gate 2: Documento base existe
-                           Gate 3: Dependencias cross-modulo (DEPENDENCY-GRAPH.md §3)
-                           Gate 4: Stale detection (versao do base mudou?)
-                           Gate 5: Amendments concorrentes para mesmo base
-                           Pos-condicao: Base bumped, amendment MERGED, CHANGELOG atualizado
-
-                           Amendments existentes: nenhum (modulo ainda DRAFT)
+                           Caso de uso previsto: UX-MFA-001 (tela MFA)
+                           quando MOD-000 ativar MFA e o roadmap mudar
 ```
 
 ### Gestao de Pendencias (qualquer momento)
 
 > **Decision tree de pendencias:**
->
-> ```
 > O que preciso fazer com pendencias?
 > ├── Ver situacao atual       → /manage-pendentes list PEN-001
 > ├── Criar nova pendencia     → /manage-pendentes create PEN-001
@@ -224,50 +203,24 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 > ├── Implementar decisao      → /manage-pendentes implement PEN-001 PENDENTE-XXX
 > ├── Cancelar pendencia       → /manage-pendentes cancel PEN-001 PENDENTE-XXX
 > └── Relatorio consolidado    → /manage-pendentes report PEN-001
-> ```
 
 ```
 16   /manage-pendentes list PEN-001
-                           Ciclo de vida completo de pendencias:              SOB DEMANDA
-
-                           Convencao de nomenclatura:
-                             PEN-001       = arquivo container (pen-001-pendente.md)
-                             PENDENTE-NNN  = item individual (## PENDENTE-001 — ...)
-
-                           SLA de resolucao por severidade:
-                             BLOQUEANTE = 7 dias  (impede promocao, escalar imediatamente)
-                             ALTA       = 14 dias (escalar ao owner apos 7 dias sem progresso)
-                             MEDIA      = 30 dias (revisar na proxima sessao de planejamento)
-                             BAIXA      = 90 dias (pode ser adiada, reavaliar se relevante)
-
-                           Ciclo de vida do item:
-                             ABERTA → EM_ANALISE → DECIDIDA → IMPLEMENTADA
-                               │         │            │
-                               └─────────┴────────────┴── CANCELADA (com motivo)
-
-                           Intencoes disponiveis:
-                             list     — Exibe Painel de Controle com contagem por status
-                             create   — Cria item com classificacao automatica (dominio, tipo, severidade)
-                                        Gera minimo 2 opcoes com pros/contras e recomendacao
-                             analyze  — Le artefatos em rastreia_para, busca ADRs similares,
-                                        enriquece opcoes com trade-offs tecnicos
-                             decide   — Registra decisao (opcao escolhida + justificativa)
-                                        Move status para DECIDIDA
-                             implement— Identifica mecanismo (edicao direta se DRAFT,
-                                        /create-amendment se READY, ADR se decisao arquitetural)
-                                        Move status para IMPLEMENTADA
-                             cancel   — Registra motivo, move para CANCELADA
-                             report   — Emite relatorio: total, por severidade, por dominio,
-                                        conformidade de SLA (dentro/proximo/vencido)
-
-                           Integracao com DoR (Gate 0 do /promote-module):
-                             DoR-1 bloqueia promocao se houver itens ABERTA ou EM_ANALISE.
-                             Todos devem estar IMPLEMENTADA, DECIDIDA ou CANCELADA.
-
                            Estado atual MOD-001:
-                             PEN-001: 4 itens, todos IMPLEMENTADA (0 abertas)
+                             PEN-001: 4 itens total
+                               4 IMPLEMENTADA (001-004)
+                               0 ABERTA
                              SLA: nenhum vencido
 ```
+
+| # | ID | Status | Sev. | Decisao (resumo) | Artefato |
+|---|-----|--------|------|-------------------|----------|
+| 1 | PENDENTE-001 | IMPLEMENTADA | MEDIA | Opcao C — React Query/SWR cache 30s | FR-004, FR-005 |
+| 2 | PENDENTE-002 | IMPLEMENTADA | BAIXA | Opcao B — Sidebar empty state | FR-004, UX-001 |
+| 3 | PENDENTE-003 | IMPLEMENTADA | ALTA | Opcao A — FR-007 + INT-006 Alterar Senha | FR-007, INT-006, DATA-003 |
+| 4 | PENDENTE-004 | IMPLEMENTADA | MEDIA | Opcao B — fallback MFA redirect | FR-001 v0.6.0 |
+
+> Detalhes completos: requirements/pen-001-pendente.md
 
 ### Utilitarios (qualquer momento)
 
@@ -286,74 +239,50 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 ## Resumo Visual do Fluxo MOD-001
 
 ```
-US-MOD-001 (READY v0.5.0)              ← Fases 0: CONCLUIDA
-  │  3 features READY (F01, F02, F03)
-  │  3 screen manifests (UX-AUTH-001, UX-SHELL-001, UX-DASH-001)
+US-MOD-001 (READY v0.5.0)              ← Fase 0: CONCLUIDA
+  │  3/3 features READY (UX-First)
+  ▼
+mod-001-backoffice-admin/ (stubs DRAFT) ← Fase 1: CONCLUIDA (forge-module v0.1.0)
   │
   ▼
-mod-001-backoffice-admin/ (stubs DRAFT) ← Fase 1: CONCLUIDA (forge-module)
+mod-001 enriquecido (DRAFT v0.10.0)     ← Fase 2: CONCLUIDA (10 agentes, 4 PENDENTEs resolvidas)
   │
   ▼
-mod-001 enriquecido (DRAFT v0.10.0)     ← Fase 2: CONCLUIDA (11 agentes, 4 PENDENTEs resolvidas)
+mod-001 validado (DRAFT)                ← Fase 3: CONCLUIDA (validate-all PASS 2026-03-22)
   │
-  ├── /validate-all .............. PROXIMO PASSO (orquestra /qa + /validate-manifest)
-  │     ├── /qa .................. sintaxe, links, metadados, Pass A-E
-  │     ├── /validate-manifest ... screen manifests vs schema v1 (3 manifests)
-  │     ├── /validate-openapi .... N/A (sem backend proprio)
-  │     ├── /validate-drizzle .... N/A (sem entidades de banco)
-  │     └── /validate-endpoint ... N/A (sem handlers Fastify)
-  │
-  ├── /manage-pendentes .......... SOB DEMANDA (ciclo: create → analyze → decide → implement)
-  │     └── SLA: BLOQUEANTE 7d | ALTA 14d | MEDIA 30d | BAIXA 90d
+  ├── ★ PROXIMO PASSO: /promote-module
+  │     Gate 0 (DoR): 7/7 atendidos
   │
   ▼
-mod-001 validado (DRAFT)                ← Fase 3: A EXECUTAR
-  │
-  ├── Gate 0 (DoR): 5/7 atendidos, 2 a verificar (lint + manifests)
+mod-001 selado (READY)                  ← Fase 4: A EXECUTAR
   │
   ▼
-mod-001 selado (READY)                  ← Fase 4: A EXECUTAR (apos fase 3)
-  │
-  ├── /create-amendment ← se precisar alterar base READY
-  ├── /merge-amendment  ← para aplicar amendment aprovado (Gates 4-5: stale + conflitos)
-  │
-  ▼
-mod-001 + amendments/                   ← Fase 5: SOB DEMANDA
+mod-001 + amendments/                   ← Fase 5: SOB DEMANDA (0 amendments)
 
-MOD-001 depende de MOD-000 (Foundation).
-MOD-001 e pre-requisito do Application Shell usado por MOD-002+.
-Camada topologica: 1 (pode ser promovido apos MOD-000 estar READY).
+Dependencia upstream: MOD-000 (Foundation) — camada topologica 1.
+MOD-001 prove Application Shell para MOD-002+ (Sidebar, Header, Breadcrumb).
 ```
 
 ---
 
-## Particularidades do MOD-001 vs MOD-000
+## Particularidades do MOD-001
 
-| Aspecto | MOD-000 (Foundation) | MOD-001 (Backoffice Admin) |
-|---------|---------------------|---------------------------|
-| Nivel | 2 — Clean Padrao | 1 — Clean Leve |
-| Natureza | Backend (API, DB, RBAC) | UX-First (Shell frontend) |
-| Entidades DB | users, sessions, roles, etc. | Nenhuma (consome MOD-000) |
-| Endpoints API | 15+ (auth, users, roles, etc.) | Nenhum (consome MOD-000) |
-| Screen Manifests | 4 manifests | 3 manifests (auth, shell, dash) |
-| Features | 17 | 3 |
-| PENDENTEs | 7 | 4 |
-| ADRs requeridas | >= 3 (Nivel 2) | >= 1 (Nivel 1) |
-| Validadores aplicaveis | /qa, /validate-manifest, /validate-openapi, /validate-drizzle, /validate-endpoint | /qa, /validate-manifest (demais N/A) |
-| Amendments | 5 criados | 0 |
+| Aspecto | Detalhe |
+|---------|---------|
+| Modulo UX-First | Nao possui backend proprio — consome endpoints do MOD-000 (Foundation). Os validadores `/validate-openapi`, `/validate-drizzle` e `/validate-endpoint` sao N/A. Apenas `/qa` e `/validate-manifest` sao aplicaveis. |
+| Nivel 1 — Clean Leve (Score 1/6) | Unico gatilho ativo: multi-tenant (Sidebar filtrada por scopes). Score 1/6 qualificaria para Nivel 0, mas Nivel 1 escolhido por testabilidade e evolucao prevista (ADR-001). |
+| Provedor do Application Shell | MOD-002+ utilizam o Shell provido por este modulo (Sidebar, Header, Breadcrumb). Promover MOD-001 e relevante para a cadeia de frontend, mas nao bloqueia modulos backend. |
+| 3 ADRs para Nivel 1 | Excede o minimo de 1 ADR. ADR-001 (Clean Leve), ADR-002 (Telemetria Pre/Pos-Auth), ADR-003 (Zero-Blank-Screen com Skeleton Timeout 3s). A riqueza de ADRs reflete decisoes de UX nao-obvias. |
+| Dependencia exclusiva de MOD-000 | Todos os 6 operationIds consumidos sao do Foundation: auth_login, auth_logout, auth_me, auth_forgot_password, auth_reset_password, auth_change_password. Nenhuma integracao externa. |
+| Escopo expandido pos-enriquecimento | PENDENTE-003 expandiu o escopo com FR-007 (Alterar Senha) e INT-006, passando de 10 para 12 artefatos de requisitos. A UX do ProfileWidget ficou completa. |
 
 ---
 
 ## Checklist Rapido — O que Falta para READY
 
-- [ ] Executar `/validate-all` no modulo (passo 5) — orquestra /qa + /validate-manifest
-- [ ] Corrigir eventuais erros encontrados
-- [ ] Executar `/promote-module docs/04_modules/mod-001-backoffice-admin/` (passo 10)
-- [ ] Verificar que Gate 0 (DoR) passa nos 7 criterios
+- [ ] Executar `/promote-module docs/04_modules/mod-001-backoffice-admin/` — verificar Gate 0 (DoR) 7/7
 
-> **Alternativa:** Se preferir validar por partes, use `/qa` e `/validate-manifest` individualmente (passos 5a-5b).
-
-> **Nota:** MOD-001 so pode ser promovido apos MOD-000 estar READY (dependencia upstream).
+> **Nota:** Todas as 4 pendencias ja estao IMPLEMENTADA. Os 12 artefatos de requisitos estao enriquecidos. As 3 ADRs excedem o minimo para Nivel 1. Nao ha bloqueios (BLK-*) afetando MOD-001. A validacao (Fase 3) foi concluida com PASS em 2026-03-22. A unica dependencia upstream (MOD-000) esta DRAFT mas isso nao impede a promocao da especificacao — apenas a geracao de codigo.
 
 ---
 
@@ -361,4 +290,5 @@ Camada topologica: 1 (pode ser promovido apos MOD-000 estar READY).
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
-| 1.0.0 | 2026-03-21 | Criacao: estado atual, fases 0-5, DoR Gate 0, particularidades N1 vs N2, DEPENDENCY-GRAPH |
+| 2.0.0 | 2026-03-23 | Recriacao: Fase 3 atualizada para CONCLUIDA (validate-all PASS 2026-03-22), Gate 0 DoR 7/7 atendidos, Fase 4 como proximo passo, pendencias em formato compacto com referencia ao pen file |
+| 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 4 pendentes resolvidas, rastreio de agentes, mapa de cobertura de validadores, particularidades UX-First |

@@ -16,7 +16,6 @@ route: "/{modulo}/{rotina}/{id}/alterar"
 auth_required: true
 pre_auth: false
 layout: shell
-notes: "Sempre em rota/modal separado — nunca inline na grade de listagem."
 
 linked_stories:
   - "US-MOD-011"
@@ -61,7 +60,9 @@ actions:
     label: "Salvar alterações do registro"
     type: submit
     operation_id: null
-    notes: "operationId depende do módulo destino."
+    http_method: PATCH
+    endpoint: null
+    notes: "DYNAMIC ENDPOINT: operation_id e endpoint resolvidos em runtime via target_endpoints do context_framer tipo OPERACAO (PEND-SGR-04)."
     requires_scope: []
     loading_state: button
     error_handling:
@@ -100,8 +101,8 @@ navigation:
 
 notes: |
   REGRAS:
-  1. current_record_state OBRIGATÓRIO.
-  2. Formulário NUNCA inline.
+  1. Formulário SEMPRE em rota/modal separado — nunca inline na grade de listagem.
+  2. current_record_state OBRIGATÓRIO.
   3. Campos bloqueados: readonly com ícone, não ocultos.
   4. Log via domain_events: campo, valor anterior, novo valor.
   5. Salvar habilitado apenas após validação sem blocking_validations.

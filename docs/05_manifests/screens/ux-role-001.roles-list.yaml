@@ -1,0 +1,188 @@
+# ============================================================
+# Screen Manifest — UX-ROLE-001
+# Tela: Gestão de Roles/RBAC
+# Módulo: MOD-000 (Foundation)
+# Schema: v1 | Versão: 1.0.0 | Data: 2026-03-22
+# ============================================================
+# CRUD de papéis com atribuição de escopos (scopes).
+# Roles de sistema (is_system=true) são read-only.
+# Catálogo de scopes carregado de DOC-FND-000 §2.2.
+# ============================================================
+
+schema_version: "v1"
+screen_id: "UX-ROLE-001"
+name: "Gestão de Roles e Permissões"
+type: config
+module: "MOD-000"
+route: "/roles"
+auth_required: true
+layout: shell
+
+linked_stories:
+  - "US-MOD-000"
+  - "US-MOD-000-F06"
+
+telemetry_defaults:
+  package: "@easycf/ui-telemetry"
+  include_tenant_id: true
+  propagate_correlation_id: true
+  capture_duration_ms: true
+
+# ─── AÇÕES ───────────────────────────────────────────────────
+actions:
+
+  - id: load_roles
+    label: "Carregar lista de roles"
+    type: view
+    operation_id: roles_list
+    http_method: GET
+    endpoint: "/api/v1/roles"
+    client_only: false
+    requires_scope: ["users:role:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar os papéis."
+
+  - id: load_role_detail
+    label: "Carregar detalhes do role e scopes atribuídos"
+    type: view
+    operation_id: roles_get
+    http_method: GET
+    endpoint: "/api/v1/roles/:id"
+    client_only: false
+    requires_scope: ["users:role:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar o papel."
+
+  - id: create_role
+    label: "Criar novo role"
+    type: submit
+    operation_id: roles_create
+    http_method: POST
+    endpoint: "/api/v1/roles"
+    client_only: false
+    requires_scope: ["users:role:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível criar o papel."
+    notes: "Campos: nome (único), descrição, lista de scopes selecionados."
+
+  - id: update_role
+    label: "Editar scopes do role"
+    type: submit
+    operation_id: roles_update
+    http_method: PUT
+    endpoint: "/api/v1/roles/:id"
+    client_only: false
+    requires_scope: ["users:role:write"]
+    loading_state: button
+    error_handling:
+      strategy: inline
+      include_correlation_id: true
+      user_message: "Não foi possível atualizar o papel."
+    notes: "PUT com lista completa de scopes (replace). Roles de sistema (is_system=true) não podem ser editados."
+
+  - id: delete_role
+    label: "Excluir role"
+    type: submit
+    operation_id: roles_delete
+    http_method: DELETE
+    endpoint: "/api/v1/roles/:id"
+    client_only: false
+    requires_scope: ["users:role:write"]
+    loading_state: button
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível excluir o papel."
+    notes: "Soft-delete. Roles de sistema ou com usuários vinculados não podem ser excluídos (422)."
+
+  - id: view_role_history
+    label: "Ver histórico de alterações do role"
+    type: view
+    operation_id: entities_history
+    http_method: GET
+    endpoint: "/api/v1/entities/role/:id/history"
+    client_only: false
+    requires_scope: ["users:role:read"]
+    loading_state: skeleton
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível carregar o histórico."
+
+# ─── COMPONENTES ─────────────────────────────────────────────
+components:
+
+  - id: "roles-header"
+    name: "RolesPageHeader"
+    description: |
+      Cabeçalho com título "Gestão de Papéis", contador de roles ativos
+      e botão "Novo Papel" (visível com scope users:role:write).
+    actions_used: [create_role]
+
+  - id: "roles-table"
+    name: "RolesTable"
+    description: |
+      Tabela de roles com colunas: Nome, Descrição, Nº de Scopes, Nº de Usuários, Sistema (badge).
+      Menu de ações por linha: Editar | Histórico | Excluir.
+      Roles is_system=true: badge "Sistema", sem botões editar/excluir.
+      Estado vazio: "Nenhum papel cadastrado."
+    actions_used: [load_roles, delete_role]
+
+  - id: "role-drawer"
+    name: "RoleDrawer"
+    description: |
+      Drawer lateral para criar/editar role:
+        - Campo nome (text, obrigatório, único)
+        - Campo descrição (textarea, opcional)
+        - Checklist de scopes agrupados por domínio (users, tenants, system, etc.)
+        - Scopes de sistema pré-selecionados e desabilitados para roles is_system
+      Validação inline para nome duplicado (409).
+    actions_used: [load_role_detail, create_role, update_role]
+
+  - id: "role-history-panel"
+    name: "RoleHistoryPanel"
+    description: |
+      Painel de histórico de alterações do role.
+      Timeline com: data, autor, tipo de mudança (create/update/delete), diff de scopes.
+    actions_used: [view_role_history]
+
+  - id: "delete-role-modal"
+    name: "DeleteRoleModal"
+    description: |
+      Modal de confirmação antes de excluir role.
+      Título: "Excluir papel?"
+      Corpo: "O papel '{nome}' será removido. Usuários vinculados perderão estas permissões."
+      Botões: "Cancelar" e "Excluir" (destructive, isLoading).
+      Bloqueado se role tem usuários vinculados ou is_system=true.
+    actions_used: [delete_role]
+
+# ─── NAVEGAÇÃO ───────────────────────────────────────────────
+navigation:
+  guard: auth
+  redirect_if_unauth: "/login"
+
+# ─── REGRAS OBRIGATÓRIAS ────────────────────────────────────
+notes: |
+  REGRAS OBRIGATÓRIAS:
+  1. Scope users:role:read obrigatório para visualização — sem ele, redirect /dashboard com Toast.
+  2. Scope users:role:write obrigatório para criar/editar/excluir. Botões ocultos sem scope (hide_if_no_permission).
+  3. Roles de sistema (is_system=true): read-only, badge "Sistema", sem ações de edição ou exclusão.
+  4. Roles com usuários vinculados: exclusão bloqueada (backend 422 + frontend desabilita botão).
+  5. Scopes exibidos agrupados por domínio para navegação facilitada.
+  6. Nome do role deve ser único (validação inline 409).
+  7. Histórico de alterações disponível para auditoria (domain_events: role.created, role.updated, role.deleted).
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-03-22"
+    author: "arquitetura"
+    description: "Criação inicial. CRUD de roles com atribuição de scopes, proteção de roles de sistema e histórico."

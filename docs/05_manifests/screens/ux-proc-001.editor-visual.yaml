@@ -5,11 +5,9 @@
 # ============================================================
 
 schema_version: "v1"
-manifest_version: 1
 screen_id: "UX-PROC-001"
 name: "Editor Visual de Fluxo de Processo"
 type: config
-entity_type: process_cycle
 module: "MOD-005"
 route: "/processos/ciclos/:id/editor"
 auth_required: true
@@ -20,40 +18,11 @@ linked_stories:
   - "US-MOD-005"
   - "US-MOD-005-F03"
 
-routes:
-  - path: /api/v1/admin/cycles/{id}/flow
-    method: GET
-  - path: /api/v1/admin/macro-stages/{mid}/stages
-    method: POST
-  - path: /api/v1/admin/stage-transitions
-    method: POST
-  - path: /api/v1/admin/stages/{id}
-    method: DELETE
-  - path: /api/v1/admin/stage-transitions/{id}
-    method: DELETE
-  - path: /api/v1/admin/cycles/{id}/publish
-    method: POST
-  - path: /api/v1/admin/cycles/{id}/fork
-    method: POST
-
 telemetry_defaults:
   package: "@easycf/ui-telemetry"
-  event_name: process.cycle_editor_viewed
   include_tenant_id: true
   propagate_correlation_id: true
   capture_duration_ms: true
-  required_fields:
-    - screen_id
-    - tenant_id
-    - correlation_id
-  propagate_headers:
-    - X-Correlation-ID
-
-permissions:
-  read: process:cycle:read
-  write: process:cycle:write
-  delete: process:cycle:delete
-  publish: process:cycle:publish
 
 actions:
 
@@ -156,52 +125,6 @@ actions:
     client_only: true
     loading_state: none
     notes: "Abre o painel lateral UX-PROC-002 para o estágio selecionado."
-
-ui_rules:
-  action_visibility:
-    strategy: hide_if_no_permission
-  action_enablement:
-    - action: publish_cycle
-      enabled_when: "cycle.status === 'DRAFT'"
-    - action: fork_cycle
-      enabled_when: "cycle.status === 'PUBLISHED'"
-    - action: create_stage_from_canvas
-      enabled_when: "cycle.status === 'DRAFT'"
-    - action: create_transition_from_canvas
-      enabled_when: "cycle.status === 'DRAFT'"
-    - action: delete_stage_from_canvas
-      enabled_when: "cycle.status === 'DRAFT'"
-    - action: delete_transition_from_canvas
-      enabled_when: "cycle.status === 'DRAFT'"
-
-error_mapping:
-  default_user_message: Ocorreu um erro inesperado. Tente novamente ou contate o suporte.
-  http_status:
-    '401':
-      user_message: Sessão expirada. Faça login novamente.
-      ui:
-        type: modal
-        level: error
-    '403':
-      user_message: Sem permissão para esta ação no editor de processos.
-      ui:
-        type: toast
-        level: error
-    '409':
-      user_message: Conflito detectado. O ciclo pode ter sido alterado por outro usuário.
-      ui:
-        type: toast
-        level: warning
-    '422':
-      user_message: Dados inválidos. Verifique os campos e tente novamente.
-      ui:
-        type: inline
-        level: error
-    '500':
-      user_message: Erro interno do servidor. Contate o suporte.
-      ui:
-        type: toast
-        level: error
 
 components:
 

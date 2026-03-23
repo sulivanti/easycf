@@ -31,7 +31,6 @@ panels:
   - id: "dlq"
     label: "DLQ"
     default: false
-    notes: "Badge com contagem de DLQ ativos no tab"
 
 actions:
 
@@ -89,7 +88,7 @@ actions:
 
   - id: navigate_to_case
     label: "Navegar para o caso vinculado"
-    type: navigate
+    type: client_only
     client_only: true
     loading_state: none
 
@@ -178,21 +177,6 @@ components:
 navigation:
   guard: auth
   redirect_if_unauth: "/login"
-
-query_params:
-  status:
-    type: string
-    enum: [ALL, QUEUED, RUNNING, SUCCESS, FAILED, DLQ]
-    default: "ALL"
-  routine_id:
-    type: string
-    default: ""
-  service_id:
-    type: string
-    default: ""
-  correlation_id:
-    type: string
-    default: ""
 
 notes: |
   REGRAS:

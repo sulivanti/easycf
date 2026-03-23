@@ -1,0 +1,12 @@
+{
+  "name": "@easycode/api",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup src/index.ts",
+    "test": "vitest",
+    "lint": "eslint src/"
+  }
+}

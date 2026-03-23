@@ -1,0 +1,117 @@
+{
+  "$schema": "codegen-registry.v1",
+  "description": "Registro centralizado dos 6 agentes de geração de código PKG-COD-001. Mapeia cada agente para sua camada, ownership (allowed_prefixes), dependências de execução e validações pós-geração. Convenção: {slug} é resolvido a partir de module_paths.API do manifesto do módulo (ex: apps/api/src/modules/foundation/ → slug 'foundation').",
+  "module_slug_resolution": {
+    "description": "O slug do módulo é extraído do campo module_paths da especificação. Para módulos com API: extrai do path API (apps/api/src/modules/{slug}/). Para módulos WEB-only: extrai do path Web (apps/web/src/modules/{slug}/).",
+    "primary_source": "module_paths.API",
+    "fallback_source": "module_paths.Web",
+    "example": "apps/api/src/modules/foundation/ → foundation"
+  },
+  "level_filter": {
+    "description": "Auto-filter de agentes por nível arquitetural do módulo (DOC-ESC-001). Agentes fora do escopo do nível são skippados com aviso.",
+    "rules": {
+      "nivel_0": {
+        "label": "WEB only",
+        "allowed_agents": ["AGN-COD-WEB", "AGN-COD-VAL"],
+        "skip_reason": "Nível 0 não possui camadas API/Domain/Application"
+      },
+      "nivel_1": {
+        "label": "Clean Leve (sem CORE)",
+        "allowed_agents": ["AGN-COD-DB", "AGN-COD-APP", "AGN-COD-API", "AGN-COD-WEB", "AGN-COD-VAL"],
+        "skip_reason": "Nível 1 não requer camada Domain (DDD-lite)"
+      },
+      "nivel_2": {
+        "label": "DDD-lite + Clean Completo",
+        "allowed_agents": ["AGN-COD-DB", "AGN-COD-CORE", "AGN-COD-APP", "AGN-COD-API", "AGN-COD-WEB", "AGN-COD-VAL"],
+        "skip_reason": null
+      }
+    }
+  },
+  "agents": {
+    "AGN-COD-DB": {
+      "name": "Banco de Dados",
+      "layer": "infrastructure",
+      "allowed_prefixes": [
+        "apps/api/src/modules/{slug}/infrastructure/",
+        "apps/api/db/migrations/",
+        "apps/api/db/schema/"
+      ],
+      "pkg_section": "§3.1",
+      "required_docs": ["DOC-GNP-00", "DOC-FND-000", "DOC-ARC-003"],
+      "required_specs": ["DATA-*"],
+      "depends_on": [],
+      "post_validation": ["validate-drizzle"]
+    },
+    "AGN-COD-CORE": {
+      "name": "Domínio (DDD-lite)",
+      "layer": "domain",
+      "allowed_prefixes": [
+        "apps/api/src/modules/{slug}/domain/"
+      ],
+      "pkg_section": "§3.2",
+      "required_docs": ["DOC-GNP-00", "DOC-FND-000"],
+      "required_specs": ["BR-*", "DATA-*"],
+      "depends_on": ["AGN-COD-DB"],
+      "post_validation": []
+    },
+    "AGN-COD-APP": {
+      "name": "Application / UseCases",
+      "layer": "application",
+      "allowed_prefixes": [
+        "apps/api/src/modules/{slug}/application/"
+      ],
+      "pkg_section": "§3.3",
+      "required_docs": ["DOC-GNP-00", "DOC-FND-000", "DOC-ARC-003"],
+      "required_specs": ["FR-*", "SEC-*", "DATA-*"],
+      "depends_on": ["AGN-COD-DB", "AGN-COD-CORE"],
+      "post_validation": []
+    },
+    "AGN-COD-API": {
+      "name": "Endpoints + OpenAPI",
+      "layer": "presentation",
+      "allowed_prefixes": [
+        "apps/api/src/modules/{slug}/presentation/",
+        "apps/api/openapi/",
+        "apps/api/test/"
+      ],
+      "pkg_section": "§3.4",
+      "required_docs": ["DOC-GNP-00", "DOC-ARC-001", "DOC-ARC-003", "DOC-FND-000"],
+      "required_specs": ["FR-*", "INT-*", "SEC-*"],
+      "depends_on": ["AGN-COD-DB", "AGN-COD-CORE", "AGN-COD-APP"],
+      "post_validation": ["validate-openapi", "validate-endpoint"]
+    },
+    "AGN-COD-WEB": {
+      "name": "Frontend",
+      "layer": "web",
+      "allowed_prefixes": [
+        "apps/web/src/modules/{slug}/"
+      ],
+      "pkg_section": "§3.5",
+      "required_docs": ["DOC-GNP-00", "DOC-UX-010"],
+      "required_specs": ["UX-*", "FR-*"],
+      "depends_on": ["AGN-COD-API"],
+      "post_validation": []
+    },
+    "AGN-COD-VAL": {
+      "name": "Validador Global",
+      "layer": "validation",
+      "allowed_prefixes": [],
+      "pkg_section": "§4",
+      "required_docs": ["DOC-GNP-00", "DOC-ARC-001", "DOC-ARC-003", "DOC-FND-000", "DOC-UX-010"],
+      "required_specs": ["*"],
+      "depends_on": ["AGN-COD-DB", "AGN-COD-CORE", "AGN-COD-APP", "AGN-COD-API", "AGN-COD-WEB"],
+      "post_validation": ["validate-drizzle", "validate-openapi", "validate-endpoint"]
+    }
+  },
+  "execution_phases": {
+    "description": "Ordem linear de execução. Respeita depends_on de cada agente.",
+    "phases": [
+      { "phase": 1, "agents": ["AGN-COD-DB"], "label": "Banco de Dados (migrações, schemas)" },
+      { "phase": 2, "agents": ["AGN-COD-CORE"], "label": "Domínio (entidades, VOs, invariantes)" },
+      { "phase": 3, "agents": ["AGN-COD-APP"], "label": "Application (use cases, eventos)" },
+      { "phase": 4, "agents": ["AGN-COD-API"], "label": "Endpoints + OpenAPI" },
+      { "phase": 5, "agents": ["AGN-COD-WEB"], "label": "Frontend" },
+      { "phase": 6, "agents": ["AGN-COD-VAL"], "label": "Validação cruzada" }
+    ]
+  }
+}

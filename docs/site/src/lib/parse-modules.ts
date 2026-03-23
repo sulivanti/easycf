@@ -78,28 +78,28 @@ function parseFeatureCount(raw: string): {
 }
 
 function detectPhase(content: string): number {
-  // Look for the highest completed phase marker
-  const phaseStatuses = [
-    /Fase\s+5.*(?:CONCLU[IÍ]DA|EM ANDAMENTO|NAO INICIADO)/i,
-    /Fase\s+4.*(?:CONCLU[IÍ]DA)/i,
-    /Fase\s+3.*(?:CONCLU[IÍ]DA)/i,
-    /Fase\s+2.*(?:CONCLU[IÍ]DA)/i,
-    /Fase\s+1.*(?:CONCLU[IÍ]DA)/i,
-  ];
-
-  // Check for explicit codegen status
-  if (/codegen.*NAO INICIADO/i.test(content) && /Fase\s+4.*CONCLU/i.test(content)) return 5;
-  if (/Fase\s+4.*CONCLU/i.test(content)) return 4;
-  if (/Fase\s+3.*CONCLU/i.test(content)) return 3;
-  if (/Fase\s+2.*CONCLU/i.test(content)) return 2;
-  if (/Fase\s+1.*CONCLU/i.test(content)) return 1;
+  // Check from highest phase down
+  // Phase 5 (Codegen): "Fase 5 ... CONCLUÍDA" or "Fases 0-5 concluidas" or "Codegen completo"
+  if (/Fase\s+5.*CONCLU[IÍ]D/i.test(content) || /Fases\s+0-5.*conclu/i.test(content) || /Codegen\s+completo/i.test(content)) return 5;
+  // Phase 5 in progress: Fase 4 done + codegen started but not done
+  if (/Fase\s+4.*CONCLU/i.test(content)) return 5;
+  if (/Fase\s+3.*CONCLU/i.test(content)) return 4;
+  if (/Fase\s+2.*CONCLU/i.test(content)) return 3;
+  if (/Fase\s+1.*CONCLU/i.test(content)) return 2;
+  if (/Fase\s+0.*CONCLU/i.test(content) || /Epico.*READY/i.test(content)) return 1;
   return 0;
 }
 
 function detectCodegen(content: string): string {
-  if (/codegen.*CONCLU[IÍ]D/i.test(content)) return "CONCLUIDO";
-  if (/codegen.*EM ANDAMENTO/i.test(content)) return "EM ANDAMENTO";
+  // Check NAO INICIADO first — the table row "Codegen ... | NAO INICIADO |"
+  // often contains "concluido" later in the same line (e.g. "Scaffold concluido")
+  // which would false-positive match CONCLUIDO if checked first.
   if (/codegen.*NAO INICIADO/i.test(content)) return "NAO INICIADO";
+  if (/codegen.*EM ANDAMENTO/i.test(content)) return "EM ANDAMENTO";
+  // For CONCLUIDO, require it closer to "codegen" (same table cell or short phrase)
+  if (/codegen\s*(?:\([^)]*\)\s*\|?\s*)?(?:completo|CONCLU[IÍ]D)/i.test(content)) return "CONCLUIDO";
+  // Also match "Fase 5 ... CONCLUÍDA" or "Fases 0-5 concluidas"
+  if (/Fase(?:s)?\s+(?:0-)?5.*CONCLU[IÍ]D/i.test(content)) return "CONCLUIDO";
   return "N/A";
 }
 

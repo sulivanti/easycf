@@ -5,6 +5,7 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 0.23.0 | 2026-03-23 | AGN-COD-VAL   | Adição PENDENTE-013 a 017 — findings de validação cruzada codegen (5 erros) |
 > | 0.20.0 | 2026-03-22 | validate-all  | Adição PENDENTE-012 — 5 screen manifests YAML ausentes (UX-AUTH-003, UX-ROLE-001, UX-TENANT-001, UX-TENANT-002) |
 > | 0.21.0 | 2026-03-22 | arquitetura   | PENDENTE-008→IMPLEMENTADA (manifests reescritos), P-009→IMPLEMENTADA (módulo corrigido), P-010→IMPLEMENTADA (Screen IDs), P-011→IMPLEMENTADA (unificação auth+MFA) |
 > | 0.22.0 | 2026-03-22 | arquitetura   | PENDENTE-012→IMPLEMENTADA — 4 manifests criados (ux-auth-003, ux-role-001, ux-tenant-001, ux-tenant-002) |
@@ -776,9 +777,286 @@ Opção A — criar todos os 4 manifests. O Foundation é módulo raiz e todos o
 
 ---
 
+## PENDENTE-013 — Endpoints GET retornam 404 vazio ao invés de RFC 9457 ProblemDetails
+
+- **status:** ABERTA
+- **severidade:** ALTA
+- **domínio:** API
+- **tipo:** BUG
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **modulo:** MOD-000
+- **rastreia_para:** FR-013, EX-OAS-001
+- **tags:** rfc-9457, error-handling, presentation
+- **sla_data:** —
+- **dependencias:** []
+
+### Questão
+
+`GET /users/:id` (users.route.ts:88-89) e `GET /roles/:id` (roles.route.ts:87) retornam `reply.status(404).send()` com body vazio quando o recurso não é encontrado. O OpenAPI spec declara `ProblemDetails404` para esses endpoints. O response deveria ser um ProblemDetails completo com `type`, `title`, `status`, `detail` e `extensions.correlationId` conforme RFC 9457.
+
+### Impacto
+
+- Clientes da API recebem 404 sem body, impossibilitando tratamento programático do erro (sem `type` para categorizar)
+- Contratos OpenAPI estão inconsistentes com a implementação real — ferramentas de geração de código (frontend) esperam `ProblemDetails` no body
+- Auditoria e debugging prejudicados — sem `correlationId` no response, rastrear a causa no backend exige cruzamento manual de logs
+
+### Opções
+
+**Opção A — Lançar DomainError.NotFound no use case:**
+O use case lança uma exceção tipada `DomainError.NotFound(entity, id, correlationId)`. O error-handler global do Fastify (já existente) serializa automaticamente para RFC 9457 ProblemDetails.
+
+- Prós: Padrão DDD; centraliza formatação de erros; consistente com POST/PUT que já usam DomainError; zero lógica de formatação nas routes
+- Contras: Nenhum relevante — o error-handler já suporta esse pattern
+
+**Opção B — Formatar ProblemDetails diretamente na route:**
+A route constrói o objeto ProblemDetails manualmente: `reply.status(404).send({ type: "/problems/not-found", title: "Not Found", ... })`.
+
+- Prós: Explícito; não depende de infra de exceções
+- Contras: Duplicação de lógica de formatação em cada route; diverge do padrão usado nos outros endpoints; risco de inconsistência no formato
+
+**Opção C — Middleware Fastify de not-found automático:**
+Criar um plugin Fastify `setNotFoundHandler` que intercepta qualquer 404 e injeta ProblemDetails.
+
+- Prós: Captura inclusive 404 de rotas inexistentes
+- Contras: Não tem acesso ao contexto de domínio (entity, id); genérico demais para erros de negócio; difícil propagar correlationId corretamente
+
+### Recomendação
+
+Opção A — lançar `DomainError.NotFound` no use case. É o padrão já adotado nos demais endpoints do Foundation (create, update) e garante formatação consistente via error-handler centralizado.
+
+### Ação Sugerida
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| Edição direta routes | Substituir `reply.status(404).send()` por `throw DomainError.NotFound(entity, id, correlationId)` nos use cases de users e roles | Imediato |
+
+---
+
+## PENDENTE-014 — DELETE endpoints sem correlationId quebrando audit trail
+
+- **status:** ABERTA
+- **severidade:** ALTA
+- **domínio:** API
+- **tipo:** BUG
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **modulo:** MOD-000
+- **rastreia_para:** FR-013, DOC-ARC-003
+- **tags:** correlation-id, audit-trail, presentation
+- **sla_data:** —
+- **dependencias:** []
+
+### Questão
+
+`DELETE /roles/:id` (roles.route.ts:143-154) e `DELETE /tenants/:tenantId/users/:userId` (tenants.route.ts:190-205) não extraem `x-correlation-id` do header e não propagam para use cases/repos. Isso quebra a cadeia de rastreabilidade E2E (DOC-ARC-003). Os demais endpoints mutantes (POST, PUT) já fazem a extração corretamente via `request.headers['x-correlation-id']`.
+
+### Impacto
+
+- Eventos de domínio emitidos pelo DELETE (`role.deleted`, `tenant_user.removed`) ficam sem `correlation_id`, impossibilitando rastreamento E2E
+- Auditoria (`domain_events`) não consegue correlacionar a exclusão com a requisição HTTP original
+- Gate CI DOC-ARC-003 pode falhar na validação de rastreabilidade em ciclos futuros de validate-all
+
+### Opções
+
+**Opção A — Extrair correlationId na route e passar ao use case:**
+Mesmo padrão dos endpoints POST/PUT existentes: `const correlationId = request.headers['x-correlation-id']` e passa como parâmetro ao use case.
+
+- Prós: Consistente com padrão existente; mudança localizada (2 arquivos); sem dependências extras
+- Contras: Nenhum relevante
+
+**Opção B — Middleware Fastify de extração automática:**
+Criar um hook `onRequest` que injeta `request.correlationId` em todas as requisições automaticamente.
+
+- Prós: Centralizado; novas routes herdam automaticamente
+- Contras: Overhead para implementar agora; requer refactoring dos endpoints existentes que já extraem manualmente; mudança de maior escopo
+
+### Recomendação
+
+Opção A — extrair diretamente na route. É a correção mínima e consistente com o padrão já existente. A centralização via middleware (Opção B) pode ser feita como melhoria futura sem bloquear esta correção.
+
+### Ação Sugerida
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| Edição direta routes | Adicionar extração de `x-correlation-id` nos handlers DELETE de roles.route.ts e tenants.route.ts | Imediato |
+
+---
+
+## PENDENTE-015 — Idempotency-Key ausente do OpenAPI spec
+
+- **status:** ABERTA
+- **severidade:** MEDIA
+- **domínio:** API
+- **tipo:** LACUNA
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **modulo:** MOD-000
+- **rastreia_para:** FR-001, FR-006, DOC-UX-010
+- **tags:** idempotency, openapi, headers
+- **sla_data:** —
+- **dependencias:** []
+
+### Questão
+
+O OpenAPI spec `v1.yaml` não documenta o header `Idempotency-Key` em nenhum endpoint de escrita (POST/PUT). O header está definido e usado no código (`common.dto.ts`, login use case), mas falta a declaração em `components/parameters` do spec e a referência nos paths relevantes (POST /auth/login, POST /users, POST /roles, etc.). Clientes gerados automaticamente não incluem o header, perdendo a proteção contra duplicação.
+
+### Impacto
+
+- Clientes SDK gerados a partir do spec não enviam `Idempotency-Key`, perdendo proteção contra requests duplicados
+- Documentação da API incompleta — desenvolvedores de integrações não sabem que o header existe
+- Validação EX-OAS-001 reporta divergência entre implementação e spec
+
+### Opções
+
+**Opção A — Declarar como parameter reutilizável em components:**
+Criar `components/parameters/IdempotencyKey` com `in: header`, `required: false`, `schema: { type: string, format: uuid }` e referenciar em todos os endpoints POST/PUT.
+
+- Prós: DRY; um ponto de definição; geração de código automática inclui o header; alinhado com padrão OpenAPI
+- Contras: Nenhum relevante
+
+**Opção B — Declarar inline em cada endpoint:**
+Adicionar o parameter diretamente em cada path POST/PUT.
+
+- Prós: Explícito por endpoint
+- Contras: Duplicação massiva (10+ endpoints); difícil manter consistência; diverge do padrão já usado para `X-Correlation-ID`
+
+### Recomendação
+
+Opção A — declarar em `components/parameters` e referenciar via `$ref`. Consistente com o padrão já usado para `X-Correlation-ID` no mesmo spec.
+
+### Ação Sugerida
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| Edição v1.yaml | Adicionar `components.parameters.IdempotencyKey` e `$ref` em endpoints POST/PUT | Próximo ciclo |
+
+---
+
+## PENDENTE-016 — OpenAPI spec: 12 success responses sem body schema
+
+- **status:** ABERTA
+- **severidade:** MEDIA
+- **domínio:** API
+- **tipo:** LACUNA
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **modulo:** MOD-000
+- **rastreia_para:** EX-OAS-001
+- **tags:** openapi, schemas, code-generation
+- **sla_data:** —
+- **dependencias:** []
+
+### Questão
+
+12 de 29 success responses no OpenAPI spec não definem body schema. Endpoints afetados: roles CRUD completo (GET list, GET by id, POST, PUT, DELETE), tenants CRUD (GET list, GET by id, POST, PUT), tenant-users CRUD (POST, DELETE), change-password (200) e reset-password (200). O code-gen frontend não consegue gerar tipos para esses responses.
+
+### Impacto
+
+- Geração de tipos TypeScript no frontend falha para 12 endpoints — desenvolvedores precisam tipar manualmente
+- Contratos de API incompletos — não há garantia formal do formato de retorno
+- Ferramentas de mock (MSW, Prism) não conseguem gerar mocks realistas para esses endpoints
+- Validação EX-OAS-001 reporta 12 violações
+
+### Opções
+
+**Opção A — Adicionar schemas completos com $ref a components:**
+Definir schemas reutilizáveis (`RoleResponse`, `TenantResponse`, `TenantUserResponse`, etc.) em `components/schemas` e referenciar nos responses.
+
+- Prós: DRY; fonte única de verdade; code-gen completo; mocks automáticos
+- Contras: Trabalho significativo (12 schemas); precisa alinhar com DTOs do código
+
+**Opção B — Schema inline mínimo por endpoint:**
+Adicionar `content.application/json.schema` inline em cada response, apenas com os campos essenciais.
+
+- Prós: Rápido de implementar
+- Contras: Duplicação; sem reutilização; difícil manter sincronizado com o código
+
+**Opção C — Postergar e gerar schemas a partir dos DTOs do código:**
+Usar uma ferramenta (zod-to-openapi ou similar) para gerar os schemas automaticamente a partir dos Zod schemas existentes no código.
+
+- Prós: Fonte única de verdade no código; zero drift entre spec e implementação
+- Contras: Requer setup de tooling; DTOs existentes podem não cobrir todos os campos do response
+
+### Recomendação
+
+Opção A — schemas em `components/schemas`. Os DTOs no código já definem a estrutura; basta espelhar. A Opção C é ideal a longo prazo mas requer setup que não justifica bloquear esta correção.
+
+### Ação Sugerida
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| Edição v1.yaml | Criar schemas em `components/schemas` e referenciar nos 12 responses | Próximo ciclo |
+
+---
+
+## PENDENTE-017 — Testes unitários e de integração ausentes
+
+- **status:** ABERTA
+- **severidade:** ALTA
+- **domínio:** CODE
+- **tipo:** LACUNA
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **modulo:** MOD-000
+- **rastreia_para:** DOC-GNP-00
+- **tags:** tests, quality, ci
+- **sla_data:** —
+- **dependencias:** []
+
+### Questão
+
+Nenhum arquivo de teste encontrado para API (`apps/api/test/`) nem Web (`apps/web/src/**/__tests__/`). Os 69 arquivos gerados nas 6 camadas (routes, use cases, repos, schemas, hooks, pages) não possuem cobertura de testes. Sem testes, alterações futuras (bug fixes, refactorings) não têm rede de segurança.
+
+### Impacto
+
+- Zero cobertura de testes — qualquer mudança pode introduzir regressões silenciosas
+- CI pipeline não valida lógica de negócio (apenas lint e type-check)
+- Use cases críticos (login, refresh token rotation, RBAC check) não estão cobertos
+- Endpoints de API sem testes de contrato — divergências entre spec e implementação passam despercebidas
+- Hooks de auth no frontend sem testes — erros de autenticação podem travar a UX
+
+### Opções
+
+**Opção A — Testes por prioridade (críticos primeiro):**
+Começar pelos use cases mais críticos: login, refresh, RBAC, error-handler. Depois expandir para routes, repos e hooks frontend. Usar Vitest para ambos API e Web.
+
+- Prós: Cobre os cenários de maior risco primeiro; entregável incremental; rápido retorno de valor
+- Contras: Cobertura parcial no curto prazo
+
+**Opção B — Cobertura completa em batch:**
+Gerar testes para todos os 69 arquivos de uma vez via codegen-agent, com meta de 80%+ de cobertura.
+
+- Prós: Cobertura abrangente de uma vez
+- Contras: Volume alto de código gerado; risco de testes frágeis/superficiais; ciclo de review longo
+
+**Opção C — Apenas testes de contrato (API) + smoke tests (Web):**
+Testes de contrato OpenAPI para os endpoints (validando req/res contra o spec) e smoke tests mínimos para as páginas do frontend.
+
+- Prós: Detecta divergências spec/implementação; rápido de implementar
+- Contras: Não cobre lógica de negócio interna; use cases sem validação
+
+### Recomendação
+
+Opção A — priorizar use cases críticos. O login flow, refresh token rotation e RBAC são os caminhos de maior risco. Após cobertura desses, expandir incrementalmente. A Opção C pode complementar como camada adicional.
+
+### Ação Sugerida
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| Geração de testes | Criar testes Vitest para: login use case, refresh use case, RBAC middleware, error-handler, auth hooks | Próximo ciclo de codegen |
+| Testes de contrato | Validar endpoints contra OpenAPI spec com Prism ou similar | Após PENDENTE-016 (schemas completos) |
+
+---
+
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-22
-- **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F02, US-MOD-000-F03, US-MOD-000-F04, US-MOD-000-F05, US-MOD-000-F09, US-MOD-000-F16, FR-000, FR-017, BR-013, SEC-000, SEC-002, INT-000, DATA-000, DOC-FND-000, UX-000, DOC-UX-010
-- **referencias_exemplos:** PKG-DEV-001 §12 (checagens mínimas AGN-DEV-11), DOC-FND-000 §2.1-§2.2 (scopes canônicos), DOC-ARC-003B (Gate 3), screen-manifest.v1.schema.json
-- **evidencias:** PENDENTE-001 a 004: lacunas de enriquecimento pilares (2026-03-15). PENDENTE-005: divergência BR-013 vs FR-017 (status code). PENDENTE-006/007: findings AGN-DEV-11 validação cruzada (2026-03-17). PENDENTE-008 a 011: findings validate-all Fase 3 — screen manifests (2026-03-20).
+- **data_ultima_revisao:** 2026-03-23
+- **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F02, US-MOD-000-F03, US-MOD-000-F04, US-MOD-000-F05, US-MOD-000-F09, US-MOD-000-F16, FR-000, FR-013, FR-017, BR-013, SEC-000, SEC-002, INT-000, DATA-000, DOC-FND-000, DOC-ARC-003, UX-000, DOC-UX-010, EX-OAS-001
+- **referencias_exemplos:** PKG-DEV-001 §12 (checagens mínimas AGN-DEV-11), DOC-FND-000 §2.1-§2.2 (scopes canônicos), DOC-ARC-003B (Gate 3), screen-manifest.v1.schema.json, PKG-COD-001 §4 (AGN-COD-VAL checklist)
+- **evidencias:** PENDENTE-001 a 004: lacunas de enriquecimento pilares (2026-03-15). PENDENTE-005: divergência BR-013 vs FR-017 (status code). PENDENTE-006/007: findings AGN-DEV-11 validação cruzada (2026-03-17). PENDENTE-008 a 011: findings validate-all Fase 3 — screen manifests (2026-03-20). PENDENTE-013 a 017: findings AGN-COD-VAL codegen (2026-03-23).

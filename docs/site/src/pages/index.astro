@@ -1,0 +1,59 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ModuleCard from "../components/ModuleCard.tsx";
+import { loadAllModules } from "../lib/parse-modules";
+import { computeStats } from "../lib/types";
+
+const modules = loadAllModules();
+const stats = computeStats(modules);
+---
+
+<Layout title="Visao Geral" active="overview">
+  <h1 class="page-title">Visao Geral</h1>
+  <p class="page-subtitle">
+    Estado consolidado de {modules.length} modulos — dados lidos de
+    <code>docs/04_modules/</code>
+  </p>
+
+  <!-- Stats -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--ready)">{stats.ready}</div>
+      <div class="stat-label">Modulos READY</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--draft)">{stats.draft}</div>
+      <div class="stat-label">Modulos DRAFT</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--approved)">{stats.features}</div>
+      <div class="stat-label">Features READY</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--sev-alta)">{stats.pendentes}</div>
+      <div class="stat-label">Pendencias</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--ready)">{stats.resolved}</div>
+      <div class="stat-label">Resolvidas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--accent)">{stats.codegen}</div>
+      <div class="stat-label">Aguardando Codegen</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--draft)">{stats.promote}</div>
+      <div class="stat-label">Aguardando Promocao</div>
+    </div>
+  </div>
+
+  <!-- Module grid -->
+  <div class="section">
+    <div class="card-header">Modulos</div>
+    <div class="module-grid">
+      {modules.map((mod) => (
+        <ModuleCard mod={mod} client:load />
+      ))}
+    </div>
+  </div>
+</Layout>

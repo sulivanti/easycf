@@ -1,0 +1,118 @@
+---
+interface Props {
+  title: string;
+  active: string;
+}
+
+const { title, active } = Astro.props;
+
+const navLinks = [
+  { href: "/", label: "Visao Geral", id: "overview", icon: "grid" },
+  { href: "/pipeline", label: "Pipeline", id: "pipeline", icon: "layers" },
+  { href: "/user-stories", label: "User Stories", id: "us", icon: "file-text" },
+  { href: "/pendentes", label: "Pendencias", id: "pendentes", icon: "alert" },
+  { href: "/artefatos", label: "Artefatos", id: "artefatos", icon: "package" },
+];
+
+const icons: Record<string, string> = {
+  grid: `<path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/>`,
+  layers: `<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>`,
+  "file-text": `<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>`,
+  alert: `<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>`,
+  clipboard: `<path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>`,
+  package: `<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>`,
+  sun: `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`,
+  moon: `<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>`,
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} — ECF Command Center</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>⚡</text></svg>" />
+    <script is:inline>
+      (function() {
+        var t = localStorage.getItem('ecf-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="logo">E</div>
+          <div>
+            <div>ECF</div>
+            <div class="brand-sub">Command Center</div>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          {navLinks.map((link) => (
+            <a href={link.href} class={`sidebar-link ${active === link.id ? "active" : ""}`}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={icons[link.icon]} />
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        <div class="sidebar-footer">
+          <button class="theme-toggle" id="theme-toggle" type="button">
+            <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icons.sun} />
+            <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none" set:html={icons.moon} />
+            <span id="theme-label">Tema Escuro</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main-content">
+        <slot />
+
+        <footer class="footer">
+          ECF Command Center v0.2.0 — Dados lidos de <code>docs/</code> em build time
+        </footer>
+      </main>
+    </div>
+
+    <script is:inline>
+      (function() {
+        var btn = document.getElementById('theme-toggle');
+        var label = document.getElementById('theme-label');
+        var iconSun = document.getElementById('icon-sun');
+        var iconMoon = document.getElementById('icon-moon');
+
+        function applyTheme(theme) {
+          document.documentElement.setAttribute('data-theme', theme);
+          localStorage.setItem('ecf-theme', theme);
+          if (theme === 'dark') {
+            label.textContent = 'Tema Claro';
+            iconSun.style.display = 'none';
+            iconMoon.style.display = '';
+          } else {
+            label.textContent = 'Tema Escuro';
+            iconSun.style.display = '';
+            iconMoon.style.display = 'none';
+          }
+        }
+
+        var current = document.documentElement.getAttribute('data-theme') || 'light';
+        applyTheme(current);
+
+        btn.addEventListener('click', function() {
+          var cur = document.documentElement.getAttribute('data-theme');
+          applyTheme(cur === 'dark' ? 'light' : 'dark');
+        });
+      })();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/global.css";
+</style>

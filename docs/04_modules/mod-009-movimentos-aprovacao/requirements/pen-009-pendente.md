@@ -172,9 +172,9 @@ Total: 7 | Abertas: 0 | Decididas: 0 | Implementadas: 7 | Bloqueantes: 0
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-009, FR-009, INT-009, SEC-009, DATA-009, NFR-009, UX-009, DATA-003
 - **referencias_exemplos:** N/A
 - **evidencias:** N/A

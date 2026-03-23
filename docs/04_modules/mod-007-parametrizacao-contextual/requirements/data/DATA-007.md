@@ -11,9 +11,9 @@
 
 # DATA-007 — Modelo de Dados da Parametrização Contextual e Rotinas
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-20
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-007, US-MOD-007-F01, US-MOD-007-F02, US-MOD-007-F03, BR-007, BR-013, FR-007, SEC-007, DATA-003
 - **referencias_exemplos:** EX-DEV-001 (Envelope DATA)
 - **evidencias:** N/A

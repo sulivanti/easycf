@@ -13,10 +13,10 @@
 # MOD-007 — Parametrização Contextual e Rotinas
 
 - **id:** MOD-007
-- **version:** 0.4.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-20
+- **data_ultima_revisao:** 2026-03-23
 - **architecture_level:** 2
 - **rastreia_para:** US-MOD-007, US-MOD-007-F01, US-MOD-007-F02, US-MOD-007-F03, US-MOD-007-F04, US-MOD-007-F05, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, DOC-FND-000, MOD-000, MOD-003, MOD-004, MOD-005, MOD-006
 - **referencias_exemplos:** EX-ESC-001 (Score de Nível), EX-DEV-001 (Envelope MOD)

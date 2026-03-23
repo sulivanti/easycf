@@ -6,10 +6,10 @@
 # MOD-011 — SmartGrid: Componente de Grade com Edição em Massa
 
 - **id:** MOD-011
-- **version:** 0.14.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-011, US-MOD-011-F01, US-MOD-011-F02, US-MOD-011-F03, US-MOD-011-F04, US-MOD-011-F05, DOC-DEV-001, DOC-ESC-001, DOC-ARC-003, DOC-FND-000, MOD-000, MOD-007
 - **evidencias:** N/A
 

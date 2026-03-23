@@ -97,9 +97,9 @@ O MOD-001 é **UX-First**: não emite domain events no backend (essa responsabil
 | `duration_ms` | int | NÃO | Preenchido em succeeded/failed |
 | `problem_type` | text | NÃO | Derivado de RFC 9457 em failed |
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-001-F01, US-MOD-001-F02, US-MOD-001-F03, FR-005, FR-006, FR-007, BR-001, BR-002, BR-006, BR-009, BR-010, SEC-002, DOC-ARC-003, DOC-FND-000, INT-006, PEN-001-003
 - **referencias_exemplos:** EX-CI-007
 - **evidencias:** N/A

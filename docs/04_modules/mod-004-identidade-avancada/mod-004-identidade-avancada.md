@@ -6,10 +6,10 @@
 # MOD-004 — Identidade Avançada
 
 - **id:** MOD-004
-- **version:** 0.3.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-004, US-MOD-004-F01, US-MOD-004-F02, US-MOD-004-F03, US-MOD-004-F04, DOC-DEV-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-FND-000, US-MOD-000-F06, US-MOD-000-F09, US-MOD-003, LGPD-BASE-001
 - **evidencias:** N/A
 

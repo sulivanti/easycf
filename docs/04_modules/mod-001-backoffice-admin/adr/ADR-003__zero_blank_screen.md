@@ -52,9 +52,9 @@ Permanente — princípio de UX do módulo. O valor de 3s pode ser revisado via 
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-001-F03, BR-009, BR-010, FR-005, NFR-001, UX-001, DATA-003, SEC-001
 - **referencias_exemplos:** EX-CI-007
 - **evidencias:** N/A

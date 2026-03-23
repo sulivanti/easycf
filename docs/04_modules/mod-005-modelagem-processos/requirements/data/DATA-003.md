@@ -139,9 +139,9 @@
 3. `sensitivity_level = 0` em todos os eventos MOD-005 — operações administrativas sem dados sensíveis
 4. Fork (`process.cycle_forked`) gera `causation_id` apontando para o evento de publicação original quando aplicável
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-005, US-MOD-005-F01, US-MOD-005-F02, BR-005, SEC-002, SEC-005, DOC-ARC-003, DOC-FND-000, INT-005
 - **referencias_exemplos:** EX-DATA-003
 - **evidencias:** N/A

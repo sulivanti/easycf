@@ -45,9 +45,9 @@ O MOD-001 **NÃO DEVE** criar tabelas, schemas ou entidades próprias. Toda a pe
 | Estado de loading (skeleton) | Derivado de auth_me pending | Dashboard, Shell | Skeleton exibido; timeout 3s → erro parcial (BR-009) |
 | Estado de erro (5xx) | Derivado de auth_me error | Dashboard | Toast + retry sem desconexão (BR-010); 401 → redirect /login |
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-001, FR-001, FR-005, MOD-000, BR-005, BR-008, BR-009, BR-010, DOC-FND-000
 - **referencias_exemplos:** EX-CI-005, EX-CI-007
 - **evidencias:** N/A

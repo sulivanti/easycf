@@ -11,10 +11,10 @@
 # MOD-001 — Backoffice Admin (UX-First Shell)
 
 - **id:** MOD-001
-- **version:** 0.10.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-001, US-MOD-001-F01, US-MOD-001-F02, US-MOD-001-F03, DOC-DEV-001, DOC-ESC-001, DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-ARC-003, DOC-FND-000, MOD-000
 - **evidencias:** N/A
 

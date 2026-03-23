@@ -19,9 +19,9 @@
 
 # PEN-002 — Questões Abertas do MOD-002 (Gestão de Usuários)
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-002, US-MOD-002-F03, FR-003, INT-001, DATA-003, SEC-002, UX-001, MOD-000, US-MOD-000-F05, BR-004, ADR-002
 - **referencias_exemplos:** EX-CI-007
 - **evidencias:** Pendência documentada em US-MOD-002-F03 §1, épico §10, FR-003 (seção Amendment Obrigatório). Migrada para formato enriquecido por AGN-DEV-11. Batch 4 (AGN-DEV-10): 2 novas pendências adicionadas — cooldown cross-tab e copy centralizada.

@@ -245,9 +245,9 @@ erDiagram
 - **RLS:** Cada tabela DEVE ter policy `tenant_id = current_setting('app.tenant_id')::uuid`
 - **Rollback:** Todas as migrações DEVEM ter `down()` que reverte sem perda de dados em outras tabelas
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-004, US-MOD-004-F01, US-MOD-004-F02, FR-001, BR-001, BR-001.2, BR-001.3, BR-001.4, BR-001.5, BR-001.6, BR-001.7, BR-001.8, BR-001.9, BR-001.10, BR-001.11, BR-001.12, SEC-001, SEC-002, INT-001
 - **referencias_exemplos:** EX-DB-001 (padrão de campos obrigatórios), EX-NAME-001 (naming convention)
 - **evidencias:** N/A

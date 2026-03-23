@@ -62,9 +62,9 @@ Fluxo:
 
 **ACEITA** — Padrão Nível 2 mandatório (DOC-ESC-001 §3.6, DOC-DEV-001 DATA-012)
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-004, DATA-003, INT-001.2, NFR-001, SEC-001, DOC-ESC-001, DOC-DEV-001
 - **referencias_exemplos:** EX-IDEMP-001 (idempotência), EX-RES-001 (resiliência)
 - **evidencias:** DATA-003 v0.2.0 (9 eventos catalogados), INT-001.2 (BullMQ Worker)

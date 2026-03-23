@@ -341,9 +341,9 @@ WHERE current_stage_id = :stage_id
   AND status IN ('ACTIVE', 'PENDING');
 ```
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-005, US-MOD-005-F01, US-MOD-005-F02, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, BR-005, BR-006, BR-012, SEC-002, SEC-005, DATA-003
 - **referencias_exemplos:** EX-DATA-001
 - **evidencias:** N/A

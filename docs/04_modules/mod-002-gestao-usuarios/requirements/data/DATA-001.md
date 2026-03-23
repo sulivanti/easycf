@@ -143,9 +143,9 @@ O view-model transforma DTOs em dados prontos para renderizacao (DOC-ESC-001 §6
 - **SEC-001 §3:** Classificacao de dados e sensitivity levels
 - **DOC-FND-000 §2:** Anti-duplicacao de entidades Foundation
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-002, US-MOD-002-F01, US-MOD-002-F02, US-MOD-002-F03, FR-001, FR-002, FR-003, BR-001, BR-002, BR-003, BR-005, INT-001, SEC-001, DATA-003, DOC-FND-000
 - **referencias_exemplos:** EX-TRACE-001, EX-DATA-001
 - **evidencias:** Modelo de dados consumidos documentado com 6 endpoints, 4 DTOs, 1 view-model. Regras PII/LGPD formalizadas. Cache strategy definida. Anti-duplicacao Foundation respeitada.

@@ -367,7 +367,7 @@ Opção B — `target_stage_id` obrigatório no body de REOPENED. É a opção m
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-006, BR-006, FR-006, SEC-006, DATA-006, NFR-006, INT-006, ADR-005, MOD-004, MOD-000

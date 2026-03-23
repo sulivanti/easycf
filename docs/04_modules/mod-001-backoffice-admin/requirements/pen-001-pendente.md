@@ -239,9 +239,9 @@ Opcao B — manter MFA como roadmap futuro conforme mod.md, mas implementar fall
 
 > **Nota de governanca:** Todos os PENDENTEs devem ser resolvidos antes de promover o modulo para `estado_item: READY`. Resolucao = tomar a decisao, incorporar no requisito afetado e atualizar status para RESOLVIDO.
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-001, FR-001, FR-004, FR-005, UX-001, BR-005, NFR-001, DOC-FND-000, ADR-003
 - **referencias_exemplos:** EX-CI-007
 - **evidencias:** N/A

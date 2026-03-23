@@ -53,9 +53,9 @@ Permanente — enquanto o MOD-001 operar com contextos pré e pós-autenticaçã
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-001-F02, BR-006, DATA-003, SEC-001, SEC-002, DOC-ARC-003
 - **referencias_exemplos:** EX-CI-007
 - **evidencias:** N/A

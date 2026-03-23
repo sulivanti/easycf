@@ -60,9 +60,9 @@ Se algum escopo corresponder, retorna 422: "Delegações não podem incluir esco
 
 **ACEITA** — Derivada de BR-001.4 (regra inegociável) + alinhamento com padrão Nível 2
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-004, US-MOD-004-F02, BR-001.4, FR-001.3, DATA-001, SEC-001, NFR-001.7
 - **referencias_exemplos:** N/A
 - **evidencias:** BR-001.4 (regra inegociável), FR-001.3 (Gherkin cenário "Rejeitar escopo de aprovação")

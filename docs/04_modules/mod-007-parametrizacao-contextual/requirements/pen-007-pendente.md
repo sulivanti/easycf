@@ -18,9 +18,9 @@
 
 # PEN-007 — Questões Abertas da Parametrização Contextual e Rotinas
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-22
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-007, BR-007, FR-007, INT-007, DATA-007, SEC-007, NFR-007, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005, ADR-006
 
 ---

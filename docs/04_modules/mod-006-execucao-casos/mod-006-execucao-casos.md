@@ -6,10 +6,10 @@
 # MOD-006 — Execução de Casos
 
 - **id:** MOD-006
-- **version:** 0.2.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **architecture_level:** 2
 - **rastreia_para:** US-MOD-006, US-MOD-006-F01, US-MOD-006-F02, US-MOD-006-F03, US-MOD-006-F04, DOC-DEV-001, DOC-ESC-001, DOC-ARC-001, DOC-ARC-003, DOC-FND-000, MOD-000, MOD-003, MOD-004, MOD-005
 - **referencias_exemplos:** EX-ESC-001

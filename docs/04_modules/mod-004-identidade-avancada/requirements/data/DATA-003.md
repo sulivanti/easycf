@@ -197,9 +197,9 @@ Todos os eventos seguem o schema padrão da tabela `domain_events`:
 - `(tenant_id, entity_type, entity_id, created_at DESC)`
 - `(tenant_id, event_type, created_at DESC)`
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-004, US-MOD-004-F01, US-MOD-004-F02, FR-001, BR-001, DATA-001, SEC-001, SEC-002, DOC-ARC-003, DOC-FND-000
 - **referencias_exemplos:** EX-TRACE-001 (rastreabilidade domain events)
 - **evidencias:** N/A

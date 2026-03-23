@@ -53,9 +53,9 @@ Permanente (não sujeita a timebox de 90 dias, pois é decisão estrutural do m�
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-001, MOD-001, DOC-ESC-001
 - **referencias_exemplos:** EX-CI-007
 - **evidencias:** N/A

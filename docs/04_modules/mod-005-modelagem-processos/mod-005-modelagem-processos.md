@@ -6,10 +6,10 @@
 # MOD-005 — Modelagem de Processos (Blueprint)
 
 - **id:** MOD-005
-- **version:** 0.17.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-005, US-MOD-005-F01, US-MOD-005-F02, US-MOD-005-F03, US-MOD-005-F04, DOC-DEV-001, DOC-ESC-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-FND-000, MOD-000, MOD-003, MOD-004
 - **evidencias:** N/A
 

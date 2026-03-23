@@ -59,9 +59,9 @@ O service verifica:
 
 **ACEITA** — Decisão técnica 2026-03-15 (US-MOD-004 v1.1.0, Marcos Sulivan)
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-004, BR-001.7, FR-001.2, DATA-001, SEC-001
 - **referencias_exemplos:** N/A
 - **evidencias:** US-MOD-004 CHANGELOG v1.1.0 (2026-03-16)

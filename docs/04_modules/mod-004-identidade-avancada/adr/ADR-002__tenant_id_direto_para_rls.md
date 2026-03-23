@@ -52,9 +52,9 @@ O valor é preenchido no momento da criação a partir do contexto de autentica�
 
 **ACEITA** — Derivada de DOC-DEV-001 (campo obrigatório B2B) + decisão de performance do AGN-DEV-04
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-004, DATA-001, SEC-001, DOC-DEV-001
 - **referencias_exemplos:** EX-DB-001 (campos obrigatórios)
 - **evidencias:** DATA-001 v0.2.0 (AGN-DEV-04)

@@ -6,10 +6,10 @@
 # MOD-009 — Movimentos sob Aprovação (Aprovações e Alçadas)
 
 - **id:** MOD-009
-- **version:** 0.5.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **architecture_level:** 2
 - **rastreia_para:** US-MOD-009, US-MOD-009-F01, US-MOD-009-F02, US-MOD-009-F03, US-MOD-009-F04, US-MOD-009-F05, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, DOC-FND-000, MOD-000, MOD-004, MOD-006
 - **referencias_exemplos:** EX-ESC-001

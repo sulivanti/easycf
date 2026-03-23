@@ -6,10 +6,10 @@
 # MOD-002 — Gestão de Usuários (Backoffice)
 
 - **id:** MOD-002
-- **version:** 0.4.0
-- **estado_item:** DRAFT
+- **version:** 1.0.0
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **architecture_level:** 1
 - **rastreia_para:** US-MOD-002, US-MOD-002-F01, US-MOD-002-F02, US-MOD-002-F03, DOC-DEV-001, DOC-ESC-001, DOC-ARC-003, DOC-FND-000, DOC-UX-010, DOC-UX-012, MOD-000, US-MOD-000-F05, US-MOD-000-F06, SEC-000-01, LGPD-BASE-001
 - **referencias_exemplos:** EX-CI-006, EX-CI-007

@@ -317,9 +317,9 @@
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-009, DOC-ARC-003, DOC-FND-000, FR-009, SEC-009, INT-009
 - **referencias_exemplos:** N/A
 - **evidencias:** N/A

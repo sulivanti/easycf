@@ -23,12 +23,12 @@ flowchart TD
     style E1  fill:#27AE60,color:#fff,stroke:#1E8449
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E4  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E5  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E4  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
-*O módulo está na **Etapa 4** — stubs gerados em DRAFT, desenvolvimento em ritmo acelerado.*
+*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
 
 ---
 
@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Épico + features já READY. Ciclo de estabilidade avança para Etapa 5. |
 | 0.3.0 | 2026-03-17 | AGN-DEV-01/02/03 | Batch 1: AGN-DEV-01 re-validou MOD (sem lacunas). AGN-DEV-02 corrigiu rastreabilidade BR-003→FR-002 e BR-004→FR-003. AGN-DEV-03 adicionou campos idempotency/timeline explícitos em FR-001/002/003. |
 | 0.2.0 | 2026-03-17 | AGN-DEV-01 | Enriquecimento MOD/Escala: score DOC-ESC-001 §4.2 (2 pts → N1), personas com scopes, OKRs do épico, premissas/restrições, matriz MUST/SHOULD N1, checklist PR N1 Web, estrutura de pastas DOC-ESC-001 §6.3. |
 | 0.1.0 | 2026-03-17 | arquitetura | Baseline Inicial — scaffold gerado via `forge-module` a partir de US-MOD-002 (READY). Módulo UX-First: consome MOD-000-F05 (Users API) e F06 (Roles API). Stubs obrigatórios criados: DATA-003, SEC-002. Todos os itens nascem em `estado_item: DRAFT`. |

@@ -23,12 +23,12 @@ flowchart TD
     style E1  fill:#27AE60,color:#fff,stroke:#1E8449
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E4  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E5  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E4  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
-*O módulo está na **Etapa 4** — enriquecimento em andamento (Batch 1: MOD, BR, FR concluídos; Batch 2: DATA, INT, NFR concluídos; Batch 3: SEC, UX concluídos; Batch 4: ADR, PENDENTE, VAL concluídos).*
+*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
 
 ---
 
@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |
 | 0.14.0 | 2026-03-19 | arquitetura | Pipeline PEND-SGR-04 (DECIDIDA → IMPLEMENTADA): campo `target_endpoints` no context_framer tipo OPERACAO. DATA-011 v0.3.0 (§6 — schema target_endpoints), INT-011 v0.3.0 (INT-003 — resolução via target_endpoints, MI-002 removida), PEN-011 v0.3.0 (PEND-SGR-04 IMPLEMENTADA). Backlog: amendment MOD-007. |
 | 0.13.0 | 2026-03-19 | arquitetura | Pipeline PEND-SGR-03 + PEND-SGR-05: NFR-011 atualizado com limite 200 linhas (MAX_GRID_ROWS=200, virtualização obrigatória) e concorrência configurável (env var SMARTGRID_CONCURRENCY default=10). Ambas pendências IMPLEMENTADAS. PEN-011 v0.4.0. |
 | 0.12.0 | 2026-03-19 | AGN-DEV-11 | Validação cruzada (Batch 4) — todos os checks passed: rastreabilidade, cobertura F01-F05, consistência DATA-003/SEC-002, mapeamento UX/ações. 1 warning menor (ref BR-006 em SEC-011 SEC-001). 3 questões abertas documentadas (PEND-SGR-03/04/05). |

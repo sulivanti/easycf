@@ -124,9 +124,9 @@
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-006, US-MOD-006-F01, US-MOD-006-F02, BR-006, FR-006, SEC-002, DOC-ARC-003, DOC-FND-000, INT-006
 - **referencias_exemplos:** EX-DATA-003
 - **evidencias:** N/A

@@ -307,9 +307,9 @@ PENDING ──► WAIVED (dispensa — BR-014)
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-006, US-MOD-006-F01, US-MOD-006-F02, BR-006, FR-006, DOC-ARC-001, DOC-FND-000, MOD-005, MOD-004, MOD-003
 - **referencias_exemplos:** EX-DATA-001
 - **evidencias:** N/A

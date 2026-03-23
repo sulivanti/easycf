@@ -13,9 +13,9 @@
 
 # PEN-011 — Questões Abertas do SmartGrid
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-22
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-011, DOC-GPA-001, FR-011, NFR-011, INT-011, DATA-011
 - **referencias_exemplos:** N/A
 - **evidencias:** N/A

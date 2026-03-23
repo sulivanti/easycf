@@ -108,9 +108,9 @@ MOD-002 é exclusivamente frontend. **Não cria tabelas nem emite domain events 
 - **DOC-FND-000 §3:** Modelo canônico de SEC-002
 - **DOC-DEV-001 §4.2:** Formato obrigatório DATA-003
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-17
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-002, US-MOD-002-F01, US-MOD-002-F02, US-MOD-002-F03, FR-001, FR-002, FR-003, BR-002, BR-004, BR-005, DOC-ARC-003, DOC-FND-000, SEC-002
 - **referencias_exemplos:** EX-TRACE-001
 - **evidencias:** Catálogo completo per PKG-DEV-001 §5. 3 eventos catalogados. 3 eventos fora de escopo documentados. Payload policies LGPD-compliant (BR-002). Outbox documentado para convite e reenvio. Batch 2: DATA-001 criado, consistência cruzada BR/FR/INT/SEC confirmada.

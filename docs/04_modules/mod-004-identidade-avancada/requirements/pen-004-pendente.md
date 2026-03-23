@@ -15,9 +15,9 @@
 
 # PEN-004 — Questões Abertas da Identidade Avançada
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** MOD-004, SEC-001, DOC-FND-000, UX-001, INT-001
 
 ---

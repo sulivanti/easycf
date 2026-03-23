@@ -11,9 +11,9 @@
 
 # DATA-003 — Catalogo de Domain Events da Parametrizacao Contextual e Rotinas
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-20
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-007, US-MOD-007-F01, US-MOD-007-F02, US-MOD-007-F03, DOC-ARC-003, DOC-FND-000, SEC-002, SEC-007, FR-007, FR-009, FR-010, INT-007
 - **referencias_exemplos:** EX-DEV-001 (Envelope DATA-003)
 - **evidencias:** N/A

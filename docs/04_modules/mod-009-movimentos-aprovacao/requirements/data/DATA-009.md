@@ -245,9 +245,9 @@ erDiagram
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-009, FR-009, BR-009, SEC-009
 - **referencias_exemplos:** N/A
 - **evidencias:** N/A

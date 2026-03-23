@@ -28,7 +28,7 @@ flowchart TD
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
-*O módulo está na **Etapa 5** — enriquecimento completo (11 agentes), aguardando selo READY (promoção).*
+*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
 
 ---
 
@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Épico + features já READY. Ciclo de estabilidade avança para Etapa 5. |
 | 0.17.0 | 2026-03-17 | AGN-DEV-10 | Re-enriquecimento PENDENTE (enrich-agent) — 3 novas questoes abertas: Q7 (domain events update/delete), Q8 (DELETE process_roles), Q9 (ADR-002 status proposed). Total: 6 resolvidas + 3 abertas |
 | 0.16.0 | 2026-03-17 | AGN-DEV-09 | Re-enriquecimento ADR (enrich-agent) — ADR-003: Fork atomico via transacao unica com remapeamento de UUIDs (accepted). ADR-004: Optimistic locking via updated_at para edicao concorrente (accepted). Total: 4 ADRs |
 | 0.15.0 | 2026-03-17 | AGN-DEV-03 | Re-enriquecimento FR (enrich-agent) — Gherkin adicionado a FR-001..FR-011, dependências BR-011/BR-012 incorporadas em FR-004/FR-005/FR-006/FR-007, done funcional expandido com detalhes de codigo imutável, reordenação e query /flow |

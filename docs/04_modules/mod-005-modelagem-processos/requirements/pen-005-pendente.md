@@ -230,9 +230,9 @@ Opcao A --- aceitar formalmente. A decisao ja esta consolidada em todos os artef
 
 ---
 
-- **estado_item:** DRAFT
+- **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-005, INT-005, ADR-001, ADR-002, ADR-003, ADR-004, SEC-005, DATA-003, DATA-005, DOC-FND-000, DOC-ARC-003
 - **referencias_exemplos:** N/A
 - **evidencias:** N/A

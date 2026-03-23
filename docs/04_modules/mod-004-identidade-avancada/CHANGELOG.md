@@ -22,13 +22,13 @@ flowchart TD
 
     style E1  fill:#27AE60,color:#fff,stroke:#1E8449
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E3  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E4  fill:#95A5A6,color:#fff,stroke:#7F8C8D
-    style E5  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E3  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E4  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
-*O módulo está na **Etapa 3** — stubs gerados em DRAFT, aguardando enriquecimento.*
+*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
 
 ---
 
@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Épico + features já READY. Ciclo de estabilidade avança para Etapa 5. |
 | 0.9.0 | 2026-03-17 | AGN-DEV-08 | Enriquecimento NFR (enrich-agent) — SLOs detalhados (latência p95, cache), topologia sync+async, degradação por componente (4 cenários), health checks (4), idempotência por endpoint (5), métricas Prometheus (7), logs estruturados, traces OTel, DR (RPO=0/RTO≤15min), estratégia de testes Nível 2 com testes derivados de BRs (8 testes específicos), checklist PR DOC-ESC-001 §7.4, OKRs com teste de validação. Fixes: mod.md data_ultima_revisao→2026-03-17 (W2), BR-001 referencias_exemplos→EX-TRACE-001 (N1) |
 | 0.8.0 | 2026-03-17 | AGN-DEV-09 | Enriquecimento ADR (enrich-agent) — ADR-001: validação auto-autorização no service (não CHECK constraint), com alternativas avaliadas e mitigações. ADR-002: tenant_id direto para RLS, justificativa de performance vs duplicação. Índice adr-index atualizado no mod.md |
 | 0.7.0 | 2026-03-17 | AGN-DEV-07 | Enriquecimento UX (enrich-agent) — UX-001: tabelas de ações DOC-UX-010 (4 ações UX-IDN-001 + 11 ações UX-IDN-002) mapeadas para endpoints/event_types, telemetria UIActionEnvelope por screen (3+7 envelopes), acessibilidade (foco, teclado, ARIA), estados por painel (loading/empty/error/expired), tratamento de erros HTTP (5 status), estrutura 3 abas UX-IDN-002, segundo sequence diagram (delegação), pontos de auditoria |

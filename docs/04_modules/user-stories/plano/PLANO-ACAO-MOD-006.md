@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-006 Execucao de Casos
 
-> **Versao:** 3.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 4/4 APPROVED
+> **Versao:** 4.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.1.0) | **Epico:** READY (v0.9.0) | **Features:** 4/4 READY
 >
-> Fases 0-4 concluidas (promocao DRAFT→READY em 2026-03-23). Proximo passo: Fase 5 (Geracao de Codigo) — executar `/app-scaffold all` e depois `/codegen mod-006`.
+> Fases 0-5 concluidas. Codegen completo: 6 agentes executados, 46 arquivos gerados (DB 3, CORE 15, APP 19, API 2, WEB 7). Validacao cruzada PASS. Proximo passo: `/validate-all` pos-codigo (OpenAPI, Drizzle, Endpoints).
 
 ---
 
@@ -11,16 +11,16 @@
 
 | Item | Estado | Detalhe |
 |------|--------|---------|
-| Epico US-MOD-006 | APPROVED (v1.2.0) | DoR 9/9 completo, 4 features vinculadas, EP04. Unico epico ja APPROVED |
-| Features F01-F04 | 4/4 APPROVED | F01 (API: abertura+motor transicao), F02 (API: gates+responsaveis+eventos), F03 (UX: painel caso+timeline), F04 (UX: listagem casos) |
+| Epico US-MOD-006 | READY (v0.9.0) | DoR 9/9 completo, 4 features vinculadas, EP04. Epico e features selados READY (2026-03-23) |
+| Features F01-F04 | 4/4 READY | F01 (API: abertura+motor transicao), F02 (API: gates+responsaveis+eventos), F03 (UX: painel caso+timeline), F04 (UX: listagem casos) |
 | Scaffold (forge-module) | CONCLUIDO | mod-006-execucao-casos/ com estrutura completa Nivel 2 |
 | Enriquecimento (10 agentes) | CONCLUIDO | AGN-DEV-01 a AGN-DEV-10 confirmados via CHANGELOG + requirements, v0.4.0, 5 pendentes resolvidas |
-| Codegen (6 agentes) | NAO INICIADO | Scaffold de app nao existe (apps/api/, apps/web/). Pre-requisito: /app-scaffold all. Nenhum arquivo de codigo gerado |
+| Codegen (6 agentes) | CONCLUIDO | 6/6 agentes done, 46 arquivos gerados (2026-03-23). Validacao cruzada PASS |
 | PENDENTEs | 0 abertas | 5 total: 5 IMPLEMENTADA (001-005) |
 | ADRs | 5 criadas (seladas READY) | Nivel 2 requer minimo 3 — atendido (ADR-001 motor atomico, ADR-002 freeze cycle_version, ADR-003 3 historicos, ADR-004 optimistic locking, ADR-005 background job expiracao) |
 | Amendments | 0 proprios (2 cross-module) | DOC-FND-000-M01 (6 scopes process:case:*) e DOC-FND-000-M02 (scope reopen) criados no Foundation |
 | Requirements | 10/10 existem (selados READY) | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (promote-module). Pipeline Mermaid Etapa 5 (Selo READY) |
+| CHANGELOG | v1.2.0 | Ultima entrada 2026-03-23 (validate-all pos-codigo). Pipeline Mermaid Etapa 5 (Selo READY) |
 | Screen Manifests | 2/2 existem | ux-case-001.painel-caso, ux-case-002.listagem-casos |
 | Dependencias | 4 upstream (MOD-000, MOD-003, MOD-004, MOD-005) | Consome auth/RBAC de MOD-000, org_units de MOD-003, delegacoes de MOD-004, blueprints de MOD-005 |
 | Bloqueios | 1 recebido (BLK-002) | MOD-006 bloqueado por MOD-005 (blueprints + cycle_version_id freeze devem estar implementados) — afeta codegen, nao spec |
@@ -47,7 +47,7 @@ O epico US-MOD-006 define a camada de execucao de casos — o motor que transfor
                            Arquivo: docs/04_modules/user-stories/epics/US-MOD-006.md
 
 2    (manual)              Revisar e finalizar features F01-F04:             CONCLUIDO
-                           - F01: API abertura + motor de transicao          4/4 APPROVED
+                           - F01: API abertura + motor de transicao          4/4 READY
                            - F02: API gates + responsaveis + eventos
                            - F03: UX Painel do caso + timeline (UX-CASE-001)
                            - F04: UX Listagem de casos (UX-CASE-002)
@@ -212,9 +212,9 @@ A promocao do MOD-006 foi executada em 2026-03-23 via `/promote-module`. O manif
                            Resultado: estado_item = READY, version = 1.0.0, INDEX.md atualizado
 ```
 
-### Fase 5: Geracao de Codigo — NAO INICIADA
+### Fase 5: Geracao de Codigo — CONCLUIDA
 
-O MOD-006 esta READY e elegivel para geracao de codigo. Porem, o scaffold de aplicacao (apps/api/ e apps/web/) ainda nao existe — pre-requisito para qualquer agente COD. Alem disso, como Nivel 2, todos os 6 agentes COD sao aplicaveis (AGN-COD-DB, AGN-COD-CORE, AGN-COD-APP, AGN-COD-API, AGN-COD-WEB, AGN-COD-VAL). A cadeia de dependencias requer que MOD-000 → MOD-003 → MOD-004 → MOD-005 tenham codigo gerado antes do MOD-006 (ordem topologica camada 4).
+Codegen completo executado em 2026-03-23 com todos os 6 agentes. Total: 46 arquivos gerados em 5 camadas (DB, CORE, APP, API, WEB) + validacao cruzada (VAL) PASS. O scaffold de aplicacao (apps/api/ e apps/web/) existia desde 2026-03-23. Como Nivel 2, todos os 6 agentes COD foram executados. Validacao cruzada confirmou consistencia Schema→Domain→Application→Presentation→Web, cobertura de 7 scopes e 11 domain events.
 
 > **Decision tree de codegen:**
 >
@@ -229,53 +229,52 @@ O MOD-006 esta READY e elegivel para geracao de codigo. Porem, o scaffold de apl
 > ```
 
 ```
-6    /app-scaffold all      Criar scaffold de aplicacao (one-time):          A EXECUTAR
-                           - apps/api/ (Fastify + Drizzle + OpenAPI)
+6    /app-scaffold all      Criar scaffold de aplicacao (one-time):          CONCLUIDO
+                           - apps/api/ (Fastify + Drizzle + OpenAPI)          2026-03-23
                            - apps/web/ (React + Vite + TanStack)
-                           Pre-condicao: Pelo menos 1 modulo READY
                            Pos-condicao: apps/api/package.json, apps/web/package.json
 
-7    /codegen mod-006       Gerar codigo para MOD-006 (6 agentes):           A EXECUTAR
-                           Executar na ordem de dependencia:
-                             AGN-COD-DB   → infrastructure/db/ (schema Drizzle, migrations)
-                             AGN-COD-CORE → domain/ (aggregates, entities, value-objects, services)
-                             AGN-COD-APP  → application/ (use-cases, ports, DTOs)
-                             AGN-COD-API  → presentation/ (routes, controllers, validators, OpenAPI)
-                             AGN-COD-WEB  → apps/web/src/modules/case-execution/ (screens, components)
-                             AGN-COD-VAL  → validacao global (cross-layer consistency)
-                           Pre-condicao: /app-scaffold concluido, dependencias upstream com codigo
-                           Pos-condicao: Codigo gerado em todas as camadas, validadores pos-codigo PASS
+7    /codegen mod-006       Gerar codigo para MOD-006 (6 agentes):           CONCLUIDO (2026-03-23)
+                           Executado na ordem de dependencia:
+                             AGN-COD-DB   → 3 arquivos (schema + relations + index)
+                             AGN-COD-CORE → 15 arquivos (VOs, errors, events, services)
+                             AGN-COD-APP  → 19 arquivos (6 ports + 13 use cases)
+                             AGN-COD-API  → 2 arquivos (DTOs Zod + routes 16 endpoints)
+                             AGN-COD-WEB  → 7 arquivos (types, API, hooks, pages)
+                             AGN-COD-VAL  → PASS (validacao cruzada 6/6 checks)
+                           Total: 46 arquivos gerados
+                           Pos-condicao: Codigo gerado, validacao cruzada PASS
 ```
 
 #### Rastreio de Agentes COD — MOD-006
 
 | # | Agente | Camada | Path | Status | Arquivos |
 |---|--------|--------|------|--------|----------|
-| 1 | AGN-COD-DB | infrastructure | apps/api/src/modules/case-execution/infrastructure/ | A EXECUTAR | 0 |
-| 2 | AGN-COD-CORE | domain | apps/api/src/modules/case-execution/domain/ | A EXECUTAR | 0 |
-| 3 | AGN-COD-APP | application | apps/api/src/modules/case-execution/application/ | A EXECUTAR | 0 |
-| 4 | AGN-COD-API | presentation | apps/api/src/modules/case-execution/presentation/ | A EXECUTAR | 0 |
-| 5 | AGN-COD-WEB | web | apps/web/src/modules/case-execution/ | A EXECUTAR | 0 |
-| 6 | AGN-COD-VAL | validation | (cross-layer) | A EXECUTAR | 0 |
+| 1 | AGN-COD-DB | infrastructure | apps/api/db/schema/ | CONCLUIDO | 3 |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/case-execution/domain/ | CONCLUIDO | 15 |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/case-execution/application/ | CONCLUIDO | 19 |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/case-execution/presentation/ | CONCLUIDO | 2 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/case-execution/ | CONCLUIDO | 7 |
+| 6 | AGN-COD-VAL | validation | (cross-layer) | CONCLUIDO | 0 (PASS) |
 
 #### Pre-requisitos para Codegen
 
-1. **Scaffold de aplicacao:** `apps/api/package.json` e `apps/web/package.json` nao existem. Executar `/app-scaffold all` primeiro.
+1. **Scaffold de aplicacao:** `apps/api/package.json` e `apps/web/package.json` existem (scaffold concluido 2026-03-23).
 2. **Ordem topologica:** MOD-006 esta na camada 4. Dependencias upstream (MOD-000, MOD-003, MOD-004, MOD-005) devem ter codigo gerado antes. Verificar status de codegen desses modulos.
 3. **BLK-002:** Blueprints do MOD-005 + `cycle_version_id` freeze devem estar implementados em codigo. Enquanto MOD-005 nao tiver codigo, MOD-006 nao pode implementar a integracao BlueprintReaderPort.
 
 ```
 8    /validate-openapi mod-006
-                           Validar contrato OpenAPI apos geracao:            FUTURO (pos-codigo)
-                           apps/api/openapi/mod-006-execucao-casos.yaml
+                           Validar contrato OpenAPI apos geracao:            N/A (paths MOD-006 nao no v1.yaml)
+                           apps/api/openapi/v1.yaml (tag case-execution)
 
 9    /validate-drizzle mod-006
-                           Validar schemas Drizzle apos geracao:             FUTURO (pos-codigo)
-                           apps/api/src/modules/case-execution/infrastructure/
+                           Validar schemas Drizzle apos geracao:             CONCLUIDO — PASS (7/7 regras)
+                           apps/api/db/schema/case-execution.ts
 
 10   /validate-endpoint mod-006
-                           Validar endpoints Fastify apos geracao:           FUTURO (pos-codigo)
-                           apps/api/src/modules/case-execution/presentation/
+                           Validar endpoints Fastify apos geracao:           CONCLUIDO — PASS (8/10, 2 avisos)
+                           apps/api/src/modules/case-execution/presentation/routes/cases.route.ts
 ```
 
 ### Fase 6: Pos-READY — SOB DEMANDA
@@ -357,8 +356,8 @@ O modulo esta READY e selado. Qualquer alteracao futura requer amendment formal 
 ## Resumo Visual do Fluxo MOD-006
 
 ```
-US-MOD-006 (APPROVED v1.2.0)           <- Fase 0: CONCLUIDA
-  |  4/4 features APPROVED (2 backend + 2 UX)
+US-MOD-006 (READY v0.9.0)             <- Fase 0: CONCLUIDA
+  |  4/4 features READY (2 backend + 2 UX)
   |  Nivel 2 — DDD-lite + Full Clean (score 5/6)
   v
 mod-006-execucao-casos/ (stubs DRAFT)  <- Fase 1: CONCLUIDA (forge-module v0.1.0)
@@ -378,12 +377,12 @@ mod-006 validado (DRAFT)               <- Fase 3: CONCLUIDA (validate-all 2026-0
 mod-006 selado (READY v1.0.0)          <- Fase 4: CONCLUIDA (promote-module 2026-03-23)
   |  Gate 0 (DoR): 7/7 atendidos
   |
-  +-- * PROXIMO PASSO: /app-scaffold all + /codegen mod-006
+  +-- CONCLUIDO: /codegen mod-006 (46 arquivos)
   |
   v
-mod-006 codigo gerado                  <- Fase 5: NAO INICIADA (scaffold app nao existe)
-  |  6 agentes COD aplicaveis (Nivel 2)
-  |  Pre-requisito: apps/api/ + apps/web/ + codegen upstream
+mod-006 codigo gerado                  <- Fase 5: CONCLUIDA (6 agentes, 46 arquivos, 2026-03-23)
+  |  DB(3) + CORE(15) + APP(19) + API(2) + WEB(7) + VAL(PASS)
+  |  Validacao cruzada PASS em todas as camadas
   |
   v
 mod-006 + amendments/                  <- Fase 6: SOB DEMANDA (0 amendments proprios)
@@ -401,7 +400,7 @@ Amendments cross-module: DOC-FND-000-M01 (6 scopes), DOC-FND-000-M02 (scope reop
 
 | Aspecto | Detalhe |
 |---------|---------|
-| Unico epico APPROVED do projeto | US-MOD-006 e o unico epico promovido a APPROVED (2026-03-18), com DoR 9/9 completo incluindo confirmacao formal do owner. Todos os demais epicos estao em READY. Isso significa que features F01-F04 tambem estao APPROVED (nao READY). |
+| Epico e features selados READY | US-MOD-006 promovido de APPROVED a READY (v0.9.0) em 2026-03-23, com DoR 9/9 completo. Features F01-F04 tambem seladas READY (v0.9.0). Manifesto READY v1.0.0. Ciclo documental completo. |
 | Motor de transicao com 5 validacoes sequenciais | O motor de transicao implementa 5 passos obrigatorios: (1) caso OPEN, (2) transicao valida no blueprint, (3) papel autorizado, (4) gates required resolvidos, (5) evidencia fornecida se required. Qualquer falha retorna 422 com motivo especifico. ADR-001 garante atomicidade em transacao unica. |
 | 3 historicos independentes | stage_history, gate_instances e case_events/case_assignments sao historicos independentes com timeline intercalada. Um estagio pode durar dias e ter 3 reatribuicoes sem mudanca de estagio. ADR-003 documenta esta decisao e suas implicacoes para queries e performance. |
 | Freeze de cycle_version_id | O caso nunca "sente" mudancas no blueprint. Ao abrir, captura `cycle_version_id` vigente. Fork ou atualizacao no MOD-005 nao afeta instancias em andamento. ADR-002 documenta esta decisao e a separacao blueprint/execucao. |
@@ -417,12 +416,14 @@ Amendments cross-module: DOC-FND-000-M01 (6 scopes), DOC-FND-000-M02 (scope reop
 - [x] Enriquecimento completo (10 agentes, 5 pendencias resolvidas)
 - [x] Executar `/validate-all` — /qa + /validate-manifest PASS (2026-03-22)
 - [x] Executar `/promote-module` — READY v1.0.0 (2026-03-23)
-- [ ] Executar `/app-scaffold all` — criar apps/api/ e apps/web/ (pre-requisito one-time)
-- [ ] Verificar codegen de dependencias upstream (MOD-000, MOD-003, MOD-004, MOD-005)
-- [ ] Executar `/codegen mod-006` — gerar codigo nas 6 camadas (DB, CORE, APP, API, WEB, VAL)
-- [ ] Executar `/validate-openapi` — validar contrato OpenAPI gerado
-- [ ] Executar `/validate-drizzle` — validar schemas Drizzle gerados
-- [ ] Executar `/validate-endpoint` — validar endpoints Fastify gerados
+- [x] Executar `/app-scaffold all` — scaffold apps/ concluido (2026-03-23)
+- [x] Executar `/codegen mod-006` — 6 agentes, 46 arquivos gerados (2026-03-23)
+- [x] Executar `/validate-all` pos-codigo — PASS (0 bloqueadores, 4 avisos) (2026-03-23)
+  - [x] QA: PASS
+  - [x] Manifests: 2/2 PASS
+  - [ ] OpenAPI: N/A (paths pendentes no v1.yaml)
+  - [x] Drizzle: PASS (7/7)
+  - [x] Endpoints: PASS (8/10, 2 avisos)
 
 > **Nota:** A especificacao esta completa e selada (READY v1.0.0). Todas as 5 pendencias estao IMPLEMENTADA. Os 10 artefatos de requisitos e 5 ADRs estao selados. O proximo marco e a geracao de codigo, que depende do scaffold de aplicacao e da ordem topologica. O BLK-002 (MOD-005 → MOD-006) exige que os blueprints do MOD-005 estejam implementados em codigo antes que o MOD-006 possa implementar BlueprintReaderPort e DelegationCheckerPort. A geracao de codigo do MOD-006 desbloqueia MOD-007 (Parametrizacao), MOD-008 (Protheus) e MOD-009 (Aprovacao) na camada seguinte.
 
@@ -432,6 +433,9 @@ Amendments cross-module: DOC-FND-000-M01 (6 scopes), DOC-FND-000-M02 (scope reop
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 4.1.0 | 2026-03-23 | Atualizacao: validate-all pos-codigo executado — PASS (0 bloqueadores, 4 avisos). Checklist atualizado. Execution state com secao validations |
+| 4.0.0 | 2026-03-23 | Atualizacao: Fase 5 CONCLUIDA — codegen completo (6 agentes, 46 arquivos). Rastreio de agentes COD atualizado. Checklist atualizado. Resumo visual atualizado. Validadores pos-codigo marcados PENDENTE |
+| 3.1.0 | 2026-03-23 | Atualizacao: Epico APPROVED→READY (v0.9.0) e features F01-F04 APPROVED→READY (v0.9.0). Execution state atualizado com secao promotion. INDEX.md e manifesto sincronizados com status READY |
 | 3.0.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (promote-module 2026-03-23, READY v1.0.0). Fase 5 NAO INICIADA (codegen). CHANGELOG Mermaid corrigido (Etapa 5). Checklist atualizado para foco em codegen. Rastreio de 6 agentes COD adicionado. Pre-requisitos de codegen detalhados (scaffold + ordem topologica + BLK-002) |
 | 2.0.0 | 2026-03-23 | Recriacao: Fase 3 CONCLUIDA (validate-all 2026-03-22 PASS 29/29 manifests). Fase 4 PENDENTE. DoR Gate 0 6/7 (BLK-002 nao bloqueia spec). Rastreio de 10 agentes via CHANGELOG+requirements. Pendencias compactadas (referencia pen file). 2 amendments cross-module. Proximo passo: /promote-module |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 5 pendentes resolvidas (001-005), rastreio de 10 agentes, mapa de cobertura de 5 validadores, particularidades Nivel 2 DDD-lite, bloqueio BLK-002, 2 amendments cross-module |

@@ -7,14 +7,18 @@
  * REOPEN requires scope process:case:reopen + target_stage_id (PENDENTE-001, PENDENTE-005).
  */
 
-import type { CaseInstanceRepository } from "../ports/case-instance.repository.js";
-import type { CaseEventRepository } from "../ports/case-event.repository.js";
-import type { GateInstanceRepository } from "../ports/gate-instance.repository.js";
-import type { CaseStatus } from "../../domain/value-objects/case-status.js";
-import { assertStatusTransition } from "../../domain/value-objects/case-status.js";
-import { createCaseExecutionEvent, CASE_EXECUTION_EVENT_TYPES } from "../../domain/domain-events/case-events.js";
+import type { CaseInstanceRepository } from '../ports/case-instance.repository.js';
+import type { CaseEventRepository } from '../ports/case-event.repository.js';
+import type { GateInstanceRepository } from '../ports/gate-instance.repository.js';
+import type { CaseStatus } from '../../domain/value-objects/case-status.js';
+import type { CaseEventType } from '../../domain/value-objects/case-event-type.js';
+import { assertStatusTransition } from '../../domain/value-objects/case-status.js';
+import {
+  createCaseExecutionEvent,
+  CASE_EXECUTION_EVENT_TYPES,
+} from '../../domain/domain-events/case-events.js';
 
-export type CaseControlAction = "ON_HOLD" | "RESUME" | "CANCEL" | "REOPEN";
+export type CaseControlAction = 'ON_HOLD' | 'RESUME' | 'CANCEL' | 'REOPEN';
 
 export interface ControlCaseInput {
   caseId: string;
@@ -32,10 +36,10 @@ export interface ControlCaseOutput {
 }
 
 const ACTION_TO_STATUS: Record<CaseControlAction, CaseStatus> = {
-  ON_HOLD: "ON_HOLD",
-  RESUME: "OPEN",
-  CANCEL: "CANCELLED",
-  REOPEN: "OPEN",
+  ON_HOLD: 'ON_HOLD',
+  RESUME: 'OPEN',
+  CANCEL: 'CANCELLED',
+  REOPEN: 'OPEN',
 };
 
 const ACTION_TO_EVENT = {
@@ -50,8 +54,12 @@ export class ControlCaseUseCase {
     private readonly caseRepo: CaseInstanceRepository,
     private readonly caseEventRepo: CaseEventRepository,
     private readonly gateInstanceRepo: GateInstanceRepository,
-    private readonly getStageGates: (stageId: string) => Promise<Array<{ gateId: string; stageId: string; required: boolean }>>,
-    private readonly emitEvent: (event: ReturnType<typeof createCaseExecutionEvent>) => Promise<void>,
+    private readonly getStageGates: (
+      stageId: string,
+    ) => Promise<Array<{ gateId: string; stageId: string; required: boolean }>>,
+    private readonly emitEvent: (
+      event: ReturnType<typeof createCaseExecutionEvent>,
+    ) => Promise<void>,
   ) {}
 
   async execute(input: ControlCaseInput): Promise<ControlCaseOutput> {
@@ -64,19 +72,19 @@ export class ControlCaseUseCase {
     assertStatusTransition(caseRow.status, targetStatus);
 
     // REOPEN requires target_stage_id (PENDENTE-005)
-    if (input.action === "REOPEN" && !input.targetStageId) {
-      throw new Error("REOPEN requires target_stage_id (PENDENTE-005).");
+    if (input.action === 'REOPEN' && !input.targetStageId) {
+      throw new Error('REOPEN requires target_stage_id (PENDENTE-005).');
     }
 
     const now = new Date();
     const extra: Record<string, unknown> = {};
 
-    if (input.action === "CANCEL") {
+    if (input.action === 'CANCEL') {
       extra.cancelledAt = now;
       extra.cancellationReason = input.reason ?? null;
     }
 
-    if (input.action === "REOPEN" && input.targetStageId) {
+    if (input.action === 'REOPEN' && input.targetStageId) {
       extra.currentStageId = input.targetStageId;
 
       // Reset gates to PENDING for target stage (PENDENTE-005)
@@ -87,7 +95,7 @@ export class ControlCaseUseCase {
             caseId: input.caseId,
             gateId: g.gateId,
             stageId: g.stageId,
-            status: "PENDING" as const,
+            status: 'PENDING' as const,
           })),
         );
       }
@@ -103,20 +111,23 @@ export class ControlCaseUseCase {
 
     // Record case_event
     const eventTypeMap: Record<CaseControlAction, string> = {
-      ON_HOLD: "ON_HOLD",
-      RESUME: "RESUMED",
-      CANCEL: "COMMENT",
-      REOPEN: "REOPENED",
+      ON_HOLD: 'ON_HOLD',
+      RESUME: 'RESUMED',
+      CANCEL: 'COMMENT',
+      REOPEN: 'REOPENED',
     };
 
     await this.caseEventRepo.create({
       caseId: input.caseId,
-      eventType: eventTypeMap[input.action] as import("../../domain/value-objects/case-event-type.js").CaseEventType,
-      descricao: `Case ${input.action.toLowerCase()}${input.reason ? `: ${input.reason}` : ""}`,
+      eventType: eventTypeMap[input.action] as CaseEventType,
+      descricao: `Case ${input.action.toLowerCase()}${input.reason ? `: ${input.reason}` : ''}`,
       createdBy: input.userId,
       createdAt: now,
       metadata: { action: input.action, reason: input.reason, targetStageId: input.targetStageId },
-      stageId: input.action === "REOPEN" && input.targetStageId ? input.targetStageId : caseRow.currentStageId,
+      stageId:
+        input.action === 'REOPEN' && input.targetStageId
+          ? input.targetStageId
+          : caseRow.currentStageId,
     });
 
     // Emit domain event

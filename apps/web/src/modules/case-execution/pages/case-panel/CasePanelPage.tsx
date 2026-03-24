@@ -3,50 +3,86 @@
  *
  * Case Panel — Detail screen with 4 tabs:
  * 1. Overview (header + progress bar + transition buttons)
- * 2. Gates (resolution/waive)
+ * 2. Gates (resolution/waive per type)
  * 3. Assignments (assign/reassign)
- * 4. Timeline (interleaved history)
+ * 4. Timeline (interleaved history + comment)
+ *
+ * Tailwind CSS v4 + shared UI components + Dialog for confirmations.
  */
 
-import React, { useState } from "react";
-import { useCaseDetail } from "../../hooks/use-cases.js";
-import { useTransitionStage, useControlCase, useResolveGate, useWaiveGate, useAssignResponsible, useRecordEvent } from "../../hooks/use-case-actions.js";
-import { useTimeline } from "../../hooks/use-timeline.js";
-import type { CaseDetail, GateInstance, Assignment, TimelineEntry } from "../../types/case-execution.types.js";
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
+import {
+  Button,
+  Badge,
+  Skeleton,
+  Input,
+  Label,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../../../../shared/ui/index.js';
+import { useCaseDetail } from '../../hooks/use-cases.js';
+import {
+  useTransitionStage,
+  useControlCase,
+  useRecordEvent,
+} from '../../hooks/use-case-actions.js';
+import { useTimeline } from '../../hooks/use-timeline.js';
+import { useGates, useResolveGate, useWaiveGate } from '../../hooks/use-gates.js';
+import { useAssignments, useAssignResponsible } from '../../hooks/use-assignments.js';
+import { CaseStatusBadge } from '../../components/CaseStatusBadge.js';
+import { GateCard } from '../../components/GateCard.js';
+import { TimelineFeed } from '../../components/TimelineFeed.js';
+import type {
+  CaseDetail,
+  AvailableTransition,
+  Assignment,
+} from '../../types/case-execution.types.js';
+import { COPY, isReadonly } from '../../types/case-execution.types.js';
 
 interface CasePanelPageProps {
   caseId: string;
+  userScopes?: readonly string[];
 }
 
-type TabId = "overview" | "gates" | "assignments" | "timeline";
+type TabId = 'overview' | 'gates' | 'assignments' | 'timeline';
 
-export function CasePanelPage({ caseId }: CasePanelPageProps) {
-  const { data: caseData, loading, error, refetch } = useCaseDetail(caseId);
-  const [activeTab, setActiveTab] = useState<TabId>("overview");
+export function CasePanelPage({ caseId, userScopes = [] }: CasePanelPageProps) {
+  const { data: caseData, isLoading, error } = useCaseDetail(caseId);
+  const [activeTab, setActiveTab] = useState<TabId>('overview');
 
-  if (loading) return <CasePanelSkeleton />;
+  if (isLoading) return <PanelSkeleton />;
   if (error) return <ErrorState error={error} />;
-  if (!caseData) return <div>Caso não encontrado.</div>;
+  if (!caseData) return <p className="p-6 text-gray-500">Caso não encontrado.</p>;
 
-  const isReadonly = caseData.status === "COMPLETED" || caseData.status === "CANCELLED";
+  const readonly = isReadonly(caseData.status);
 
   return (
-    <div className="case-panel">
+    <div className="flex flex-col gap-0">
       <CaseHeader caseData={caseData} />
       <TabBar activeTab={activeTab} onChange={setActiveTab} />
-      <div className="case-panel__content">
-        {activeTab === "overview" && (
-          <OverviewTab caseData={caseData} isReadonly={isReadonly} onRefresh={refetch} />
+      <div className="p-6">
+        {activeTab === 'overview' && (
+          <OverviewTab
+            caseData={caseData}
+            readonly={readonly}
+            caseId={caseId}
+            userScopes={userScopes}
+          />
         )}
-        {activeTab === "gates" && (
-          <GatesTab caseId={caseId} gates={caseData.current_stage_gates} isReadonly={isReadonly} onRefresh={refetch} />
+        {activeTab === 'gates' && <GatesTab caseId={caseId} readonly={readonly} />}
+        {activeTab === 'assignments' && (
+          <AssignmentsTab caseId={caseId} readonly={readonly} userScopes={userScopes} />
         )}
-        {activeTab === "assignments" && (
-          <AssignmentsTab caseId={caseId} assignments={caseData.active_assignments} isReadonly={isReadonly} onRefresh={refetch} />
-        )}
-        {activeTab === "timeline" && (
-          <TimelineTab caseId={caseId} />
-        )}
+        {activeTab === 'timeline' && <TimelineTab caseId={caseId} readonly={readonly} />}
       </div>
     </div>
   );
@@ -55,42 +91,55 @@ export function CasePanelPage({ caseId }: CasePanelPageProps) {
 // ── Header ───────────────────────────────────────────────────────────────────
 
 function CaseHeader({ caseData }: { caseData: CaseDetail }) {
-  const statusColors: Record<string, string> = {
-    OPEN: "#27AE60", COMPLETED: "#2980B9", CANCELLED: "#E74C3C", ON_HOLD: "#F39C12",
-  };
-
   return (
-    <header className="case-header">
-      <div className="case-header__title">
-        <h1>{caseData.codigo}</h1>
-        <span className="case-header__badge" style={{ backgroundColor: statusColors[caseData.status] }}>
-          {caseData.status}
-        </span>
+    <header className="px-6 pt-6 pb-3 flex flex-col gap-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <h1 className="text-xl font-bold font-mono">{caseData.codigo}</h1>
+          <CaseStatusBadge status={caseData.status} />
+        </div>
+        <div className="flex items-center gap-4 text-sm text-gray-500">
+          <span>Aberto em: {new Date(caseData.opened_at).toLocaleDateString('pt-BR')}</span>
+          {caseData.object_type && <span>Objeto: {caseData.object_type}</span>}
+        </div>
       </div>
-      <div className="case-header__meta">
-        <span>Aberto em: {new Date(caseData.opened_at).toLocaleDateString("pt-BR")}</span>
-        {caseData.object_type && <span>Objeto: {caseData.object_type}</span>}
-      </div>
+      {caseData.status === 'ON_HOLD' && (
+        <div className="rounded-md bg-yellow-50 border border-yellow-200 px-3 py-2 text-sm text-yellow-800">
+          Caso em espera — transições e gates bloqueados.
+        </div>
+      )}
+      {caseData.status === 'CANCELLED' && caseData.cancellation_reason && (
+        <div className="rounded-md bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-600">
+          Cancelado: {caseData.cancellation_reason}
+        </div>
+      )}
     </header>
   );
 }
 
 // ── Tab Bar ──────────────────────────────────────────────────────────────────
 
-function TabBar({ activeTab, onChange }: { activeTab: TabId; onChange: (t: TabId) => void }) {
-  const tabs: Array<{ id: TabId; label: string }> = [
-    { id: "overview", label: "Visão Geral" },
-    { id: "gates", label: "Gates" },
-    { id: "assignments", label: "Responsáveis" },
-    { id: "timeline", label: "Histórico" },
-  ];
+const TABS: Array<{ id: TabId; label: string }> = [
+  { id: 'overview', label: 'Visão Geral' },
+  { id: 'gates', label: 'Gates' },
+  { id: 'assignments', label: 'Responsáveis' },
+  { id: 'timeline', label: 'Histórico' },
+];
 
+function TabBar({ activeTab, onChange }: { activeTab: TabId; onChange: (t: TabId) => void }) {
   return (
-    <nav className="tab-bar">
-      {tabs.map((t) => (
+    <nav className="flex border-b px-6">
+      {TABS.map((t) => (
         <button
           key={t.id}
-          className={`tab-bar__item ${activeTab === t.id ? "tab-bar__item--active" : ""}`}
+          className={`
+            px-4 py-2 text-sm font-medium border-b-2 transition-colors
+            ${
+              activeTab === t.id
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }
+          `}
           onClick={() => onChange(t.id)}
         >
           {t.label}
@@ -102,143 +151,254 @@ function TabBar({ activeTab, onChange }: { activeTab: TabId; onChange: (t: TabId
 
 // ── Overview Tab ─────────────────────────────────────────────────────────────
 
-function OverviewTab({ caseData, isReadonly, onRefresh }: { caseData: CaseDetail; isReadonly: boolean; onRefresh: () => void }) {
-  const transition = useTransitionStage(caseData.id);
-  const control = useControlCase(caseData.id);
-  const [motivo, setMotivo] = useState("");
+function OverviewTab({
+  caseData,
+  readonly,
+  caseId,
+  userScopes,
+}: {
+  caseData: CaseDetail;
+  readonly: boolean;
+  caseId: string;
+  userScopes: readonly string[];
+}) {
+  const transition = useTransitionStage(caseId);
+  const control = useControlCase(caseId);
+  const [cancelOpen, setCancelOpen] = useState(false);
+  const [cancelReason, setCancelReason] = useState('');
 
-  const pendingGates = caseData.current_stage_gates.filter((g) => g.status === "PENDING");
+  const pendingGates = caseData.current_stage_gates.filter((g) => g.status === 'PENDING');
   const allGatesCleared = pendingGates.length === 0;
+  const transitions = caseData.available_transitions ?? [];
 
-  const handleTransition = async (targetStageId: string) => {
-    await transition.execute({ target_stage_id: targetStageId, motivo: motivo || undefined });
-    onRefresh();
-  };
+  const handleTransition = useCallback(
+    async (t: AvailableTransition) => {
+      await transition.mutateAsync({ target_stage_id: t.target_stage_id });
+      toast.success(COPY.transition_success(t.target_stage_name));
+    },
+    [transition],
+  );
 
-  const handleControl = async (action: string) => {
-    await control.execute({ action, reason: motivo || undefined });
-    onRefresh();
-  };
+  const handleHold = useCallback(async () => {
+    await control.mutateAsync({ action: 'hold' });
+    toast.success(COPY.case_hold);
+  }, [control]);
+
+  const handleResume = useCallback(async () => {
+    await control.mutateAsync({ action: 'resume' });
+    toast.success(COPY.case_resumed);
+  }, [control]);
+
+  const handleCancel = useCallback(async () => {
+    await control.mutateAsync({ action: 'cancel', reason: cancelReason });
+    setCancelOpen(false);
+    setCancelReason('');
+    toast.success(COPY.case_cancelled);
+  }, [control, cancelReason]);
 
   return (
-    <div className="overview-tab">
-      <section className="overview-tab__gates-summary">
-        <h3>Gates do Estágio Atual</h3>
+    <div className="flex flex-col gap-6">
+      {/* Gates summary */}
+      <section>
+        <h3 className="text-sm font-semibold text-gray-700 mb-2">Gates do Estágio Atual</h3>
         {pendingGates.length > 0 ? (
-          <p>{pendingGates.length} gate(s) pendente(s) — transição bloqueada.</p>
+          <p className="text-sm text-yellow-700">
+            {pendingGates.length} gate(s) pendente(s) — transição bloqueada.
+          </p>
         ) : (
-          <p>Todos os gates resolvidos.</p>
+          <p className="text-sm text-green-700">Todos os gates resolvidos.</p>
         )}
       </section>
 
-      {!isReadonly && (
-        <section className="overview-tab__actions">
-          <h3>Ações</h3>
-          <div className="overview-tab__motivo">
-            <label htmlFor="motivo">Motivo (opcional)</label>
-            <textarea id="motivo" value={motivo} onChange={(e) => setMotivo(e.target.value)} maxLength={1000} rows={2} />
-          </div>
-          <div className="overview-tab__buttons">
-            {caseData.status === "OPEN" && (
-              <>
-                <button disabled={!allGatesCleared || transition.loading} onClick={() => handleTransition("")}>
-                  {transition.loading ? "Transicionando..." : "Transicionar"}
-                </button>
-                <button onClick={() => handleControl("ON_HOLD")} disabled={control.loading}>
-                  Suspender (ON_HOLD)
-                </button>
-                <button onClick={() => handleControl("CANCEL")} disabled={control.loading} className="btn--danger">
-                  Cancelar
-                </button>
-              </>
+      {/* Transitions */}
+      {!readonly && (
+        <TooltipProvider>
+          <section>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">Transições Disponíveis</h3>
+            {transitions.length === 0 ? (
+              <p className="text-sm text-gray-400">Nenhuma transição disponível.</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {transitions.map((t) => {
+                  const blocked = !allGatesCleared;
+                  return (
+                    <Tooltip key={t.transition_id}>
+                      <TooltipTrigger asChild>
+                        <span>
+                          <Button
+                            size="sm"
+                            disabled={blocked || transition.isPending}
+                            onClick={() => handleTransition(t)}
+                          >
+                            {t.target_stage_name}
+                            {t.evidence_required && ' *'}
+                          </Button>
+                        </span>
+                      </TooltipTrigger>
+                      {blocked && (
+                        <TooltipContent>
+                          {pendingGates.map((g) => g.gate_name ?? g.gate_id).join(', ')} pendente(s)
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                  );
+                })}
+              </div>
             )}
-            {caseData.status === "ON_HOLD" && (
-              <>
-                <button onClick={() => handleControl("RESUME")} disabled={control.loading}>
-                  Retomar
-                </button>
-                <button onClick={() => handleControl("CANCEL")} disabled={control.loading} className="btn--danger">
+          </section>
+        </TooltipProvider>
+      )}
+
+      {/* Case controls */}
+      {!readonly && (
+        <section className="flex gap-2 border-t pt-4">
+          {caseData.status === 'OPEN' && (
+            <>
+              <Button variant="outline" size="sm" onClick={handleHold} disabled={control.isPending}>
+                Suspender
+              </Button>
+              {userScopes.includes('process:case:cancel') && (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setCancelOpen(true)}
+                  disabled={control.isPending}
+                >
                   Cancelar
-                </button>
-              </>
-            )}
-          </div>
-          {(transition.error || control.error) && (
-            <div className="error-message">{(transition.error ?? control.error)?.message}</div>
+                </Button>
+              )}
+            </>
+          )}
+          {caseData.status === 'ON_HOLD' && (
+            <>
+              <Button size="sm" onClick={handleResume} disabled={control.isPending}>
+                Retomar
+              </Button>
+              {userScopes.includes('process:case:cancel') && (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setCancelOpen(true)}
+                  disabled={control.isPending}
+                >
+                  Cancelar
+                </Button>
+              )}
+            </>
           )}
         </section>
       )}
+
+      {/* Errors */}
+      {(transition.error || control.error) && (
+        <p className="text-sm text-red-600">{(transition.error ?? control.error)?.message}</p>
+      )}
+
+      {/* Cancel confirmation dialog */}
+      <Dialog open={cancelOpen} onOpenChange={setCancelOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cancelar Caso</DialogTitle>
+            <DialogDescription>{COPY.confirm_cancel}</DialogDescription>
+          </DialogHeader>
+          <div className="py-2">
+            <Label htmlFor="cancel-reason">Motivo</Label>
+            <textarea
+              id="cancel-reason"
+              className="mt-1 w-full rounded-md border px-3 py-2 text-sm"
+              rows={3}
+              value={cancelReason}
+              onChange={(e) => setCancelReason(e.target.value)}
+              placeholder="Informe o motivo do cancelamento..."
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCancelOpen(false)}>
+              Voltar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleCancel}
+              disabled={control.isPending || !cancelReason}
+            >
+              {control.isPending ? 'Cancelando...' : 'Confirmar Cancelamento'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
 // ── Gates Tab ────────────────────────────────────────────────────────────────
 
-function GatesTab({ caseId, gates, isReadonly, onRefresh }: { caseId: string; gates: GateInstance[]; isReadonly: boolean; onRefresh: () => void }) {
+function GatesTab({ caseId, readonly }: { caseId: string; readonly: boolean }) {
+  const { data: gates, isLoading } = useGates(caseId);
   const resolve = useResolveGate(caseId);
   const waive = useWaiveGate(caseId);
-  const [waiveMotivo, setWaiveMotivo] = useState("");
 
-  const handleResolve = async (gateInstanceId: string, decision: string) => {
-    await resolve.execute({ gateInstanceId, body: { decision } });
-    onRefresh();
-  };
+  const handleResolve = useCallback(
+    (gateInstanceId: string, body: Record<string, unknown>) => {
+      resolve.mutate(
+        { gateInstanceId, body },
+        {
+          onSuccess: () => {
+            const decision = body.decision as string | undefined;
+            const name = gates?.find((g) => g.id === gateInstanceId)?.gate_name ?? '';
+            if (decision === 'APPROVED') toast.success(COPY.gate_approved(name));
+            else if (decision === 'REJECTED') toast.warning(COPY.gate_rejected(name));
+            else toast.success(`Gate '${name}' resolvido.`);
+          },
+        },
+      );
+    },
+    [resolve, gates],
+  );
 
-  const handleWaive = async (gateInstanceId: string) => {
-    await waive.execute({ gateInstanceId, motivo: waiveMotivo });
-    setWaiveMotivo("");
-    onRefresh();
-  };
+  const handleWaive = useCallback(
+    (gateInstanceId: string, motivo: string) => {
+      waive.mutate(
+        { gateInstanceId, motivo },
+        {
+          onSuccess: () => {
+            const name = gates?.find((g) => g.id === gateInstanceId)?.gate_name ?? '';
+            toast.success(COPY.gate_waived(name));
+          },
+        },
+      );
+    },
+    [waive, gates],
+  );
 
-  if (gates.length === 0) return <div className="empty-state">Nenhum gate neste estágio.</div>;
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Skeleton key={i} className="h-24 w-full" />
+        ))}
+      </div>
+    );
+  }
+
+  if (!gates || gates.length === 0) {
+    return <p className="text-sm text-gray-400 py-4">{COPY.empty_gates}</p>;
+  }
 
   return (
-    <div className="gates-tab">
-      <table>
-        <thead>
-          <tr><th>Gate</th><th>Status</th><th>Decisão</th><th>Ações</th></tr>
-        </thead>
-        <tbody>
-          {gates.map((g) => (
-            <tr key={g.id}>
-              <td>{g.gate_id}</td>
-              <td>
-                <span className={`badge badge--${g.status.toLowerCase()}`}>{g.status}</span>
-              </td>
-              <td>{g.decision ?? "—"}</td>
-              <td>
-                {!isReadonly && g.status === "PENDING" && (
-                  <div className="gates-tab__actions">
-                    <button onClick={() => handleResolve(g.id, "APPROVED")} disabled={resolve.loading}>
-                      Aprovar
-                    </button>
-                    <button onClick={() => handleResolve(g.id, "REJECTED")} disabled={resolve.loading} className="btn--danger">
-                      Rejeitar
-                    </button>
-                    <div className="gates-tab__waive">
-                      <input
-                        type="text"
-                        placeholder="Motivo dispensa (min 20 chars)"
-                        value={waiveMotivo}
-                        onChange={(e) => setWaiveMotivo(e.target.value)}
-                        minLength={20}
-                      />
-                      <button
-                        onClick={() => handleWaive(g.id)}
-                        disabled={waive.loading || waiveMotivo.length < 20}
-                      >
-                        Dispensar
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="flex flex-col gap-3">
+      {gates.map((gate) => (
+        <GateCard
+          key={gate.id}
+          gate={gate}
+          readonly={readonly}
+          onResolve={handleResolve}
+          onWaive={handleWaive}
+          resolving={resolve.isPending}
+          waiving={waive.isPending}
+        />
+      ))}
       {(resolve.error || waive.error) && (
-        <div className="error-message">{(resolve.error ?? waive.error)?.message}</div>
+        <p className="text-sm text-red-600">{(resolve.error ?? waive.error)?.message}</p>
       )}
     </div>
   );
@@ -246,132 +406,205 @@ function GatesTab({ caseId, gates, isReadonly, onRefresh }: { caseId: string; ga
 
 // ── Assignments Tab ──────────────────────────────────────────────────────────
 
-function AssignmentsTab({ caseId, assignments, isReadonly, onRefresh }: { caseId: string; assignments: Assignment[]; isReadonly: boolean; onRefresh: () => void }) {
+function AssignmentsTab({
+  caseId,
+  readonly,
+  userScopes,
+}: {
+  caseId: string;
+  readonly: boolean;
+  userScopes: readonly string[];
+}) {
+  const { data: assignments, isLoading } = useAssignments(caseId);
   const assign = useAssignResponsible(caseId);
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ process_role_id: "", user_id: "" });
+  const canAssign = userScopes.includes('process:case:assign');
 
-  const handleAssign = async () => {
-    await assign.execute(formData);
+  const [showForm, setShowForm] = useState(false);
+  const [roleId, setRoleId] = useState('');
+  const [userId, setUserId] = useState('');
+
+  const handleAssign = useCallback(async () => {
+    await assign.mutateAsync({ process_role_id: roleId, user_id: userId });
     setShowForm(false);
-    setFormData({ process_role_id: "", user_id: "" });
-    onRefresh();
-  };
+    setRoleId('');
+    setUserId('');
+    toast.success(COPY.assignment_created(userId, roleId));
+  }, [assign, roleId, userId]);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Skeleton key={i} className="h-12 w-full" />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div className="assignments-tab">
-      <table>
-        <thead>
-          <tr><th>Role</th><th>Usuário</th><th>Atribuído em</th><th>Válido até</th><th>Ativo</th></tr>
-        </thead>
-        <tbody>
+    <div className="flex flex-col gap-4">
+      {!assignments || assignments.length === 0 ? (
+        <p className="text-sm text-gray-400 py-4">{COPY.empty_assignments}</p>
+      ) : (
+        <div className="flex flex-col gap-2">
           {assignments.map((a) => (
-            <tr key={a.id}>
-              <td>{a.process_role_id}</td>
-              <td>{a.user_id}</td>
-              <td>{new Date(a.assigned_at).toLocaleDateString("pt-BR")}</td>
-              <td>{a.valid_until ? new Date(a.valid_until).toLocaleDateString("pt-BR") : "—"}</td>
-              <td>{a.is_active ? "Sim" : "Não"}</td>
-            </tr>
+            <AssignmentRow key={a.id} assignment={a} />
           ))}
-          {assignments.length === 0 && (
-            <tr><td colSpan={5} className="empty-state">Nenhuma atribuição ativa.</td></tr>
-          )}
-        </tbody>
-      </table>
+        </div>
+      )}
 
-      {!isReadonly && (
+      {!readonly && canAssign && (
         <>
-          <button onClick={() => setShowForm(!showForm)}>
-            {showForm ? "Cancelar" : "Nova Atribuição"}
-          </button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="self-start"
+            onClick={() => setShowForm(!showForm)}
+          >
+            {showForm ? 'Cancelar' : 'Nova Atribuição'}
+          </Button>
           {showForm && (
-            <form className="assignments-tab__form" onSubmit={(e) => { e.preventDefault(); handleAssign(); }}>
-              <input placeholder="Process Role ID" value={formData.process_role_id} onChange={(e) => setFormData({ ...formData, process_role_id: e.target.value })} required />
-              <input placeholder="User ID" value={formData.user_id} onChange={(e) => setFormData({ ...formData, user_id: e.target.value })} required />
-              <button type="submit" disabled={assign.loading}>
-                {assign.loading ? "Atribuindo..." : "Atribuir"}
-              </button>
-            </form>
+            <div className="flex items-end gap-3 border rounded-lg p-4">
+              <div className="flex-1">
+                <Label htmlFor="assign-role">Papel</Label>
+                <Input
+                  id="assign-role"
+                  value={roleId}
+                  onChange={(e) => setRoleId(e.target.value)}
+                  placeholder="ID do papel"
+                  className="mt-1"
+                />
+              </div>
+              <div className="flex-1">
+                <Label htmlFor="assign-user">Usuário</Label>
+                <Input
+                  id="assign-user"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                  placeholder="ID do usuário"
+                  className="mt-1"
+                />
+              </div>
+              <Button
+                size="sm"
+                onClick={handleAssign}
+                disabled={assign.isPending || !roleId || !userId}
+              >
+                {assign.isPending ? 'Atribuindo...' : 'Atribuir'}
+              </Button>
+            </div>
           )}
-          {assign.error && <div className="error-message">{assign.error.message}</div>}
+          {assign.error && <p className="text-sm text-red-600">{assign.error.message}</p>}
         </>
       )}
     </div>
   );
 }
 
-// ── Timeline Tab ─────────────────────────────────────────────────────────────
-
-function TimelineTab({ caseId }: { caseId: string }) {
-  const { entries, loading, error } = useTimeline(caseId);
-
-  if (loading) return <div className="loading">Carregando timeline...</div>;
-  if (error) return <ErrorState error={error} />;
-  if (entries.length === 0) return <div className="empty-state">Nenhum evento registrado.</div>;
-
-  const sourceLabels: Record<string, string> = {
-    stage_history: "Transição",
-    gate_instance: "Gate",
-    case_event: "Evento",
-    case_assignment: "Atribuição",
-  };
-
+function AssignmentRow({ assignment }: { assignment: Assignment }) {
   return (
-    <div className="timeline-tab">
-      <ul className="timeline">
-        {entries.map((entry) => (
-          <li key={entry.id} className={`timeline__item timeline__item--${entry.source}`}>
-            <div className="timeline__header">
-              <span className="timeline__source">{sourceLabels[entry.source]}</span>
-              <time className="timeline__time">{new Date(entry.timestamp).toLocaleString("pt-BR")}</time>
-            </div>
-            <div className="timeline__body">
-              {renderTimelineData(entry)}
-            </div>
-          </li>
-        ))}
-      </ul>
+    <div className="flex items-center justify-between rounded-lg border px-4 py-3">
+      <div className="flex items-center gap-3">
+        <span className="text-sm font-medium">
+          {assignment.process_role_name ?? assignment.process_role_id}
+        </span>
+        <span className="text-sm text-gray-500">{assignment.user_name ?? assignment.user_id}</span>
+      </div>
+      <div className="flex items-center gap-3 text-xs text-gray-400">
+        <span>{new Date(assignment.assigned_at).toLocaleDateString('pt-BR')}</span>
+        {assignment.valid_until && (
+          <span>até {new Date(assignment.valid_until).toLocaleDateString('pt-BR')}</span>
+        )}
+        <Badge variant={assignment.is_active ? 'default' : 'secondary'}>
+          {assignment.is_active ? 'Ativo' : 'Inativo'}
+        </Badge>
+      </div>
     </div>
   );
 }
 
-function renderTimelineData(entry: TimelineEntry): React.ReactNode {
-  const d = entry.data;
-  switch (entry.source) {
-    case "stage_history":
-      return <span>De {String(d.fromStageId ?? "—")} para {String(d.toStageId)}{d.motivo ? ` — ${d.motivo}` : ""}</span>;
-    case "gate_instance":
-      return <span>Gate {String(d.gateId)}: {String(d.status)}{d.decision ? ` (${d.decision})` : ""}</span>;
-    case "case_event":
-      return <span>[{String(d.eventType)}] {String(d.descricao)}</span>;
-    case "case_assignment":
-      return <span>Role {String(d.processRoleId)} → Usuário {String(d.userId)}</span>;
-    default:
-      return <span>{JSON.stringify(d)}</span>;
+// ── Timeline Tab ─────────────────────────────────────────────────────────────
+
+function TimelineTab({ caseId, readonly }: { caseId: string; readonly: boolean }) {
+  const { data: entries, isLoading } = useTimeline(caseId);
+  const recordEvent = useRecordEvent(caseId);
+  const [comment, setComment] = useState('');
+
+  const handleComment = useCallback(async () => {
+    if (!comment.trim()) return;
+    await recordEvent.mutateAsync({
+      event_type: 'COMMENT',
+      descricao: comment.trim(),
+    });
+    setComment('');
+  }, [recordEvent, comment]);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton key={i} className="h-16 w-full" />
+        ))}
+      </div>
+    );
   }
+
+  const canComment = !readonly;
+
+  return (
+    <div className="flex flex-col gap-4">
+      {canComment && (
+        <div className="flex gap-2">
+          <Input
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Adicionar comentário..."
+            className="flex-1"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleComment();
+              }
+            }}
+          />
+          <Button
+            size="sm"
+            onClick={handleComment}
+            disabled={recordEvent.isPending || !comment.trim()}
+          >
+            {recordEvent.isPending ? 'Enviando...' : 'Comentar'}
+          </Button>
+        </div>
+      )}
+      <TimelineFeed entries={entries ?? []} />
+      {recordEvent.error && <p className="text-sm text-red-600">{recordEvent.error.message}</p>}
+    </div>
+  );
 }
 
 // ── Shared ───────────────────────────────────────────────────────────────────
 
-function CasePanelSkeleton() {
+function PanelSkeleton() {
   return (
-    <div className="case-panel case-panel--skeleton">
-      <div className="skeleton skeleton--title" />
-      <div className="skeleton skeleton--tabs" />
-      <div className="skeleton skeleton--content" />
+    <div className="p-6 flex flex-col gap-4">
+      <Skeleton className="h-8 w-64" />
+      <Skeleton className="h-4 w-48" />
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-64 w-full" />
     </div>
   );
 }
 
 function ErrorState({ error }: { error: Error & { correlationId?: string } }) {
   return (
-    <div className="error-state">
-      <h3>Erro ao carregar caso</h3>
-      <p>{error.message}</p>
-      {error.correlationId && (
-        <small>Correlation ID: {error.correlationId}</small>
-      )}
+    <div className="p-6">
+      <div className="rounded-md border border-red-200 bg-red-50 p-4">
+        <h3 className="font-medium text-red-800">{COPY.error_load_case}</h3>
+        <p className="mt-1 text-sm text-red-700">{error.message}</p>
+        {error.correlationId && (
+          <p className="mt-2 text-xs text-red-500">Correlation ID: {error.correlationId}</p>
+        )}
+      </div>
     </div>
   );
 }

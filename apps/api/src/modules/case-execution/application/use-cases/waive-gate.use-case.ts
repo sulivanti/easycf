@@ -6,10 +6,13 @@
  * Motivo must be at least 20 characters (BR-014).
  */
 
-import type { GateInstanceRepository } from "../ports/gate-instance.repository.js";
-import { validateGateWaive } from "../../domain/domain-services/gate-resolver.service.js";
-import { assertGateTransition } from "../../domain/value-objects/gate-resolution-status.js";
-import { createCaseExecutionEvent, CASE_EXECUTION_EVENT_TYPES } from "../../domain/domain-events/case-events.js";
+import type { GateInstanceRepository } from '../ports/gate-instance.repository.js';
+import { validateGateWaive } from '../../domain/domain-services/gate-resolver.service.js';
+import { assertGateTransition } from '../../domain/value-objects/gate-resolution-status.js';
+import {
+  createCaseExecutionEvent,
+  CASE_EXECUTION_EVENT_TYPES,
+} from '../../domain/domain-events/case-events.js';
 
 export interface WaiveGateInput {
   gateInstanceId: string;
@@ -22,13 +25,15 @@ export interface WaiveGateInput {
 
 export interface WaiveGateOutput {
   gateInstanceId: string;
-  status: "WAIVED";
+  status: 'WAIVED';
 }
 
 export class WaiveGateUseCase {
   constructor(
     private readonly gateInstanceRepo: GateInstanceRepository,
-    private readonly emitEvent: (event: ReturnType<typeof createCaseExecutionEvent>) => Promise<void>,
+    private readonly emitEvent: (
+      event: ReturnType<typeof createCaseExecutionEvent>,
+    ) => Promise<void>,
   ) {}
 
   async execute(input: WaiveGateInput): Promise<WaiveGateOutput> {
@@ -39,14 +44,14 @@ export class WaiveGateUseCase {
 
     // Domain validation (motivo min 20 chars — BR-014)
     validateGateWaive({ motivo: input.motivo, userId: input.userId });
-    assertGateTransition(gate.status, "WAIVED");
+    assertGateTransition(gate.status, 'WAIVED');
 
     const now = new Date();
     await this.gateInstanceRepo.resolve(input.gateInstanceId, {
-      status: "WAIVED",
+      status: 'WAIVED',
       resolvedBy: input.userId,
       resolvedAt: now,
-      decision: "WAIVED",
+      decision: 'WAIVED',
       parecer: input.motivo,
       evidence: null,
       checklistItems: null,
@@ -67,6 +72,6 @@ export class WaiveGateUseCase {
       }),
     );
 
-    return { gateInstanceId: input.gateInstanceId, status: "WAIVED" };
+    return { gateInstanceId: input.gateInstanceId, status: 'WAIVED' };
   }
 }

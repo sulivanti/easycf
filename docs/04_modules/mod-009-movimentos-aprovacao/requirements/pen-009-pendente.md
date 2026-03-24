@@ -5,11 +5,12 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 0.11.0 | 2026-03-24 | validate-all  | Revalidação completa — PENDENTE-001 mantida (10 Prettier warnings). Blockquote tables corrigidos. |
+> | 0.10.0 | 2026-03-24 | validate-all  | Adição PENDENTE-001 — erros lint codegen (10 ocorrências) |
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.5.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento Batch 4 — pendências identificadas a partir de cross-reading de todos os artefatos do módulo |
 > | 0.6.0  | 2026-03-19 | arquitetura | PEN-009-001 decidida (Opção 1 — domain event outbox) + PEN-009-002 implementada (Amendment DOC-FND-000-M03) |
->
-| 0.7.0  | 2026-03-19 | arquitetura | PEN-009-003 implementada (dry_run body field), PEN-009-004 implementada (in-app MVP), PEN-009-006 implementada (endpoint retry) |
+> | 0.7.0  | 2026-03-19 | arquitetura | PEN-009-003 implementada (dry_run body field), PEN-009-004 implementada (in-app MVP), PEN-009-006 implementada (endpoint retry) |
 > | 0.8.0  | 2026-03-19 | arquitetura | PEN-009-007 implementada (polling 60s MVP, SSE roadmap pós-MVP) |
 > | 0.9.0  | 2026-03-19 | arquitetura | PEN-009-005 implementada (sem particionamento MVP, apenas índices; threshold 5M para range mensal PostgreSQL 14+) |
 
@@ -172,9 +173,64 @@ Total: 7 | Abertas: 0 | Decididas: 0 | Implementadas: 7 | Bloqueantes: 0
 
 ---
 
+## PENDENTE-001 — Erros de lint do codegen (ESLint + Prettier)
+
+- **status:** ABERTA
+- **severidade:** MÉDIA
+- **domínio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **modulo:** MOD-009
+- **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002, PEN-000/PENDENTE-018
+- **tags:** lint, eslint, prettier, codegen
+- **sla_data:** 2026-04-23
+- **dependencias:** []
+
+### Questão
+
+Código gerado pelo codegen não passa em `pnpm lint`. 10 ocorrências de lint neste módulo (web/movement-approval: 7, api/movement-approval: 3). Parte do problema cross-module documentado em PEN-000 PENDENTE-018 (55 errors + 91 warnings em 19 módulos). Viola DOC-PADRAO-002 §4.3.
+
+### Impacto
+
+Gate `lint` do DOC-ARC-002 falharia se ativado. Erros incluem `react-hooks/set-state-in-effect` (cascading renders), `no-unused-vars` e formatação Prettier divergente.
+
+### Opções
+
+**Opção A — Correção incremental em 3 fases (alinhada com PEN-000 PENDENTE-018):**
+
+1. `pnpm format` — corrige formatação Prettier automaticamente (0 risco)
+2. `pnpm lint:fix` + remoção manual de unused imports/vars — elimina warnings
+3. Refatoração dos errors React (extrair lógica de setState para callbacks/reducers)
+
+- Prós: Baixo risco, cada fase é independente e reversível, consistente com decisão já tomada em PEN-000 PENDENTE-018
+- Contras: Fase 3 requer entendimento da lógica de cada componente
+
+**Opção B — Relaxar regras temporariamente com `eslint-disable`:**
+
+Adicionar `eslint-disable` nos arquivos afetados e criar backlog de correção.
+
+- Prós: Desbloqueia CI imediatamente
+- Contras: Dívida técnica acumulada, esconde problemas reais (cascading renders). Opção C do PEN-000 PENDENTE-018 já foi descartada.
+
+### Recomendação
+
+Opção A — Correção incremental em 3 fases, consistente com a decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). As fases 1 e 2 são totalmente automatizáveis. A fase 3 segue padrão repetitivo (extrair setState para callback pattern).
+
+### Resolução (preenchido quando DECIDIDA)
+
+> **Decisão:** —
+> **Decidido por:** — em —
+> **Justificativa:** —
+> **Artefato de saída:** —
+> **Implementado em:** —
+
+---
+
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-009, FR-009, INT-009, SEC-009, DATA-009, NFR-009, UX-009, DATA-003
+- **data_ultima_revisao:** 2026-03-24
+- **rastreia_para:** US-MOD-009, FR-009, INT-009, SEC-009, DATA-009, NFR-009, UX-009, DATA-003, DOC-PADRAO-002
 - **referencias_exemplos:** N/A
-- **evidencias:** N/A
+- **evidencias:** PENDENTE-001 (10 ocorrências lint — web/movement-approval: 7, api/movement-approval: 3)

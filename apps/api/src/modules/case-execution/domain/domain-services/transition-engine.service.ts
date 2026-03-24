@@ -12,14 +12,14 @@
  * 5. Evidence provided if required (evidence_required on transition)
  */
 
-import type { CaseStatus } from "../value-objects/case-status.js";
-import type { GateResolutionStatus } from "../value-objects/gate-resolution-status.js";
-import { isGateCleared } from "../value-objects/gate-resolution-status.js";
-import { CaseNotOpenError } from "../errors/case-not-open.error.js";
-import { InvalidTransitionError } from "../errors/invalid-transition.error.js";
-import { GatePendingError } from "../errors/gate-pending.error.js";
-import { EvidenceRequiredError } from "../errors/evidence-required.error.js";
-import { RoleRequiredUnassignedError } from "../errors/role-required-unassigned.error.js";
+import type { CaseStatus } from '../value-objects/case-status.js';
+import type { GateResolutionStatus } from '../value-objects/gate-resolution-status.js';
+import { isGateCleared } from '../value-objects/gate-resolution-status.js';
+import { CaseNotOpenError } from '../errors/case-not-open.error.js';
+import { InvalidTransitionError } from '../errors/invalid-transition.error.js';
+import { GatePendingError } from '../errors/gate-pending.error.js';
+import { EvidenceRequiredError } from '../errors/evidence-required.error.js';
+import { RoleRequiredUnassignedError } from '../errors/role-required-unassigned.error.js';
 
 // ---------------------------------------------------------------------------
 // Input types (ports — injected by application layer)
@@ -32,7 +32,7 @@ export interface TransitionRequest {
   targetStageId: string;
   userId: string;
   userRoleCodigos: string[];
-  evidence?: { type: "note" | "file"; content?: string; url?: string };
+  evidence?: { type: 'note' | 'file'; content?: string; url?: string };
 }
 
 export interface BlueprintTransition {
@@ -82,7 +82,7 @@ export function validateTransition(
   context: TransitionContext,
 ): TransitionResult & { transition: BlueprintTransition } {
   // Step 1: Case is OPEN (BR-012)
-  if (request.currentStatus !== "OPEN") {
+  if (request.currentStatus !== 'OPEN') {
     throw new CaseNotOpenError(request.caseId, request.currentStatus);
   }
 
@@ -96,7 +96,7 @@ export function validateTransition(
     throw new InvalidTransitionError(
       request.currentStageId,
       request.targetStageId,
-      "Transition does not exist in the blueprint",
+      'Transition does not exist in the blueprint',
     );
   }
 
@@ -109,13 +109,13 @@ export function validateTransition(
     throw new InvalidTransitionError(
       request.currentStageId,
       request.targetStageId,
-      `User role not in allowed roles: ${transition.allowedRoles.join(", ")}`,
+      `User role not in allowed roles: ${transition.allowedRoles.join(', ')}`,
     );
   }
 
   // Step 4: All required gates cleared (BR-002, BR-005 — skip INFORMATIVE)
   const blocking = context.pendingGates.filter(
-    (g) => g.required && g.gateType !== "INFORMATIVE" && !isGateCleared(g.status),
+    (g) => g.required && g.gateType !== 'INFORMATIVE' && !isGateCleared(g.status),
   );
   if (blocking.length > 0) {
     throw new GatePendingError(
@@ -125,13 +125,11 @@ export function validateTransition(
   }
 
   // Step 4b: Required roles assigned (BR-006)
-  const unassigned = context.requiredRoles.filter(
-    (r) => !r.hasActiveAssignment,
-  );
+  const unassigned = context.requiredRoles.filter((r) => !r.hasActiveAssignment);
   if (unassigned.length > 0) {
     throw new RoleRequiredUnassignedError(
       request.caseId,
-      unassigned.map((r) => r.roleName).join(", "),
+      unassigned.map((r) => r.roleName).join(', '),
     );
   }
 

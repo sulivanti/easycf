@@ -7,11 +7,14 @@
  * Records stage_history entry (initial) + case.opened domain event.
  */
 
-import type { CaseInstanceRepository, CaseInstanceRow } from "../ports/case-instance.repository.js";
-import type { StageHistoryRepository } from "../ports/stage-history.repository.js";
-import type { GateInstanceRepository } from "../ports/gate-instance.repository.js";
-import { CycleNotPublishedError } from "../../domain/errors/cycle-not-published.error.js";
-import { createCaseExecutionEvent, CASE_EXECUTION_EVENT_TYPES } from "../../domain/domain-events/case-events.js";
+import type { CaseInstanceRepository, CaseInstanceRow } from '../ports/case-instance.repository.js';
+import type { StageHistoryRepository } from '../ports/stage-history.repository.js';
+import type { GateInstanceRepository } from '../ports/gate-instance.repository.js';
+import { CycleNotPublishedError } from '../../domain/errors/cycle-not-published.error.js';
+import {
+  createCaseExecutionEvent,
+  CASE_EXECUTION_EVENT_TYPES,
+} from '../../domain/domain-events/case-events.js';
 
 export interface OpenCaseInput {
   cycleId: string;
@@ -42,14 +45,16 @@ export class OpenCaseUseCase {
     private readonly stageHistoryRepo: StageHistoryRepository,
     private readonly gateInstanceRepo: GateInstanceRepository,
     private readonly getCycleInfo: (cycleId: string) => Promise<CycleInfo | null>,
-    private readonly emitEvent: (event: ReturnType<typeof createCaseExecutionEvent>) => Promise<void>,
+    private readonly emitEvent: (
+      event: ReturnType<typeof createCaseExecutionEvent>,
+    ) => Promise<void>,
   ) {}
 
   async execute(input: OpenCaseInput): Promise<OpenCaseOutput> {
     // 1. Validate cycle is PUBLISHED (BR-009)
     const cycle = await this.getCycleInfo(input.cycleId);
-    if (!cycle || cycle.status !== "PUBLISHED") {
-      throw new CycleNotPublishedError(input.cycleId, cycle?.status ?? "NOT_FOUND");
+    if (!cycle || cycle.status !== 'PUBLISHED') {
+      throw new CycleNotPublishedError(input.cycleId, cycle?.status ?? 'NOT_FOUND');
     }
 
     // 2. Generate codigo (BR-010)
@@ -62,7 +67,7 @@ export class OpenCaseUseCase {
       cycleId: input.cycleId,
       cycleVersionId: cycle.currentVersionId,
       currentStageId: cycle.initialStageId,
-      status: "OPEN",
+      status: 'OPEN',
       objectType: input.objectType ?? null,
       objectId: input.objectId ?? null,
       orgUnitId: input.orgUnitId ?? null,
@@ -82,7 +87,7 @@ export class OpenCaseUseCase {
       transitionId: null,
       transitionedBy: input.userId,
       transitionedAt: caseInstance.openedAt,
-      motivo: "Case opened",
+      motivo: 'Case opened',
       evidence: null,
     });
 
@@ -93,7 +98,7 @@ export class OpenCaseUseCase {
           caseId: caseInstance.id,
           gateId: g.gateId,
           stageId: g.stageId,
-          status: "PENDING" as const,
+          status: 'PENDING' as const,
         })),
       );
     }

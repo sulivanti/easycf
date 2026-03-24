@@ -152,13 +152,58 @@ Após todos os agentes executados, emita um resumo consolidado:
 - Execute `/codegen-all` para processar o próximo módulo
 ```
 
-## PASSO 8: Sincronizar Plano de Ação
+## PASSO 8: Registrar Execution State
 
-Após o relatório consolidado, atualize o plano de ação do módulo:
+Após o relatório consolidado, registre o estado de execução do codegen.
+
+1. Leia `.agents/execution-state/MOD-{NNN}.json` (se existir) ou crie um novo
+2. Atualize (ou crie) a seção `codegen` com os dados reais coletados no PASSO 5:
+
+```json
+{
+  "module_id": "MOD-{NNN}",
+  "module_path": "{caminho_modulo}",
+  "last_updated": "{ISO_TIMESTAMP}",
+  "codegen": {
+    "started_at": "{ISO_TIMESTAMP_INICIO}",
+    "completed_at": "{ISO_TIMESTAMP_FIM_OU_NULL}",
+    "agents": {
+      "AGN-COD-DB":   { "status": "done|error|skipped|pending", "completed_at": "...", "files_generated": N, "files": ["..."] },
+      "AGN-COD-CORE": { "status": "...", "completed_at": "...", "files_generated": N, "files": ["..."] },
+      "AGN-COD-APP":  { "status": "...", "completed_at": "...", "files_generated": N, "files": ["..."] },
+      "AGN-COD-API":  { "status": "...", "completed_at": "...", "files_generated": N, "files": ["..."] },
+      "AGN-COD-WEB":  { "status": "...", "completed_at": "...", "files_generated": N, "files": ["..."] },
+      "AGN-COD-VAL":  { "status": "...", "completed_at": "...", "files_generated": N, "files": ["..."] }
+    }
+  }
+}
+```
+
+- `status` usa os valores: `done`, `error`, `skipped` (nível N/A), `pending` (não executado)
+- Para agentes skippados por nível, use `"status": "skipped"` e `"files_generated": 0`
+- Se o codegen foi parcial (apenas alguns agentes), preencha os executados e deixe os demais como `pending`
+- Preserve seções existentes (`scaffold`, `validations`, `tests`) — faça merge, não sobrescreva
+
+## PASSO 9: Atualizar CHANGELOG
+
+Localize o `CHANGELOG.md` do módulo e adicione uma entrada na tabela "Histórico de Versões":
+
+```
+| {next_version} | {data_atual} | codegen | Codegen concluído: {N} agentes executados, {M} arquivos gerados. Camadas: {lista_camadas}. |
+```
+
+A versão deve ser o próximo patch bump da última entrada existente.
+
+> **Nota:** Se o codegen foi parcial (apenas alguns agentes), registre quais foram executados. Exemplo: `"Codegen parcial: AGN-COD-DB + AGN-COD-CORE (2 agentes, 10 arquivos). Faltam: APP, API, WEB, VAL."`
+
+## PASSO 10: Sincronizar Plano de Ação
+
+Após registrar o execution state, atualize o plano de ação do módulo:
 
 1. Verifique se o plano já existe: `docs/04_modules/user-stories/plano/PLANO-ACAO-MOD-{NNN}.md`
 2. Se **existe** → invoque `/action-plan {caminho_modulo} --update`
 3. Se **não existe** → invoque `/action-plan {caminho_modulo}` (criação completa)
 
 > **Nota:** Este passo garante que o plano de ação reflita o progresso da geração de código.
+> O action-plan agora lê `.agents/execution-state/MOD-{NNN}.json` para dados precisos do checklist.
 > Adicione ao relatório: `📋 Plano de ação atualizado: PLANO-ACAO-MOD-{NNN}.md`

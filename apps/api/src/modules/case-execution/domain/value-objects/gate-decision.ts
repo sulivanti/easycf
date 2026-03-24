@@ -7,5 +7,5 @@
  * WAIVED — gate dispensed (status → WAIVED, requires special scope — BR-014).
  */
 
-export const GATE_DECISIONS = ["APPROVED", "REJECTED", "WAIVED"] as const;
+export const GATE_DECISIONS = ['APPROVED', 'REJECTED', 'WAIVED'] as const;
 export type GateDecision = (typeof GATE_DECISIONS)[number];

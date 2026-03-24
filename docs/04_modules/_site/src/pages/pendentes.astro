@@ -6,17 +6,19 @@ import { loadAllModules } from "../lib/parse-modules";
 
 const penModules = loadAllPendentesDetailed();
 const modules = loadAllModules();
-const allPendentes = modules.flatMap((m) => m.pendentes);
 
-const totalPen = penModules.reduce((s, m) => s + m.pendentes.length, 0);
+// Use penModules (full parser with normalised status/severity) for ALL stats
+const allPendentes = penModules.flatMap((m) => m.pendentes);
+
+const totalPen = allPendentes.length;
 const totalOpen = allPendentes.filter((p) => p.status === "ABERTA").length;
 
-// Severity distribution
+// Severity distribution (already normalised by parse-pendentes-full)
 const sevDist = {
-  bloq: allPendentes.filter((p) => p.severidade.toUpperCase() === "BLOQ").length,
-  alta: allPendentes.filter((p) => p.severidade.toUpperCase() === "ALTA").length,
-  media: allPendentes.filter((p) => ["MEDIA", "MÉDIA"].includes(p.severidade.toUpperCase())).length,
-  baixa: allPendentes.filter((p) => p.severidade.toUpperCase() === "BAIXA").length,
+  bloq: allPendentes.filter((p) => p.severidade === "BLOQ" || p.severidade === "CRITICA").length,
+  alta: allPendentes.filter((p) => p.severidade === "ALTA").length,
+  media: allPendentes.filter((p) => p.severidade === "MEDIA").length,
+  baixa: allPendentes.filter((p) => p.severidade === "BAIXA").length,
 };
 
 const codegenReady = modules.filter((m) => m.estado === "READY" && m.codegen === "NAO INICIADO");

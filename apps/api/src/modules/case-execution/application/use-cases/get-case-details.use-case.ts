@@ -4,9 +4,12 @@
  * Returns full case details: instance + current stage gates + active assignments.
  */
 
-import type { CaseInstanceRepository, CaseInstanceRow } from "../ports/case-instance.repository.js";
-import type { GateInstanceRepository, GateInstanceRow } from "../ports/gate-instance.repository.js";
-import type { CaseAssignmentRepository, CaseAssignmentRow } from "../ports/case-assignment.repository.js";
+import type { CaseInstanceRepository, CaseInstanceRow } from '../ports/case-instance.repository.js';
+import type { GateInstanceRepository, GateInstanceRow } from '../ports/gate-instance.repository.js';
+import type {
+  CaseAssignmentRepository,
+  CaseAssignmentRow,
+} from '../ports/case-assignment.repository.js';
 
 export interface GetCaseDetailsInput {
   caseId: string;

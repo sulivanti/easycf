@@ -6,13 +6,11 @@
  */
 
 export class RoleNotAuthorizedError extends Error {
-  public readonly code = "ROLE_NOT_AUTHORIZED";
+  public readonly code = 'ROLE_NOT_AUTHORIZED';
   public readonly statusCode = 403;
 
   constructor(userId: string, requiredCapability: string) {
-    super(
-      `User ${userId} does not have the required capability: ${requiredCapability}.`,
-    );
-    this.name = "RoleNotAuthorizedError";
+    super(`User ${userId} does not have the required capability: ${requiredCapability}.`);
+    this.name = 'RoleNotAuthorizedError';
   }
 }

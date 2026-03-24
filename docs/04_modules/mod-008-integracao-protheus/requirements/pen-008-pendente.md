@@ -10,20 +10,21 @@
 > | 0.3.0  | 2026-03-19 | arquitetura | PENDENTE-001 decidida: Opção B (tabela simples + trigger de migração) |
 > | 0.4.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida: Opção A (retenção 6 meses + archive S3 com anonimização PII) |
 > | 0.5.0  | 2026-03-19 | arquitetura | PENDENTE-004 implementada: Opção B+A (ticket Protheus + fallback default=10 + monitoramento) |
->
-| 0.6.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida+implementada: Opção A (cache Redis OAuth2, lock distribuído, mid-flight expiry) |
-| 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada: Opção A (seed automático HML com WireMock) |
-| 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-001 implementada: Opção B (tabela simples + trigger migração 10M; alerta 5M no NFR-008) |
-| 0.9.0  | 2026-03-19 | arquitetura | PENDENTE-002 implementada: Opção A (retenção 6 meses hot + archive S3 anonimizado; original purgado) |
-| 1.1.0  | 2026-03-23 | Marcos Sulivan | PENDENTE-004 → IMPLEMENTADA — limite real confirmado: default=10, max=20 conexões simultâneas |
-| 1.0.0  | 2026-03-22 | arquitetura | Sincronização status body: PENDENTE-006/007/008 → IMPLEMENTADA (correções já aplicadas em manifests e DOC-FND-000) |
+> | 0.6.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida+implementada: Opção A (cache Redis OAuth2, lock distribuído, mid-flight expiry) |
+> | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada: Opção A (seed automático HML com WireMock) |
+> | 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-001 implementada: Opção B (tabela simples + trigger migração 10M; alerta 5M no NFR-008) |
+> | 0.9.0  | 2026-03-19 | arquitetura | PENDENTE-002 implementada: Opção A (retenção 6 meses hot + archive S3 anonimizado; original purgado) |
+> | 1.2.0  | 2026-03-24 | validate-all  | Adição PENDENTE-009 — erros lint codegen (6 ocorrências) |
+> | 1.1.0  | 2026-03-23 | Marcos Sulivan | PENDENTE-004 → IMPLEMENTADA — limite real confirmado: default=10, max=20 conexões simultâneas |
+> | 1.0.0  | 2026-03-22 | arquitetura | Sincronização status body: PENDENTE-006/007/008 → IMPLEMENTADA (correções já aplicadas em manifests e DOC-FND-000) |
 
 # PEN-008 — Questões Abertas da Integração Dinâmica Protheus
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-008, MOD-008, NFR-008, SEC-008, INT-008, DATA-008
+- **data_ultima_revisao:** 2026-03-24
+- **rastreia_para:** US-MOD-008, MOD-008, NFR-008, SEC-008, INT-008, DATA-008, DOC-PADRAO-002
+- **evidencias:** PENDENTE-009 (6 ocorrências lint codegen — web/integration-protheus: 4, api/integration-protheus: 2)
 
 ---
 
@@ -459,3 +460,58 @@ Gate 3 falha para ambos manifests MOD-008. Bloqueio de promoção para READY.
 > **Justificativa:** 5 scopes registrados diretamente em DOC-FND-000 §2.2: `integration:service:read`, `integration:service:write`, `integration:routine:write`, `integration:execute`, `integration:log:read`, `integration:log:reprocess`. Gate 3 verde para ambos manifests MOD-008.
 > **Artefato de saída:** DOC-FND-000 §2.2 (scopes integration:* nas linhas 119-124)
 > **Implementado em:** DOC-FND-000 v1.8.0
+
+---
+
+## PENDENTE-009 — Erros de lint do codegen (ESLint + Prettier)
+
+- **status:** ABERTA
+- **severidade:** MÉDIA
+- **domínio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **modulo:** MOD-008
+- **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002, PEN-000/PENDENTE-018
+- **tags:** lint, eslint, prettier, codegen
+- **sla_data:** 2026-04-23
+- **dependencias:** []
+
+### Questão
+
+Código gerado pelo codegen não passa em `pnpm lint`. 6 ocorrências de lint neste módulo (web/integration-protheus: 4, api/integration-protheus: 2). Parte do problema cross-module documentado em PEN-000 PENDENTE-018 (55 errors + 91 warnings em 19 módulos). Viola DOC-PADRAO-002 §4.3.
+
+### Impacto
+
+Gate `lint` do DOC-ARC-002 falharia se ativado. Erros incluem `react-hooks/set-state-in-effect` (cascading renders), `no-unused-vars` e formatação Prettier divergente.
+
+### Opções
+
+**Opção A — Correção incremental em 3 fases (alinhada com PEN-000 PENDENTE-018):**
+
+1. `pnpm format` — corrige formatação Prettier automaticamente (0 risco)
+2. `pnpm lint:fix` + remoção manual de unused imports/vars — elimina warnings
+3. Refatoração dos errors React (extrair lógica de setState para callbacks/reducers)
+
+- Prós: Baixo risco, cada fase é independente e reversível, consistente com decisão já tomada em PEN-000 PENDENTE-018
+- Contras: Fase 3 requer entendimento da lógica de cada componente
+
+**Opção B — Relaxar regras temporariamente com `eslint-disable`:**
+
+Adicionar `eslint-disable` nos arquivos afetados e criar backlog de correção.
+
+- Prós: Desbloqueia CI imediatamente
+- Contras: Dívida técnica acumulada, esconde problemas reais (cascading renders). Opção C do PEN-000 PENDENTE-018 já foi descartada.
+
+### Recomendação
+
+Opção A — Correção incremental em 3 fases, consistente com a decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). As fases 1 e 2 são totalmente automatizáveis. A fase 3 segue padrão repetitivo (extrair setState para callback pattern).
+
+### Resolução (preenchido quando DECIDIDA)
+
+> **Decisão:** —
+> **Decidido por:** — em —
+> **Justificativa:** —
+> **Artefato de saída:** —
+> **Implementado em:** —

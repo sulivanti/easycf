@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-010",
   "module_path": "docs/04_modules/mod-010-mcp-automacao/",
-  "last_updated": "2026-03-23T22:30:00.000Z",
+  "last_updated": "2026-03-24T23:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -15,5 +15,123 @@
     "gates_passed": ["DoR-1", "DoR-2", "DoR-3", "DoR-4", "DoR-5", "DoR-6", "DoR-7"],
     "epic_status": "READY",
     "features_promoted": ["F01", "F02", "F03", "F04", "F05"]
+  },
+  "codegen": {
+    "started_at": "2026-03-23T23:05:00.000Z",
+    "completed_at": "2026-03-24T19:30:00Z",
+    "agents": {
+      "AGN-COD-DB": {
+        "status": "done",
+        "completed_at": "2026-03-23T23:10:00.000Z",
+        "files_generated": 3,
+        "files": [
+          "apps/api/db/schema/mcp-automation.ts",
+          "apps/api/db/schema/mcp-automation.relations.ts",
+          "apps/api/db/schema/index.ts"
+        ]
+      },
+      "AGN-COD-CORE": {
+        "status": "done",
+        "completed_at": "2026-03-23T23:25:00.000Z",
+        "files_generated": 10,
+        "files": [
+          "apps/api/src/modules/mcp/domain/value-objects/agent-status.ts",
+          "apps/api/src/modules/mcp/domain/value-objects/execution-policy.ts",
+          "apps/api/src/modules/mcp/domain/value-objects/action-type.ts",
+          "apps/api/src/modules/mcp/domain/value-objects/execution-status.ts",
+          "apps/api/src/modules/mcp/domain/aggregates/mcp-agent.ts",
+          "apps/api/src/modules/mcp/domain/entities/mcp-action.ts",
+          "apps/api/src/modules/mcp/domain/domain-services/scope-blocklist-validator.ts",
+          "apps/api/src/modules/mcp/domain/domain-events/mcp-events.ts",
+          "apps/api/src/modules/mcp/domain/errors/mcp-errors.ts",
+          "apps/api/src/modules/mcp/domain/index.ts"
+        ]
+      },
+      "AGN-COD-APP": {
+        "status": "done",
+        "completed_at": "2026-03-23T23:45:00.000Z",
+        "files_generated": 14,
+        "files": [
+          "apps/api/src/modules/mcp/application/ports/repositories.ts",
+          "apps/api/src/modules/mcp/application/ports/services.ts",
+          "apps/api/src/modules/mcp/application/use-cases/agents/create-agent.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/agents/update-agent.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/agents/revoke-agent.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/agents/rotate-agent-key.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/agents/enable-phase2.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/agents/list-agents.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/actions/create-action.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/actions/update-action.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/links/grant-agent-action.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/links/revoke-agent-action.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/gateway/execute-mcp.use-case.ts",
+          "apps/api/src/modules/mcp/application/use-cases/executions/list-executions.use-case.ts"
+        ]
+      },
+      "AGN-COD-API": {
+        "status": "done",
+        "completed_at": "2026-03-24T12:00:00.000Z",
+        "files_generated": 14,
+        "files": [
+          "apps/api/src/modules/mcp/presentation/dtos/common.dto.ts",
+          "apps/api/src/modules/mcp/presentation/dtos/agents.dto.ts",
+          "apps/api/src/modules/mcp/presentation/dtos/actions.dto.ts",
+          "apps/api/src/modules/mcp/presentation/dtos/executions.dto.ts",
+          "apps/api/src/modules/mcp/presentation/dtos/gateway.dto.ts",
+          "apps/api/src/modules/mcp/presentation/routes/agents.route.ts",
+          "apps/api/src/modules/mcp/presentation/routes/actions.route.ts",
+          "apps/api/src/modules/mcp/presentation/routes/executions.route.ts",
+          "apps/api/src/modules/mcp/presentation/routes/gateway.route.ts",
+          "apps/api/src/modules/mcp/presentation/error-handler.ts",
+          "apps/api/src/modules/mcp/presentation/index.ts",
+          "apps/api/src/modules/mcp/index.ts",
+          "apps/api/openapi/mod-010-mcp-automation.yaml"
+        ],
+        "notes": "14 endpoints: 8 agent admin (incl. links), 3 action admin, 2 execution log, 1 gateway. ListActions uses actionRepo.list() directly (no use case — thin read). Payload sanitization in executions route."
+      },
+      "AGN-COD-WEB": {
+        "status": "done",
+        "completed_at": "2026-03-24T19:30:00Z",
+        "files_generated": 10,
+        "files": [
+          "apps/web/src/modules/mcp-automation/types/mcp-automation.types.ts",
+          "apps/web/src/modules/mcp-automation/api/mcp-automation.api.ts",
+          "apps/web/src/modules/mcp-automation/hooks/use-agents.ts",
+          "apps/web/src/modules/mcp-automation/hooks/use-actions.ts",
+          "apps/web/src/modules/mcp-automation/hooks/use-executions.ts",
+          "apps/web/src/modules/mcp-automation/components/ApiKeyModal.tsx",
+          "apps/web/src/modules/mcp-automation/components/RevokeModal.tsx",
+          "apps/web/src/modules/mcp-automation/components/ExecutionDetailPanel.tsx",
+          "apps/web/src/modules/mcp-automation/pages/agents/AgentsPage.tsx",
+          "apps/web/src/modules/mcp-automation/pages/executions/ExecutionsPage.tsx"
+        ],
+        "notes": "Full rewrite: React Query (25× useQuery/useMutation), Tailwind CSS v4 (zero inline style), shared UI (Button, Badge, Table, Dialog, Drawer, Skeleton, Tooltip, Spinner, Input, Label). 3 extracted components (ApiKeyModal, RevokeModal, ExecutionDetailPanel). Toast via sonner."
+      },
+      "AGN-COD-VAL": {
+        "status": "done",
+        "completed_at": "2026-03-24T15:00:00.000Z",
+        "files_generated": 0,
+        "files": [],
+        "notes": "Validação Fase 3 completa. QA: PASS, Manifests: 2/2 PASS, OpenAPI: PASS, Drizzle: PASS, Endpoints: PASS. 0 bloqueadores, 0 violações."
+      }
+    }
+  },
+  "validations": {
+    "last_run": "2026-03-24T23:00:00.000Z",
+    "lint": { "status": "PASS", "run_at": "2026-03-24T23:00:00.000Z", "errors": 0, "warnings": 0 },
+    "format": { "status": "WARN", "run_at": "2026-03-24T23:00:00.000Z", "warnings": 5, "notes": "5 Prettier format warnings in web/mcp-automation (cross-module issue PEN-000/PENDENTE-018)" },
+    "architecture": { "status": "PASS", "run_at": "2026-03-24T23:00:00.000Z", "notes": "DomainError+type+statusHint, react-query hooks, Pattern A web" },
+    "qa": { "status": "PASS", "run_at": "2026-03-24T23:00:00.000Z", "blockers": 0, "violations": 0, "warnings": 0 },
+    "manifest": { "status": "PASS", "run_at": "2026-03-24T23:00:00.000Z", "total": 2, "passed": 2, "violations": [] },
+    "openapi": { "status": "PASS", "run_at": "2026-03-24T23:00:00.000Z", "operations": 14 },
+    "drizzle": { "status": "PASS", "run_at": "2026-03-24T23:00:00.000Z", "tables": 5, "checks": true, "indexes": true },
+    "endpoint": { "status": "PASS", "run_at": "2026-03-24T23:00:00.000Z", "route_files": 4, "endpoints": 14 },
+    "verdict": {
+      "ready_for_promotion": true,
+      "blockers": 0,
+      "critical_violations": 0,
+      "warnings": 5,
+      "notes": "5 Prettier format warnings (non-blocking, cross-module PEN-000/PENDENTE-018). PENDENTE-008 lint errors resolved (0 ESLint errors)."
+    }
   }
 }

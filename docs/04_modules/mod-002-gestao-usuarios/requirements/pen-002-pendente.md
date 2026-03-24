@@ -5,14 +5,20 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 0.17.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-006 → IMPLEMENTADA — 0 lint errors em web/users (já corrigidos em PENDENTE-004/005) |
+| 0.16.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-006 → DECIDIDA (Opção A — correção incremental em 3 fases) |
+| 0.15.0 | 2026-03-24 | validate-all  | Adição PENDENTE-006 — erros lint codegen (10 ocorrências) |
+> | 0.14.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-005 → IMPLEMENTADA — copy.ts criado + strings inline migradas (8 componentes) |
+> | 0.13.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-005 → DECIDIDA (Opção A — criar copy.ts e migrar strings inline) |
+> | 0.12.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-004 → IMPLEMENTADA — 6 test files, 59 tests (domain + component) |
+> | 0.11.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-004 → DECIDIDA (Opção C — unit tests + component tests) |
 > | 0.10.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-002 → IMPLEMENTADA — known limitation v1 documentada em BR-004 v0.2.0 |
->
-| 0.9.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → IMPLEMENTADA — Opção A (ADR-002 v0.2.0, copy.ts structure) |
-| 0.8.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → DECIDIDA (Opção A) |
-| 0.7.0  | 2026-03-18 | usuário     | PENDENTE-002 decidida — Opção A (cooldown client-side, known limitation v1) |
-| 0.6.0  | 2026-03-18 | usuário     | PENDENTE-001 implementada — endpoint adicionado diretamente em FR-000 §FR-006 (DRAFT) |
-| 0.5.0  | 2026-03-18 | usuário     | PENDENTE-001 decidida — Opção A (amendment MOD-000-F05) |
-| 0.4.0  | 2026-03-17 | AGN-DEV-10  | Batch 4 — adicionadas PENDENTE-002 (cooldown cross-tab) e PENDENTE-003 (copy centralizada) |
+> | 0.9.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → IMPLEMENTADA — Opção A (ADR-002 v0.2.0, copy.ts structure) |
+> | 0.8.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → DECIDIDA (Opção A) |
+> | 0.7.0  | 2026-03-18 | usuário     | PENDENTE-002 decidida — Opção A (cooldown client-side, known limitation v1) |
+> | 0.6.0  | 2026-03-18 | usuário     | PENDENTE-001 implementada — endpoint adicionado diretamente em FR-000 §FR-006 (DRAFT) |
+> | 0.5.0  | 2026-03-18 | usuário     | PENDENTE-001 decidida — Opção A (amendment MOD-000-F05) |
+> | 0.4.0  | 2026-03-17 | AGN-DEV-10  | Batch 4 — adicionadas PENDENTE-002 (cooldown cross-tab) e PENDENTE-003 (copy centralizada) |
 > | 0.3.0  | 2026-03-17 | AGN-DEV-11  | Renomeação pen-002-pendente.md, H1 corrigido, sla_data e dependencias adicionados |
 > | 0.2.0  | 2026-03-17 | AGN-DEV-11  | Migração para formato enriquecido (TEMPLATE-PENDENTE §4) |
 > | 0.1.0  | 2026-03-17 | AGN-DEV-10  | Criação — pendência de amendment no MOD-000-F05 |
@@ -21,10 +27,10 @@
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-002, US-MOD-002-F03, FR-003, INT-001, DATA-003, SEC-002, UX-001, MOD-000, US-MOD-000-F05, BR-004, ADR-002
+- **data_ultima_revisao:** 2026-03-24
+- **rastreia_para:** US-MOD-002, US-MOD-002-F03, FR-003, INT-001, DATA-003, SEC-002, UX-001, MOD-000, US-MOD-000-F05, BR-004, ADR-002, DOC-PADRAO-002
 - **referencias_exemplos:** EX-CI-007
-- **evidencias:** Pendência documentada em US-MOD-002-F03 §1, épico §10, FR-003 (seção Amendment Obrigatório). Migrada para formato enriquecido por AGN-DEV-11. Batch 4 (AGN-DEV-10): 2 novas pendências adicionadas — cooldown cross-tab e copy centralizada.
+- **evidencias:** Pendência documentada em US-MOD-002-F03 §1, épico §10, FR-003 (seção Amendment Obrigatório). Migrada para formato enriquecido por AGN-DEV-11. Batch 4 (AGN-DEV-10): 2 novas pendências adicionadas — cooldown cross-tab e copy centralizada. PENDENTE-006 — 10 erros lint codegen (web/users: 10), ref PEN-000/PENDENTE-018. PENDENTE-006 DECIDIDA → IMPLEMENTADA (0 erros lint — já corrigidos em PENDENTE-004/005).
 
 ---
 
@@ -35,6 +41,9 @@
 | PENDENTE-001 | ✅ IMPLEMENTADA | 🔴 BLOQUEANTE | ARC | ~~Amendment `users_invite_resend` no MOD-000-F05~~ | — | Antes do scaffolding F03 |
 | PENDENTE-002 | ✅ IMPLEMENTADA | 🟡 MÉDIA | ARC | ~~Cooldown anti-spam cross-tab: known limitation v1~~ | Marcos Sulivan | Antes do scaffolding F03 |
 | PENDENTE-003 | ✅ IMPLEMENTADA | 🟢 BAIXA | UX | ~~Estrutura de copy centralizada (`domain/copy.ts`)~~ | Marcos Sulivan | Durante scaffolding |
+| PENDENTE-004 | ✅ IMPLEMENTADA | 🔴 ALTA | QA | ~~Testes unitários ausentes (NFR-001 §9: ≥80% lines)~~ | Marcos Sulivan | Antes do merge |
+| PENDENTE-005 | ✅ IMPLEMENTADA | 🟡 MÉDIA | UX | ~~`domain/copy.ts` não gerado (ADR-002/PEN-003 spec'd, AGN-COD-WEB não criou)~~ | Marcos Sulivan | Antes do merge |
+| PENDENTE-006 | ✅ IMPLEMENTADA | 🟡 MÉDIA | ARC | ~~Erros de lint do codegen (ESLint + Prettier)~~ | Marcos Sulivan | 2026-04-23 |
 
 ---
 
@@ -227,3 +236,195 @@ Usar biblioteca de internacionalização com arquivos de mensagens.
 > **Justificativa:** Object map com plain strings é simples, type-safe, auditável via grep e sem dependência de lib de i18n. Suficiente para backoffice pt-BR only. Migração para i18n futura é trivial (extrair strings para arquivo JSON de locale).
 > **Artefato de saída:** ADR-002 v0.2.0 (§Estrutura de `domain/copy.ts` adicionada)
 > **Implementado em:** 2026-03-18
+
+---
+
+## ~~PENDENTE-004~~ — ✅ IMPLEMENTADA: Testes Unitários (domain + component)
+
+- **status:** IMPLEMENTADA
+- **severidade:** ALTA
+- **domínio:** QA
+- **tipo:** LACUNA
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** C
+- **justificativa_decisao:** Ambas as camadas de teste são necessárias para atingir ≥80% lines e ≥70% branches (NFR-001 §9). Testes unitários de domain/data garantem lógica pura; testes de componente cobrem cenários Gherkin de FR-001..FR-003.
+- **modulo:** MOD-002
+- **rastreia_para:** [NFR-001, BR-001, BR-003, BR-004, BR-005, BR-006, FR-001, FR-002, FR-003]
+- **tags:** [tests, quality, nfr, codegen-val]
+- **sla_data:** Antes do merge
+- **dependencias:** []
+
+### Questão
+
+Nenhum arquivo de teste (`.test.ts`, `.spec.ts`, `__tests__/`) encontrado em `apps/web/src/modules/users/`. NFR-001 §9 exige:
+- ≥80% line coverage, ≥70% branches
+- Unit tests para: view-model, permissions, form modes, cooldown, modal, table actions
+- Integration tests: happy path, error handling, scope visibility
+
+### Impacto
+
+- **Qualidade:** Sem testes, regressões não são detectadas. Componentes com lógica condicional (3 scopes, 2 modos, cooldown 60s) são especialmente suscetíveis.
+- **CI gate:** NFR-001 §10 define CI gates que falharão sem cobertura mínima.
+- **Artefatos impactados:** Todos os 14 arquivos gerados por AGN-COD-WEB.
+
+### Arquivos prioritários para teste
+
+| Arquivo | Justificativa |
+|---|---|
+| `domain/permissions.ts` | 4 funções de visibilidade por scope — unit test puro |
+| `domain/view-model.ts` | formatters e StatusBadge mapping — unit test puro |
+| `data/mappers.ts` | 5 mappers + extractFieldErrors — unit test puro |
+| `ui/forms/UserCreateForm.tsx` | 2 modos, validação, idempotency — component test |
+| `ui/components/CooldownButton.tsx` | timer 60s, estados — component test |
+| `ui/components/DeactivateModal.tsx` | LGPD (nome, não email) — component test |
+
+### Opções
+
+**Opção A — Testes unitários domain/data apenas:**
+Criar testes para `permissions.ts`, `view-model.ts`, `mappers.ts` — cobertura de lógica pura sem dependência de React.
+
+- Prós: Rápido de implementar; alto valor por linha de teste; sem setup de testing-library
+- Contras: Não cobre interações de componente; cobertura parcial (domain/data apenas)
+
+**Opção B — Testes de componente apenas:**
+Criar testes com React Testing Library para `UserCreateForm`, `CooldownButton`, `DeactivateModal` e páginas.
+
+- Prós: Cobre cenários Gherkin de FR-001..FR-003; valida integração UI
+- Contras: Mais lento de escrever e executar; não testa lógica isolada
+
+**Opção C — Ambos A + B:**
+Testes unitários para domain/data + testes de componente para ui/.
+
+- Prós: Cobertura completa (≥80% lines, ≥70% branches conforme NFR-001 §9); cobre lógica pura e interações
+- Contras: Maior esforço inicial; requer vitest + testing-library configurados
+
+### Recomendação
+
+Opção C — ambas as camadas de teste são necessárias. Testes unitários de domain/data garantem lógica pura; testes de componente cobrem cenários Gherkin. Priorizar domain/ e data/ (unit tests puros, sem dependência de React) antes de ui/ (component tests com testing-library).
+
+### Resolução
+
+> **Decisão:** Opção C — Ambos A + B (unit tests domain/data + component tests ui/)
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Ambas as camadas de teste são necessárias para atingir ≥80% lines e ≥70% branches (NFR-001 §9). Testes unitários de domain/data garantem lógica pura sem dependência de React; testes de componente com testing-library cobrem cenários Gherkin de FR-001..FR-003 e validam interações (form modes, cooldown, modal LGPD). Priorizar domain/data primeiro (alto valor por linha de teste).
+> **Artefato de saída:** 6 test files: permissions.test.ts, view-model.test.ts, mappers.test.ts, CooldownButton.test.tsx, DeactivateModal.test.tsx, UserCreateForm.test.tsx (59 tests passing)
+> **Implementado em:** 2026-03-24
+
+---
+
+## ~~PENDENTE-005~~ — ✅ IMPLEMENTADA: `domain/copy.ts` Criado e Strings Migradas
+
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **domínio:** UX
+- **tipo:** LACUNA
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **justificativa_decisao:** ADR-002 já define a estrutura; o arquivo deveria ter sido gerado pelo AGN-COD-WEB. Custo baixo, benefício imediato para auditoria LGPD centralizada. Opção B (adiar) viola decisão já tomada em PEN-003.
+- **modulo:** MOD-002
+- **rastreia_para:** [ADR-002, PEN-003, BR-002, BR-006, UX-001]
+- **tags:** [copy, lgpd, pii-safe, codegen-val]
+- **sla_data:** Antes do merge
+- **dependencias:** []
+
+### Questão
+
+PENDENTE-003 foi marcada como IMPLEMENTADA (decisão Opção A — object map em `domain/copy.ts`), e ADR-002 v0.2.0 documenta a estrutura. Porém, AGN-COD-WEB não gerou o arquivo `domain/copy.ts`. As strings de feedback estão inline nos componentes (toasts, modais, erros).
+
+### Impacto
+
+- **Auditoria LGPD:** Sem centralização, auditoria de PII em mensagens requer busca manual em todos os componentes.
+- **Consistência:** Risco de copy divergente entre telas para mesmos cenários de erro.
+
+### Opções
+
+**Opção A — Criar copy.ts e migrar strings inline:**
+Criar `apps/web/src/modules/users/domain/copy.ts` com object map type-safe conforme ADR-002 §Estrutura. Migrar todas as strings inline dos componentes para referências ao mapa.
+
+- Prós: Conformidade total com ADR-002 e PEN-003 decisão; auditoria LGPD centralizada; copy consistente entre telas
+- Contras: Requer refactoring dos componentes existentes para usar referências ao mapa
+
+**Opção B — Adiar para sprint de qualidade:**
+Manter strings inline e criar issue de tech-debt para migração futura.
+
+- Prós: Sem impacto imediato nos componentes gerados; menor esforço agora
+- Contras: Viola ADR-002 decidido em PEN-003; auditoria LGPD manual; risco de copy divergente
+
+### Recomendação
+
+Opção A — criar `domain/copy.ts` e migrar strings inline. ADR-002 é decisão já tomada (PEN-003 IMPLEMENTADA); o arquivo deveria ter sido gerado pelo AGN-COD-WEB. Custo de criação é baixo e o benefício de auditoria LGPD centralizada é imediato.
+
+### Resolução
+
+> **Decisão:** Opção A — Criar copy.ts e migrar strings inline
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** ADR-002 já define a estrutura completa do object map. O arquivo deveria ter sido gerado pelo AGN-COD-WEB na etapa de codegen. Custo de criação é baixo e o benefício de auditoria LGPD centralizada é imediato. Opção B (adiar) viola decisão já tomada em PEN-003 IMPLEMENTADA.
+> **Artefato de saída:** `apps/web/src/modules/users/domain/copy.ts` — 8 componentes migrados (CooldownButton, DeactivateModal, PasswordStrengthIndicator, UserCreateForm, UserFormScreen, UserInviteScreen, UsersListScreen, UsersTable)
+> **Implementado em:** 2026-03-24
+
+---
+
+## ~~PENDENTE-006~~ — ✅ IMPLEMENTADA: Erros de lint do codegen (ESLint + Prettier)
+
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **domínio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **justificativa_decisao:** Correção incremental em 3 fases (format → lint:fix → refactor) é baixo risco, cada fase reversível, e consistente com decisão já tomada em PEN-000 PENDENTE-018. eslint-disable (Opção B) já foi descartada no PEN-000.
+- **modulo:** MOD-002
+- **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002, PEN-000/PENDENTE-018
+- **tags:** lint, eslint, prettier, codegen
+- **sla_data:** 2026-04-23
+- **dependencias:** []
+
+### Questão
+
+Código gerado pelo codegen não passa em `pnpm lint`. 10 ocorrências de lint neste módulo (web/users: 10). Parte do problema cross-module documentado em PEN-000 PENDENTE-018 (55 errors + 91 warnings em 19 módulos). Viola DOC-PADRAO-002 §4.3.
+
+### Impacto
+
+Gate `lint` do DOC-ARC-002 falharia se ativado. Erros incluem `react-hooks/set-state-in-effect` (cascading renders), `no-unused-vars` e formatação Prettier divergente.
+
+### Opções
+
+**Opção A — Correção incremental em 3 fases (alinhada com PEN-000 PENDENTE-018):**
+
+1. `pnpm format` — corrige formatação Prettier automaticamente (0 risco)
+2. `pnpm lint:fix` + remoção manual de unused imports/vars — elimina warnings
+3. Refatoração dos errors React (extrair lógica de setState para callbacks/reducers)
+
+- Prós: Baixo risco, cada fase é independente e reversível, consistente com decisão já tomada em PEN-000 PENDENTE-018
+- Contras: Fase 3 requer entendimento da lógica de cada componente
+
+**Opção B — Relaxar regras temporariamente com `eslint-disable`:**
+
+Adicionar `eslint-disable` nos arquivos afetados e criar backlog de correção.
+
+- Prós: Desbloqueia CI imediatamente
+- Contras: Dívida técnica acumulada, esconde problemas reais (cascading renders). Opção C do PEN-000 PENDENTE-018 já foi descartada.
+
+### Recomendação
+
+Opção A — Correção incremental em 3 fases, consistente com a decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). As fases 1 e 2 são totalmente automatizáveis. A fase 3 segue padrão repetitivo (extrair setState para callback pattern).
+
+### Resolução
+
+> **Decisão:** Opção A — Correção incremental em 3 fases (format → lint:fix → refactor React)
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Cada fase é independente e reversível. Fases 1 e 2 são totalmente automatizáveis (`pnpm format` + `pnpm lint:fix`). Fase 3 segue padrão repetitivo (extrair setState para callback pattern). Consistente com decisão já tomada em PEN-000 PENDENTE-018. Opção B (eslint-disable) já descartada no PEN-000.
+> **Artefato de saída:** Verificação via `pnpm lint` + `prettier --check` — 0 erros em `apps/web/src/modules/users/` (já corrigidos durante PENDENTE-004 e PENDENTE-005)
+> **Implementado em:** 2026-03-24

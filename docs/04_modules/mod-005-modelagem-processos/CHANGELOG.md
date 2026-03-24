@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.2 | 2026-03-24 | validate-all | Re-validação completa. Lint: PASS. Format: PASS. QA: WARN (5 TS — reactflow deps). Drizzle: PASS (7/7). Endpoints: FAIL (1 bloqueador + 3 críticas persistem: V-E01 DomainError, V-E02 deprecate sem rota, V-E03 status codes, V-E06 web deprecate broken). Manifests: WARN (V-M01 update action). Nova pendência: nenhuma (todas pré-existentes). |
+| 1.0.1 | 2026-03-23 | validate-all | Validação Fase 3 com 1 bloqueador + 4 violações críticas — ver pen file. QA: WARN (infra-level). Manifests: 1/2. OpenAPI: PASS. Drizzle: PASS. Endpoints: FAIL. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Épico + features já READY. Ciclo de estabilidade avança para Etapa 5. |
 | 0.17.0 | 2026-03-17 | AGN-DEV-10 | Re-enriquecimento PENDENTE (enrich-agent) — 3 novas questoes abertas: Q7 (domain events update/delete), Q8 (DELETE process_roles), Q9 (ADR-002 status proposed). Total: 6 resolvidas + 3 abertas |
 | 0.16.0 | 2026-03-17 | AGN-DEV-09 | Re-enriquecimento ADR (enrich-agent) — ADR-003: Fork atomico via transacao unica com remapeamento de UUIDs (accepted). ADR-004: Optimistic locking via updated_at para edicao concorrente (accepted). Total: 4 ADRs |

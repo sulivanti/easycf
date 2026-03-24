@@ -24,7 +24,7 @@ flowchart TD
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
+    style E5  fill:#27AE60,color:#fff,stroke:#1E8449
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
@@ -44,3 +44,6 @@ flowchart TD
 | 0.5.0 | 2026-03-19 | AGN-DEV-09/10/11 | Enriquecimento Batch 4 — AGN-DEV-09 (ADR): 4 ADRs criados — ADR-001 (Outbox Pattern para garantia de entrega), ADR-002 (Retry gerenciado pelo Outbox vs. BullMQ), ADR-003 (Herança de behavior_routines do MOD-007 via extensão 1:1), ADR-004 (Credenciais criptografadas AES-256 via secret do ambiente). AGN-DEV-10 (PENDENTE): 5 pendências identificadas — PENDENTE-001 (particionamento call_logs > 10M), PENDENTE-002 (retenção call_logs vs. LGPD), PENDENTE-003 (OAuth2 refresh token Protheus), PENDENTE-004 (limite real concurrency Protheus), PENDENTE-005 (seed HML para testes). AGN-DEV-11 (VAL): Validação cruzada completa — 0 erros, 2 warnings, cobertura 100% entre pilares. |
 | 0.6.0 | 2026-03-19 | arquitetura | PENDENTE-001 implementada — Opção B (tabela simples + trigger migração 10M). Alerta `call_logs.count > 5M` adicionado ao NFR-008 §6.5. Env var `INTEGRATION_CONCURRENCY` já limita throughput. PEN-008 v0.8.0. |
 | 0.7.0 | 2026-03-19 | arquitetura | PENDENTE-002 implementada — Opção A (retenção 6 meses hot storage + archive S3 com anonimização PII). Original purgado após 6 meses; metadados (id, status, correlation_id, duration_ms) permanecem no PostgreSQL. PEN-008 v0.9.0. |
+| 1.1.0 | 2026-03-23 | codegen | Codegen concluído: 6 agentes executados, 35 arquivos gerados. Camadas: DB, CORE, APP (12 use cases), API (15 endpoints, OpenAPI), WEB (2 telas UX). |
+| 1.3.0 | 2026-03-24 | validate-all | Re-validação completa: WARN — 0 bloqueadores, 4 ALTA (inalteradas), 7 MEDIA/warnings. QA: PASS (45 source files). Lint: WARN (cross-module PEN-000/018). Architecture: WARN (domain errors extend Error, cross-module). Manifests: WARN (V-M01 inalterada). OpenAPI: WARN (sem error schemas). Drizzle: PASS (6/6, 21 indexes, 16 CHECKs). Endpoints: WARN (V-RT-1/V-RT-2 inalteradas). |
+| 1.2.0 | 2026-03-23 | validate-all | Validação Fase 3: WARN — 0 bloqueadores, 4 ALTA, 5 MEDIA. QA: PASS. Manifests: 1/2. OpenAPI: PASS (sem error schemas). Drizzle: PASS (6/6). Endpoints: PASS (4 ALTA a corrigir). |

@@ -22,7 +22,7 @@ export interface CaseAssignmentRepository {
   findById(id: string): Promise<CaseAssignmentRow | null>;
   findActiveByCaseId(caseId: string): Promise<CaseAssignmentRow[]>;
   findActiveByCaseAndRole(caseId: string, processRoleId: string): Promise<CaseAssignmentRow | null>;
-  create(data: Omit<CaseAssignmentRow, "id">): Promise<CaseAssignmentRow>;
+  create(data: Omit<CaseAssignmentRow, 'id'>): Promise<CaseAssignmentRow>;
   deactivate(id: string, reason: string): Promise<void>;
   deactivateByRole(caseId: string, processRoleId: string, reason: string): Promise<void>;
   findExpired(now: Date): Promise<CaseAssignmentRow[]>;

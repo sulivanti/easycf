@@ -1,56 +1,129 @@
 /**
  * @contract UX-CASE-002, FR-009, FR-001
  *
- * Case Listing page with filters, cursor-based pagination,
+ * Case listing page with filters, cursor-based pagination,
  * new case drawer, and pending gates badge.
+ *
+ * Tailwind CSS v4 + shared UI components + Drawer for new case.
  */
 
-import React, { useState, useCallback } from "react";
-import { useCaseList, useOpenCase } from "../../hooks/use-cases.js";
-import type { CaseStatus, CaseListItem } from "../../types/case-execution.types.js";
+import { useState, useCallback, useEffect } from 'react';
+import {
+  Button,
+  Badge,
+  Skeleton,
+  Input,
+  Label,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../../../../shared/ui/index.js';
+import { useCaseList, useOpenCase } from '../../hooks/use-cases.js';
+import { CaseStatusBadge } from '../../components/CaseStatusBadge.js';
+import type {
+  CaseStatus,
+  CaseListFilters,
+  CaseListItem,
+} from '../../types/case-execution.types.js';
+import { COPY } from '../../types/case-execution.types.js';
 
 interface CaseListPageProps {
   onSelectCase: (caseId: string) => void;
+  userScopes?: readonly string[];
 }
 
-export function CaseListPage({ onSelectCase }: CaseListPageProps) {
-  const [filters, setFilters] = useState<{
-    cycle_id?: string;
-    status?: CaseStatus;
-    my_responsibility?: boolean;
-    search?: string;
-  }>({});
-  const [showDrawer, setShowDrawer] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
+export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProps) {
+  const [filters, setFilters] = useState<CaseListFilters>({});
+  const [searchInput, setSearchInput] = useState('');
+  const { data, isLoading, error } = useCaseList(filters);
+  const canWrite = userScopes.includes('process:case:write');
 
-  const { data, loading, error, refetch, loadMore } = useCaseList(filters);
+  const items = data?.data ?? [];
+  const hasMore = data?.meta.has_more ?? false;
+  const nextCursor = data?.meta.next_cursor ?? undefined;
 
   // Debounced search (400ms — UX-CASE-002)
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchInput(value);
+  useEffect(() => {
     const timeout = setTimeout(() => {
-      setFilters((f) => ({ ...f, search: value || undefined }));
+      setFilters((f) => ({ ...f, search: searchInput || undefined, cursor: undefined }));
     }, 400);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [searchInput]);
+
+  const handleLoadMore = useCallback(() => {
+    if (nextCursor) {
+      setFilters((prev) => ({ ...prev, cursor: nextCursor }));
+    }
+  }, [nextCursor]);
+
+  // ── Loading state ──────────────────────────────────────────────────────────
+  if (isLoading && items.length === 0) {
+    return (
+      <div className="p-6">
+        <Skeleton className="h-8 w-48 mb-4" />
+        <div className="flex flex-col gap-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-12 w-full" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Error state ────────────────────────────────────────────────────────────
+  if (error) {
+    return (
+      <div className="p-6 text-red-600">
+        {COPY.error_load_cases} {error.message}
+      </div>
+    );
+  }
 
   return (
-    <div className="case-list-page">
-      <header className="case-list-page__header">
-        <h1>Casos</h1>
-        <button onClick={() => setShowDrawer(true)}>Novo Caso</button>
-      </header>
+    <div className="p-6">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center gap-3">
+          <h1 className="text-xl font-bold">Casos</h1>
+          {items.length > 0 && <Badge variant="secondary">{items.length}</Badge>}
+        </div>
+        <div className="flex gap-2">{canWrite && <NewCaseDrawer onCreated={onSelectCase} />}</div>
+      </div>
 
-      <div className="case-list-page__filters">
-        <input
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <Input
           type="search"
-          placeholder="Buscar por código ou object_id..."
+          placeholder="Buscar por código..."
           value={searchInput}
-          onChange={(e) => handleSearchChange(e.target.value)}
+          onChange={(e) => setSearchInput(e.target.value)}
+          className="w-64"
         />
         <select
-          value={filters.status ?? ""}
-          onChange={(e) => setFilters((f) => ({ ...f, status: (e.target.value || undefined) as CaseStatus | undefined }))}
+          value={filters.status ?? ''}
+          onChange={(e) =>
+            setFilters((f) => ({
+              ...f,
+              status: (e.target.value || undefined) as CaseStatus | undefined,
+              cursor: undefined,
+            }))
+          }
+          className="px-3 py-2 text-sm border border-gray-300 rounded-md bg-white"
         >
           <option value="">Todos os status</option>
           <option value="OPEN">Aberto</option>
@@ -58,53 +131,59 @@ export function CaseListPage({ onSelectCase }: CaseListPageProps) {
           <option value="COMPLETED">Concluído</option>
           <option value="CANCELLED">Cancelado</option>
         </select>
-        <label>
+        <label className="flex items-center gap-2 text-sm">
           <input
             type="checkbox"
-            checked={filters.my_responsibility ?? false}
-            onChange={(e) => setFilters((f) => ({ ...f, my_responsibility: e.target.checked || undefined }))}
+            checked={filters.assigned_to_me ?? false}
+            onChange={(e) =>
+              setFilters((f) => ({
+                ...f,
+                assigned_to_me: e.target.checked || undefined,
+                cursor: undefined,
+              }))
+            }
+            className="rounded border-gray-300"
           />
           Minha responsabilidade
         </label>
       </div>
 
-      {error && <div className="error-message">{error.message}</div>}
-
-      {loading && !data ? (
-        <TableSkeleton />
-      ) : data && data.data.length > 0 ? (
-        <>
-          <table className="case-table">
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Status</th>
-                <th>Estágio</th>
-                <th>Gates Pendentes</th>
-                <th>Aberto em</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.data.map((c) => (
+      {/* Table */}
+      {items.length === 0 ? (
+        <div className="text-center py-12 text-gray-400">
+          <p>{searchInput ? COPY.empty_search(searchInput) : COPY.empty_cases}</p>
+          {canWrite && !searchInput && (
+            <p className="mt-2 text-sm">Abra o primeiro caso para começar.</p>
+          )}
+        </div>
+      ) : (
+        <TooltipProvider>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Código</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Estágio</TableHead>
+                <TableHead>Gates Pendentes</TableHead>
+                <TableHead>Aberto em</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((c) => (
                 <CaseRow key={c.id} caseItem={c} onSelect={() => onSelectCase(c.id)} />
               ))}
-            </tbody>
-          </table>
-          {data.meta.has_more && (
-            <button className="btn--load-more" onClick={loadMore} disabled={loading}>
-              {loading ? "Carregando..." : "Carregar mais"}
-            </button>
-          )}
-        </>
-      ) : (
-        <EmptyState />
+            </TableBody>
+          </Table>
+        </TooltipProvider>
       )}
 
-      {showDrawer && (
-        <NewCaseDrawer
-          onClose={() => setShowDrawer(false)}
-          onCreated={(caseId) => { setShowDrawer(false); refetch(); onSelectCase(caseId); }}
-        />
+      {/* Load more */}
+      {hasMore && (
+        <div className="text-center mt-4">
+          <Button variant="outline" size="sm" onClick={handleLoadMore} disabled={isLoading}>
+            {isLoading ? 'Carregando...' : 'Carregar mais'}
+          </Button>
+        </div>
       )}
     </div>
   );
@@ -113,98 +192,110 @@ export function CaseListPage({ onSelectCase }: CaseListPageProps) {
 // ── Case Row ─────────────────────────────────────────────────────────────────
 
 function CaseRow({ caseItem, onSelect }: { caseItem: CaseListItem; onSelect: () => void }) {
-  const statusColors: Record<string, string> = {
-    OPEN: "#27AE60", COMPLETED: "#2980B9", CANCELLED: "#E74C3C", ON_HOLD: "#F39C12",
-  };
-
   return (
-    <tr className="case-row" onClick={onSelect} style={{ cursor: "pointer" }}>
-      <td>{caseItem.codigo}</td>
-      <td>
-        <span className="badge" style={{ backgroundColor: statusColors[caseItem.status] }}>
-          {caseItem.status}
-        </span>
-      </td>
-      <td>{caseItem.current_stage_id}</td>
-      <td>
+    <TableRow className="cursor-pointer hover:bg-gray-50" onClick={onSelect}>
+      <TableCell className="font-mono text-sm">{caseItem.codigo}</TableCell>
+      <TableCell>
+        <CaseStatusBadge status={caseItem.status} />
+      </TableCell>
+      <TableCell className="text-sm">
+        {caseItem.current_stage_name ?? caseItem.current_stage_id}
+      </TableCell>
+      <TableCell>
         {caseItem.pending_gates_count > 0 ? (
-          <span className="badge badge--warning" title="Clique para ver gates pendentes">
-            {caseItem.pending_gates_count}
-          </span>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Badge variant="destructive" className="cursor-pointer">
+                {caseItem.pending_gates_count}
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent>Clique para ver gates pendentes</TooltipContent>
+          </Tooltip>
         ) : (
-          "—"
+          <span className="text-gray-400">—</span>
         )}
-      </td>
-      <td>{new Date(caseItem.opened_at).toLocaleDateString("pt-BR")}</td>
-    </tr>
+      </TableCell>
+      <TableCell className="text-sm text-gray-500">
+        {new Date(caseItem.opened_at).toLocaleDateString('pt-BR')}
+      </TableCell>
+    </TableRow>
   );
 }
 
 // ── New Case Drawer ──────────────────────────────────────────────────────────
 
-function NewCaseDrawer({ onClose, onCreated }: { onClose: () => void; onCreated: (caseId: string) => void }) {
-  const { execute, loading, error } = useOpenCase();
-  const [cycleId, setCycleId] = useState("");
-  const [objectType, setObjectType] = useState("");
-  const [objectId, setObjectId] = useState("");
+function NewCaseDrawer({ onCreated }: { onCreated: (caseId: string) => void }) {
+  const openCase = useOpenCase();
+  const [open, setOpen] = useState(false);
+  const [cycleId, setCycleId] = useState('');
+  const [objectType, setObjectType] = useState('');
+  const [objectId, setObjectId] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = await execute({
+  const handleSubmit = async () => {
+    const result = await openCase.mutateAsync({
       cycle_id: cycleId,
       object_type: objectType || undefined,
       object_id: objectId || undefined,
     });
-    if (result) onCreated(result.id);
+    setOpen(false);
+    setCycleId('');
+    setObjectType('');
+    setObjectId('');
+    onCreated(result.id);
   };
 
   return (
-    <div className="drawer-overlay" onClick={onClose}>
-      <div className="drawer" onClick={(e) => e.stopPropagation()}>
-        <header className="drawer__header">
-          <h2>Novo Caso</h2>
-          <button onClick={onClose} className="btn--close">X</button>
-        </header>
-        <form className="drawer__body" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="cycle_id">Ciclo (obrigatório)</label>
-            <input id="cycle_id" value={cycleId} onChange={(e) => setCycleId(e.target.value)} required />
+    <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild>
+        <Button size="sm">Novo Caso</Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Novo Caso</DrawerTitle>
+          <DrawerDescription>Abra um novo caso vinculado a um ciclo publicado.</DrawerDescription>
+        </DrawerHeader>
+        <div className="flex flex-col gap-4 px-4 py-2">
+          <div>
+            <Label htmlFor="nc-cycle">Ciclo (obrigatório)</Label>
+            <Input
+              id="nc-cycle"
+              value={cycleId}
+              onChange={(e) => setCycleId(e.target.value)}
+              placeholder="ID do ciclo publicado"
+              className="mt-1"
+            />
           </div>
-          <div className="form-group">
-            <label htmlFor="object_type">Tipo do Objeto</label>
-            <input id="object_type" value={objectType} onChange={(e) => setObjectType(e.target.value)} />
+          <div>
+            <Label htmlFor="nc-obj-type">Tipo do Objeto</Label>
+            <Input
+              id="nc-obj-type"
+              value={objectType}
+              onChange={(e) => setObjectType(e.target.value)}
+              placeholder="Ex: contrato, pedido..."
+              className="mt-1"
+            />
           </div>
-          <div className="form-group">
-            <label htmlFor="object_id">ID do Objeto</label>
-            <input id="object_id" value={objectId} onChange={(e) => setObjectId(e.target.value)} />
+          <div>
+            <Label htmlFor="nc-obj-id">ID do Objeto</Label>
+            <Input
+              id="nc-obj-id"
+              value={objectId}
+              onChange={(e) => setObjectId(e.target.value)}
+              placeholder="UUID do objeto"
+              className="mt-1"
+            />
           </div>
-          {error && <div className="error-message">{error.message}</div>}
-          <button type="submit" disabled={loading || !cycleId}>
-            {loading ? "Criando..." : "Criar Caso"}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-// ── Shared ───────────────────────────────────────────────────────────────────
-
-function TableSkeleton() {
-  return (
-    <div className="table-skeleton">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="skeleton skeleton--row" />
-      ))}
-    </div>
-  );
-}
-
-function EmptyState() {
-  return (
-    <div className="empty-state">
-      <p>Nenhum caso encontrado.</p>
-      <small>Tente ajustar os filtros ou crie um novo caso.</small>
-    </div>
+          {openCase.error && <p className="text-sm text-red-600">{openCase.error.message}</p>}
+        </div>
+        <DrawerFooter>
+          <DrawerClose asChild>
+            <Button variant="outline">Cancelar</Button>
+          </DrawerClose>
+          <Button onClick={handleSubmit} disabled={!cycleId || openCase.isPending}>
+            {openCase.isPending ? 'Criando...' : 'Criar Caso'}
+          </Button>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

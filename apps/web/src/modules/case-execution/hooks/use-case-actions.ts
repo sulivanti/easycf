@@ -1,64 +1,61 @@
 /**
- * @contract FR-002..FR-007, UX-006
+ * @contract FR-002, FR-003, FR-007, UX-006
  *
- * React hooks for case mutations: transition, control, gates, assignments, events.
+ * React Query mutations for case lifecycle:
+ * transition stage, hold/resume/cancel, record event.
+ * Invalidates detail + cases list on success.
  */
 
-import { useState } from "react";
-import * as api from "../api/case-execution.api.js";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { transitionStage, controlCase, recordEvent } from '../api/case-execution.api.js';
+import { CASES_KEY, DETAIL_KEY } from './use-cases.js';
+import { TIMELINE_KEY } from './use-timeline.js';
 
-function useMutation<TInput, TOutput>(fn: (input: TInput) => Promise<TOutput>) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const execute = async (input: TInput): Promise<TOutput> => {
-    setLoading(true);
-    setError(null);
-    try {
-      return await fn(input);
-    } catch (e) {
-      setError(e as Error);
-      throw e;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { execute, loading, error };
-}
-
+/** @contract FR-002 — POST /api/v1/cases/:id/transition */
 export function useTransitionStage(caseId: string) {
-  return useMutation((body: { target_stage_id: string; evidence?: { type: string; content?: string; url?: string }; motivo?: string }) =>
-    api.transitionStage(caseId, body),
-  );
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: (body: Parameters<typeof transitionStage>[1]) => transitionStage(caseId, body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [...DETAIL_KEY, caseId] });
+      qc.invalidateQueries({ queryKey: CASES_KEY });
+      qc.invalidateQueries({ queryKey: [...TIMELINE_KEY, caseId] });
+    },
+  });
 }
 
+/** @contract FR-003 — POST /api/v1/cases/:id/hold|resume|cancel */
 export function useControlCase(caseId: string) {
-  return useMutation((body: { action: string; reason?: string; target_stage_id?: string }) =>
-    api.controlCase(caseId, body),
-  );
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      action,
+      reason,
+      target_stage_id,
+    }: {
+      action: 'hold' | 'resume' | 'cancel';
+      reason?: string;
+      target_stage_id?: string;
+    }) => controlCase(caseId, action, { reason, target_stage_id }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [...DETAIL_KEY, caseId] });
+      qc.invalidateQueries({ queryKey: CASES_KEY });
+      qc.invalidateQueries({ queryKey: [...TIMELINE_KEY, caseId] });
+    },
+  });
 }
 
-export function useResolveGate(caseId: string) {
-  return useMutation((params: { gateInstanceId: string; body: Parameters<typeof api.resolveGate>[2] }) =>
-    api.resolveGate(caseId, params.gateInstanceId, params.body),
-  );
-}
-
-export function useWaiveGate(caseId: string) {
-  return useMutation((params: { gateInstanceId: string; motivo: string }) =>
-    api.waiveGate(caseId, params.gateInstanceId, { motivo: params.motivo }),
-  );
-}
-
-export function useAssignResponsible(caseId: string) {
-  return useMutation((body: Parameters<typeof api.assignResponsible>[1]) =>
-    api.assignResponsible(caseId, body),
-  );
-}
-
+/** @contract FR-007 — POST /api/v1/cases/:id/events */
 export function useRecordEvent(caseId: string) {
-  return useMutation((body: Parameters<typeof api.recordEvent>[1]) =>
-    api.recordEvent(caseId, body),
-  );
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: (body: Parameters<typeof recordEvent>[1]) => recordEvent(caseId, body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [...DETAIL_KEY, caseId] });
+      qc.invalidateQueries({ queryKey: [...TIMELINE_KEY, caseId] });
+    },
+  });
 }

@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-007",
   "module_path": "docs/04_modules/mod-007-parametrizacao-contextual/",
-  "last_updated": "2026-03-23T22:30:00.000Z",
+  "last_updated": "2026-03-24T18:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -15,5 +15,148 @@
     "gates_passed": ["DoR-1", "DoR-2", "DoR-3", "DoR-4", "DoR-5", "DoR-6", "DoR-7"],
     "epic_status": "READY",
     "features_promoted": ["F01", "F02", "F03", "F04", "F05"]
+  },
+  "codegen": {
+    "started_at": "2026-03-24T01:00:00.000Z",
+    "completed_at": "2026-03-24T15:10:00Z",
+    "agents": {
+      "AGN-COD-DB": {
+        "status": "done",
+        "completed_at": "2026-03-24T01:00:00.000Z",
+        "files_generated": 3,
+        "files": [
+          "apps/api/db/schema/contextual-params.ts",
+          "apps/api/db/schema/contextual-params.relations.ts",
+          "apps/api/db/schema/index.ts"
+        ]
+      },
+      "AGN-COD-CORE": {
+        "status": "done",
+        "completed_at": "2026-03-24T01:00:00.000Z",
+        "files_generated": 14,
+        "files": [
+          "apps/api/src/modules/contextual-params/domain/value-objects/routine-status.ts",
+          "apps/api/src/modules/contextual-params/domain/value-objects/item-type.ts",
+          "apps/api/src/modules/contextual-params/domain/value-objects/item-action.ts",
+          "apps/api/src/modules/contextual-params/domain/value-objects/framer-status.ts",
+          "apps/api/src/modules/contextual-params/domain/aggregates/behavior-routine.ts",
+          "apps/api/src/modules/contextual-params/domain/entities/context-framer.ts",
+          "apps/api/src/modules/contextual-params/domain/entities/context-framer-type.ts",
+          "apps/api/src/modules/contextual-params/domain/entities/target-object.ts",
+          "apps/api/src/modules/contextual-params/domain/entities/target-field.ts",
+          "apps/api/src/modules/contextual-params/domain/entities/incidence-rule.ts",
+          "apps/api/src/modules/contextual-params/domain/entities/routine-item.ts",
+          "apps/api/src/modules/contextual-params/domain/errors/param-errors.ts",
+          "apps/api/src/modules/contextual-params/domain/domain-events/param-events.ts",
+          "apps/api/src/modules/contextual-params/domain/domain-services/conflict-resolver.service.ts"
+        ]
+      },
+      "AGN-COD-APP": {
+        "status": "done",
+        "completed_at": "2026-03-24T02:30:00.000Z",
+        "files_generated": 22,
+        "files": [
+          "apps/api/src/modules/contextual-params/application/ports/repositories.ts",
+          "apps/api/src/modules/contextual-params/application/ports/services.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/create-framer-type.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/create-framer.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/update-framer.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/delete-framer.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/create-target-object.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/create-target-field.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/create-incidence-rule.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/update-incidence-rule.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/delete-incidence-rule.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/link-routine.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/unlink-routine.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/create-routine.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/update-routine.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/publish-routine.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/fork-routine.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/create-routine-item.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/update-routine-item.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/delete-routine-item.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/use-cases/evaluate-rules.use-case.ts",
+          "apps/api/src/modules/contextual-params/application/index.ts"
+        ]
+      },
+      "AGN-COD-API": {
+        "status": "done",
+        "completed_at": "2026-03-24T03:00:00.000Z",
+        "files_generated": 10,
+        "files": [
+          "apps/api/src/modules/contextual-params/presentation/dtos/contextual-params.dto.ts",
+          "apps/api/src/modules/contextual-params/presentation/error-handler.ts",
+          "apps/api/src/modules/contextual-params/presentation/routes/admin-framer-types.route.ts",
+          "apps/api/src/modules/contextual-params/presentation/routes/admin-framers.route.ts",
+          "apps/api/src/modules/contextual-params/presentation/routes/admin-target-objects.route.ts",
+          "apps/api/src/modules/contextual-params/presentation/routes/admin-incidence-rules.route.ts",
+          "apps/api/src/modules/contextual-params/presentation/routes/admin-routines.route.ts",
+          "apps/api/src/modules/contextual-params/presentation/routes/admin-routine-items.route.ts",
+          "apps/api/src/modules/contextual-params/presentation/routes/evaluate.route.ts",
+          "apps/api/src/modules/contextual-params/presentation/index.ts"
+        ]
+      },
+      "AGN-COD-WEB": {
+        "status": "done",
+        "completed_at": "2026-03-24T15:10:00Z",
+        "files_generated": 16,
+        "files": [
+          "apps/web/src/modules/contextual-params/types/contextual-params.types.ts",
+          "apps/web/src/modules/contextual-params/types/permissions.ts",
+          "apps/web/src/modules/contextual-params/types/view-model.ts",
+          "apps/web/src/modules/contextual-params/api/contextual-params.api.ts",
+          "apps/web/src/modules/contextual-params/hooks/use-framers.ts",
+          "apps/web/src/modules/contextual-params/hooks/use-target-objects.ts",
+          "apps/web/src/modules/contextual-params/hooks/use-incidence-rules.ts",
+          "apps/web/src/modules/contextual-params/hooks/use-routines.ts",
+          "apps/web/src/modules/contextual-params/hooks/use-routine-items.ts",
+          "apps/web/src/modules/contextual-params/hooks/use-evaluate.ts",
+          "apps/web/src/modules/contextual-params/components/DryRunPreview.tsx",
+          "apps/web/src/modules/contextual-params/components/FramerDrawer.tsx",
+          "apps/web/src/modules/contextual-params/components/IncidenceMatrix.tsx",
+          "apps/web/src/modules/contextual-params/components/ItemTypeForm.tsx",
+          "apps/web/src/modules/contextual-params/pages/FramersConfigPage.tsx",
+          "apps/web/src/modules/contextual-params/pages/RoutinesEditorPage.tsx"
+        ]
+      },
+      "AGN-COD-VAL": {
+        "status": "done",
+        "completed_at": "2026-03-24T18:00:00Z",
+        "files_generated": 0,
+        "files": [],
+        "validation": {
+          "errors": 2,
+          "warnings": 2,
+          "notes": 1,
+          "checks_failed": ["tests_present", "domain_errors_extend_base"],
+          "checks_warning": ["openapi_present_and_linted", "domain_errors_duck_typing"],
+          "checks_passed": ["problem_details_rfc9457", "correlation_id", "idempotency", "layering_clean_arch", "x_permissions_documented", "lint_pass", "format_pass", "drizzle_schema_complete", "relations_complete", "web_react_query", "domain_events_complete", "conflict_resolver_implemented", "routes_scope_guards"]
+        }
+      }
+    }
+  },
+  "validate_all": {
+    "executed_at": "2026-03-24T18:00:00Z",
+    "verdict": "PASS_WITH_WARNINGS",
+    "checks": {
+      "lint": "PASS",
+      "format": "PASS",
+      "drizzle_schema": "PASS — 9 tables, all FKs/indexes/checks correct",
+      "drizzle_relations": "PASS — complete bidirectional relations",
+      "routes_endpoints": "PASS — 7 route files, 25 endpoints, scope guards on all",
+      "domain_events": "PASS — 14 events (DATA-003)",
+      "domain_services": "PASS — ConflictResolver with restrictiveness (BR-004, ADR-002/004)",
+      "value_objects": "PASS — RoutineStatus, ItemType, ItemAction, FramerStatus",
+      "web_hooks": "PASS — 6 hooks, all use @tanstack/react-query",
+      "web_pages": "PASS — 2 pages (FramersConfigPage, RoutinesEditorPage)",
+      "web_api": "PASS — apiFetch with correlation-id, credentials, error handling",
+      "web_pattern_a": "PASS — hooks export queryKey, invalidate on mutation",
+      "error_handler": "PASS — RFC 9457, X-Correlation-ID",
+      "domain_errors_extend_base": "WARNING — errors extend Error directly, not DomainError (cross-module pattern, also MOD-006)",
+      "tests_present": "FAIL — 0 test files",
+      "openapi_standalone": "WARNING — inline via Fastify schema, no YAML standalone"
+    },
+    "pendencies_registered": ["PENDENTE-010 (lint cross-module, already registered)", "PENDENTE-011 (domain errors not extending DomainError)"]
   }
 }

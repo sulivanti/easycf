@@ -5,6 +5,15 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 0.36.0 | 2026-03-24 | usuário       | PENDENTE-018→DECIDIDA→IMPLEMENTADA (Opção A — correção incremental 3 fases: format + lint:fix + refatoração errors) |
+> | 0.34.0 | 2026-03-24 | validate-all  | Adição PENDENTE-018 — erros de lint pré-existentes do codegen (55 errors + 91 warnings, 19 módulos) |
+> | 0.33.0 | 2026-03-24 | usuário       | PENDENTE-017→DECIDIDA→IMPLEMENTADA (Opção A — 8 test suites Vitest, 97 testes, fix import path error-handler) |
+> | 0.31.0 | 2026-03-24 | usuário       | PENDENTE-016→IMPLEMENTADA (v1.yaml v1.4.0: 12 response schemas + GET /tenants/{id}) |
+> | 0.30.0 | 2026-03-24 | usuário       | PENDENTE-015→IMPLEMENTADA (v1.yaml: IdempotencyKey component + $ref em 13 endpoints POST/PUT/PATCH) |
+> | 0.28.0 | 2026-03-24 | usuário       | PENDENTE-016→DECIDIDA (Opção A — schemas completos com $ref em components/schemas para 12 success responses) |
+> | 0.27.0 | 2026-03-24 | usuário       | PENDENTE-015→DECIDIDA (Opção A — IdempotencyKey como component parameter no OpenAPI) |
+> | 0.26.0 | 2026-03-24 | usuário       | PENDENTE-014→DECIDIDA→IMPLEMENTADA (Opção A — correlationId nos DELETE handlers) |
+> | 0.24.0 | 2026-03-23 | usuário       | PENDENTE-013→DECIDIDA→IMPLEMENTADA (Opção A — EntityNotFoundError em users/roles GET) |
 > | 0.23.0 | 2026-03-23 | AGN-COD-VAL   | Adição PENDENTE-013 a 017 — findings de validação cruzada codegen (5 erros) |
 > | 0.20.0 | 2026-03-22 | validate-all  | Adição PENDENTE-012 — 5 screen manifests YAML ausentes (UX-AUTH-003, UX-ROLE-001, UX-TENANT-001, UX-TENANT-002) |
 > | 0.21.0 | 2026-03-22 | arquitetura   | PENDENTE-008→IMPLEMENTADA (manifests reescritos), P-009→IMPLEMENTADA (módulo corrigido), P-010→IMPLEMENTADA (Screen IDs), P-011→IMPLEMENTADA (unificação auth+MFA) |
@@ -777,9 +786,9 @@ Opção A — criar todos os 4 manifests. O Foundation é módulo raiz e todos o
 
 ---
 
-## PENDENTE-013 — Endpoints GET retornam 404 vazio ao invés de RFC 9457 ProblemDetails
+## ~~PENDENTE-013 — Endpoints GET retornam 404 vazio ao invés de RFC 9457 ProblemDetails~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA ✅
 - **severidade:** ALTA
 - **domínio:** API
 - **tipo:** BUG
@@ -791,6 +800,11 @@ Opção A — criar todos os 4 manifests. O Foundation é módulo raiz e todos o
 - **tags:** rfc-9457, error-handling, presentation
 - **sla_data:** —
 - **dependencias:** []
+- **decidido_em:** 2026-03-23
+- **decidido_por:** usuário
+- **opcao_escolhida:** A
+- **justificativa_decisao:** Padrão DDD já adotado nos demais endpoints; error-handler centralizado garante RFC 9457
+- **implementado_em:** 2026-03-23
 
 ### Questão
 
@@ -830,13 +844,21 @@ Opção A — lançar `DomainError.NotFound` no use case. É o padrão já adota
 
 | Skill | Propósito | Quando executar |
 |---|---|---|
-| Edição direta routes | Substituir `reply.status(404).send()` por `throw DomainError.NotFound(entity, id, correlationId)` nos use cases de users e roles | Imediato |
+| Edição direta routes | Substituir `reply.status(404).send()` por `throw EntityNotFoundError(entity, id)` nos handlers de users e roles | Imediato |
+
+### Resolução
+
+> **Decisão:** Opção A — Lançar `EntityNotFoundError` no handler (error-handler centralizado serializa para RFC 9457)
+> **Decidido por:** usuário em 2026-03-23
+> **Justificativa:** Padrão DDD já adotado nos demais endpoints do Foundation; error-handler centralizado garante consistência RFC 9457
+> **Artefato de saída:** users.route.ts:88-89, roles.route.ts:87
+> **Implementado em:** 2026-03-23
 
 ---
 
-## PENDENTE-014 — DELETE endpoints sem correlationId quebrando audit trail
+## ~~PENDENTE-014 — DELETE endpoints sem correlationId quebrando audit trail~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA ✅
 - **severidade:** ALTA
 - **domínio:** API
 - **tipo:** BUG
@@ -883,11 +905,19 @@ Opção A — extrair diretamente na route. É a correção mínima e consistent
 |---|---|---|
 | Edição direta routes | Adicionar extração de `x-correlation-id` nos handlers DELETE de roles.route.ts e tenants.route.ts | Imediato |
 
+### Resolução
+
+> **Decisão:** Opção A — Extrair correlationId na route e passar ao use case
+> **Decidido por:** usuário em 2026-03-24
+> **Justificativa:** Correção mínima e consistente com o padrão POST/PUT já existente. Middleware centralizado (Opção B) pode vir como melhoria futura sem bloquear esta correção.
+> **Artefato de saída:** roles.route.ts (DELETE handler), tenants.route.ts (DELETE /tenants/:id + DELETE /tenants/:tenantId/users/:userId)
+> **Implementado em:** 2026-03-24
+
 ---
 
-## PENDENTE-015 — Idempotency-Key ausente do OpenAPI spec
+## ~~PENDENTE-015 — Idempotency-Key ausente do OpenAPI spec~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA ✅
 - **severidade:** MEDIA
 - **domínio:** API
 - **tipo:** LACUNA
@@ -899,6 +929,9 @@ Opção A — extrair diretamente na route. É a correção mínima e consistent
 - **tags:** idempotency, openapi, headers
 - **sla_data:** —
 - **dependencias:** []
+- **decidido_em:** 2026-03-24
+- **decidido_por:** usuário
+- **opcao_escolhida:** A
 
 ### Questão
 
@@ -934,11 +967,19 @@ Opção A — declarar em `components/parameters` e referenciar via `$ref`. Cons
 |---|---|---|
 | Edição v1.yaml | Adicionar `components.parameters.IdempotencyKey` e `$ref` em endpoints POST/PUT | Próximo ciclo |
 
+### Resolução
+
+> **Decisão:** Opção A — Declarar como parameter reutilizável em components
+> **Decidido por:** usuário em 2026-03-24
+> **Justificativa:** DRY, consistente com padrão existente para X-Correlation-ID, code-gen automático inclui o header sem intervenção manual
+> **Artefato de saída:** apps/api/openapi/v1.yaml (components/parameters/IdempotencyKey + $ref em 13 endpoints)
+> **Implementado em:** 2026-03-24
+
 ---
 
-## PENDENTE-016 — OpenAPI spec: 12 success responses sem body schema
+## ~~PENDENTE-016 — OpenAPI spec: 12 success responses sem body schema~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA ✅
 - **severidade:** MEDIA
 - **domínio:** API
 - **tipo:** LACUNA
@@ -950,6 +991,9 @@ Opção A — declarar em `components/parameters` e referenciar via `$ref`. Cons
 - **tags:** openapi, schemas, code-generation
 - **sla_data:** —
 - **dependencias:** []
+- **decidido_em:** 2026-03-24
+- **decidido_por:** usuário
+- **opcao_escolhida:** A
 
 ### Questão
 
@@ -992,11 +1036,19 @@ Opção A — schemas em `components/schemas`. Os DTOs no código já definem a 
 |---|---|---|
 | Edição v1.yaml | Criar schemas em `components/schemas` e referenciar nos 12 responses | Próximo ciclo |
 
+### Resolução
+
+> **Decisão:** Opção A — Adicionar schemas completos com $ref a components/schemas
+> **Decidido por:** usuário em 2026-03-24
+> **Justificativa:** DRY e fonte única de verdade. Os DTOs no código já definem a estrutura; espelhar em components/schemas garante code-gen completo, mocks automáticos e contratos formais. Opção C (zod-to-openapi) é ideal a longo prazo mas requer setup que não justifica bloquear esta correção.
+> **Artefato de saída:** v1.yaml v1.4.0 — 12 response schemas em components/schemas (RoleCreateResponse, RoleListItem, PaginatedRoles, RoleDetailResponse, TenantCreateResponse, TenantListItem, PaginatedTenants, TenantDetailResponse, TenantUserAddResponse, TenantUserListItem, PaginatedTenantUsers) + GET /tenants/{id} endpoint adicionado
+> **Implementado em:** 2026-03-24
+
 ---
 
-## PENDENTE-017 — Testes unitários e de integração ausentes
+## ~~PENDENTE-017 — Testes unitários e de integração ausentes~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA ✅
 - **severidade:** ALTA
 - **domínio:** CODE
 - **tipo:** LACUNA
@@ -1008,6 +1060,10 @@ Opção A — schemas em `components/schemas`. Os DTOs no código já definem a 
 - **tags:** tests, quality, ci
 - **sla_data:** —
 - **dependencias:** []
+- **decidido_em:** 2026-03-24
+- **decidido_por:** usuário
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-24
 
 ### Questão
 
@@ -1052,11 +1108,126 @@ Opção A — priorizar use cases críticos. O login flow, refresh token rotatio
 | Geração de testes | Criar testes Vitest para: login use case, refresh use case, RBAC middleware, error-handler, auth hooks | Próximo ciclo de codegen |
 | Testes de contrato | Validar endpoints contra OpenAPI spec com Prism ou similar | Após PENDENTE-016 (schemas completos) |
 
+### Resolução
+
+> **Decisão:** Opção A — Testes por prioridade (críticos primeiro)
+> **Decidido por:** usuário em 2026-03-24
+> **Justificativa:** Priorizar use cases críticos (login, refresh token rotation, RBAC, error-handler) garante rede de segurança nos caminhos de maior risco com entrega incremental. Opção C pode complementar como camada adicional após PENDENTE-016.
+> **Artefato de saída:** 8 test suites em `apps/api/test/foundation/` (domain-errors, scope.vo, user.entity, session.entity, role.entity, login.use-case, refresh-token.use-case, error-handler) + fix import path em error-handler.ts
+> **Implementado em:** 2026-03-24
+
+---
+
+## PENDENTE-018 — ~~Erros de lint pré-existentes do codegen (ESLint + Prettier)~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **domínio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **modulo:** MOD-000
+- **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002
+- **tags:** lint, eslint, prettier, codegen, cross-module
+- **sla_data:** 2026-04-23
+- **dependencias:** []
+
+### Questão
+
+Código gerado pelo codegen (PKG-COD-001) não passa em `pnpm lint` nem `pnpm format:check`. Há 55 ESLint errors, 91 warnings e 441 arquivos com formatação Prettier divergente, distribuídos por 19 módulos. Isto viola DOC-PADRAO-002 §4.3 (regra MUST: todo código novo DEVE passar em `pnpm lint` sem erros antes de merge) e o gate `lint` do DOC-ARC-002.
+
+### Impacto
+
+- Gate `lint` do CI (DOC-ARC-002) falharia se ativado — bloqueia qualquer pipeline futuro
+- 55 errors incluem 50× `react-hooks/set-state-in-effect` (cascading renders em produção)
+- 91 warnings poluem output de lint, dificultando identificação de novos erros
+- Formatação inconsistente em 441 arquivos dificulta code review e diffs
+
+### Distribuição por módulo
+
+| Módulo | Ocorrências | | Módulo | Ocorrências |
+|---|---|---|---|---|
+| web/identity-advanced | 16 | | web/mcp-automation | 7 |
+| web/foundation | 13 | | web/movement-approval | 7 |
+| web/contextual-params | 12 | | web/process-modeling | 7 |
+| web/users | 10 | | api/foundation | 6 |
+| web/org-units | 9 | | web/smartgrid | 6 |
+| web/backoffice-admin | 7 | | web/case-execution | 5 |
+| web/integration-protheus | 4 | | api/mcp | 3 |
+| api/movement-approval | 3 | | api/org-units | 3 |
+| api/case-execution | 2 | | api/identity-advanced | 2 |
+| api/integration-protheus | 2 | | | |
+
+### Detalhamento dos erros
+
+**Errors (55):**
+
+| Regra | Qtd | Descrição |
+|---|---|---|
+| `react-hooks/set-state-in-effect` | 50 | setState síncrono dentro de useEffect — causa cascading renders |
+| `react/no-unescaped-entities` | 2 | Caracteres `'` `"` não escapados em JSX |
+| impure function during render | 2 | Side-effects no corpo do componente React |
+| variable before declaration | 1 | Variável usada antes de ser declarada |
+
+**Warnings (91):**
+
+| Regra | Qtd | Descrição |
+|---|---|---|
+| `@typescript-eslint/no-unused-vars` | 78 | Imports/variáveis não utilizados |
+| `@typescript-eslint/consistent-type-imports` | 7 | `import { X }` deveria ser `import type { X }` |
+| `react-hooks/exhaustive-deps` | 6 | Dependências faltando em useEffect |
+
+### Opções
+
+**Opção A — Correção em 3 fases (incrementalista):**
+
+1. `pnpm format` — corrige 441 arquivos automaticamente (0 risco)
+2. `pnpm lint:fix` + remoção manual de unused imports/vars — elimina 91 warnings
+3. Refatoração dos 55 errors React (extrair lógica de setState para callbacks/reducers)
+
+- Prós: Baixo risco, cada fase é independente e reversível, progresso mensurável
+- Contras: Fase 3 requer entendimento da lógica de cada componente
+
+**Opção B — Fix em batch via codegen-agent:**
+
+Criar um agente de lint-fix que percorre os 19 módulos automaticamente, aplicando padrões de correção conhecidos para cada regra.
+
+- Prós: Velocidade, uniformidade de padrão
+- Contras: Risco de correções mecânicas que quebram lógica; setState patterns podem variar
+
+**Opção C — Relaxar regras temporariamente:**
+
+Adicionar `eslint-disable` nos arquivos gerados e criar um backlog de correção por módulo.
+
+- Prós: Desbloqueia CI imediatamente
+- Contras: Dívida técnica acumulada, esconde problemas reais (cascading renders)
+
+### Recomendação
+
+Opção A — Correção incremental em 3 fases. As fases 1 e 2 são totalmente automatizáveis e eliminam 100% dos warnings + formatação. A fase 3 (55 errors) exige revisão por componente mas segue padrão repetitivo (extrair setState para callback pattern).
+
+### Ação Sugerida
+
+| Skill / Comando | Propósito | Quando executar |
+|---|---|---|
+| `pnpm format` | Fase 1: auto-formatação Prettier | Imediatamente |
+| `pnpm lint:fix` | Fase 2: auto-fix warnings ESLint | Após fase 1 |
+| Refatoração manual | Fase 3: corrigir 55 errors React hooks | Após fase 2, por módulo |
+
+### Resolução
+
+> **Decisão:** Opção A — Correção incremental em 3 fases (format + lint:fix + refatoração errors)
+> **Decidido por:** usuário em 2026-03-24
+> **Justificativa:** Fases 1 e 2 são automatizáveis com risco zero (Prettier + auto-fix ESLint). Fase 3 segue padrão repetitivo (extrair setState para callback). Não relaxar regras (Opção C) para não acumular dívida técnica. Batch via codegen-agent (Opção B) é arriscado em correções de lógica React.
+> **Artefato de saída:** pnpm format + pnpm lint (0 errors, 0 warnings — 110→0 problems across 40+ arquivos)
+> **Implementado em:** 2026-03-24
+
 ---
 
 - **estado_item:** DRAFT
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F02, US-MOD-000-F03, US-MOD-000-F04, US-MOD-000-F05, US-MOD-000-F09, US-MOD-000-F16, FR-000, FR-013, FR-017, BR-013, SEC-000, SEC-002, INT-000, DATA-000, DOC-FND-000, DOC-ARC-003, UX-000, DOC-UX-010, EX-OAS-001
-- **referencias_exemplos:** PKG-DEV-001 §12 (checagens mínimas AGN-DEV-11), DOC-FND-000 §2.1-§2.2 (scopes canônicos), DOC-ARC-003B (Gate 3), screen-manifest.v1.schema.json, PKG-COD-001 §4 (AGN-COD-VAL checklist)
-- **evidencias:** PENDENTE-001 a 004: lacunas de enriquecimento pilares (2026-03-15). PENDENTE-005: divergência BR-013 vs FR-017 (status code). PENDENTE-006/007: findings AGN-DEV-11 validação cruzada (2026-03-17). PENDENTE-008 a 011: findings validate-all Fase 3 — screen manifests (2026-03-20). PENDENTE-013 a 017: findings AGN-COD-VAL codegen (2026-03-23).
+- **data_ultima_revisao:** 2026-03-24
+- **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F02, US-MOD-000-F03, US-MOD-000-F04, US-MOD-000-F05, US-MOD-000-F09, US-MOD-000-F16, FR-000, FR-013, FR-017, BR-013, SEC-000, SEC-002, INT-000, DATA-000, DOC-FND-000, DOC-ARC-003, UX-000, DOC-UX-010, EX-OAS-001, DOC-PADRAO-002, DOC-ARC-002
+- **referencias_exemplos:** PKG-DEV-001 §12 (checagens mínimas AGN-DEV-11), DOC-FND-000 §2.1-§2.2 (scopes canônicos), DOC-ARC-003B (Gate 3), screen-manifest.v1.schema.json, PKG-COD-001 §4 (AGN-COD-VAL checklist), DOC-PADRAO-002 §4.3 (regras ESLint/Prettier)
+- **evidencias:** PENDENTE-001 a 004: lacunas de enriquecimento pilares (2026-03-15). PENDENTE-005: divergência BR-013 vs FR-017 (status code). PENDENTE-006/007: findings AGN-DEV-11 validação cruzada (2026-03-17). PENDENTE-008 a 011: findings validate-all Fase 3 — screen manifests (2026-03-20). PENDENTE-013 a 017: findings AGN-COD-VAL codegen (2026-03-23). PENDENTE-018: erros lint pré-existentes do codegen (2026-03-24).

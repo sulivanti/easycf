@@ -6,13 +6,11 @@
  */
 
 export class CaseNotOpenError extends Error {
-  public readonly code = "CASE_NOT_OPEN";
+  public readonly code = 'CASE_NOT_OPEN';
   public readonly statusCode = 422;
 
   constructor(caseId: string, currentStatus: string) {
-    super(
-      `Case ${caseId} is ${currentStatus}. Only OPEN cases can be transitioned.`,
-    );
-    this.name = "CaseNotOpenError";
+    super(`Case ${caseId} is ${currentStatus}. Only OPEN cases can be transitioned.`);
+    this.name = 'CaseNotOpenError';
   }
 }

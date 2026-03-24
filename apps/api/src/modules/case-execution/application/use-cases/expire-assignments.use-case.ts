@@ -9,10 +9,13 @@
  * Records case_events + domain_events for audit trail.
  */
 
-import type { CaseAssignmentRepository } from "../ports/case-assignment.repository.js";
-import type { CaseEventRepository } from "../ports/case-event.repository.js";
-import type { DelegationCheckerPort } from "../ports/delegation-checker.port.js";
-import { createCaseExecutionEvent, CASE_EXECUTION_EVENT_TYPES } from "../../domain/domain-events/case-events.js";
+import type { CaseAssignmentRepository } from '../ports/case-assignment.repository.js';
+import type { CaseEventRepository } from '../ports/case-event.repository.js';
+import type { DelegationCheckerPort } from '../ports/delegation-checker.port.js';
+import {
+  createCaseExecutionEvent,
+  CASE_EXECUTION_EVENT_TYPES,
+} from '../../domain/domain-events/case-events.js';
 
 export interface ExpireAssignmentsOutput {
   expiredByValidUntil: number;
@@ -25,7 +28,9 @@ export class ExpireAssignmentsUseCase {
     private readonly assignmentRepo: CaseAssignmentRepository,
     private readonly caseEventRepo: CaseEventRepository,
     private readonly delegationChecker: DelegationCheckerPort,
-    private readonly emitEvent: (event: ReturnType<typeof createCaseExecutionEvent>) => Promise<void>,
+    private readonly emitEvent: (
+      event: ReturnType<typeof createCaseExecutionEvent>,
+    ) => Promise<void>,
   ) {}
 
   async execute(): Promise<ExpireAssignmentsOutput> {
@@ -36,14 +41,14 @@ export class ExpireAssignmentsUseCase {
     // 1. Expire by valid_until (BR-017)
     const expiredByDate = await this.assignmentRepo.findExpired(now);
     for (const assignment of expiredByDate) {
-      await this.assignmentRepo.deactivate(assignment.id, "Expired (valid_until reached)");
+      await this.assignmentRepo.deactivate(assignment.id, 'Expired (valid_until reached)');
       await this.caseEventRepo.create({
         caseId: assignment.caseId,
-        eventType: "REASSIGNED",
+        eventType: 'REASSIGNED',
         descricao: `Assignment expired: valid_until ${assignment.validUntil?.toISOString()}`,
-        createdBy: "SYSTEM",
+        createdBy: 'SYSTEM',
         createdAt: now,
-        metadata: { assignmentId: assignment.id, reason: "valid_until_expired" },
+        metadata: { assignmentId: assignment.id, reason: 'valid_until_expired' },
         stageId: assignment.stageId,
       });
       expiredByValidUntil++;
@@ -57,14 +62,18 @@ export class ExpireAssignmentsUseCase {
 
       for (const assignment of affectedAssignments) {
         if (!assignment.isActive) continue;
-        await this.assignmentRepo.deactivate(assignment.id, "Delegation expired");
+        await this.assignmentRepo.deactivate(assignment.id, 'Delegation expired');
         await this.caseEventRepo.create({
           caseId: assignment.caseId,
-          eventType: "REASSIGNED",
+          eventType: 'REASSIGNED',
           descricao: `Assignment expired: delegation ${assignment.delegationId} no longer valid`,
-          createdBy: "SYSTEM",
+          createdBy: 'SYSTEM',
           createdAt: now,
-          metadata: { assignmentId: assignment.id, delegationId: assignment.delegationId, reason: "delegation_expired" },
+          metadata: {
+            assignmentId: assignment.id,
+            delegationId: assignment.delegationId,
+            reason: 'delegation_expired',
+          },
           stageId: assignment.stageId,
         });
         expiredByDelegation++;
@@ -76,9 +85,9 @@ export class ExpireAssignmentsUseCase {
       await this.emitEvent(
         createCaseExecutionEvent({
           eventType: CASE_EXECUTION_EVENT_TYPES.ASSIGNMENT_REPLACED,
-          entityId: "SYSTEM",
-          tenantId: "SYSTEM",
-          createdBy: "SYSTEM",
+          entityId: 'SYSTEM',
+          tenantId: 'SYSTEM',
+          createdBy: 'SYSTEM',
           correlationId: `expire-job-${now.toISOString()}`,
           data: { expiredByValidUntil, expiredByDelegation, total },
         }),

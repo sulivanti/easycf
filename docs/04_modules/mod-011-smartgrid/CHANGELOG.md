@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.2 | 2026-03-24 | validate-all | Validação completa: lint 0 erros (4 warnings corrigidos), format 0 erros (10 arquivos formatados), QA PASS, Manifests 3/3 PASS. PENDENTE-010 IMPLEMENTADA. Arquitetura Pattern A confirmada (react-query em todos hooks). |
+| 1.0.1 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. QA: PASS (0 bloqueadores MOD-011). Manifests: 3/3 PASS. OpenAPI: N/A. Drizzle: N/A. Endpoints: N/A. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |
 | 0.14.0 | 2026-03-19 | arquitetura | Pipeline PEND-SGR-04 (DECIDIDA → IMPLEMENTADA): campo `target_endpoints` no context_framer tipo OPERACAO. DATA-011 v0.3.0 (§6 — schema target_endpoints), INT-011 v0.3.0 (INT-003 — resolução via target_endpoints, MI-002 removida), PEN-011 v0.3.0 (PEND-SGR-04 IMPLEMENTADA). Backlog: amendment MOD-007. |
 | 0.13.0 | 2026-03-19 | arquitetura | Pipeline PEND-SGR-03 + PEND-SGR-05: NFR-011 atualizado com limite 200 linhas (MAX_GRID_ROWS=200, virtualização obrigatória) e concorrência configurável (env var SMARTGRID_CONCURRENCY default=10). Ambas pendências IMPLEMENTADAS. PEN-011 v0.4.0. |

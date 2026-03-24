@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import fs from "node:fs";
 import path from "node:path";
 
-const DOCS_ROOT = path.resolve(import.meta.dirname ?? ".", "../../../");
+const DOCS_ROOT = path.resolve(import.meta.dirname ?? ".", "../../../../");
 
 // Read INDEX.md and parse the normative documents table
 function parseIndexMd(): Array<{ name: string; id: string; version: string; status: string; desc: string; path: string }> {

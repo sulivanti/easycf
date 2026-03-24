@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-000 Foundation
 
-> **Versao:** 1.4.0 | **Data:** 2026-03-23 | **Owner:** arquitetura
-> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v0.9.0) | **Features:** 17/17 READY
+> **Versao:** 1.12.0 | **Data:** 2026-03-24 | **Owner:** arquitetura
+> **Estado atual do modulo:** READY (v1.1.0) | **Epico:** READY (v0.9.0) | **Features:** 17/17 READY
 >
-> Fases 0-4 concluidas. Modulo promovido a READY em 2026-03-23 (v1.0.0). Proximo passo: executar `/app-scaffold all` para criar estrutura de codigo, depois `/codegen docs/04_modules/mod-000-foundation/` para gerar codigo das 6 camadas.
+> Fases 0-5 concluidas. Codegen completo: 6/6 agentes (69 arquivos). 18 pendencias: 18/18 IMPLEMENTADA, 0 ABERTA. Lint e format 100% limpos (0 errors, 0 warnings). Modulo totalmente pronto — proximo passo: `/codegen-all` para gerar codigo dos demais modulos na ordem topologica.
 
 ---
 
@@ -15,15 +15,15 @@
 | Features F01-F17 | 17/17 READY | Todas seladas — F01 (Auth), F02 (MFA), F03 (SSO), F04 (Forgot), F05 (Users), F06 (RBAC), F07 (Tenants), F08 (Profile), F09 (Tenant-User), F10 (Change-Pwd), F11 (GET /info), F12 (Scopes CRUD), F13 (Telemetria UI), F14 (Correlation E2E), F15 (CI Gates), F16 (Storage), F17 (Apple SSO) |
 | Scaffold (forge-module) | CONCLUIDO | mod-000-foundation/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Todos os 11 agentes executados, v0.10.0 atingida |
-| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ inexistente. 0 arquivos de codigo gerados. Executar /app-scaffold + /codegen |
-| PENDENTEs | 0 abertas | 12 total: 12/12 IMPLEMENTADA |
+| Codegen (6 agentes) | CONCLUIDO | 6/6 agentes done: DB(4), CORE(11), APP(17), API(12), WEB(25), VAL(0). Total: 69 arquivos. VAL: 5 erros, 12 warnings |
+| PENDENTEs | 0 abertas | 18 total: 18 IMPLEMENTADA. PENDENTE-018 (lint cross-module) resolvida: Opcao A — `pnpm format` + `pnpm lint:fix` + refatoracao React hooks (110→0 problemas) |
 | ADRs | 4 aceitas (2 arquivos) | Nivel 2 requer minimo 3 — atendido (ADR-001/002/003 em ADR-001.md + ADR-004.md) |
 | Amendments | 5 criados | DOC-PADRAO-005-C01, DOC-FND-000-M01, M02, M03, M04 (todos pre-READY) |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (Etapa 5 pipeline — READY) |
+| CHANGELOG | v1.1.0 | Ultima entrada 2026-03-24 (validate-all Fase 3 PASS) |
 | Screen Manifests | 5 proprios MOD-000 | ux-auth-001, ux-auth-003, ux-role-001, ux-tenant-001, ux-tenant-002 |
 | Dependencias | 0 upstream | MOD-000 e raiz — camada topologica 0 (11 dependentes) |
-| Bloqueios | 0 pendencias bloqueantes | BLK-001 (MOD-002 → amendment F05) resolvido. 0 pendencias ABERTA. |
+| Bloqueios | 0 pendencias bloqueantes | BLK-001 (MOD-002 → amendment F05) resolvido. |
 
 ---
 
@@ -151,7 +151,7 @@ O `/validate-all` foi executado em 2026-03-20 e identificou 5 pendencias (PENDEN
                              4. /validate-drizzle (schemas Drizzle — se existirem)
                              5. /validate-endpoint (handlers Fastify — se existirem)
                            Skills 3-5 executadas condicionalmente:
-                             FUTURO (pos-codigo) — artefatos inexistentes
+                             Executadas na Fase 5 (pos-codegen) — ver resultados abaixo
                            Resultado: 29/29 manifests PASS, 0 violacoes
 ```
 
@@ -175,9 +175,9 @@ O `/validate-all` foi executado em 2026-03-20 e identificou 5 pendencias (PENDEN
 |---|-----------|-------------------|------------------|-----------|
 | 1 | `/qa` | SIM (todos) | SIM — CONCLUIDO | mod.md, requirements/*, adr/*, CHANGELOG.md |
 | 2 | `/validate-manifest` | SIM (manifests existem) | SIM — CONCLUIDO | ux-auth-001, ux-auth-003, ux-role-001, ux-tenant-001, ux-tenant-002 (MOD-000) |
-| 3 | `/validate-openapi` | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | apps/api/openapi/v1.yaml (nao existe) |
-| 4 | `/validate-drizzle` | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | apps/api/src/modules/foundation/schema.ts (nao existe) |
-| 5 | `/validate-endpoint` | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | apps/api/src/modules/foundation/routes/ (nao existe) |
+| 3 | `/validate-openapi` | SIM (Nivel 2) | SIM — CONCLUIDO (Fase 5) | apps/api/openapi/v1.yaml |
+| 4 | `/validate-drizzle` | SIM (Nivel 2) | SIM — CONCLUIDO (Fase 5) | apps/api/db/schema/foundation.ts, foundation.relations.ts |
+| 5 | `/validate-endpoint` | SIM (Nivel 2) | SIM — CONCLUIDO (Fase 5) | apps/api/src/modules/foundation/ |
 
 ### Fase 4: Promocao — CONCLUIDA
 
@@ -187,7 +187,7 @@ Modulo promovido a READY em 2026-03-23 (v1.0.0). Todos os criterios DoR atendido
 6    /promote-module docs/04_modules/mod-000-foundation/
                            Selar mod-000 como READY:                         CONCLUIDO (2026-03-23)
                            Gate 0 — Definition of Ready (DoR):
-                             [DoR-1] PENDENTEs resolvidos? .............. SIM (12/12 IMPLEMENTADA)
+                             [DoR-1] PENDENTEs resolvidos? .............. SIM (18/18 IMPLEMENTADA, 0 ABERTA)
                              [DoR-2] Arquivos de requisito existem? ..... SIM (10/10)
                              [DoR-3] Zero erros de lint? ................ SIM (validate-all PASS)
                              [DoR-4] Screen manifests validados? ........ SIM (5/5 manifests PASS)
@@ -202,9 +202,9 @@ Modulo promovido a READY em 2026-03-23 (v1.0.0). Todos os criterios DoR atendido
                              INDEX.md: atualizado
 ```
 
-### Fase 5: Geracao de Codigo — NAO INICIADA
+### Fase 5: Geracao de Codigo — CONCLUIDA
 
-MOD-000 esta READY (pre-requisito para codegen atendido). Porem o scaffold dos workspaces apps/ ainda nao existe — nenhum arquivo de codigo foi gerado. Como Nivel 2, o modulo requer todas as 6 camadas: DB, CORE, APP, API, WEB e VAL.
+Codegen completo em 2026-03-23. Todos os 6 agentes executados com sucesso (4 batches: DB+CORE, APP+API, WEB, VAL). Total de 69 arquivos gerados cobrindo todas as camadas do Nivel 2. AGN-COD-VAL detectou 5 erros e 12 warnings — registrados como PENDENTE-013 a 017.
 
 > **Decision tree de codegen:**
 >
@@ -219,49 +219,52 @@ MOD-000 esta READY (pre-requisito para codegen atendido). Porem o scaffold dos w
 > ```
 
 ```
-7    /app-scaffold all      Bootstrap dos workspaces monorepo:                A EXECUTAR (one-time)
-                           Cria apps/api/ e apps/web/ com:
+7    /app-scaffold all      Bootstrap dos workspaces monorepo:                CONCLUIDO (2026-03-23)
+                           Criado apps/api/ e apps/web/ com:
                              - package.json, tsconfig.json
                              - Estrutura de diretorios (src/modules/, db/, openapi/, test/)
                              - vite.config.ts (web)
-                             - pnpm-workspace.yaml (se nao existir)
-                           Pre-condicao: Nenhuma (gate detecta se ja existe)
-                           Pos-condicao: Scaffold pronto para codegen
 
 8    /codegen docs/04_modules/mod-000-foundation/
-                           Gerar codigo para mod-000 (6 agentes):            A EXECUTAR (apos scaffold)
-                           Fase 1: AGN-COD-DB   (infrastructure, migrations, schemas)
-                           Fase 2: AGN-COD-CORE (domain — entidades, VOs, invariantes)
-                           Fase 3: AGN-COD-APP  (application — use cases, eventos)
-                           Fase 4: AGN-COD-API  (presentation — endpoints, OpenAPI)
-                           Fase 5: AGN-COD-WEB  (frontend — UI, estados, consumo API)
-                           Fase 6: AGN-COD-VAL  (validacao cruzada — read-only)
-                           Pre-condicao: Scaffold existe, estado_item = READY
-                           Pos-condicao: Codigo gerado em apps/api/ e apps/web/
+                           Gerar codigo para mod-000 (6 agentes):            CONCLUIDO (2026-03-23)
+                           Batch 1: AGN-COD-DB (4 arq) + AGN-COD-CORE (11 arq)
+                           Batch 2: AGN-COD-APP (17 arq) + AGN-COD-API (12 arq)
+                           Batch 3: AGN-COD-WEB (25 arq)
+                           Batch 4: AGN-COD-VAL (validacao — 5 erros, 12 warnings)
+                           Total: 69 arquivos gerados
+                           Execution state: .agents/execution-state/MOD-000.json
 ```
-
-> **Nota contexto:** Para modulos grandes ou complexos, considere executar em batches:
-> - Batch 1: `AGN-COD-DB,AGN-COD-CORE` (infraestrutura + dominio)
-> - Batch 2: `AGN-COD-APP,AGN-COD-API` (application + endpoints)
-> - Batch 3: `AGN-COD-WEB,AGN-COD-VAL` (frontend + validacao)
 
 #### Rastreio de Agentes COD — MOD-000
 
 | # | Agente | Camada | Path | Status | Arquivos |
 |---|--------|--------|------|--------|----------|
-| 1 | AGN-COD-DB | infrastructure | apps/api/src/modules/foundation/infrastructure/, db/ | A EXECUTAR | 0 |
-| 2 | AGN-COD-CORE | domain | apps/api/src/modules/foundation/domain/ | A EXECUTAR | 0 |
-| 3 | AGN-COD-APP | application | apps/api/src/modules/foundation/application/ | A EXECUTAR | 0 |
-| 4 | AGN-COD-API | presentation | apps/api/src/modules/foundation/presentation/, openapi/, test/ | A EXECUTAR | 0 |
-| 5 | AGN-COD-WEB | web | apps/web/src/modules/foundation/ | A EXECUTAR | 0 |
-| 6 | AGN-COD-VAL | validation | (read-only) | A EXECUTAR | 0 |
+| 1 | AGN-COD-DB | infrastructure | apps/api/db/schema/, apps/api/src/modules/foundation/infrastructure/ | ✅ DONE (2026-03-23) | 4 |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/foundation/domain/ | ✅ DONE (2026-03-23) | 11 |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/foundation/application/ | ✅ DONE (2026-03-23) | 17 |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/foundation/presentation/, openapi/ | ✅ DONE (2026-03-23) | 12 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/foundation/ | ✅ DONE (2026-03-23) | 25 |
+| 6 | AGN-COD-VAL | validation | (read-only) | ✅ DONE (2026-03-23) | 0 (5E/12W) |
 
-#### Pre-requisitos para Codegen
+#### Resultado AGN-COD-VAL (Validacao Cruzada)
 
-1. **Scaffold:** `apps/api/package.json` — NAO EXISTE → executar `/app-scaffold all`
-2. **Scaffold:** `apps/web/package.json` — NAO EXISTE → executar `/app-scaffold all`
-3. **Ordem topologica:** MOD-000 esta na camada 0 (sem dependencias) — pode ser gerado primeiro
-4. **pnpm install:** Executar apos scaffold para instalar dependencias base
+| Check | Status | Detalhe |
+|-------|--------|---------|
+| problem_details_rfc9457 | ⚠️ warning | GET /users/:id e GET /roles/:id retornam 404 vazio (PENDENTE-013) |
+| correlation_id | ✅ fixed | DELETE /roles/:id, DELETE /tenants/:id e DELETE /tenants/:tid/users/:uid — correlationId extraido (PENDENTE-014 IMPLEMENTADA) |
+| idempotency | ✅ fixed | IdempotencyKey component parameter + $ref em 13 endpoints (PENDENTE-015 IMPLEMENTADA) |
+| layering_clean_arch | ✅ ok | Camadas sem vazamento |
+| tests_present | ✅ fixed | 8 test suites, 97 testes (PENDENTE-017 IMPLEMENTADA) |
+| openapi_present_and_linted | ✅ fixed | 12 response schemas adicionados em v1.yaml v1.4.0 (PENDENTE-016 IMPLEMENTADA) |
+| x_permissions_documented | n/a | Foundation nao usa timeline/notifications neste estagio |
+
+#### Validacoes de Skills (post_validation)
+
+| Skill | Resultado | Passed | Warnings | Errors |
+|-------|-----------|--------|----------|--------|
+| validate-drizzle | ✅ PASS | 18 | 4 | 0 |
+| validate-openapi | ⚠️ PASS com issues | 7 | 3 | 1 |
+| validate-endpoint | ⚠️ PASS com issues | 28 | 5 | 3 |
 
 ### Fase 6: Pos-READY (quando necessario)
 
@@ -335,10 +338,9 @@ MOD-000 esta READY (pre-requisito para codegen atendido). Porem o scaffold dos w
                                └─────────┴────────────┴── CANCELADA (com motivo)
 
                            Estado atual MOD-000:
-                             PEN-000: 12 itens total
-                               12 IMPLEMENTADA (001-012) ← DoR-1 atendido
+                             PEN-000: 18 itens total
+                               18 IMPLEMENTADA (001-018)
                                0 ABERTA
-                             Todas as pendencias resolvidas
 ```
 
 #### Painel de Pendencias — Resumo Individual
@@ -357,6 +359,12 @@ MOD-000 esta READY (pre-requisito para codegen atendido). Porem o scaffold dos w
 | PENDENTE-010 | IMPLEMENTADA | MEDIA | UX | Opcao A — Screen IDs padronizados UX-USR | UX-000 atualizado |
 | PENDENTE-011 | IMPLEMENTADA | MEDIA | UX | Opcao A — Login+Forgot unificados em UX-AUTH-001 | ux-auth-001 v1.0.0 |
 | PENDENTE-012 | IMPLEMENTADA | ALTA | UX | Opcao A — 4 manifests criados | ux-auth-003, ux-role-001, ux-tenant-001, ux-tenant-002 |
+| PENDENTE-013 | IMPLEMENTADA | ALTA | API | Opcao A — EntityNotFoundError em users/roles GET | users.route.ts, roles.route.ts |
+| PENDENTE-014 | IMPLEMENTADA | ALTA | API | Opcao A — correlationId nos 3 DELETE handlers | roles.route.ts, tenants.route.ts |
+| PENDENTE-015 | IMPLEMENTADA | MEDIA | API | Opcao A — IdempotencyKey component + $ref em 13 endpoints | v1.yaml (components/parameters/IdempotencyKey) |
+| PENDENTE-016 | IMPLEMENTADA | MEDIA | API | Opcao A — 12 response schemas + GET /tenants/{id} | v1.yaml v1.4.0 (components/schemas) |
+| PENDENTE-017 | IMPLEMENTADA | ALTA | CODE | Opcao A — Testes por prioridade (8 suites, 97 testes) | apps/api/test/foundation/ (8 files) + fix error-handler.ts import |
+| PENDENTE-018 | ✅ IMPLEMENTADA | MEDIA | ARC | Opcao A — Correcao incremental 3 fases (format + lint:fix + refatoracao) | `pnpm format` + `pnpm lint:fix` + refatoracao React hooks (110→0 problemas, 40+ arquivos) |
 
 > Detalhes completos: requirements/pen-000-pendente.md
 
@@ -391,19 +399,25 @@ mod-000 validado (DRAFT)                ← Fase 3: CONCLUIDA (validate-all PASS
   ▼
 mod-000 selado (READY v1.0.0)           ← Fase 4: CONCLUIDA (promote-module 2026-03-23)
   │
-  ├── ★ PROXIMO PASSO: /app-scaffold all → /codegen mod-000
-  │
   ▼
-mod-000 codigo gerado                   ← Fase 5: NAO INICIADA
-  │  Scaffold apps/ inexistente
-  │  0/6 agentes COD executados
-  │  Nivel 2: DB → CORE → APP → API → WEB → VAL
+mod-000 codigo gerado (69 arq)          ← Fase 5: CONCLUIDA (codegen 2026-03-23)
+  │  6/6 agentes COD executados
+  │  DB(4) → CORE(11) → APP(17) → API(12) → WEB(25) → VAL(5E/12W)
+  │
+  │  PENDENTE-017 IMPLEMENTADA: 8 test suites, 97 testes
+  │  + fix import path bug em error-handler.ts
+  │
+  │  PENDENTE-018 IMPLEMENTADA: pnpm format + lint:fix + refatoracao React hooks
+  │  110→0 problemas (0 errors, 0 warnings, format clean)
+  │
+  ├── ★ MODULO COMPLETO — 18/18 pendencias resolvidas, lint/format 100% limpos
+  ├── PROXIMO PASSO: `/codegen-all` para gerar codigo dos demais modulos
   │
   ▼
 mod-000 + amendments/                   ← Fase 6: SOB DEMANDA (5 amendments pre-READY existem)
 
 MOD-000 e pre-requisito de TODOS os demais modulos.
-Na ordem topologica, MOD-000 e camada 0 — deve ser o primeiro a ter codigo gerado.
+Na ordem topologica, MOD-000 e camada 0 — codigo gerado, lint limpo, pronto para /codegen-all nos demais.
 ```
 
 ---
@@ -417,23 +431,30 @@ Na ordem topologica, MOD-000 e camada 0 — deve ser o primeiro a ter codigo ger
 | Alto volume de amendments pre-READY | 5 amendments criados antes da promocao (DOC-FND-000-M01 a M04 + DOC-PADRAO-005-C01). Outros modulos (MOD-006, MOD-009, MOD-010) ja demandam extensoes no catalogo de scopes do Foundation. |
 | Bloqueador de MOD-002 (BLK-001) | Resolvido — endpoint `users_invite_resend` adicionado em FR-006 (CHANGELOG v0.3.0). |
 | Screen manifests com cobertura completa | 5 manifests YAML proprios: ux-auth-001 (login), ux-auth-003 (sessions), ux-role-001 (roles), ux-tenant-001 (tenants), ux-tenant-002 (tenant-users). |
-| Primeiro modulo para codegen | Camada topologica 0 — MOD-000 deve ter codigo gerado antes de qualquer outro modulo. O codegen dos demais referenciarao tipos e contracts do Foundation. |
+| Primeiro modulo com codegen completo | Camada topologica 0 — MOD-000 foi o primeiro modulo a ter codegen completo (69 arquivos, 6/6 agentes). O codegen dos demais modulos pode agora referenciar tipos, schemas e guards do Foundation. |
 
 ---
 
 ## Checklist Rapido — Codegen MOD-000
 
-Modulo ja esta READY. Checklist de geracao de codigo:
+Modulo READY com codegen completo. Checklist de geracao e pos-geracao:
 
-- [ ] Executar `/app-scaffold all` — criar apps/api/ e apps/web/
-- [ ] Executar `pnpm install` na raiz do monorepo
-- [ ] Executar `/codegen docs/04_modules/mod-000-foundation/` — gerar codigo (6 agentes)
-- [ ] Revisar arquivos gerados em apps/api/src/modules/foundation/
-- [ ] Revisar arquivos gerados em apps/web/src/modules/foundation/
-- [ ] Executar `/validate-all` pos-codigo (openapi, drizzle, endpoint)
-- [ ] Executar `pnpm test` e `pnpm lint`
+- [x] Executar `/app-scaffold all` — criar apps/api/ e apps/web/ ✓ (2026-03-23)
+- [x] Executar `pnpm install` na raiz do monorepo ✓
+- [x] Executar `/codegen docs/04_modules/mod-000-foundation/` — 6/6 agentes ✓ (2026-03-23, 69 arquivos)
+- [x] Revisar arquivos gerados em apps/api/ (DB: 4, CORE: 11, APP: 17, API: 12) ✓
+- [x] Revisar arquivos gerados em apps/web/ (WEB: 25 — types, api, hooks, pages) ✓
+- [x] AGN-COD-VAL validacao cruzada ✓ (5 erros, 12 warnings → PENDENTE-013 a 017)
+- [x] Resolver PENDENTE-013 — EntityNotFoundError em users/roles GET ✓ (2026-03-23)
+- [x] Resolver PENDENTE-014 — correlationId nos 3 DELETE handlers ✓ (2026-03-24)
+- [x] Resolver PENDENTE-015 — Idempotency-Key no OpenAPI spec ✓ (2026-03-24, Opcao A — component + $ref)
+- [x] Resolver PENDENTE-016 — 12 response schemas no OpenAPI ✓ (2026-03-24, Opcao A — v1.yaml v1.4.0)
+- [x] Resolver PENDENTE-017 — Criar testes unitarios e de integracao ✓ (2026-03-24, Opcao A — 8 suites, 97 testes + fix import path)
+- [x] Executar `pnpm test` ✓ (2026-03-24, 8/8 suites, 97/97 passed)
+- [x] Executar `pnpm lint` ✓ (2026-03-24, PENDENTE-018 Opcao A — 3 fases: format → lint:fix → refatoracao React hooks. 110→0 problemas)
+- [x] Executar `pnpm format:check` ✓ (2026-03-24, 441 arquivos formatados com `pnpm format`)
 
-> **Nota:** MOD-000 e camada topologica 0 — gerar codigo aqui desbloqueia `/codegen-all` para os demais modulos. Apos codegen do MOD-000, os validadores que eram "FUTURO (pos-codigo)" passam a ser executaveis.
+> **Nota:** Modulo totalmente pronto. Codegen completo (69 arquivos). 18/18 pendencias resolvidas. 97 testes passando. Lint e format 100% limpos. MOD-000 esta na camada topologica 0 — pronto para `/codegen-all` nos demais modulos.
 
 ---
 
@@ -441,6 +462,16 @@ Modulo ja esta READY. Checklist de geracao de codigo:
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 1.12.0 | 2026-03-24 | Atualizacao (--update): PENDENTE-018 DECIDIDA (Opcao A) e IMPLEMENTADA — correcao lint em 3 fases: `pnpm format` (441 arquivos), `pnpm lint:fix` (auto-fix warnings), refatoracao manual (setState-in-effect, unused vars, type imports, unescaped entities). 110→0 problemas (0 errors, 0 warnings). 18/18 pendencias resolvidas. Checklist completo. Modulo totalmente pronto |
+| 1.11.0 | 2026-03-24 | Atualizacao (--update): PENDENTE-018 criada (lint errors cross-module: 55 ESLint errors + 91 warnings + 441 Prettier issues em 19 modulos, severidade MÉDIA, SLA 2026-04-23). /validate-all atualizado com step 4.0 Lint Check. Checklist atualizado com itens pnpm lint e format:check. Pendentes: 17 IMPLEMENTADA, 1 ABERTA |
+| 1.10.0 | 2026-03-24 | Atualizacao (--update): PENDENTE-017 DECIDIDA (Opcao A) e IMPLEMENTADA — 8 test suites Vitest criados (97 testes): domain-errors, scope.vo, user.entity, session.entity, role.entity, login.use-case, refresh-token.use-case, error-handler. Fix bug import path em error-handler.ts. Todas 17/17 pendencias resolvidas. Checklist atualizado: pnpm test PASS. Proximo: pnpm lint |
+| 1.9.0 | 2026-03-24 | Atualizacao (--update): PENDENTE-016 DECIDIDA (Opcao A) e IMPLEMENTADA — 12 response schemas adicionados em v1.yaml v1.4.0 (components/schemas com $ref). PENDENTE-015 tambem ja IMPLEMENTADA. Pendentes: 16 IMPLEMENTADA, 1 ABERTA (017 — testes). Proximo passo atualizado para PENDENTE-017 |
+| 1.8.0 | 2026-03-24 | Atualizacao: PENDENTE-015 DECIDIDA (Opcao A) e IMPLEMENTADA — IdempotencyKey como component parameter reutilizavel em v1.yaml + $ref em 13 endpoints POST/PUT/PATCH. Inlines substituidos por $ref (DRY). Pendentes: 15 IMPLEMENTADA, 2 ABERTA (016-017). Proximo passo atualizado para PENDENTE-016/017 |
+| 1.7.0 | 2026-03-24 | Atualizacao: PENDENTE-014 DECIDIDA (Opcao A) e IMPLEMENTADA — correlationId extraido nos 3 DELETE handlers (roles.route.ts, tenants.route.ts). Pendentes: 14 IMPLEMENTADA, 3 ABERTA (015-017). Proximo passo atualizado para PENDENTE-015/017 |
+| 1.6.0 | 2026-03-24 | Atualizacao: Validacao Fase 3 re-executada — QA PASS, Manifests 5/5 PASS, OpenAPI PASS, Drizzle PASS, Endpoints PASS (0 bloqueadores, 2 avisos operationId). PENDENTE-013 IMPLEMENTADA. Execution state atualizado com secao validations. CHANGELOG mod v1.1.0 adicionado. Pendentes: 13 IMPLEMENTADA, 4 ABERTA (014-017) |
+| 1.5.1 | 2026-03-23 | Re-diagnostico (--update): estado confirmado sem mudancas de fase. 5 ABERTA (013-017) permanecem. Validacoes pos-codegen detalhadas: drizzle PASS (18p/4w/0e), openapi PASS (7p/3w/1e), endpoint PASS (28p/5w/3e). Dados do execution-state MOD-000.json confirmam 6/6 agentes done |
+| 1.5.0 | 2026-03-23 | Atualizacao: Fase 5 CONCLUIDA — codegen completo 6/6 agentes (69 arquivos). AGN-COD-VAL: 5 erros, 12 warnings. PENDENTE-013 a 017 adicionadas (findings codegen). Rastreio de agentes COD atualizado com status DONE. Checklist expandido com itens pos-codegen. Resumo visual atualizado |
+| 1.4.1 | 2026-03-23 | Atualizacao: Scaffold apps/ agora existe (apps/api + apps/web criados via /app-scaffold all). Fase 5 permanece NAO INICIADA (0 arquivos de codigo). Pre-requisitos de scaffold atualizados para EXISTE. Checklist /app-scaffold marcado como concluido. Proximo passo atualizado: /codegen mod-000 |
 | 1.4.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (promote-module 2026-03-23, v1.0.0 READY). Nova Fase 5: Geracao de Codigo — NAO INICIADA (scaffold inexistente, 0/6 agentes COD). Fase 5 renumerada para Fase 6 (Pos-READY). Decision tree de codegen adicionado. Checklist atualizado para foco em codegen. Pendentes inline convertidas para tabela-resumo compacta |
 | 1.3.0 | 2026-03-22 | Atualizacao: PENDENTE-008 a 012 IMPLEMENTADAS. Fase 3 CONCLUIDA (validate-all re-executado: 29/29 manifests PASS). Screen Manifests agora 5 proprios MOD-000. Checklist 6/7 concluido — falta apenas /promote-module. Proximo passo: promocao |
 | 1.2.0 | 2026-03-22 | Atualizacao: PENDENTE-012 adicionada (5 screen manifests YAML ausentes). PENDENTEs total agora 12 (7 IMPLEMENTADA, 5 ABERTA: 008-012). Screen Manifests corrigido para refletir 1 manifest proprio MOD-000 (ux-auth-001). Bloqueadores atualizados, checklist expandido |

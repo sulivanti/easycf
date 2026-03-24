@@ -13,10 +13,10 @@ export interface StageHistoryRow {
   transitionedBy: string;
   transitionedAt: Date;
   motivo: string | null;
-  evidence: { type: "note" | "file"; content?: string; url?: string } | null;
+  evidence: { type: 'note' | 'file'; content?: string; url?: string } | null;
 }
 
 export interface StageHistoryRepository {
-  create(data: Omit<StageHistoryRow, "id">): Promise<StageHistoryRow>;
+  create(data: Omit<StageHistoryRow, 'id'>): Promise<StageHistoryRow>;
   findByCaseId(caseId: string): Promise<StageHistoryRow[]>;
 }

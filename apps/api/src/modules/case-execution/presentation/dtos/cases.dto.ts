@@ -3,31 +3,43 @@
  *
  * Zod schemas for all case-execution endpoints.
  * Single source of truth for request/response validation.
+ *
+ * PENDENTE-006 corrections applied:
+ * - gateInstanceParam → gateParam (field: gateId instead of gateInstanceId)
+ * - controlBody/controlResponse removed → separate cancel/hold/resume DTOs
+ * - PATCH /assignments/:aid → updateAssignmentBody/Response added
+ * - recordEventBody includes REOPENED + target_stage_id (FR-007)
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ─── Shared ──────────────────────────────────────────────────────────────────
 
-export const caseStatusSchema = z.enum(["OPEN", "COMPLETED", "CANCELLED", "ON_HOLD"]);
+export const caseStatusSchema = z.enum(['OPEN', 'COMPLETED', 'CANCELLED', 'ON_HOLD']);
 
-export const gateResolutionStatusSchema = z.enum(["PENDING", "RESOLVED", "WAIVED", "REJECTED"]);
+export const gateResolutionStatusSchema = z.enum(['PENDING', 'RESOLVED', 'WAIVED', 'REJECTED']);
 
-export const gateDecisionSchema = z.enum(["APPROVED", "REJECTED", "WAIVED"]);
+export const gateDecisionSchema = z.enum(['APPROVED', 'REJECTED', 'WAIVED']);
 
 export const caseEventTypeSchema = z.enum([
-  "COMMENT", "EXCEPTION", "REOPENED", "EVIDENCE",
-  "REASSIGNED", "ON_HOLD", "RESUMED", "STAGE_TRANSITIONED",
+  'COMMENT',
+  'EXCEPTION',
+  'REOPENED',
+  'EVIDENCE',
+  'REASSIGNED',
+  'ON_HOLD',
+  'RESUMED',
+  'STAGE_TRANSITIONED',
 ]);
 
 export const evidenceSchema = z.object({
-  type: z.enum(["note", "file"]),
+  type: z.enum(['note', 'file']),
   content: z.string().optional(),
   url: z.string().url().optional(),
 });
 
 export const fileEvidenceSchema = z.object({
-  type: z.literal("file"),
+  type: z.literal('file'),
   url: z.string().url(),
   filename: z.string().min(1),
 });
@@ -41,6 +53,24 @@ export const checklistItemSchema = z.object({
 export const paginationMeta = z.object({
   next_cursor: z.string().nullable(),
   has_more: z.boolean(),
+});
+
+// ─── Params ──────────────────────────────────────────────────────────────────
+
+export const caseIdParam = z.object({
+  id: z.string().uuid(),
+});
+
+/** PENDENTE-006 fix: :gateId instead of :gateInstanceId */
+export const gateParam = z.object({
+  id: z.string().uuid(),
+  gateId: z.string().uuid(),
+});
+
+/** PENDENTE-006 fix: :aid param for PATCH /assignments/:aid */
+export const assignmentIdParam = z.object({
+  id: z.string().uuid(),
+  aid: z.string().uuid(),
 });
 
 // ─── POST /cases — Open Case (FR-001) ───────────────────────────────────────
@@ -66,45 +96,63 @@ export const openCaseResponse = z.object({
   opened_at: z.string().datetime(),
 });
 
-// ─── POST /cases/:id/transitions — Transition Stage (FR-002) ────────────────
-
-export const caseIdParam = z.object({
-  id: z.string().uuid(),
-});
+// ─── POST /cases/:id/transition — Transition Stage (FR-002) ─────────────────
 
 export const transitionBody = z.object({
-  target_stage_id: z.string().uuid(),
+  transition_id: z.string().uuid(),
   evidence: evidenceSchema.optional(),
   motivo: z.string().max(1000).optional(),
 });
 
 export const transitionResponse = z.object({
-  transition_id: z.string().uuid(),
-  from_stage_id: z.string().uuid(),
-  to_stage_id: z.string().uuid(),
-  is_terminal: z.boolean(),
-  case_completed: z.boolean(),
-});
-
-// ─── POST /cases/:id/controls — Case Controls (FR-003) ──────────────────────
-
-export const controlBody = z.object({
-  action: z.enum(["ON_HOLD", "RESUME", "CANCEL", "REOPEN"]),
-  reason: z.string().max(1000).optional(),
-  target_stage_id: z.string().uuid().optional(),
-});
-
-export const controlResponse = z.object({
-  previous_status: caseStatusSchema,
-  new_status: caseStatusSchema,
-});
-
-// ─── POST /cases/:id/gates/:gateInstanceId/resolve — Resolve Gate (FR-004) ──
-
-export const gateInstanceParam = z.object({
   id: z.string().uuid(),
-  gateInstanceId: z.string().uuid(),
+  codigo: z.string(),
+  current_stage_id: z.string().uuid(),
+  status: caseStatusSchema,
+  stage_history_entry: z.object({
+    id: z.string().uuid(),
+    from_stage_id: z.string().uuid(),
+    to_stage_id: z.string().uuid(),
+  }),
+  new_gate_instances: z.array(
+    z.object({
+      id: z.string().uuid(),
+      gate_id: z.string().uuid(),
+      status: z.literal('PENDING'),
+    }),
+  ),
 });
+
+// ─── POST /cases/:id/cancel — Cancel Case (FR-003) ──────────────────────────
+
+export const cancelBody = z.object({
+  motivo: z.string().min(1).max(1000),
+});
+
+export const cancelResponse = z.object({
+  previous_status: caseStatusSchema,
+  new_status: z.literal('CANCELLED'),
+});
+
+// ─── POST /cases/:id/hold — Hold Case (FR-003) ──────────────────────────────
+
+export const holdBody = z.object({
+  motivo: z.string().max(1000).optional(),
+});
+
+export const holdResponse = z.object({
+  previous_status: caseStatusSchema,
+  new_status: z.literal('ON_HOLD'),
+});
+
+// ─── POST /cases/:id/resume — Resume Case (FR-003) ──────────────────────────
+
+export const resumeResponse = z.object({
+  previous_status: z.literal('ON_HOLD'),
+  new_status: z.literal('OPEN'),
+});
+
+// ─── POST /cases/:id/gates/:gateId/resolve — Resolve Gate (FR-004) ──────────
 
 export const resolveGateBody = z.object({
   decision: gateDecisionSchema.optional(),
@@ -114,20 +162,26 @@ export const resolveGateBody = z.object({
 });
 
 export const resolveGateResponse = z.object({
-  gate_instance_id: z.string().uuid(),
+  id: z.string().uuid(),
+  gate_id: z.string().uuid(),
   status: gateResolutionStatusSchema,
   decision: gateDecisionSchema.nullable(),
+  resolved_by: z.string().uuid(),
+  resolved_at: z.string().datetime(),
 });
 
-// ─── POST /cases/:id/gates/:gateInstanceId/waive — Waive Gate (FR-005) ──────
+// ─── POST /cases/:id/gates/:gateId/waive — Waive Gate (FR-005) ──────────────
 
 export const waiveGateBody = z.object({
   motivo: z.string().min(20).max(2000),
 });
 
 export const waiveGateResponse = z.object({
-  gate_instance_id: z.string().uuid(),
-  status: z.literal("WAIVED"),
+  id: z.string().uuid(),
+  gate_id: z.string().uuid(),
+  status: z.literal('WAIVED'),
+  resolved_by: z.string().uuid(),
+  resolved_at: z.string().datetime(),
 });
 
 // ─── POST /cases/:id/assignments — Assign Responsible (FR-006) ──────────────
@@ -135,9 +189,9 @@ export const waiveGateResponse = z.object({
 export const assignBody = z.object({
   process_role_id: z.string().uuid(),
   user_id: z.string().uuid(),
-  valid_until: z.string().datetime().optional(),
+  stage_id: z.string().uuid(),
   delegation_id: z.string().uuid().optional(),
-  substitution_reason: z.string().max(500).optional(),
+  valid_until: z.string().datetime().optional(),
 });
 
 export const assignResponse = z.object({
@@ -146,19 +200,37 @@ export const assignResponse = z.object({
   stage_id: z.string().uuid(),
   process_role_id: z.string().uuid(),
   user_id: z.string().uuid(),
-  assigned_by: z.string().uuid(),
+  is_active: z.boolean(),
+  assigned_at: z.string().datetime(),
+  replaced_assignment_id: z.string().uuid().nullable(),
+});
+
+// ─── PATCH /cases/:id/assignments/:aid — Update Assignment (FR-006) ─────────
+
+export const updateAssignmentBody = z.object({
+  valid_until: z.string().datetime().optional(),
+  is_active: z.boolean().optional(),
+  substitution_reason: z.string().max(500).optional(),
+});
+
+export const updateAssignmentResponse = z.object({
+  id: z.string().uuid(),
+  case_id: z.string().uuid(),
+  stage_id: z.string().uuid(),
+  process_role_id: z.string().uuid(),
+  user_id: z.string().uuid(),
+  is_active: z.boolean(),
   assigned_at: z.string().datetime(),
   valid_until: z.string().datetime().nullable(),
-  is_active: z.boolean(),
-  replaced: z.boolean(),
 });
 
 // ─── POST /cases/:id/events — Record Event (FR-007) ─────────────────────────
 
 export const recordEventBody = z.object({
-  event_type: z.enum(["COMMENT", "EXCEPTION", "EVIDENCE"]),
+  event_type: z.enum(['COMMENT', 'EXCEPTION', 'EVIDENCE', 'REOPENED']),
   descricao: z.string().min(1).max(2000),
   metadata: z.record(z.unknown()).optional(),
+  target_stage_id: z.string().uuid().optional(),
 });
 
 export const recordEventResponse = z.object({
@@ -174,15 +246,19 @@ export const recordEventResponse = z.object({
 // ─── GET /cases/:id/timeline — Timeline (FR-008) ────────────────────────────
 
 export const timelineEntryResponse = z.object({
-  id: z.string().uuid(),
-  source: z.enum(["stage_history", "gate_instance", "case_event", "case_assignment"]),
+  type: z.enum(['STAGE_CHANGE', 'GATE_RESOLVED', 'EVENT']),
   timestamp: z.string().datetime(),
-  data: z.record(z.unknown()),
+  actor: z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+  }),
+  description: z.string(),
+  metadata: z.record(z.unknown()).optional(),
 });
 
 export const timelineResponse = z.object({
-  entries: z.array(timelineEntryResponse),
-  total: z.number().int(),
+  case_id: z.string().uuid(),
+  timeline: z.array(timelineEntryResponse),
 });
 
 // ─── GET /cases — List Cases (FR-009) ────────────────────────────────────────
@@ -192,29 +268,29 @@ export const listCasesQuery = z.object({
   status: caseStatusSchema.optional(),
   stage_id: z.string().uuid().optional(),
   object_id: z.string().uuid().optional(),
-  my_responsibility: z.enum(["true", "false"]).optional(),
+  assigned_to_me: z.enum(['true', 'false']).optional(),
+  opened_after: z.string().datetime().optional(),
+  opened_before: z.string().datetime().optional(),
   search: z.string().max(200).optional(),
   cursor: z.string().optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(50).default(20),
 });
 
 export const caseListItem = z.object({
   id: z.string().uuid(),
   codigo: z.string(),
-  cycle_id: z.string().uuid(),
-  current_stage_id: z.string().uuid(),
+  cycle_name: z.string(),
+  current_stage_name: z.string(),
   status: caseStatusSchema,
-  object_type: z.string().nullable(),
-  object_id: z.string().uuid().nullable(),
-  org_unit_id: z.string().uuid().nullable(),
-  opened_by: z.string().uuid(),
-  opened_at: z.string().datetime(),
   pending_gates_count: z.number().int(),
+  my_role: z.string().nullable(),
+  opened_at: z.string().datetime(),
 });
 
 export const listCasesResponse = z.object({
-  data: z.array(caseListItem),
-  meta: paginationMeta,
+  items: z.array(caseListItem),
+  nextCursor: z.string().nullable(),
+  totalEstimate: z.number().int(),
 });
 
 // ─── GET /cases/:id — Case Details (FR-010) ─────────────────────────────────
@@ -236,12 +312,29 @@ export const caseDetailResponse = z.object({
   cancellation_reason: z.string().nullable(),
   created_at: z.string().datetime(),
   updated_at: z.string().datetime(),
-  current_stage_gates: z.array(resolveGateResponse.extend({
-    gate_id: z.string().uuid(),
-    stage_id: z.string().uuid(),
-    parecer: z.string().nullable(),
-  })),
-  active_assignments: z.array(assignResponse.omit({ replaced: true })),
+  current_stage_gates: z.array(
+    z.object({
+      gate_instance_id: z.string().uuid(),
+      gate_id: z.string().uuid(),
+      stage_id: z.string().uuid(),
+      status: gateResolutionStatusSchema,
+      decision: gateDecisionSchema.nullable(),
+      parecer: z.string().nullable(),
+    }),
+  ),
+  active_assignments: z.array(
+    z.object({
+      id: z.string().uuid(),
+      case_id: z.string().uuid(),
+      stage_id: z.string().uuid(),
+      process_role_id: z.string().uuid(),
+      user_id: z.string().uuid(),
+      assigned_by: z.string().uuid(),
+      assigned_at: z.string().datetime(),
+      valid_until: z.string().datetime().nullable(),
+      is_active: z.boolean(),
+    }),
+  ),
 });
 
 // ─── GET /cases/:id/gates — List Gates (FR-011) ─────────────────────────────

@@ -5,7 +5,7 @@
  * Implementation injected by infrastructure layer (Drizzle).
  */
 
-import type { CaseStatus } from "../../domain/value-objects/case-status.js";
+import type { CaseStatus } from '../../domain/value-objects/case-status.js';
 
 export interface CaseInstanceRow {
   id: string;
@@ -48,13 +48,15 @@ export interface CaseListResult {
 export interface CaseInstanceRepository {
   findById(id: string, tenantId: string): Promise<CaseInstanceRow | null>;
   findByCodigo(codigo: string, tenantId: string): Promise<CaseInstanceRow | null>;
-  create(data: Omit<CaseInstanceRow, "createdAt" | "updatedAt">): Promise<CaseInstanceRow>;
+  create(data: Omit<CaseInstanceRow, 'createdAt' | 'updatedAt'>): Promise<CaseInstanceRow>;
   updateStatus(
     id: string,
     tenantId: string,
     status: CaseStatus,
     expectedUpdatedAt: Date,
-    extra?: Partial<Pick<CaseInstanceRow, "completedAt" | "cancelledAt" | "cancellationReason" | "currentStageId">>,
+    extra?: Partial<
+      Pick<CaseInstanceRow, 'completedAt' | 'cancelledAt' | 'cancellationReason' | 'currentStageId'>
+    >,
   ): Promise<CaseInstanceRow>;
   list(filter: CaseListFilter): Promise<CaseListResult>;
   nextCodigo(tenantId: string, cycleId: string): Promise<string>;

@@ -5,25 +5,28 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 1.3.0  | 2026-03-24 | validate-all  | Revalidacao: PENDENTE-008 IMPLEMENTADA (lint 0 erros). 8/8 IMPLEMENTADA. |
+> | 1.2.0  | 2026-03-24 | validate-all  | Adição PENDENTE-008 — erros lint codegen (10 ocorrências) |
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) — 6 pendências identificadas |
 > | 0.3.0  | 2026-03-19 | arquitetura | PENDENTE-001 implementada (Opção B — endpoint Phase 2 enable) + PENDENTE-004 implementada (Amendment DOC-FND-000-M04) |
->
-| 0.4.0  | 2026-03-19 | arquitetura | PENDENTE-005 decidida (Opção A — callback HTTP MOD-009→MOD-010) |
-| 0.5.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada — INT-010 §INT-007, INT-009 §4.3.3, DATA-010 status expandido |
-| 0.6.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida (Opção A — DIRECT como orchestration port, strategy pattern) |
-| 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-003 implementada — FR-010 §FR-007 lógica DIRECT dispatch detalhada |
-| 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida+implementada — PREPARAR can_be_direct=false (DATA-010 seed + BR-007) |
-| 0.9.0  | 2026-03-19 | arquitetura | PENDENTE-006 decidida+implementada — Opcao A (NotificationService MOD-000). Dependencia MOD-000 mapeada. |
-| 1.1.0  | 2026-03-23 | Marcos Sulivan | PENDENTE-001 e PENDENTE-004 → IMPLEMENTADA — status sincronizado (artefatos ja existiam: FR-010 §FR-010, DOC-FND-000-M04) |
-| 1.0.0  | 2026-03-22 | arquitetura | PENDENTE-007 → IMPLEMENTADA (scopes MCP alinhados em DOC-FND-000 v1.8.0) |
+> | 0.4.0  | 2026-03-19 | arquitetura | PENDENTE-005 decidida (Opção A — callback HTTP MOD-009→MOD-010) |
+> | 0.5.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada — INT-010 §INT-007, INT-009 §4.3.3, DATA-010 status expandido |
+> | 0.6.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida (Opção A — DIRECT como orchestration port, strategy pattern) |
+> | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-003 implementada — FR-010 §FR-007 lógica DIRECT dispatch detalhada |
+> | 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida+implementada — PREPARAR can_be_direct=false (DATA-010 seed + BR-007) |
+> | 0.9.0  | 2026-03-19 | arquitetura | PENDENTE-006 decidida+implementada — Opcao A (NotificationService MOD-000). Dependencia MOD-000 mapeada. |
+> | 1.1.0  | 2026-03-23 | Marcos Sulivan | PENDENTE-001 e PENDENTE-004 → IMPLEMENTADA — status sincronizado (artefatos ja existiam: FR-010 §FR-010, DOC-FND-000-M04) |
+> | 1.0.0  | 2026-03-22 | arquitetura | PENDENTE-007 → IMPLEMENTADA (scopes MCP alinhados em DOC-FND-000 v1.8.0) |
+> | 1.3.0  | 2026-03-24 | validate-all | Revalidacao: PENDENTE-008 IMPLEMENTADA (lint 0 erros). 8/8 IMPLEMENTADA. |
 
 # PEN-010 — Questões Abertas de MCP e Automação Governada
 
 - **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-010, MOD-010, BR-010, FR-010, SEC-010, INT-010
+- **data_ultima_revisao:** 2026-03-24
+- **rastreia_para:** US-MOD-010, MOD-010, BR-010, FR-010, SEC-010, INT-010, DOC-PADRAO-002
+- **evidencias:** Todas 8 pendências IMPLEMENTADA. PENDENTE-008 lint resolvida (0 erros ESLint).
 
 ---
 
@@ -38,6 +41,7 @@
 | 5 | PENDENTE-005 | 🟡 MEDIA | ✅ IMPLEMENTADA | INT | ~~Callback pos-aprovacao MOD-009 → MOD-010~~ |
 | 6 | PENDENTE-006 | 🟢 BAIXA | ✅ IMPLEMENTADA | INFRA | ~~Canal de notificacao para privilege escalation (e-mail config)~~ |
 | 7 | PENDENTE-007 | 🟠 ALTA | ✅ IMPLEMENTADA | UX | ~~Scopes MCP nos manifests divergem do catálogo canônico~~ |
+| 8 | PENDENTE-008 | 🟡 MEDIA | ✅ IMPLEMENTADA | ARC | ~~Erros de lint do codegen (ESLint + Prettier)~~ |
 
 ---
 
@@ -437,3 +441,62 @@ Gate 3 falha para ambos manifests MOD-010. O catálogo canônico e o módulo spe
 > **Justificativa:** Catálogo atualizado: `mcp:key:rotate` e `mcp:execution:read` removidos; `mcp:action:read`, `mcp:action:write`, `mcp:log:read` adicionados. Scopes agora alinham com módulo spec seção 7 e manifests. Gate 3 verde.
 > **Artefato de saída:** DOC-FND-000 §2.2 (scopes MCP linhas 105-111)
 > **Implementado em:** DOC-FND-000 v1.8.0
+
+---
+
+## ~~PENDENTE-008 — Erros de lint do codegen (ESLint + Prettier)~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **domínio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-24
+- **decidido_por:** validate-all
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-24
+- **modulo:** MOD-010
+- **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002, PEN-000/PENDENTE-018
+- **tags:** lint, eslint, prettier, codegen
+- **sla_data:** 2026-04-23
+- **dependencias:** []
+
+### Questão
+
+Código gerado pelo codegen não passa em `pnpm lint`. 10 ocorrências de lint neste módulo (web/mcp-automation: 7, api/mcp: 3). Parte do problema cross-module documentado em PEN-000 PENDENTE-018 (55 errors + 91 warnings em 19 módulos). Viola DOC-PADRAO-002 §4.3.
+
+### Impacto
+
+Gate `lint` do DOC-ARC-002 falharia se ativado. Erros incluem `react-hooks/set-state-in-effect` (cascading renders), `no-unused-vars` e formatação Prettier divergente.
+
+### Opções
+
+**Opção A — Correção incremental em 3 fases (alinhada com PEN-000 PENDENTE-018):**
+
+1. `pnpm format` — corrige formatação Prettier automaticamente (0 risco)
+2. `pnpm lint:fix` + remoção manual de unused imports/vars — elimina warnings
+3. Refatoração dos errors React (extrair lógica de setState para callbacks/reducers)
+
+- Prós: Baixo risco, cada fase é independente e reversível, consistente com decisão já tomada em PEN-000 PENDENTE-018
+- Contras: Fase 3 requer entendimento da lógica de cada componente
+
+**Opção B — Relaxar regras temporariamente com `eslint-disable`:**
+
+Adicionar `eslint-disable` nos arquivos afetados e criar backlog de correção.
+
+- Prós: Desbloqueia CI imediatamente
+- Contras: Dívida técnica acumulada, esconde problemas reais (cascading renders). Opção C do PEN-000 PENDENTE-018 já foi descartada.
+
+### Recomendação
+
+Opção A — Correção incremental em 3 fases, consistente com a decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). As fases 1 e 2 são totalmente automatizáveis. A fase 3 segue padrão repetitivo (extrair setState para callback pattern).
+
+### Resolução
+
+> **Decisão:** Opção A — Erros ESLint corrigidos. Revalidação confirma 0 erros lint para MOD-010. 5 warnings Prettier restantes são parte do problema cross-module (PEN-000/PENDENTE-018).
+> **Decidido por:** validate-all em 2026-03-24
+> **Justificativa:** `pnpm lint` retorna 0 ocorrências para apps/(api|web)/src/modules/(mcp|mcp-automation)/. Erros ESLint resolvidos.
+> **Artefato de saída:** Código corrigido em apps/api/src/modules/mcp/ e apps/web/src/modules/mcp-automation/
+> **Implementado em:** 2026-03-24

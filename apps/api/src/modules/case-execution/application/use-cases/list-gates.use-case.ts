@@ -4,7 +4,7 @@
  * Lists gate instances for a case, optionally filtered by stage.
  */
 
-import type { GateInstanceRepository, GateInstanceRow } from "../ports/gate-instance.repository.js";
+import type { GateInstanceRepository, GateInstanceRow } from '../ports/gate-instance.repository.js';
 
 export interface ListGatesInput {
   caseId: string;

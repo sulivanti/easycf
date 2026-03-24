@@ -36,6 +36,9 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.5.0 | 2026-03-24 | validate-all | Validação completa (lint+format+architecture+qa+manifest+openapi+drizzle+endpoint). Lint: PASS. Format: PASS. QA: PASS. Manifests: 2/2 PASS. Drizzle: PASS (5 tabelas, 12 indexes, 4 checks). OpenAPI: PASS (16/16). Endpoints: PASS (16/16). Arquitetura: WARN — 7 domain errors estendem Error ao invés de DomainError (PENDENTE-008). Web Pattern A: PASS. Hooks React Query: PASS. 0 bloqueadores, 0 violações críticas, 3 avisos (PENDENTE-007 lint, PENDENTE-008 DomainError, qa:all cross-module). |
+| 1.4.0 | 2026-03-24 | validate-all | Validação pós-correção PENDENTE-006 aprovada. QA: PASS. Manifests: 2/2 PASS. Drizzle: PASS (2 avisos menores). OpenAPI: PASS (16/16 endpoints, operationIds corretos). Endpoints: PASS (16/16, todas as 5 correções PENDENTE-006 aplicadas). 0 bloqueadores, 0 violações críticas, 2 avisos. |
+| 1.3.0 | 2026-03-23 | validate-all | Validação Fase 3 com 4 violações críticas. QA: PASS. Manifests: 2/2 PASS. Drizzle: PASS. Endpoints: FAIL (13/16, paths divergem da spec, /controls consolidado, PATCH ausente, 5 operationId mismatches). OpenAPI: N/A (contrato inexistente). |
 | 1.2.0 | 2026-03-23 | validate-all | Validação pós-código aprovada. QA: PASS. Manifests: 2/2 PASS. Drizzle: PASS (7/7 regras). Endpoints: PASS (8/10, 2 avisos). OpenAPI: N/A (paths pendentes). 0 bloqueadores, 4 avisos. |
 | 1.1.0 | 2026-03-23 | codegen | Codegen concluído: 6 agentes executados, 46 arquivos gerados. Camadas: DB, CORE, APP (19), API (2), WEB (7), VAL. Validação cruzada PASS em todas as camadas. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |

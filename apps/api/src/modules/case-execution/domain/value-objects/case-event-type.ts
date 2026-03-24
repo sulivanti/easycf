@@ -7,13 +7,13 @@
  */
 
 export const CASE_EVENT_TYPES = [
-  "COMMENT",
-  "EXCEPTION",
-  "REOPENED",
-  "EVIDENCE",
-  "REASSIGNED",
-  "ON_HOLD",
-  "RESUMED",
-  "STAGE_TRANSITIONED",
+  'COMMENT',
+  'EXCEPTION',
+  'REOPENED',
+  'EVIDENCE',
+  'REASSIGNED',
+  'ON_HOLD',
+  'RESUMED',
+  'STAGE_TRANSITIONED',
 ] as const;
 export type CaseEventType = (typeof CASE_EVENT_TYPES)[number];

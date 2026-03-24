@@ -5,6 +5,8 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 0.7.0  | 2026-03-24 | validate-all  | PENDENTE-010 IMPLEMENTADA — lint+format corrigidos (0 erros MOD-011) |
+> | 0.6.0  | 2026-03-24 | validate-all  | Adição PENDENTE-010 — erros lint codegen (6 ocorrências) |
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE — documenta PEND-SGR-01/02 como resolvidas, adiciona PEND-SGR-03/04/05 |
 > | 0.3.0  | 2026-03-19 | arquitetura | Pipeline PEND-SGR-04 — DECIDIDA (Opção A: target_endpoints no context_framer) → IMPLEMENTADA (DATA-011 + INT-011 + backlog amendment MOD-007) |
@@ -15,10 +17,10 @@
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-011, DOC-GPA-001, FR-011, NFR-011, INT-011, DATA-011
+- **data_ultima_revisao:** 2026-03-24
+- **rastreia_para:** US-MOD-011, DOC-GPA-001, FR-011, NFR-011, INT-011, DATA-011, DOC-PADRAO-002
 - **referencias_exemplos:** N/A
-- **evidencias:** N/A
+- **evidencias:** PENDENTE-010 IMPLEMENTADA (lint corrigido 2026-03-24)
 
 ---
 
@@ -137,6 +139,43 @@ Gate 2 WARNING para os 3 manifests. Tecnicamente violante, mas by-design (endpoi
 > **Justificativa:** 3 manifests atualizados com campo `notes` em ações submit explicando que `operation_id` e `endpoint` são resolvidos em runtime via `target_endpoints` do context_framer (PEND-SGR-04). Gate 2 WARNING justificado — design by-intent, não erro.
 > **Artefato de saída:** ux-sgr-001.inclusao-massa.yaml, ux-sgr-002.alteracao-registro.yaml, ux-sgr-003.exclusao-massa.yaml (campo notes adicionado em ações dinâmicas)
 > **Implementado em:** 2026-03-22
+
+---
+
+## ~~PENDENTE-010 — Erros de lint do codegen (ESLint + Prettier)~~
+
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **domínio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-24
+- **decidido_por:** validate-all
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-24
+- **modulo:** MOD-011
+- **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002, PEN-000/PENDENTE-018
+- **tags:** lint, eslint, prettier, codegen
+- **sla_data:** 2026-04-23
+- **dependencias:** []
+
+### Questão
+
+Código gerado pelo codegen não passa em `pnpm lint`. 6 ocorrências de lint neste módulo (web/smartgrid: 6). Parte do problema cross-module documentado em PEN-000 PENDENTE-018 (55 errors + 91 warnings em 19 módulos). Viola DOC-PADRAO-002 §4.3.
+
+### Impacto
+
+Gate `lint` do DOC-ARC-002 falharia se ativado. Erros incluem `react-hooks/set-state-in-effect` (cascading renders), `no-unused-vars` e formatação Prettier divergente.
+
+### Resolução
+
+> **Decisão:** Opção A — correção incremental (pnpm format + remoção de imports não usados + prefixo _ em vars não usadas)
+> **Decidido por:** validate-all em 2026-03-24
+> **Justificativa:** 4 warnings ESLint corrigidos (3x no-unused-vars import, 1x no-unused-vars var) + 10 arquivos Prettier formatados. Zero lint/format issues restantes para smartgrid.
+> **Artefato de saída:** SmartDataGrid.tsx, use-evaluate.ts, BulkInsertPage.tsx + 10 arquivos reformatados
+> **Implementado em:** 2026-03-24
 
 ---
 

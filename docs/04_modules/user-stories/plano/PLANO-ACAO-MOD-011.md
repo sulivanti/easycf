@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-011 SmartGrid
 
-> **Versao:** 4.0.0 | **Data:** 2026-03-24 | **Owner:** arquitetura
-> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.2.0) | **Features:** 5/5 READY
+> **Versao:** 6.0.0 | **Data:** 2026-03-24 | **Owner:** arquitetura
+> **Estado atual do modulo:** READY (v1.0.2) | **Epico:** READY (v1.2.0) | **Features:** 5/5 READY
 >
-> Fases 0-4 concluidas. Modulo selado como READY v1.0.0 em 2026-03-23. Epico e features promovidos formalmente a READY em 2026-03-24. Fase 5 (Geracao de Codigo) NAO INICIADA — scaffold apps/ concluido (2026-03-23). Proximo passo: executar `/codegen mod-011`.
+> Fases 0-5 concluidas. Codegen completo: AGN-COD-WEB gerou 22 arquivos. Validacao completa (validate-all): lint PASS (0 erros, 4 warnings corrigidos), format PASS (10 arquivos formatados), QA PASS, Manifests 3/3 PASS, OpenAPI/Drizzle/Endpoints N/A. PENDENTE-010 IMPLEMENTADA. 0 pendencias ABERTA. Modulo folha — nenhum downstream bloqueado.
 
 ---
 
@@ -15,12 +15,12 @@
 | Features F01-F05 | 5/5 READY (v1.2.0) | F01 (Amendment current_record_state), F02 (Grade Inclusao em Massa), F03 (Formulario Alteracao), F04 (Grade Exclusao em Massa), F05 (Acoes em Massa). Promovidas 2026-03-24 |
 | Scaffold (forge-module) | CONCLUIDO | mod-011-smartgrid/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | AGN-DEV-01 a AGN-DEV-11 confirmados, v0.14.0, 7 pendentes resolvidas |
-| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ concluido (2026-03-23). Nivel 1 UX Consumer: agentes aplicaveis AGN-COD-WEB + AGN-COD-VAL (demais N/A ou limitados). Executar `/codegen mod-011` |
-| PENDENTEs | 0 ABERTA | 7 total: 7 IMPLEMENTADA (PEND-SGR-01 a PEND-SGR-07) |
+| Codegen (6 agentes) | CONCLUIDO | 21 arquivos gerados (AGN-COD-WEB). DB/CORE/APP/API skipped (UX puro). AGN-COD-VAL PASS (0 bloqueadores, 3/3 manifests). Concluido 2026-03-24 |
+| PENDENTEs | 0 ABERTA | 8 total: 8 IMPLEMENTADA (PEND-SGR-01 a PEND-SGR-07 + PENDENTE-010) |
 | ADRs | 2 aceitas (ACCEPTED) | Nivel 1 requer minimo 1 — atendido (ADR-001 Motor 1-por-1, ADR-002 Sem Persistencia Server-Side) |
 | Amendments | 0 (1 backlog) | Amendment MOD-007: campo `target_endpoints` no context_framer tipo OPERACAO (backlog) |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (Etapa 5 — Selo READY) |
+| CHANGELOG | v1.0.2 | Ultima entrada 2026-03-24 (validate-all completo: lint+format+QA+manifests PASS) |
 | Screen Manifests | 3/3 existem | ux-sgr-001.inclusao-massa.yaml, ux-sgr-002.alteracao-registro.yaml, ux-sgr-003.exclusao-massa.yaml |
 | Dependencias | 2 upstream (MOD-000, MOD-007) | Consome auth/RBAC do MOD-000 e routine-engine/evaluate do MOD-007 |
 | Bloqueios | 0 | Nenhum BLK-* afeta MOD-011 |
@@ -203,9 +203,9 @@ Promocao executada em duas etapas: manifesto selado como READY v1.0.0 em 2026-03
                         NFR-011, PEN-011, ADR-001, ADR-002
 ```
 
-### Fase 5: Geracao de Codigo — NAO INICIADA
+### Fase 5: Geracao de Codigo — CONCLUIDA
 
-O modulo foi promovido a READY, o que habilita a geracao de codigo. O scaffold de aplicacao (`apps/api/` e `apps/web/`) foi concluido em 2026-03-23. Para MOD-011 (Nivel 1 UX Consumer), a geracao de codigo e predominantemente na camada Web: 3 telas UX (bulk-insert, record-edit, bulk-delete), 8 componentes UI, domain wrappers (motor-evaluator, row-status-mapper, json-serializer) e data layer (commands, queries, mappers). O amendment em MOD-007 (F01 — `current_record_state`) sera tratado no codegen do MOD-007, nao do MOD-011.
+Codegen completo em 2026-03-24. Batch 1 (AGN-COD-DB, AGN-COD-CORE, AGN-COD-APP, AGN-COD-API) skipped — modulo UX puro sem tabelas, dominio ou endpoints proprios. Batch 2 (AGN-COD-WEB) gerou 21 arquivos cobrindo 3 telas, 8 componentes, 4 domain wrappers, 3 data layer e 1 barrel index. Batch 3 (AGN-COD-VAL) via `/validate-all` aprovado com 0 bloqueadores: QA PASS (0 erros MOD-011), Manifests 3/3 PASS, OpenAPI/Drizzle/Endpoints N/A.
 
 > **Decision tree de codegen:**
 >
@@ -225,32 +225,44 @@ O modulo foi promovido a READY, o que habilita a geracao de codigo. O scaffold d
                            - apps/web/ (React + TanStack)
                            - Pre-requisito para qualquer codegen
 
-7b   /codegen mod-011      Gerar codigo do MOD-011 (Nivel 1 UX Consumer):    A EXECUTAR
-                           - Agentes aplicaveis para Nivel 1:
-                             AGN-COD-DB, AGN-COD-APP, AGN-COD-API,
-                             AGN-COD-WEB, AGN-COD-VAL
-                           - MOD-011 e UX-First: DB/APP/API serao
-                             minimais ou skippados (0 tabelas, 0 endpoints)
-                           - Foco principal: AGN-COD-WEB
-                             (apps/web/src/modules/smartgrid/)
+7b   /codegen mod-011      Gerar codigo do MOD-011 (Nivel 1 UX Consumer):    CONCLUIDO
+                           Batch 1: AGN-COD-DB, AGN-COD-CORE,                  2026-03-24
+                                    AGN-COD-APP, AGN-COD-API → skipped
+                           Batch 2: AGN-COD-WEB → 21 arquivos                  2026-03-24
+                           Batch 3: AGN-COD-VAL → PASS (0 bloqueadores)        2026-03-24
 ```
 
 #### Rastreio de Agentes COD
 
 | # | Agente | Camada | Path | Status | Arquivos |
 |---|--------|--------|------|--------|----------|
-| 1 | AGN-COD-DB | infrastructure | apps/api/src/modules/smartgrid/infrastructure/ | N/A (0 tabelas, UX puro) | 0 |
-| 2 | AGN-COD-CORE | domain | apps/api/src/modules/smartgrid/domain/ | N/A (Nivel 1) | 0 |
-| 3 | AGN-COD-APP | application | apps/api/src/modules/smartgrid/application/ | N/A (0 endpoints, UX puro) | 0 |
-| 4 | AGN-COD-API | presentation | apps/api/src/modules/smartgrid/presentation/ | N/A (0 endpoints, UX puro) | 0 |
-| 5 | AGN-COD-WEB | web | apps/web/src/modules/smartgrid/ | PENDENTE | 0 — scaffold apps/web/ concluido, aguarda codegen |
-| 6 | AGN-COD-VAL | validation | (cross-layer) | PENDENTE | Pos AGN-COD-WEB |
+| 1 | AGN-COD-DB | infrastructure | — | SKIPPED (0 tabelas, UX puro) | 0 |
+| 2 | AGN-COD-CORE | domain | — | SKIPPED (Nivel 1, sem dominio) | 0 |
+| 3 | AGN-COD-APP | application | — | SKIPPED (0 use cases, delega MOD-007) | 0 |
+| 4 | AGN-COD-API | presentation | — | SKIPPED (0 endpoints, UX puro) | 0 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/smartgrid/ | CONCLUIDO (2026-03-24) | 21 |
+| 6 | AGN-COD-VAL | validation | (cross-layer) | CONCLUIDO (2026-03-24) | 0 (validacao apenas) |
 
-> **Nota sobre Nivel 1 UX Consumer:** MOD-011 nao possui tabelas, endpoints ou dominio proprio. Os agentes AGN-COD-DB, AGN-COD-CORE, AGN-COD-APP e AGN-COD-API serao skippados ou produzirao apenas o amendment em MOD-007 (F01 — `current_record_state`). O foco real de codegen e AGN-COD-WEB, que gerara:
-> - `apps/web/src/modules/smartgrid/ui/screens/` — 3 telas (bulk-insert, record-edit, bulk-delete)
-> - `apps/web/src/modules/smartgrid/ui/components/` — 8 componentes (SmartGridHeader, MassActionToolbar, SmartDataGrid, CloseConfirmationModal, SelectionList, DeleteConfirmationPanel, DeleteResultFeedback, SmartEditForm)
-> - `apps/web/src/modules/smartgrid/domain/` — motor-evaluator.ts, row-status-mapper.ts, json-serializer.ts, rules.ts
-> - `apps/web/src/modules/smartgrid/data/` — commands.ts, queries.ts, mappers.ts
+#### Arquivos Gerados (AGN-COD-WEB — 21 arquivos)
+
+| Camada | Arquivos |
+|--------|----------|
+| data/ | types.ts, queries.ts, mappers.ts |
+| domain/ | motor-evaluator.ts, row-status-mapper.ts, json-serializer.ts, rules.ts |
+| ui/components/ | RowStatusIcon.tsx, SmartGridHeader.tsx, MassActionToolbar.tsx, SmartDataGrid.tsx, CloseConfirmationModal.tsx, BlockedRecordMessage.tsx, SelectionList.tsx, DeleteConfirmationPanel.tsx, DeleteResultFeedback.tsx |
+| ui/forms/ | SmartEditForm.tsx |
+| ui/screens/ | BulkInsertScreen.tsx, RecordEditScreen.tsx, BulkDeleteScreen.tsx |
+| raiz | index.ts |
+
+#### Validacao Pos-Codegen (AGN-COD-VAL)
+
+| # | Validador | Status | Resultado |
+|---|-----------|--------|-----------|
+| 1 | QA geral | PASS | 0 bloqueadores MOD-011 |
+| 2 | Screen Manifests | PASS | 3/3 aprovados (ux-sgr-001, 002, 003) |
+| 3 | OpenAPI | N/A | Modulo UX-only |
+| 4 | Drizzle | N/A | Modulo UX-only |
+| 5 | Endpoints | N/A | Modulo UX-only |
 
 #### Scaffold e Pre-Requisitos
 
@@ -258,10 +270,10 @@ O modulo foi promovido a READY, o que habilita a geracao de codigo. O scaffold d
 |---------------|--------|------|
 | `apps/api/package.json` | CONCLUIDO | Scaffold concluido 2026-03-23 |
 | `apps/web/package.json` | CONCLUIDO | Scaffold concluido 2026-03-23 |
-| MOD-000 codigo gerado | A VERIFICAR | MOD-000 na Camada 0 — deve ser gerado antes |
-| MOD-007 codigo gerado | A VERIFICAR | MOD-007 na Camada 5 — deve ser gerado antes (inclui amendment F01) |
+| MOD-000 codigo gerado | CONCLUIDO | Camada 0 — gerado previamente |
+| MOD-007 codigo gerado | CONCLUIDO | Camada 5 — gerado previamente |
 
-> **Ordem topologica:** MOD-011 esta na Camada 6. As dependencias upstream (MOD-000 Camada 0, MOD-007 Camada 5) devem ter codigo gerado antes para que o MOD-011 possa consumir os tipos e contratos exportados.
+> **Ordem topologica:** MOD-011 esta na Camada 6 (modulo folha). Dependencias upstream (MOD-000 Camada 0, MOD-007 Camada 5) foram geradas antes.
 
 ### Fase 6: Pos-READY — SOB DEMANDA
 
@@ -307,6 +319,7 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment formal foi criado
 | 5 | PEND-SGR-05 | IMPLEMENTADA | — | Concorrencia env var default=10 |
 | 6 | PEND-SGR-06 | IMPLEMENTADA | ALTA | Scope param:engine:evaluate registrado |
 | 7 | PEND-SGR-07 | IMPLEMENTADA | MEDIA | Notes em acoes submit dinamicas |
+| 8 | PENDENTE-010 | IMPLEMENTADA | MEDIA | Lint+Prettier corrigidos (4 warnings + 10 format) |
 
 > Detalhes completos: requirements/pen-011-pendente.md
 
@@ -328,10 +341,10 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment formal foi criado
 
 ```
 PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──→ PROMOCAO ──→ CODEGEN ──→ POS-READY
-    [OK]         [OK]          [OK]              [OK]         [OK]       [PROX]      [futuro]
+    [OK]         [OK]          [OK]              [OK]         [OK]        [OK]       [futuro]
                                                                            │
-                                                                           ├── Scaffold apps/ concluido (2026-03-23)
-                                                                           └── /codegen mod-011 (AGN-COD-WEB)
+                                                                           ├── AGN-COD-WEB: 21 arquivos (2026-03-24)
+                                                                           └── AGN-COD-VAL: PASS (2026-03-24)
 ```
 
 **Posicao na cadeia topologica:** Camada 6 (MOD-011 depende de MOD-000 e MOD-007). Modulo folha — nenhum modulo depende de MOD-011.
@@ -353,19 +366,19 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 | Amendment backlog MOD-007 | O campo `target_endpoints` no context_framer tipo OPERACAO foi especificado (DATA-011 §6, INT-011 INT-003) mas requer amendment formal no MOD-007 para implementacao efetiva. Este amendment esta em backlog e nao bloqueia a especificacao do MOD-011. |
 | Menor contagem de dependencias | Apenas 2 dependencias upstream (MOD-000, MOD-007) — uma das menores do portfolio. Posicao de modulo folha na Camada 6 (paralelo com MOD-008 e MOD-010). |
 | Promovido a READY | Modulo selado em 2026-03-23 (v1.0.0). Epico e features promovidos formalmente a READY em 2026-03-24 (v1.2.0). Todas as 7 pendencias IMPLEMENTADA, todos os validadores aplicaveis PASS, 2 ADRs ACCEPTED. Proximo marco: geracao de codigo. |
-| Codegen predominantemente Web | Dos 6 agentes COD, apenas AGN-COD-WEB e AGN-COD-VAL sao efetivamente aplicaveis. Os demais 4 agentes (DB, CORE, APP, API) serao skippados por nao haver tabelas, dominio ou endpoints proprios. O amendment no MOD-007 e tratado no codegen do MOD-007. |
+| Codegen predominantemente Web | Dos 6 agentes COD, apenas AGN-COD-WEB e AGN-COD-VAL foram efetivamente executados. Os demais 4 agentes (DB, CORE, APP, API) foram skippados por nao haver tabelas, dominio ou endpoints proprios. AGN-COD-WEB gerou 21 arquivos, AGN-COD-VAL aprovou com 0 bloqueadores. |
 
 ---
 
-## Checklist Rapido — O que Falta para Codegen
+## Checklist Rapido — Codegen Completo
 
-- [x] Executar `/app-scaffold all` (cria apps/api e apps/web — one-time, afeta todos os modulos) — CONCLUIDO 2026-03-23
-- [ ] Verificar se MOD-000 e MOD-007 tem codigo gerado (dependencias upstream)
-- [ ] Executar `/codegen mod-011` (foco: AGN-COD-WEB para apps/web/src/modules/smartgrid/)
-- [ ] Validar codigo gerado (AGN-COD-VAL)
-- [ ] Criar amendment formal no MOD-007 para `target_endpoints` (backlog)
+- [x] Executar `/app-scaffold all` — CONCLUIDO 2026-03-23
+- [x] Verificar dependencias upstream (MOD-000, MOD-007) — CONCLUIDO
+- [x] Executar `/codegen mod-011` — CONCLUIDO 2026-03-24 (21 arquivos, 4 agentes skipped + WEB done)
+- [x] Validar codigo gerado (`/validate-all mod-011`) — CONCLUIDO 2026-03-24 (PASS, 0 bloqueadores)
+- [ ] Criar amendment formal no MOD-007 para `target_endpoints` (backlog, nao bloqueia)
 
-> **Nota:** MOD-011 e modulo folha (Camada 6) — a geracao de seu codigo nao bloqueia nenhum outro modulo. As dependencias upstream (MOD-000, MOD-007) devem ter codigo gerado antes para disponibilizar tipos e contratos consumidos pelo SmartGrid.
+> **Nota:** MOD-011 e modulo folha (Camada 6) — codegen completo, nenhum downstream bloqueado. O unico item pendente e o amendment no MOD-007 para `target_endpoints`, que e backlog e nao bloqueia o funcionamento do MOD-011.
 
 ---
 
@@ -373,6 +386,8 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 6.0.0 | 2026-03-24 | Atualizacao: validate-all completo — lint PASS (4 warnings corrigidos: 3x no-unused-vars import + 1x no-unused-vars var), format PASS (10 arquivos), QA PASS (0 erros MOD-011 em 22 globais), Manifests 3/3 PASS, Arquitetura Pattern A confirmada. PENDENTE-010 IMPLEMENTADA. Execution state atualizado. |
+| 5.0.0 | 2026-03-24 | Atualizacao: Fase 5 (Codegen) CONCLUIDA — AGN-COD-WEB gerou 21 arquivos, AGN-COD-VAL aprovado (PASS, 0 bloqueadores, 3/3 manifests). 4 agentes skipped (DB/CORE/APP/API — UX puro). Execution state atualizado com codegen.completed_at e validations. Checklist e resumo visual atualizados. |
 | 4.0.0 | 2026-03-24 | Atualizacao: Promocao formal do epico (APPROVED→READY v1.2.0) e features F01-F05 (APPROVED→READY v1.2.0). Execution state atualizado com secao promotion (gates DoR-1 a DoR-7, timestamp 2026-03-24). Diagnostico e checklist atualizados. |
 | 3.0.0 | 2026-03-23 | Atualizacao: Fase 4 (Promocao) CONCLUIDA — modulo promovido a READY v1.0.0 em 2026-03-23. Fase 5 (Geracao de Codigo) adicionada com rastreio de agentes COD, scaffold ausente, checklist de codegen. Resumo visual e checklist rapido atualizados para refletir proximo marco (codegen). |
 | 2.0.0 | 2026-03-23 | Recriacao completa: Fases 0-3 CONCLUIDAS (validate-all 2026-03-22 PASS), Fase 4 PRONTA para promocao (0 ABERTA), PEND-SGR-06 e PEND-SGR-07 adicionadas e resolvidas, 3/3 screen manifests confirmados PASS, mapa de cobertura atualizado com 3 validadores N/A (UX-First) |

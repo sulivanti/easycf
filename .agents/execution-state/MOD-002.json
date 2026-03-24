@@ -1,0 +1,146 @@
+{
+  "module_id": "MOD-002",
+  "module_path": "docs/04_modules/mod-002-gestao-usuarios/",
+  "last_updated": "2026-03-24T18:00:00Z",
+  "scaffold": {
+    "completed": true,
+    "completed_at": "2026-03-23T14:00:00.000Z",
+    "apps_created": ["api", "web"],
+    "pnpm_workspace_updated": true
+  },
+  "codegen": {
+    "started_at": "2026-03-23T23:00:00.000Z",
+    "completed_at": "2026-03-23T23:55:00.000Z",
+    "agents": {
+      "AGN-COD-DB": { "status": "skipped", "completed_at": "2026-03-23T23:00:00.000Z", "files_generated": 0, "files": [], "skip_reason": "UX-First module — no own DB entities (DATA-001)" },
+      "AGN-COD-CORE": { "status": "skipped", "completed_at": "2026-03-23T23:00:00.000Z", "files_generated": 0, "files": [], "skip_reason": "Level 1 — no Domain layer" },
+      "AGN-COD-APP": { "status": "skipped", "completed_at": "2026-03-23T23:00:00.000Z", "files_generated": 0, "files": [], "skip_reason": "UX-First module — no own use cases/backend logic (DATA-001)" },
+      "AGN-COD-API": { "status": "skipped", "completed_at": "2026-03-23T23:00:00.000Z", "files_generated": 0, "files": [], "skip_reason": "UX-First module — no own endpoints (manifest §2: 'não cria endpoints novos')" },
+      "AGN-COD-WEB": {
+        "status": "done",
+        "completed_at": "2026-03-24T15:30:00Z",
+        "files_generated": 13,
+        "files": [
+          "apps/web/src/modules/users/types/users.types.ts",
+          "apps/web/src/modules/users/api/users.api.ts",
+          "apps/web/src/modules/users/hooks/use-users-list.ts",
+          "apps/web/src/modules/users/hooks/use-role-options.ts",
+          "apps/web/src/modules/users/hooks/use-user-detail.ts",
+          "apps/web/src/modules/users/hooks/use-create-user.ts",
+          "apps/web/src/modules/users/hooks/use-deactivate-user.ts",
+          "apps/web/src/modules/users/hooks/use-resend-invite.ts",
+          "apps/web/src/modules/users/components/UsersTable.tsx",
+          "apps/web/src/modules/users/components/DeactivateModal.tsx",
+          "apps/web/src/modules/users/pages/UsersListPage.tsx",
+          "apps/web/src/modules/users/pages/UserFormPage.tsx",
+          "apps/web/src/modules/users/pages/UserInvitePage.tsx"
+        ],
+        "notes": "Re-codegen: migrated from Pattern B (data/domain/ui) to Pattern A (api/components/hooks/pages/types). All hooks now use @tanstack/react-query. Shared UI components imported from @shared/ui.",
+        "missing_info": [
+          "Foundation UserListItem lacks roleId/roleName — amendment needed on MOD-000-F05",
+          "Foundation UserDetail lacks inviteTokenExpired — amendment needed on MOD-000-F05",
+          "Foundation CreateUserRequest lacks mode/roleId — MOD-002 uses httpClient directly as workaround"
+        ]
+      },
+      "AGN-COD-VAL": {
+        "status": "done",
+        "completed_at": "2026-03-23T23:55:00.000Z",
+        "files_generated": 0,
+        "files": [],
+        "validation": {
+          "summary": { "errors": 1, "warnings": 2, "notes": 1 },
+          "checks": {
+            "problem_details_rfc9457": true,
+            "correlation_id": true,
+            "idempotency": "ok",
+            "layering_clean_arch": "ok",
+            "tests_present": "missing",
+            "openapi_present_and_linted": "n/a",
+            "x_permissions_documented": "n/a"
+          },
+          "findings": [
+            {
+              "severity": "error",
+              "location": "apps/web/src/modules/users/",
+              "message": "No test files found. NFR-001 §9 requires ≥80% line coverage, ≥70% branches.",
+              "fix_suggestion": "Create __tests__/ with unit tests for domain/view-model.ts, domain/permissions.ts, data/mappers.ts, ui/forms/UserCreateForm.tsx, ui/components/CooldownButton.tsx"
+            },
+            {
+              "severity": "warning",
+              "location": "data/types.ts, data/mappers.ts",
+              "message": "Foundation UserListItem lacks roleId/roleName; UserDetail lacks inviteTokenExpired. Defaults applied.",
+              "fix_suggestion": "Amendment MOD-000-F05 to add missing fields"
+            },
+            {
+              "severity": "warning",
+              "location": "domain/",
+              "message": "domain/copy.ts (centralized PII-safe strings) documented in PEN-003/ADR-002 but not created. Strings are inline.",
+              "fix_suggestion": "Create domain/copy.ts with type-safe string map"
+            },
+            {
+              "severity": "note",
+              "location": "ui/screens/, data/queries.ts",
+              "message": "UX telemetry (ux.action.requested/succeeded/failed) specified in UX-001 §7 not implemented. Depends on Foundation telemetry SDK.",
+              "fix_suggestion": "Implement useTelemetry hook when Foundation exposes SDK"
+            }
+          ],
+          "post_validations": {
+            "validate-drizzle": "n/a (UX-First, no Drizzle schemas)",
+            "validate-openapi": "n/a (UX-First, no OpenAPI specs)",
+            "validate-endpoint": "n/a (UX-First, no Fastify endpoints)"
+          }
+        }
+      }
+    }
+  },
+  "tests": {
+    "pnpm_lint": {
+      "status": "PASS",
+      "run_at": "2026-03-24T18:00:00Z",
+      "eslint_errors": 0,
+      "eslint_warnings": 0,
+      "prettier_issues": 0
+    }
+  },
+  "validations": {
+    "last_run": "2026-03-24T18:00:00Z",
+    "lint": {
+      "status": "PASS",
+      "run_at": "2026-03-24T18:00:00Z",
+      "eslint_errors": 0,
+      "eslint_warnings": 0,
+      "prettier_issues": 0,
+      "top_rules": []
+    },
+    "architecture": {
+      "status": "PASS",
+      "run_at": "2026-03-24T18:00:00Z",
+      "domain_errors": "N/A",
+      "web_pattern": "Pattern A (api/, components/, hooks/, pages/, types/)",
+      "react_query": true
+    },
+    "qa": {
+      "status": "PASS",
+      "run_at": "2026-03-24T18:00:00Z",
+      "blockers": 0,
+      "violations": 0,
+      "warnings": 2
+    },
+    "manifest": {
+      "status": "PASS",
+      "run_at": "2026-03-24T18:00:00Z",
+      "total": 3,
+      "passed": 3,
+      "violations": []
+    },
+    "openapi": { "status": "N/A", "run_at": null },
+    "drizzle": { "status": "N/A", "run_at": null },
+    "endpoint": { "status": "N/A", "run_at": null },
+    "verdict": {
+      "ready_for_promotion": true,
+      "blockers": 0,
+      "critical_violations": 0,
+      "warnings": 2
+    }
+  }
+}

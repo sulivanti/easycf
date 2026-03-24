@@ -6,13 +6,11 @@
  */
 
 export class EvidenceRequiredError extends Error {
-  public readonly code = "EVIDENCE_REQUIRED";
+  public readonly code = 'EVIDENCE_REQUIRED';
   public readonly statusCode = 422;
 
   constructor(transitionId: string) {
-    super(
-      `Transition ${transitionId} requires evidence. Provide evidence in the request body.`,
-    );
-    this.name = "EvidenceRequiredError";
+    super(`Transition ${transitionId} requires evidence. Provide evidence in the request body.`);
+    this.name = 'EvidenceRequiredError';
   }
 }

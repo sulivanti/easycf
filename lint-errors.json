@@ -1,1 +1,24 @@
-[]
+[
+  "[Erro] Referência de arquivo quebrada: '/CONTRIBUTING.md' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\astro\\README.md:35",
+  "[Erro] Referência de arquivo quebrada: './examples' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\CHANGELOG.md:14",
+  "[Erro] Referência de arquivo quebrada: './examples' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:167",
+  "[Erro] Referência de arquivo quebrada: 'examples/coffee.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:175",
+  "[Erro] Referência de arquivo quebrada: 'examples/excerpt-separator.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:176",
+  "[Erro] Referência de arquivo quebrada: 'examples/excerpt-stringify.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:177",
+  "[Erro] Referência de arquivo quebrada: 'examples/excerpt.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:178",
+  "[Erro] Referência de arquivo quebrada: 'examples/javascript.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:179",
+  "[Erro] Referência de arquivo quebrada: 'examples/json-stringify.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:180",
+  "[Erro] Referência de arquivo quebrada: 'examples/json.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:181",
+  "[Erro] Referência de arquivo quebrada: 'examples/restore-empty.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:182",
+  "[Erro] Referência de arquivo quebrada: 'examples/sections-excerpt.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:183",
+  "[Erro] Referência de arquivo quebrada: 'examples/sections.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:184",
+  "[Erro] Referência de arquivo quebrada: 'examples/toml.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:185",
+  "[Erro] Referência de arquivo quebrada: 'examples/yaml-stringify.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:186",
+  "[Erro] Referência de arquivo quebrada: 'examples/yaml.js' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:187",
+  "[Erro] Referência de arquivo quebrada: '../../issues/new' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:495",
+  "[Erro] Referência de arquivo quebrada: '.verb.md' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\gray-matter\\README.md:513",
+  "[Erro] Referência de arquivo quebrada: 'mailto:opencode@microsoft.com' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\typescript\\README.md:39",
+  "[Erro] Referência de arquivo quebrada: 'mailto:secure@microsoft.com' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\_site\\node_modules\\typescript\\SECURITY.md:15",
+  "[Erro] context-map.json: skill 'codegen-agent' referencia doc 'PKG-COD-001' que não existe em normativos/ ou pacotes_agentes/",
+  "[Erro] context-map.json: skill 'codegen' referencia doc 'PKG-COD-001' que não existe em normativos/ ou pacotes_agentes/"
+]

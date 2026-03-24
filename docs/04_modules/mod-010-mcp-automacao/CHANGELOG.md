@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.2.0 | 2026-03-24 | validate-all | Revalidação completa: Lint 0 erros (PENDENTE-008 resolvida), Format 5 warnings (cross-module PEN-000/PENDENTE-018), Arquitetura PASS (DomainError+type+statusHint, react-query, Pattern A), QA PASS, Manifests 2/2 PASS, OpenAPI PASS (14 ops), Drizzle PASS (5 tabelas), Endpoints PASS (4 routes, 14 endpoints). 0 bloqueadores, 0 violações críticas. |
+| 1.1.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. QA: PASS. Manifests: 2/2 PASS. OpenAPI: PASS. Drizzle: PASS. Endpoints: PASS. Codegen completo (DB+CORE+APP+API+WEB). 0 bloqueadores, 0 violações. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |
 | 0.6.0 | 2026-03-19 | arquitetura | PENDENTE-006 decidida+implementada — Opcao A (NotificationService MOD-000) escolhida para canal e-mail de privilege escalation. Dependencia MOD-000 NotificationService multi-canal mapeada (MOD-000 ainda nao possui o servico). PEN-010 v0.9.0. |
 | 0.5.0 | 2026-03-19 | AGN-DEV-09, AGN-DEV-10, AGN-DEV-11 | Enriquecimento Batch 4 (final) — AGN-DEV-09: 4 ADRs criadas (ADR-001 Gateway Síncrono, ADR-002 API Key bcrypt, ADR-003 Outbox Pattern, ADR-004 Blocklist Wildcard); mod.md §9 adr-index atualizado. AGN-DEV-10: PEN-010 atualizado com 6 pendências (2 altas: Phase 2 enable e amendment MOD-000-F12; 3 médias: PREPARAR default, DIRECT lógica, callback MOD-009; 1 baixa: e-mail config). AGN-DEV-11: Cross-validation — 2 erros corrigidos (rate limit SEC vs NFR, tenant_id mcp_action_types), 4 warnings documentados, cobertura completa verificada. |

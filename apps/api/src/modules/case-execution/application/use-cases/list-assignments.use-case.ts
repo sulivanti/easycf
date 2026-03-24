@@ -4,7 +4,10 @@
  * Lists active assignments for a case.
  */
 
-import type { CaseAssignmentRepository, CaseAssignmentRow } from "../ports/case-assignment.repository.js";
+import type {
+  CaseAssignmentRepository,
+  CaseAssignmentRow,
+} from '../ports/case-assignment.repository.js';
 
 export interface ListAssignmentsInput {
   caseId: string;

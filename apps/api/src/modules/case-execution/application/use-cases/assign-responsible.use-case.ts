@@ -6,10 +6,16 @@
  * Supports delegation-based assignments via delegationId.
  */
 
-import type { CaseInstanceRepository } from "../ports/case-instance.repository.js";
-import type { CaseAssignmentRepository, CaseAssignmentRow } from "../ports/case-assignment.repository.js";
-import { createCaseExecutionEvent, CASE_EXECUTION_EVENT_TYPES } from "../../domain/domain-events/case-events.js";
-import { CaseNotOpenError } from "../../domain/errors/case-not-open.error.js";
+import type { CaseInstanceRepository } from '../ports/case-instance.repository.js';
+import type {
+  CaseAssignmentRepository,
+  CaseAssignmentRow,
+} from '../ports/case-assignment.repository.js';
+import {
+  createCaseExecutionEvent,
+  CASE_EXECUTION_EVENT_TYPES,
+} from '../../domain/domain-events/case-events.js';
+import { CaseNotOpenError } from '../../domain/errors/case-not-open.error.js';
 
 export interface AssignResponsibleInput {
   caseId: string;
@@ -33,7 +39,9 @@ export class AssignResponsibleUseCase {
   constructor(
     private readonly caseRepo: CaseInstanceRepository,
     private readonly assignmentRepo: CaseAssignmentRepository,
-    private readonly emitEvent: (event: ReturnType<typeof createCaseExecutionEvent>) => Promise<void>,
+    private readonly emitEvent: (
+      event: ReturnType<typeof createCaseExecutionEvent>,
+    ) => Promise<void>,
   ) {}
 
   async execute(input: AssignResponsibleInput): Promise<AssignResponsibleOutput> {
@@ -42,7 +50,7 @@ export class AssignResponsibleUseCase {
     if (!caseRow) {
       throw new Error(`Case ${input.caseId} not found.`);
     }
-    if (caseRow.status !== "OPEN" && caseRow.status !== "ON_HOLD") {
+    if (caseRow.status !== 'OPEN' && caseRow.status !== 'ON_HOLD') {
       throw new CaseNotOpenError(input.caseId, caseRow.status);
     }
 
@@ -57,7 +65,7 @@ export class AssignResponsibleUseCase {
       await this.assignmentRepo.deactivateByRole(
         input.caseId,
         input.processRoleId,
-        input.substitutionReason ?? "Reassigned",
+        input.substitutionReason ?? 'Reassigned',
       );
     }
 

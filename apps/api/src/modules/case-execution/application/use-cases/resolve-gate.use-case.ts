@@ -6,11 +6,17 @@
  * APPROVAL gates require can_approve=true on user role (BR-008).
  */
 
-import type { GateInstanceRepository } from "../ports/gate-instance.repository.js";
-import { validateGateResolution, type GateResolveRequest } from "../../domain/domain-services/gate-resolver.service.js";
-import type { GateDecision } from "../../domain/value-objects/gate-decision.js";
-import { assertGateTransition } from "../../domain/value-objects/gate-resolution-status.js";
-import { createCaseExecutionEvent, CASE_EXECUTION_EVENT_TYPES } from "../../domain/domain-events/case-events.js";
+import type { GateInstanceRepository } from '../ports/gate-instance.repository.js';
+import {
+  validateGateResolution,
+  type GateResolveRequest,
+} from '../../domain/domain-services/gate-resolver.service.js';
+import type { GateDecision } from '../../domain/value-objects/gate-decision.js';
+import { assertGateTransition } from '../../domain/value-objects/gate-resolution-status.js';
+import {
+  createCaseExecutionEvent,
+  CASE_EXECUTION_EVENT_TYPES,
+} from '../../domain/domain-events/case-events.js';
 
 export interface ResolveGateInput {
   gateInstanceId: string;
@@ -21,13 +27,13 @@ export interface ResolveGateInput {
   correlationId: string;
   decision?: GateDecision;
   parecer?: string;
-  evidence?: { type: "file"; url: string; filename: string };
+  evidence?: { type: 'file'; url: string; filename: string };
   checklistItems?: Array<{ id: string; label: string; checked: boolean }>;
 }
 
 export interface ResolveGateOutput {
   gateInstanceId: string;
-  status: "RESOLVED" | "REJECTED";
+  status: 'RESOLVED' | 'REJECTED';
   decision: GateDecision | null;
 }
 
@@ -35,7 +41,9 @@ export class ResolveGateUseCase {
   constructor(
     private readonly gateInstanceRepo: GateInstanceRepository,
     private readonly getGateType: (gateId: string) => Promise<string>,
-    private readonly emitEvent: (event: ReturnType<typeof createCaseExecutionEvent>) => Promise<void>,
+    private readonly emitEvent: (
+      event: ReturnType<typeof createCaseExecutionEvent>,
+    ) => Promise<void>,
   ) {}
 
   async execute(input: ResolveGateInput): Promise<ResolveGateOutput> {
@@ -45,7 +53,7 @@ export class ResolveGateUseCase {
     }
 
     // Validate state transition (PENDING → RESOLVED/REJECTED)
-    const gateType = await this.getGateType(gate.gateId) as GateResolveRequest["gateType"];
+    const gateType = (await this.getGateType(gate.gateId)) as GateResolveRequest['gateType'];
 
     const request: GateResolveRequest = {
       gateType,

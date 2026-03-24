@@ -15,7 +15,7 @@
 - **version:** 1.0.0
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
+- **data_ultima_revisao:** 2026-03-24
 - **rastreia_para:** US-MOD-000, DOC-DEV-001, DOC-GNP-00, DOC-ESC-001, DOC-GPA-001, DOC-ARC-001, DOC-ARC-002, DOC-ARC-003, DOC-UX-010, DOC-PADRAO-001, DOC-PADRAO-002, DOC-PADRAO-004, DOC-PADRAO-005, DOC-FND-000
 - **evidencias:** N/A
 
@@ -115,13 +115,13 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [BR-000](requirements/br/BR-000.md) — Regras de Negócio do Foundation (14 regras)
 - [FR-000](requirements/fr/FR-000.md) — Requisitos Funcionais do Foundation (19 requisitos)
 - [DATA-000](requirements/data/DATA-000.md) — Modelo de Dados do Foundation (8 entidades)
-- [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events do Foundation (34 eventos)
+- [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events do Foundation (36 eventos)
 - [INT-000](requirements/int/INT-000.md) — Integrações e Contratos do Foundation (6 integrações)
 - [SEC-000](requirements/sec/SEC-000.md) — Segurança e Compliance do Foundation (8 seções)
 - [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos do Foundation (34 entradas)
 - [UX-000](requirements/ux/UX-000.md) — Jornadas e Fluxos do Foundation (8 telas/jornadas, v0.3.0)
 - [NFR-000](requirements/nfr/NFR-000.md) — Requisitos Não Funcionais do Foundation (SLOs, observabilidade, DR)
-- [PEN-000](requirements/pen-000-pendente.md) — Questões Abertas do Foundation (12 pendências: 12/12 IMPLEMENTADA)
+- [PEN-000](requirements/pen-000-pendente.md) — Questões Abertas do Foundation (18 pendências: 18 IMPLEMENTADA, 0 ABERTA)
 <!-- end index -->
 
 ## 7. Decisões (ADR)
@@ -141,4 +141,5 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [DOC-FND-000-M02](amendments/sec/DOC-FND-000-M02.md) — 7º scope process:case:reopen no catálogo §2.2 (PEN-006 PENDENTE-001)
 - [DOC-FND-000-M03](amendments/sec/DOC-FND-000-M03.md) — 7 scopes approval:* registrados no catálogo §2.2 (MOD-009, PEN-009 PENDENTE-002)
 - [DOC-FND-000-M04](amendments/sec/DOC-FND-000-M04.md) — 6 scopes mcp:* registrados no catálogo §2.2 (MOD-010, PEN-010 PENDENTE-004)
+- [FR-000-M01](amendments/fr/FR-000-M01.md) — DTO gaps Users API (F05): role_id/role_name em UserListItem, invite_token_expired em UserDetail, mode/role_id em CreateUserRequest (MOD-002)
 <!-- end amendments-index -->

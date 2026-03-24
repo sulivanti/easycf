@@ -1,17 +1,17 @@
 # US-MOD-006 — Execução de Casos (Épico)
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.2.0
-**Data:** 2026-03-18
+**Status Ágil:** `READY`
+**Versão:** 0.9.0
+**Data:** 2026-03-23
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-006** (Execução de Casos)
 **Épico de Negócio:** EP04
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** EP04 (doc 02_Arquitetura_de_Processo_e_Execucao), US-MOD-005, US-MOD-004, US-MOD-003, US-MOD-000-F09, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (domínio rico, transições com invariantes, audit trail completo)
 - **evidencias:** N/A
@@ -170,10 +170,10 @@ US-MOD-006
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-006-F01](../features/US-MOD-006-F01.md) | API abertura + motor de transição | Backend | `APPROVED` |
-| [US-MOD-006-F02](../features/US-MOD-006-F02.md) | API gates + responsáveis + eventos | Backend | `APPROVED` |
-| [US-MOD-006-F03](../features/US-MOD-006-F03.md) | UX Painel do caso + timeline | UX | `APPROVED` |
-| [US-MOD-006-F04](../features/US-MOD-006-F04.md) | UX Listagem de casos | UX | `APPROVED` |
+| [US-MOD-006-F01](../features/US-MOD-006-F01.md) | API abertura + motor de transição | Backend | `READY` |
+| [US-MOD-006-F02](../features/US-MOD-006-F02.md) | API gates + responsáveis + eventos | Backend | `READY` |
+| [US-MOD-006-F03](../features/US-MOD-006-F03.md) | UX Painel do caso + timeline | UX | `READY` |
+| [US-MOD-006-F04](../features/US-MOD-006-F04.md) | UX Listagem de casos | UX | `READY` |
 
 ---
 
@@ -319,6 +319,7 @@ US-MOD-006
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. 5 tabelas, motor de transição, 3 históricos independentes, 4 features. |
 | 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: todas as decisões já estavam corretas. Owner atualizado. |
+| 0.9.0 | 2026-03-23 | promote-module | Promoção APPROVED→READY: épico + features F01-F04 selados. |
 | 1.2.0 | 2026-03-18 | Marcos Sulivan | Revisão final e promoção para APPROVED. DoR completo. |
 
 ---

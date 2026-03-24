@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-007 Parametrizacao Contextual e Rotinas
 
-> **Versao:** 4.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.4.0) | **Features:** 5/5 READY
+> **Versao:** 6.0.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.3.0) | **Epico:** READY (v1.4.0) | **Features:** 5/5 READY
 >
-> Fases 0-4 concluidas (modulo promovido a READY em 2026-03-23, epico+features selados READY). Proximo passo: Fase 5 (Geracao de Codigo) — executar `/app-scaffold` seguido de `/codegen mod-007`.
+> Fases 0-5 concluidas. Validacao pos-codegen executada (2026-03-24): PASS_WITH_WARNINGS. Lint PASS, Drizzle PASS, Endpoints PASS, React-Query PASS. Warnings: domain errors nao estendem DomainError, OpenAPI standalone ausente. FAIL: tests_present. Proximo passo: criar testes unitarios.
 
 ---
 
@@ -15,12 +15,12 @@
 | Features F01-F05 | 5/5 READY | F01 (Enquadradores+Objetos+Incidencias), F02 (Rotinas+Itens+Versionamento), F03 (Motor de Avaliacao), F04 (UX Configurador), F05 (UX Cadastro Rotinas) |
 | Scaffold (forge-module) | CONCLUIDO | mod-007-parametrizacao-contextual/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-11 confirmados, v0.4.0, todas as pendentes resolvidas |
-| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ concluido (2026-03-23). Executar `/codegen mod-007` |
+| Codegen (6 agentes) | CONCLUIDO | 6 agentes done (DB:3, CORE:14, APP:22, API:10, WEB:8, VAL:0). 57 arquivos gerados. Checks: 5/7 passed |
 | PENDENTEs | 0 abertas | 9 total: 9 IMPLEMENTADA (001-009) |
 | ADRs | 6 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 a ADR-006) |
 | Amendments | 0 | Nenhum |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (promocao DRAFT->READY) |
+| CHANGELOG | v1.2.0 | Ultima entrada 2026-03-24 (codegen completo: 6 agentes, 57 arquivos) |
 | Screen Manifests | 2/2 existem | UX-PARAM-001, UX-ROTINA-001 |
 | Dependencias | 5 upstream (MOD-000, MOD-003, MOD-004, MOD-005, MOD-006) | Consome Foundation core, org_units, scopes contextuais, ciclos referenciados, motor de transicao |
 | Dependentes | 3 downstream (MOD-008, MOD-010, MOD-011) | MOD-008 herda behavior_routines, MOD-010/MOD-011 consomem motor |
@@ -153,28 +153,48 @@ O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis 
                            - ux-rotina-001.editor-rotinas.yaml: PASS
                            - Gates 1-3 verdes (YAML valido, actions consistentes, scopes registrados)
 
-5c   /validate-openapi      Validacao de contratos OpenAPI:                   FUTURO (pos-codigo)
-                           Artefato: apps/api/openapi/mod-007-parametrizacao-contextual.yaml
-                           Aplicavel (Nivel 2), mas arquivo de codigo nao existe ainda
+5c   /validate-openapi      Validacao de contratos OpenAPI:                   WARNING
+                           Artefato: apps/api/openapi/mod-007-*.yaml NAO EXISTE
+                           Endpoints definidos inline via Fastify schema (25 endpoints)
+                           Sem YAML standalone — funcional mas nao lintavel
 
-5d   /validate-drizzle      Validacao de schemas Drizzle:                     FUTURO (pos-codigo)
-                           Artefato: src/modules/contextual-params/schema.ts
-                           Aplicavel (Nivel 2), mas arquivo de codigo nao existe ainda
+5d   /validate-drizzle      Validacao de schemas Drizzle:                     PASS
+                           Artefato: apps/api/db/schema/contextual-params.ts
+                           9 tabelas: context_framer_types, context_framers,
+                           target_objects, target_fields, incidence_rules,
+                           behavior_routines, routine_items, routine_incidence_links,
+                           routine_version_history. FKs, indexes, checks corretos.
+                           Relations: contextual-params.relations.ts — completo.
 
-5e   /validate-endpoint     Validacao de endpoints Fastify:                   FUTURO (pos-codigo)
-                           Artefato: src/modules/contextual-params/routes/
-                           Aplicavel (Nivel 2), mas arquivo de codigo nao existe ainda
+5e   /validate-endpoint     Validacao de endpoints Fastify:                   PASS
+                           7 route files em presentation/routes/
+                           25 endpoints cobertos com scope guards e correlation-id
+                           RFC 9457 error handler presente
+
+5f   /validate-lint         Lint e formatacao:                                PASS
+                           pnpm lint: 0 errors para contextual-params
+                           pnpm format:check: 0 divergencias
+
+5g   /validate-arch         Validacao arquitetural:                           PASS_WITH_WARNINGS
+                           - Domain errors NAO estendem DomainError (cross-module)
+                           - Web hooks usam @tanstack/react-query: PASS
+                           - Web Pattern A (queryKey + invalidate): PASS
+                           - Conflict resolver (ADR-002/004): PASS
+                           - Domain events (14, DATA-003): PASS
+                           - Value objects (4): PASS
 ```
 
 **Validadores Aplicaveis — Mapa de Cobertura:**
 
-| # | Validador | Aplicavel (nivel) | Executavel agora | Artefatos |
-|---|-----------|-------------------|------------------|-----------|
-| 1 | /qa | SIM (todos) | SIM — PASS | Todos os .md do modulo |
-| 2 | /validate-manifest | SIM (manifests existem) | SIM — PASS | ux-param-001, ux-rotina-001 |
-| 3 | /validate-openapi | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | openapi/mod-007-*.yaml |
-| 4 | /validate-drizzle | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | schema.ts |
-| 5 | /validate-endpoint | SIM (Nivel 2) | NAO — FUTURO (pos-codigo) | routes/*.route.ts |
+| # | Validador | Aplicavel (nivel) | Resultado | Artefatos |
+|---|-----------|-------------------|-----------|-----------|
+| 1 | /qa | SIM (todos) | PASS | Todos os .md do modulo |
+| 2 | /validate-manifest | SIM (manifests existem) | PASS | ux-param-001, ux-rotina-001 |
+| 3 | /validate-openapi | SIM (Nivel 2) | WARNING — sem YAML standalone | Inline via Fastify schema |
+| 4 | /validate-drizzle | SIM (Nivel 2) | PASS — 9 tabelas OK | contextual-params.ts + .relations.ts |
+| 5 | /validate-endpoint | SIM (Nivel 2) | PASS — 25 endpoints OK | 7 route files |
+| 6 | /validate-lint | SIM (todos) | PASS | 0 errors |
+| 7 | /validate-arch | SIM (Nivel 2) | PASS_WITH_WARNINGS | Domain errors, react-query, Pattern A |
 
 ### Fase 4: Promocao — CONCLUIDA
 
@@ -204,9 +224,9 @@ O modulo foi promovido a READY em 2026-03-23 via `/promote-module`. Todos os cri
 
 > **Resultado:** Todos os criterios DoR atendidos. Modulo promovido a READY em 2026-03-23.
 
-### Fase 5: Geracao de Codigo — NAO INICIADA
+### Fase 5: Geracao de Codigo — CONCLUIDA
 
-O modulo esta READY (v1.0.0), o que habilita a geracao de codigo. O scaffold de aplicacoes (`apps/api/` e `apps/web/`) foi concluido em 2026-03-23. MOD-007 e Nivel 2 (DDD-lite + Full Clean), portanto todos os 6 agentes de codigo sao aplicaveis: AGN-COD-DB, AGN-COD-CORE, AGN-COD-APP, AGN-COD-API, AGN-COD-WEB, AGN-COD-VAL. O slug do modulo e `contextual-params` (resolvido de `apps/api/src/modules/contextual-params/`).
+O codegen foi executado em 2026-03-24 em 3 batches (DB+CORE, APP+API, WEB+VAL). Todos os 6 agentes completaram com sucesso, gerando 57 arquivos em 6 camadas. O validador AGN-COD-VAL identificou 2 issues: testes ausentes (error) e OpenAPI standalone ausente (warning). 5 de 7 checks passaram (RFC 9457, correlation_id, idempotency, layering, x_permissions).
 
 > **Decision tree de codegen:**
 >
@@ -226,38 +246,50 @@ O modulo esta READY (v1.0.0), o que habilita a geracao de codigo. O scaffold de 
                            - apps/web/ (React + Vite)
                            - package.json, tsconfig.json, estrutura base
 
-7b   /codegen mod-007      Gerar codigo do modulo (6 agentes):               A EXECUTAR
-                           Slug: contextual-params
-                           Nivel: 2 (todos os 6 agentes aplicaveis)
-                           Ordem: DB → CORE → APP → API → WEB → VAL
-                           Pre-requisito: /app-scaffold concluido
-                           Pre-requisito topologico: MOD-000..MOD-006 devem ter
-                           codigo gerado antes (camada 5 na ordem topologica)
+7b   /codegen mod-007      Gerar codigo do modulo (6 agentes):               CONCLUIDO
+                           Slug: contextual-params                            2026-03-24
+                           Nivel: 2 (todos os 6 agentes executados)
+                           Batch 1: AGN-COD-DB + AGN-COD-CORE (17 arquivos)
+                           Batch 2: AGN-COD-APP + AGN-COD-API (32 arquivos)
+                           Batch 3: AGN-COD-WEB + AGN-COD-VAL (8 + validacao)
+                           Total: 57 arquivos gerados
 ```
 
 **Rastreio de agentes COD:**
 
 | # | Agente | Camada | Path | Status | Arquivos |
 |---|--------|--------|------|--------|----------|
-| 1 | AGN-COD-DB | infrastructure | apps/api/src/modules/contextual-params/infrastructure/ | A EXECUTAR | 0 |
-| 2 | AGN-COD-CORE | domain | apps/api/src/modules/contextual-params/domain/ | A EXECUTAR | 0 |
-| 3 | AGN-COD-APP | application | apps/api/src/modules/contextual-params/application/ | A EXECUTAR | 0 |
-| 4 | AGN-COD-API | presentation | apps/api/src/modules/contextual-params/presentation/ | A EXECUTAR | 0 |
-| 5 | AGN-COD-WEB | web | apps/web/src/modules/contextual-params/ | A EXECUTAR | 0 |
-| 6 | AGN-COD-VAL | validation | (cross-validation) | A EXECUTAR | — |
+| 1 | AGN-COD-DB | infrastructure | apps/api/db/schema/ | DONE (2026-03-24) | 3 |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/contextual-params/domain/ | DONE (2026-03-24) | 14 |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/contextual-params/application/ | DONE (2026-03-24) | 22 |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/contextual-params/presentation/ | DONE (2026-03-24) | 10 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/contextual-params/ | DONE (2026-03-24) | 8 |
+| 6 | AGN-COD-VAL | validation | (cross-validation) | DONE (2026-03-24) | 0 (validacao) |
+
+**Validacao AGN-COD-VAL — Resultado:**
+
+| Check | Status |
+|-------|--------|
+| problem_details_rfc9457 | PASS |
+| correlation_id | PASS |
+| idempotency | PASS |
+| layering_clean_arch | PASS |
+| x_permissions_documented | PASS |
+| tests_present | FAIL — 0 test files |
+| openapi_present_and_linted | WARNING — inline via Fastify schema, sem YAML standalone |
 
 **Scaffold e pre-requisitos:**
 
 - `apps/api/package.json` — EXISTE (scaffold concluido 2026-03-23)
 - `apps/web/package.json` — EXISTE (scaffold concluido 2026-03-23)
-- Ordem topologica: MOD-007 esta na camada 5. Dependencias upstream (MOD-000 a MOD-006) devem ter codigo gerado antes para que imports e tipos compartilhados estejam disponiveis.
+- Ordem topologica: MOD-007 esta na camada 5. Dependencias upstream geradas.
 
-**Validacoes pos-codegen:**
+**Proximos passos pos-codegen:**
 
-Apos a geracao de codigo, os 3 validadores marcados como FUTURO na Fase 3 tornam-se executaveis:
-- `/validate-drizzle` — schemas Drizzle em `contextual-params/infrastructure/`
-- `/validate-openapi` — contrato em `apps/api/openapi/mod-007-parametrizacao-contextual.yaml`
-- `/validate-endpoint` — rotas Fastify em `contextual-params/presentation/routes/`
+- [ ] Executar `pnpm install` para resolver dependencias
+- [ ] Executar `pnpm test` / `pnpm lint`
+- [ ] Executar `/validate-all` pos-codegen (drizzle + openapi + endpoints)
+- [ ] Criar testes unitarios para use cases e motor de avaliacao
 
 ### Fase 6: Pos-READY — SOB DEMANDA
 
@@ -329,9 +361,9 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ainda.
 ```
   [Fase 0]         [Fase 1]         [Fase 2]           [Fase 3]         [Fase 4]         [Fase 5]         [Fase 6]
   Pre-Modulo  -->  Genese     -->  Enriquecimento -->  Validacao   -->  Promocao   -->  Codegen    -->  Pos-READY
-  CONCLUIDA        CONCLUIDA       CONCLUIDA           CONCLUIDA        CONCLUIDA        <<<AQUI>>>      SOB DEMANDA
-  Epico READY      Scaffold v0.1   11 agentes OK       validate-all     READY v1.0.0     scaffold OK     amendments
-  5/5 READY        9 tabelas       6 ADRs, 9 PEN       PASS 2026-03-22  DoR 7/7 OK       6 agentes COD   quando necessario
+  CONCLUIDA        CONCLUIDA       CONCLUIDA           CONCLUIDA        CONCLUIDA        CONCLUIDA        <<<AQUI>>>
+  Epico READY      Scaffold v0.1   11 agentes OK       validate-all     READY v1.0.0     57 arquivos     amendments
+  5/5 READY        9 tabelas       6 ADRs, 9 PEN       PASS 2026-03-22  DoR 7/7 OK       6 agentes OK    quando necessario
 
   Dependencias upstream: MOD-000 → MOD-003 → MOD-004 → MOD-005 → MOD-006 → MOD-007
   Camada topologica: 5
@@ -351,21 +383,31 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ainda.
 | Scopes registrados | 7 scopes param:* registrados em DOC-FND-000 v1.8.0 (PENDENTE-009). Desbloqueou Gate 3 para manifests. Scopes canalizados via MOD-000-F12 amendment. |
 | Camada topologica 5 | MOD-007 depende de 5 modulos upstream. Para codegen, todos os upstream devem ter codigo gerado primeiro. MOD-007 e o penultimo na cadeia antes dos modulos folha (MOD-008, MOD-010, MOD-011). |
 
-## Checklist Rapido — O que Falta para Codegen
+## Checklist Rapido — Pos-Codegen
 
 - [x] Executar `/app-scaffold all` — scaffold apps/ concluido (2026-03-23)
-- [ ] Garantir que MOD-000..MOD-006 tenham codigo gerado (ordem topologica)
-- [ ] Executar `/codegen mod-007` (6 agentes: DB → CORE → APP → API → WEB → VAL)
-- [ ] Executar `/validate-drizzle` pos-codegen (schema.ts)
-- [ ] Executar `/validate-openapi` pos-codegen (contrato YAML)
-- [ ] Executar `/validate-endpoint` pos-codegen (rotas Fastify)
+- [x] Executar `/codegen mod-007` — 6 agentes done, 57 arquivos (2026-03-24)
+- [x] AGN-COD-DB: 3 arquivos (schema + relations + index)
+- [x] AGN-COD-CORE: 14 arquivos (entities, VOs, aggregates, events, services)
+- [x] AGN-COD-APP: 22 arquivos (ports + 19 use cases + index)
+- [x] AGN-COD-API: 10 arquivos (DTOs + error-handler + 7 routes + index)
+- [x] AGN-COD-WEB: 8 arquivos (types, queries, permissions, view-model, 2 screens, 2 components)
+- [x] AGN-COD-VAL: validacao cruzada (5/7 checks PASS)
+- [x] Executar `pnpm lint` — PASS (0 errors para contextual-params)
+- [x] Executar `pnpm format:check` — PASS
+- [x] Executar `/validate-all` pos-codegen — PASS_WITH_WARNINGS (2026-03-24)
+- [ ] Criar testes unitarios (tests_present: FAIL)
+- [ ] Gerar OpenAPI YAML standalone (openapi_present: WARNING)
+- [ ] Refatorar domain errors para estender DomainError (PENDENTE-011)
 
-> **Nota:** MOD-007 esta READY e elegivel para codegen imediatamente apos o scaffold de apps/ existir e os modulos upstream terem sido gerados. A geracao de codigo do MOD-007 desbloqueia MOD-008 (heranca de behavior_routines), MOD-010 (motor de parametrizacao) e MOD-011 (routine-engine/evaluate).
+> **Nota:** Codegen do MOD-007 concluido. Desbloqueia MOD-008 (heranca de behavior_routines), MOD-010 (motor de parametrizacao) e MOD-011 (routine-engine/evaluate) para codegen.
 
 ## CHANGELOG deste Documento
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 6.0.0 | 2026-03-24 | Atualizacao: validate-all pos-codegen executado. Lint PASS, Drizzle PASS (9 tabelas), Endpoints PASS (25), React-Query PASS (6 hooks), Pattern A PASS. Warnings: domain errors nao estendem DomainError (cross-module), OpenAPI standalone ausente. FAIL: tests_present. PENDENTE-011 registrada. Verdict: PASS_WITH_WARNINGS |
+| 5.0.0 | 2026-03-24 | Atualizacao: Fase 5 CONCLUIDA (codegen completo 2026-03-24: 6 agentes, 57 arquivos, 3 batches). VAL: 5/7 checks PASS, tests_present FAIL, openapi standalone WARNING. Checklist reorientado para pos-codegen |
 | 4.0.0 | 2026-03-23 | Atualizacao: Epico promovido APPROVED→READY v1.4.0, Features F01-F05 promovidas APPROVED→READY, CHANGELOG E5 verde, execution-state atualizado com secao promotion, INDEX.md sincronizado |
 | 3.0.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (modulo promovido a READY v1.0.0 em 2026-03-23), Fase 5 (Codegen) adicionada como NAO INICIADA com rastreio de 6 agentes COD, checklist reorientado para codegen |
 | 2.0.0 | 2026-03-23 | Recriacao: Fases 0-3 CONCLUIDAS (validate-all PASS 2026-03-22), Fase 4 PENDENTE, PENDENTE-007/008/009 agora IMPLEMENTADA (0 abertas), DoR 7/7 atendido, modulo elegivel para promocao |

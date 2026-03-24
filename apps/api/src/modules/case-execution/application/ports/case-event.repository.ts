@@ -4,7 +4,7 @@
  * Repository port for case_events (append-only).
  */
 
-import type { CaseEventType } from "../../domain/value-objects/case-event-type.js";
+import type { CaseEventType } from '../../domain/value-objects/case-event-type.js';
 
 export interface CaseEventRow {
   id: string;
@@ -18,6 +18,6 @@ export interface CaseEventRow {
 }
 
 export interface CaseEventRepository {
-  create(data: Omit<CaseEventRow, "id">): Promise<CaseEventRow>;
+  create(data: Omit<CaseEventRow, 'id'>): Promise<CaseEventRow>;
   findByCaseId(caseId: string): Promise<CaseEventRow[]>;
 }

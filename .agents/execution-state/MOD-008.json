@@ -1,0 +1,129 @@
+{
+  "module_id": "MOD-008",
+  "module_path": "docs/04_modules/mod-008-integracao-protheus/",
+  "last_updated": "2026-03-24T21:00:00Z",
+  "scaffold": {
+    "completed": true,
+    "completed_at": "2026-03-23T14:00:00.000Z",
+    "apps_created": ["api", "web"],
+    "pnpm_workspace_updated": true
+  },
+  "promotion": {
+    "completed": true,
+    "completed_at": "2026-03-23T22:30:00.000Z",
+    "version": "1.0.0",
+    "gates_passed": ["DoR-1", "DoR-2", "DoR-3", "DoR-4", "DoR-5", "DoR-6", "DoR-7"],
+    "epic_status": "READY",
+    "features_promoted": ["F01", "F02", "F03", "F04", "F05"]
+  },
+  "codegen": {
+    "started_at": "2026-03-23T23:30:00.000Z",
+    "completed_at": "2026-03-24T17:30:00Z",
+    "agents": {
+      "AGN-COD-DB": {
+        "status": "done",
+        "completed_at": "2026-03-23T23:35:00.000Z",
+        "files_generated": 3,
+        "files": [
+          "apps/api/db/schema/integration-protheus.ts",
+          "apps/api/db/schema/integration-protheus.relations.ts",
+          "apps/api/db/schema/index.ts"
+        ]
+      },
+      "AGN-COD-CORE": {
+        "status": "done",
+        "completed_at": "2026-03-23T23:45:00.000Z",
+        "files_generated": 8,
+        "files": [
+          "apps/api/src/modules/integration-protheus/domain/value-objects/auth-type.ts",
+          "apps/api/src/modules/integration-protheus/domain/value-objects/call-log-status.ts",
+          "apps/api/src/modules/integration-protheus/domain/value-objects/mapping-type.ts",
+          "apps/api/src/modules/integration-protheus/domain/value-objects/param-type.ts",
+          "apps/api/src/modules/integration-protheus/domain/entities/integration-service.entity.ts",
+          "apps/api/src/modules/integration-protheus/domain/errors/integration-errors.ts",
+          "apps/api/src/modules/integration-protheus/domain/domain-events/integration-events.ts",
+          "apps/api/src/modules/integration-protheus/domain/domain-services/payload-builder.service.ts"
+        ]
+      },
+      "AGN-COD-APP": {
+        "status": "done",
+        "completed_at": "2026-03-24T03:30:00Z",
+        "files_generated": 12,
+        "files": [
+          "apps/api/src/modules/integration-protheus/application/ports/repositories.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/create-service.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/update-service.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/list-services.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/configure-routine.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/manage-field-mappings.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/manage-params.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/execute-integration.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/reprocess-call.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/list-call-logs.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/fork-integration-routine.use-case.ts",
+          "apps/api/src/modules/integration-protheus/application/use-cases/get-call-log-metrics.use-case.ts"
+        ]
+      },
+      "AGN-COD-API": {
+        "status": "done",
+        "completed_at": "2026-03-24T03:45:00Z",
+        "files_generated": 6,
+        "files": [
+          "apps/api/src/modules/integration-protheus/presentation/dtos/integration-protheus.dto.ts",
+          "apps/api/src/modules/integration-protheus/presentation/routes/services.route.ts",
+          "apps/api/src/modules/integration-protheus/presentation/routes/routines.route.ts",
+          "apps/api/src/modules/integration-protheus/presentation/routes/engine.route.ts",
+          "apps/api/src/modules/integration-protheus/presentation/index.ts",
+          "apps/api/openapi/mod-008-integration-protheus.yaml"
+        ]
+      },
+      "AGN-COD-WEB": {
+        "status": "done",
+        "completed_at": "2026-03-24T17:30:00Z",
+        "files_generated": 17,
+        "files": [
+          "apps/web/src/modules/integration-protheus/types/integration-protheus.types.ts",
+          "apps/web/src/modules/integration-protheus/types/permissions.ts",
+          "apps/web/src/modules/integration-protheus/types/view-model.ts",
+          "apps/web/src/modules/integration-protheus/api/integration-protheus.api.ts",
+          "apps/web/src/modules/integration-protheus/hooks/use-services.ts",
+          "apps/web/src/modules/integration-protheus/hooks/use-routines.ts",
+          "apps/web/src/modules/integration-protheus/hooks/use-field-mappings.ts",
+          "apps/web/src/modules/integration-protheus/hooks/use-params.ts",
+          "apps/web/src/modules/integration-protheus/hooks/use-call-logs.ts",
+          "apps/web/src/modules/integration-protheus/hooks/use-metrics.ts",
+          "apps/web/src/modules/integration-protheus/components/HttpConfigTab.tsx",
+          "apps/web/src/modules/integration-protheus/components/FieldMappingsTab.tsx",
+          "apps/web/src/modules/integration-protheus/components/IntegrationParamsTab.tsx",
+          "apps/web/src/modules/integration-protheus/components/MonitorHeader.tsx",
+          "apps/web/src/modules/integration-protheus/components/LogDetailPanel.tsx",
+          "apps/web/src/modules/integration-protheus/pages/RoutineEditorPage.tsx",
+          "apps/web/src/modules/integration-protheus/pages/IntegrationMonitorPage.tsx"
+        ]
+      },
+      "AGN-COD-VAL": {
+        "status": "done",
+        "completed_at": "2026-03-23T04:30:00.000Z",
+        "files_generated": 0,
+        "files": []
+      }
+    }
+  },
+  "validations": {
+    "last_run": "2026-03-24T21:00:00.000Z",
+    "qa": { "status": "PASS", "run_at": "2026-03-24T21:00:00.000Z", "blockers": 0, "violations": 0, "warnings": 0, "notes": "10 req files + 45 source files (26 api + 17 web + 2 drizzle), all imports resolved, IDs consistent" },
+    "lint": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "notes": "Cross-module issue (PEN-000/PENDENTE-018). No MOD-008-specific lint errors in lint-errors.json. ESLint deferred to batch fix." },
+    "architecture": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "notes": "V-ARC-1: Domain errors extend Error instead of DomainError (cross-module pattern, same as MOD-006). W-ARC-1: Web hooks use react-query Pattern A correctly. W-ARC-2: API routes follow Fastify plugin pattern." },
+    "manifest": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "total": 2, "passed": 1, "violations": ["V-M01: ux-integ-001 missing update_param action — ALTA (UNCHANGED)", "V-M02: ux-integ-001 missing view_history action — MEDIA (UNCHANGED)", "V-M03: Both manifests lack per-status-code error granularity — MEDIA (UNCHANGED)"] },
+    "openapi": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "notes": "13/13 own endpoints present, 15 schemas defined. W-OAS-1: No error response schemas 4xx/5xx (ALTA). W-OAS-2: MetricsResponse schema defined but no path references it (MEDIA)" },
+    "drizzle": { "status": "PASS", "run_at": "2026-03-24T21:00:00.000Z", "notes": "6/6 tables validated, 21 indexes, 16 CHECKs, 7 FKs (all ON DELETE RESTRICT). Relations file: 6 relation definitions with cross-module refs (MOD-000, MOD-006, MOD-007). Self-referencing FK for reprocess chain. 0 violations." },
+    "endpoint": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "notes": "13/13 endpoints verified across 3 route files. V-RT-1: 5 mutations in routines.route.ts lack correlation_id (ALTA). V-RT-2: routineStatus stub in 6 places — uses unsafe cast + default DRAFT instead of DB lookup (ALTA). V-RT-3: Services route hardcodes timestamps with new Date() (MEDIA). V-RT-4: created_by populated from session but not from DB on PATCH (MEDIA)" },
+    "verdict": {
+      "ready_for_promotion": false,
+      "blockers": 0,
+      "critical_violations": 4,
+      "warnings": 7,
+      "summary": "WARN — same 4 ALTA violations from previous run remain unfixed. 1 new architecture warning (DomainError, cross-module). Drizzle PASS. QA PASS. All 45 source files structurally sound."
+    }
+  }
+}

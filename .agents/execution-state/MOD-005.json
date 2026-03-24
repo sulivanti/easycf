@@ -1,0 +1,163 @@
+{
+  "module_id": "MOD-005",
+  "module_path": "docs/04_modules/mod-005-modelagem-processos/",
+  "last_updated": "2026-03-24T20:00:00Z",
+  "scaffold": {
+    "completed": true,
+    "completed_at": "2026-03-23T14:00:00.000Z",
+    "apps_created": ["api", "web"],
+    "pnpm_workspace_updated": true
+  },
+  "codegen": {
+    "started_at": "2026-03-23T23:00:00.000Z",
+    "completed_at": "2026-03-24T18:30:00Z",
+    "agents": {
+      "AGN-COD-DB": {
+        "status": "done",
+        "completed_at": "2026-03-23T23:15:00.000Z",
+        "files_generated": 3,
+        "files": [
+          "apps/api/db/schema/process-modeling.ts",
+          "apps/api/db/schema/process-modeling.relations.ts",
+          "apps/api/db/schema/index.ts"
+        ]
+      },
+      "AGN-COD-CORE": {
+        "status": "done",
+        "completed_at": "2026-03-23T23:30:00.000Z",
+        "files_generated": 10,
+        "files": [
+          "apps/api/src/modules/process-modeling/domain/value-objects/cycle-status.ts",
+          "apps/api/src/modules/process-modeling/domain/value-objects/gate-type.ts",
+          "apps/api/src/modules/process-modeling/domain/errors/cycle-immutable.error.ts",
+          "apps/api/src/modules/process-modeling/domain/errors/cross-cycle-transition.error.ts",
+          "apps/api/src/modules/process-modeling/domain/errors/stage-has-instances.error.ts",
+          "apps/api/src/modules/process-modeling/domain/aggregates/process-cycle.ts",
+          "apps/api/src/modules/process-modeling/domain/entities/macro-stage.ts",
+          "apps/api/src/modules/process-modeling/domain/entities/stage.ts",
+          "apps/api/src/modules/process-modeling/domain/entities/gate.ts",
+          "apps/api/src/modules/process-modeling/domain/entities/stage-transition.ts"
+        ]
+      },
+      "AGN-COD-APP": {
+        "status": "done",
+        "completed_at": "2026-03-24T00:15:00.000Z",
+        "files_generated": 15,
+        "files": [
+          "apps/api/src/modules/process-modeling/application/ports/repositories.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/create-cycle.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/update-cycle.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/delete-cycle.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/publish-cycle.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/fork-cycle.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/deprecate-cycle.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/manage-macro-stages.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/manage-stages.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/manage-gates.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/manage-process-roles.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/manage-stage-roles.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/manage-transitions.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/use-cases/get-cycle-flow.use-case.ts",
+          "apps/api/src/modules/process-modeling/application/index.ts"
+        ]
+      },
+      "AGN-COD-API": {
+        "status": "done",
+        "completed_at": "2026-03-24T01:00:00.000Z",
+        "files_generated": 6,
+        "files": [
+          "apps/api/src/modules/process-modeling/presentation/dtos/process-modeling.dto.ts",
+          "apps/api/src/modules/process-modeling/presentation/routes/cycles.route.ts",
+          "apps/api/src/modules/process-modeling/presentation/routes/stages.route.ts",
+          "apps/api/src/modules/process-modeling/presentation/routes/process-roles.route.ts",
+          "apps/api/src/modules/process-modeling/presentation/index.ts",
+          "apps/api/openapi/v1.yaml"
+        ]
+      },
+      "AGN-COD-WEB": {
+        "status": "done",
+        "completed_at": "2026-03-24T18:30:00Z",
+        "files_generated": 11,
+        "files": [
+          "apps/web/src/modules/process-modeling/types/process-modeling.types.ts",
+          "apps/web/src/modules/process-modeling/api/process-modeling.api.ts",
+          "apps/web/src/modules/process-modeling/hooks/use-cycles.ts",
+          "apps/web/src/modules/process-modeling/hooks/use-cycle-actions.ts",
+          "apps/web/src/modules/process-modeling/hooks/use-flow.ts",
+          "apps/web/src/modules/process-modeling/hooks/use-stage-config.ts",
+          "apps/web/src/modules/process-modeling/hooks/use-process-roles.ts",
+          "apps/web/src/modules/process-modeling/components/StageNode.tsx",
+          "apps/web/src/modules/process-modeling/components/StageConfigPanel.tsx",
+          "apps/web/src/modules/process-modeling/pages/CyclesListPage.tsx",
+          "apps/web/src/modules/process-modeling/pages/FlowEditorPage.tsx"
+        ]
+      },
+      "AGN-COD-VAL": {
+        "status": "done",
+        "completed_at": "2026-03-24T20:00:00Z",
+        "files_generated": 0,
+        "files": []
+      }
+    }
+  },
+  "validations": {
+    "last_run": "2026-03-24T20:00:00Z",
+    "lint": { "status": "PASS", "run_at": "2026-03-24T20:00:00Z", "errors": 0, "warnings": 0 },
+    "format": { "status": "PASS", "run_at": "2026-03-24T20:00:00Z", "errors": 0 },
+    "qa": { "status": "WARN", "run_at": "2026-03-24T20:00:00Z", "blockers": 0, "violations": 0, "warnings": 5, "notes": "5 TS errors in web: reactflow module not found (3) + implicit any (2) — infra-level dependency, not module logic" },
+    "architectural": {
+      "status": "FAIL",
+      "run_at": "2026-03-24T20:00:00Z",
+      "violations": [
+        "V-E01 BLOQUEANTE: Domain errors (CycleImmutableError, CrossCycleTransitionError, StageHasInstancesError) extend Error instead of DomainError — 500 instead of RFC 9457",
+        "V-E02 ALTA: FR-004 deprecateCycleUseCase has no route — unreachable via API",
+        "V-E03 ALTA: CycleImmutableError/StageHasInstancesError use statusCode 409, spec says 422",
+        "V-E06 ALTA: Web API deprecateCycle() calls PATCH with {status:'DEPRECATED'} but backend PATCH DTO does not accept status field — deprecation broken end-to-end"
+      ]
+    },
+    "manifest": {
+      "status": "WARN",
+      "run_at": "2026-03-24T20:00:00Z",
+      "total": 2,
+      "passed": 1,
+      "violations": [
+        "V-M01 ALTA: ux-proc-001 missing update_stage_position action (PATCH stages/:id canvas_x/canvas_y)"
+      ],
+      "notes": "ux-proc-002 PASS (11 actions mapped correctly). V-M02 deactivate and V-M03 view_history downgraded to warnings — not spec-required."
+    },
+    "openapi": { "status": "PASS", "run_at": "2026-03-24T20:00:00Z", "notes": "No separate OpenAPI file for MOD-005 (endpoints in v1.yaml). All 11 FR endpoints present in routes." },
+    "drizzle": {
+      "status": "PASS",
+      "run_at": "2026-03-24T20:00:00Z",
+      "tables": 7,
+      "indexes": 23,
+      "relations": 7,
+      "violations": 0,
+      "notes": "7/7 tables (process_cycles, process_macro_stages, process_stages, process_gates, process_roles, stage_role_links, stage_transitions). All FK RESTRICT. Soft-delete on 5, hard-delete on 2 (links/transitions). ADR-001 partial unique index present. CHECK constraints for status and gate_type enums."
+    },
+    "endpoint": {
+      "status": "FAIL",
+      "run_at": "2026-03-24T20:00:00Z",
+      "routes_total": 26,
+      "routes_wired": 25,
+      "violations": [
+        "V-E01 BLOQUEANTE: 3 domain errors extend Error not DomainError — all domain errors return 500",
+        "V-E02 ALTA: deprecateCycleUseCase exists but no route invokes it (FR-004 unreachable)",
+        "V-E03 ALTA: CycleImmutableError.statusCode=409, StageHasInstancesError.statusCode=409 vs spec 422",
+        "V-E04 MEDIA: stageDetailResponse roles use nested {role:{...}} vs OAS flat StageRoleLinkResponse",
+        "V-E05 MEDIA: flowRoleItem also uses nested role object vs OAS flat shape"
+      ]
+    },
+    "web": {
+      "status": "WARN",
+      "run_at": "2026-03-24T20:00:00Z",
+      "notes": "11 files: types, api, 5 hooks, 2 components, 2 pages. All well-structured. V-E06: deprecateCycle() in api client calls PATCH with status field not accepted by backend. 5 TS errors from missing reactflow types (dependency not installed)."
+    },
+    "verdict": {
+      "ready_for_promotion": false,
+      "blockers": 1,
+      "critical_violations": 3,
+      "warnings": 8
+    }
+  }
+}

@@ -6,9 +6,13 @@
  * P95 < 300ms (NFR-006).
  */
 
-import type { CaseInstanceRepository, CaseListFilter, CaseListResult } from "../ports/case-instance.repository.js";
-import type { GateInstanceRepository } from "../ports/gate-instance.repository.js";
-import type { CaseStatus } from "../../domain/value-objects/case-status.js";
+import type {
+  CaseInstanceRepository,
+  CaseListFilter,
+  CaseListResult,
+} from '../ports/case-instance.repository.js';
+import type { GateInstanceRepository } from '../ports/gate-instance.repository.js';
+import type { CaseStatus } from '../../domain/value-objects/case-status.js';
 
 export interface ListCasesInput {
   tenantId: string;

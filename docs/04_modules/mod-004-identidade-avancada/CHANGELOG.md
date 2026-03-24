@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.2.0 | 2026-03-24 | validate-all | validate-all pos-codegen: lint/format PASS, 6 validadores semanticos PASS, 1 violacao arquitetural (PENDENTE-005: IdentityDomainError nao estende DomainError). PENDENTE-004 (lint codegen) pre-existente mantida. |
+| 1.1.0 | 2026-03-23 | codegen | Codegen concluído: 6 agentes executados, 37 arquivos gerados. Camadas: DB, CORE, APP, API, WEB, VAL. Validação cruzada aprovada com ressalvas menores (OpenAPI 401 responses, x-permissions self-service). |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Épico + features já READY. Ciclo de estabilidade avança para Etapa 5. |
 | 0.9.0 | 2026-03-17 | AGN-DEV-08 | Enriquecimento NFR (enrich-agent) — SLOs detalhados (latência p95, cache), topologia sync+async, degradação por componente (4 cenários), health checks (4), idempotência por endpoint (5), métricas Prometheus (7), logs estruturados, traces OTel, DR (RPO=0/RTO≤15min), estratégia de testes Nível 2 com testes derivados de BRs (8 testes específicos), checklist PR DOC-ESC-001 §7.4, OKRs com teste de validação. Fixes: mod.md data_ultima_revisao→2026-03-17 (W2), BR-001 referencias_exemplos→EX-TRACE-001 (N1) |
 | 0.8.0 | 2026-03-17 | AGN-DEV-09 | Enriquecimento ADR (enrich-agent) — ADR-001: validação auto-autorização no service (não CHECK constraint), com alternativas avaliadas e mitigações. ADR-002: tenant_id direto para RLS, justificativa de performance vs duplicação. Índice adr-index atualizado no mod.md |

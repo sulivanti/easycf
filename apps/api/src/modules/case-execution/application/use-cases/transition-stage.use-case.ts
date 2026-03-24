@@ -8,11 +8,11 @@
  * If target stage is terminal: auto-completes case.
  */
 
-import type { CaseInstanceRepository } from "../ports/case-instance.repository.js";
-import type { StageHistoryRepository } from "../ports/stage-history.repository.js";
-import type { GateInstanceRepository } from "../ports/gate-instance.repository.js";
-import type { CaseEventRepository } from "../ports/case-event.repository.js";
-import type { CaseAssignmentRepository } from "../ports/case-assignment.repository.js";
+import type { CaseInstanceRepository } from '../ports/case-instance.repository.js';
+import type { StageHistoryRepository } from '../ports/stage-history.repository.js';
+import type { GateInstanceRepository } from '../ports/gate-instance.repository.js';
+import type { CaseEventRepository } from '../ports/case-event.repository.js';
+import type { CaseAssignmentRepository } from '../ports/case-assignment.repository.js';
 import {
   validateTransition,
   type TransitionRequest,
@@ -20,8 +20,11 @@ import {
   type BlueprintTransition,
   type PendingGateInfo,
   type RequiredRoleInfo,
-} from "../../domain/domain-services/transition-engine.service.js";
-import { createCaseExecutionEvent, CASE_EXECUTION_EVENT_TYPES } from "../../domain/domain-events/case-events.js";
+} from '../../domain/domain-services/transition-engine.service.js';
+import {
+  createCaseExecutionEvent,
+  CASE_EXECUTION_EVENT_TYPES,
+} from '../../domain/domain-events/case-events.js';
 
 export interface TransitionStageInput {
   caseId: string;
@@ -29,7 +32,7 @@ export interface TransitionStageInput {
   tenantId: string;
   userId: string;
   userRoleCodigos: string[];
-  evidence?: { type: "note" | "file"; content?: string; url?: string };
+  evidence?: { type: 'note' | 'file'; content?: string; url?: string };
   motivo?: string;
   correlationId: string;
 }
@@ -54,11 +57,23 @@ export class TransitionStageUseCase {
     private readonly gateInstanceRepo: GateInstanceRepository,
     private readonly caseEventRepo: CaseEventRepository,
     private readonly assignmentRepo: CaseAssignmentRepository,
-    private readonly findTransition: (fromStageId: string, toStageId: string, cycleVersionId: string) => Promise<BlueprintTransition | null>,
-    private readonly getGatesForStage: (caseId: string, stageId: string) => Promise<PendingGateInfo[]>,
-    private readonly getRequiredRoles: (caseId: string, stageId: string) => Promise<RequiredRoleInfo[]>,
+    private readonly findTransition: (
+      fromStageId: string,
+      toStageId: string,
+      cycleVersionId: string,
+    ) => Promise<BlueprintTransition | null>,
+    private readonly getGatesForStage: (
+      caseId: string,
+      stageId: string,
+    ) => Promise<PendingGateInfo[]>,
+    private readonly getRequiredRoles: (
+      caseId: string,
+      stageId: string,
+    ) => Promise<RequiredRoleInfo[]>,
     private readonly getTargetStageInfo: (stageId: string) => Promise<TargetStageInfo>,
-    private readonly emitEvent: (event: ReturnType<typeof createCaseExecutionEvent>) => Promise<void>,
+    private readonly emitEvent: (
+      event: ReturnType<typeof createCaseExecutionEvent>,
+    ) => Promise<void>,
   ) {}
 
   async execute(input: TransitionStageInput): Promise<TransitionStageOutput> {
@@ -106,7 +121,7 @@ export class TransitionStageUseCase {
     await this.caseRepo.updateStatus(
       input.caseId,
       input.tenantId,
-      caseCompleted ? "COMPLETED" : "OPEN",
+      caseCompleted ? 'COMPLETED' : 'OPEN',
       caseRow.updatedAt,
       {
         currentStageId: input.targetStageId,
@@ -133,7 +148,7 @@ export class TransitionStageUseCase {
           caseId: input.caseId,
           gateId: g.gateId,
           stageId: g.stageId,
-          status: "PENDING" as const,
+          status: 'PENDING' as const,
         })),
       );
     }
@@ -141,7 +156,7 @@ export class TransitionStageUseCase {
     // 9. Record case_event (STAGE_TRANSITIONED)
     await this.caseEventRepo.create({
       caseId: input.caseId,
-      eventType: "STAGE_TRANSITIONED",
+      eventType: 'STAGE_TRANSITIONED',
       descricao: `Transitioned from ${caseRow.currentStageId} to ${input.targetStageId}`,
       createdBy: input.userId,
       createdAt: now,

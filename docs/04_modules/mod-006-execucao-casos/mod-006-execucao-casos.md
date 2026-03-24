@@ -221,10 +221,10 @@ apps/web/src/modules/case-execution/
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-006-F01](../user-stories/features/US-MOD-006-F01.md) | API abertura + motor de transição | Backend | `APPROVED` |
-| [US-MOD-006-F02](../user-stories/features/US-MOD-006-F02.md) | API gates + responsáveis + eventos | Backend | `APPROVED` |
-| [US-MOD-006-F03](../user-stories/features/US-MOD-006-F03.md) | UX Painel do caso + timeline | UX | `APPROVED` |
-| [US-MOD-006-F04](../user-stories/features/US-MOD-006-F04.md) | UX Listagem de casos | UX | `APPROVED` |
+| [US-MOD-006-F01](../user-stories/features/US-MOD-006-F01.md) | API abertura + motor de transição | Backend | `READY` |
+| [US-MOD-006-F02](../user-stories/features/US-MOD-006-F02.md) | API gates + responsáveis + eventos | Backend | `READY` |
+| [US-MOD-006-F03](../user-stories/features/US-MOD-006-F03.md) | UX Painel do caso + timeline | UX | `READY` |
+| [US-MOD-006-F04](../user-stories/features/US-MOD-006-F04.md) | UX Listagem de casos | UX | `READY` |
 
 ## 6. Screen Manifests
 

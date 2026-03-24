@@ -6,11 +6,14 @@
  * P95 < 500ms for up to 100 events (NFR-006).
  */
 
-import type { StageHistoryRepository } from "../ports/stage-history.repository.js";
-import type { GateInstanceRepository } from "../ports/gate-instance.repository.js";
-import type { CaseEventRepository } from "../ports/case-event.repository.js";
-import type { CaseAssignmentRepository } from "../ports/case-assignment.repository.js";
-import { assembleTimeline, type TimelineEntry } from "../../domain/domain-services/timeline.service.js";
+import type { StageHistoryRepository } from '../ports/stage-history.repository.js';
+import type { GateInstanceRepository } from '../ports/gate-instance.repository.js';
+import type { CaseEventRepository } from '../ports/case-event.repository.js';
+import type { CaseAssignmentRepository } from '../ports/case-assignment.repository.js';
+import {
+  assembleTimeline,
+  type TimelineEntry,
+} from '../../domain/domain-services/timeline.service.js';
 
 export interface GetTimelineInput {
   caseId: string;
@@ -41,7 +44,7 @@ export class GetTimelineUseCase {
 
     const stageTimeline: TimelineEntry[] = stageEntries.map((e) => ({
       id: e.id,
-      source: "stage_history",
+      source: 'stage_history',
       timestamp: e.transitionedAt,
       data: {
         fromStageId: e.fromStageId,
@@ -56,7 +59,7 @@ export class GetTimelineUseCase {
       .filter((g) => g.resolvedAt !== null)
       .map((g) => ({
         id: g.id,
-        source: "gate_instance",
+        source: 'gate_instance',
         timestamp: g.resolvedAt!,
         data: {
           gateId: g.gateId,
@@ -69,7 +72,7 @@ export class GetTimelineUseCase {
 
     const eventTimeline: TimelineEntry[] = eventEntries.map((e) => ({
       id: e.id,
-      source: "case_event",
+      source: 'case_event',
       timestamp: e.createdAt,
       data: {
         eventType: e.eventType,
@@ -81,7 +84,7 @@ export class GetTimelineUseCase {
 
     const assignmentTimeline: TimelineEntry[] = assignmentEntries.map((a) => ({
       id: a.id,
-      source: "case_assignment",
+      source: 'case_assignment',
       timestamp: a.assignedAt,
       data: {
         processRoleId: a.processRoleId,

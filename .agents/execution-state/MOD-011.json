@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-011",
   "module_path": "docs/04_modules/mod-011-smartgrid/",
-  "last_updated": "2026-03-24T12:00:00.000Z",
+  "last_updated": "2026-03-24T23:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -15,5 +15,61 @@
     "gates_passed": ["DoR-1", "DoR-2", "DoR-3", "DoR-4", "DoR-5", "DoR-6", "DoR-7"],
     "epic_status": "READY",
     "features_promoted": ["F01", "F02", "F03", "F04", "F05"]
+  },
+  "codegen": {
+    "started_at": "2026-03-24T18:00:00.000Z",
+    "completed_at": "2026-03-24T23:00:00Z",
+    "agents": {
+      "AGN-COD-DB": { "status": "skipped", "completed_at": "2026-03-24T18:00:00.000Z", "files_generated": 0, "files": [], "skip_reason": "MOD-011 has 0 database tables (UX pure module)" },
+      "AGN-COD-CORE": { "status": "skipped", "completed_at": "2026-03-24T18:00:00.000Z", "files_generated": 0, "files": [], "skip_reason": "Level 1 module - no domain layer" },
+      "AGN-COD-APP": { "status": "skipped", "completed_at": "2026-03-24T18:00:00.000Z", "files_generated": 0, "files": [], "skip_reason": "MOD-011 has 0 own use cases (delegates to MOD-007)" },
+      "AGN-COD-API": { "status": "skipped", "completed_at": "2026-03-24T18:00:00.000Z", "files_generated": 0, "files": [], "skip_reason": "MOD-011 has 0 own API endpoints; F01 amendment belongs to MOD-007" },
+      "AGN-COD-WEB": {
+        "status": "done",
+        "completed_at": "2026-03-24T21:30:00Z",
+        "files_generated": 22,
+        "files": [
+          "apps/web/src/modules/smartgrid/types/smartgrid.types.ts",
+          "apps/web/src/modules/smartgrid/api/smartgrid.api.ts",
+          "apps/web/src/modules/smartgrid/api/json-serializer.ts",
+          "apps/web/src/modules/smartgrid/hooks/use-operation-config.ts",
+          "apps/web/src/modules/smartgrid/hooks/use-evaluate.ts",
+          "apps/web/src/modules/smartgrid/hooks/use-save.ts",
+          "apps/web/src/modules/smartgrid/hooks/use-delete.ts",
+          "apps/web/src/modules/smartgrid/hooks/use-grid-rules.ts",
+          "apps/web/src/modules/smartgrid/components/RowStatusIcon.tsx",
+          "apps/web/src/modules/smartgrid/components/CloseConfirmationModal.tsx",
+          "apps/web/src/modules/smartgrid/components/BlockedRecordMessage.tsx",
+          "apps/web/src/modules/smartgrid/components/DeleteConfirmationPanel.tsx",
+          "apps/web/src/modules/smartgrid/components/DeleteResultFeedback.tsx",
+          "apps/web/src/modules/smartgrid/components/MassActionToolbar.tsx",
+          "apps/web/src/modules/smartgrid/components/SelectionList.tsx",
+          "apps/web/src/modules/smartgrid/components/SmartDataGrid.tsx",
+          "apps/web/src/modules/smartgrid/components/SmartGridHeader.tsx",
+          "apps/web/src/modules/smartgrid/components/SmartEditForm.tsx",
+          "apps/web/src/modules/smartgrid/pages/BulkInsertPage.tsx",
+          "apps/web/src/modules/smartgrid/pages/RecordEditPage.tsx",
+          "apps/web/src/modules/smartgrid/pages/BulkDeletePage.tsx",
+          "apps/web/src/modules/smartgrid/index.ts"
+        ]
+      },
+      "AGN-COD-VAL": { "status": "done", "completed_at": "2026-03-24T20:00:00.000Z", "files_generated": 0, "files": [] }
+    }
+  },
+  "validations": {
+    "last_run": "2026-03-24T23:00:00Z",
+    "lint": { "status": "PASS", "run_at": "2026-03-24T23:00:00Z", "errors": 0, "warnings": 0, "fixed": ["SmartDataGrid.tsx", "use-evaluate.ts", "BulkInsertPage.tsx"] },
+    "format": { "status": "PASS", "run_at": "2026-03-24T23:00:00Z", "files_formatted": 10 },
+    "qa": { "status": "PASS", "run_at": "2026-03-24T23:00:00Z", "blockers": 0, "violations": 0, "warnings": 0 },
+    "manifest": { "status": "PASS", "run_at": "2026-03-24T23:00:00Z", "total": 3, "passed": 3, "violations": [] },
+    "openapi": { "status": "N/A", "run_at": null },
+    "drizzle": { "status": "N/A", "run_at": null },
+    "endpoint": { "status": "N/A", "run_at": null },
+    "verdict": {
+      "ready_for_promotion": true,
+      "blockers": 0,
+      "critical_violations": 0,
+      "warnings": 0
+    }
   }
 }

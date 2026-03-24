@@ -1,17 +1,17 @@
 # US-MOD-008 — Integração Dinâmica Protheus/TOTVS (Épico)
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.2.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.3.0
+**Data:** 2026-03-23
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-008** (Integração Dinâmica)
 **Épico de Negócio:** EP07
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** EP07, doc 04_Integracoes_Aprovacoes_e_Automacao_Governada §2–3, US-MOD-007, US-MOD-006, US-MOD-000-F07, DOC-DEV-001 §4.3, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (Outbox Pattern, BullMQ, retry com backoff, DLQ, audit log)
 - **evidencias:** N/A

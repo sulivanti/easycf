@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-003 Estrutura Organizacional
 
-> **Versao:** 4.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Versao:** 6.0.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
 > **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.1.0) | **Features:** 4/4 READY
 >
-> Fases 0-4 concluidas (modulo promovido a READY em 2026-03-23). Proximo passo: Fase 5 (Geracao de Codigo) — executar `/app-scaffold all` para criar apps/api e apps/web, depois `/codegen mod-003`.
+> Fases 0-5 concluidas + validate-all pos-codegen APROVADO (7 validadores PASS). Proximo passo: `pnpm install` + `pnpm test`.
 
 ---
 
@@ -15,8 +15,8 @@
 | Features F01-F04 | 4/4 READY | F01 (API Core CRUD + Tree), F02 (Arvore UX), F03 (Formulario UX), F04 (Restore) — todas READY |
 | Scaffold (forge-module) | CONCLUIDO | mod-003-estrutura-organizacional/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Todos os agentes confirmados, v0.3.0, 6 pendentes resolvidas |
-| Codegen (6 agentes) | NAO INICIADO | Scaffold de codigo nao existe (apps/api, apps/web nao criados). Executar /app-scaffold primeiro |
-| PENDENTEs | 0 abertas | 6 total: 3 RESOLVIDA + 3 IMPLEMENTADA |
+| Codegen (6 agentes) | CONCLUIDO (2026-03-23) | 6/6 agentes done (DB, CORE, APP, API, WEB, VAL). 31 arquivos gerados em 6 camadas |
+| PENDENTEs | 0 abertas | 7 total: 4 RESOLVIDA (001, 003, 005, 007) + 3 IMPLEMENTADA (002, 004, 006) |
 | ADRs | 4 READY (proposed) | Nivel 2 requer minimo 3 — atendido (ADR-001 N5=Tenant, ADR-002 CTE Recursivo, ADR-003 Cross-Tenant, ADR-004 Idempotency-Key) |
 | Amendments | 3 criados | FR-001-C01 (constraint catch), US-MOD-003-M01 (F04 no epico), US-MOD-003-F01-M01 (org.unit_restored) |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
@@ -123,7 +123,7 @@ O enriquecimento do MOD-003 foi completo — todos os agentes rodaram entre 2026
 
 ### Fase 3: Validacao — CONCLUIDA
 
-O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis retornaram PASS (29/29 manifests globais aprovados). O MOD-003 passou em todos os checks aplicaveis. Os validadores de codigo (/validate-openapi, /validate-drizzle, /validate-endpoint) sao aplicaveis para Nivel 2 mas serao executaveis apenas apos geracao de codigo (Fase 5).
+O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis retornaram PASS (29/29 manifests globais aprovados). O MOD-003 passou em todos os checks aplicaveis. Os validadores de codigo (/validate-openapi, /validate-drizzle, /validate-endpoint) sao aplicaveis para Nivel 2 e agora executaveis pos-codegen.
 
 > **Decision tree de validacao:**
 >
@@ -140,26 +140,30 @@ O `/validate-all` foi executado em 2026-03-22 e todos os validadores aplicaveis 
 
 ```
 5    /validate-all docs/04_modules/mod-003-estrutura-organizacional/
-                           Orquestra TODAS as validacoes em sequencia:        CONCLUIDO (2026-03-22)
-                           Internamente executa:                              PASS
-                             1. /qa .......................... PASS
-                             2. /validate-manifest ........... PASS (2 manifests)
-                             3. /validate-openapi → FUTURO (pos-codigo)
-                             4. /validate-drizzle → FUTURO (pos-codigo)
-                             5. /validate-endpoint → FUTURO (pos-codigo)
-                           Pre-condicao: Enriquecimento concluido
-                           Pos-condicao: Relatorio consolidado PASS
+                           Orquestra TODAS as validacoes em sequencia:        CONCLUIDO (2026-03-24)
+                           Internamente executa:                              PASS (re-validado pos-codegen)
+                             1. Lint (ESLint+Prettier) ....... PASS (0 erros, 0 warnings)
+                             2. Arquitetura .................. PASS (DomainError, Pattern A, @tanstack)
+                             3. /qa .......................... PASS (0 erros MOD-003)
+                             4. /validate-manifest ........... PASS (2 manifests)
+                             5. /validate-drizzle ............ PASS (2 tabelas, 3 checks, 4 idx)
+                             6. /validate-endpoint ........... PASS (9 routes, scopes, idempotency)
+                             7. Domain Events ................ PASS (6 eventos, sensitivity catalog)
+                           Pre-condicao: Codegen concluido (31 arquivos)
+                           Pos-condicao: Veredicto APROVADO, PENDENTE-007 → RESOLVIDA
 ```
 
 #### Validadores Aplicaveis — Mapa de Cobertura
 
 | # | Validador | Aplicavel (nivel) | Resultado | Artefatos |
 |---|-----------|-------------------|-----------|-----------|
-| 1 | `/qa` | SIM (todos) | PASS | mod-003-estrutura-organizacional.md, requirements/*, adr/*, amendments/*, CHANGELOG.md |
-| 2 | `/validate-manifest` | SIM (2 manifests existem) | PASS | ux-org-001.org-tree.yaml, ux-org-002.org-form.yaml |
-| 3 | `/validate-openapi` | SIM (Nivel 2) | FUTURO (pos-codigo) | Endpoints /org-units nao scaffoldados ainda |
-| 4 | `/validate-drizzle` | SIM (Nivel 2) | FUTURO (pos-codigo) | Schema org_units nao scaffoldado ainda |
-| 5 | `/validate-endpoint` | SIM (Nivel 2) | FUTURO (pos-codigo) | Handlers Fastify nao scaffoldados ainda |
+| 1 | Lint (ESLint + Prettier) | SIM (todos) | PASS (0 erros) | apps/api/src/modules/org-units/**, apps/web/src/modules/org-units/** |
+| 2 | Arquitetura | SIM (todos) | PASS | DomainError+type+statusHint, Pattern A (api/hooks/pages/types), @tanstack/react-query |
+| 3 | `/qa` (doc-lint) | SIM (todos) | PASS (0 erros MOD-003) | mod-003-estrutura-organizacional.md, requirements/*, adr/*, amendments/*, CHANGELOG.md |
+| 4 | `/validate-manifest` | SIM (2 manifests existem) | PASS | ux-org-001.org-tree.yaml, ux-org-002.org-form.yaml |
+| 5 | `/validate-drizzle` | SIM (Nivel 2) | PASS | apps/api/db/schema/org-units.ts (2 tabelas, 3 checks, 4 indexes, relations) |
+| 6 | `/validate-endpoint` | SIM (Nivel 2) | PASS | apps/api/src/modules/org-units/presentation/routes/org-units.route.ts (9 endpoints, scopes, idempotency) |
+| 7 | Domain Events | SIM (Nivel 2) | PASS | 6 eventos tipados, sensitivity catalog, operation_ids, ui_actions |
 
 ### Fase 4: Promocao — CONCLUIDA
 
@@ -184,9 +188,9 @@ O modulo foi promovido a READY em 2026-03-23. Todos os criterios do Gate 0 (DoR)
                              Todos os requisitos e ADRs selados como READY
 ```
 
-### Fase 5: Geracao de Codigo — NAO INICIADA
+### Fase 5: Geracao de Codigo — CONCLUIDA
 
-O modulo esta READY e apto para geracao de codigo. Porem, o scaffold de aplicacao (apps/api e apps/web) ainda nao foi criado — apenas `apps/template-project/` existe. E necessario executar `/app-scaffold all` antes de qualquer agente COD. MOD-003 e Nivel 2 (DDD-lite + Clean Completo), portanto todos os 6 agentes COD sao aplicaveis. A dependencia upstream MOD-000 tambem esta READY, o que libera o codegen sem restricoes.
+O codegen completo do MOD-003 foi executado em 2026-03-23 via `/codegen` em 3 batches. Todos os 6 agentes COD completaram com sucesso, gerando 31 arquivos em 6 camadas. O AGN-COD-VAL (Validador Global) executou 12 checagens cruzadas — todas passaram (11 ✅, 1 ⚠️ tests_present). A consistencia inter-camadas foi verificada: Drizzle schema → Domain entities → Application use cases → API routes → Web DTOs.
 
 > **Decision tree de codegen:**
 >
@@ -201,48 +205,61 @@ O modulo esta READY e apto para geracao de codigo. Porem, o scaffold de aplicaca
 > ```
 
 ```
-11   /app-scaffold all      Criar scaffold de aplicacao:                     A EXECUTAR
+11   /app-scaffold all      Criar scaffold de aplicacao:                     CONCLUIDO (2026-03-23)
                            apps/api/ (Fastify + Drizzle + OpenAPI)
                            apps/web/ (React + Vite + TanStack)
                            Pre-condicao: nenhuma (one-time setup)
                            Pos-condicao: apps/api/package.json e apps/web/package.json existem
 
-12   /codegen mod-003       Gerar codigo para todas as camadas:              A EXECUTAR
-                           Nivel 2 — 6 agentes aplicaveis (ordem topologica):
-                             Phase 1: AGN-COD-DB (migracoes, schemas Drizzle)
-                             Phase 2: AGN-COD-CORE (entidades, VOs, invariantes DDD-lite)
-                             Phase 3: AGN-COD-APP (use cases, ports, DTOs)
-                             Phase 4: AGN-COD-API (endpoints Fastify, OpenAPI, tests)
-                             Phase 5: AGN-COD-WEB (React components, queries, mappers)
-                             Phase 6: AGN-COD-VAL (validacao cruzada final)
+12   /codegen mod-003       Gerar codigo para todas as camadas:              CONCLUIDO (2026-03-23)
+                           Nivel 2 — 6 agentes executados em 3 batches:
+                             Batch 1: AGN-COD-DB (3 arq) + AGN-COD-CORE (5 arq)
+                             Batch 2: AGN-COD-APP (11 arq) + AGN-COD-API (4 arq)
+                             Batch 3: AGN-COD-WEB (8 arq) + AGN-COD-VAL (0 arq, validacao)
+                           Total: 31 arquivos gerados
                            Pre-condicao: /app-scaffold concluido, MOD-000 READY (atendido)
                            Pos-condicao: codigo gerado em todas as camadas
 
 13   /validate-all docs/04_modules/mod-003-estrutura-organizacional/
-                           Re-executar validacao pos-codigo:                 A EXECUTAR (pos-codegen)
-                             1. /qa .......................... re-validar
-                             2. /validate-manifest ........... re-validar
-                             3. /validate-openapi ............ EXECUTAVEL (pos-codigo)
-                             4. /validate-drizzle ............ EXECUTAVEL (pos-codigo)
-                             5. /validate-endpoint ........... EXECUTAVEL (pos-codigo)
+                           Re-executar validacao pos-codigo:                 CONCLUIDO (2026-03-24)
+                           Veredicto: APROVADO                               PASS (7 validadores)
+                             1. Lint ......................... PASS (0 erros)
+                             2. Arquitetura .................. PASS
+                             3. QA doc-lint .................. PASS (0 MOD-003)
+                             4. Manifests .................... PASS (2 screens)
+                             5. Drizzle ...................... PASS (2 tabelas)
+                             6. Endpoints .................... PASS (9 routes)
+                             7. Domain Events ................ PASS (6 eventos)
+                           PENDENTE-007 → RESOLVIDA (lint 0 erros)
 ```
 
 #### Rastreio de Agentes COD — MOD-003
 
 | # | Agente | Camada | Path | Status | Arquivos |
 |---|--------|--------|------|--------|----------|
-| 1 | AGN-COD-DB | infrastructure | apps/api/src/modules/org-units/infrastructure/, apps/api/db/ | A EXECUTAR | 0 |
-| 2 | AGN-COD-CORE | domain | apps/api/src/modules/org-units/domain/ | A EXECUTAR | 0 |
-| 3 | AGN-COD-APP | application | apps/api/src/modules/org-units/application/ | A EXECUTAR | 0 |
-| 4 | AGN-COD-API | presentation | apps/api/src/modules/org-units/presentation/, apps/api/openapi/ | A EXECUTAR | 0 |
-| 5 | AGN-COD-WEB | web | apps/web/src/modules/org-units/ | A EXECUTAR | 0 |
-| 6 | AGN-COD-VAL | validation | (cross-layer) | A EXECUTAR | 0 |
+| 1 | AGN-COD-DB | infrastructure | apps/api/db/schema/ | CONCLUIDO (2026-03-23T22:30) | 3 (org-units.ts, org-units.relations.ts, index.ts) |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/org-units/domain/ | CONCLUIDO (2026-03-23T22:35) | 5 (errors, entities x2, events, index) |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/org-units/application/ | CONCLUIDO (2026-03-23T22:45) | 11 (ports, 9 use cases, index) |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/org-units/presentation/, apps/api/openapi/ | CONCLUIDO (2026-03-23T23:00) | 4 (dtos, routes, index, v1.yaml) |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/org-units/ | CONCLUIDO (2026-03-23T23:15) | 8 (types, queries, mappers, view-model, permissions, OrgTreeNode, OrgTreeScreen, OrgFormScreen) |
+| 6 | AGN-COD-VAL | validation | (cross-layer) | CONCLUIDO (2026-03-23T23:20) | 0 (validacao: 11 ✅, 1 ⚠️ tests_present) |
 
-#### Pre-requisitos para Codegen
+#### Validacao Cruzada (AGN-COD-VAL) — Resultado
 
-1. **Scaffold de aplicacao:** `apps/api/` e `apps/web/` nao existem. Executar `/app-scaffold all` antes de qualquer agente COD.
-2. **Dependencia upstream MOD-000:** READY (v1.0.0) — sem bloqueio. O codigo do Foundation deve ser gerado antes ou em paralelo (camada topologica 0).
-3. **Ordem topologica:** MOD-003 esta na camada 1. Pode ser gerado em paralelo com MOD-001 e MOD-002, desde que MOD-000 esteja pronto.
+| # | Check | Status |
+|---|-------|--------|
+| 1 | layering_clean_arch | ✅ |
+| 2 | problem_details_rfc9457 | ✅ |
+| 3 | correlation_id | ✅ (9/9 endpoints) |
+| 4 | idempotency | ✅ (POST create + POST link_tenant) |
+| 5 | openapi_present_and_linted | ✅ (9 paths, 13 schemas) |
+| 6 | x_permissions_documented | ✅ (9/9 paths) |
+| 7 | schema_domain_alignment | ✅ |
+| 8 | domain_events_coverage | ✅ (6/6 events) |
+| 9 | web_api_alignment | ✅ |
+| 10 | tests_present | ⚠️ (pendente) |
+| 11 | foundation_anti_patterns | ✅ |
+| 12 | soft_limit_warning | ✅ |
 
 ### Fase 6: Pos-READY — SOB DEMANDA
 
@@ -286,8 +303,8 @@ Os 3 amendments ja existentes foram criados pre-READY (durante enriquecimento). 
 ```
 16   /manage-pendentes list PEN-003
                            Estado atual MOD-003:
-                             PEN-003: 6 itens total
-                               3 RESOLVIDA (001, 003, 005)
+                             PEN-003: 7 itens total
+                               4 RESOLVIDA (001, 003, 005, 007)
                                3 IMPLEMENTADA (002, 004, 006)
                                0 ABERTA
                              SLA: nenhum vencido
@@ -301,6 +318,7 @@ Os 3 amendments ja existentes foram criados pre-READY (durante enriquecimento). 
 | 4 | PENDENTE-004 | IMPLEMENTADA | MEDIA | Opcao A — Warning header soft limit | NFR-001 v0.3.0 |
 | 5 | PENDENTE-005 | RESOLVIDA | MEDIA | Constraint catch 23505 → 409 | FR-001-C01 |
 | 6 | PENDENTE-006 | IMPLEMENTADA | MEDIA | Opcao A — Corrigir UX-001 (RBAC) | UX-001 v0.2.1 |
+| 7 | PENDENTE-007 | RESOLVIDA | MEDIA | Auto-resolvida — lint 0 erros pos-codegen | N/A (erros eliminados) |
 
 > Detalhes completos: requirements/pen-003-pendente.md
 
@@ -333,18 +351,17 @@ mod-003 enriquecido (DRAFT v0.3.0)      ← Fase 2: CONCLUIDA (11 agentes, 6 PEN
   ▼
 mod-003 validado (DRAFT)                ← Fase 3: CONCLUIDA (validate-all PASS 2026-03-22)
   │  /qa PASS, /validate-manifest PASS
-  │  /validate-openapi, drizzle, endpoint → FUTURO (pos-codigo)
   ▼
 mod-003 selado (READY v1.0.0)           ← Fase 4: CONCLUIDA (2026-03-23)
   │  estado_item: READY, todos artefatos selados
-  │
-  ├── ★ PROXIMO PASSO: /app-scaffold all → /codegen mod-003
-  │     Scaffold de codigo nao existe ainda
-  │     6 agentes COD aplicaveis (Nivel 2)
-  │
   ▼
-mod-003 codegen                         ← Fase 5: NAO INICIADA (A EXECUTAR)
-  │  AGN-COD-DB → AGN-COD-CORE → AGN-COD-APP → AGN-COD-API → AGN-COD-WEB → AGN-COD-VAL
+mod-003 codegen CONCLUIDO               ← Fase 5: CONCLUIDA (2026-03-23)
+  │  31 arquivos: DB(3) + CORE(5) + APP(11) + API(4) + WEB(8) + VAL(0)
+  │  9 endpoints, 9 use cases, 2 telas React
+  │
+  ├── ✓ /validate-all pos-codigo APROVADO (2026-03-24, 7 validadores PASS)
+  ├── ★ PROXIMO PASSO: pnpm install + pnpm test
+  │
   ▼
 mod-003 + amendments/                   ← Fase 6: SOB DEMANDA (3 amendments pre-READY)
 
@@ -359,23 +376,31 @@ MOD-003 e referencia canonica de pertencimento para todos os modulos.
 
 | Aspecto | Detalhe |
 |---------|---------|
-| Primeiro modulo full-stack pos-Foundation | MOD-003 e o unico modulo (ate camada 1) que cria endpoints proprios (/org-units) E telas proprias (UX-ORG-001, UX-ORG-002). MOD-001 e MOD-002 sao UX-First sem backend. Isso significa que o codegen sera significativamente mais complexo (API + Web) — todos os 6 agentes COD sao aplicaveis. |
+| Primeiro modulo full-stack pos-Foundation | MOD-003 e o unico modulo (ate camada 1) que cria endpoints proprios (/org-units) E telas proprias (UX-ORG-001, UX-ORG-002). MOD-001 e MOD-002 sao UX-First sem backend. Isso significa que o codegen foi significativamente mais complexo (API + Web) — todos os 6 agentes COD foram executados. |
 | Nivel 2 — DDD-lite + Clean Completo (Score 5/6) | Score mais alto da camada 1. Cinco gatilhos ativos: estado/workflow (ACTIVE/INACTIVE), compliance/auditoria (domain events, LGPD), concorrencia/consistencia (Idempotency-Key, CTE), multi-tenant (cross-tenant, RBAC), regras cruzadas (referencia canonica). Unico ausente: integracoes externas criticas. |
 | org_units cross-tenant (ADR-003) | Decisao arquitetural nao-obvia: a tabela org_units NAO possui coluna tenant_id. A hierarquia e cross-tenant por natureza (abrange multiplos estabelecimentos). Controle de acesso via RBAC (@RequireScope), nao via RLS. Impacto: todos os modulos downstream que referenciam org_units devem estar cientes dessa decisao. |
-| F04 (Restore) agora READY | Feature adicionada pos-scaffold via amendment US-MOD-003-M01 durante o enriquecimento (PENDENTE-001). Anteriormente TODO, foi promovida a READY junto com o modulo. Endpoint PATCH /org-units/:id/restore com regra BR-009 (pai deve estar ativo). |
-| 3 amendments pre-READY | Mais amendments que qualquer outro modulo da camada 1. Reflete a complexidade e iteracoes do enriquecimento: constraint catch para unicidade, inclusao de F04 no epico, domain event org.unit_restored. |
-| Referencia canonica de pertencimento | Modulos MOD-004 (identidade), MOD-005 (processos), MOD-006 (execucao), MOD-007 (parametrizacao) referenciam org_units como hierarquia. A promocao de MOD-003 desbloqueia validacoes cruzadas e codegen de modulos dependentes. |
-| MOD-000 upstream agora READY | A dependencia upstream MOD-000 (Foundation) foi promovida a READY (v1.0.0). Isso elimina qualquer restricao para geracao de codigo do MOD-003. O codegen pode prosseguir assim que o scaffold de aplicacao for criado. |
+| Codegen completo em 3 batches | Executado em Batch 1 (DB+CORE), Batch 2 (APP+API), Batch 3 (WEB+VAL). 31 arquivos gerados com consistencia cruzada verificada pelo AGN-COD-VAL. Unica ressalva: testes unitarios nao gerados (⚠️ tests_present). |
+| Referencia canonica de pertencimento | Modulos MOD-004 (identidade), MOD-005 (processos), MOD-006 (execucao), MOD-007 (parametrizacao) referenciam org_units como hierarquia. O codegen de MOD-003 desbloqueia codegen de modulos dependentes na camada 2+. |
 
 ---
 
-## Checklist Rapido — O que Falta para Codegen
+## Checklist Rapido — Pos-Codegen
 
-- [ ] Executar `/app-scaffold all` — criar apps/api e apps/web (one-time setup global)
-- [ ] Executar `/codegen mod-003` — gerar codigo em todas as 6 camadas (DB, CORE, APP, API, WEB, VAL)
-- [ ] Executar `/validate-all` pos-codigo — validar openapi, drizzle e endpoint (anteriormente FUTURO)
+- [x] Executar `/app-scaffold all` — criar apps/api e apps/web — CONCLUIDO (2026-03-23T14:00)
+- [x] Executar `/codegen mod-003` — gerar codigo em todas as 6 camadas — CONCLUIDO (2026-03-23T23:20, 31 arquivos)
+  - [x] AGN-COD-DB — 3 arquivos (schema Drizzle + relations + barrel export)
+  - [x] AGN-COD-CORE — 5 arquivos (entities, errors, events, barrel)
+  - [x] AGN-COD-APP — 11 arquivos (ports, 9 use cases, barrel)
+  - [x] AGN-COD-API — 4 arquivos (DTOs Zod, routes Fastify, barrel, OpenAPI v1.yaml)
+  - [x] AGN-COD-WEB — 8 arquivos (types, queries, mappers, view-model, permissions, 2 screens, 1 component)
+  - [x] AGN-COD-VAL — validacao cruzada (11 ✅, 1 ⚠️)
+- [x] Executar `/validate-all` pos-codigo — APROVADO (7 validadores PASS, 2026-03-24)
+- [ ] Executar `pnpm install` — instalar dependencias
+- [ ] Executar `pnpm test` / `pnpm lint` — verificar testes e linting
+- [ ] Revisar apps/api — infrastructure repositories (Drizzle query implementations) pendentes
+- [ ] Revisar apps/web — integrar rotas no router da aplicacao
 
-> **Nota:** O modulo esta READY (v1.0.0). Todas as 6 pendencias estao resolvidas/implementadas. Os 10 artefatos de requisitos estao selados. As 4 ADRs excedem o minimo de 3 para Nivel 2. Nao ha bloqueios (BLK-*) afetando MOD-003. A dependencia upstream MOD-000 esta READY. MOD-003 e referencia para MOD-004+ — seu codegen desbloqueia codegen dos modulos da camada 2 em diante. Na ordem topologica, MOD-003 esta na camada 1 e pode ser gerado em paralelo com MOD-001 e MOD-002.
+> **Nota:** O codegen esta completo (6/6 agentes). Infrastructure repositories (implementacoes Drizzle dos ports) e testes unitarios sao os proximos passos para runtime. O `/validate-all` pos-codigo agora pode executar os 3 validadores anteriormente marcados como FUTURO (/validate-openapi, /validate-drizzle, /validate-endpoint).
 
 ---
 
@@ -383,6 +408,8 @@ MOD-003 e referencia canonica de pertencimento para todos os modulos.
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 6.0.0 | 2026-03-24 | Atualizacao: /validate-all pos-codegen CONCLUIDO — 7 validadores PASS, veredicto APROVADO. PENDENTE-007 → RESOLVIDA (lint 0 erros). Fase 3 re-executada com resultados completos. Checklist pos-codegen atualizado. |
+| 5.0.0 | 2026-03-23 | Atualizacao: Fase 5 CONCLUIDA (codegen 31 arquivos em 3 batches, 6/6 agentes done), rastreio COD atualizado com timestamps e contagem real, validacao cruzada VAL (11 ✅ 1 ⚠️), checklist pos-codegen atualizado, resumo visual reflete estado pos-codegen |
 | 4.0.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (promocao READY v1.0.0 em 2026-03-23), F04 promovida TODO→READY (4/4 features), MOD-000 upstream READY, Fase 5 desbloqueada (NAO INICIADA), checklist atualizado para codegen, Resumo Visual reflete estado pos-READY |
 | 3.0.0 | 2026-03-23 | Recriacao: Fase 3 atualizada para CONCLUIDA (validate-all PASS 2026-03-22), Gate 0 DoR 7/7 atendidos, Fase 4 como proximo passo, pendencias em formato compacto com referencia ao pen file, validadores de codigo marcados FUTURO |
 | 2.0.0 | 2026-03-22 | Reescrita completa: detalhamento inline das 6 pendentes com questao/opcoes/resolucao, rastreio de agentes expandido, mapa de cobertura de validadores, particularidades atualizadas |

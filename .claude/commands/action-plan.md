@@ -2,7 +2,7 @@
 
 Gera ou atualiza o Plano de Acao de um modulo, diagnosticando automaticamente o estado atual de cada fase do ciclo de vida (Pre-Modulo → Genese → Enriquecimento → Validacao → Promocao → Pos-READY).
 
-> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `action-plan`
+> **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `action-plan` | **Execution State:** `.agents/execution-state/MOD-{NNN}.json`
 
 > **Quando usar:** Quando quiser visualizar ou atualizar o roadmap de execucao de um modulo especifico — antes de iniciar trabalho, apos completar uma fase, ou para diagnosticar o estado atual.
 
@@ -159,6 +159,24 @@ Registre:
 - Quais camadas tem arquivos (indica quais agentes COD ja rodaram)
 - Se scaffold existe (pre-requisito para codegen)
 
+### 1.12 — Execution State (.agents/execution-state/MOD-{NNN}.json)
+
+Leia o arquivo `.agents/execution-state/MOD-{NNN}.json` (se existir). Este arquivo contem dados **precisos e timestamped** escritos pelas skills de execucao (`/app-scaffold`, `/codegen`, `/codegen-agent`, `/validate-all`).
+
+Se o arquivo existir, extraia:
+
+| Secao | Campos | Uso |
+|-------|--------|-----|
+| `scaffold` | `completed`, `completed_at`, `apps_created` | Checklist: item scaffold marcado [x] com data |
+| `codegen.agents.*` | `status`, `completed_at`, `files_generated`, `files` | Checklist: cada agente COD com status real (done/pending/skipped/error) |
+| `codegen.completed_at` | timestamp ou null | Se todos agentes finalizaram, marcar codegen como CONCLUIDO |
+| `validations.*` | `status`, `run_at`, `verdict` | Checklist: validacoes com resultado real (PASS/FAIL/N/A) |
+| `tests.*` | `status`, `run_at` | Checklist: testes com resultado real |
+
+**Prioridade de dados:** Se o execution-state existir, seus dados tem **prioridade sobre inferencia** do filesystem (1.11). Isso evita o problema de scaffold existir mas o action-plan nao saber quando foi criado.
+
+Se o arquivo **nao existir**, use inferencia do filesystem (1.11) como fallback — mas registre no plano que os dados sao inferidos, nao confirmados.
+
 ---
 
 ## PASSO 2 — Diagnostico de Fases
@@ -225,10 +243,10 @@ estado_item do manifesto do módulo?
 
 ### Fase 5: Geracao de Codigo
 
-Determinar o estado da geracao de codigo a partir dos dados coletados em 1.11:
+Determinar o estado da geracao de codigo usando **duas fontes** (1.12 tem prioridade sobre 1.11):
 
-1. **Scaffold** — verificar se `apps/api/package.json` e `apps/web/package.json` existem (pre-requisito)
-2. **Arquivos de codigo** — verificar existencia em `apps/api/src/modules/{slug}/` e `apps/web/src/modules/{slug}/`
+1. **Execution State (1.12)** — se `.agents/execution-state/MOD-{NNN}.json` existir, usar `scaffold.*` e `codegen.agents.*` para status preciso
+2. **Filesystem (1.11)** — fallback: verificar existencia de `apps/api/package.json`, arquivos em `apps/api/src/modules/{slug}/`
 3. **Camadas com codigo** — mapear quais camadas tem arquivos (infrastructure, domain, application, presentation, web)
 
 ```text
@@ -244,7 +262,7 @@ estado_item == READY? (pre-requisito para codegen)
         → Fase 5: CONCLUIDA
 ```
 
-> Nota: A deteccao de quais agentes COD rodaram e baseada na existencia de arquivos nas camadas. Para modulos Nivel 0 (WEB only), apenas a camada Web precisa ter arquivos. Para Nivel 1 (sem CORE), a camada Domain nao e exigida.
+> Nota: Se o execution-state existir, use `codegen.agents.{AGN}.status` para diagnostico preciso (done/pending/skipped/error) em vez de inferir pela existencia de arquivos. Para modulos Nivel 0 (WEB only), apenas AGN-COD-WEB e AGN-COD-VAL sao aplicaveis. Para Nivel 1 (sem CORE), AGN-COD-CORE sera "skipped".
 
 ### Fase 6: Pos-READY
 
@@ -414,6 +432,20 @@ O plano deve ser um **documento hibrido**: estrutura rigorosa do template (PASSO
 18. **Particularidades** — Incluir descricoes detalhadas (nao apenas factuais). Explicar o impacto de cada particularidade e por que importa.
 
 19. **Checklist Rapido** — Listar apenas os itens que faltam para READY. Se o modulo ja e READY, mostrar checklist de codegen com itens pendentes. Incluir nota final sobre dependencias e impacto downstream.
+
+    **Fonte de dados para o checklist:** Se `.agents/execution-state/MOD-{NNN}.json` existir, use-o como **fonte primaria** para marcar itens `[x]` ou `[ ]`:
+
+    | Item do Checklist | Dado do Execution State | Regra de marcacao |
+    |---|---|---|
+    | `/app-scaffold all` | `scaffold.completed` == true | `[x]` com data de `scaffold.completed_at` |
+    | `pnpm install` | `pnpm_install.completed` == true | `[x]` com data |
+    | `/codegen mod-NNN` | todos `codegen.agents.*.status` == "done" ou "skipped" | `[x]` se completo; `[ ] ({N}/{TOTAL} agentes)` se parcial |
+    | Revisar apps/api | `codegen.agents.AGN-COD-DB..API.status` == "done" | `[x]` se todos os agentes API completaram |
+    | Revisar apps/web | `codegen.agents.AGN-COD-WEB.status` == "done" | `[x]` se WEB done |
+    | `/validate-all` | `validations.verdict.ready_for_promotion` == true | `[x]` se PASS; `[ ] (FAIL — {N} violacoes)` se FAIL |
+    | `pnpm test` / `pnpm lint` | `tests.pnpm_test.status`, `tests.pnpm_lint.status` | `[x]` se PASS |
+
+    Se o execution-state **nao existir**, faca inferencia a partir do filesystem (1.11) como fallback — mas nao invente dados de timestamp.
 
 20. **CHANGELOG do Documento** — Se `--update`, adicionar nova entrada preservando historico. Se criacao, iniciar com v1.0.0.
 

@@ -24,7 +24,7 @@ flowchart TD
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
+    style E5  fill:#27AE60,color:#fff,stroke:#1E8449
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 
@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.2.0 | 2026-03-24 | validate-all | Revalidação completa: Lint PASS (0 ESLint errors, 10 Prettier warnings tracked in PENDENTE-001). Architecture PASS (DomainError+type+statusHint, Pattern A react-query, clean arch). QA PASS. Manifests 2/2 PASS. OpenAPI PASS (14 ops). Drizzle PASS (7 tabelas, 7 relations). Endpoints PASS (14/14, 4 route files). 0 bloqueadores, 0 violações críticas, 10 warnings. |
+| 1.1.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. QA: PASS. Manifests: 2/2 PASS. OpenAPI: PASS (14 ops). Drizzle: PASS (7 tabelas). Endpoints: PASS (14/14). 0 bloqueadores, 0 violações críticas, 32 warnings LOW. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |
 | 0.9.0| 2026-03-19 | arquitetura | PEN-009-005 implementada — sem particionamento de `movement_history` no MVP (opção 3, apenas índices). Suficiente até 10M registros. Threshold preventivo de 5M registros para acionar migração para range partitioning mensal (PostgreSQL 14+ nativo). Monitoramento via métrica count de movement_history. |
 | 0.8.0 | 2026-03-19 | arquitetura | PEN-009-007 implementada — polling 60s como MVP para SidebarBadge (opção 1); SSE (Server-Sent Events) registrado no roadmap pós-MVP como enhancement de push unidirecional após validação de UX. Todas as 7 pendências do módulo estão agora implementadas (0 abertas). |

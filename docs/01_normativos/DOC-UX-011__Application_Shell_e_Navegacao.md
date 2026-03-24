@@ -1,9 +1,9 @@
 # DOC-UX-011 — Padrões de Application Shell e Navegação
 
 - **id:** DOC-UX-011
-- **version:** 1.0.0
+- **version:** 1.1.0
 - **status:** READY
-- **data_ultima_revisao:** 2026-03-06
+- **data_ultima_revisao:** 2026-03-24
 - **owner:** produto + arquitetura + UX
 - **scope:** global (Application Shell e navegação)
 
@@ -30,6 +30,52 @@ O layout base DEVE ser composto minimamente por:
 3. **Breadcrumb Bar:** Faixa horizontal imediatamente acima do conteúdo da página, indicando o rastro de navegação.
 4. **Main Content Area:** A área dinâmica onde as telas (ex: `/customers`, `/invoices/123`) serão renderizadas.
 
+### 2.2 Estratégia de Roteamento SPA
+
+O frontend DEVE utilizar **@tanstack/react-router** como router SPA. É PROIBIDO o uso de `react-router-dom` ou navegação via `window.location.href`.
+
+#### Route Tree
+
+A árvore de rotas reside em `apps/web/src/routes/` com a seguinte estrutura base:
+
+```
+src/routes/
+├── __root.tsx          ← Layout raiz (Application Shell)
+├── _auth.tsx           ← Layout autenticado (sidebar + header)
+├── _auth.dashboard.tsx ← Dashboard pós-login
+├── login.tsx           ← Página de login (rota pública)
+└── _auth.{module}/     ← Rotas de cada módulo (lazy-loaded)
+```
+
+#### Code Splitting
+
+Rotas de módulo DEVEM ser lazy-loaded via `lazy()` do TanStack Router para otimizar o bundle:
+
+```typescript
+// src/routes/_auth.users.tsx
+import { createLazyFileRoute } from '@tanstack/react-router';
+
+export const Route = createLazyFileRoute('/_auth/users')({
+  component: () => import('@modules/users/pages/UsersListPage'),
+});
+```
+
+#### Router Context
+
+O Router Context é o mecanismo padrão para compartilhar estado de autenticação e permissões entre rotas. Substitui Redux/Zustand/Context para dados de auth:
+
+```typescript
+interface RouterContext {
+  auth: {
+    user: User | null;
+    scopes: string[];
+    tenantId: string;
+    branchId: string;
+  };
+  queryClient: QueryClient;
+}
+```
+
 ---
 
 ## 3. Navegação Dinâmica Baseada em Roles (Menus)
@@ -46,6 +92,62 @@ Os menus de navegação do sistema gerado **NÃO DEVEM** ser estáticos. A rende
 1. Cada item de menu registrado na aplicação DEVE declarar quais `scopes` (ex: `users:read`, `reports:view`) são necessários para visualizá-lo.
 2. O componente de Sidebar DEVE interceptar a lista de menus disponíveis e **ocultar (não renderizar)** qualquer link para o qual o usuário não possua o escopo correspondente no Tenant ativo.
 3. **Atenção:** Esconder o menu não substitui a proteção da rota no nível do Router (Frontend) e nem a proteção do Endpoint (Backend). É apenas uma decisão de UX.
+
+### 3.3 Route Guards
+
+O TanStack Router oferece `beforeLoad` como ponto de interceptação antes da renderização da rota. Os seguintes guards são obrigatórios:
+
+#### AuthGuard
+
+Aplicado no layout `_auth.tsx`. Verifica se o usuário possui token válido antes de renderizar qualquer rota autenticada:
+
+```typescript
+// src/routes/_auth.tsx
+export const Route = createFileRoute('/_auth')({
+  beforeLoad: async ({ context }) => {
+    if (!context.auth.user) {
+      throw redirect({ to: '/login' });
+    }
+  },
+  component: AuthLayout,
+});
+```
+
+#### GuestGuard
+
+Aplicado na rota `/login`. Redireciona usuários já autenticados para o dashboard:
+
+```typescript
+// src/routes/login.tsx
+export const Route = createFileRoute('/login')({
+  beforeLoad: async ({ context }) => {
+    if (context.auth.user) {
+      throw redirect({ to: '/' });
+    }
+  },
+  component: LoginPage,
+});
+```
+
+#### ScopeGuard
+
+Aplicado em rotas de módulo que requerem scopes específicos. Verifica se o usuário possui os scopes necessários no Tenant ativo:
+
+```typescript
+function requireScope(...scopes: string[]) {
+  return ({ context }: { context: RouterContext }) => {
+    const hasAccess = scopes.every((s) => context.auth.scopes.includes(s));
+    if (!hasAccess) {
+      throw redirect({ to: '/' });
+    }
+  };
+}
+
+// Uso em rota de módulo:
+export const Route = createFileRoute('/_auth/users')({
+  beforeLoad: requireScope('users:read'),
+});
+```
 
 ---
 
@@ -94,10 +196,21 @@ A identificação do usuário ativo DEVE estar sempre visível no Shell da aplic
 Quando a automação do framework gerar um frontend vazio para um novo projeto, ela será avaliada pelos seguintes critérios de aceitação:
 
 - **[CA-01]** O código de Layout/Shell gerado inclui de forma robusta um Header, Sidebar, Wrapper de Content e um Breadcrumb componentizado.
-- **[CA-02]** O armazenamento do array de permissões (via store de estado global como Redux/Zustand ou React Context) está implementado e alimentado logo no load principal da aplicação.
+- **[CA-02]** O armazenamento do array de permissões (via Router Context do `@tanstack/react-router`) está implementado e alimentado logo no load principal da aplicação.
 - **[CA-03]** Componente de Menu lateral aceita um prop/array de rotas e filtra internamente baseado nas guards de escopo (`scopes`).
 - **[CA-04]** A URL `/` em ambiente autenticado aciona um Dashboard amigável lendo os dados de perfil (DOC-FND-000 §1.2 — `GET /auth/me`).
+- **[CA-05]** Navegação in-app DEVE usar `<Link>` ou `router.navigate()` do `@tanstack/react-router`. O uso de `window.location.href` para navegação interna é **PROIBIDO**.
+- **[CA-06]** Rotas de módulo DEVEM ser lazy-loaded via `lazy()` do TanStack Router. O bundle principal não deve incluir código de módulos individuais.
 
 ---
 
 *Este documento substitui formalmente a necessidade das User Stories antigas US-016 (Dashboard), US-017 (Menus), US-018 (Breadcrumb) e US-021 (Widget NavBar).*
+
+---
+
+## CHANGELOG
+
+| Versão | Data | Descrição |
+|--------|------|-----------|
+| 1.1.0 | 2026-03-24 | Amendment M01: §2.2 Estratégia de Roteamento SPA, §3.3 Route Guards, CA-02 atualizado para Router Context, novos CA-05 e CA-06 |
+| 1.0.0 | 2026-03-06 | Versão inicial |

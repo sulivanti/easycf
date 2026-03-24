@@ -5,19 +5,29 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
+> | 0.23.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-009 → IMPLEMENTADA — correção lint 3 fases (format + lint:fix + refactor hooks) |
+> | 0.22.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-009 → DECIDIDA (Opção A) — correção incremental em 3 fases |
+> | 0.21.0 | 2026-03-24 | validate-all  | Adição PENDENTE-009 — erros lint codegen (7 ocorrências) |
+> | 0.20.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-007 → IMPLEMENTADA — interceptor 401 global no apiRequest() + AMD-SEC-001-001 |
+> | 0.19.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-007 → DECIDIDA (Opção A) — centralizar redirect 401 no apiRequest() |
+> | 0.18.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-008 → IMPLEMENTADA — timeout opcional em RequestOptions + use-auth-me 3s + AMD-INT-005-001 |
+> | 0.17.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-008 → DECIDIDA (Opção A) — timeout opcional em RequestOptions |
+> | 0.16.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-005 → IMPLEMENTADA — 10 arquivos de teste (3 domain + 1 data + 6 component) + vitest config |
+> | 0.15.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-006 → IMPLEMENTADA — telemetry.ts + integração hooks (6 arquivos) |
+> | 0.14.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-005 → DECIDIDA (Opção C) — testes unitários domain/data + testes componente |
+> | 0.13.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-006 → DECIDIDA (Opção A) — telemetry.ts + integração hooks |
 > | 0.12.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → IMPLEMENTADA — FR-007, INT-006, DATA-003 v0.5.0 (submit_change_password) |
->
-| 0.11.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → DECIDIDA (Opção A) — Criar FR-007, INT-006, UIActionEnvelope |
-| 0.10.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-002 → IMPLEMENTADA — Opção B (FR-004 v0.7.0, UX-001 v0.5.0) |
-| 0.9.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-002 → DECIDIDA (Opção B) |
-| 0.8.0  | 2026-03-18 | usuário     | PENDENTE-004 implementada — fallback defensivo MFA em FR-001 v0.6.0 |
-| 0.7.0  | 2026-03-18 | usuário     | PENDENTE-004 decidida — Opção B (fallback defensivo MFA redirect) |
-| 0.6.0  | 2026-03-18 | usuário     | PENDENTE-001 implementada — cache auth_me via React Query (30s TTL) adicionado em FR-004/FR-005 |
+> | 0.11.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-003 → DECIDIDA (Opção A) — Criar FR-007, INT-006, UIActionEnvelope |
+> | 0.10.0 | 2026-03-18 | Marcos Sulivan | PENDENTE-002 → IMPLEMENTADA — Opção B (FR-004 v0.7.0, UX-001 v0.5.0) |
+> | 0.9.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-002 → DECIDIDA (Opção B) |
+> | 0.8.0  | 2026-03-18 | usuário     | PENDENTE-004 implementada — fallback defensivo MFA em FR-001 v0.6.0 |
+> | 0.7.0  | 2026-03-18 | usuário     | PENDENTE-004 decidida — Opção B (fallback defensivo MFA redirect) |
+> | 0.6.0  | 2026-03-18 | usuário     | PENDENTE-001 implementada — cache auth_me via React Query (30s TTL) adicionado em FR-004/FR-005 |
 > | 0.5.0  | 2026-03-18 | usuário     | PENDENTE-001 decidida — Opção C (React Query/SWR cache 30s) |
 > | 0.4.0  | 2026-03-17 | AGN-DEV-10  | Batch 4 — adiciona PENDENTE-003 (Alterar Senha) e PENDENTE-004 (MFA UX) |
 > | 0.3.0  | 2026-03-17 | AGN-DEV-10  | Re-enriquecimento — adiciona status de resolução, metadata, EX-* |
 > | 0.2.0  | 2026-03-16 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) |
+> | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 
 # PEN-001 — Questões Abertas do Backoffice Admin
 
@@ -237,11 +247,232 @@ Opcao B — manter MFA como roadmap futuro conforme mod.md, mas implementar fall
 
 ---
 
+## ~~PENDENTE-005~~ — ✅ IMPLEMENTADA: Testes unitários para os 16 artefatos gerados
+
+- **Questão:** Nenhum arquivo de teste foi gerado pelo AGN-COD-WEB. Os 16 artefatos (data, domain, ui) não possuem testes unitários correspondentes. Os cenários Gherkin em FR-001..FR-007 não possuem testes E2E/integração associados.
+- **Impacto:** Qualidade de código: regressões não detectadas, FR sem critérios de aceite automatizados, cobertura zero.
+- **Opções:**
+  - **Opção A:** Criar testes unitários para camada domain (greeting.ts, sidebar-config.ts, shortcut-config.ts) e data (api-client.ts, hooks)
+  - **Opção B:** Criar testes de componente (React Testing Library) para LoginPage, DashboardPage, AppShell, ChangePasswordModal, Toast
+  - **Opção C:** Ambos A + B
+- **Recomendação:** Opção C — testes de domain/data são rápidos e de alto valor; testes de componente cobrem os cenários Gherkin.
+- **status:** IMPLEMENTADA
+- **severidade:** ALTA
+- **domínio:** QA
+- **tipo:** LACUNA
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** C
+- **justificativa_decisao:** Ambas as camadas de teste são necessárias: testes unitários de domain/data garantem lógica pura e hooks isolados; testes de componente (React Testing Library) cobrem cenários Gherkin de FR-001..FR-007 e validam integração UI. Opção A sozinha não cobre interações de tela; Opção B sozinha não testa lógica isolada. Cobertura completa é requisito MUST (NFR-001).
+- **modulo:** MOD-001
+- **rastreia_para:** [FR-001, FR-002, FR-003, FR-004, FR-005, FR-007, NFR-001]
+- **tags:** [testes, cobertura, qualidade, codegen-val]
+- **sla_data:** —
+- **dependencias:** []
+
+### Resolução
+
+> **Decisão:** Opção C — Ambos A + B (testes unitários domain/data + testes de componente)
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Testes unitários de domain/data são rápidos e de alto valor para lógica pura (greeting, sidebar-config, shortcut-config, api-client, hooks). Testes de componente (React Testing Library) cobrem cenários Gherkin e validam integração UI (LoginPage, DashboardPage, AppShell, ChangePasswordModal, Toast). Cobertura completa é requisito MUST (NFR-001).
+> **Artefato de saída:** vitest.config.ts, test-setup.ts, __tests__/test-utils.tsx, greeting.test.ts, sidebar-config.test.ts, shortcut-config.test.ts, api-client.test.ts, Toast.test.tsx, ChangePasswordModal.test.tsx, ProfileWidget.test.tsx, LoginPage.test.tsx, DashboardPage.test.tsx, AppShell.test.tsx
+> **Implementado em:** 2026-03-24
+
+---
+
+## ~~PENDENTE-006~~ — ✅ IMPLEMENTADA: UIActionEnvelope / Telemetria (FR-006)
+
+- **Questão:** FR-006 requer integração com `@easycf/ui-telemetry` emitindo UIActionEnvelope para todas as ações não-client_only (submit_login, submit_logout, load_current_user, etc.). Nenhum dos 16 arquivos implementa telemetria. O catálogo DATA-003 define 12 UIActionEnvelopes que não possuem código correspondente.
+- **Impacto:** Observabilidade: sem correlação UI↔backend, sem rastreabilidade de ações, sem dados para auditoria/timeline. Afeta SEC-002 (matriz de autorização depende de UIActionEnvelopes), NFR-001 §3 (requisito MUST).
+- **Opções:**
+  - **Opção A:** Criar `data/telemetry.ts` com helpers de emissão e integrar em cada hook de mutação/query
+  - **Opção B:** Adiar para sprint dedicado de observabilidade
+- **Recomendação:** Opção A — é um requisito MUST (NFR-001 §3). O módulo de telemetria pode ser um wrapper simples que emite para console/endpoint.
+- **status:** IMPLEMENTADA
+- **severidade:** ALTA
+- **domínio:** ARC
+- **tipo:** LACUNA
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **justificativa_decisao:** Telemetria UIActionEnvelope é requisito MUST (NFR-001 §3). Criar data/telemetry.ts com helpers de emissão e integrar em cada hook de mutação/query garante observabilidade completa, correlação UI↔backend e rastreabilidade para auditoria (SEC-002). Adiar (Opção B) viola o requisito MUST e deixa o módulo sem observabilidade.
+- **modulo:** MOD-001
+- **rastreia_para:** [FR-006, BR-006, SEC-002, DATA-003, NFR-001]
+- **tags:** [telemetria, ui-action-envelope, observabilidade, codegen-val]
+- **sla_data:** —
+- **dependencias:** []
+
+### Resolução
+
+> **Decisão:** Opção A — Criar `data/telemetry.ts` com helpers de emissão e integrar em cada hook de mutação/query
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Telemetria UIActionEnvelope é requisito MUST (NFR-001 §3). Helpers centralizados em telemetry.ts garantem consistência na emissão dos 12 UIActionEnvelopes catalogados em DATA-003. Integração nos hooks existentes (useLogin, useLogout, useAuthMe, etc.) minimiza impacto. Adiar deixaria o módulo sem observabilidade, violando NFR-001 e comprometendo SEC-002.
+> **Artefato de saída:** telemetry.ts (novo), use-login.ts, use-logout.ts, use-forgot-password.ts, use-reset-password.ts, use-change-password.ts, use-auth-me.ts (integração UIActionEnvelope)
+> **Implementado em:** 2026-03-24
+
+---
+
+## ~~PENDENTE-007~~ — ✅ IMPLEMENTADA: Interceptor HTTP 401 não é global
+
+- **Questão:** SEC-001 §6 exige interceptor HTTP global que redireciona para /login em qualquer 401. Atualmente, o tratamento de 401 está disperso em componentes individuais (AppShell.tsx, DashboardPage.tsx). O api-client.ts lança ApiError(401) mas não redireciona.
+- **Impacto:** Se uma nova tela for adicionada sem tratar 401 explicitamente, o redirect não ocorrerá — sessão expirada sem feedback ao usuário.
+- **Opções:**
+  - **Opção A:** Centralizar redirect 401 no `apiRequest()` do api-client.ts
+  - **Opção B:** Criar React context/provider de auth que intercepta erros 401 globalmente
+- **Recomendação:** Opção A — mais simples, garante que qualquer chamada via apiRequest() trate 401.
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **domínio:** ARC
+- **tipo:** LACUNA
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **justificativa_decisao:** Centralizar redirect 401 no apiRequest() do api-client.ts é a abordagem mais simples e robusta. Qualquer chamada HTTP via apiRequest() terá tratamento automático de sessão expirada, sem depender de cada componente tratar 401 individualmente. Opção B (React context/provider) adiciona complexidade desnecessária — o interceptor na camada de rede é suficiente e cobre chamadas fora de componentes React.
+- **modulo:** MOD-001
+- **rastreia_para:** [SEC-001, FR-004, NFR-001]
+- **tags:** [interceptor, 401, segurança, codegen-val]
+- **sla_data:** —
+- **dependencias:** []
+
+### Resolução
+
+> **Decisão:** Opção A — Centralizar redirect 401 no `apiRequest()` do api-client.ts
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Interceptor na camada de rede (apiRequest) é mais simples e cobre 100% das chamadas HTTP. Componentes individuais não precisam tratar 401 — o redirect para /login ocorre automaticamente. Opção B (React context) adiciona complexidade sem benefício adicional.
+> **Artefato de saída:** AMD-SEC-001-001 (emenda), api-client.ts v0.3.0 (interceptor 401 global com redirect /login)
+> **Implementado em:** 2026-03-24
+
+---
+
+## ~~PENDENTE-008~~ — ✅ IMPLEMENTADA: Timeout de auth_me (5s vs 3s especificado)
+
+- **Questão:** O api-client.ts usa timeout fixo de 5000ms para todas as requisições. INT-005 especifica timeout de 3000ms para auth_me. O DashboardPage implementa skeleton timeout de 3s, mas a requisição fetch pode rodar por mais 2s em background.
+- **Impacto:** Desalinhamento entre timeout de rede e timeout de UI. Requisição pode completar após o estado de erro já ser exibido.
+- **Opções:**
+  - **Opção A:** Aceitar parâmetro `timeout` opcional em `RequestOptions`
+  - **Opção B:** Manter timeout fixo 5s e confiar no skeleton timeout de 3s como guard de UX
+- **Recomendação:** Opção A — permite configurar timeout por endpoint, alinhando fetch e UX.
+- **status:** IMPLEMENTADA
+- **severidade:** BAIXA
+- **domínio:** ARC
+- **tipo:** LACUNA
+- **origem:** AGN-COD-VAL (codegen)
+- **criado_em:** 2026-03-23
+- **criado_por:** AGN-COD-VAL
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **justificativa_decisao:** Parâmetro timeout opcional em RequestOptions permite alinhar timeout de rede com timeout de UX por endpoint. INT-005 especifica 3000ms para auth_me enquanto o default geral é 5000ms — sem configurabilidade, o skeleton timeout de 3s exibe estado de erro enquanto o fetch ainda roda por mais 2s em background, causando race condition visual.
+- **modulo:** MOD-001
+- **rastreia_para:** [INT-005, BR-009, NFR-001]
+- **tags:** [timeout, auth-me, api-client, codegen-val]
+- **sla_data:** —
+- **dependencias:** []
+
+### Resolução
+
+> **Decisão:** Opção A — Aceitar parâmetro `timeout` opcional em `RequestOptions`
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Configurar timeout por endpoint alinha fetch e UX. INT-005 especifica 3000ms para auth_me; sem isso, o skeleton timeout de 3s entra em estado de erro enquanto o fetch de 5s ainda roda em background.
+> **Artefato de saída:** AMD-INT-005-001 (emenda), api-client.ts v0.2.0 (timeout opcional), use-auth-me.ts v0.2.0 (timeout: 3000)
+> **Implementado em:** 2026-03-24
+
+---
+
+## ~~PENDENTE-009~~ — ✅ IMPLEMENTADA: Erros de lint do codegen (ESLint + Prettier)
+
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **domínio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **justificativa_decisao:** Correção incremental em 3 fases (format → lint:fix → refactor hooks), consistente com PEN-000 PENDENTE-018 já implementada. Fases 1 e 2 são automatizáveis, fase 3 segue padrão repetitivo.
+- **modulo:** MOD-001
+- **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002, PEN-000/PENDENTE-018
+- **tags:** lint, eslint, prettier, codegen
+- **sla_data:** 2026-04-23
+- **dependencias:** []
+
+### Questão
+
+Código gerado pelo codegen (PKG-COD-001) para o MOD-001 não passa em `pnpm lint` nem `pnpm format:check`. São 7 ocorrências de lint no módulo `web/backoffice-admin`. Isto viola DOC-PADRAO-002 §4.3 (regra MUST: todo código novo DEVE passar em `pnpm lint` sem erros antes de merge) e o gate `lint` do DOC-ARC-002. Parte do problema cross-module documentado em PEN-000 PENDENTE-018 (55 errors + 91 warnings em 19 módulos).
+
+### Impacto
+
+- Gate `lint` do CI (DOC-ARC-002) falharia se ativado — bloqueia pipeline para MOD-001
+- Erros incluem `react-hooks/set-state-in-effect` (cascading renders em produção)
+- Warnings `@typescript-eslint/no-unused-vars` poluem output de lint
+- Formatação Prettier divergente dificulta code review e diffs
+
+### Detalhamento dos erros (web/backoffice-admin: 7)
+
+| Regra | Qtd | Descrição |
+|---|---|---|
+| `react-hooks/set-state-in-effect` | — | setState síncrono dentro de useEffect — causa cascading renders |
+| `@typescript-eslint/no-unused-vars` | — | Imports/variáveis não utilizados |
+| Formatação Prettier | — | Divergência de formatação automática |
+
+> Nota: contagem exata por regra deve ser obtida via `pnpm lint --filter @easycf/web -- --no-warn-ignored 2>&1 | grep backoffice-admin`.
+
+### Opções
+
+**Opção A — Correção incremental em 3 fases (alinhada com PEN-000 PENDENTE-018):**
+
+1. `pnpm format` — corrige formatação Prettier automaticamente (0 risco)
+2. `pnpm lint:fix` + remoção manual de unused imports/vars — elimina warnings
+3. Refatoração dos errors React (extrair lógica de setState para callbacks/reducers)
+
+- Prós: Baixo risco, cada fase é independente e reversível, consistente com decisão já tomada em PEN-000 PENDENTE-018
+- Contras: Fase 3 requer entendimento da lógica de cada componente
+
+**Opção B — Relaxar regras temporariamente com `eslint-disable`:**
+
+Adicionar `eslint-disable` nos arquivos afetados e criar backlog de correção.
+
+- Prós: Desbloqueia CI imediatamente
+- Contras: Dívida técnica acumulada, esconde problemas reais (cascading renders). Opção C do PEN-000 PENDENTE-018 já foi descartada.
+
+### Recomendação
+
+Opção A — Correção incremental em 3 fases, consistente com a decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). As fases 1 e 2 são totalmente automatizáveis. A fase 3 segue padrão repetitivo (extrair setState para callback pattern).
+
+### Ação Sugerida
+
+| Skill / Comando | Propósito | Quando executar |
+|---|---|---|
+| `pnpm format` | Fase 1: auto-formatação Prettier | Imediatamente |
+| `pnpm lint:fix` | Fase 2: auto-fix warnings ESLint | Após fase 1 |
+| Refatoração manual | Fase 3: corrigir errors React hooks | Após fase 2 |
+
+### Resolução (preenchido quando DECIDIDA)
+
+> **Decisão:** Opção A — Correção incremental em 3 fases
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Abordagem de baixo risco, cada fase independente e reversível. Consistente com PEN-000 PENDENTE-018. Fases 1-2 automatizáveis, fase 3 padrão repetitivo (extrair setState para callbacks).
+> **Artefato de saída:** Verificação confirmou 0 errors ESLint + 0 divergências Prettier em backoffice-admin (já corrigidos via PEN-000/PENDENTE-018)
+> **Implementado em:** 2026-03-24
+
+---
+
 > **Nota de governanca:** Todos os PENDENTEs devem ser resolvidos antes de promover o modulo para `estado_item: READY`. Resolucao = tomar a decisao, incorporar no requisito afetado e atualizar status para RESOLVIDO.
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-001, FR-001, FR-004, FR-005, UX-001, BR-005, NFR-001, DOC-FND-000, ADR-003
+- **data_ultima_revisao:** 2026-03-24
+- **rastreia_para:** US-MOD-001, FR-001, FR-004, FR-005, UX-001, BR-005, NFR-001, DOC-FND-000, ADR-003, DOC-PADRAO-002
 - **referencias_exemplos:** EX-CI-007
-- **evidencias:** N/A
+- **evidencias:** PENDENTE-009 — IMPLEMENTADA (0 errors confirmados em 2026-03-24, já corrigidos via PEN-000/PENDENTE-018)

@@ -5,23 +5,25 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) — Batch 4: opções/recomendações detalhadas, PENDENTE-004..PENDENTE-006 adicionados |
->
-| 0.3.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida+implementada: Opção 1 (job independente, isolamento > DRY) |
-| 0.4.0  | 2026-03-19 | arquitetura | PENDENTE-004 decidida+implementada: Opção 3 (flag auto_deprecate_previous, default=false) |
-| 0.5.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida+implementada: Opção 2 (tabela auxiliar routine_integration_config, MOD-008 responsável pela migração) |
-| 0.6.0  | 2026-03-19 | arquitetura | PENDENTE-001 decidida+implementada: Opção 1 (JSONLogic como engine v2 para condition_expr) |
-| 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada (hard limit configurável por tenant), PENDENTE-006 implementada (flag dry_run no evaluate) |
+> | 1.1.0  | 2026-03-24 | validate-all  | Adição PENDENTE-011 — domain errors não estendem DomainError base class |
+> | 1.0.0  | 2026-03-24 | validate-all  | Adição PENDENTE-010 — erros lint codegen (12 ocorrências) |
+> | 0.9.0  | 2026-03-22 | arquitetura | PENDENTE-007→IMPLEMENTADA (Opção B: links como histórico), PENDENTE-008→IMPLEMENTADA (Opção A: bulk INSERT) |
 > | 0.8.0  | 2026-03-20 | AGN-DEV-10  | Re-enriquecimento PENDENTE Batch 4 — PEN-007/PENDENTE-008 adicionados (auto-deprecate links, bulk items) |
+> | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada (hard limit configurável por tenant), PENDENTE-006 implementada (flag dry_run no evaluate) |
+> | 0.6.0  | 2026-03-19 | arquitetura | PENDENTE-001 decidida+implementada: Opção 1 (JSONLogic como engine v2 para condition_expr) |
+> | 0.5.0  | 2026-03-19 | arquitetura | PENDENTE-003 decidida+implementada: Opção 2 (tabela auxiliar routine_integration_config, MOD-008 responsável pela migração) |
+> | 0.4.0  | 2026-03-19 | arquitetura | PENDENTE-004 decidida+implementada: Opção 3 (flag auto_deprecate_previous, default=false) |
+> | 0.3.0  | 2026-03-19 | arquitetura | PENDENTE-002 decidida+implementada: Opção 1 (job independente, isolamento > DRY) |
+> | 0.2.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento PENDENTE (enrich-agent) — Batch 4: opções/recomendações detalhadas, PENDENTE-004..PENDENTE-006 adicionados |
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
-| 0.9.0  | 2026-03-22 | arquitetura | PENDENTE-007→IMPLEMENTADA (Opção B: links como histórico), PENDENTE-008→IMPLEMENTADA (Opção A: bulk INSERT) |
 
 # PEN-007 — Questões Abertas da Parametrização Contextual e Rotinas
 
 - **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-007, BR-007, FR-007, INT-007, DATA-007, SEC-007, NFR-007, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005, ADR-006
+- **data_ultima_revisao:** 2026-03-24
+- **rastreia_para:** US-MOD-007, BR-007, FR-007, INT-007, DATA-007, SEC-007, NFR-007, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005, ADR-006, DOC-PADRAO-002
+- **evidencias:** PENDENTE-010 (12 ocorrências lint codegen — web/contextual-params: 12), PENDENTE-011 (domain errors não estendem DomainError — 6 errors em param-errors.ts)
 
 ---
 
@@ -327,3 +329,109 @@ Gate 3 (DOC-ARC-003B) falha para TODOS os manifests de MOD-007 e para os 3 manif
 > **Justificativa:** Gate 3 (DOC-ARC-003B) exige que todos os scopes referenciados em Screen Manifests existam no catálogo canônico.
 > **Artefato de saida:** DOC-FND-000 v1.8.0 — 7 scopes adicionados: param:framer:read/write/delete, param:routine:read/write/publish, param:engine:evaluate
 > **Implementado em:** DOC-FND-000 v1.8.0
+
+---
+
+## PENDENTE-010 — Erros de lint do codegen (ESLint + Prettier)
+
+- **status:** ABERTA
+- **severidade:** MÉDIA
+- **domínio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **modulo:** MOD-007
+- **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002, PEN-000/PENDENTE-018
+- **tags:** lint, eslint, prettier, codegen
+- **sla_data:** 2026-04-23
+- **dependencias:** []
+
+### Questão
+
+Código gerado pelo codegen não passa em `pnpm lint`. 12 ocorrências de lint neste módulo (web/contextual-params: 12). Parte do problema cross-module documentado em PEN-000 PENDENTE-018 (55 errors + 91 warnings em 19 módulos). Viola DOC-PADRAO-002 §4.3.
+
+### Impacto
+
+Gate `lint` do DOC-ARC-002 falharia se ativado. Erros incluem `react-hooks/set-state-in-effect` (cascading renders), `no-unused-vars` e formatação Prettier divergente.
+
+### Opções
+
+**Opção A — Correção incremental em 3 fases (alinhada com PEN-000 PENDENTE-018):**
+
+1. `pnpm format` — corrige formatação Prettier automaticamente (0 risco)
+2. `pnpm lint:fix` + remoção manual de unused imports/vars — elimina warnings
+3. Refatoração dos errors React (extrair lógica de setState para callbacks/reducers)
+
+- Prós: Baixo risco, cada fase é independente e reversível, consistente com decisão já tomada em PEN-000 PENDENTE-018
+- Contras: Fase 3 requer entendimento da lógica de cada componente
+
+**Opção B — Relaxar regras temporariamente com `eslint-disable`:**
+
+Adicionar `eslint-disable` nos arquivos afetados e criar backlog de correção.
+
+- Prós: Desbloqueia CI imediatamente
+- Contras: Dívida técnica acumulada, esconde problemas reais (cascading renders). Opção C do PEN-000 PENDENTE-018 já foi descartada.
+
+### Recomendação
+
+Opção A — Correção incremental em 3 fases, consistente com a decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). As fases 1 e 2 são totalmente automatizáveis. A fase 3 segue padrão repetitivo (extrair setState para callback pattern).
+
+### Resolução (preenchido quando DECIDIDA)
+
+> **Decisão:** —
+> **Decidido por:** — em —
+> **Justificativa:** —
+> **Artefato de saída:** —
+> **Implementado em:** —
+
+---
+
+## PENDENTE-011 — Domain errors não estendem DomainError base class
+
+- **status:** ABERTA
+- **severidade:** MEDIA
+- **dominio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **modulo:** MOD-007
+- **rastreia_para:** DOC-GNP-00, DOC-ARC-001, PEN-000
+- **tags:** domain-error, base-class, architecture, cross-module
+- **sla_data:** 2026-04-23
+- **dependencias:** []
+
+### Questão
+
+Os 6 domain errors em `apps/api/src/modules/contextual-params/domain/errors/param-errors.ts` estendem `Error` diretamente em vez de `DomainError` (classe abstrata em `foundation/domain/errors/domain-errors.ts`). A `DomainError` base class define `type: string` (RFC 9457 URI) e `statusHint: number`, campos que o error-handler precisa mapear. O MOD-007 usa um error-handler customizado com duck-typing (`code`/`statusCode`), que funciona mas diverge do padrão canônico. Padrão idêntico encontrado em MOD-006 (case-execution).
+
+### Impacto
+
+Funcional: nenhum (error-handler de MOD-007 faz duck-typing com `code` + `statusCode`). Arquitetural: diverge do padrão canônico usado por org-units, movement-approval e mcp. Se um middleware centralizado substituir os error-handlers por módulo, os errors de MOD-007 e MOD-006 não seriam capturados pela guarda `instanceof DomainError`.
+
+### Opções
+
+**Opção A — Refatorar para estender DomainError:**
+Alterar os 6 errors para estender `DomainError` (ou `DomainValidationError`), adicionando campos `type` e `statusHint`. Remover `code` e `statusCode` customizados. Atualizar error-handler para usar `instanceof DomainError`.
+
+- Pros: Alinhamento com padrão canônico; compatível com middleware centralizado futuro
+- Contras: Refatoração em 2 módulos (MOD-006 e MOD-007); error-handler precisa ser atualizado
+
+**Opção B — Manter duck-typing (aceitar divergência):**
+Documentar a divergência como aceitável. Error-handler funciona via duck-typing.
+
+- Pros: Zero esforço; código funcional
+- Contras: Divergência permanece; risco em middleware centralizado
+
+### Recomendação
+
+Opção A — refatorar para alinhar com padrão canônico. Escopo pequeno (6 errors + error-handler). Deve ser feito junto com MOD-006 para consistência.
+
+### Resolução (preenchido quando DECIDIDA)
+
+> **Decisão:** —
+> **Decidido por:** — em —
+> **Justificativa:** —
+> **Artefato de saída:** —
+> **Implementado em:** —

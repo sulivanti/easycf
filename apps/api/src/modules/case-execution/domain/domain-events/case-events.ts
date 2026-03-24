@@ -8,23 +8,23 @@
 
 export const CASE_EXECUTION_EVENT_TYPES = {
   // Case lifecycle
-  CASE_OPENED: "case_execution.case.opened",
-  CASE_STAGE_TRANSITIONED: "case_execution.case.stage_transitioned",
-  CASE_COMPLETED: "case_execution.case.completed",
-  CASE_CANCELLED: "case_execution.case.cancelled",
-  CASE_ON_HOLD: "case_execution.case.on_hold",
-  CASE_RESUMED: "case_execution.case.resumed",
+  CASE_OPENED: 'case_execution.case.opened',
+  CASE_STAGE_TRANSITIONED: 'case_execution.case.stage_transitioned',
+  CASE_COMPLETED: 'case_execution.case.completed',
+  CASE_CANCELLED: 'case_execution.case.cancelled',
+  CASE_ON_HOLD: 'case_execution.case.on_hold',
+  CASE_RESUMED: 'case_execution.case.resumed',
 
   // Gates
-  GATE_RESOLVED: "case_execution.gate.resolved",
-  GATE_WAIVED: "case_execution.gate.waived",
+  GATE_RESOLVED: 'case_execution.gate.resolved',
+  GATE_WAIVED: 'case_execution.gate.waived',
 
   // Assignments
-  ASSIGNMENT_CREATED: "case_execution.assignment.created",
-  ASSIGNMENT_REPLACED: "case_execution.assignment.replaced",
+  ASSIGNMENT_CREATED: 'case_execution.assignment.created',
+  ASSIGNMENT_REPLACED: 'case_execution.assignment.replaced',
 
   // Events
-  EVENT_RECORDED: "case_execution.event.recorded",
+  EVENT_RECORDED: 'case_execution.event.recorded',
 } as const;
 
 export type CaseExecutionEventType =
@@ -43,11 +43,10 @@ export interface CaseExecutionEventPayload {
 }
 
 export function createCaseExecutionEvent(
-  params: Omit<CaseExecutionEventPayload, "entityType" | "sensitivityLevel"> & {
+  params: Omit<CaseExecutionEventPayload, 'entityType' | 'sensitivityLevel'> & {
     entityType?: string;
   },
 ): CaseExecutionEventPayload {
-  const entityType =
-    params.entityType ?? params.eventType.split(".").slice(0, 2).join(".");
+  const entityType = params.entityType ?? params.eventType.split('.').slice(0, 2).join('.');
   return { ...params, entityType, sensitivityLevel: 1 };
 }

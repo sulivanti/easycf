@@ -13,13 +13,24 @@
         "lint:docs": "node .agents/scripts/lint-docs.js",
         "lint:markdown": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\" \"#.gemini/**\" \"#tmp/**\"",
         "validate:manifests": "node .agents/scripts/validate-manifests.js",
-        "qa:all": "npm run lint:docs && npm run lint:markdown && npm run validate:manifests"
+        "qa:all": "npm run lint:docs && npm run lint:markdown && npm run validate:manifests",
+        "lint": "eslint apps/",
+        "lint:fix": "eslint apps/ --fix",
+        "format": "prettier --write \"apps/**/*.{ts,tsx,json}\"",
+        "format:check": "prettier --check \"apps/**/*.{ts,tsx,json}\""
     },
     "devDependencies": {
+        "@eslint/js": "^9.39.4",
         "ajv": "^8.18.0",
+        "eslint": "^9.0.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^7.0.1",
         "js-yaml": "^4.1.1",
         "markdownlint-cli2": "^0.21.0",
-        "typescript": "^5.4.0"
+        "prettier": "^3.8.1",
+        "typescript": "^5.4.0",
+        "typescript-eslint": "^8.57.2"
     },
     "packageManager": "pnpm@9.0.0",
     "engines": {

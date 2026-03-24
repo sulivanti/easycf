@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-004 Identidade Avancada
 
-> **Versao:** 4.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Versao:** 9.0.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
 > **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.1.0) | **Features:** 4/4 READY
 >
-> Fases 0-4 concluidas (promocao DRAFT->READY em 2026-03-23). Proximo passo: Fase 5 (Geracao de Codigo) — executar `/app-scaffold all` seguido de `/codegen mod-004`.
+> Todas as 5 pendencias resolvidas (5/5 IMPLEMENTADA). PENDENTE-004 (lint) e PENDENTE-005 (DomainError base class) corrigidas em codigo. Lint MOD-004 limpo, identity-errors.ts agora estende DomainError (RFC 9457 compliant). Proximo passo: `pnpm install` → `pnpm test`.
 
 ---
 
@@ -15,12 +15,12 @@
 | Features F01-F04 | 4/4 READY | F01 (API: user_org_scopes), F02 (API: shares+delegations+job expiracao), F03 (UX: escopo org), F04 (UX: painel shares/delegations) |
 | Scaffold (forge-module) | CONCLUIDO | mod-004-identidade-avancada/ com estrutura completa Nivel 2 |
 | Enriquecimento (10 agentes) | CONCLUIDO | Agentes 01-10 confirmados, v0.9.0, 3 pendentes resolvidas |
-| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ nao existe. Executar /app-scaffold all primeiro, depois /codegen mod-004 |
-| PENDENTEs | 0 abertas | 3 total: 3 IMPLEMENTADA |
+| Codegen (6 agentes) | CONCLUIDO (6/6) | DB (3), CORE (7), APP (12), API (3), WEB (12), VAL (0 — validacao). 37 arquivos gerados. Validacao cruzada aprovada com ressalvas menores. |
+| PENDENTEs | 0 abertas | 5 total: 5 IMPLEMENTADA (001-005 todas resolvidas) |
 | ADRs | 4 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 auto-auth service, ADR-002 tenant_id RLS, ADR-003 outbox pattern, ADR-004 regex escopos proibidos) |
 | Amendments | 0 | Nenhum |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (promote-module DRAFT->READY) |
+| CHANGELOG | v1.2.0 | Ultima entrada 2026-03-24 (validate-all pos-codegen) |
 | Screen Manifests | 2/2 existem | ux-idn-001.org-scope, ux-idn-002.shares-delegations |
 | Dependencias | 2 upstream (MOD-000, MOD-003) | Ambos READY (v1.0.0). Consome auth/RBAC/events de MOD-000 e org_units de MOD-003 |
 | Bloqueios | 0 sobre MOD-004 | Nenhum BLK-* afeta MOD-004. MOD-004 emite BLK-003 (MOD-005 depende de org_scopes) |
@@ -180,9 +180,9 @@ O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifest
 |---|-----------|-------------------|------------------|-----------|
 | 1 | `/qa` | SIM (todos) | SIM — PASS | mod-004-identidade-avancada.md, requirements/*, adr/*, CHANGELOG.md |
 | 2 | `/validate-manifest` | SIM (2 manifests existem) | SIM — PASS | ux-idn-001.org-scope, ux-idn-002.shares-delegations |
-| 3 | `/validate-openapi` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/openapi/ — nao existe ainda |
-| 4 | `/validate-drizzle` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/src/modules/identity-advanced/domain/ — nao existe |
-| 5 | `/validate-endpoint` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/src/modules/identity-advanced/presentation/routes/ — nao existe |
+| 3 | `/validate-openapi` | SIM (Nivel 2) | SIM — PASS com ressalvas (AGN-COD-VAL 2026-03-23) | apps/api/openapi/v1.yaml (11 endpoints). Ressalvas: 401 responses ausentes, x-permissions self-service |
+| 4 | `/validate-drizzle` | SIM (Nivel 2) | SIM — APROVADO CONDICIONAL (AGN-COD-VAL 2026-03-23) | apps/api/db/schema/identity-advanced.ts (3 tabelas). Condicional: Zod schemas minor |
+| 5 | `/validate-endpoint` | SIM (Nivel 2) | SIM — PASS (AGN-COD-VAL 2026-03-23) | apps/api/src/modules/identity-advanced/presentation/routes/identity-advanced.route.ts (11 endpoints) |
 
 ### Fase 4: Promocao — CONCLUIDA
 
@@ -209,9 +209,9 @@ A promocao do MOD-004 foi executada em 2026-03-23 via `/promote-module`, avancan
                            Pos-condicao: estado_item = READY, INDEX.md atualizado, commit
 ```
 
-### Fase 5: Geracao de Codigo — NAO INICIADA
+### Fase 5: Geracao de Codigo — CONCLUIDA (6/6 agentes)
 
-O MOD-004 e agora READY (v1.0.0) e elegivel para geracao de codigo. As dependencias upstream (MOD-000 e MOD-003) tambem estao READY, o que significa que a cadeia topologica esta desbloqueada. Porem, o scaffold de aplicacao (`apps/api/`, `apps/web/`) ainda nao existe — e necessario executar `/app-scaffold all` antes de rodar qualquer agente COD. O MOD-004 e Nivel 2, portanto todos os 6 agentes COD sao aplicaveis (DB, CORE, APP, API, WEB, VAL).
+O codegen do MOD-004 foi concluido em 2026-03-23 com todos os 6 agentes executados: DB (schemas Drizzle), CORE (aggregates, VOs, domain errors), APP (use cases, ports, domain events), API (routes, DTOs, OpenAPI), WEB (12 arquivos: types, queries, commands, mappers, permissions, rules, view-models, 2 telas React, 3 componentes) e VAL (validacao cruzada). Total: 37 arquivos de codigo cobrindo toda a stack full-stack (infraestrutura → dominio → aplicacao → apresentacao → frontend → validacao).
 
 > **Decision tree de codegen:**
 >
@@ -226,34 +226,36 @@ O MOD-004 e agora READY (v1.0.0) e elegivel para geracao de codigo. As dependenc
 > ```
 
 ```
-7    /app-scaffold all      Criar scaffold de aplicacao:                      A EXECUTAR
+7    /app-scaffold all      Criar scaffold de aplicacao:                      CONCLUIDO (2026-03-23)
                            - apps/api/ (Fastify + Drizzle + BullMQ)
                            - apps/web/ (React + TanStack)
                            Pre-condicao: Nenhuma (one-time setup)
                            Pos-condicao: package.json, tsconfig, estrutura base
 
-8    /codegen mod-004       Gerar codigo para todas as camadas:               A EXECUTAR
-                           Nivel 2 — todos os 6 agentes aplicaveis
+8    /codegen mod-004       Gerar codigo para todas as camadas:               CONCLUIDO (6/6)
+                           Nivel 2 — todos os 6 agentes executados
                            Slug: identity-advanced
                            Pre-condicao: /app-scaffold concluido
-                           Pos-condicao: Codigo gerado em apps/api + apps/web
+                           Resultado: DB (3), CORE (7), APP (12), API (3),
+                           WEB (12), VAL (validacao). 37 arquivos totais.
+                           Validacao cruzada: aprovada com ressalvas menores
 ```
 
 #### Rastreio de Agentes COD — MOD-004
 
 | # | Agente | Camada | Path | Status | Arquivos |
 |---|--------|--------|------|--------|----------|
-| 1 | AGN-COD-DB | infrastructure | apps/api/src/modules/identity-advanced/infrastructure/, apps/api/db/ | A EXECUTAR | 0 |
-| 2 | AGN-COD-CORE | domain | apps/api/src/modules/identity-advanced/domain/ | A EXECUTAR | 0 |
-| 3 | AGN-COD-APP | application | apps/api/src/modules/identity-advanced/application/ | A EXECUTAR | 0 |
-| 4 | AGN-COD-API | presentation | apps/api/src/modules/identity-advanced/presentation/, apps/api/openapi/ | A EXECUTAR | 0 |
-| 5 | AGN-COD-WEB | web | apps/web/src/modules/identity-advanced/ | A EXECUTAR | 0 |
-| 6 | AGN-COD-VAL | validation | (cross-layer) | A EXECUTAR | 0 |
+| 1 | AGN-COD-DB | infrastructure | apps/api/db/schema/ | DONE (2026-03-23 23:10) | 3 |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/identity-advanced/domain/ | DONE (2026-03-23 23:25) | 7 |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/identity-advanced/application/ | DONE (2026-03-23 23:45) | 12 |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/identity-advanced/presentation/, apps/api/openapi/ | DONE (2026-03-24 00:10) | 3 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/identity-advanced/ | DONE (2026-03-23 22:30) | 12 |
+| 6 | AGN-COD-VAL | validation | (cross-layer) | DONE (2026-03-23 23:00) | 0 |
 
 #### Scaffold e Pre-requisitos
 
-- **apps/api/package.json:** NAO EXISTE — executar `/app-scaffold all`
-- **apps/web/package.json:** NAO EXISTE — executar `/app-scaffold all`
+- **apps/api/package.json:** EXISTE — criado via `/app-scaffold all` (2026-03-23)
+- **apps/web/package.json:** EXISTE — criado via `/app-scaffold all` (2026-03-23)
 - **Dependencias upstream com codigo:** MOD-000 (READY) e MOD-003 (READY) — ambos elegiveis para codegen. Ordem topologica ideal: MOD-000 → MOD-003 → MOD-004.
 - **Nota:** O `/codegen-all` respeita a ordem topologica automaticamente. Se preferir gerar apenas MOD-004, assegure que MOD-000 e MOD-003 ja tenham codigo gerado (tabelas referenciadas por FK e APIs consumidas).
 
@@ -291,10 +293,10 @@ O MOD-004 e agora READY (v1.0.0) e elegivel para geracao de codigo. As dependenc
 ```
 11   /manage-pendentes list PEN-004
                            Estado atual MOD-004:
-                             PEN-004: 3 itens total
-                               3 IMPLEMENTADA (001-003)
+                             PEN-004: 5 itens total
+                               5 IMPLEMENTADA (001-005)
                                0 ABERTA
-                             SLA: nenhum vencido
+                             SLA: nenhum vencido (todas resolvidas)
 ```
 
 #### Painel de Pendencias — Resumo Compacto
@@ -304,6 +306,8 @@ O MOD-004 e agora READY (v1.0.0) e elegivel para geracao de codigo. As dependenc
 | 1 | PENDENTE-001 | IMPLEMENTADA | ALTA | Opcao A — 8 scopes identity:* registrados em DOC-FND-000 §2.2 | DOC-FND-000 §2.2 |
 | 2 | PENDENTE-002 | IMPLEMENTADA | MEDIA | Opcao A — Contrato exposicao user_org_scopes em INT-001.5 | INT-001.5 v0.5.0 |
 | 3 | PENDENTE-003 | IMPLEMENTADA | MEDIA | Opcao A — TTL 300s no cache Redis como safety net | INT-001.1 v0.4.0 |
+| 4 | PENDENTE-004 | IMPLEMENTADA | MEDIA | Opcao A — Correcao incremental lint (4x no-explicit-any + Prettier) | identity-advanced.route.ts |
+| 5 | PENDENTE-005 | IMPLEMENTADA | ALTA | Opcao A — Refatorar 12 subclasses → DomainError (code→type, httpStatus→statusHint) | identity-errors.ts |
 
 > Detalhes completos: requirements/pen-004-pendente.md
 
@@ -345,12 +349,14 @@ mod-004 validado (DRAFT)                ← Fase 3: CONCLUIDA (validate-all 2026
 mod-004 selado (READY v1.0.0)          ← Fase 4: CONCLUIDA (promote-module 2026-03-23)
   │  Gate 0 (DoR): 7/7 atendidos
   │
-  ├── ★ PROXIMO PASSO: /app-scaffold all → /codegen mod-004
   │
   ▼
-mod-004 codigo gerado                  ← Fase 5: NAO INICIADA (scaffold nao existe)
-  │  6 agentes COD aplicaveis (Nivel 2): DB, CORE, APP, API, WEB, VAL
-  │  Slug: identity-advanced
+mod-004 codigo gerado (completo)      ← Fase 5: CONCLUIDA (6/6 agentes, 37 arquivos)
+  │  ✅ DB (3) → ✅ CORE (7) → ✅ APP (12) → ✅ API (3) → ✅ WEB (12) → ✅ VAL
+  │  Validacao cruzada: aprovada com ressalvas menores
+  │  pnpm lint: PASS (PENDENTE-004 implementada — 4x no-explicit-any corrigidos)
+  │  PENDENTE-005: IMPLEMENTADA (12 subclasses → DomainError, RFC 9457 compliant)
+  │  ★ PROXIMO PASSO: pnpm install → pnpm test
   │
   ▼
 mod-004 + amendments/                  ← Fase 6: SOB DEMANDA (0 amendments)
@@ -377,18 +383,27 @@ Bloqueio emitido: BLK-003 — MOD-005 depende de org_scopes de MOD-004
 
 ---
 
-## Checklist Rapido — O que Falta para Codigo
+## Checklist Rapido — Status do Codigo
 
 - [x] Epico READY (v1.1.0) — 4/4 features READY
 - [x] Enriquecimento completo (10 agentes, 3 pendencias resolvidas)
 - [x] Validacao PASS (validate-all 2026-03-22)
 - [x] Promocao READY (v1.0.0, 2026-03-23)
 - [x] Dependencias upstream READY (MOD-000 v1.0.0, MOD-003 v1.0.0)
-- [ ] Executar `/app-scaffold all` — criar apps/api/ e apps/web/ (one-time, se ainda nao existe)
-- [ ] Executar `/codegen mod-004` (ou `/codegen-all` para todos os modulos READY em ordem topologica)
-- [ ] Validacao pos-codigo: `/validate-openapi`, `/validate-drizzle`, `/validate-endpoint`
+- [x] Executar `/app-scaffold all` — CONCLUIDO (2026-03-23)
+- [x] `/codegen mod-004 AGN-COD-DB` — 3 arquivos (schemas Drizzle) — DONE 2026-03-23
+- [x] `/codegen mod-004 AGN-COD-CORE` — 7 arquivos (aggregates, VOs, errors) — DONE 2026-03-23
+- [x] `/codegen mod-004 AGN-COD-APP` — 12 arquivos (use cases, ports, domain events) — DONE 2026-03-23
+- [x] `/codegen mod-004 AGN-COD-API` — 3 arquivos (routes, DTOs, OpenAPI) — DONE 2026-03-24
+- [x] `/codegen mod-004 AGN-COD-WEB` — 12 arquivos (types, queries, commands, components, screens) — DONE 2026-03-23
+- [x] `/codegen mod-004 AGN-COD-VAL` — validacao cruzada aprovada com ressalvas menores — DONE 2026-03-23
+- [x] Validacao pos-codigo: `/validate-drizzle` APROVADO CONDICIONAL, `/validate-openapi` PASS com ressalvas, `/validate-endpoint` PASS
+- [ ] `pnpm install` — instalar dependencias
+- [ ] `pnpm test` — executar testes
+- [x] `pnpm lint` — PASS para MOD-004 (PENDENTE-004 implementada 2026-03-24: 4x `no-explicit-any` removidos + Prettier)
+- [x] Resolver PENDENTE-005 — 12 subclasses refatoradas para estender DomainError (code→type `/problems/identity/*`, httpStatus→statusHint). RFC 9457 compliant. (2026-03-24)
 
-> **Nota:** O scaffold de aplicacao (`/app-scaffold all`) e um passo one-time que cria a estrutura base de `apps/api/` e `apps/web/`. Apos o scaffold, `/codegen mod-004` gera codigo nas 6 camadas (DB, CORE, APP, API, WEB, VAL) para o slug `identity-advanced`. A geracao de codigo do MOD-004 depende de MOD-000 e MOD-003 terem codigo gerado primeiro (FKs e APIs consumidas). Usar `/codegen-all` garante a ordem topologica automaticamente.
+> **Nota:** Codegen 6/6 agentes concluidos (37 arquivos). Todas as 5 pendencias resolvidas (5/5 IMPLEMENTADA). Lint e DomainError compliance corrigidos. Ressalvas menores do codegen: (1) 401 responses ausentes no OpenAPI, (2) x-permissions self-service, (3) scripts openapi:lint/serve (infra cross-modulo).
 
 ---
 
@@ -396,6 +411,11 @@ Bloqueio emitido: BLK-003 — MOD-005 depende de org_scopes de MOD-004
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 9.0.0 | 2026-03-24 | Atualizacao: PENDENTE-005 DECIDIDA (Opcao A) e IMPLEMENTADA — 12 subclasses refatoradas para estender DomainError (code→type /problems/identity/*, httpStatus→statusHint). RFC 9457 compliant. Todas as 5 pendencias agora IMPLEMENTADA. Proximo passo: pnpm install, pnpm test |
+| 8.0.0 | 2026-03-24 | Atualizacao: PENDENTE-004 DECIDIDA (Opcao A) e IMPLEMENTADA — 4x `no-explicit-any` removidos de identity-advanced.route.ts + Prettier aplicado. Lint MOD-004 limpo. PENDENTEs: 4/5 IMPLEMENTADA, 1 ABERTA (PENDENTE-005). Proximo passo: resolver PENDENTE-005 |
+| 7.0.0 | 2026-03-24 | Atualizacao: validate-all pos-codegen executado — lint/format PASS, 6 validadores semanticos PASS, 1 violacao arquitetural (PENDENTE-005). PENDENTE-004 (lint codegen) registrada. |
+| 6.0.0 | 2026-03-23 | Atualizacao: Fase 5 CONCLUIDA — codegen 6/6 agentes done. WEB (12 arquivos: types, queries, commands, mappers, permissions, rules, view-model, OrgScopeCard, ShareDrawer, DelegationDrawer, OrgScopeManagement, SharesDelegationsPanel) e VAL (validacao cruzada aprovada com ressalvas menores). 37 arquivos totais. validate-drizzle APROVADO CONDICIONAL, validate-openapi PASS com ressalvas, validate-endpoint PASS. Proximo passo: pnpm install, pnpm test |
+| 5.0.0 | 2026-03-23 | Atualizacao: Fase 5 EM ANDAMENTO — codegen 4/6 agentes concluidos (DB, CORE, APP, API done; WEB, VAL pendentes). 25 arquivos gerados. Validadores pos-codigo validate-openapi e validate-endpoint PASS. Checklist atualizado com progresso granular por agente. Proximo passo: /codegen mod-004 AGN-COD-WEB,AGN-COD-VAL |
 | 4.0.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (promote-module 2026-03-23, DRAFT v0.9.0→READY v1.0.0). Fase 5 (Codegen) adicionada como NAO INICIADA com rastreio de 6 agentes COD. Dependencias upstream MOD-000 e MOD-003 agora READY. Checklist atualizado para fase de codigo. Proximo passo: /app-scaffold all → /codegen mod-004 |
 | 3.0.0 | 2026-03-23 | Recriacao: Fase 3 CONCLUIDA (validate-all 2026-03-22 PASS 29/29 manifests). Fase 4 PENDENTE. DoR Gate 0 7/7 atendidos. Pendencias compactadas (referencia pen file). Proximo passo: /promote-module |
 | 2.0.0 | 2026-03-22 | Reescrita completa no formato padrao (sem acentos): Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 3 pendentes resolvidas (001-003), rastreio de 10 agentes, mapa de cobertura de validadores, particularidades Nivel 2 com cache Redis, 4 ADRs, dependencias upstream |

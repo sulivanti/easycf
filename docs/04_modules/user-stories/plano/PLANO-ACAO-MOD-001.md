@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-001 Backoffice Admin
 
-> **Versao:** 2.1.0 | **Data:** 2026-03-23 | **Owner:** arquitetura
+> **Versao:** 3.5.0 | **Data:** 2026-03-24 | **Owner:** arquitetura
 > **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v0.5.0) | **Features:** 3/3 READY
 >
-> Fases 0-4 concluidas. Modulo promovido a READY em 2026-03-23 (v1.0.0). Proximo passo: executar `/app-scaffold all` e depois `/codegen docs/04_modules/mod-001-backoffice-admin/` (UX-First — apenas AGN-COD-WEB + AGN-COD-VAL).
+> Fases 0-6 concluidas. Todas as 9/9 pendencias resolvidas (IMPLEMENTADA). PENDENTE-009 implementada (Opcao A — lint errors ja corrigidos via PEN-000/PENDENTE-018, confirmado 0 errors). 2 amendments criados (AMD-INT-005-001, AMD-SEC-001-001). Proximo passo: `pnpm install` + `pnpm test` + `pnpm lint`.
 
 ---
 
@@ -15,10 +15,10 @@
 | Features F01-F03 | 3/3 READY | F01 (Shell Auth + Layout), F02 (Telemetria UI), F03 (Dashboard Executivo) |
 | Scaffold (forge-module) | CONCLUIDO | mod-001-backoffice-admin/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-10 confirmados, v0.10.0, 4 pendentes resolvidas |
-| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ inexistente. UX-First: apenas AGN-COD-WEB e AGN-COD-VAL aplicaveis (Nivel 1 sem API propria) |
-| PENDENTEs | 0 abertas | 4 total: 4 IMPLEMENTADA |
+| Codegen (6 agentes) | CONCLUIDO (2026-03-23) | Scaffold apps/ ok. WEB done (16 arquivos), DB/CORE/APP/API skipped (Nivel 1), VAL done (1E/3W/1N) |
+| PENDENTEs | 0 abertas | 9 total: 9 IMPLEMENTADA (001-009) |
 | ADRs | 3 aceitas | Nivel 1 requer minimo 1 — atendido (ADR-001 Clean Leve, ADR-002 Telemetria, ADR-003 Zero-Blank-Screen) |
-| Amendments | 0 | Nenhum |
+| Amendments | 2 | AMD-INT-005-001 (timeout configuravel — PENDENTE-008), AMD-SEC-001-001 (interceptor 401 global — PENDENTE-007) |
 | Requirements | 12/12 existem | BR(1), FR(2), DATA(2), INT(2), SEC(2), UX(1), NFR(1), PEN(1) |
 | CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (Etapa 5 pipeline — READY) |
 | Screen Manifests | 3/3 existem | ux-auth-001, ux-shell-001, ux-dash-001 |
@@ -105,7 +105,7 @@ O enriquecimento do MOD-001 foi completo — todos os agentes rodaram entre 2026
 | 9 | AGN-DEV-09 | ADR | ADR-001, ADR-002, ADR-003 | CONCLUIDO | 3 ADRs criadas e aceitas |
 | 10 | AGN-DEV-10 | PEN | pen-001-pendente.md | CONCLUIDO | v0.12.0 — 4 pendentes criadas e resolvidas |
 
-#### Pendentes Resolvidas — Resumo Compacto
+#### Pendentes Resolvidas (Enriquecimento) — Resumo Compacto
 
 | # | ID | Status | Sev. | Decisao (resumo) | Artefato |
 |---|-----|--------|------|-------------------|----------|
@@ -178,9 +178,9 @@ Modulo promovido a READY em 2026-03-23 (v1.0.0). Todos os criterios DoR atendido
                              CHANGELOG: Etapa 5 — Selo READY
 ```
 
-### Fase 5: Geracao de Codigo — NAO INICIADA
+### Fase 5: Geracao de Codigo — CONCLUIDA
 
-MOD-001 esta READY (pre-requisito para codegen atendido). Como modulo UX-First (Nivel 1 sem backend proprio), apenas os agentes AGN-COD-WEB e AGN-COD-VAL sao aplicaveis — os agentes de backend (DB, CORE, APP, API) sao N/A porque o modulo nao possui module_paths de API.
+Codegen completo em 2026-03-23. O scaffold foi criado (`/app-scaffold all`), seguido pela execucao dos 6 agentes COD. Como modulo UX-First (Nivel 1 sem backend proprio), os agentes de backend (DB, CORE, APP, API) foram skippados automaticamente. AGN-COD-WEB gerou 16 arquivos e AGN-COD-VAL validou o output com 1 erro, 3 warnings e 1 note — criando 4 novas pendencias (005-008). Pos-codegen: todas as 4 pendencias resolvidas em 2026-03-24. PENDENTE-006 (telemetria) — telemetry.ts + 6 hooks integrados. PENDENTE-005 (testes) — 10 arquivos de teste com vitest + RTL. PENDENTE-008 (timeout) — AMD-INT-005-001 + timeout opcional. PENDENTE-007 (interceptor 401) — AMD-SEC-001-001 + redirect global no apiRequest().
 
 > **Decision tree de codegen:**
 >
@@ -190,55 +190,138 @@ MOD-001 esta READY (pre-requisito para codegen atendido). Como modulo UX-First (
 > │   └── NAO → /app-scaffold all (one-time, cria apps/api e apps/web)
 > └── SIM → Qual escopo?
 >     ├── Todos modulos READY (ordem topologica)  → /codegen-all (--dry-run para preview)
->     ├── Todos agentes de 1 modulo               → /codegen mod-001
->     └── 1 agente especifico                     → /codegen-agent mod-001 AGN-COD-WEB
+>     ├── Todos agentes de 1 modulo               → /codegen mod-NNN
+>     └── 1 agente especifico                     → /codegen-agent mod-NNN AGN-COD-XX
 > ```
 
 ```
-7    /app-scaffold all      Bootstrap dos workspaces monorepo:                A EXECUTAR (one-time)
-                           Cria apps/api/ e apps/web/ com estrutura base
-                           Pre-condicao: Nenhuma (gate detecta se ja existe)
+7    /app-scaffold all      Bootstrap dos workspaces monorepo:                CONCLUIDO (2026-03-23)
+                           Criou apps/api/ e apps/web/ com estrutura base
+                           pnpm_workspace atualizado
 
-8    /codegen docs/04_modules/mod-001-backoffice-admin/
-                           Gerar codigo para mod-001 (UX-First):             A EXECUTAR (apos scaffold)
-                           Fase 1: AGN-COD-DB   → N/A (sem API paths)
-                           Fase 2: AGN-COD-CORE → N/A (Nivel 1, sem Domain)
-                           Fase 3: AGN-COD-APP  → N/A (sem API paths)
-                           Fase 4: AGN-COD-API  → N/A (sem API paths)
-                           Fase 5: AGN-COD-WEB  (frontend — UI, estados, consumo API MOD-000)
-                           Fase 6: AGN-COD-VAL  (validacao cruzada — read-only)
-                           Pre-condicao: Scaffold existe, estado_item = READY
-                           Pos-condicao: Codigo gerado em apps/web/src/modules/backoffice-admin/
+8    /codegen-agent docs/04_modules/mod-001-backoffice-admin/ AGN-COD-DB
+                           Banco de Dados:                                   SKIPPED
+                           Nivel 1 UX-First — sem module_paths API
+
+     /codegen-agent docs/04_modules/mod-001-backoffice-admin/ AGN-COD-CORE
+                           Dominio (DDD-lite):                               SKIPPED
+                           Nivel 1 — sem camada Domain
+
+     /codegen-agent docs/04_modules/mod-001-backoffice-admin/ AGN-COD-APP
+                           Application / UseCases:                           SKIPPED
+                           Nivel 1 UX-First — sem module_paths API
+
+     /codegen-agent docs/04_modules/mod-001-backoffice-admin/ AGN-COD-API
+                           Endpoints + OpenAPI:                              SKIPPED
+                           Nivel 1 UX-First — sem module_paths API
+
+     /codegen-agent docs/04_modules/mod-001-backoffice-admin/ AGN-COD-WEB
+                           Frontend:                                         CONCLUIDO (2026-03-23)
+                           16 arquivos gerados em apps/web/src/modules/backoffice-admin/
+                           Camadas: data/ (7), domain/ (3), ui/screens/ (2), ui/components/ (4)
+
+     /codegen-agent docs/04_modules/mod-001-backoffice-admin/ AGN-COD-VAL
+                           Validador Global:                                 CONCLUIDO (2026-03-23)
+                           Resultado: 1 erro, 3 warnings, 1 note
+                           Checks: RFC9457 ✅, correlation_id ✅, layering ✅, tests ❌
+                           4 pendencias criadas (005-008)
+                           codegen.completed_at definido (todos agentes finalizados)
 ```
-
-> **Nota:** MOD-001 depende de MOD-000 (Foundation) para endpoints de auth. O codigo do MOD-000 deve ser gerado primeiro (camada topologica 0). MOD-001 esta na camada topologica 1. O `/codegen-all` respeita esta ordem automaticamente.
 
 #### Rastreio de Agentes COD — MOD-001
 
 | # | Agente | Camada | Path | Status | Arquivos |
 |---|--------|--------|------|--------|----------|
-| 1 | AGN-COD-DB | infrastructure | — | N/A (UX-First, sem API paths) | 0 |
-| 2 | AGN-COD-CORE | domain | — | N/A (Nivel 1) | 0 |
-| 3 | AGN-COD-APP | application | — | N/A (UX-First, sem API paths) | 0 |
-| 4 | AGN-COD-API | presentation | — | N/A (UX-First, sem API paths) | 0 |
-| 5 | AGN-COD-WEB | web | apps/web/src/modules/backoffice-admin/ | A EXECUTAR | 0 |
-| 6 | AGN-COD-VAL | validation | (read-only) | A EXECUTAR | 0 |
+| 1 | AGN-COD-DB | infrastructure | — | SKIPPED (Nivel 1 UX-First) | 0 |
+| 2 | AGN-COD-CORE | domain | — | SKIPPED (Nivel 1) | 0 |
+| 3 | AGN-COD-APP | application | — | SKIPPED (Nivel 1 UX-First) | 0 |
+| 4 | AGN-COD-API | presentation | — | SKIPPED (Nivel 1 UX-First) | 0 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/backoffice-admin/ | DONE (2026-03-23) | 16 |
+| 6 | AGN-COD-VAL | validation | (read-only) | DONE (2026-03-23) | 0 (validacao) |
 
-#### Pre-requisitos para Codegen
+#### Arquivos em apps/web/src/modules/backoffice-admin/ (17 fonte + 10 teste)
 
-1. **Scaffold:** `apps/web/package.json` — NAO EXISTE → executar `/app-scaffold all`
-2. **Dependencia upstream:** MOD-000 deve ter codigo gerado primeiro (camada topologica 0)
-3. **Ordem topologica:** MOD-001 esta na camada 1 — executar apos MOD-000
+| # | Path | Linhas | Camada |
+|---|------|--------|--------|
+| 1 | data/api-client.ts | 113 | data |
+| 2 | data/queries/use-auth-me.ts | 63 | data |
+| 3 | data/mutations/use-login.ts | 56 | data |
+| 4 | data/mutations/use-forgot-password.ts | 28 | data |
+| 5 | data/mutations/use-reset-password.ts | 32 | data |
+| 6 | data/mutations/use-logout.ts | 31 | data |
+| 7 | data/mutations/use-change-password.ts | 40 | data |
+| 8 | data/telemetry.ts | 119 | data (PENDENTE-006) |
+| 9 | domain/greeting.ts | 25 | domain |
+| 10 | domain/sidebar-config.ts | 89 | domain |
+| 11 | domain/shortcut-config.ts | 66 | domain |
+| 12 | ui/screens/LoginPage.tsx | 368 | ui |
+| 13 | ui/screens/DashboardPage.tsx | 191 | ui |
+| 14 | ui/components/AppShell.tsx | 206 | ui |
+| 15 | ui/components/ProfileWidget.tsx | 152 | ui |
+| 16 | ui/components/ChangePasswordModal.tsx | 218 | ui |
+| 17 | ui/components/Toast.tsx | 125 | ui |
+| — | **Arquivos de teste (PENDENTE-005)** | | |
+| 18 | domain/greeting.test.ts | — | test |
+| 19 | domain/sidebar-config.test.ts | — | test |
+| 20 | domain/shortcut-config.test.ts | — | test |
+| 21 | data/api-client.test.ts | — | test |
+| 22 | ui/components/Toast.test.tsx | — | test |
+| 23 | ui/components/ChangePasswordModal.test.tsx | — | test |
+| 24 | ui/components/ProfileWidget.test.tsx | — | test |
+| 25 | ui/components/AppShell.test.tsx | — | test |
+| 26 | ui/screens/LoginPage.test.tsx | — | test |
+| 27 | ui/screens/DashboardPage.test.tsx | — | test |
+| — | **Infraestrutura de teste** | | |
+| 28 | ../../vitest.config.ts | — | config |
+| 29 | ../../src/test-setup.ts | — | config |
+| 30 | __tests__/test-utils.tsx | — | test |
 
-### Fase 6: Pos-READY (quando necessario)
+#### Resultado da Validacao AGN-COD-VAL
+
+| Check | Resultado |
+|-------|-----------|
+| problem_details_rfc9457 | ✅ OK |
+| correlation_id | ✅ OK |
+| idempotency | ✅ N/A |
+| layering_clean_arch | ✅ OK |
+| tests_present | ❌ MISSING |
+| openapi_present_and_linted | ✅ N/A |
+| x_permissions_documented | ✅ N/A |
+
+| # | Sev. | Finding | Pendencia |
+|---|------|---------|-----------|
+| 1 | ERROR | ~~Testes unitarios ausentes~~ — RESOLVIDO (10 arquivos de teste criados) | PENDENTE-005 (IMPLEMENTADA) |
+| 2 | WARNING | ~~UIActionEnvelope/telemetria nao implementada~~ — RESOLVIDO (telemetry.ts) | PENDENTE-006 (IMPLEMENTADA) |
+| 3 | WARNING | ~~Interceptor 401 nao e global~~ — RESOLVIDO (redirect global no apiRequest + AMD-SEC-001-001) | PENDENTE-007 (IMPLEMENTADA) |
+| 4 | WARNING | ~~Timeout auth_me 5s vs 3s especificado em INT-005~~ — RESOLVIDO (timeout opcional + AMD-INT-005-001) | PENDENTE-008 (IMPLEMENTADA) |
+| 5 | NOTE | Icones de toggle com emoji (🙈👁) — renderizacao inconsistente | (nao gera pendencia) |
+| 6 | ERROR | ~~Lint errors codegen (7 ocorrencias ESLint + Prettier)~~ — RESOLVIDO (0 errors confirmado, ja corrigidos via PEN-000/PENDENTE-018) | PENDENTE-009 (IMPLEMENTADA) |
+
+> Dados de execution state: `.agents/execution-state/MOD-001.json` — timestamps precisos de cada agente.
+
+### Fase 6: Pos-READY — EM USO
+
+2 amendments criados ate o momento. O modulo permanece READY; amendments documentam mudancas sem alterar a base selada.
 
 ```
-9    /update-specification docs/04_modules/mod-001-backoffice-admin/requirements/fr/FR-001.md
+9    /create-amendment INT-005 melhoria "timeout configuravel"
+                           Amendment criado:                                 CONCLUIDO (2026-03-24)
+                           AMD-INT-005-001__timeout_configuravel.md
+                           Origem: PENDENTE-008 — timeout opcional em
+                           RequestOptions + use-auth-me 3s
+
+9b   /create-amendment SEC-001 melhoria "interceptor 401 global"
+                           Amendment criado:                                 CONCLUIDO (2026-03-24)
+                           AMD-SEC-001-001__interceptor_401_global.md
+                           Origem: PENDENTE-007 — redirect /login global
+                           no apiRequest() do api-client.ts
+
+10   /update-specification docs/04_modules/mod-001-backoffice-admin/requirements/fr/FR-001.md
                            Se spec precisa de ajuste apos READY:             SOB DEMANDA
                            Detecta estado_item=READY → delega para
                            /create-amendment automaticamente
 
-10   /create-amendment FR-001 melhoria "adicionar tela MFA"
+11   /create-amendment FR-001 melhoria "adicionar tela MFA"
                            Criar amendment formal:                           SOB DEMANDA
                            Naming: {Pilar}-{ID}-{Natureza}{Seq}.md
                            Caso de uso previsto: UX-MFA-001 (tela MFA)
@@ -263,10 +346,10 @@ MOD-001 esta READY (pre-requisito para codegen atendido). Como modulo UX-First (
 ```
 16   /manage-pendentes list PEN-001
                            Estado atual MOD-001:
-                             PEN-001: 4 itens total
-                               4 IMPLEMENTADA (001-004)
+                             PEN-001: 9 itens total
+                               8 IMPLEMENTADA (001-008)
                                0 ABERTA
-                             SLA: nenhum vencido
+                             SLA: nenhum vencido — todas resolvidas
 ```
 
 | # | ID | Status | Sev. | Decisao (resumo) | Artefato |
@@ -275,6 +358,11 @@ MOD-001 esta READY (pre-requisito para codegen atendido). Como modulo UX-First (
 | 2 | PENDENTE-002 | IMPLEMENTADA | BAIXA | Opcao B — Sidebar empty state | FR-004, UX-001 |
 | 3 | PENDENTE-003 | IMPLEMENTADA | ALTA | Opcao A — FR-007 + INT-006 Alterar Senha | FR-007, INT-006, DATA-003 |
 | 4 | PENDENTE-004 | IMPLEMENTADA | MEDIA | Opcao B — fallback MFA redirect | FR-001 v0.6.0 |
+| 5 | PENDENTE-005 | IMPLEMENTADA | ALTA | Opcao C — 10 test files (vitest + RTL) | *.test.ts/tsx, vitest.config.ts |
+| 6 | PENDENTE-006 | IMPLEMENTADA | ALTA | Opcao A — telemetry.ts + integracao 6 hooks | telemetry.ts, use-*.ts |
+| 7 | PENDENTE-007 | IMPLEMENTADA | MEDIA | Opcao A — interceptor 401 global apiRequest() + AMD-SEC-001-001 | api-client.ts |
+| 8 | PENDENTE-008 | IMPLEMENTADA | BAIXA | Opcao A — timeout opcional RequestOptions + AMD-INT-005-001 | api-client.ts, use-auth-me.ts |
+| 9 | PENDENTE-009 | IMPLEMENTADA | MEDIA | Opcao A — lint errors ja corrigidos (0 errors confirmado) | PEN-000/PENDENTE-018 |
 
 > Detalhes completos: requirements/pen-001-pendente.md
 
@@ -309,16 +397,17 @@ mod-001 validado (DRAFT)                ← Fase 3: CONCLUIDA (validate-all PASS
   ▼
 mod-001 selado (READY v1.0.0)           ← Fase 4: CONCLUIDA (promote-module 2026-03-23)
   │
-  ├── ★ PROXIMO PASSO: /app-scaffold all → /codegen mod-001
+  ▼
+mod-001 codigo gerado                   ← Fase 5: CONCLUIDA (2026-03-23)
+  │  Scaffold apps/ ok (api + web)
+  │  AGN-COD-WEB: 16 arquivos em apps/web/src/modules/backoffice-admin/
+  │  AGN-COD-VAL: 1E/3W/1N → 4 pendencias (005-008) — todas IMPLEMENTADAS
+  │  Pos-codegen: telemetry.ts, testes, timeout, interceptor 401
   │
   ▼
-mod-001 codigo gerado                   ← Fase 5: NAO INICIADA
-  │  Scaffold apps/ inexistente
-  │  UX-First: apenas AGN-COD-WEB + AGN-COD-VAL
-  │  Depende de MOD-000 ter codigo gerado primeiro
+mod-001 + amendments/                   ← Fase 6: EM USO (2 amendments: AMD-INT-005-001, AMD-SEC-001-001)
   │
-  ▼
-mod-001 + amendments/                   ← Fase 6: SOB DEMANDA (0 amendments)
+  ├── ★ PROXIMO PASSO: pnpm install + pnpm test + pnpm lint
 
 Dependencia upstream: MOD-000 (Foundation) — camada topologica 1.
 MOD-001 prove Application Shell para MOD-002+ (Sidebar, Header, Breadcrumb).
@@ -330,26 +419,33 @@ MOD-001 prove Application Shell para MOD-002+ (Sidebar, Header, Breadcrumb).
 
 | Aspecto | Detalhe |
 |---------|---------|
-| Modulo UX-First | Nao possui backend proprio — consome endpoints do MOD-000 (Foundation). No codegen, apenas AGN-COD-WEB e AGN-COD-VAL sao aplicaveis (4 agentes de backend sao N/A). Validadores `/validate-openapi`, `/validate-drizzle` e `/validate-endpoint` continuam N/A. |
+| Modulo UX-First | Nao possui backend proprio — consome endpoints do MOD-000 (Foundation). No codegen, apenas AGN-COD-WEB e AGN-COD-VAL foram executados (4 agentes de backend skippados). Validadores `/validate-openapi`, `/validate-drizzle` e `/validate-endpoint` sao N/A no codegen-val. |
 | Nivel 1 — Clean Leve (Score 1/6) | Unico gatilho ativo: multi-tenant (Sidebar filtrada por scopes). Score 1/6 qualificaria para Nivel 0, mas Nivel 1 escolhido por testabilidade e evolucao prevista (ADR-001). |
-| Provedor do Application Shell | MOD-002+ utilizam o Shell provido por este modulo (Sidebar, Header, Breadcrumb). Gerar codigo do MOD-001 e relevante para a cadeia de frontend. |
+| Provedor do Application Shell | MOD-002+ utilizam o Shell provido por este modulo (Sidebar, Header, Breadcrumb). O codigo gerado e a base de frontend para toda a aplicacao. |
 | 3 ADRs para Nivel 1 | Excede o minimo de 1 ADR. ADR-001 (Clean Leve), ADR-002 (Telemetria Pre/Pos-Auth), ADR-003 (Zero-Blank-Screen com Skeleton Timeout 3s). |
-| Dependencia exclusiva de MOD-000 | Todos os 6 operationIds consumidos sao do Foundation. O codigo do MOD-000 deve ser gerado antes para que o MOD-001 possa referenciar tipos e guards compartilhados. |
+| Dependencia exclusiva de MOD-000 | Todos os 6 operationIds consumidos sao do Foundation. O codigo do MOD-001 consome APIs via api-client.ts com fetch wrapper centralizado. |
 | Escopo expandido pos-enriquecimento | PENDENTE-003 expandiu o escopo com FR-007 (Alterar Senha) e INT-006, passando de 10 para 12 artefatos de requisitos. |
+| 4 pendencias do codegen-val | AGN-COD-VAL identificou 4 gaps (005-008). Todas 4 IMPLEMENTADAS: testes (005), telemetria (006), interceptor 401 (007), timeout (008). Zero pendencias abertas. |
 
 ---
 
-## Checklist Rapido — Codegen MOD-001
+## Checklist Rapido — Pos-Codegen MOD-001
 
-Modulo ja esta READY. Checklist de geracao de codigo:
+Modulo READY com codegen completo. Itens restantes para qualidade de codigo:
 
-- [ ] Executar `/app-scaffold all` — criar apps/api/ e apps/web/ (se nao executado)
-- [ ] Aguardar codegen do MOD-000 (camada topologica 0 — pre-requisito)
-- [ ] Executar `/codegen docs/04_modules/mod-001-backoffice-admin/` — gerar codigo (WEB + VAL)
-- [ ] Revisar arquivos gerados em apps/web/src/modules/backoffice-admin/
+- [x] Executar `/app-scaffold all` — criar apps/api/ e apps/web/ (2026-03-23)
+- [x] Executar codegen MOD-001 — AGN-COD-WEB (16 arquivos gerados, 2026-03-23)
+- [x] Executar codegen MOD-001 — AGN-COD-VAL (validacao cruzada, 2026-03-23)
+- [x] Revisar arquivos gerados em apps/web/src/modules/backoffice-admin/ (16 arquivos)
+- [x] **PENDENTE-005 (ALTA):** Testes unitarios + componente criados — 10 test files com vitest + RTL (2026-03-24)
+- [x] **PENDENTE-006 (ALTA):** UIActionEnvelope/telemetria implementada — telemetry.ts + 6 hooks (2026-03-24)
+- [x] **PENDENTE-007 (MEDIA):** Interceptor 401 global no apiRequest() — AMD-SEC-001-001, api-client.ts (2026-03-24)
+- [x] **PENDENTE-008 (BAIXA):** Timeout configuravel por endpoint — AMD-INT-005-001, api-client.ts, use-auth-me.ts (2026-03-24)
+- [x] **PENDENTE-009 (MEDIA):** Lint errors codegen — ja corrigidos via PEN-000/PENDENTE-018, 0 errors confirmado (2026-03-24)
+- [ ] Executar `pnpm install` (novas deps: vitest, @testing-library/react, jsdom)
 - [ ] Executar `pnpm test` e `pnpm lint`
 
-> **Nota:** MOD-001 e UX-First na camada topologica 1. Apenas AGN-COD-WEB gera codigo (apps/web/). Os 4 agentes de backend sao skippados automaticamente. O `/codegen-all` orquestra a ordem correta (MOD-000 primeiro, depois MOD-001).
+> **Nota:** 8/8 pendencias resolvidas. Todas as pendencias do codegen-val implementadas. Apos `pnpm install`, os 10 arquivos de teste podem ser executados via `pnpm --filter @easycode/web test`.
 
 ---
 
@@ -357,6 +453,12 @@ Modulo ja esta READY. Checklist de geracao de codigo:
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 3.5.0 | 2026-03-24 | Atualizacao: PENDENTE-009 IMPLEMENTADA (Opcao A — lint errors ja corrigidos via PEN-000/PENDENTE-018, 0 errors confirmado). 9/9 pendencias resolvidas |
+| 3.4.0 | 2026-03-24 | Atualizacao: PENDENTE-007 IMPLEMENTADA (Opcao A — interceptor 401 global no apiRequest() + AMD-SEC-001-001). 8/8 pendencias resolvidas, 2 amendments. Zero pendencias abertas |
+| 3.3.0 | 2026-03-24 | Atualizacao: PENDENTE-008 IMPLEMENTADA (Opcao A — timeout opcional RequestOptions + use-auth-me 3s + AMD-INT-005-001). 7/8 pendencias resolvidas, 1 amendment criado. Fase 6 atualizada para EM USO |
+| 3.2.0 | 2026-03-24 | Atualizacao: PENDENTE-005 IMPLEMENTADA (Opcao C — 10 test files: 3 domain + 1 data + 6 component + vitest config + test-utils). 6/8 pendencias resolvidas. Checklist e resumo atualizados |
+| 3.1.0 | 2026-03-24 | Atualizacao: PENDENTE-005 DECIDIDA (Opcao C testes), PENDENTE-006 IMPLEMENTADA (Opcao A telemetry.ts + hooks). 2 abertas restantes (007, 008). Checklist e resumo visual atualizados |
+| 3.0.0 | 2026-03-23 | Atualizacao: Fase 5 CONCLUIDA — scaffold ok, AGN-COD-WEB done (16 arquivos), AGN-COD-VAL done (1E/3W/1N). codegen.completed_at definido. 4 novas pendencias (005-008) do validador. Checklist atualizado para foco pos-codegen |
 | 2.1.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (promote-module 2026-03-23, v1.0.0 READY). Nova Fase 5: Geracao de Codigo — NAO INICIADA (UX-First: AGN-COD-WEB + AGN-COD-VAL, 4 agentes backend N/A). Decision tree de codegen adicionado. Checklist atualizado para foco em codegen |
 | 2.0.0 | 2026-03-23 | Recriacao: Fase 3 atualizada para CONCLUIDA (validate-all PASS 2026-03-22), Gate 0 DoR 7/7 atendidos, Fase 4 como proximo passo, pendencias em formato compacto com referencia ao pen file |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 4 pendentes resolvidas, rastreio de agentes, mapa de cobertura de validadores, particularidades UX-First |

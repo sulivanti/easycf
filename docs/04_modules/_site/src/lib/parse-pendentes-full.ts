@@ -74,7 +74,9 @@ const DIR_MAP: Record<string, { dir: string; nome: string }> = {
 function extractField(text: string, field: string): string {
   const re = new RegExp(`\\*\\*${field}:\\*\\*\\s*(.+)`, "im");
   const m = text.match(re);
-  return m ? m[1].trim() : "";
+  if (!m) return "";
+  const v = m[1].trim();
+  return v === "—" || v === "-" ? "" : v;
 }
 
 function normSev(s: string): string {
@@ -170,7 +172,7 @@ function parsePenFile(filePath: string, num: string): PenModulo | null {
     const opcaoEscolhida = extractField(fullSection, "opcao_escolhida") || "";
 
     // Extract subsections
-    const questaoMatch = fullSection.match(/### Questão\n+([\s\S]*?)(?=\n### |$)/);
+    const questaoMatch = fullSection.match(/### Quest[ãa]o\n+([\s\S]*?)(?=\n### |$)/);
     const questao = questaoMatch ? questaoMatch[1].trim() :
       extractField(fullSection, "Questão") || extractField(fullSection, "Descrição") || "";
 
@@ -182,17 +184,17 @@ function parsePenFile(filePath: string, num: string): PenModulo | null {
     const opcoes: PendenteOpcao[] = [];
 
     // Format 1: **Opção A — Title:**\nDescription\n- Prós: ...\n- Contras: ...
-    const opcoesMatch = fullSection.match(/### Opções\n+([\s\S]*?)(?=\n### |$)/);
+    const opcoesMatch = fullSection.match(/### Op[çc][õo]es\n+([\s\S]*?)(?=\n### |$)/);
     if (opcoesMatch) {
       const optsBlock = opcoesMatch[1];
-      const optSections = optsBlock.split(/\*\*Opção\s+/).slice(1);
+      const optSections = optsBlock.split(/\*\*Op[çc][ãa]o\s+/).slice(1);
       for (const opt of optSections) {
-        const headerMatch = opt.match(/^([A-C])\s*[—-]\s*(.+?):\*\*/);
+        const headerMatch = opt.match(/^([A-C])\s*[—\-]{1,3}\s*(.+?):\*\*/);
         if (headerMatch) {
           const rest = opt.slice(headerMatch[0].length - 2); // after **
-          const prosMatch = rest.match(/Prós:\s*(.+?)(?=\n|$)/);
+          const prosMatch = rest.match(/Pr[óo]s:\s*(.+?)(?=\n|$)/);
           const contrasMatch = rest.match(/Contras:\s*(.+?)(?=\n|$)/);
-          const descLines = rest.split("\n").filter((l) => !l.match(/^\s*-\s*(?:Prós|Contras)/) && l.trim());
+          const descLines = rest.split("\n").filter((l) => !l.match(/^\s*-\s*(?:Pr[óo]s|Contras)/) && l.trim());
           opcoes.push({
             letra: headerMatch[1],
             titulo: headerMatch[2].trim(),
@@ -230,7 +232,7 @@ function parsePenFile(filePath: string, num: string): PenModulo | null {
     if (opcoes.length === 0) {
       const optsInline = fullSection.match(/\*\*Opções:\*\*\n([\s\S]*?)(?=\n-\s+\*\*Recomendação|### |$)/);
       if (optsInline) {
-        const optMatches = optsInline[1].matchAll(/-\s+\*\*Opção\s+([A-C])\s*(?::|—|-)\*\*\s*(.+)/gi);
+        const optMatches = optsInline[1].matchAll(/-\s+\*\*Op[çc][ãa]o\s+([A-C])\s*(?::|—|-)\*\*\s*(.+)/gi);
         for (const om of optMatches) {
           opcoes.push({
             letra: om[1].toUpperCase(),
@@ -245,7 +247,7 @@ function parsePenFile(filePath: string, num: string): PenModulo | null {
     }
 
     // Recommendation
-    const recMatch = fullSection.match(/### Recomendação\n+([\s\S]*?)(?=\n### |$)/);
+    const recMatch = fullSection.match(/### Recomenda[çc][ãa]o\n+([\s\S]*?)(?=\n### |$)/);
     const recomendacao = recMatch ? recMatch[1].trim() :
       extractField(fullSection, "Recomendação") || "";
 
@@ -258,7 +260,7 @@ function parsePenFile(filePath: string, num: string): PenModulo | null {
     }
 
     // Resolution
-    const resMatch = fullSection.match(/### Resolução\n+([\s\S]*?)(?=\n---|\n## |$)/);
+    const resMatch = fullSection.match(/### Resolu[çc][ãa]o[^]*?\n+([\s\S]*?)(?=\n---|\n## |$)/);
     const resolucao = resMatch ? resMatch[1].trim() : "";
 
     // Extract justificativa and artefato from resolucao
@@ -284,8 +286,8 @@ function parsePenFile(filePath: string, num: string): PenModulo | null {
       recomendacao,
       resolucao,
       opcaoEscolhida,
-      justificativaDecisao: justMatch ? justMatch[1].trim() : "",
-      artefatoSaida: artMatch ? artMatch[1].trim() : "",
+      justificativaDecisao: justMatch && justMatch[1].trim() !== "—" ? justMatch[1].trim() : "",
+      artefatoSaida: artMatch && artMatch[1].trim() !== "—" ? artMatch[1].trim() : "",
     });
   }
 

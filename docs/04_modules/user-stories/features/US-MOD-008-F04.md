@@ -1,16 +1,16 @@
 # US-MOD-008-F04 — UX: Editor de Rotinas de Integração (UX-INTEG-001)
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.1.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.2.0
+**Data:** 2026-03-23
 **Módulo Destino:** **MOD-008** (Integração Dinâmica — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-008, US-MOD-008-F01, US-MOD-008-F02, US-MOD-007-F05, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — editor de rotinas de integração

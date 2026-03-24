@@ -1,9 +1,9 @@
 # DOC-UX-012 — Componentes Globais e Feedback
 
 - **id:** DOC-UX-012
-- **version:** 1.0.0
+- **version:** 1.1.0
 - **status:** READY
-- **data_ultima_revisao:** 2026-03-06
+- **data_ultima_revisao:** 2026-03-24
 - **owner:** produto + arquitetura + UX
 - **scope:** global (componentes globais e feedback visual)
 
@@ -56,9 +56,19 @@ As opções visuais da janela do usuário individual compõem as Preferências P
 
 ### 4.1 Retenção de Persistência Frontend
 
-1. **Dark/Light Mode:** O Framework base DEVE incluir suporte a Theme Toggles atrelados a variáveis CSS e TailwindCSS. A preferência `theme` (`light`, `dark` ou `system`) DEVE ser gravada no `localStorage` do navegador.
+1. **Dark/Light Mode:** O Framework base DEVE incluir suporte a Theme Toggles conforme a estratégia `class="dark"` no `<html>` definida em [DOC-UX-013 §5](DOC-UX-013__Design_System_e_Tokens_Visuais.md). A preferência `theme` (`light`, `dark` ou `system`) DEVE ser gravada no `localStorage` do navegador. Componentes DEVEM usar a variant `dark:` do Tailwind para estilos alternativos.
 2. **Layout Type:** Caso haja variação de Layout (Menu Lateral Expandido vs Colapsado), isso DEVE ser retido de modo equivalente.
 3. **Internacionalização (i18n):** Se o projeto exigir suporte multilíngue além de pt-BR, o idioma escolhido (`language`) DEVE ser armazenado no `localStorage` sob a chave `lang` e aplicado como header `Accept-Language` global no Interceptor HTTP.
+
+### 4.2 Shared Component Library
+
+Todos os componentes de UI reutilizáveis DEVEM residir em `apps/web/src/shared/ui/` conforme [DOC-UX-013 §4](DOC-UX-013__Design_System_e_Tokens_Visuais.md).
+
+**Regras:**
+1. Módulos (`src/modules/`) **NÃO DEVEM** recriar componentes equivalentes aos da biblioteca compartilhada (Button, Input, Badge, Modal, Drawer, Table, Skeleton, Toast, Spinner).
+2. Importações DEVEM usar o alias `@shared/ui/` (ex: `import { Button, Modal } from '@shared/ui'`).
+3. Novos componentes compartilhados requerem amendment ao DOC-UX-013.
+4. Componentes compartilhados são criados exclusivamente pelo `/app-scaffold` — `AGN-COD-WEB` apenas os consome.
 
 ---
 
@@ -72,6 +82,21 @@ O feedback visual em operações ativas precisa evitar que a tela aparente estar
 2. Para cliques de gravação de escopo individual (Botões de Confirmar: `create`, `update`, `delete`, `approve`), o próprio Botão que acionou a Ação DEVE mudar seu estado interno para um `Spinner` e ficar `disabled` (travar duplo clique não intencional) até que a Promise de rede responda com Sucesso ou RFC 9457 de Erro.
 3. **Idempotência no Frontend:** O bloqueio visual de duplo clique é mandatório para auxiliar a Idempotência que será protegida também pelo campo `Idempotency-Key` no cabeçalho.
 
+### 5.2 Requisitos de Animação
+
+Transições e animações de feedback DEVEM usar a biblioteca `motion` (DOC-PADRAO-002 §3.5). Animações CSS puras são aceitáveis apenas para `animate-pulse` (Skeleton) e `animate-spin` (Spinner simples).
+
+| Componente | Animação | Implementação |
+|------------|----------|---------------|
+| Toast | Slide-in (direita) + fade-in na entrada; slide-out + fade-out na saída | `motion.div` com `initial`, `animate`, `exit` |
+| Modal | Scale-up (0.95→1) + backdrop fade-in | `motion.div` com `AnimatePresence` |
+| Drawer | Slide-right (ou left) a partir da borda da tela | `motion.div` com `animate={{ x: 0 }}` |
+| Skeleton | Pulse (opacidade alternada) | `animate-pulse` do Tailwind (CSS nativo) |
+| Spinner | Rotação contínua | `animate-spin` do Tailwind ou `motion.div` com `rotate` |
+| Page transitions | Fade + slide sutil (opcional) | `motion.div` no outlet do router |
+
+**Regra:** Animações DEVEM respeitar `prefers-reduced-motion`. Quando o usuário solicita redução de movimento, transições devem ser instantâneas (duration: 0).
+
 ---
 
 ## 6. Critérios de Aceitação para o Gerador (Scaffold CLI)
@@ -81,8 +106,18 @@ Quando os geradores (Agente COD / CLI) criarem código de UI de base para projet
 - **[CA-01]** Existe um interceptor configurado globalmente (`axios.interceptors.response` ou similar) disparando os "Toasts" para status HTTP inválidos.
 - **[CA-02]** A função de renderização de Erros do Toast inclui e respeita os campos definidos pela normatização da `RFC 9457`.
 - **[CA-03]** Tema selecionado persiste quando uma página individual (Page Refresh F5) é recarregada manualmente.
-- **[CA-04]** Componentes de Botões gerados (`Button` exportado no Boilerplate de design system) aceitam prop unificada `isLoading=true` desativando a própria interação.
+- **[CA-04]** Componentes de Botões gerados (`Button` exportado em `@shared/ui/`) aceitam prop unificada `isLoading=true` desativando a própria interação. O Spinner integrado DEVE ser animado via `motion` ou `animate-spin` do Tailwind.
+- **[CA-05]** Inline `style={{}}` é **PROIBIDO** para layout, cor e tipografia. Todo styling DEVE usar classes Tailwind CSS. Ver DOC-UX-013 §3.4 para exceções permitidas.
 
 ---
 
 *Este documento consolida obrigatoriedades e substitui formalmente a necessidade das User Stories antigas US-019 (Busca Global), US-020 (Preferências Temporárias UX) e US-022 (Utilitários Compartilhados).*
+
+---
+
+## CHANGELOG
+
+| Versão | Data | Descrição |
+|--------|------|-----------|
+| 1.1.0 | 2026-03-24 | Amendment M01: §4.1 referencia DOC-UX-013 §5, nova §4.2 Shared Component Library, nova §5.2 Requisitos de Animação, CA-04 expandido com Spinner animado, novo CA-05 proibindo inline styles |
+| 1.0.0 | 2026-03-06 | Versão inicial |

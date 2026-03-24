@@ -24,8 +24,8 @@ flowchart TD
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E5  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E6  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
 ```
 
 *O módulo está na **Etapa 5** — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.*
@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.2.0 | 2026-03-24 | create-amendment | Amendment FR-000-M01: DTO gaps Users API (F05) — adiciona role_id/role_name em UserListItem, invite_token_expired em UserDetail, mode/role_id em CreateUserRequest. Motivação: MOD-002 (Gestão de Usuários frontend) usa defaults hardcoded como workaround. |
+| 1.1.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. QA: PASS. Manifests: 5/5. OpenAPI: PASS. Drizzle: PASS. Endpoints: PASS. 0 bloqueadores, 2 avisos (operationId MFA/sessions). |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, 9 requisitos (BR/FR/DATA/DATA-003/SEC/SEC-002/INT/UX/NFR), 4 ADRs selados. Épico + 17 features já READY. Ciclo de estabilidade avança para Etapa 5. |
 | 0.10.0 | 2026-03-19 | manage-pendentes | Amendment DOC-FND-000-M02: 7º scope process:case:reopen registrado no catálogo canônico §2.2. Ref: PEN-006 PENDENTE-001. Total: 7 scopes process:case:*. |
 | 0.9.0 | 2026-03-19 | manage-pendentes | Amendment DOC-FND-000-M01: 6 scopes process:case:* registrados no catálogo canônico §2.2 (MOD-006). Ref: PEN-006 PENDENTE-004. |

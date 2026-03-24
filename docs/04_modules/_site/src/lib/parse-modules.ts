@@ -219,8 +219,8 @@ function parsePendentes(modId: string): Pendente[] {
       const id = titleMatch[1];
       const title = titleMatch[2].replace(/~~$/g, "").trim();
 
-      const statusMatch = section.match(/\*\*status:\*\*\s*(\S+)/i);
-      const sevMatch = section.match(/\*\*severidade:\*\*\s*(\S+)/i);
+      const statusMatch = section.match(/\*\*status:\*\*\s*(?:[✅🔲⬜☐☑]\s*)?(\S+)/i);
+      const sevMatch = section.match(/\*\*severidade:\*\*\s*(?:[✅🔲⬜☐☑]\s*)?(\S+)/i);
       const domMatch = section.match(/\*\*dom[ií]nio:\*\*\s*(\S+)/i);
 
       pendentes.push({

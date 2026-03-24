@@ -1,16 +1,16 @@
 # US-MOD-008-F02 — API: Mapeamentos de Campos e Parâmetros
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.1.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.2.0
+**Data:** 2026-03-23
 **Módulo Destino:** **MOD-008** (Integração Dinâmica — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-008, US-MOD-008-F01
 - **nivel_arquitetura:** 2 (mapeamento dinâmico, transform_expr, condition_expr, mascaramento)
 - **tipo:** Backend — cria novos endpoints

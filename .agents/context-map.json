@@ -134,6 +134,30 @@
         { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1"], "reason": "Verificar dependentes antes de deletar — módulos com dependentes não podem ser removidos sem confirmação" }
       ]
     },
+    "codegen-agent": {
+      "docs": [
+        { "id": "PKG-COD-001", "path": "docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md", "sections": "*", "reason": "System prompts, schemas e ownership dos 6 agentes de código" },
+        { "id": "DOC-GNP-00", "sections": "*", "reason": "Regras consolidadas MUST/SHOULD para geração de código" },
+        { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "Anti-patterns Foundation e SEC-002 canônico" },
+        { "id": "DOC-ESC-001", "sections": ["§4", "§6"], "reason": "Scoring de nível e matriz MUST/SHOULD por camada" },
+        { "id": "DOC-UX-013", "sections": "*", "reason": "Design System, tokens, Tailwind v4, shared components e anti-patterns visuais" }
+      ]
+    },
+    "codegen": {
+      "docs": [
+        { "id": "PKG-COD-001", "path": "docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md", "sections": ["§0"], "reason": "Contrato de execução e envelope padrão" },
+        { "id": "DOC-DEV-001", "sections": ["§lifecycle"], "reason": "Ciclo de vida DRAFT/READY — codegen requer READY" },
+        { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1", "§5"], "reason": "Grafo de adjacência e ordem topológica — validar dependências" }
+      ]
+    },
+    "app-scaffold": {
+      "docs": [
+        { "id": "DOC-PADRAO-001", "sections": "*", "reason": "Stack tecnológico do projeto" },
+        { "id": "DOC-PADRAO-002", "sections": "*", "reason": "Dependências NodeJS autorizadas" },
+        { "id": "DOC-GNP-00", "sections": ["§3"], "reason": "Estrutura de diretórios do monorepo" },
+        { "id": "DOC-UX-013", "sections": "*", "reason": "Design System, tokens visuais, shared components e Tailwind v4 config para scaffold web" }
+      ]
+    },
     "action-plan": {
       "docs": [
         { "id": "DOC-DEV-001", "sections": ["§lifecycle", "§metadata"], "reason": "Ciclo de vida DRAFT/READY e metadados para diagnosticar estado do módulo" },

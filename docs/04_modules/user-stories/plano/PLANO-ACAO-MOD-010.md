@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-010 MCP e Automacao Governada
 
-> **Versao:** 2.1.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** DRAFT (v0.2.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
+> **Versao:** 5.0.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.2.0) | **Epico:** READY (v1.3.0) | **Features:** 5/5 READY
 >
-> Fases 0-3 concluidas. PENDENTE-001 e PENDENTE-004 resolvidas (status sincronizado 2026-03-23). Proximo passo: executar `/promote-module`.
+> Fases 0-5 concluidas. Modulo selado READY v1.2.0. Codegen completo (6/6 agentes: DB+CORE+APP+API+WEB+VAL). Revalidacao completa: Lint 0 erros, Format 5 warnings (cross-module), Arquitetura PASS, QA PASS, Manifests 2/2 PASS, OpenAPI PASS (14 ops), Drizzle PASS (5 tabelas), Endpoints PASS (14 endpoints). 0 bloqueadores, 0 violacoes criticas. PENDENTE-008 resolvida (lint 0 erros).
 
 ---
 
@@ -11,17 +11,18 @@
 
 | Item | Estado | Detalhe |
 |------|--------|---------|
-| Epico US-MOD-010 | APPROVED (v1.2.0) | DoR completo, 5 features vinculadas, 3 politicas de execucao, blocklist Phase 1/2 |
-| Features F01-F05 | 5/5 APPROVED | F01 (API Agentes + Catalogo), F02 (API Gateway + Motor), F03 (API Log), F04 (UX Gestao), F05 (UX Monitor) |
+| Epico US-MOD-010 | READY (v1.3.0) | DoR completo, 5 features vinculadas, 3 politicas de execucao, blocklist Phase 1/2. Promovido 2026-03-23. |
+| Features F01-F05 | 5/5 READY | F01 (API Agentes + Catalogo), F02 (API Gateway + Motor), F03 (API Log), F04 (UX Gestao), F05 (UX Monitor). Promovidas 2026-03-23. |
 | Scaffold (forge-module) | CONCLUIDO | mod-010-mcp-automacao/ com estrutura completa |
-| Enriquecimento (11 agentes) | CONCLUIDO | AGN-DEV-01 a AGN-DEV-11 confirmados, v0.6.0, 7 pendentes identificadas |
-| PENDENTEs | 0 ABERTA | 7 total: 7/7 IMPLEMENTADA (PENDENTE-001, PENDENTE-004 sincronizadas 2026-03-23) |
+| Enriquecimento (11 agentes) | CONCLUIDO | AGN-DEV-01 a AGN-DEV-11 confirmados, v0.6.0, 7 pendentes identificadas e resolvidas |
+| Codegen (6 agentes) | CONCLUIDO | 6/6 agentes done (DB 3 files, CORE 10, APP 14, API 14, WEB 7, VAL 0). Validacao PASS 2026-03-24. |
+| PENDENTEs | 0 ABERTA | 8 total: 8/8 IMPLEMENTADA |
 | ADRs | 4 criadas (ACCEPTED) | Nivel 2 requer minimo 3 — atendido (ADR-001 Gateway Sincrono, ADR-002 API Key bcrypt, ADR-003 Outbox Pattern, ADR-004 Blocklist Wildcard) |
-| Amendments | 0 | Nenhum (modulo ainda DRAFT) |
+| Amendments | 0 | Nenhum (modulo recem-selado READY) |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v0.6.0 | Ultima entrada 2026-03-19 (Etapa 4 — enriquecimento em andamento) |
+| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (Etapa 5 — Selo READY) |
 | Screen Manifests | 2/2 existem | ux-mcp-001.gestao-agentes.yaml, ux-mcp-002.monitor-execucoes.yaml |
-| Dependencias | 5 upstream (MOD-000, MOD-004, MOD-007, MOD-008, MOD-009) | Consome Foundation core, scopes delegados, parametrizacao, integracoes externas, motor de aprovacao |
+| Dependencias | 5 upstream (MOD-000, MOD-004, MOD-007, MOD-008, MOD-009) | Todas 5 READY. Consome Foundation core, scopes delegados, parametrizacao, integracoes externas, motor de aprovacao |
 | Bloqueios | 0 | Nenhum BLK-* afeta MOD-010 diretamente |
 
 ---
@@ -33,11 +34,14 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 ```
 
 > **Decision tree de enriquecimento:**
+>
+> ```
 > Quero enriquecer todos os modulos elegiveis?
 > ├── SIM → /enrich-all (sequencial, com checkpoint e --dry-run/--resume)
 > └── NAO → Qual escopo?
 >     ├── Todos agentes de 1 modulo  → /enrich mod-NNN
 >     └── 1 agente especifico        → /enrich-agent AGN-DEV-XX mod-NNN
+> ```
 
 ### Fase 0: Pre-Modulo — CONCLUIDA
 
@@ -77,7 +81,7 @@ Modulo scaffoldado via `forge-module` a partir do epico APPROVED (v1.2.0). Nivel
 
 ### Fase 2: Enriquecimento — CONCLUIDA
 
-O enriquecimento do MOD-010 foi executado via 4 batches sequenciais, cobrindo todos os 11 agentes. O modulo e o mais complexo do portfolio (Nivel 2, Score 6/6 DOC-ESC-001), com 7 pendencias identificadas durante o enriquecimento — 5 ja resolvidas durante o proprio ciclo de enriquecimento, 2 resolvidas posteriormente. Note que embora todas tenham secao "Resolucao" preenchida, PENDENTE-001 e PENDENTE-004 permanecem com status ABERTA no pen file pois requerem implementacao efetiva de artefatos (endpoint Phase 2 enable e amendment MOD-000-F12 respectivamente).
+O enriquecimento do MOD-010 foi executado via 4 batches sequenciais, cobrindo todos os 11 agentes. O modulo e o mais complexo do portfolio (Nivel 2, Score 6/6 DOC-ESC-001), com 7 pendencias identificadas durante o enriquecimento — todas resolvidas e IMPLEMENTADA. O CHANGELOG do modulo registra cada batch e resolucao de pendencia em detalhe.
 
 ```
 4    /enrich mod-010        Enriquecimento completo (11 agentes, 4 batches):  CONCLUIDO
@@ -111,50 +115,41 @@ O enriquecimento do MOD-010 foi executado via 4 batches sequenciais, cobrindo to
 
 | # | ID | Status | Severidade | Decisao (1 linha) | Artefato |
 |---|---|---|---|---|---|
-| 1 | ~~PENDENTE-001~~ | IMPLEMENTADA | ALTA | Opcao B — endpoint dedicado `POST /enable-phase2` com scope separado | FR-010 |
+| 1 | PENDENTE-001 | IMPLEMENTADA | ALTA | Opcao B — endpoint dedicado `POST /enable-phase2` com scope separado | FR-010 |
 | 2 | PENDENTE-002 | IMPLEMENTADA | MEDIA | Opcao A — PREPARAR `can_be_direct=false` (conservador) | DATA-010, BR-010 |
 | 3 | PENDENTE-003 | IMPLEMENTADA | MEDIA | Opcao A — DIRECT como orchestration port, strategy pattern | FR-010 |
-| 4 | ~~PENDENTE-004~~ | IMPLEMENTADA | ALTA | Opcao B — Amendment DOC-FND-000-M04 criado pelo time Foundation | DOC-FND-000 |
+| 4 | PENDENTE-004 | IMPLEMENTADA | ALTA | Opcao B — Amendment DOC-FND-000-M04 criado pelo time Foundation | DOC-FND-000 |
 | 5 | PENDENTE-005 | IMPLEMENTADA | MEDIA | Opcao A — Callback HTTP MOD-009 → MOD-010 | INT-010, DATA-010 |
 | 6 | PENDENTE-006 | IMPLEMENTADA | BAIXA | Opcao A — NotificationService do Foundation (MOD-000) | dependencia mapeada |
 | 7 | PENDENTE-007 | IMPLEMENTADA | ALTA | Opcao A — DOC-FND-000 §2.2 alinhado com modulo spec | DOC-FND-000 v1.8.0 |
 
 > Detalhes completos: requirements/pen-010-pendente.md
 
-### Fase 3: Validacao — CONCLUIDA
+### Fase 3: Validacao — CONCLUIDA (3x)
 
-Validacao executada via `/validate-all` em 2026-03-22 com resultado PASS para todos os manifests do modulo. Durante a validacao, PENDENTE-007 foi identificada e resolvida (scopes MCP nos manifests divergiam do catalogo canonico — DOC-FND-000 atualizado para v1.8.0).
-
-> **Decision tree de validacao:**
-> Quero validar tudo de uma vez?
-> ├── SIM → /validate-all (orquestra todos, pula os que nao tem artefato)
-> └── NAO → Qual pilar?
->     ├── Sintaxe/links/metadados → /qa
->     ├── Screen manifests       → /validate-manifest
->     ├── Contratos OpenAPI      → /validate-openapi
->     ├── Schemas Drizzle        → /validate-drizzle
->     └── Endpoints Fastify      → /validate-endpoint
+Primeira validacao em 2026-03-22 (pre-codegen: QA + manifests). Segunda validacao em 2026-03-24 (pos-codegen: todas as 5 skills). Terceira validacao em 2026-03-24 (revalidacao completa: lint + format + arquitetura + QA + manifests + OpenAPI + Drizzle + endpoints).
 
 ```
 5a   /qa                    Validacao de sintaxe, links e metadados:          CONCLUIDO
-                           - Todos os artefatos passaram qa check             validate-all 2026-03-22
+                           - MOD-010 markdown: 0 erros                        2026-03-24
 
 5b   /validate-manifest    Validacao de screen manifests:                     CONCLUIDO
-                           - ux-mcp-001.gestao-agentes.yaml PASS
+                           - ux-mcp-001.gestao-agentes.yaml PASS              2026-03-24
                            - ux-mcp-002.monitor-execucoes.yaml PASS
-                           - PENDENTE-007 resolvida durante validacao (scopes alinhados)
 
-5c   /validate-openapi     Validacao de contratos OpenAPI:                    FUTURO (pos-codigo)
-                           - Artefato de codigo nao existe ainda
-                           - 13 endpoints definidos em spec, OpenAPI sera gerado pos-implementacao
+5c   /validate-openapi     Validacao de contratos OpenAPI:                    CONCLUIDO
+                           - mod-010-mcp-automation.yaml PASS                 2026-03-24
+                           - 14 operacoes, RFC 9457, BR-004, x-permissions
 
-5d   /validate-drizzle     Validacao de schemas Drizzle:                      FUTURO (pos-codigo)
-                           - 5 tabelas definidas em DATA-010
-                           - Schema Drizzle sera criado durante implementacao
+5d   /validate-drizzle     Validacao de schemas Drizzle:                      CONCLUIDO
+                           - mcp-automation.ts PASS (5 tabelas, checks, indexes) 2026-03-24
+                           - mcp-automation.relations.ts PASS
 
-5e   /validate-endpoint    Validacao de endpoints Fastify:                    FUTURO (pos-codigo)
-                           - 13 endpoints definidos
-                           - Handlers Fastify serao implementados pos-scaffold de codigo
+5e   /validate-endpoint    Validacao de endpoints Fastify:                    CONCLUIDO
+                           - agents.route.ts (8 endpoints) PASS               2026-03-24
+                           - actions.route.ts (3 endpoints) PASS
+                           - executions.route.ts (2 endpoints) PASS
+                           - gateway.route.ts (1 endpoint) PASS
 ```
 
 #### Validadores Aplicaveis — Mapa de Cobertura
@@ -163,39 +158,69 @@ Validacao executada via `/validate-all` em 2026-03-22 com resultado PASS para to
 |---|-----------|-------------------|------------------|-----------|
 | 1 | `/qa` | SIM (todos) | SIM — PASS | Todos os 10 requisitos + mod.md + CHANGELOG |
 | 2 | `/validate-manifest` | SIM (2 manifests) | SIM — PASS | ux-mcp-001.yaml, ux-mcp-002.yaml |
-| 3 | `/validate-openapi` | SIM (Nivel 2) | NAO — pos-codigo | 13 endpoints em spec, OpenAPI futuro |
-| 4 | `/validate-drizzle` | SIM (Nivel 2) | NAO — pos-codigo | 5 tabelas em DATA-010, schema futuro |
-| 5 | `/validate-endpoint` | SIM (Nivel 2) | NAO — pos-codigo | 13 endpoints em spec, handlers futuro |
+| 3 | `/validate-openapi` | SIM (Nivel 2) | SIM — PASS | mod-010-mcp-automation.yaml (14 ops) |
+| 4 | `/validate-drizzle` | SIM (Nivel 2) | SIM — PASS | mcp-automation.ts (5 tabelas), relations |
+| 5 | `/validate-endpoint` | SIM (Nivel 2) | SIM — PASS | 4 route files (14 endpoints total) |
 
-### Fase 4: Promocao — PENDENTE
+### Fase 4: Promocao — CONCLUIDA
 
-Fase 3 concluida e todas as 7 pendencias IMPLEMENTADA. PENDENTE-001 (FR-010 criado) e PENDENTE-004 (DOC-FND-000-M04 criado) tiveram status sincronizado em 2026-03-23. DoR 7/7 atendido — modulo elegivel para promocao imediata.
+Modulo promovido para READY (v1.0.0) em 2026-03-23 via `/promote-module`. DoR 7/7 atendido. Todas as 7 pendencias IMPLEMENTADA. Commit: 5ca283e.
 
 ```
-6    /promote-module        Gate 0 — DoR Pre-Promocao:                       A EXECUTAR
-
+6    /promote-module        Gate 0 — DoR Pre-Promocao:                       CONCLUIDO
+                                                                             commit 5ca283e
      DoR-1: 0 pendencias ABERTA?                                             SIM (7/7 IMPLEMENTADA)
      DoR-2: Todos features APPROVED?                                         SIM (5/5)
      DoR-3: Todos requisitos existem?                                        SIM (10/10)
      DoR-4: ADRs minimos atendidos (>= 3 para Nivel 2)?                     SIM (4 ADRs)
      DoR-5: Screen manifests validos?                                        SIM (2/2 PASS)
      DoR-6: validate-all PASS?                                               SIM (2026-03-22)
-     DoR-7: Owner aprova?                                                    A VERIFICAR
+     DoR-7: Owner aprova?                                                    SIM
+                           Resultado: READY v1.0.0 selado                    2026-03-23
 ```
 
 #### Bloqueadores para Promocao
 
-1. **PENDENTE-001 (ABERTA, ALTA):** Phase 2 `*:create` — mecanismo de habilitacao per-agent. A decisao e Opcao B (endpoint dedicado `POST /enable-phase2`), mas o status permanece ABERTA porque o endpoint ainda nao foi completamente especificado em FR-010 com todos os detalhes necessarios para implementacao. Acao: verificar se FR-010 ja contem o FR completo ou se precisa de `/update-specification`.
+Nenhum. Todos resolvidos. Modulo selado READY v1.0.0.
 
-2. **PENDENTE-004 (ABERTA, ALTA):** Amendment MOD-000-F12 — registro de scopes no Foundation. A decisao e Opcao B (amendment pelo time Foundation) e o DOC-FND-000-M04 ja foi criado (DOC-FND-000 v1.7.0). O status permanece ABERTA possivelmente por falta de atualizacao do pen file. Acao: verificar se implementacao esta completa e atualizar status para IMPLEMENTADA via `/manage-pendentes implement PEN-010 PENDENTE-004`.
+### Fase 5: Geracao de Codigo — CONCLUIDA
 
-> **Nota:** Apos resolver as 2 pendencias ABERTA, re-executar `/validate-all` para confirmar PASS e entao `/promote-module` para promocao.
-
-### Fase 5: Pos-READY — SOB DEMANDA
+Codegen completo (6/6 agentes) executado entre 2026-03-23 e 2026-03-24. 48 arquivos gerados no total. Validacao pos-codegen PASS (5/5 validadores).
 
 ```
-7    /create-amendment      Sob demanda apos READY:                           SOB DEMANDA
-                           - Nenhum amendment criado (modulo ainda DRAFT)
+7a   /app-scaffold all     Scaffold de aplicacoes:                            CONCLUIDO
+                           - apps/api/ (Fastify + Drizzle + OpenAPI)            2026-03-23
+                           - apps/web/ (React + TanStack)
+
+7b   /codegen mod-010      Geracao de codigo (6 agentes, Nivel 2):            CONCLUIDO
+                           - AGN-COD-DB: 3 files (schema + relations + index)   2026-03-23
+                           - AGN-COD-CORE: 10 files (VOs, aggregate, entity, services, events, errors)
+                           - AGN-COD-APP: 14 files (ports, 12 use cases)
+                           - AGN-COD-API: 14 files (DTOs, routes, OpenAPI)      2026-03-24
+                           - AGN-COD-WEB: 7 files (types, api, hooks, pages)    2026-03-24
+                           - AGN-COD-VAL: validacao PASS (0 violacoes)          2026-03-24
+                           Path API: apps/api/src/modules/mcp/
+                           Path Web: apps/web/src/modules/mcp-automation/
+```
+
+#### Rastreio de Agentes COD
+
+| # | Agente | Camada | Path | Status | Arquivos |
+|---|--------|--------|------|--------|----------|
+| 1 | AGN-COD-DB | infrastructure | apps/api/db/schema/ | CONCLUIDO | 3 |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/mcp/domain/ | CONCLUIDO | 10 |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/mcp/application/ | CONCLUIDO | 14 |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/mcp/presentation/, apps/api/openapi/ | CONCLUIDO | 14 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/mcp-automation/ | CONCLUIDO | 7 |
+| 6 | AGN-COD-VAL | validation | (cross-layer) | CONCLUIDO | 0 (validacao) |
+
+### Fase 6: Pos-READY — SOB DEMANDA
+
+Modulo selado READY v1.0.0. Alteracoes futuras exclusivamente via `/create-amendment`. Nenhum amendment criado ate o momento.
+
+```
+8    /create-amendment      Sob demanda apos READY:                           SOB DEMANDA
+                           - Nenhum amendment criado
                            - Amendments futuros para extensoes Phase 2, novos action types, etc.
 ```
 
@@ -209,6 +234,8 @@ Fase 3 concluida e todas as 7 pendencias IMPLEMENTADA. PENDENTE-001 (FR-010 cria
 **Ciclo de vida:** ABERTA → EM_ANALISE → DECIDIDA → IMPLEMENTADA (ou CANCELADA)
 
 > **Decision tree de pendencias:**
+>
+> ```
 > O que preciso fazer com pendencias?
 > ├── Ver situacao atual       → /manage-pendentes list PEN-010
 > ├── Criar nova pendencia     → /manage-pendentes create PEN-010
@@ -217,18 +244,20 @@ Fase 3 concluida e todas as 7 pendencias IMPLEMENTADA. PENDENTE-001 (FR-010 cria
 > ├── Implementar decisao      → /manage-pendentes implement PEN-010 PENDENTE-XXX
 > ├── Cancelar pendencia       → /manage-pendentes cancel PEN-010 PENDENTE-XXX
 > └── Relatorio consolidado    → /manage-pendentes report PEN-010
+> ```
 
 #### Pendencias — Referencia
 
 | # | ID | Status | Severidade | Decisao (1 linha) |
 |---|---|---|---|---|
-| 1 | ~~PENDENTE-001~~ | IMPLEMENTADA | ALTA | Endpoint dedicado Phase 2 enable |
+| 1 | PENDENTE-001 | IMPLEMENTADA | ALTA | Endpoint dedicado Phase 2 enable |
 | 2 | PENDENTE-002 | IMPLEMENTADA | MEDIA | PREPARAR can_be_direct=false |
 | 3 | PENDENTE-003 | IMPLEMENTADA | MEDIA | DIRECT orchestration port |
-| 4 | ~~PENDENTE-004~~ | IMPLEMENTADA | ALTA | Amendment DOC-FND-000-M04 (scopes MCP) |
+| 4 | PENDENTE-004 | IMPLEMENTADA | ALTA | Amendment DOC-FND-000-M04 (scopes MCP) |
 | 5 | PENDENTE-005 | IMPLEMENTADA | MEDIA | Callback HTTP MOD-009 → MOD-010 |
 | 6 | PENDENTE-006 | IMPLEMENTADA | BAIXA | NotificationService MOD-000 |
 | 7 | PENDENTE-007 | IMPLEMENTADA | ALTA | Scopes alinhados DOC-FND-000 v1.8.0 |
+| 8 | PENDENTE-008 | IMPLEMENTADA | MEDIA | Erros lint codegen resolvidos (0 erros ESLint) |
 
 > Detalhes completos: requirements/pen-010-pendente.md
 
@@ -238,8 +267,10 @@ Fase 3 concluida e todas as 7 pendencias IMPLEMENTADA. PENDENTE-001 (FR-010 cria
      /qa                    Re-validar apos alteracoes
      /validate-all          Validacao completa (manifests + qa)
      /manage-pendentes      Gerenciar ciclo de vida de pendencias
-     /promote-module        Executar promocao quando DoR atendido
      /create-amendment      Criar adendo pos-READY
+     /app-scaffold          Scaffold de aplicacoes (one-time)
+     /codegen               Gerar codigo de um modulo
+     /codegen-all           Gerar codigo de todos modulos READY (ordem topologica)
 ```
 
 ---
@@ -247,21 +278,21 @@ Fase 3 concluida e todas as 7 pendencias IMPLEMENTADA. PENDENTE-001 (FR-010 cria
 ## Resumo Visual do Fluxo MOD-010
 
 ```
-PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──→ PROMOCAO ──→ POS-READY
-    [OK]         [OK]          [OK]              [OK]       [BLOQ]      [futuro]
-                                                              │
-                                                              ├── 2 ABERTA (PENDENTE-001, PENDENTE-004)
-                                                              └── DoR-1 NAO atendido
+PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──→ PROMOCAO ──→ CODEGEN ──→ POS-READY
+    [OK]         [OK]          [OK]              [OK]        [OK]         [OK]     [sob demanda]
+                                                          READY v1.2.0
+                                                          48 arquivos                ◄── voce esta aqui
+                                                          2026-03-24
 ```
 
 **Posicao na cadeia topologica:** Camada 6 (MOD-010 depende de MOD-000, MOD-004, MOD-007, MOD-008, MOD-009). Modulo folha — nenhum modulo depende de MOD-010.
 
-**Dependencias upstream (5):**
-- MOD-000 (Foundation) — auth, RBAC, domain events, audit trail, NotificationService
-- MOD-004 (Identidade Avancada) — scopes delegados para agentes MCP
-- MOD-007 (Parametrizacao Contextual) — motor de parametrizacao para configuracao dinamica
-- MOD-008 (Integracao Protheus) — integracoes externas acionadas via MCP
-- MOD-009 (Movimentos sob Aprovacao) — policy CONTROLLED para movimentos que requerem aprovacao
+**Dependencias upstream (5) — todas READY:**
+- MOD-000 (Foundation) — READY — auth, RBAC, domain events, audit trail, NotificationService
+- MOD-004 (Identidade Avancada) — READY — scopes delegados para agentes MCP
+- MOD-007 (Parametrizacao Contextual) — READY — motor de parametrizacao para configuracao dinamica
+- MOD-008 (Integracao Protheus) — READY — integracoes externas acionadas via MCP
+- MOD-009 (Movimentos sob Aprovacao) — READY — policy CONTROLLED para movimentos que requerem aprovacao
 
 ---
 
@@ -269,25 +300,24 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 
 | Aspecto | Detalhe |
 |---------|---------|
-| Nivel de Arquitetura | Nivel 2 — DDD-lite + Clean Completo. Score DOC-ESC-001: 6/6 gatilhos ativados (workflow, compliance, concorrencia, integracoes criticas, multi-tenant, regras cruzadas). Modulo mais complexo do portfolio. |
+| Nivel de Arquitetura | Nivel 2 — DDD-lite + Clean Completo. Score DOC-ESC-001: 6/6 gatilhos ativados (workflow, compliance, concorrencia, integracoes criticas, multi-tenant, regras cruzadas). Modulo mais complexo do portfolio. Requer todos os 6 agentes COD. |
 | Aggregate Root | `McpAgent` — fronteira transacional clara. Domain Services: McpGateway (8 passos), ScopeBlocklistValidator, McpDispatcher. Value Objects: ExecutionPolicy, AgentStatus, ActionType. |
-| Pendencias ABERTA | 2 pendencias de severidade ALTA bloqueiam promocao. PENDENTE-001 (Phase 2 per-agent enablement) tem decisao documentada mas implementacao incompleta. PENDENTE-004 (amendment MOD-000-F12) pode ja estar implementada — requer verificacao do pen file. |
-| Maior contagem de dependencias | 5 dependencias upstream — a maior do portfolio. Posicao de modulo folha na Camada 6 significa que nenhum deploy e bloqueado por MOD-010, mas o proprio MOD-010 depende de muitos modulos estarem prontos. |
+| Pendencias | 0 ABERTA. 8/8 IMPLEMENTADA. Modulo selado READY v1.2.0. |
+| Maior contagem de dependencias | 5 dependencias upstream — a maior do portfolio. Posicao de modulo folha na Camada 6 significa que nenhum deploy e bloqueado por MOD-010, mas o proprio MOD-010 depende de muitos modulos estarem prontos. Todas 5 agora READY. |
 | API Key once-only | Mecanismo de seguranca critico: API key retornada apenas uma vez na criacao, armazenada via bcrypt hash. Nunca retornada em GET. Rotacao gera nova key com idempotencia. |
-| Blocklist em 2 fases | Phase 1 (permanente): 6 padroes de escopo bloqueados. Phase 2 (futuro): `*:create` liberavel per-agent sob condicoes. O mecanismo Phase 2 e justamente PENDENTE-001 que bloqueia promocao. |
+| Blocklist em 2 fases | Phase 1 (permanente): 6 padroes de escopo bloqueados. Phase 2 (futuro): `*:create` liberavel per-agent sob condicoes. Endpoint dedicado Phase 2 enable definido (PENDENTE-001 IMPLEMENTADA). |
 | Screen Manifests | 2 manifests YAML existem e passaram validacao. UX-MCP-001 (Gestao Agentes), UX-MCP-002 (Monitor Execucoes). |
+| Codegen — escopo completo | Nivel 2 requer 6 agentes COD. Slug: `mcp`. Paths: `apps/api/src/modules/mcp/` (domain, application, infrastructure, presentation) e `apps/web/src/modules/mcp/` (UI screens, components). Scaffold de apps concluido (2026-03-23). |
 
 ---
 
-## Checklist Rapido — O que Falta para READY
+## Checklist Rapido — Codegen CONCLUIDO
 
-- [x] Resolver PENDENTE-001: FR-010 §FR-010 criado com endpoint Phase 2 enable — IMPLEMENTADA ✅
-- [x] Resolver PENDENTE-004: DOC-FND-000-M04 criado com 6 scopes mcp:* — IMPLEMENTADA ✅
-- [ ] Re-executar `/validate-all` apos resolver pendencias (confirmar PASS)
-- [ ] Executar `/promote-module MOD-010` (Gate 0 DoR)
-- [ ] Owner (Marcos Sulivan) aprovar promocao
-
-> **Nota:** MOD-010 e modulo folha (Camada 6) — sua promocao nao bloqueia nenhum outro modulo. Porem, as dependencias upstream (especialmente MOD-009 e MOD-008) devem estar READY antes do deploy efetivo.
+- [x] Executar `/app-scaffold all` — CONCLUIDO 2026-03-23
+- [x] Executar `/codegen mod-010` — 6/6 agentes CONCLUIDO (48 arquivos) — 2026-03-24
+- [x] Pos-codegen: `/validate-openapi` — PASS (14 operacoes) — 2026-03-24
+- [x] Pos-codegen: `/validate-drizzle` — PASS (5 tabelas) — 2026-03-24
+- [x] Pos-codegen: `/validate-endpoint` — PASS (14 endpoints) — 2026-03-24
 
 ---
 
@@ -295,6 +325,11 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 5.0.0 | 2026-03-24 | Revalidacao completa via validate-all: Lint 0 erros (PENDENTE-008 resolvida), Format 5 warnings (cross-module PEN-000/PENDENTE-018), Arquitetura PASS, QA PASS, Manifests 2/2 PASS, OpenAPI PASS (14 ops), Drizzle PASS (5 tabelas), Endpoints PASS (14 endpoints). 0 bloqueadores. |
+| 4.0.0 | 2026-03-24 | Codegen CONCLUIDO (6/6 agentes, 48 arquivos). Validacao Fase 3 pos-codegen PASS (5/5: QA, Manifests 2/2, OpenAPI, Drizzle, Endpoints). Plano atualizado: Fase 5 CONCLUIDA, checklist completo. Pronto para merge. |
+| 3.2.0 | 2026-03-23 | Atualizacao: Epico APPROVED→READY (v1.3.0) e features F01-F05 APPROVED→READY (v1.2.0). Mermaid E5 verde. Execution state atualizado com secao promotion. |
+| 3.1.0 | 2026-03-23 | Atualizacao: Fase 5 (Geracao de Codigo) adicionada como NAO INICIADA (scaffold apps inexistente, todas 5 deps upstream READY). Fase 6 (Pos-READY) renumerada. Rastreio de agentes COD, pre-requisitos de codegen, checklist de codegen e decision tree de codegen adicionados. CHANGELOG do modulo atualizado para v1.0.0. Status das dependencias upstream confirmado: todas 12 modulos READY |
+| 3.0.0 | 2026-03-23 | Fase 4 CONCLUIDA — READY v1.0.0 selado (commit 5ca283e). Resumo visual, checklist e particularidades atualizados |
 | 2.1.0 | 2026-03-23 | PENDENTE-001 e PENDENTE-004 → IMPLEMENTADA (status sincronizado — artefatos ja existiam). DoR 7/7 atendido. Fase 4 desbloqueada — pronto para /promote-module |
 | 2.0.0 | 2026-03-23 | Recriacao completa: Fases 0-3 CONCLUIDAS (validate-all 2026-03-22 PASS), Fase 4 BLOQUEADA por 2 ABERTA (PENDENTE-001, PENDENTE-004), PENDENTE-007 adicionada e resolvida, screen manifests 2/2 confirmados, mapa de cobertura atualizado |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 6 pendentes resolvidas (001-006), rastreio de 11 agentes, mapa de cobertura de 5 validadores, particularidades Nivel 2 DDD-lite Score 6/6 |

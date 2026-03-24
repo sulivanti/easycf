@@ -1,16 +1,16 @@
 # US-MOD-011-F01 — Amendment: current_record_state no Motor de Avaliação (MOD-007-F03)
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.1.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.2.0
+**Data:** 2026-03-24
 **Módulo Destino:** **MOD-011** → impacto em **MOD-007** (Backend — Amendment)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-24
 - **rastreia_para:** US-MOD-011, US-MOD-007-F03, PEND-SGR-02
 - **nivel_arquitetura:** 2
 - **tipo:** Backend — amendment em MOD-007-F03

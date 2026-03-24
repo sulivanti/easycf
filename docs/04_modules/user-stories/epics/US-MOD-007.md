@@ -1,17 +1,17 @@
 # US-MOD-007 — Parametrização Contextual e Rotinas (Épico)
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.3.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.4.0
+**Data:** 2026-03-23
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-007** (Parametrização Contextual e Rotinas)
 **Épicos de Negócio:** EP05 (Parametrização Contextual) + EP06 (Cadastro de Rotinas)
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** EP05, EP06, doc 03_Parametrizacao_Contextual_e_Cadastro_de_Rotinas, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003, US-MOD-006, US-MOD-003, US-MOD-004
 - **nivel_arquitetura:** 2 (versionamento de rotinas, motor de avaliação, integração com MOD-006)
 - **evidencias:** N/A

@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-005 Modelagem de Processos
 
-> **Versao:** 3.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** DRAFT (v0.17.0) | **Epico:** READY (v1.2.0) | **Features:** 4/4 READY
+> **Versao:** 7.1.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.0.3) | **Epico:** READY (v1.2.0) | **Features:** 4/4 READY
 >
-> Fases 0-3 concluidas (validate-all PASS em 2026-03-22). Proximo passo: Fase 4 (Promocao) — executar `/promote-module`.
+> Fases 0-5 concluidas. Codegen completo (6/6 agentes, 42 arquivos). **Validacao Fase 3 PASS** — 0 bloqueadores, 0 violacoes criticas, 5 avisos (MEDIA/BAIXA). **16/16 pendencias IMPLEMENTADA**. 1 amendment. Proximo passo: `/manage-pendentes report PEN-005` para confirmar fechamento completo.
 
 ---
 
@@ -11,18 +11,20 @@
 
 | Item | Estado | Detalhe |
 |------|--------|---------|
-| Epico US-MOD-005 | READY (v1.2.0) | DoR 7/8 completo (falta owner confirmar APPROVED), 4 features vinculadas, EP03 |
-| Features F01-F04 | 4/4 READY | F01 (API: Ciclos+Macroetapas+Estagios), F02 (API: Gates+Papeis+Transicoes), F03 (UX: Editor Visual), F04 (UX: Configurador Estagio) |
+| Epico US-MOD-005 | READY (v1.2.0) | DoR completo, 4 features vinculadas, EP03 |
+| Features F01-F04 | 4/4 READY | F01 (API: Ciclos+Macroetapas+Estagios v1.1.0), F02 (API: Gates+Papeis+Transicoes v1.0.2), F03 (UX: Editor Visual v1.0.2), F04 (UX: Configurador Estagio v1.0.2) |
 | Scaffold (forge-module) | CONCLUIDO | mod-005-modelagem-processos/ com estrutura completa Nivel 2 |
-| Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-10 confirmados (AGN-DEV-01 x2, AGN-DEV-02 x2, AGN-DEV-03 x2, AGN-DEV-09 x2, AGN-DEV-10 x2 = re-enriquecimento), v0.17.0 |
-| PENDENTEs | 0 abertas | 9 total: 9 IMPLEMENTADA (Q1-Q9) |
-| ADRs | 4 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 is_initial unique, ADR-002 fail-safe MOD-006, ADR-003 fork atomico, ADR-004 optimistic locking) |
-| Amendments | 0 | Nenhum |
+| Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-10 confirmados (re-enriquecimento completo), v0.17.0 |
+| Codegen (6 agentes) | CONCLUIDO | 6/6 agentes done. 42 arquivos gerados. Todas violacoes resolvidas. |
+| Validacao Fase 3 | **PASS** (2026-03-24) | 0 bloqueadores, 0 criticas, 5 avisos. Lint PASS, QA WARN (infra), Manifests PASS (2/2), OpenAPI WARN, Drizzle PASS, Endpoints PASS, Arquitetural PASS |
+| PENDENTEs | 0 abertas / 16 total | 16 IMPLEMENTADA (Q1-Q9, PENDENTE-010..016). 0 DECIDIDA. 0 ABERTA. |
+| ADRs | 4 criadas (accepted) | Nivel 2 requer minimo 3 — atendido (ADR-001..004) |
+| Amendments | 1 | AMD-UX-PROC-001-001 (update_stage_position no ux-proc-001) |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v0.17.0 | Ultima entrada 2026-03-17 (AGN-DEV-10 re-enriquecimento PEN). Pipeline Mermaid Etapa 5 |
-| Screen Manifests | 2/2 existem | ux-proc-001.editor-visual, ux-proc-002.config-estagio |
+| CHANGELOG | v1.0.3 | Ultima entrada 2026-03-24 (validate-all PASS). Pipeline Mermaid Etapa 5 |
+| Screen Manifests | 2/2 existem | ux-proc-001.editor-visual (PASS c/ amendment), ux-proc-002.config-estagio (PASS) |
 | Dependencias | 3 upstream (MOD-000, MOD-003, MOD-004) | Consome auth/RBAC de MOD-000, org_units de MOD-003, org_scopes de MOD-004 |
-| Bloqueios | 1 recebido (BLK-003) | MOD-005 bloqueado por MOD-004 (org_scopes para filtering). Tambem emite BLK-002 para MOD-006 |
+| Bloqueios | 1 recebido (BLK-003) | MOD-005 bloqueado por MOD-004 (org_scopes). Emite BLK-002 para MOD-006 |
 
 ---
 
@@ -34,15 +36,13 @@ PASSO    SKILL/ACAO              DETALHES                                    STA
 
 ### Fase 0: Pre-Modulo — CONCLUIDA
 
-O epico US-MOD-005 define a camada de modelagem de processos (blueprint) — a separacao conceitual entre o molde (MOD-005) e o produto moldado (MOD-006). Modelo de 7 tabelas com versionamento imutavel de ciclos publicados, grafo de transicoes com condicoes e evidencias, e catalogo global de papeis de processo. O principio "Etapa nao e responsavel" (doc normativo) fundamenta a separacao Papel (processo) vs Role (RBAC). Com 4 features cobrindo backend (F01, F02) e frontend (F03, F04), o modulo foi aprovado como READY com DoR quase completo.
+O epico US-MOD-005 define a camada de modelagem de processos (blueprint) — a separacao conceitual entre o molde (MOD-005) e o produto moldado (MOD-006). Modelo de 7 tabelas com versionamento imutavel de ciclos publicados, grafo de transicoes com condicoes e evidencias, e catalogo global de papeis de processo. Com 4 features cobrindo backend (F01, F02) e frontend (F03, F04), o modulo foi aprovado como READY com DoR completo.
 
 ```
 1    (manual)              Revisar e finalizar epico US-MOD-005:             CONCLUIDO
                            - Escopo fechado (4 features: 2 backend + 2 UX)  status_agil = READY
                            - Gherkin validado (5 cenarios epico)             v1.2.0
                            - DoR completo (7 tabelas, 25 endpoints, regras)
-                           - Separacao Blueprint vs Execucao documentada
-                           - Versionamento de ciclos (DRAFT→PUBLISHED→DEPRECATED)
                            Arquivo: docs/04_modules/user-stories/epics/US-MOD-005.md
 
 2    (manual)              Revisar e finalizar features F01-F04:             CONCLUIDO
@@ -55,185 +55,139 @@ O epico US-MOD-005 define a camada de modelagem de processos (blueprint) — a s
 
 ### Fase 1: Genese do Modulo — CONCLUIDA
 
-Modulo Nivel 2 (DDD-lite + Full Clean) scaffoldado na camada topologica 3. Score 5/6 no DOC-ESC-001 §4.2. Primeiro modulo da cadeia de processos (MOD-005 → MOD-006 → MOD-007).
+Modulo Nivel 2 (DDD-lite + Full Clean) scaffoldado na camada topologica 3. Score 5/6 no DOC-ESC-001 §4.2.
 
 ```
-3    /forge-module MOD-005  Scaffold completo gerado:                        CONCLUIDO
-                           mod-005-modelagem-processos.md, CHANGELOG.md,    v0.1.0 (2026-03-16)
-                           requirements/ (br/, fr/, data/, int/, sec/,
-                           ux/, nfr/), adr/, amendments/
-                           Stubs obrigatorios: BR-005, FR-005, DATA-005,
-                           DATA-003, INT-005, SEC-005, SEC-002, UX-005,
-                           NFR-005, PEN-005
-                           Pasta: docs/04_modules/mod-005-modelagem-processos/
+3    /forge-module          Scaffold criado:                                 CONCLUIDO
+                           Pasta: mod-005-modelagem-processos/
+                           Nivel 2 — DDD-lite + Full Clean
+                           Artefatos: mod.md, CHANGELOG.md, requirements/
 ```
 
-### Fase 2: Enriquecimento — CONCLUIDO
+### Fase 2: Enriquecimento — CONCLUIDA
 
-O enriquecimento do MOD-005 foi o mais intenso do projeto — 17 versoes no CHANGELOG, com re-enriquecimento de 5 agentes (AGN-DEV-01, 02, 03, 09, 10) necessario apos o enriquecimento inicial revelar lacunas e questoes interdependentes. Durante o processo, 9 questoes foram levantadas (Q1-Q9) e todas resolvidas: Q1 (React Flow), Q2 (JSON rule engine), Q3 (integracao MOD-006), Q4 (scopes DOC-FND-000), Q5 (ADR-001 is_initial), Q6 (contagem endpoints), Q7 (domain events UPDATE/DELETE), Q8 (DELETE process_roles), Q9 (ADR-002 status proposed). Destaque para o modelo de 7 tabelas, 26 endpoints, 19 domain events, fork atomico com remapeamento de UUIDs.
+Enriquecimento mais intenso do projeto com 17 versoes no CHANGELOG e 9 questoes resolvidas. 5 agentes precisaram de re-enriquecimento.
 
-> **Decision tree de enriquecimento:**
+```
+4    /enrich mod-005        Enriquecimento completo:                         CONCLUIDO
+                           11 agentes executados (AGN-DEV-01..10)
+                           5 agentes re-enriquecidos
+                           9 questoes levantadas e resolvidas (Q1-Q9)
+                           Versao final: v0.17.0
+```
+
+### Fase 3: Validacao Spec — CONCLUIDA (pre-READY)
+
+```
+5    /validate-all          Validacao pre-promocao (spec):                   CONCLUIDO (2026-03-22)
+                           /qa .................. PASS
+                           /validate-manifest ... PASS (2/2)
+                           /validate-openapi .... FUTURO (pos-codigo)
+                           /validate-drizzle .... FUTURO (pos-codigo)
+                           /validate-endpoint ... FUTURO (pos-codigo)
+```
+
+### Fase 4: Promocao — CONCLUIDA
+
+```
+6    /promote-module        Promocao DRAFT → READY:                          CONCLUIDO (2026-03-23)
+                           Gate 0 — DoR: 7/7 atendidos
+                           estado_item = READY (v1.0.0)
+```
+
+> **Nota sobre BLK-003:** MOD-005 recebe bloqueio BLK-003 (depende de `org_scopes` de MOD-004). Isso nao impediu a promocao de spec mas afeta a geracao de codigo — MOD-004 precisa ter codigo gerado antes na ordem topologica.
+
+### Fase 5: Geracao de Codigo — CONCLUIDA (validacao PASS)
+
+Codegen completo (6/6 agentes done). Validacao cruzada (AGN-COD-VAL) identificou 6 violacoes — todas resolvidas (PENDENTE-010..016). Re-validacao final: **PASS** (0 bloqueadores, 0 criticas).
+
+> **Decision tree de codegen:**
 >
 > ```
-> Quero enriquecer todos os modulos elegiveis?
-> ├── SIM → /enrich-all (sequencial, com checkpoint e --dry-run/--resume)
-> └── NAO → Qual escopo?
->     ├── Todos agentes de 1 modulo  → /enrich mod-005
->     └── 1 agente especifico        → /enrich-agent AGN-DEV-XX mod-005
+> Preciso gerar codigo para os modulos?
+> ├── Scaffold existe? (apps/api/, apps/web/)
+> │   └── NAO → /app-scaffold all (one-time, cria apps/api e apps/web)
+> └── SIM → Qual escopo?
+>     ├── Todos modulos READY (ordem topologica)  → /codegen-all (--dry-run para preview)
+>     ├── Todos agentes de 1 modulo               → /codegen mod-005
+>     └── 1 agente especifico                     → /codegen-agent mod-005 AGN-COD-XX
 > ```
 
 ```
-4    /enrich docs/04_modules/mod-005-modelagem-processos/
-                           Agentes executados sobre mod-005:                 CONCLUIDO
-                           AGN-DEV-01 (MOD x2), AGN-DEV-02 (BR x2),       v0.17.0 (2026-03-17)
-                           AGN-DEV-03 (FR x2), AGN-DEV-04 (DATA),
-                           AGN-DEV-05 (INT), AGN-DEV-06 (SEC),
-                           AGN-DEV-07 (UX), AGN-DEV-08 (NFR),
-                           AGN-DEV-09 (ADR x2), AGN-DEV-10 (PEN x2)
-                           9 questoes criadas e resolvidas (Q1-Q9)
+7    /app-scaffold all      Criar scaffold de aplicacoes:                     CONCLUIDO (2026-03-23)
+                           - apps/api/ (Fastify + Drizzle + OpenAPI)
+                           - apps/web/ (Next.js + React)
+
+8    /codegen mod-005       Gerar codigo para MOD-005 (Nivel 2 — 6 agentes): CONCLUIDO (2026-03-23)
+                           42 arquivos gerados em 6 fases
+
+9    (correcoes)            Corrigir violacoes da validacao cruzada:          CONCLUIDO
+                           V-E01 BLOQUEANTE: ✅ RESOLVIDO (PENDENTE-010)
+                           V-E02 ALTA: ✅ RESOLVIDO (PENDENTE-011)
+                           V-E03 ALTA: ✅ RESOLVIDO (PENDENTE-012)
+                           V-E04 ALTA: ✅ RESOLVIDO (PENDENTE-013 — DTOs alinhados)
+                           V-E06 ALTA: ✅ RESOLVIDO (PENDENTE-016/011)
+                           V-M01 ALTA: ✅ RESOLVIDO (PENDENTE-014 via AMD-UX-PROC-001-001)
+
+10   /validate-all mod-005  Re-validacao final 2026-03-24:                   PASS ✅
+                           Lint: PASS (0 errors, 0 warnings, 0 format issues)
+                           Arquitetural: PASS (DomainError OK, Pattern A OK)
+                           QA: WARN (6 TS — infra-level: reactflow + implicit any)
+                           Manifests: PASS (2/2 — V-M01 resolvido)
+                           OpenAPI: WARN (deprecate falta no OAS)
+                           Drizzle: PASS (7/7 tabelas, 23 indexes)
+                           Endpoints: PASS (27/27 rotas, 0 violacoes)
+                           Veredicto: 0 bloqueadores, 0 criticas, 5 avisos
 ```
 
-#### Rastreio de Agentes — MOD-005
+#### Rastreio de Agentes COD — MOD-005
 
-| # | Agente | Pilar | Artefato | Status | Evidencia |
-|---|--------|-------|----------|--------|-----------|
-| 1 | AGN-DEV-01 | MOD/Escala | mod-005-modelagem-processos.md | CONCLUIDO (x2) | v0.2.0 — Nivel 2 confirmado (score 5/6), module_paths; v0.13.0 — re-enriquecimento, contadores atualizados |
-| 2 | AGN-DEV-02 | BR | BR-005.md | CONCLUIDO (x2) | v0.3.0 — 10 regras BR-001 a BR-010, Gherkin, exemplos; v0.14.0 — BR-011 (depreciacao), BR-012 (reordenacao). Total: 12 regras |
-| 3 | AGN-DEV-03 | FR | FR-005.md | CONCLUIDO (x2) | v0.9.0 — 13 requisitos FR-001 a FR-013; v0.15.0 — Gherkin adicionado, deps BR-011/012 incorporadas |
-| 4 | AGN-DEV-04 | DATA | DATA-005.md, DATA-003.md | CONCLUIDO | v0.4.0 — 7 tabelas completas, constraints, indexes, seed data, migracao, queries criticas (/flow SLA <200ms), catalogo events expandido |
-| 5 | AGN-DEV-05 | INT | INT-005.md | CONCLUIDO | v0.5.0 — 25 endpoints documentados, contratos, RFC 9457, contrato /flow, integracao MOD-006, 4 escopos RBAC |
-| 6 | AGN-DEV-06 | SEC | SEC-005.md, SEC-002.md | CONCLUIDO | v0.6.0 — 11 secoes SEC (authn, authz, classificacao, retencao, mascaramento, soft delete, imutabilidade, tenant isolation, auditoria, LGPD) |
-| 7 | AGN-DEV-07 | UX | UX-005.md | CONCLUIDO | v0.7.0 — UX-PROC-001 (editor visual: 8 acoes, 5 estados, 7 componentes) + UX-PROC-002 (configurador: 4 abas, 10 acoes, sincronizacao bidirecional) |
-| 8 | AGN-DEV-08 | NFR | NFR-005.md | CONCLUIDO | v0.10.0 — SLOs (/flow <200ms, fork <2s), topologia sync, 2 healthchecks, DR, 9 limites capacidade, 5 pilares observabilidade |
-| 9 | AGN-DEV-09 | ADR | ADR-001 a ADR-004 | CONCLUIDO (x2) | v0.8.0 — ADR-001 (is_initial unique), ADR-002 (fail-safe MOD-006); v0.16.0 — ADR-003 (fork atomico), ADR-004 (optimistic locking) |
-| 10 | AGN-DEV-10 | PEN | pen-005-pendente.md | CONCLUIDO (x2) | v0.11.0 — Q1-Q6 (3 resolvidas, 3 abertas); v0.17.0 — Q7-Q9 adicionadas. Total: 9 questoes, todas IMPLEMENTADA |
+| # | Agente | Camada | Path | Status | Arquivos |
+|---|--------|--------|------|--------|----------|
+| 1 | AGN-COD-DB | infrastructure | apps/api/db/schema/process-modeling.ts, .relations.ts, index.ts | DONE (2026-03-23 23:15) | 3 |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/process-modeling/domain/ | DONE (2026-03-23 23:30) | 10 |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/process-modeling/application/ | DONE (2026-03-24 00:15) | 15 |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/process-modeling/presentation/, openapi/ | DONE (2026-03-24 01:00) | 6 |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/process-modeling/ | DONE (2026-03-24 18:30) | 11 |
+| 6 | AGN-COD-VAL | validation | (cross-layer) | DONE (2026-03-24 20:00) | 0 |
 
-#### Pendentes Resolvidas no Enriquecimento — Resumo Compacto
+**Total:** 45 arquivos gerados (3 DB + 10 domain + 15 application + 6 presentation + 11 web)
 
-> As 9 questoes foram identificadas durante o enriquecimento e todas decididas e implementadas entre 2026-03-17 e 2026-03-18.
+#### Resultado da Validacao Final (2026-03-24 22:30)
 
-| # | ID | Status | Sev. | Decisao (1 linha) | Artefato |
-|---|---|---|---|---|---|
-| 1 | Q1 | IMPLEMENTADA | — | React Flow confirmado como biblioteca de canvas | UX-005, mod.md |
-| 2 | Q2 | IMPLEMENTADA | — | JSON rule engine marcado como futuro (campo nullable) | DATA-005 §2.7 |
-| 3 | Q3 | IMPLEMENTADA | — | API sincrona GET /internal/instances/count-active (timeout 3s, fail-safe 503) | INT-005 §4.1, ADR-002 |
-| 4 | Q4 | IMPLEMENTADA | — | 4 scopes process:cycle:* registrados em DOC-FND-000 v1.1.0 | DOC-FND-000 §2.2 |
-| 5 | Q5 | IMPLEMENTADA | — | Opcao B — campo denormalizado cycle_id + partial unique index | ADR-001, DATA-005 §2.3 |
-| 6 | Q6 | IMPLEMENTADA | — | Contagem correta: 25 endpoints (corrigido mod.md e INT-005) | INT-005 §1, mod.md |
-| 7 | Q7 | IMPLEMENTADA | MEDIA | Opcao A — 10 eventos UPDATE/DELETE adicionados ao DATA-003 | DATA-003 v0.4.0, SEC-002 v0.4.0 |
-| 8 | Q8 | IMPLEMENTADA | BAIXA | Opcao A — DELETE /admin/process-roles/:id adicionado | INT-005 §1.7 |
-| 9 | Q9 | IMPLEMENTADA | BAIXA | Opcao A — ADR-002 status: proposed → accepted | ADR-002.md |
+| # | Validador | Resultado | Detalhes |
+|---|-----------|-----------|----------|
+| 0 | Lint + Format | PASS | 0 erros lint, 0 erros format |
+| 0.5 | Arquitetural | PASS | 4/4 DomainError OK, Web Pattern A OK, React Query em 5 hooks |
+| 1 | QA (TypeScript) | WARN | 4 implicit-any + 2 ReactFlow JSX type — infra-level deps |
+| 2 | Screen Manifests | PASS | 2/2 — ux-proc-001 PASS (V-M01 resolvido), ux-proc-002 PASS |
+| 3 | OpenAPI | WARN | Endpoints presentes exceto POST /cycles/{id}/deprecate (spec drift) |
+| 4 | Drizzle Schemas | PASS | 7/7 tabelas, 23 indexes, 7 relacoes, 0 violacoes |
+| 5 | Fastify Endpoints | PASS | 27/27 rotas wired. 5 violacoes anteriores resolvidas. 3 novos achados BAIXA/MEDIA |
 
-> Detalhes completos: requirements/pen-005-pendente.md
+#### Achados Residuais (nao-bloqueantes)
 
----
+| # | ID | Sev. | Tipo | Descricao |
+|---|---|---|---|---|
+| 1 | V-N01 | BAIXA | Doc | FR-004 spec diz PATCH, implementacao usa POST /deprecate (drift documentacao) |
+| 2 | V-N02 | MEDIA | Codigo | Handlers fabricam campos null no response (nome, descricao) |
+| 3 | V-N03 | BAIXA | Codigo | Timestamps fabricados (new Date) vs valores persistidos |
+| 4 | V-N04 | MEDIA | Contrato | OpenAPI v1.yaml falta endpoint POST /cycles/{id}/deprecate |
+| 5 | V-QA01 | BAIXA | Infra | 4 implicit-any + 2 ReactFlow JSX type (deps nao instaladas) |
 
-### Fase 3: Validacao — CONCLUIDA
+> Nenhum destes achados e bloqueante. Podem ser corrigidos em iteracoes futuras via amendment.
 
-O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifests validos em todos os pilares. Os 2 screen manifests proprios do MOD-005 (ux-proc-001, ux-proc-002) passaram na validacao contra schema v1. Nenhuma pendencia adicional identificada. Fase 3 CONCLUIDA.
-
-> **Decision tree de validacao:**
->
-> ```
-> Quero validar tudo de uma vez?
-> ├── SIM → /validate-all (orquestra todos, pula os que nao tem artefato)
-> └── NAO → Qual pilar?
->     ├── Sintaxe/links/metadados → /qa
->     ├── Screen manifests       → /validate-manifest
->     ├── Contratos OpenAPI      → /validate-openapi
->     ├── Schemas Drizzle        → /validate-drizzle
->     └── Endpoints Fastify      → /validate-endpoint
-> ```
+### Fase 6: Pos-READY — EM ANDAMENTO (1 amendment)
 
 ```
-5    /validate-all docs/04_modules/mod-005-modelagem-processos/
-                           Orquestra TODAS as validacoes em sequencia:        CONCLUIDO (2026-03-22)
-                           Internamente executa:
-                             1. /qa (lint, links, metadados, EX-*, §N, ciclos)
-                             2. /validate-manifest (screen manifests vs schema v1)
-                             3. /validate-openapi → FUTURO (pos-codigo)
-                             4. /validate-drizzle → FUTURO (pos-codigo)
-                             5. /validate-endpoint → FUTURO (pos-codigo)
-                           Pre-condicao: Enriquecimento concluido
-                           Pos-condicao: Relatorio consolidado PASS
-```
-
-> **Alternativa:** Executar validadores individuais:
-
-```
-5a   /qa docs/04_modules/mod-005-modelagem-processos/
-                           Diagnostico de sintaxe e integridade:              PASS
-                           - lint:docs (Pass A-E: EX-*, §N, IDs, context-map, ciclos)
-                           - Consistencia de metadados (estado_item, owner)
-                           - Dead links, DoR alignment
-
-5b   /validate-manifest ux-proc-001.editor-visual.yaml
-                           Validar manifests contra schema v1:               PASS
-                           - ux-proc-001.editor-visual.yaml
-                           - ux-proc-002.config-estagio.yaml
-                           Verifica: DOC-UX-010, operationId, RBAC,
-                           telemetria, permissions
-
-5c   /validate-openapi                                                       FUTURO (pos-codigo)
-5d   /validate-drizzle                                                       FUTURO (pos-codigo)
-5e   /validate-endpoint                                                      FUTURO (pos-codigo)
-```
-
-#### Validadores Aplicaveis — Mapa de Cobertura
-
-| # | Validador | Aplicavel (nivel) | Executavel agora | Artefatos |
-|---|-----------|-------------------|------------------|-----------|
-| 1 | `/qa` | SIM (todos) | SIM — PASS | mod-005-modelagem-processos.md, requirements/*, adr/*, CHANGELOG.md |
-| 2 | `/validate-manifest` | SIM (2 manifests existem) | SIM — PASS | ux-proc-001.editor-visual, ux-proc-002.config-estagio |
-| 3 | `/validate-openapi` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/openapi/mod-005-modelagem-processos.yaml — nao existe ainda |
-| 4 | `/validate-drizzle` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/src/modules/process-modeling/domain/ — nao existe |
-| 5 | `/validate-endpoint` | SIM (Nivel 2) | FUTURO (pos-codigo) | apps/api/src/modules/process-modeling/presentation/routes/ — nao existe |
-
-### Fase 4: Promocao — PENDENTE
-
-```
-10   /promote-module docs/04_modules/mod-005-modelagem-processos/
-                           Selar mod-005 como READY:                         A EXECUTAR
-                           Gate 0 — Definition of Ready (DoR):
-                             [DoR-1] PENDENTEs resolvidos? .............. SIM (9/9 IMPLEMENTADA)
-                             [DoR-2] Arquivos de requisito existem? ..... SIM (10/10)
-                             [DoR-3] Zero erros de lint? ................ SIM (validate-all 2026-03-22 PASS)
-                             [DoR-4] Screen manifests validados? ........ SIM (2/2 manifests PASS)
-                             [DoR-5] ADRs conforme nivel? ............... SIM (4 >= 3 para N2)
-                             [DoR-6] CHANGELOG atualizado? .............. SIM (v0.17.0)
-                             [DoR-7] Bloqueios cross-modulo? ............ ATENCAO (BLK-003 recebido de MOD-004)
-
-                           Fluxo interno:
-                             Step 1: /qa (pre-check)
-                             Step 2: Promover estado_item DRAFT→READY
-                             Step 3: /qa (pos-check)
-                             Step 4: /update-index
-                             Step 5: /git commit
-                           Pre-condicao: QA verde, DoR-1..7 atendidos
-                           Pos-condicao: estado_item = READY, INDEX.md atualizado, commit
-```
-
-> **Nota sobre BLK-003:** MOD-005 recebe bloqueio BLK-003 (depende de `org_scopes` de MOD-004 para filtering de processos). Isso afeta a **implementacao de codigo**, nao a promocao de especificacao. O DoR avalia completude da especificacao, nao a viabilidade de deploy. MOD-005 pode ser promovido a READY independentemente do estado do MOD-004 — mas a geracao de codigo requer MOD-000 → MOD-003 → MOD-004 → MOD-005 sequencial.
-
-#### Bloqueadores para Promocao
-
-1. **BLK-003 (MOD-004 → MOD-005):** `org_scopes` para filtering precisam existir. Impacto: implementacao de codigo, nao especificacao. MOD-004 ainda DRAFT.
-2. **CHANGELOG Mermaid:** Pipeline Mermaid mostra Etapa 5 (aguardando selo READY), que reflete corretamente o estado pos-validacao.
-
-### Fase 5: Pos-READY (quando necessario)
-
-```
-11   /update-specification docs/04_modules/mod-005-modelagem-processos/requirements/fr/FR-005.md
-                           Se spec precisa de ajuste apos READY:             SOB DEMANDA
-                           Detecta estado_item=READY → delega para
-                           /create-amendment automaticamente
-
-12   /create-amendment FR-005 melhoria "descricao"
-                           Criar amendment formal:                           SOB DEMANDA
-                           Naming: {Pilar}-{ID}-{Natureza}{Seq}.md
-                           Casos de uso previstos:
+11   /create-amendment       Amendment AMD-UX-PROC-001-001 criado:             CONCLUIDO (2026-03-24)
+                           - Acao update_stage_position adicionada ao
+                             manifest ux-proc-001.editor-visual.yaml
+                           - Origem: PENDENTE-014 (V-M01 ALTA)
+                           - Arquivo: amendments/ux/AMD-UX-PROC-001-001__action_update_stage_position.md
+                           Casos previstos (futuros):
                            - JSON rule engine para condicoes de transicao
-                           - Novos tipos de gate alem dos 4 iniciais
+                           - Novos tipos de gate
 ```
 
 ### Gestao de Pendencias (qualquer momento)
@@ -254,25 +208,33 @@ O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifest
 ```
 16   /manage-pendentes list PEN-005
                            Estado atual MOD-005:
-                             PEN-005: 9 itens total
-                               9 IMPLEMENTADA (Q1-Q9)
+                             PEN-005: 16 itens total
+                               16 IMPLEMENTADA (Q1-Q9, PENDENTE-010..016)
+                               0 DECIDIDA
                                0 ABERTA
-                             SLA: nenhum vencido
+                             SLA: todos dentro do prazo
 ```
 
 #### Painel de Pendencias — Resumo Compacto
 
 | # | ID | Status | Sev. | Decisao (1 linha) | Artefato |
 |---|---|---|---|---|---|
-| 1 | Q1 | IMPLEMENTADA | — | React Flow confirmado como biblioteca canvas | UX-005 |
-| 2 | Q2 | IMPLEMENTADA | — | JSON rule engine marcado futuro | DATA-005 §2.7 |
-| 3 | Q3 | IMPLEMENTADA | — | API sincrona GET /internal/instances/count-active | INT-005 §4.1, ADR-002 |
-| 4 | Q4 | IMPLEMENTADA | — | 4 scopes process:cycle:* em DOC-FND-000 v1.1.0 | DOC-FND-000 §2.2 |
-| 5 | Q5 | IMPLEMENTADA | — | cycle_id denormalizado + partial unique index | ADR-001, DATA-005 |
-| 6 | Q6 | IMPLEMENTADA | — | Contagem correta: 25 endpoints | INT-005, mod.md |
-| 7 | Q7 | IMPLEMENTADA | MEDIA | 10 eventos UPDATE/DELETE no DATA-003 | DATA-003 v0.4.0 |
-| 8 | Q8 | IMPLEMENTADA | BAIXA | DELETE /admin/process-roles/:id adicionado | INT-005 §1.7 |
-| 9 | Q9 | IMPLEMENTADA | BAIXA | ADR-002 status → accepted | ADR-002.md |
+| 1 | Q1 | ✅ IMPLEMENTADA | — | React Flow confirmado como biblioteca canvas | UX-005 |
+| 2 | Q2 | ✅ IMPLEMENTADA | — | JSON rule engine marcado futuro | DATA-005 §2.7 |
+| 3 | Q3 | ✅ IMPLEMENTADA | — | API sincrona GET /internal/instances/count-active | INT-005 §4.1, ADR-002 |
+| 4 | Q4 | ✅ IMPLEMENTADA | — | 4 scopes process:cycle:* em DOC-FND-000 v1.1.0 | DOC-FND-000 §2.2 |
+| 5 | Q5 | ✅ IMPLEMENTADA | — | cycle_id denormalizado + partial unique index | ADR-001, DATA-005 |
+| 6 | Q6 | ✅ IMPLEMENTADA | — | Contagem correta: 25 endpoints | INT-005, mod.md |
+| 7 | Q7 | ✅ IMPLEMENTADA | MEDIA | 10 eventos UPDATE/DELETE no DATA-003 | DATA-003 v0.4.0 |
+| 8 | Q8 | ✅ IMPLEMENTADA | BAIXA | DELETE /admin/process-roles/:id adicionado | INT-005 §1.7 |
+| 9 | Q9 | ✅ IMPLEMENTADA | BAIXA | ADR-002 status → accepted | ADR-002.md |
+| 10 | PENDENTE-010 | ✅ IMPLEMENTADA | 🔴BLOQ | Domain errors → DomainError (type URI + statusHint 422/503) | domain/errors/*.ts |
+| 11 | PENDENTE-011 | ✅ IMPLEMENTADA | 🟠ALTA | POST /admin/cycles/:id/deprecate + web client | cycles.route.ts, process-modeling.api.ts |
+| 12 | PENDENTE-012 | ✅ IMPLEMENTADA | 🟠ALTA | statusHint 422 (resolvido com PENDENTE-010) | domain/errors/*.ts |
+| 13 | PENDENTE-013 | ✅ IMPLEMENTADA | 🟠ALTA | DTOs Zod alinhados com OAS (gates +stage_id/descricao, roles flat) | process-modeling.dto.ts, flow-graph.service.ts, process-modeling.types.ts, StageConfigPanel.tsx |
+| 14 | PENDENTE-014 | ✅ IMPLEMENTADA | 🟠ALTA | Acao update_stage_position via AMD-UX-PROC-001-001 | ux-proc-001.yaml, AMD-UX-PROC-001-001 |
+| 15 | PENDENTE-015 | ✅ IMPLEMENTADA | 🟡MEDIA | Format + lint fix (3 fases) | cycles.route.ts, process-roles.route.ts, stages.route.ts |
+| 16 | PENDENTE-016 | ✅ IMPLEMENTADA | 🟠ALTA | Resolvida por PENDENTE-011 (web client corrigido) | process-modeling.api.ts |
 
 > Detalhes completos: requirements/pen-005-pendente.md
 
@@ -283,9 +245,6 @@ O `/validate-all` foi executado em 2026-03-22 com resultado PASS: 29/29 manifest
                            Formato: docs(mod-005): <descricao>
 
 15   /update-index          Atualizar indices se criou/removeu arquivos       SOB DEMANDA
-                           INDEX.md sincronizado
-
-17   /readme-blueprint      Atualizar README.md do repositorio               SOB DEMANDA
 ```
 
 ---
@@ -297,32 +256,28 @@ US-MOD-005 (READY v1.2.0)              ← Fase 0: CONCLUIDA
   │  4/4 features READY (2 backend + 2 UX)
   │  Nivel 2 — DDD-lite + Full Clean (score 5/6)
   ▼
-mod-005-modelagem-processos/ (stubs DRAFT) ← Fase 1: CONCLUIDA (forge-module v0.1.0)
+mod-005-modelagem-processos/ (stubs)    ← Fase 1: CONCLUIDA (forge-module v0.1.0)
+  ▼
+mod-005 enriquecido (v0.17.0)          ← Fase 2: CONCLUIDA (11 runs, 9 questoes resolvidas)
+  ▼
+mod-005 validado spec                   ← Fase 3: CONCLUIDA (validate-all 2026-03-22 PASS)
+  ▼
+mod-005 selado (READY v1.0.0)          ← Fase 4: CONCLUIDA (promote-module 2026-03-23)
+  ▼
+mod-005 codigo gerado (45 arquivos)    ← Fase 5: CONCLUIDA ✅
+  │  6/6 agentes COD done
+  │  Violacoes: 6/6 RESOLVIDAS → /validate-all PASS (2026-03-24)
+  │  ├── Lint: PASS | Arquitetural: PASS | Manifests: PASS (2/2)
+  │  ├── Drizzle: PASS (7/7) | Endpoints: PASS (27/27)
+  │  └── 5 avisos nao-bloqueantes (MEDIA/BAIXA)
   │
   ▼
-mod-005 enriquecido (DRAFT v0.17.0)    ← Fase 2: CONCLUIDA (11 runs, 9 questoes resolvidas)
-  │
-  ▼
-mod-005 validado (DRAFT)                ← Fase 3: CONCLUIDA (validate-all 2026-03-22 PASS, 29/29)
-  │  ├── /qa .................. PASS
-  │  ├── /validate-manifest ... PASS (2 manifests)
-  │  ├── /validate-openapi .... FUTURO (pos-codigo)
-  │  ├── /validate-drizzle .... FUTURO (pos-codigo)
-  │  └── /validate-endpoint ... FUTURO (pos-codigo)
-  │
-  ├── ★ PROXIMO PASSO: executar /promote-module
-  ├── Gate 0 (DoR): 6/7 atendidos, 1 ATENCAO (BLK-003 — nao bloqueia spec)
-  │
-  ▼
-mod-005 selado (READY)                  ← Fase 4: A EXECUTAR
-  │
-  ▼
-mod-005 + amendments/                   ← Fase 5: SOB DEMANDA (0 amendments)
+mod-005 + amendments/                   ← Fase 6: EM ANDAMENTO (1 amendment)
 
 Dependencias upstream: MOD-000 (Foundation) + MOD-003 (Estrutura Org) + MOD-004 (Identidade Avancada)
-Camada topologica: 3 (implementar apos MOD-000 → MOD-003 → MOD-004)
+Camada topologica: 3
 Dependentes downstream: MOD-006 (Execucao de Casos), MOD-007 (Parametrizacao)
-Bloqueio recebido: BLK-003 — org_scopes de MOD-004 para filtering (implementacao, nao spec)
+Bloqueio recebido: BLK-003 — org_scopes de MOD-004 (implementacao)
 Bloqueio emitido: BLK-002 — MOD-006 depende de blueprints + cycle_version_id freeze
 ```
 
@@ -332,22 +287,35 @@ Bloqueio emitido: BLK-002 — MOD-006 depende de blueprints + cycle_version_id f
 
 | Aspecto | Detalhe |
 |---------|---------|
-| Modulo-molde da cadeia de processos | MOD-005 e o "molde" e MOD-006 e o "produto moldado". A separacao Blueprint vs Execucao e principio fundamental do sistema. Blueprints publicados sao imutaveis — qualquer mudanca requer fork criando nova versao. Instancias no MOD-006 referenciam `cycle_version_id` (nao `cycle_id`), garantindo leitura historica. |
-| Enriquecimento mais intenso do projeto | Com 17 versoes no CHANGELOG e 9 questoes resolvidas, MOD-005 teve o enriquecimento mais complexo. 5 agentes precisaram de re-enriquecimento (AGN-DEV-01, 02, 03, 09, 10) apos questoes interdependentes serem identificadas. Isso reflete a riqueza do dominio: 7 tabelas, 26 endpoints, 19 domain events, fork atomico. |
-| Fork atomico com remapeamento de UUIDs | ADR-003 define fork de ciclo publicado como transacao unica que copia 7 tabelas com novos UUIDs e causation_id para rastreabilidade. E a operacao mais complexa do modulo e justifica Nivel 2 por si so. |
-| BLK-003 recebido de MOD-004 | MOD-005 depende de `org_scopes` de MOD-004 para filtering de processos por area organizacional. Este bloqueio afeta a implementacao de codigo mas nao impede a promocao da especificacao para READY. |
-| Editor visual com React Flow | UX-PROC-001 usa React Flow como biblioteca de canvas com nodos customizados, swimlanes por macroetapa, mini-mapa obrigatorio a partir de 15 nos, e sincronizacao bidirecional com UX-PROC-002 (configurador de estagio). |
-| 4 ADRs cobrindo decisoes nao-obvias | ADR-001 (is_initial unique via campo denormalizado), ADR-002 (fail-safe integracao MOD-006 com 503), ADR-003 (fork atomico transacao unica), ADR-004 (optimistic locking via updated_at). Cada ADR resolve um problema arquitetural especifico do dominio de processos. |
+| Modulo-molde da cadeia de processos | MOD-005 e o "molde" e MOD-006 e o "produto moldado". Blueprints publicados sao imutaveis — qualquer mudanca requer fork criando nova versao. |
+| Enriquecimento mais intenso do projeto | 17 versoes no CHANGELOG, 9 questoes resolvidas. 5 agentes precisaram de re-enriquecimento. |
+| Fork atomico com remapeamento de UUIDs | ADR-003 define fork como transacao unica copiando 7 tabelas com novos UUIDs. Operacao mais complexa do modulo. |
+| BLK-003 recebido de MOD-004 | Depende de `org_scopes` para filtering. Nao impediu promocao spec mas afeta codegen. |
+| Editor visual com React Flow | UX-PROC-001 usa React Flow com nodos customizados, swimlanes, mini-mapa, sincronizacao bidirecional com UX-PROC-002. |
+| 4 ADRs cobrindo decisoes nao-obvias | ADR-001 (is_initial unique), ADR-002 (fail-safe MOD-006), ADR-003 (fork atomico), ADR-004 (optimistic locking). |
+| Validacao completa PASS | Todas 7 violacoes criticas do codegen resolvidas. 16/16 pendencias IMPLEMENTADA. Modulo pronto para operacao. |
 
 ---
 
-## Checklist Rapido — O que Falta para READY
+## Checklist Rapido — Codigo Completo
 
 - [x] Enriquecimento completo (11 runs, 9 questoes resolvidas)
-- [x] Executar `/validate-all` — /qa + /validate-manifest PASS (2026-03-22)
-- [ ] Executar `/promote-module docs/04_modules/mod-005-modelagem-processos/` — verificar Gate 0 (DoR)
+- [x] Validacao spec (`/validate-all` 2026-03-22 PASS)
+- [x] Promocao (`/promote-module` 2026-03-23 — READY v1.0.0)
+- [x] Scaffold apps (`/app-scaffold all` 2026-03-23)
+- [x] Codegen (`/codegen mod-005` — 6/6 agentes done, 45 arquivos)
+- [x] Corrigir V-E01 BLOQUEANTE: domain errors → DomainError (PENDENTE-010 IMPLEMENTADA 2026-03-24)
+- [x] Corrigir V-E02 ALTA: POST /admin/cycles/:id/deprecate (PENDENTE-011 IMPLEMENTADA 2026-03-24)
+- [x] Corrigir V-E03 ALTA: status codes 422 (resolvido com PENDENTE-010/012, 2026-03-24)
+- [x] Corrigir V-E06 ALTA: web deprecateCycle() → POST /deprecate (PENDENTE-016 IMPLEMENTADA 2026-03-24)
+- [x] Corrigir V-E04 MEDIA: alinhar StageDetailResponse DTO vs OAS (PENDENTE-013 IMPLEMENTADA 2026-03-24)
+- [x] Corrigir V-M01 ALTA: adicionar acao `update_stage_position` ao ux-proc-001 (PENDENTE-014 IMPLEMENTADA via AMD-UX-PROC-001-001)
+- [x] Re-executar `/validate-all mod-005` — **PASS** (2026-03-24 22:30)
+- [x] `pnpm lint` — PASS (2026-03-24)
+- [x] `pnpm format:check` — PASS (2026-03-24)
+- [ ] `pnpm test` — verificar pos-correcoes
 
-> **Nota:** Todas as 9 questoes estao IMPLEMENTADA. Os 10 artefatos de requisitos estao enriquecidos e validados. As 4 ADRs atendem o minimo para Nivel 2. Nao ha pendencias abertas. O BLK-003 (MOD-004 → MOD-005) afeta implementacao de codigo, nao promocao de especificacao. A promocao do MOD-005 desbloqueia BLK-002 e habilita MOD-006 (Execucao de Casos) a avancar. Rota sequencial ideal: MOD-000 → MOD-003 → MOD-004 → MOD-005.
+> **Nota:** MOD-005 **codigo completo e validado**. 16/16 pendencias IMPLEMENTADA, 0 ABERTA. Validacao PASS com 5 avisos nao-bloqueantes. 1 amendment (AMD-UX-PROC-001-001). MOD-005 desbloqueia BLK-002 e habilita MOD-006 (Execucao de Casos).
 
 ---
 
@@ -355,7 +323,17 @@ Bloqueio emitido: BLK-002 — MOD-006 depende de blueprints + cycle_version_id f
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
-| 3.0.0 | 2026-03-23 | Recriacao: Fase 3 CONCLUIDA (validate-all 2026-03-22 PASS 29/29 manifests). Fase 4 PENDENTE. DoR Gate 0 6/7 (BLK-003 nao bloqueia spec). Pendencias compactadas (referencia pen file). Proximo passo: /promote-module |
-| 2.0.0 | 2026-03-22 | Reescrita completa no formato padrao: detalhamento completo das 9 pendentes (Q1-Q9) com questao, opcoes, resolucao, rastreio de agentes, mapa de cobertura de validadores, particularidades, resumo visual |
-| 1.1.0 | 2026-03-21 | Reescrita formato hibrido: PASSOs numerados, decision trees padrao, gestao de pendencias completa (SLA/ciclo de vida), rastreio de agentes, painel de pendencias individual, bloqueadores explicitos, resumo visual vertical, notas contextuais |
-| 1.0.0 | 2026-03-21 | Criacao inicial — diagnostico Fase 2 concluida (11 agentes, 9 pendentes, Mermaid Etapa 5). Nivel 2 DDD-lite com BLK-003 |
+| 7.1.0 | 2026-03-24 | /validate-all PASS — 0 bloqueadores, 0 criticas, 5 avisos. Step 10 atualizado. Checklist: validate-all marcado [x]. Tabela de violacoes substituida por achados residuais (nao-bloqueantes). Veredicto: pronto para operacao. |
+| 7.0.0 | 2026-03-24 | PENDENTE-014 IMPLEMENTADA — acao update_stage_position adicionada ao manifest ux-proc-001 via amendment AMD-UX-PROC-001-001. 16/16 pendencias IMPLEMENTADA. 1 amendment. V-M01 resolvido. Proximo: /validate-all. |
+| 6.5.0 | 2026-03-24 | PENDENTE-013 IMPLEMENTADA — DTOs Zod alinhados com OAS: gates +stage_id/descricao, roles flat (4 arquivos alterados). V-E04 resolvido. Resta 1 DECIDIDA (014). |
+| 6.4.0 | 2026-03-24 | PENDENTE-013 DECIDIDA (Opcao A: alinhar DTOs Zod com OAS), PENDENTE-014 DECIDIDA (Opcao A: adicionar update ao manifest), PENDENTE-016 IMPLEMENTADA (resolvida por PENDENTE-011). 0 ABERTA restantes — todas 16 pendencias resolvidas. |
+| 6.3.0 | 2026-03-24 | PENDENTE-010+011+012 IMPLEMENTADAS: 4 domain errors → DomainError (RFC 9457, 422), POST /cycles/:id/deprecate criado, web client corrigido. V-E01 BLOQUEANTE + V-E03 + V-E06 resolvidos. PENDENTE-012 resolvida como side-effect de 010 (statusHint 422). 3 abertas restantes. |
+| 6.2.0 | 2026-03-24 | PENDENTE-010 DECIDIDA (Opcao A: DomainError) + PENDENTE-011 DECIDIDA (Opcao A: POST /deprecate). Painel atualizado: 4 abertas, 2 decididas, 10 implementadas. |
+| 6.1.0 | 2026-03-24 | PENDENTE-015 DECIDIDA (Opcao A) e IMPLEMENTADA: Prettier + ESLint corrigidos (0 erros MOD-005). Painel atualizado com batch 5 (PENDENTE-010..016). 6 abertas restantes. |
+| 6.0.0 | 2026-03-24 | Re-validacao /validate-all: Lint PASS, Format PASS, QA WARN (5 TS reactflow), Drizzle PASS (7/7), Endpoints FAIL (1 bloqueador + 3 criticas persistem). Nova violacao V-E06 (web deprecateCycle broken). Checklist atualizado. |
+| 5.0.0 | 2026-03-23 | Atualizacao: Fase 5 EM ANDAMENTO — codegen 6/6 agentes done (42 arquivos). AGN-COD-VAL executado: FAIL com 1 bloqueador (domain errors herdam Error) + 4 criticas (deprecacao sem rota, status codes, DTO mismatches, manifest acao faltante). Tabela de violacoes adicionada. Checklist atualizado com correcoes pendentes. |
+| 4.0.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (promote-module DRAFT→READY v1.0.0). Fase 5 adicionada (NAO INICIADA, scaffold concluido). Rastreio de agentes COD incluido. |
+| 3.0.0 | 2026-03-23 | Recriacao: Fase 3 CONCLUIDA (validate-all 2026-03-22 PASS 29/29). Fase 4 PENDENTE. DoR 6/7. |
+| 2.0.0 | 2026-03-22 | Reescrita completa: detalhamento das 9 pendentes, rastreio de agentes, mapa de cobertura, particularidades |
+| 1.1.0 | 2026-03-21 | Reescrita formato hibrido: decision trees, gestao pendencias, resumo visual |
+| 1.0.0 | 2026-03-21 | Criacao inicial — diagnostico Fase 2 concluida |

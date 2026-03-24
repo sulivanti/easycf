@@ -1,7 +1,7 @@
 # DOC-DEV-001 — Documento de Especificação Executável (TS + Node + Vite/React | OpenAPI/Swagger)
 
 - **id:** DOC-DEV-001
-- **version:** 1.6.0
+- **version:** 1.7.0
 - **status:** ACTIVE
 - **data_ultima_revisao:** 2026-03-20
 - **owner:** arquitetura
@@ -15,6 +15,7 @@
 
 | Versão | Data       | Responsável | Descrição |
 |--------|------------|-------------|-----------|
+| 1.7.0  | 2026-03-24 | arquitetura | §5.4: Formaliza padrão de diagramas por módulo (`diagrams/`). Define tipos obrigatórios por nível arquitetural (N1 vs N2), convenção de nomes, paleta de cores Mermaid e regras de manutenção. |
 | 1.6.0  | 2026-03-20 | arquitetura | §0.4: Documenta escopo de IDs (local ao módulo vs. globalmente único). Notação qualificada `MOD-XXX/ARTEFATO-YYY` para referências cross-módulo. Classificação cross-cutting vs. domínio com templates base para DATA-003 e SEC-002. |
 | 1.5.0  | 2026-03-15 | arquitetura | Correções: remoção de REFINING, renumeração de seções, unificação para forge-module, Vite/React. Metadados duplicados removidos do rodapé. |
 | 1.4.0  | 2026-03-04 | arquitetura | Promovido a norma canônica em `01_normativos`. CHANGELOG embutido. Skill `forge-module` referenciada na regra de uso. |
@@ -1107,6 +1108,62 @@ flowchart LR
 - Paginação / filtros / ordenação padronizados
 - Idempotência em escritas quando aplicável
 - Versionamento (se exposto publicamente)
+
+## 5.4 Diagramas por Módulo (`diagrams/`)
+
+> Cada módulo **DEVE** possuir uma pasta `diagrams/` contendo diagramas Mermaid em arquivos `.md`. Os diagramas são **artefatos vivos** — devem ser atualizados quando a arquitetura do módulo mudar (novos use cases, entidades, transições de estado).
+
+### 5.4.1 Tipos de diagrama e obrigatoriedade por nível
+
+| Tipo de Diagrama | Arquivo | Nível 1 (Clean Leve) | Nível 2 (DDD-lite + Clean) | Conteúdo |
+|---|---|---|---|---|
+| **Arquitetura de Camadas** | `architecture.md` | **MUST** | **MUST** | Camadas do módulo (Presentation → Application → Domain → Infrastructure) com routes, use cases, entidades e tabelas |
+| **Modelo de Domínio** | `domain-model.md` | N/A | **MUST** | Diagrama ER das entidades, aggregates, value objects e seus relacionamentos |
+| **Máquina de Estados** | `state-machine.md` | N/A | **MUST** (se houver status) | `stateDiagram-v2` para cada entidade com ciclo de vida (ex: DRAFT → PUBLISHED → DEPRECATED) |
+| **Fluxo UX** | `ux-flow.md` | **SHOULD** | **SHOULD** (se houver UX) | `flowchart TD` com jornadas do usuário, screens, decisões e feedback (toasts, erros) |
+| **Contexto de Dependências** | `dependency-context.md` | MAY | MAY | Grafo de dependências diretas do módulo com outros módulos |
+
+### 5.4.2 Convenções de nomenclatura
+
+- **Diretório:** `docs/04_modules/mod-NNN-nome/diagrams/`
+- **Nomes de arquivo:** `kebab-case.md` (ex: `architecture.md`, `domain-model.md`, `state-machine.md`)
+- **Formato:** Mermaid inline em Markdown (consistente com DOC-DEV-002 §5)
+- **Título:** cada arquivo DEVE começar com `# MOD-NNN — <Título do Diagrama>`
+
+### 5.4.3 Paleta de cores Mermaid (padrão do projeto)
+
+| Camada / Semântica | Fill | Stroke | Texto | classDef |
+|---|---|---|---|---|
+| Presentation | `#3498DB` | `#2980B9` | `#fff` | `presentation` |
+| Application | `#27AE60` | `#1E8449` | `#fff` | `application` |
+| Domain (entidades/VOs) | `#E67E22` | `#CA6F1E` | `#fff` | `domain` |
+| Domain Services | `#8E44AD` | `#6C3483` | `#fff` | `service` |
+| Infrastructure | `#95A5A6` | `#7F8C8D` | `#fff` | `infra` |
+| Sistemas Externos | `#E74C3C` | `#C0392B` | `#fff` | `external` |
+| UI Components | `#9B59B6` | `#8E44AD` | `#fff` | `components` |
+| Sucesso / Completo | `#27AE60` | `#1E8449` | `#fff` | — |
+| Erro / Terminal | `#E74C3C` | `#C0392B` | `#fff` | — |
+| Em progresso / Warning | `#E67E22` | `#CA6F1E` | `#fff` | — |
+
+> **Consistência:** esta paleta é derivada dos diagramas canônicos de DOC-DEV-002 §5.3 (verde = completo, laranja = em andamento, cinza = estável). Todos os módulos DEVEM usar as mesmas definições de cor para garantir coerência visual.
+
+### 5.4.4 Tipos de gráfico Mermaid por caso de uso
+
+| Caso de Uso | Tipo Mermaid | Quando usar |
+|---|---|---|
+| Camadas de arquitetura | `graph TD` | Visualizar fluxo top-down entre camadas |
+| Modelo de domínio (ER) | `erDiagram` | Entidades, relacionamentos, campos |
+| Máquina de estados | `stateDiagram-v2` | Ciclos de vida com transições |
+| Fluxos UX / processos | `flowchart TD` | Jornadas de usuário, fluxos de decisão |
+| Dependências entre módulos | `graph TD` / `graph LR` | Grafo de dependências |
+
+### 5.4.5 Regras de manutenção
+
+1. **Criação:** a skill `forge-module` DEVE criar a pasta `diagrams/` com stubs dos diagramas obrigatórios para o nível do módulo.
+2. **Atualização:** ao alterar entidades, use cases ou transições de estado, os diagramas correspondentes DEVEM ser atualizados na mesma PR.
+3. **Versionamento:** diagramas são Mermaid inline em `.md` — 100% versionáveis via git diff.
+4. **Não duplicar:** diagramas de dependência cross-módulo global ficam em `docs/04_modules/_diagrams-global/`, não dentro de módulos individuais.
+5. **Referência:** o manifesto do módulo (`mod-NNN-nome.md`) SHOULD listar os diagramas disponíveis na seção "Documentos do módulo".
 
 ---
 

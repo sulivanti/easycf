@@ -1,16 +1,16 @@
 # US-MOD-007-F01 — API: Enquadradores, Objetos-Alvo e Regras de Incidência
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.2.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.3.0
+**Data:** 2026-03-23
 **Módulo Destino:** **MOD-007** (Parametrização Contextual — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-007, US-MOD-003, DOC-ARC-001
 - **nivel_arquitetura:** 2 (enquadradores com vigência, detecção de conflitos config-time, UNIQUE constraint)
 - **tipo:** Backend — cria novos endpoints

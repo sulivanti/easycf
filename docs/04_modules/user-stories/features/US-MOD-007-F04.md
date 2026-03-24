@@ -1,17 +1,17 @@
 # US-MOD-007-F04 — UX: Configurador de Enquadradores (UX-PARAM-001)
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.2.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.3.0
+**Data:** 2026-03-23
 **Módulo Destino:** **MOD-007** (Parametrização Contextual — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 **operationIds consumidos:** `admin_framers_list/create/update/delete`, `admin_target_objects_list`, `admin_target_fields_create`, `admin_incidence_rules_list/create/update`, `routine_engine_evaluate`
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-007, US-MOD-007-F01, US-MOD-007-F03, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — configurador de enquadradores e matriz de incidência

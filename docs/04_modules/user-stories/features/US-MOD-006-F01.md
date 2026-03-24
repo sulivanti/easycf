@@ -1,16 +1,16 @@
 # US-MOD-006-F01 — API: Abertura de Caso e Motor de Transição
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.1.0
-**Data:** 2026-03-18
+**Status Ágil:** `READY`
+**Versão:** 0.9.0
+**Data:** 2026-03-23
 **Módulo Destino:** **MOD-006** (Execução de Casos — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-18
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-006, US-MOD-005-F01, US-MOD-005-F02, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (domínio rico, transições com invariantes, audit trail completo)
 - **tipo:** Backend — cria novos endpoints

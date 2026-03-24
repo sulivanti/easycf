@@ -1,17 +1,17 @@
 # US-MOD-007-F05 — UX: Cadastro de Rotinas (UX-ROTINA-001)
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.2.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.3.0
+**Data:** 2026-03-23
 **Módulo Destino:** **MOD-007** (Parametrização Contextual — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 **operationIds consumidos:** `admin_routines_list/create/get`, `admin_routines_publish/fork`, `admin_routine_items_create/update/delete`, `routine_engine_evaluate`
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-007, US-MOD-007-F02, US-MOD-007-F03, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — editor de rotinas com versionamento

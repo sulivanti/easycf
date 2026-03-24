@@ -1,0 +1,377 @@
+# DOC-UX-013 — Design System e Tokens Visuais
+
+- **id:** DOC-UX-013
+- **version:** 1.1.0
+- **status:** ACTIVE
+- **data_ultima_revisao:** 2026-03-24
+- **owner:** produto + arquitetura + UX
+- **scope:** global (design system, tokens visuais, styling)
+
+---
+
+## 1. Objetivo
+
+Este documento estabelece o **Design System** obrigatório para todas as interfaces frontend geradas pelo EasyCodeFramework. Define tokens visuais (cores, tipografia, espaçamento), a estratégia de styling via Tailwind CSS v4, a biblioteca de componentes compartilhados (`src/shared/ui/`), e o suporte a temas dark/light.
+
+### 1.1 Motivação
+
+Ciclos anteriores de codegen produziram frontend com:
+- Inline styles hardcoded (sem design tokens)
+- Abordagens de styling misturadas (inline, CSS classes órfãs, Tailwind sem config)
+- `src/shared/` vazio — cada módulo recriava Button, Input, Badge, Modal, Table
+- Sem tipografia sistematizada, sem animações, sem dark mode funcional
+
+### 1.2 Escopo
+
+Aplica-se a **todo código frontend** gerado por `AGN-COD-WEB` e pelo `/app-scaffold`. Módulos de negócio (`apps/web/src/modules/`) DEVEM consumir os tokens e componentes aqui definidos — nunca recriar.
+
+---
+
+## 2. Design Tokens
+
+Os design tokens são variáveis CSS definidas no bloco `@theme` do Tailwind CSS v4. Todos os valores visuais DEVEM ser referenciados via tokens — nunca hardcoded.
+
+### 2.1 Cores Semânticas
+
+Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-{shade}`:
+
+```css
+@theme {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
+
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --color-neutral-950: #020617;
+
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-info-500: #06b6d4;
+  --color-info-600: #0891b2;
+}
+```
+
+**Regra:** Módulos NÃO DEVEM definir cores adicionais fora do `@theme`. Se novas cores forem necessárias, devem ser adicionadas via amendment ao design system.
+
+### 2.2 Tipografia
+
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `--font-sans` | `'Inter', system-ui, sans-serif` | Corpo de texto, UI |
+| `--font-mono` | `'JetBrains Mono', monospace` | Código, IDs, logs |
+| `--text-xs` | `0.75rem / 1rem` | Badges, captions |
+| `--text-sm` | `0.875rem / 1.25rem` | Labels, secondary text |
+| `--text-base` | `1rem / 1.5rem` | Body text padrão |
+| `--text-lg` | `1.125rem / 1.75rem` | Subtítulos |
+| `--text-xl` | `1.25rem / 1.75rem` | Títulos de seção |
+| `--text-2xl` | `1.5rem / 2rem` | Títulos de página |
+| `--text-3xl` | `1.875rem / 2.25rem` | Títulos principais |
+| `--text-4xl` | `2.25rem / 2.5rem` | Hero text |
+
+**Font loading:** Google Fonts CDN no `index.html` (Inter + JetBrains Mono). Para produção, recomenda-se self-hosting via `@fontsource`.
+
+### 2.3 Espaçamento
+
+Grid de 4px. Escala:
+
+| Token | Valor |
+|-------|-------|
+| `--spacing-0` | `0` |
+| `--spacing-1` | `0.25rem` (4px) |
+| `--spacing-2` | `0.5rem` (8px) |
+| `--spacing-3` | `0.75rem` (12px) |
+| `--spacing-4` | `1rem` (16px) |
+| `--spacing-5` | `1.25rem` (20px) |
+| `--spacing-6` | `1.5rem` (24px) |
+| `--spacing-8` | `2rem` (32px) |
+| `--spacing-10` | `2.5rem` (40px) |
+| `--spacing-12` | `3rem` (48px) |
+| `--spacing-16` | `4rem` (64px) |
+
+### 2.4 Radii, Shadows e Timing
+
+```css
+@theme {
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Animation Timing */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+```
+
+---
+
+## 3. Tailwind CSS v4
+
+### 3.1 Framework de Styling Mandatório
+
+Tailwind CSS v4 é o **único framework de styling autorizado** para o frontend. Todo styling de layout, cor, tipografia e espaçamento DEVE usar classes utilitárias do Tailwind.
+
+### 3.2 Configuração Vite
+
+Tailwind v4 usa o plugin Vite nativo — **sem** `postcss.config.js` nem `tailwind.config.js`:
+
+```typescript
+// vite.config.ts
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});
+```
+
+### 3.3 CSS Entry Point
+
+O arquivo `src/index.css` DEVE conter:
+
+```css
+@import "tailwindcss";
+
+@theme {
+  /* Todos os tokens da §2 são definidos aqui */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-primary-50: #eff6ff;
+  /* ... demais tokens conforme §2.1, §2.4 ... */
+}
+```
+
+### 3.4 Proibição de Inline Styles
+
+**MUST NOT** usar `style={{}}` para:
+- Layout (margin, padding, display, flex, grid)
+- Cores (background, color, border-color)
+- Tipografia (font-size, font-weight, line-height)
+- Espaçamento e dimensões (width, height, gap)
+
+**Exceções permitidas** (inline style aceitável):
+- Valores dinâmicos calculados em runtime (ex: `style={{ width: `${progress}%` }}`)
+- Posicionamento absoluto com coordenadas dinâmicas
+
+---
+
+## 4. Shared Component Library (shadcn/ui)
+
+A biblioteca de componentes compartilhados é baseada em **shadcn/ui** — um gerador de componentes que copia código-fonte para dentro do projeto, garantindo ownership total e customização sem lock-in.
+
+### 4.1 Stack de Componentes
+
+| Camada | Pacote | Papel |
+|--------|--------|-------|
+| Primitivos headless | `@radix-ui/*` | Acessibilidade WAI-ARIA (focus trap, keyboard nav, aria-*) |
+| Variants tipadas | `class-variance-authority` (cva) | Define variants (size, variant) com type-safety |
+| Merge de classes | `tailwind-merge` + `clsx` | Resolve conflitos de classes Tailwind e composição condicional |
+| Styling | Tailwind CSS v4 | Classes utilitárias (§3) |
+| Animações | `motion` | Transições de Modal, Drawer, Toast (DOC-PADRAO-002 §3.5) |
+
+### 4.2 Estrutura
+
+Todos os componentes compartilhados residem em `apps/web/src/shared/ui/`, gerados via `npx shadcn@latest add`:
+
+```
+src/shared/
+├── lib/
+│   └── utils.ts          ← cn() helper (clsx + tailwind-merge)
+└── ui/
+    ├── index.ts           ← barrel export
+    ├── button.tsx          ← shadcn Button (cva variants)
+    ├── input.tsx           ← shadcn Input (label + error)
+    ├── badge.tsx           ← shadcn Badge
+    ├── dialog.tsx          ← shadcn Dialog (Radix Dialog → Modal)
+    ├── drawer.tsx          ← shadcn Drawer (vaul)
+    ├── table.tsx           ← shadcn Table
+    ├── skeleton.tsx        ← shadcn Skeleton (animate-pulse)
+    ├── sonner.tsx          ← shadcn Sonner (toast system)
+    └── spinner.tsx         ← Spinner customizado (animate-spin)
+```
+
+> **Nota de naming:** shadcn usa `dialog.tsx` para modais e `sonner.tsx` para toasts. O barrel `index.ts` re-exporta com aliases se necessário (ex: `export { Dialog as Modal } from './dialog'`).
+
+### 4.3 Utilitário `cn()`
+
+Toda composição de classes DEVE usar o helper `cn()`:
+
+```typescript
+// src/shared/lib/utils.ts
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Uso em componentes:
+
+```tsx
+<button className={cn(buttonVariants({ variant, size }), className)}>
+```
+
+### 4.4 Componentes Obrigatórios
+
+O scaffold DEVE instalar os seguintes componentes via shadcn CLI:
+
+| Componente shadcn | Comando | Primitivo Radix | Uso no ECF |
+|-------------------|---------|-----------------|------------|
+| `button` | `npx shadcn@latest add button` | — | Ações primárias, secundárias, ghost, destructive |
+| `input` | `npx shadcn@latest add input` | — | Formulários com label e validação |
+| `badge` | `npx shadcn@latest add badge` | — | Status tags, contadores |
+| `dialog` | `npx shadcn@latest add dialog` | `@radix-ui/react-dialog` | Modais com focus trap e Escape |
+| `drawer` | `npx shadcn@latest add drawer` | `vaul` | Painéis laterais slide-in |
+| `table` | `npx shadcn@latest add table` | — | Listagens de dados |
+| `skeleton` | `npx shadcn@latest add skeleton` | — | Loading placeholders |
+| `sonner` | `npx shadcn@latest add sonner` | `sonner` | Toast notifications |
+| `dropdown-menu` | `npx shadcn@latest add dropdown-menu` | `@radix-ui/react-dropdown-menu` | Widget de Perfil (DOC-UX-011 §6) |
+| `tooltip` | `npx shadcn@latest add tooltip` | `@radix-ui/react-tooltip` | Dicas contextuais |
+| `label` | `npx shadcn@latest add label` | `@radix-ui/react-label` | Labels acessíveis para inputs |
+
+#### Customizações obrigatórias pós-geração
+
+Os componentes shadcn são gerados com defaults. O scaffold DEVE aplicar as seguintes customizações:
+
+1. **Button** — Adicionar prop `isLoading?: boolean` que exibe `<Spinner />` e seta `aria-busy="true"` + `disabled`
+2. **Dialog** — Integrar `motion` para animação scale-up + backdrop fade (substituindo a animação CSS padrão do Radix)
+3. **Drawer** — Integrar `motion` para slide-in animado
+4. **Sonner** — Configurar variantes visuais (`success`, `error`, `warning`, `info`) e exibição de `correlationId` (RFC 9457)
+5. **Spinner** — Componente customizado (não vem do shadcn): `role="status"`, `aria-label="Carregando"`, `animate-spin`
+
+### 4.5 Inicialização shadcn no Scaffold
+
+O `/app-scaffold` DEVE executar a inicialização shadcn com a seguinte configuração:
+
+```bash
+npx shadcn@latest init --defaults --css src/index.css --components src/shared/ui --utils src/shared/lib/utils.ts
+```
+
+Parâmetros relevantes:
+- `--css src/index.css` — aponta para o CSS entry point com `@theme` (§3.3)
+- `--components src/shared/ui` — destino dos componentes (não o default `src/components/ui`)
+- `--utils src/shared/lib/utils.ts` — localização do helper `cn()`
+
+Após init, instalar os componentes:
+
+```bash
+npx shadcn@latest add button input badge dialog drawer table skeleton sonner dropdown-menu tooltip label
+```
+
+### 4.6 Regra de Ownership
+
+- Componentes em `src/shared/ui/` são criados **apenas pelo scaffold** (`/app-scaffold`) via shadcn CLI
+- `AGN-COD-WEB` DEVE importar de `@shared/ui/` — **nunca recriar** componentes equivalentes dentro de `src/modules/`
+- O código gerado pelo shadcn é **editável** — customizações de design (cores, radii, padding) são feitas diretamente no arquivo
+- Novos componentes compartilhados requerem amendment a este documento e `npx shadcn@latest add {component}` no scaffold
+
+---
+
+## 5. Dark/Light Theme
+
+### 5.1 Estratégia
+
+O tema utiliza a estratégia `class` no elemento `<html>`:
+
+```html
+<!-- Light (default) -->
+<html lang="pt-BR">
+
+<!-- Dark -->
+<html lang="pt-BR" class="dark">
+```
+
+### 5.2 Tailwind Dark Variant
+
+Componentes DEVEM usar a variant `dark:` do Tailwind para estilos alternativos:
+
+```tsx
+<div className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
+```
+
+### 5.3 Persistência
+
+- A preferência de tema DEVE ser armazenada em `localStorage` sob a chave `theme`
+- Valores aceitos: `'light'` | `'dark'` | `'system'`
+- Na inicialização, aplicar `class="dark"` ao `<html>` se:
+  - `theme === 'dark'`, ou
+  - `theme === 'system'` e `prefers-color-scheme: dark`
+
+### 5.4 Toggle Component
+
+O ThemeToggle DEVE:
+- Exibir ícone contextual (sol/lua)
+- Atualizar `localStorage` e `<html>` class simultaneamente
+- Estar posicionado no Header do Application Shell (DOC-UX-011)
+
+---
+
+## 6. Anti-Patterns (PROIBIDO)
+
+| Anti-Pattern | Exemplo | Correção |
+|-------------|---------|----------|
+| Hex/RGB hardcoded | `color: '#3b82f6'` | `className="text-primary-500"` |
+| Inline styles para layout/cor/tipo | `style={{ padding: '16px' }}` | `className="p-4"` |
+| Componentes duplicados por módulo | `modules/users/Button.tsx` | `import { Button } from '@shared/ui'` |
+| CSS class sem arquivo | `className="my-custom-btn"` sem CSS | Usar apenas classes Tailwind |
+| Navegação via `window.location.href` | `window.location.href = '/users'` | `<Link to="/users">` ou `router.navigate({ to: '/users' })` |
+| `tailwind.config.js` (v3 syntax) | Arquivo de config v3 | Usar `@theme` block no CSS (v4) |
+| `postcss.config.js` para Tailwind | Config PostCSS | Usar `@tailwindcss/vite` plugin |
+| Implementar acessibilidade manualmente | Focus trap, aria-* customizado | Usar primitivos Radix UI via shadcn |
+| Concatenação manual de classes | `className={\`btn \${active && 'active'}\`}` | `className={cn(buttonVariants(), className)}` com `cn()` |
+
+---
+
+## 7. Critérios de Aceite para Codegen
+
+- **[CA-01]** Todo styling de layout, cor e tipografia usa exclusivamente classes Tailwind. Zero `style={{}}` para esses propósitos.
+- **[CA-02]** Componentes de UI (Button, Input, Badge, Dialog, Drawer, Table, Skeleton, Sonner, Spinner) são importados de `@shared/ui/` (gerados via shadcn/ui) — nenhum duplicado em `src/modules/`.
+- **[CA-03]** O arquivo `src/index.css` contém `@import "tailwindcss"` e bloco `@theme` com todos os tokens da §2.
+- **[CA-04]** Dark mode funcional: `class="dark"` no `<html>`, variant `dark:` nos componentes, persistência em `localStorage`.
+- **[CA-05]** Navegação in-app usa exclusivamente `<Link>` ou `router.navigate()` do TanStack Router. Zero `window.location.href`.
+- **[CA-06]** Composição de classes usa exclusivamente `cn()` (clsx + tailwind-merge). Zero concatenação manual de strings.
+
+---
+
+## CHANGELOG
+
+| Versão | Data | Descrição |
+|--------|------|-----------|
+| 1.1.0 | 2026-03-24 | §4 reescrita para shadcn/ui como base da component library (Radix UI, cva, tailwind-merge, cn()), anti-patterns e CA-06 adicionados |
+| 1.0.0 | 2026-03-24 | Versão inicial — design tokens, Tailwind v4, shared components, dark/light theme |

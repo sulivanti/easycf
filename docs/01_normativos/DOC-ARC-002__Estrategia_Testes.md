@@ -1,9 +1,9 @@
 # DOC-ARC-002 — Estratégia de Testes Automáticos
 
 - **id:** DOC-ARC-002
-- **version:** 1.0.0
+- **version:** 1.1.0
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-04
+- **data_ultima_revisao:** 2026-03-24
 - **owner:** arquitetura
 - **scope:** global (todos os módulos e agentes)
 - **supersedes:** DOC-DEV-001 §5.5
@@ -70,13 +70,15 @@ Garantir a saúde do CI/CD com testes rápidos, confiáveis e que valham o custo
 
 | Gate | Tipo | Critério de Falha | Status |
 |---|---|---|---|
-| `lint` | Unitário | Erro de linting (ESLint, Prettier) | ⚠️ PENDENTE |
+| `lint` | Unitário | Erro de linting (ESLint, Prettier) | ✅ IMPLEMENTADO |
 | `test:unit` | Unitário | Qualquer falha em testes unitários | ⚠️ PENDENTE |
 | `test:integration` | Integração | Qualquer falha em testes de integração | ⚠️ PENDENTE |
 | `openapi:lint` | Contrato | Spectral reporta erro no OpenAPI | ⚠️ PENDENTE |
 | `openapi:contract-test` | Contrato | Response real diverge do schema | ⚠️ PENDENTE |
 
-> ⚠️ Todos os gates acima estão pendentes de implementação. Ver [Status de Implementação (Gap Analysis)](#status-de-implementação-gap-analysis---2026-03-04) abaixo.
+> ⚠️ Os gates `test:unit`, `test:integration`, `openapi:lint` e `openapi:contract-test` estão pendentes de implementação. Ver [Status de Implementação (Gap Analysis)](#status-de-implementação-gap-analysis---2026-03-04) abaixo.
+>
+> ✅ **Gate `lint`:** Tooling configurado via `eslint.config.mjs` + `.prettierrc` na raiz. Scripts: `pnpm lint`, `pnpm format:check`. Detalhes em `DOC-PADRAO-002 §4.3`.
 
 ---
 
@@ -104,3 +106,12 @@ Atualmente, o projeto encontra-se em deficit com este normativo. As seguintes pe
 ## Metadados
 
 > Bloco de metadados canônico movido para o topo do documento (padrão DOC-PADRAO-META v1.0.0).
+
+---
+
+## CHANGELOG
+
+| Versão | Data | Descrição |
+|---|---|---|
+| 1.1.0 | 2026-03-24 | Gate `lint` atualizado para ✅ IMPLEMENTADO; adicionada nota com tooling real |
+| 1.0.0 | 2026-03-04 | Versão inicial |

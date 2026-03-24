@@ -1,6 +1,6 @@
 # Índice de Documentação (EasyA2)
 
-> **Regra de manutenção:** Atualizar este índice sempre que um novo documento for criado ou renomeado. IDs de documentos são estáveis e não mudam após publicação.
+> **Regra de manutenção (MUST):** Todo novo documento normativo (DOC-*), pacote (PKG-*) ou módulo (MOD-*) **DEVE** ser registrado neste índice **no mesmo commit** em que for criado. Skills que criam documentos (`/forge-module`, `/create-specification`, `/create-oo-doc`) devem invocar `/update-index` como último passo. IDs de documentos são estáveis e não mudam após publicação.
 
 ---
 
@@ -24,6 +24,7 @@
 | [DOC-UX-010 — Catálogo de Ações UX](01_normativos/DOC-UX-010__Catalogo_Acoes_e_Template_UX.md) | DOC-UX-010 | 1.0.0 | DRAFT | Catálogo oficial de action_keys reutilizáveis |
 | [DOC-UX-011 — Application Shell](01_normativos/DOC-UX-011__Application_Shell_e_Navegacao.md) | DOC-UX-011 | 1.0.0 | READY | Navegação, menus, breadcrumbs, headers |
 | [DOC-UX-012 — Componentes Globais](01_normativos/DOC-UX-012__Componentes_Globais_e_Feedback.md) | DOC-UX-012 | 1.0.0 | READY | Tratamento global de erros, busca, dark mode |
+| [DOC-UX-013 — Design System e Tokens Visuais](01_normativos/DOC-UX-013__Design_System_e_Tokens_Visuais.md) | DOC-UX-013 | 1.1.0 | ACTIVE | Tokens semânticos, Tailwind v4 @theme, paleta, tipografia, espaçamento |
 | [DOC-FND-000 — Contratos Fundacionais](01_normativos/DOC-FND-000__Foundation.md) | DOC-FND-000 | 1.0.0 | ACTIVE | Auth, RBAC, SEC-002, Telemetria, Error Handling, Storage |
 | [DOC-PADRAO-003 — (Reservado)](01_normativos/DOC-PADRAO-003__Reservado.md) | DOC-PADRAO-003 | — | DESCONTINUADO | ID reservado, sem conteúdo normativo ativo |
 
@@ -63,18 +64,48 @@ Cada módulo possui raiz em `04_modules/` com `<dirname>.md` (manifesto do módu
 
 | Módulo | Arquivo Raiz | Estado |
 |---|---|---|
-| MOD-000 — Framework de Automação / Geradores (Foundation) | [mod-000-foundation.md](04_modules/mod-000-foundation/mod-000-foundation.md) | DRAFT |
-| MOD-001 — Backoffice Admin (UX-First Shell) | [mod-001-backoffice-admin.md](04_modules/mod-001-backoffice-admin/mod-001-backoffice-admin.md) | DRAFT |
-| MOD-002 — Gestão de Usuários (Backoffice) | [mod-002-gestao-usuarios.md](04_modules/mod-002-gestao-usuarios/mod-002-gestao-usuarios.md) | DRAFT |
-| MOD-003 — Estrutura Organizacional | [mod-003-estrutura-organizacional.md](04_modules/mod-003-estrutura-organizacional/mod-003-estrutura-organizacional.md) | DRAFT |
-| MOD-004 — Identidade Avançada | [mod-004-identidade-avancada.md](04_modules/mod-004-identidade-avancada/mod-004-identidade-avancada.md) | DRAFT |
-| MOD-005 — Modelagem de Processos (Blueprint) | [mod-005-modelagem-processos.md](04_modules/mod-005-modelagem-processos/mod-005-modelagem-processos.md) | DRAFT |
-| MOD-006 — Execução de Casos | [mod-006-execucao-casos.md](04_modules/mod-006-execucao-casos/mod-006-execucao-casos.md) | DRAFT |
-| MOD-007 — Parametrização Contextual e Rotinas | [mod-007-parametrizacao-contextual.md](04_modules/mod-007-parametrizacao-contextual/mod-007-parametrizacao-contextual.md) | DRAFT |
-| MOD-008 — Integração Dinâmica Protheus/TOTVS | [mod-008-integracao-protheus.md](04_modules/mod-008-integracao-protheus/mod-008-integracao-protheus.md) | DRAFT |
-| MOD-009 — Movimentos sob Aprovação (Aprovações e Alçadas) | [mod-009-movimentos-aprovacao.md](04_modules/mod-009-movimentos-aprovacao/mod-009-movimentos-aprovacao.md) | DRAFT |
-| MOD-010 — MCP e Automação Governada | [mod-010-mcp-automacao.md](04_modules/mod-010-mcp-automacao/mod-010-mcp-automacao.md) | DRAFT |
-| MOD-011 — SmartGrid: Componente de Grade com Edição em Massa | [mod-011-smartgrid.md](04_modules/mod-011-smartgrid/mod-011-smartgrid.md) | DRAFT |
+| MOD-000 — Framework de Automação / Geradores (Foundation) | [mod-000-foundation.md](04_modules/mod-000-foundation/mod-000-foundation.md) | READY |
+| MOD-001 — Backoffice Admin (UX-First Shell) | [mod-001-backoffice-admin.md](04_modules/mod-001-backoffice-admin/mod-001-backoffice-admin.md) | READY |
+| MOD-002 — Gestão de Usuários (Backoffice) | [mod-002-gestao-usuarios.md](04_modules/mod-002-gestao-usuarios/mod-002-gestao-usuarios.md) | READY |
+| MOD-003 — Estrutura Organizacional | [mod-003-estrutura-organizacional.md](04_modules/mod-003-estrutura-organizacional/mod-003-estrutura-organizacional.md) | READY |
+| MOD-004 — Identidade Avançada | [mod-004-identidade-avancada.md](04_modules/mod-004-identidade-avancada/mod-004-identidade-avancada.md) | READY |
+| MOD-005 — Modelagem de Processos (Blueprint) | [mod-005-modelagem-processos.md](04_modules/mod-005-modelagem-processos/mod-005-modelagem-processos.md) | READY |
+| MOD-006 — Execução de Casos | [mod-006-execucao-casos.md](04_modules/mod-006-execucao-casos/mod-006-execucao-casos.md) | READY |
+| MOD-007 — Parametrização Contextual e Rotinas | [mod-007-parametrizacao-contextual.md](04_modules/mod-007-parametrizacao-contextual/mod-007-parametrizacao-contextual.md) | READY |
+| MOD-008 — Integração Dinâmica Protheus/TOTVS | [mod-008-integracao-protheus.md](04_modules/mod-008-integracao-protheus/mod-008-integracao-protheus.md) | READY |
+| MOD-009 — Movimentos sob Aprovação (Aprovações e Alçadas) | [mod-009-movimentos-aprovacao.md](04_modules/mod-009-movimentos-aprovacao/mod-009-movimentos-aprovacao.md) | READY |
+| MOD-010 — MCP e Automação Governada | [mod-010-mcp-automacao.md](04_modules/mod-010-mcp-automacao/mod-010-mcp-automacao.md) | READY |
+| MOD-011 — SmartGrid: Componente de Grade com Edição em Massa | [mod-011-smartgrid.md](04_modules/mod-011-smartgrid/mod-011-smartgrid.md) | READY |
+
+### Features — MOD-000
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-000-F01](04_modules/user-stories/features/US-MOD-000-F01.md) | Autenticação Nativa (E-mail, Senha, Sessão) | UX-AUTH-001 | READY |
+| [US-MOD-000-F02](04_modules/user-stories/features/US-MOD-000-F02.md) | Autenticação de Dois Fatores via TOTP (MFA) | — | READY |
+| [US-MOD-000-F03](04_modules/user-stories/features/US-MOD-000-F03.md) | Login via SSO OAuth2 (Google/Microsoft) | UX-AUTH-001 | READY |
+| [US-MOD-000-F04](04_modules/user-stories/features/US-MOD-000-F04.md) | Recuperação de Senha por E-mail | — | READY |
+| [US-MOD-000-F05](04_modules/user-stories/features/US-MOD-000-F05.md) | Cadastro e Gestão de Usuários (CRUD) | UX-USR-001, UX-USR-002 | READY |
+| [US-MOD-000-F06](04_modules/user-stories/features/US-MOD-000-F06.md) | Gestão de Perfis (Roles) e RBAC | — | READY |
+| [US-MOD-000-F07](04_modules/user-stories/features/US-MOD-000-F07.md) | Gestão de Filiais Multi-Tenant (CRUD) | — | READY |
+| [US-MOD-000-F08](04_modules/user-stories/features/US-MOD-000-F08.md) | Perfil do Usuário Autenticado | UX-USR-002 | READY |
+| [US-MOD-000-F09](04_modules/user-stories/features/US-MOD-000-F09.md) | Vinculação de Usuários a Filiais com Roles | — | READY |
+| [US-MOD-000-F10](04_modules/user-stories/features/US-MOD-000-F10.md) | Alteração de Senha Autenticada | — | READY |
+| [US-MOD-000-F11](04_modules/user-stories/features/US-MOD-000-F11.md) | Endpoint GET /info (Versão e Metadados) | — | READY |
+| [US-MOD-000-F12](04_modules/user-stories/features/US-MOD-000-F12.md) | Catálogo de Permissões (CRUD de Escopos) | — | READY |
+| [US-MOD-000-F13](04_modules/user-stories/features/US-MOD-000-F13.md) | Utilitário de Telemetria UI (UIActionEnvelope) | — | READY |
+| [US-MOD-000-F14](04_modules/user-stories/features/US-MOD-000-F14.md) | Middlewares de Correlação E2E (CorrelationId) | — | READY |
+| [US-MOD-000-F15](04_modules/user-stories/features/US-MOD-000-F15.md) | Motor de Gates de Pipeline CI | — | READY |
+| [US-MOD-000-F16](04_modules/user-stories/features/US-MOD-000-F16.md) | Módulo de Storage e Upload Centralizado | — | READY |
+| [US-MOD-000-F17](04_modules/user-stories/features/US-MOD-000-F17.md) | Login via Sign in with Apple (Apple ID) | — | READY |
+
+### Features — MOD-001
+
+| Feature | Tema | Screen Manifest | Status |
+|---|---|---|---|
+| [US-MOD-001-F01](04_modules/user-stories/features/US-MOD-001-F01.md) | Shell de Autenticação e Layout Base | UX-AUTH-001, UX-SHELL-001 | READY |
+| [US-MOD-001-F02](04_modules/user-stories/features/US-MOD-001-F02.md) | Telemetria de UI e Rastreabilidade do Shell | UX-SHELL-001, UX-DASH-001 | READY |
+| [US-MOD-001-F03](04_modules/user-stories/features/US-MOD-001-F03.md) | Dashboard Administrativo Executivo | UX-DASH-001 | READY |
 
 ### Features — MOD-002
 
@@ -114,30 +145,30 @@ Cada módulo possui raiz em `04_modules/` com `<dirname>.md` (manifesto do módu
 
 | Feature | Tema | Screen Manifest | Status |
 |---|---|---|---|
-| [US-MOD-006-F01](04_modules/user-stories/features/US-MOD-006-F01.md) | API abertura + motor de transição | — (Backend) | APPROVED |
-| [US-MOD-006-F02](04_modules/user-stories/features/US-MOD-006-F02.md) | API gates + responsáveis + eventos | — (Backend) | APPROVED |
-| [US-MOD-006-F03](04_modules/user-stories/features/US-MOD-006-F03.md) | UX Painel do caso + timeline | UX-CASE-001 | APPROVED |
-| [US-MOD-006-F04](04_modules/user-stories/features/US-MOD-006-F04.md) | UX Listagem de casos | UX-CASE-002 | APPROVED |
+| [US-MOD-006-F01](04_modules/user-stories/features/US-MOD-006-F01.md) | API abertura + motor de transição | — (Backend) | READY |
+| [US-MOD-006-F02](04_modules/user-stories/features/US-MOD-006-F02.md) | API gates + responsáveis + eventos | — (Backend) | READY |
+| [US-MOD-006-F03](04_modules/user-stories/features/US-MOD-006-F03.md) | UX Painel do caso + timeline | UX-CASE-001 | READY |
+| [US-MOD-006-F04](04_modules/user-stories/features/US-MOD-006-F04.md) | UX Listagem de casos | UX-CASE-002 | READY |
 
 ### Features — MOD-007
 
 | Feature | Tema | Screen Manifest | Status |
 |---|---|---|---|
-| [US-MOD-007-F01](04_modules/user-stories/features/US-MOD-007-F01.md) | API Enquadradores + Objetos + Incidências | — (Backend) | APPROVED |
-| [US-MOD-007-F02](04_modules/user-stories/features/US-MOD-007-F02.md) | API Rotinas + Itens + Versionamento | — (Backend) | APPROVED |
-| [US-MOD-007-F03](04_modules/user-stories/features/US-MOD-007-F03.md) | Motor de Avaliação (runtime) | — (Backend) | APPROVED |
-| [US-MOD-007-F04](04_modules/user-stories/features/US-MOD-007-F04.md) | UX Configurador de Enquadradores | UX-PARAM-001 | APPROVED |
-| [US-MOD-007-F05](04_modules/user-stories/features/US-MOD-007-F05.md) | UX Cadastro de Rotinas | UX-ROTINA-001 | APPROVED |
+| [US-MOD-007-F01](04_modules/user-stories/features/US-MOD-007-F01.md) | API Enquadradores + Objetos + Incidências | — (Backend) | READY |
+| [US-MOD-007-F02](04_modules/user-stories/features/US-MOD-007-F02.md) | API Rotinas + Itens + Versionamento | — (Backend) | READY |
+| [US-MOD-007-F03](04_modules/user-stories/features/US-MOD-007-F03.md) | Motor de Avaliação (runtime) | — (Backend) | READY |
+| [US-MOD-007-F04](04_modules/user-stories/features/US-MOD-007-F04.md) | UX Configurador de Enquadradores | UX-PARAM-001 | READY |
+| [US-MOD-007-F05](04_modules/user-stories/features/US-MOD-007-F05.md) | UX Cadastro de Rotinas | UX-ROTINA-001 | READY |
 
 ### Features — MOD-008
 
 | Feature | Tema | Screen Manifest | Status |
 |---|---|---|---|
-| [US-MOD-008-F01](04_modules/user-stories/features/US-MOD-008-F01.md) | API Catálogo de serviços + rotinas de integração | — (Backend) | APPROVED |
-| [US-MOD-008-F02](04_modules/user-stories/features/US-MOD-008-F02.md) | API Mapeamentos de campos e parâmetros | — (Backend) | APPROVED |
-| [US-MOD-008-F03](04_modules/user-stories/features/US-MOD-008-F03.md) | API Motor de execução (BullMQ + Outbox + DLQ) | — (Backend) | APPROVED |
-| [US-MOD-008-F04](04_modules/user-stories/features/US-MOD-008-F04.md) | UX Editor de rotinas de integração | UX-INTEG-001 | APPROVED |
-| [US-MOD-008-F05](04_modules/user-stories/features/US-MOD-008-F05.md) | UX Monitor de integrações | UX-INTEG-002 | APPROVED |
+| [US-MOD-008-F01](04_modules/user-stories/features/US-MOD-008-F01.md) | API Catálogo de serviços + rotinas de integração | — (Backend) | READY |
+| [US-MOD-008-F02](04_modules/user-stories/features/US-MOD-008-F02.md) | API Mapeamentos de campos e parâmetros | — (Backend) | READY |
+| [US-MOD-008-F03](04_modules/user-stories/features/US-MOD-008-F03.md) | API Motor de execução (BullMQ + Outbox + DLQ) | — (Backend) | READY |
+| [US-MOD-008-F04](04_modules/user-stories/features/US-MOD-008-F04.md) | UX Editor de rotinas de integração | UX-INTEG-001 | READY |
+| [US-MOD-008-F05](04_modules/user-stories/features/US-MOD-008-F05.md) | UX Monitor de integrações | UX-INTEG-002 | READY |
 
 ### Features — MOD-009
 
@@ -153,21 +184,21 @@ Cada módulo possui raiz em `04_modules/` com `<dirname>.md` (manifesto do módu
 
 | Feature | Tema | Screen Manifest | Status |
 |---|---|---|---|
-| [US-MOD-010-F01](04_modules/user-stories/features/US-MOD-010-F01.md) | API Agentes MCP + Catálogo de Ações | — (Backend) | APPROVED |
-| [US-MOD-010-F02](04_modules/user-stories/features/US-MOD-010-F02.md) | API Gateway + Motor de Despacho | — (Backend) | APPROVED |
-| [US-MOD-010-F03](04_modules/user-stories/features/US-MOD-010-F03.md) | API Log de Execuções | — (Backend) | APPROVED |
-| [US-MOD-010-F04](04_modules/user-stories/features/US-MOD-010-F04.md) | UX Gestão de Agentes e Ações | UX-MCP-001 | APPROVED |
-| [US-MOD-010-F05](04_modules/user-stories/features/US-MOD-010-F05.md) | UX Monitor de Execuções | UX-MCP-002 | APPROVED |
+| [US-MOD-010-F01](04_modules/user-stories/features/US-MOD-010-F01.md) | API Agentes MCP + Catálogo de Ações | — (Backend) | READY |
+| [US-MOD-010-F02](04_modules/user-stories/features/US-MOD-010-F02.md) | API Gateway + Motor de Despacho | — (Backend) | READY |
+| [US-MOD-010-F03](04_modules/user-stories/features/US-MOD-010-F03.md) | API Log de Execuções | — (Backend) | READY |
+| [US-MOD-010-F04](04_modules/user-stories/features/US-MOD-010-F04.md) | UX Gestão de Agentes e Ações | UX-MCP-001 | READY |
+| [US-MOD-010-F05](04_modules/user-stories/features/US-MOD-010-F05.md) | UX Monitor de Execuções | UX-MCP-002 | READY |
 
 ### Features — MOD-011
 
 | Feature | Tema | Screen Manifest | Status |
 |---|---|---|---|
-| [US-MOD-011-F01](04_modules/user-stories/features/US-MOD-011-F01.md) | Amendment: `current_record_state` no motor MOD-007 | — (Backend amendment) | APPROVED |
-| [US-MOD-011-F02](04_modules/user-stories/features/US-MOD-011-F02.md) | UX Grade de Inclusão em Massa | UX-SGR-001 | APPROVED |
-| [US-MOD-011-F03](04_modules/user-stories/features/US-MOD-011-F03.md) | UX Formulário de Alteração de Registro | UX-SGR-002 | APPROVED |
-| [US-MOD-011-F04](04_modules/user-stories/features/US-MOD-011-F04.md) | UX Grade de Exclusão em Massa | UX-SGR-003 | APPROVED |
-| [US-MOD-011-F05](04_modules/user-stories/features/US-MOD-011-F05.md) | UX Ações em Massa sobre Linhas | UX-SGR-001 | APPROVED |
+| [US-MOD-011-F01](04_modules/user-stories/features/US-MOD-011-F01.md) | Amendment: `current_record_state` no motor MOD-007 | — (Backend amendment) | READY |
+| [US-MOD-011-F02](04_modules/user-stories/features/US-MOD-011-F02.md) | UX Grade de Inclusão em Massa | UX-SGR-001 | READY |
+| [US-MOD-011-F03](04_modules/user-stories/features/US-MOD-011-F03.md) | UX Formulário de Alteração de Registro | UX-SGR-002 | READY |
+| [US-MOD-011-F04](04_modules/user-stories/features/US-MOD-011-F04.md) | UX Grade de Exclusão em Massa | UX-SGR-003 | READY |
+| [US-MOD-011-F05](04_modules/user-stories/features/US-MOD-011-F05.md) | UX Ações em Massa sobre Linhas | UX-SGR-001 | READY |
 
 > **Nota:** Novos módulos devem criar um subdiretório próprio em `04_modules/<mod-id>/` seguindo o padrão do MOD-001.
 
@@ -197,6 +228,7 @@ graph TD
     UX010["DOC-UX-010<br/>Catálogo Ações"]
     UX011["DOC-UX-011<br/>App Shell"]
     UX012["DOC-UX-012<br/>Componentes"]
+    UX013["DOC-UX-013<br/>Design System"]
 
     DEV002["DOC-DEV-002<br/>Fluxo Agentes"]
 
@@ -218,6 +250,8 @@ graph TD
     ARC003 --> ARC001
     UX011 --> ARC003
     UX012 --> ARC003
+    UX013 --> UX012
+    UX013 --> PAD002
 
     GPA001 --> PKG_DEV
     GPA001 --> PKG_COD
@@ -246,7 +280,7 @@ graph TD
     class DEV001 canonical
     class ESC001,GNP00,ARC001,ARC002,ARC003 arch
     class PAD001,PAD002,PAD004,PAD005 infra
-    class UX010,UX011,UX012 ux
+    class UX010,UX011,UX012,UX013 ux
     class FND000 foundation
     class GPA001,DEV002,PKG_DEV,PKG_COD agents
 ```

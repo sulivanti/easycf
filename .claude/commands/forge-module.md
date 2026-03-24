@@ -34,6 +34,9 @@ Crie o diretório em `docs/04_modules/mod-{ID}-{nome}/` com a árvore padrão:
 - `adr/` (Architecture Decision Records)
 - `tests/` (suíte inicial Vitest)
 - `amendments/` com estrutura para futuras emendas
+- `diagrams/` com stubs obrigatórios por nível arquitetural (ver DOC-DEV-001 §5.4):
+  - **Nível 1 (Clean Leve):** `architecture.md` (obrigatório) + `ux-flow.md` (recomendado)
+  - **Nível 2 (DDD-lite):** `architecture.md` + `domain-model.md` + `state-machine.md` (obrigatórios) + `ux-flow.md` (recomendado)
 
 Stubs obrigatórios em estado DRAFT:
 
@@ -55,9 +58,13 @@ Ambos com header de automação e metadados `estado_item: DRAFT`, `rastreia_para
 
 3. Aplique as informações da User Story: `rastreia_para` inclui irmãos e US, `estado_item` nasce como **DRAFT**.
 
-## PASSO 5: Diagrama Mermaid (CHANGELOG)
+## PASSO 5: Diagramas Mermaid
 
+### 5a. CHANGELOG (obrigatório)
 Siga `DOC-DEV-002` seção 5 para gerar o pipeline colorido (`Etapa 4 - DRAFT`).
+
+### 5b. Diagramas do módulo (obrigatório)
+Crie os stubs na pasta `diagrams/` conforme `DOC-DEV-001 §5.4`. Use a paleta de cores padronizada (§5.4.3) e os tipos Mermaid corretos por caso de uso (§5.4.4). Cada arquivo DEVE começar com `# MOD-{ID} — <Título>` e conter ao menos o esqueleto do diagrama com os elementos conhecidos da User Story.
 
 ## PASSO 6: Índices
 

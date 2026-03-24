@@ -1,16 +1,16 @@
 # US-MOD-007-F02 — API: Rotinas de Comportamento, Itens e Versionamento
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.1.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.2.0
+**Data:** 2026-03-23
 **Módulo Destino:** **MOD-007** (Parametrização Contextual — Backend)
 **Referências Normativas:** DOC-DEV-001, DOC-ARC-001
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-007, US-MOD-007-F01
 - **nivel_arquitetura:** 2 (versionamento de rotinas, itens parametrizados, integração com MOD-006)
 - **tipo:** Backend — cria novos endpoints

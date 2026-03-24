@@ -11,19 +11,24 @@
     "manifest_screens":    "docs/05_manifests/screens/",
     "manifest_schemas":    "docs/05_manifests/schemas/",
     "openapi":             "apps/api/openapi/",
-    "drizzle_schemas":     "apps/api/src/modules/*/schema.ts",
-    "fastify_routes":      "apps/api/src/modules/*/routes/*.route.ts",
+    "drizzle_schemas":     "apps/api/db/schema/*.ts",
+    "fastify_routes":      "apps/api/src/modules/*/presentation/routes/*.route.ts",
     "templates":           ".agents/templates/",
     "dependency_graph":    "docs/04_modules/DEPENDENCY-GRAPH.md",
     "index":               "docs/INDEX.md",
     "user_stories":        "docs/04_modules/user-stories/",
     "enrichment_registry": ".agents/enrichment-registry.json",
+    "codegen_registry":    ".agents/codegen-registry.json",
     "context_map":         ".agents/context-map.json",
     "pkg_dev_001":         "docs/02_pacotes_agentes/PKG-DEV-001_Pacote_Agentes_Enriquecimento.md",
-    "skill_templates":     ".agents/templates/"
+    "pkg_cod_001":         "docs/02_pacotes_agentes/PKG-COD-001_Pacote_Agentes_Geracao_Codigo.md",
+    "api_modules":         "apps/api/src/modules/",
+    "web_modules":         "apps/web/src/modules/",
+    "skill_templates":     ".agents/templates/",
+    "execution_state":     ".agents/execution-state/"
   },
   "_notes": {
-    "drizzle_schemas": "Path futuro — diretório apps/api/src/modules/ será criado quando o código for scaffoldado",
-    "fastify_routes":  "Path futuro — idem"
+    "drizzle_schemas": "Schemas Drizzle ficam em apps/api/db/schema/ (barrel: index.ts). Cada módulo tem {module}.ts + {module}.relations.ts",
+    "fastify_routes":  "Rotas Fastify ficam em apps/api/src/modules/{slug}/presentation/routes/*.route.ts"
   }
 }

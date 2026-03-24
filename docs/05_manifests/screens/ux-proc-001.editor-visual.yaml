@@ -53,6 +53,20 @@ actions:
       user_message: "Não foi possível criar o estágio."
     notes: "Cria estágio inline no canvas. Posição X,Y salva em metadata do estágio para o editor."
 
+  - id: update_stage_position
+    label: "Mover estágio no canvas (persistir posição)"
+    type: submit
+    operation_id: admin_stages_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/stages/:sid"
+    requires_scope: ["process:cycle:write"]
+    loading_state: none
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível salvar a posição do estágio."
+    notes: "Dispara ao soltar nó após drag no canvas. Persiste canvas_x/canvas_y no estágio (DATA-005 §2.3)."
+
   - id: create_transition_from_canvas
     label: "Criar transição arrastando aresta entre estágios"
     type: submit
@@ -176,7 +190,7 @@ components:
       Estado ciclo PUBLISHED: canvas em modo readonly — nós não movíveis, sem arestas criáveis,
       sem duplo clique. Banner "Ciclo publicado — use 'Nova versão' para editar" no topo do canvas.
 
-    actions_used: [create_stage_from_canvas, create_transition_from_canvas,
+    actions_used: [create_stage_from_canvas, update_stage_position, create_transition_from_canvas,
                    delete_stage_from_canvas, delete_transition_from_canvas, open_stage_config]
 
   - id: "macro-stage-panel"
@@ -204,6 +218,10 @@ notes: |
   7. Posições X,Y dos nós no canvas salvas em metadata do estágio para persistência do layout.
 
 changelog:
+  - version: "1.1.0"
+    date: "2026-03-24"
+    author: "manage-pendentes"
+    description: "Adicionada ação update_stage_position (PATCH /admin/stages/:sid) para persistir canvas_x/canvas_y. Resolve PENDENTE-014 (PEN-005)."
   - version: "1.0.0"
     date: "2026-03-15"
     author: "arquitetura"

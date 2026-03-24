@@ -297,11 +297,11 @@ Detalhes completos em [DATA-010](requirements/data/DATA-010.md).
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-010-F01](../user-stories/features/US-MOD-010-F01.md) | API Agentes + Catálogo de Ações | Backend | `APPROVED` |
-| [US-MOD-010-F02](../user-stories/features/US-MOD-010-F02.md) | API Gateway + Motor de Despacho | Backend | `APPROVED` |
-| [US-MOD-010-F03](../user-stories/features/US-MOD-010-F03.md) | API Log de Execuções | Backend | `APPROVED` |
-| [US-MOD-010-F04](../user-stories/features/US-MOD-010-F04.md) | UX Gestão de Agentes e Ações | UX | `APPROVED` |
-| [US-MOD-010-F05](../user-stories/features/US-MOD-010-F05.md) | UX Monitor de Execuções | UX | `APPROVED` |
+| [US-MOD-010-F01](../user-stories/features/US-MOD-010-F01.md) | API Agentes + Catálogo de Ações | Backend | `READY` |
+| [US-MOD-010-F02](../user-stories/features/US-MOD-010-F02.md) | API Gateway + Motor de Despacho | Backend | `READY` |
+| [US-MOD-010-F03](../user-stories/features/US-MOD-010-F03.md) | API Log de Execuções | Backend | `READY` |
+| [US-MOD-010-F04](../user-stories/features/US-MOD-010-F04.md) | UX Gestão de Agentes e Ações | UX | `READY` |
+| [US-MOD-010-F05](../user-stories/features/US-MOD-010-F05.md) | UX Monitor de Execuções | UX | `READY` |
 
 ---
 

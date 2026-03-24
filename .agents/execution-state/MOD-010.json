@@ -1,0 +1,19 @@
+{
+  "module_id": "MOD-010",
+  "module_path": "docs/04_modules/mod-010-mcp-automacao/",
+  "last_updated": "2026-03-23T22:30:00.000Z",
+  "scaffold": {
+    "completed": true,
+    "completed_at": "2026-03-23T14:00:00.000Z",
+    "apps_created": ["api", "web"],
+    "pnpm_workspace_updated": true
+  },
+  "promotion": {
+    "completed": true,
+    "completed_at": "2026-03-23T22:30:00.000Z",
+    "version": "1.0.0",
+    "gates_passed": ["DoR-1", "DoR-2", "DoR-3", "DoR-4", "DoR-5", "DoR-6", "DoR-7"],
+    "epic_status": "READY",
+    "features_promoted": ["F01", "F02", "F03", "F04", "F05"]
+  }
+}

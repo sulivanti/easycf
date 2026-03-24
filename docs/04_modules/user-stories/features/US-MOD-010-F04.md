@@ -1,16 +1,16 @@
 # US-MOD-010-F04 — UX: Gestão de Agentes e Ações (UX-MCP-001)
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.1.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.2.0
+**Data:** 2026-03-23
 **Módulo Destino:** **MOD-010** (MCP e Automação Governada — UX)
 **Referências Normativas:** DOC-DEV-001, DOC-UX-010, DOC-ARC-003
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
-- **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-19
+- **status_agil:** READY
+- **owner:** Marcos Sulivan
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** US-MOD-010, US-MOD-010-F01, DOC-UX-010
 - **nivel_arquitetura:** 2
 - **tipo:** UX — gestão de agentes e ações MCP

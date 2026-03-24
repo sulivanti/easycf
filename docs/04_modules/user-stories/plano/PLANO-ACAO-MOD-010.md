@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-010 MCP e Automacao Governada
 
-> **Versao:** 3.1.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
+> **Versao:** 3.2.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.3.0) | **Features:** 5/5 READY
 >
-> Fases 0-4 concluidas. Modulo selado READY v1.0.0 (commit 5ca283e, 2026-03-23). Fase 5 (Geracao de Codigo) NAO INICIADA — scaffold de apps nao existe ainda. Proximo passo: executar `/app-scaffold all` para criar apps/api e apps/web, depois `/codegen mod-010`.
+> Fases 0-4 concluidas. Modulo selado READY v1.0.0. Epico e features promovidos APPROVED→READY (2026-03-23). Fase 5 (Geracao de Codigo) NAO INICIADA — scaffold apps/ concluido (2026-03-23). Proximo passo: executar `/codegen mod-010`.
 
 ---
 
@@ -11,11 +11,11 @@
 
 | Item | Estado | Detalhe |
 |------|--------|---------|
-| Epico US-MOD-010 | APPROVED (v1.2.0) | DoR completo, 5 features vinculadas, 3 politicas de execucao, blocklist Phase 1/2 |
-| Features F01-F05 | 5/5 APPROVED | F01 (API Agentes + Catalogo), F02 (API Gateway + Motor), F03 (API Log), F04 (UX Gestao), F05 (UX Monitor) |
+| Epico US-MOD-010 | READY (v1.3.0) | DoR completo, 5 features vinculadas, 3 politicas de execucao, blocklist Phase 1/2. Promovido 2026-03-23. |
+| Features F01-F05 | 5/5 READY | F01 (API Agentes + Catalogo), F02 (API Gateway + Motor), F03 (API Log), F04 (UX Gestao), F05 (UX Monitor). Promovidas 2026-03-23. |
 | Scaffold (forge-module) | CONCLUIDO | mod-010-mcp-automacao/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | AGN-DEV-01 a AGN-DEV-11 confirmados, v0.6.0, 7 pendentes identificadas e resolvidas |
-| Codegen (6 agentes) | NAO INICIADO | Scaffold de apps nao existe (apps/api/, apps/web/). Todas 5 dependencias upstream READY. Executar `/app-scaffold all` + `/codegen mod-010` |
+| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ concluido (2026-03-23). Todas 5 dependencias upstream READY. Executar `/codegen mod-010` |
 | PENDENTEs | 0 ABERTA | 7 total: 7/7 IMPLEMENTADA |
 | ADRs | 4 criadas (ACCEPTED) | Nivel 2 requer minimo 3 — atendido (ADR-001 Gateway Sincrono, ADR-002 API Key bcrypt, ADR-003 Outbox Pattern, ADR-004 Blocklist Wildcard) |
 | Amendments | 0 | Nenhum (modulo recem-selado READY) |
@@ -197,26 +197,26 @@ Nenhum. Todos resolvidos. Modulo selado READY v1.0.0.
 
 ### Fase 5: Geracao de Codigo — NAO INICIADA
 
-Modulo READY v1.0.0 — pre-requisito de codegen atendido. Todas as 5 dependencias upstream (MOD-000, MOD-004, MOD-007, MOD-008, MOD-009) estao READY. Porem, o scaffold de aplicacoes (apps/api/, apps/web/) ainda nao existe. Nivel 2 requer todos os 6 agentes COD: AGN-COD-DB, AGN-COD-CORE, AGN-COD-APP, AGN-COD-API, AGN-COD-WEB, AGN-COD-VAL.
+Modulo READY v1.0.0 — pre-requisito de codegen atendido. Todas as 5 dependencias upstream (MOD-000, MOD-004, MOD-007, MOD-008, MOD-009) estao READY. Scaffold de aplicacoes (apps/api/, apps/web/) concluido em 2026-03-23. Nivel 2 requer todos os 6 agentes COD: AGN-COD-DB, AGN-COD-CORE, AGN-COD-APP, AGN-COD-API, AGN-COD-WEB, AGN-COD-VAL.
 
 > **Decision tree de codegen:**
 >
 > ```
 > Preciso gerar codigo para os modulos?
 > ├── Scaffold existe? (apps/api/, apps/web/)
-> │   └── NAO → /app-scaffold all (one-time, cria apps/api e apps/web)
-> └── SIM → Qual escopo?
+> │   └── SIM (concluido 2026-03-23)
+> └── Qual escopo?
 >     ├── Todos modulos READY (ordem topologica)  → /codegen-all (--dry-run para preview)
 >     ├── Todos agentes de 1 modulo               → /codegen mod-NNN
 >     └── 1 agente especifico                     → /codegen-agent mod-NNN AGN-COD-XX
 > ```
 
 ```
-7a   /app-scaffold all     Scaffold de aplicacoes:                            A EXECUTAR
-                           - Criar apps/api/ (Fastify + Drizzle + OpenAPI)
-                           - Criar apps/web/ (React + TanStack)
+7a   /app-scaffold all     Scaffold de aplicacoes:                            CONCLUIDO
+                           - apps/api/ (Fastify + Drizzle + OpenAPI)            2026-03-23
+                           - apps/web/ (React + TanStack)
                            - Pre-requisito one-time para todos os modulos
-                           Verificar: apps/api/package.json e apps/web/package.json
+                           Verificado: apps/api/package.json e apps/web/package.json existem
 
 7b   /codegen mod-010      Geracao de codigo (6 agentes, Nivel 2):            A EXECUTAR
                            - AGN-COD-DB: migrations, schemas Drizzle (5 tabelas)
@@ -242,7 +242,7 @@ Modulo READY v1.0.0 — pre-requisito de codegen atendido. Todas as 5 dependenci
 
 #### Pre-requisitos para Codegen
 
-1. **Scaffold de apps:** `apps/api/package.json` e `apps/web/package.json` NAO existem. Executar `/app-scaffold all` primeiro (operacao one-time que cria a estrutura base para todos os modulos).
+1. **Scaffold de apps:** `apps/api/package.json` e `apps/web/package.json` existem — scaffold concluido em 2026-03-23 via `/app-scaffold all`.
 2. **Dependencias upstream READY:** Todas 5 dependencias upstream READY — sem bloqueio.
 3. **Ordem topologica:** MOD-010 esta na Camada 6 (ultima). Idealmente, codigo dos modulos upstream (MOD-000 a MOD-009) deve ser gerado antes para que adapters e ports possam referenciar tipos reais. Considerar `/codegen-all` para respeitar ordem topologica automaticamente.
 
@@ -338,13 +338,13 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 | API Key once-only | Mecanismo de seguranca critico: API key retornada apenas uma vez na criacao, armazenada via bcrypt hash. Nunca retornada em GET. Rotacao gera nova key com idempotencia. |
 | Blocklist em 2 fases | Phase 1 (permanente): 6 padroes de escopo bloqueados. Phase 2 (futuro): `*:create` liberavel per-agent sob condicoes. Endpoint dedicado Phase 2 enable definido (PENDENTE-001 IMPLEMENTADA). |
 | Screen Manifests | 2 manifests YAML existem e passaram validacao. UX-MCP-001 (Gestao Agentes), UX-MCP-002 (Monitor Execucoes). |
-| Codegen — escopo completo | Nivel 2 requer 6 agentes COD. Slug: `mcp`. Paths: `apps/api/src/modules/mcp/` (domain, application, infrastructure, presentation) e `apps/web/src/modules/mcp/` (UI screens, components). Scaffold de apps e pre-requisito one-time pendente. |
+| Codegen — escopo completo | Nivel 2 requer 6 agentes COD. Slug: `mcp`. Paths: `apps/api/src/modules/mcp/` (domain, application, infrastructure, presentation) e `apps/web/src/modules/mcp/` (UI screens, components). Scaffold de apps concluido (2026-03-23). |
 
 ---
 
 ## Checklist Rapido — O que Falta para Codegen
 
-- [ ] Executar `/app-scaffold all` — criar apps/api e apps/web (one-time para todo o portfolio)
+- [x] Executar `/app-scaffold all` — criar apps/api e apps/web (one-time para todo o portfolio) — CONCLUIDO 2026-03-23
 - [ ] Executar `/codegen mod-010` ou `/codegen-all` — gerar codigo das 6 camadas
 - [ ] Pos-codegen: `/validate-openapi` — validar contratos OpenAPI gerados (13 endpoints)
 - [ ] Pos-codegen: `/validate-drizzle` — validar schemas Drizzle gerados (5 tabelas)
@@ -358,6 +358,7 @@ PRE-MODULO ──→ GENESE ──→ ENRIQUECIMENTO ──→ VALIDACAO ──�
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 3.2.0 | 2026-03-23 | Atualizacao: Epico APPROVED→READY (v1.3.0) e features F01-F05 APPROVED→READY (v1.2.0). Mermaid E5 verde. Execution state atualizado com secao promotion. |
 | 3.1.0 | 2026-03-23 | Atualizacao: Fase 5 (Geracao de Codigo) adicionada como NAO INICIADA (scaffold apps inexistente, todas 5 deps upstream READY). Fase 6 (Pos-READY) renumerada. Rastreio de agentes COD, pre-requisitos de codegen, checklist de codegen e decision tree de codegen adicionados. CHANGELOG do modulo atualizado para v1.0.0. Status das dependencias upstream confirmado: todas 12 modulos READY |
 | 3.0.0 | 2026-03-23 | Fase 4 CONCLUIDA — READY v1.0.0 selado (commit 5ca283e). Resumo visual, checklist e particularidades atualizados |
 | 2.1.0 | 2026-03-23 | PENDENTE-001 e PENDENTE-004 → IMPLEMENTADA (status sincronizado — artefatos ja existiam). DoR 7/7 atendido. Fase 4 desbloqueada — pronto para /promote-module |

@@ -1,17 +1,17 @@
 # US-MOD-010 — MCP e Automação Governada (Épico)
 
-**Status Ágil:** `APPROVED`
-**Versão:** 1.2.0
-**Data:** 2026-03-19
+**Status Ágil:** `READY`
+**Versão:** 1.3.0
+**Data:** 2026-03-23
 **Autor(es):** Produto + Arquitetura
 **Módulo Destino:** **MOD-010** (MCP e Automação Governada)
 **Épico de Negócio:** EP09
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-19
+- **data_ultima_revisao:** 2026-03-23
 - **rastreia_para:** EP09, doc 04_Integracoes_Aprovacoes_e_Automacao_Governada §6–7, doc 01_Fundacao_Organizacional_e_de_Acesso §7, US-MOD-004, US-MOD-007, US-MOD-008, US-MOD-009, DOC-DEV-001, DOC-ARC-001, DOC-ARC-003
 - **nivel_arquitetura:** 2 (identidade técnica governada, políticas de execução, rastreabilidade integral)
 - **evidencias:** N/A
@@ -179,6 +179,7 @@ Funcionalidade: Épico MCP e Automação Governada MOD-010
 - [x] Screen Manifests UX-MCP-001, UX-MCP-002 criados
 - [x] Novos escopos mapeados para MOD-000-F12
 - [x] Owner confirmar READY → APPROVED
+- [x] Promoção APPROVED→READY selada (promote-module 2026-03-23)
 
 ## 8. Definition of Done (DoD)
 
@@ -204,11 +205,11 @@ US-MOD-010
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-010-F01](../features/US-MOD-010-F01.md) | API Agentes + Catálogo de Ações | Backend | `APPROVED` |
-| [US-MOD-010-F02](../features/US-MOD-010-F02.md) | API Gateway + Motor de Despacho | Backend | `APPROVED` |
-| [US-MOD-010-F03](../features/US-MOD-010-F03.md) | API Log de Execuções | Backend | `APPROVED` |
-| [US-MOD-010-F04](../features/US-MOD-010-F04.md) | UX Gestão de Agentes e Ações | UX | `APPROVED` |
-| [US-MOD-010-F05](../features/US-MOD-010-F05.md) | UX Monitor de Execuções | UX | `APPROVED` |
+| [US-MOD-010-F01](../features/US-MOD-010-F01.md) | API Agentes + Catálogo de Ações | Backend | `READY` |
+| [US-MOD-010-F02](../features/US-MOD-010-F02.md) | API Gateway + Motor de Despacho | Backend | `READY` |
+| [US-MOD-010-F03](../features/US-MOD-010-F03.md) | API Log de Execuções | Backend | `READY` |
+| [US-MOD-010-F04](../features/US-MOD-010-F04.md) | UX Gestão de Agentes e Ações | UX | `READY` |
+| [US-MOD-010-F05](../features/US-MOD-010-F05.md) | UX Monitor de Execuções | UX | `READY` |
 
 ---
 
@@ -345,6 +346,7 @@ US-MOD-010
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. 5 tabelas, 3 políticas, gateway MCP, 5 features. Último módulo do backlog. |
 | 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: blocklist expandida com *:delete, abordagem duas fases documentada, sensitivity_level=2 para privilege escalation. Owner atualizado. |
+| 1.3.0 | 2026-03-23 | promote-module | Promoção APPROVED→READY: épico e features F01–F05 selados. Todos os gates DoR passaram. Ciclo de estabilidade avança para Etapa 5. |
 | 1.2.0 | 2026-03-19 | Marcos Sulivan | APPROVED com cascata. Todas as regras validadas: blocklist Phase 1, 3 políticas, API key once-only, sensitivity_level=2, DoR completo. Features F01–F05 aprovadas em cascata. |
 
 ---

@@ -52,7 +52,12 @@
       "required_docs": ["DOC-GNP-00", "DOC-FND-000"],
       "required_specs": ["BR-*", "DATA-*"],
       "depends_on": ["AGN-COD-DB"],
-      "post_validation": []
+      "post_validation": [],
+      "structural_checks": [
+        "domain_errors_extend_DomainError",
+        "domain_errors_have_type_field_rfc9457",
+        "domain_errors_have_statusHint_field"
+      ]
     },
     "AGN-COD-APP": {
       "name": "Application / UseCases",
@@ -87,10 +92,15 @@
         "apps/web/src/modules/{slug}/"
       ],
       "pkg_section": "§3.5",
-      "required_docs": ["DOC-GNP-00", "DOC-UX-010"],
+      "required_docs": ["DOC-GNP-00", "DOC-UX-010", "DOC-UX-011", "DOC-UX-012", "DOC-UX-013"],
       "required_specs": ["UX-*", "FR-*"],
       "depends_on": ["AGN-COD-API"],
-      "post_validation": []
+      "post_validation": [],
+      "structural_checks": [
+        "web_structure_pattern_a_only",
+        "web_hooks_use_react_query",
+        "web_no_pattern_b_directories"
+      ]
     },
     "AGN-COD-VAL": {
       "name": "Validador Global",

@@ -1,7 +1,7 @@
 # PKG-COD-001 — Pacote 2: Agentes de Geração de Código (GNP + CEE + CHE) (6 agentes)
 
-**Versão:** 1.3  
-**Data:** 2026-03-02  
+**Versão:** 1.5
+**Data:** 2026-03-24
 **Base:** DOC-DEV-001 + DOC-ESC-001 + DOC-GNP-00 v2.0 + DOC-GPA-001 + EX-OAS-* + Events↔Permissions Pack + UX-010
 
 Este pacote define **6 agentes especialistas** para geração de código e validação, focando em atuar de forma isolada nas **Camadas da Arquitetura** do projeto.
@@ -140,6 +140,33 @@ Regras de segurança e parsing:
 - **Allowed Prefixes:** `apps/api/src/domain/`
 - **Protagonismo:** entidades/VO/invariantes baseadas estritamente em BR-xxx.
 
+**Contratos Obrigatórios — Domain Errors (MUST)**
+
+1. **MUST** estender `DomainError` (classe abstrata de `apps/api/src/modules/foundation/domain/errors/domain-errors.ts`). **NUNCA** usar `extends Error` diretamente.
+2. **MUST** incluir campo `readonly type: string` com URI Problem Details (RFC 9457). Formato: `'/problems/{kebab-case-error-name}'`.
+3. **MUST** incluir campo `readonly statusHint: number` com HTTP status code semântico (400, 403, 404, 409, 422, etc.).
+4. **MUST NOT** usar campos `code` ou `statusCode` — esses são substituídos por `type` e `statusHint` conforme DOC-GNP-00.
+5. **MUST** importar `DomainError` do Foundation: `import { DomainError } from '@modules/foundation/domain/errors/domain-errors';`
+
+```typescript
+// ✅ CORRETO — padrão obrigatório
+import { DomainError } from '@modules/foundation/domain/errors/domain-errors';
+
+export class ResourceNotAvailableError extends DomainError {
+  readonly type = '/problems/resource-not-available';
+  readonly statusHint = 422;
+  constructor(resourceId: string) {
+    super(`Resource ${resourceId} is not available`);
+  }
+}
+
+// ❌ PROIBIDO — extends Error direto
+export class ResourceNotAvailableError extends Error {
+  readonly code = 'RESOURCE_NOT_AVAILABLE';
+  readonly statusCode = 422;
+}
+```
+
 ### 3.3 AGN-COD-APP — Application/UseCases
 
 - **Allowed Prefixes:** `apps/api/src/application/`
@@ -175,8 +202,75 @@ Regras de segurança e parsing:
 
 ### 3.5 AGN-COD-WEB — Frontend
 
-- **Allowed Prefixes:** `apps/web/`
+- **Allowed Prefixes:** `apps/web/src/modules/{slug}/`
 - **Protagonismo:** UI, estados Loading/Empty/Error conforme UX-xxx; consumo de API.
+- **Required Docs:** DOC-GNP-00, DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-UX-013
+
+**Contratos Obrigatórios — Estrutura de Diretório (MUST)**
+
+Todo módulo web **MUST** seguir a estrutura **Pattern A** abaixo. **NUNCA** gerar variantes alternativas (data/domain/ui/):
+
+```
+apps/web/src/modules/{slug}/
+├── api/            # Clients HTTP (fetch wrappers tipados)
+├── components/     # Componentes específicos do módulo ({EntityName}Card, {EntityName}Timeline)
+├── hooks/          # React hooks (useQuery/useMutation wrappers)
+├── pages/          # Page components (1 por rota)
+└── types/          # TypeScript types/interfaces do módulo
+```
+
+**Contratos Obrigatórios — React Query (MUST)**
+
+1. **MUST** criar hooks wrapper em `hooks/` usando `useQuery()` para reads e `useMutation()` para writes (de `@tanstack/react-query`).
+2. **MUST NOT** fazer chamadas fetch diretas em componentes — toda interação com API passa por hooks.
+3. **MUST** usar `queryKey` estruturado: `['{slug}', '{entity}', ...params]`.
+
+```typescript
+// ✅ CORRETO — hook wrapper obrigatório
+import { useQuery } from '@tanstack/react-query';
+import { listItems } from '../api/{slug}.api';
+
+export function useItems(filters: ItemFilters) {
+  return useQuery({
+    queryKey: ['{slug}', '{entity}', filters],
+    queryFn: () => listItems(filters),
+  });
+}
+```
+
+**Regras de Styling (MUST)**
+
+1. **MUST** usar exclusivamente Tailwind CSS v4 para styling de layout, cor e tipografia.
+2. **MUST NOT** usar inline `style={{}}` para layout, cor, tipografia ou espaçamento. Exceções: valores dinâmicos em runtime (ex: `style={{ width: `${progress}%` }}`).
+3. **MUST** usar tokens semânticos definidos no `@theme` (DOC-UX-013 §2). Hex/RGB hardcoded é proibido.
+
+**Regras de Componentes (MUST)**
+
+4. **MUST** importar componentes de UI de `@shared/ui/` (Button, Input, Badge, Modal, Drawer, Table, Skeleton, Toast, Spinner).
+5. **MUST NOT** recriar componentes equivalentes dentro de `src/modules/{slug}/`. Shared components são ownership exclusivo do scaffold.
+6. Componentes específicos do módulo (ex: `{EntityName}Card`, `{EntityName}Timeline`) podem ser criados em `src/modules/{slug}/components/`.
+
+**Regras de Roteamento (MUST)**
+
+7. **MUST** usar `<Link>` ou `router.navigate()` do `@tanstack/react-router` para navegação in-app.
+8. **MUST NOT** usar `window.location.href` para navegação interna.
+9. **MUST** criar rotas lazy-loaded via `lazy()` do TanStack Router.
+
+**Regras de Animação (MUST)**
+
+10. **MUST** usar `motion` (DOC-PADRAO-002 §3.5) para animações de Modal (scale-up + backdrop), Drawer (slide), Toast (slide + fade).
+11. **MUST** respeitar `prefers-reduced-motion` — animações instantâneas quando redução é solicitada.
+
+**Regras de State (MUST)**
+
+12. **MUST** usar `@tanstack/react-query` para server state (cache, refetch, invalidation).
+13. **MUST** usar Router Context do `@tanstack/react-router` para dados de autenticação (user, scopes, tenantId).
+14. **MUST NOT** usar Redux, Zustand ou React Context genérico para auth state.
+
+**Anti-Pattern Foundation**
+
+- Nunca recrie guards de autenticação — use os Route Guards definidos em DOC-UX-011 §3.3.
+- Nunca recrie componentes de feedback (Toast, Spinner) — importe de `@shared/ui/`.
 
 ---
 
@@ -239,6 +333,8 @@ OpenAPI (quando AGN-COD-API):
 
 ## 6) Changelog
 
+- v1.5 (2026-03-24): Adição de **Contratos Obrigatórios** em §3.2 (DomainError, RFC 9457) e §3.5 (Pattern A, React Query hooks). Causa raiz: auditoria detectou 27 classes de erro com `extends Error` e 2 padrões web incompatíveis gerados por codegen sem enforcement.
+- v1.4 (2026-03-24): Expansão de §3.5 AGN-COD-WEB com regras MUST para Tailwind, shared components, TanStack Router, motion e React Query. Allowed prefixes refinados para `apps/web/src/modules/{slug}/`.
 - v1.3 (2026-03-02): Adição do subtópico 0.4 que obriga o uso de skills do diretório `.claude/commands`.
 - v1.2 (2026-02-27): Amarração explícita com EX-OAS-001..004, x-permissions (timeline/notifications), SEC-002, DATA-003 e UX-010; expansão de ownership do AGN-COD-API para `apps/api/openapi/`.
 - v1.1 (2026-02-22): Base por camadas, plan→emit_files, content_lines[], validador.

@@ -58,5 +58,9 @@ validate_*.txt
 # Obsidian vault
 .obsidian/
 
+# Temporary codegen/lint artifacts
+tmp-lint-*
+tmp-*.mjs
+
 # Scratch / rascunho
 d.md

@@ -12,6 +12,7 @@ Esta skill é o **orquestrador pai** de todas as validações. A relação é:
 
 ```
 /validate-all  (orquestrador — validação completa pré-promoção)
+├── lint check          (tooling: pnpm lint + pnpm format:check — DOC-PADRAO-002 §4.3)
 ├── /qa                 (sintaxe: npm lint scripts — links, markdown, YAML schemas)
 ├── /validate-manifest  (semântica: manifests vs schema v1 e catálogo de scopes)
 ├── /validate-openapi   (semântica: contratos OpenAPI vs DOC-ARC-001)
@@ -19,6 +20,7 @@ Esta skill é o **orquestrador pai** de todas as validações. A relação é:
 └── /validate-endpoint  (semântica: handlers Fastify vs contratos e normativos)
 ```
 
+- **lint check** valida **qualidade de código** (ESLint + Prettier) conforme DOC-PADRAO-002 §4.3 e gate `lint` do DOC-ARC-002
 - `/qa` valida **integridade de arquivos** (links quebrados, formatação markdown, YAML parseable) via `pnpm run` scripts
 - As demais validam **conformidade semântica** com normativos (LLM lê e julga o conteúdo)
 
@@ -48,8 +50,9 @@ Se o módulo não existir, aborte com mensagem clara.
 
 Determine quais validações são aplicáveis verificando a existência de artefatos:
 
-| # | Validação | Skill | Condição de Aplicabilidade | Artefato a Localizar |
-|---|-----------|-------|---------------------------|---------------------|
+| # | Validação | Skill / Comando | Condição de Aplicabilidade | Artefato a Localizar |
+|---|-----------|-----------------|---------------------------|---------------------|
+| 0 | Lint Check | `pnpm lint` + `pnpm format:check` | **Sempre aplicável** (se existem arquivos `.ts`/`.tsx` do módulo em `apps/`) | `apps/api/src/modules/{mod}/`, `apps/web/src/modules/{mod}/` |
 | 1 | QA geral | `/qa` | **Sempre aplicável** | — |
 | 2 | Screen Manifests | `/validate-manifest` | Existem arquivos `ux-*.yaml` em `docs/05_manifests/screens/` para o módulo | `docs/05_manifests/screens/ux-{entity}*.yaml` |
 | 3 | OpenAPI | `/validate-openapi` | Existe contrato OpenAPI do módulo | `apps/api/openapi/v*.yaml` com paths do módulo |
@@ -81,6 +84,97 @@ Aguarde confirmação. Se o usuário pedir ajustes, aplique-os.
 ## PASSO 4: Execução Sequencial
 
 Execute cada validação aplicável na ordem definida. Para cada uma:
+
+### 4.0 — Lint Check (sempre, se existem arquivos .ts/.tsx do módulo)
+
+Execute os dois comandos na raiz do monorepo:
+
+1. `pnpm lint` — capturar a saída e filtrar apenas linhas referentes aos paths do módulo (`apps/api/src/modules/{mod_slug}/` e/ou `apps/web/src/modules/{mod_slug}/`)
+2. `pnpm format:check` — idem, filtrar apenas arquivos do módulo
+
+**Classificação do resultado:**
+
+| Condição | Status |
+|---|---|
+| 0 errors ESLint + 0 format issues | `PASS` |
+| Apenas warnings ESLint (0 errors) + 0 format issues | `WARN` (não bloqueia promoção) |
+| ≥1 error ESLint OU ≥1 format issue | `FAIL` |
+| Nenhum arquivo `.ts`/`.tsx` do módulo em `apps/` | `N/A` |
+
+Registre:
+- Quantidade de errors, warnings (ESLint) e arquivos com problemas de formatação (Prettier)
+- Regras mais frequentes (top 3)
+
+> **Ref normativa:** DOC-PADRAO-002 §4.3, DOC-ARC-002 gate `lint`.
+
+### 4.0.5 — Validação Arquitetural (sempre, se existem arquivos do módulo)
+
+Verifique conformidade com padrões obrigatórios do PKG-COD-001:
+
+**Domain Errors (se `apps/api/src/modules/{mod_slug}/domain/errors/` existe):**
+1. Todas as classes de erro DEVEM estender `DomainError` (não `Error`)
+2. Todas DEVEM ter campo `readonly type: string` (formato `/problems/...`)
+3. Todas DEVEM ter campo `readonly statusHint: number`
+4. Se algum arquivo viola → `FAIL` com lista de arquivos violadores
+
+**Web Module Structure (se `apps/web/src/modules/{mod_slug}/` existe):**
+1. Estrutura DEVE seguir Pattern A: `api/`, `hooks/`, `pages/`, `types/`
+2. NÃO DEVE conter Pattern B: `data/`, `domain/`, `ui/`
+3. Hooks DEVEM usar `@tanstack/react-query` (`useQuery`/`useMutation`)
+4. Se Pattern B detectado → `FAIL` com diretórios incorretos
+
+**Classificação:**
+
+| Condição | Status |
+|---|---|
+| Todos checks passam | `PASS` |
+| Apenas avisos menores | `WARN` |
+| Violação de herança DomainError OU Pattern B detectado | `FAIL` |
+| Nenhum arquivo aplicável | `N/A` |
+
+**Exemplo de output — FAIL (Domain Errors):**
+
+```
+### 4.0.5 — Validação Arquitetural — MOD-{NNN}
+
+**Domain Errors:**
+| # | Arquivo | extends | type | statusHint | Status |
+|---|---------|---------|------|------------|--------|
+| 1 | {slug}-errors.ts → ResourceNotFoundError | Error ❌ | ausente ❌ | ausente ❌ | FAIL |
+| 2 | {slug}-errors.ts → InvalidConfigError | Error ❌ | ausente ❌ | ausente ❌ | FAIL |
+| 3 | {slug}-errors.ts → DuplicateEntryError | Error ❌ | ausente ❌ | ausente ❌ | FAIL |
+
+→ **3 classes violam PKG-COD-001 §3.2** — devem estender DomainError com type + statusHint.
+
+**Web Module Structure:**
+| Check | Esperado | Encontrado | Status |
+|---|---|---|---|
+| Pattern A (api/, hooks/, pages/, types/) | Sim | Não — encontrado data/, domain/, ui/ | FAIL |
+| React Query em hooks/ | useQuery/useMutation | Diretório hooks/ inexistente | FAIL |
+
+→ **Pattern B detectado** — módulo web precisa ser reestruturado para Pattern A.
+
+**Resultado: FAIL** (5 violações críticas)
+```
+
+**Exemplo de output — PASS:**
+
+```
+### 4.0.5 — Validação Arquitetural — MOD-{NNN}
+
+**Domain Errors:**
+| # | Arquivo | extends | type | statusHint | Status |
+|---|---------|---------|------|------------|--------|
+| 1 | {slug}-errors.ts → ResourceNotFoundError | DomainError ✅ | /problems/resource-not-found ✅ | 404 ✅ | PASS |
+
+**Web Module Structure:**
+| Check | Esperado | Encontrado | Status |
+|---|---|---|---|
+| Pattern A | Sim | api/, hooks/, pages/, types/ ✅ | PASS |
+| React Query | useQuery/useMutation | use-items.ts → useQuery ✅ | PASS |
+
+**Resultado: PASS** (0 violações)
+```
 
 ### 4.1 — QA Geral (sempre)
 
@@ -136,6 +230,7 @@ Após todas as validações, emita o relatório final:
 
 | # | Validação         | Status | Resultado | Detalhes              |
 |---|-------------------|--------|-----------|----------------------|
+| 0 | Lint Check        | ✅ RUN  | WARN      | 0 errors, 3 warnings (no-unused-vars) |
 | 1 | QA geral          | ✅ RUN  | PASS      | 0 bloqueadores       |
 | 2 | Screen Manifests  | ✅ RUN  | FAIL      | 2/3 aprovados        |
 | 3 | OpenAPI           | ⊘ N/A  | —         | Módulo UX-only       |
@@ -162,11 +257,83 @@ Após todas as validações, emita o relatório final:
 3. Quando aprovado, execute `/promote-module {caminho_modulo}`
 ```
 
-## PASSO 6: Registro de Pendências (violações → pen file)
+## PASSO 6: Registrar Execution State
+
+Após o relatório consolidado, registre o estado de validação no execution state.
+
+1. Leia `.agents/execution-state/MOD-{NNN}.json` (se existir) ou crie um novo
+2. Atualize (ou crie) a seção `validations`:
+
+```json
+{
+  "module_id": "MOD-{NNN}",
+  "module_path": "{caminho_modulo}",
+  "last_updated": "{ISO_TIMESTAMP}",
+  "validations": {
+    "last_run": "{ISO_TIMESTAMP}",
+    "lint":     { "status": "PASS|WARN|FAIL|N/A", "run_at": "{ISO_TIMESTAMP}", "eslint_errors": 0, "eslint_warnings": 0, "prettier_issues": 0, "top_rules": [] },
+    "qa":       { "status": "PASS|FAIL|N/A|ERROR", "run_at": "{ISO_TIMESTAMP}", "blockers": 0, "violations": 0, "warnings": 0 },
+    "manifest": { "status": "PASS|FAIL|N/A|ERROR", "run_at": "{ISO_TIMESTAMP}", "total": N, "passed": N, "violations": [] },
+    "openapi":  { "status": "PASS|FAIL|N/A|ERROR", "run_at": "{ISO_TIMESTAMP}" },
+    "drizzle":  { "status": "PASS|FAIL|N/A|ERROR", "run_at": "{ISO_TIMESTAMP}" },
+    "endpoint": { "status": "PASS|FAIL|N/A|ERROR", "run_at": "{ISO_TIMESTAMP}" },
+    "verdict": {
+      "ready_for_promotion": true,
+      "blockers": 0,
+      "critical_violations": 0,
+      "warnings": 0
+    }
+  }
+}
+```
+
+- Para validações `N/A`, use `"status": "N/A"` e `"run_at": null`
+- Para validações que deram erro de execução, use `"status": "ERROR"`
+- `verdict` é o resumo do "Veredicto Final" do PASSO 5
+- Preserve seções existentes (`scaffold`, `codegen`, `tests`) — faça merge, não sobrescreva
+- **Adicionalmente**, atualize a seção `tests.pnpm_lint` no execution-state com o resultado do step 4.0:
+
+```json
+"tests": {
+  "pnpm_lint": {
+    "status": "PASS|WARN|FAIL|N/A",
+    "run_at": "{ISO_TIMESTAMP}",
+    "eslint_errors": 0,
+    "eslint_warnings": 0,
+    "prettier_issues": 0
+  }
+}
+```
+
+> Isso alimenta o `/action-plan` que consome `tests.pnpm_lint.status` para o checklist rápido.
+
+## PASSO 7: Atualizar CHANGELOG
+
+Localize o `CHANGELOG.md` do módulo e adicione uma entrada na tabela "Histórico de Versões":
+
+```
+| {next_version} | {data_atual} | validate-all | Validação Fase 3: {resultado_geral}. QA: {status_qa}. Manifests: {N_passed}/{N_total}. OpenAPI: {status}. Drizzle: {status}. Endpoints: {status}. |
+```
+
+A versão deve ser o próximo patch bump da última entrada existente.
+
+> **Nota:** Registre o veredicto no CHANGELOG. Se PASS: `"Validação Fase 3 aprovada — pronto para merge."`. Se FAIL: `"Validação Fase 3 com {N} violações críticas — ver pen file."`.
+
+## PASSO 8: Sincronizar Plano de Ação
+
+Atualize o plano de ação do módulo para refletir os resultados da validação:
+
+1. Verifique se o plano existe: `docs/04_modules/user-stories/plano/PLANO-ACAO-MOD-{NNN}.md`
+2. Se **existe** → invoque `/action-plan {caminho_modulo} --update`
+3. Se **não existe** → invoque `/action-plan {caminho_modulo}` (criação completa)
+
+> **Nota:** O action-plan lê `.agents/execution-state/MOD-{NNN}.json` para dados precisos. A seção `validations` registrada no PASSO 6 será consumida aqui.
+
+## PASSO 9: Registro de Pendências (violações → pen file)
 
 Se o relatório (PASSO 5) contém **Bloqueadores** ou **Violações Críticas**, execute este passo. Se o veredicto foi PASS sem violações críticas, **skip** este passo.
 
-### 6.1 — Deduplicação
+### 9.1 — Deduplicação
 
 Para cada violação crítica ou bloqueador encontrado:
 
@@ -177,7 +344,7 @@ Para cada violação crítica ou bloqueador encontrado:
 3. Se já existe → marque como `EXISTENTE (PENDENTE-XXX)` — não duplicar
 4. Se não existe → marque como `NOVA`
 
-### 6.2 — Registro automático
+### 9.2 — Registro automático
 
 Todas as violações marcadas como `NOVA` são registradas **automaticamente** — sem confirmação do usuário.
 
@@ -195,7 +362,7 @@ Apresente o resumo da deduplicação antes de criar:
 | 3 | EX-SEC-002 — escopo não registrado | SEC-002 | ALTA | EXISTENTE (PENDENTE-006) |
 ```
 
-### 6.3 — Criação via manage-pendentes
+### 9.3 — Criação via manage-pendentes
 
 > **REGRA CRÍTICA:** O registro de pendências DEVE ser feito **exclusivamente** via invocação de `/manage-pendentes create PEN-{NNN}` em modo programático. **NUNCA** edite o arquivo `pen-{NNN}-pendente.md` diretamente. Escrever direto no pen file quebra a cadeia de automação: o `/manage-pendentes` PASSO 6 dispara `/action-plan --update`, que propaga os dados para o plano de ação. Se você escrever direto, o plano NÃO será atualizado.
 
@@ -211,7 +378,7 @@ Para cada violação `NOVA`, invoque `/manage-pendentes create PEN-{NNN}` em **m
 
 Aguarde a conclusão de cada `/manage-pendentes create` antes de prosseguir para a próxima violação — a skill executa o `/action-plan --update` internamente.
 
-### 6.4 — Resumo do Registro
+### 9.4 — Resumo do Registro
 
 Após todas as criações, emita:
 
@@ -227,7 +394,7 @@ Após todas as criações, emita:
 
 ## Notas
 
-- Esta skill **lê e reporta** (PASSOs 1-5) e opcionalmente **registra pendências** (PASSO 6) quando há violações críticas.
+- Esta skill **lê e reporta** (PASSOs 1-5), **registra execution state** (PASSO 6) e opcionalmente **registra pendências** (PASSO 7) quando há violações críticas.
 - O registro de pendências é delegado ao `/manage-pendentes` (modo programático, `origem: VALIDATE`) — esta skill não edita o pen file diretamente.
 - Cada skill individual (`/qa`, `/validate-manifest`, etc.) mantém suas próprias regras e configuração.
 - Para validações N/A, registre o motivo no relatório mas não trate como falha.

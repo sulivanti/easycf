@@ -41,9 +41,7 @@ describe('AutoApprovalService (ADR-002)', () => {
   });
 
   it('returns false when requester lacks required scope', () => {
-    const rules = [
-      makeRule({ allowSelfApprove: true, requiredScope: 'approval:decide' }),
-    ];
+    const rules = [makeRule({ allowSelfApprove: true, requiredScope: 'approval:decide' })];
     expect(service.canAutoApprove(['other:scope'], rules)).toBe(false);
   });
 

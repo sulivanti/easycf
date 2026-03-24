@@ -10,9 +10,7 @@ import {
   InsufficientJustificationError,
 } from '../../../../src/modules/movement-approval/domain/errors/movement-approval-errors.js';
 
-function makeMovement(
-  overrides: Partial<ControlledMovementProps> = {},
-): ControlledMovement {
+function makeMovement(overrides: Partial<ControlledMovementProps> = {}): ControlledMovement {
   return ControlledMovement.create({
     id: 'mov-001',
     tenantId: 'tenant-001',
@@ -122,16 +120,12 @@ describe('ControlledMovement aggregate root', () => {
 
     it('rejects justification < 20 chars', () => {
       const mov = makeMovement();
-      expect(() => mov.override('user-admin', 'too short')).toThrow(
-        InsufficientJustificationError,
-      );
+      expect(() => mov.override('user-admin', 'too short')).toThrow(InsufficientJustificationError);
     });
 
     it('rejects if not PENDING_APPROVAL', () => {
       const mov = makeMovement({ status: 'REJECTED' });
-      expect(() => mov.override('user-admin', validJustification)).toThrow(
-        MovementNotPendingError,
-      );
+      expect(() => mov.override('user-admin', validJustification)).toThrow(MovementNotPendingError);
     });
   });
 
@@ -191,9 +185,7 @@ describe('ControlledMovement aggregate root', () => {
 
     it('rejects same actor as requester', () => {
       const mov = makeMovement({ requesterId: 'user-requester' });
-      expect(() => mov.assertCanDecide('user-requester')).toThrow(
-        SegregationViolationError,
-      );
+      expect(() => mov.assertCanDecide('user-requester')).toThrow(SegregationViolationError);
     });
   });
 

@@ -21,7 +21,7 @@ erDiagram
     }
 
     CONTENT_USERS {
-        uuid userId PK_FK
+        uuid userId PK "FK para users"
         varchar fullName
         varchar cpfCnpj
         varchar avatarUrl

@@ -2,7 +2,7 @@
 
 - **id:** DOC-DEP-001
 - **version:** 1.0.0
-- **data_ultima_revisao:** 2026-03-20
+- **data_ultima_revisao:** 2026-03-24
 - **owner:** arquitetura
 - **gerado_por:** auditoria manual + linter Pass E (cycle detection)
 

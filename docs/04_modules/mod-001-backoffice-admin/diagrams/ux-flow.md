@@ -29,9 +29,11 @@ flowchart TD
     PROFILE -->|Logout| LOGOUT["POST /auth/logout"]
     LOGOUT --> LOGIN
 
-    style START fill:#27AE60,color:#fff,stroke:#1E8449
-    style SHELL fill:#3498DB,color:#fff,stroke:#2980B9
-    style ERR1 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style ERR2 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style ERR3 fill:#E74C3C,color:#fff,stroke:#C0392B
+    classDef trigger fill:#3498DB,color:#fff,stroke:#2980B9
+    classDef success fill:#27AE60,color:#fff,stroke:#1E8449
+    classDef error fill:#E74C3C,color:#fff,stroke:#C0392B
+
+    class START success
+    class SHELL trigger
+    class ERR1,ERR2,ERR3 error
 ```

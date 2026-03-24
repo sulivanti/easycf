@@ -34,9 +34,13 @@ flowchart LR
     S4 --> S3
     S3 -->|"Rejeitado"| S2
 
-    style S1 fill:#27AE60,color:#fff,stroke:#1E8449
-    style S5 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style S3 fill:#E67E22,color:#fff,stroke:#CA6F1E
+    classDef success fill:#27AE60,color:#fff,stroke:#1E8449
+    classDef error fill:#E74C3C,color:#fff,stroke:#C0392B
+    classDef warning fill:#E67E22,color:#fff,stroke:#CA6F1E
+
+    class S1 success
+    class S5 error
+    class S3 warning
 ```
 
 ## Gate Types

@@ -48,8 +48,13 @@ flowchart TD
     ADMIN -->|Não| END["Terminal"]
     REPROCESS --> WORKER
 
-    style TRIGGER fill:#3498DB,color:#fff,stroke:#2980B9
-    style OK fill:#27AE60,color:#fff,stroke:#1E8449
-    style DLQ fill:#E74C3C,color:#fff,stroke:#C0392B
-    style HTTP fill:#E67E22,color:#fff,stroke:#CA6F1E
+    classDef trigger fill:#3498DB,color:#fff,stroke:#2980B9
+    classDef success fill:#27AE60,color:#fff,stroke:#1E8449
+    classDef error fill:#E74C3C,color:#fff,stroke:#C0392B
+    classDef warning fill:#E67E22,color:#fff,stroke:#CA6F1E
+
+    class TRIGGER trigger
+    class OK success
+    class DLQ error
+    class HTTP warning
 ```

@@ -15,10 +15,14 @@ const LINT_EXCLUDE_PATTERNS = [
     /CHANGELOG\.md$/i,
 ];
 
+// Diretórios excluídos da travessia recursiva (CR-1: previne FPs de node_modules)
+const WALK_EXCLUDE_DIRS = new Set(['node_modules', '.git', '.astro', '.turbo', 'dist', '.next']);
+
 function walkDir(dir, callback) {
     if (!fs.existsSync(dir)) return;
     const files = fs.readdirSync(dir);
     for (const f of files) {
+        if (WALK_EXCLUDE_DIRS.has(f)) continue;
         let dirPath = path.join(dir, f);
         let isDirectory = fs.statSync(dirPath).isDirectory();
         if (isDirectory) {
@@ -281,6 +285,13 @@ if (fs.existsSync(contextMapPath)) {
         for (const dep of (config.docs || [])) {
             if (!existingDocIds.has(dep.id)) {
                 errors.push(`[Erro] context-map.json: skill '${skill}' referencia doc '${dep.id}' que não existe em normativos/ ou pacotes_agentes/`);
+            }
+            // CR-6: Validar que paths explícitos resolvem para arquivos existentes
+            if (dep.path) {
+                const resolvedPath = path.resolve(__dirname, '..', '..', dep.path);
+                if (!fs.existsSync(resolvedPath)) {
+                    errors.push(`[Erro] context-map.json: skill '${skill}' → doc '${dep.id}' aponta para path inexistente: '${dep.path}'`);
+                }
             }
         }
     }

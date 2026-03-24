@@ -5,9 +5,7 @@ import {
 } from '../../../../src/modules/movement-approval/domain/entities/approval-instance.entity.js';
 import { InsufficientOpinionError } from '../../../../src/modules/movement-approval/domain/errors/movement-approval-errors.js';
 
-function makeInstance(
-  overrides: Partial<ApprovalInstanceProps> = {},
-): ApprovalInstance {
+function makeInstance(overrides: Partial<ApprovalInstanceProps> = {}): ApprovalInstance {
   return ApprovalInstance.create({
     id: 'inst-001',
     tenantId: 'tenant-001',

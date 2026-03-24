@@ -248,11 +248,11 @@ apps/web/src/modules/movement-approval/
 
 | Feature | Tema | Tipo | Status |
 |---|---|---|---|
-| [US-MOD-009-F01](../user-stories/features/US-MOD-009-F01.md) | API Regras de controle + alçada | Backend | `APPROVED` |
-| [US-MOD-009-F02](../user-stories/features/US-MOD-009-F02.md) | API Motor de controle (interceptação) | Backend | `APPROVED` |
-| [US-MOD-009-F03](../user-stories/features/US-MOD-009-F03.md) | API Inbox + execução + override | Backend | `APPROVED` |
-| [US-MOD-009-F04](../user-stories/features/US-MOD-009-F04.md) | UX Inbox de aprovações | UX | `APPROVED` |
-| [US-MOD-009-F05](../user-stories/features/US-MOD-009-F05.md) | UX Configurador de regras | UX | `APPROVED` |
+| [US-MOD-009-F01](../user-stories/features/US-MOD-009-F01.md) | API Regras de controle + alçada | Backend | `READY` |
+| [US-MOD-009-F02](../user-stories/features/US-MOD-009-F02.md) | API Motor de controle (interceptação) | Backend | `READY` |
+| [US-MOD-009-F03](../user-stories/features/US-MOD-009-F03.md) | API Inbox + execução + override | Backend | `READY` |
+| [US-MOD-009-F04](../user-stories/features/US-MOD-009-F04.md) | UX Inbox de aprovações | UX | `READY` |
+| [US-MOD-009-F05](../user-stories/features/US-MOD-009-F05.md) | UX Configurador de regras | UX | `READY` |
 
 ## 6. Screen Manifests
 

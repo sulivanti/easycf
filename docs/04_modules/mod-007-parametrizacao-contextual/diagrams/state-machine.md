@@ -49,7 +49,11 @@ flowchart TD
     APPLY -->|dry-run| PREVIEW["Retornar preview<br/>(sem efeito)"]
     APPLY -->|apply| EXEC["Aplicar ações<br/>+ emitir eventos"]
 
-    style TRIGGER fill:#3498DB,color:#fff,stroke:#2980B9
-    style EXEC fill:#27AE60,color:#fff,stroke:#1E8449
-    style PREVIEW fill:#E67E22,color:#fff,stroke:#CA6F1E
+    classDef trigger fill:#3498DB,color:#fff,stroke:#2980B9
+    classDef success fill:#27AE60,color:#fff,stroke:#1E8449
+    classDef warning fill:#E67E22,color:#fff,stroke:#CA6F1E
+
+    class TRIGGER trigger
+    class EXEC success
+    class PREVIEW warning
 ```

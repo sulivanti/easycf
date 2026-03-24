@@ -10,7 +10,7 @@
   },
   "codegen": {
     "started_at": "2026-03-23T23:00:00.000Z",
-    "completed_at": "2026-03-23T23:00:00.000Z",
+    "completed_at": "2026-03-24T17:20:00.000Z",
     "agents": {
       "AGN-COD-DB": {
         "status": "done",
@@ -84,11 +84,19 @@
       },
       "AGN-COD-VAL": {
         "status": "done",
-        "completed_at": "2026-03-23T23:00:00.000Z",
+        "completed_at": "2026-03-24T17:20:00.000Z",
         "files_generated": 0,
         "files": []
       }
     }
+  },
+  "promotion": {
+    "completed": true,
+    "completed_at": "2026-03-24T17:20:00.000Z",
+    "version": "1.0.0",
+    "gates_passed": ["DoR-1", "DoR-2", "DoR-3", "DoR-4", "DoR-5", "DoR-6", "DoR-7"],
+    "epic_status": "READY",
+    "features_promoted": ["F01", "F02", "F03", "F04", "F05"]
   },
   "validate_all": {
     "completed_at": "2026-03-24T22:00:00Z",

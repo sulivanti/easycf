@@ -20,26 +20,26 @@ describe('OverrideAuditor domain service (ADR-004)', () => {
   });
 
   it('throws InsufficientScopeError with empty scopes', () => {
-    expect(() =>
-      auditor.validateOverride('actor-001', [], validJustification),
-    ).toThrow(InsufficientScopeError);
+    expect(() => auditor.validateOverride('actor-001', [], validJustification)).toThrow(
+      InsufficientScopeError,
+    );
   });
 
   it('throws InsufficientJustificationError for justification < 20 chars', () => {
-    expect(() =>
-      auditor.validateOverride('actor-001', ['approval:override'], 'too short'),
-    ).toThrow(InsufficientJustificationError);
+    expect(() => auditor.validateOverride('actor-001', ['approval:override'], 'too short')).toThrow(
+      InsufficientJustificationError,
+    );
   });
 
   it('throws InsufficientJustificationError for empty justification', () => {
-    expect(() =>
-      auditor.validateOverride('actor-001', ['approval:override'], ''),
-    ).toThrow(InsufficientJustificationError);
+    expect(() => auditor.validateOverride('actor-001', ['approval:override'], '')).toThrow(
+      InsufficientJustificationError,
+    );
   });
 
   it('checks scope before justification (scope error takes precedence)', () => {
-    expect(() =>
-      auditor.validateOverride('actor-001', [], 'short'),
-    ).toThrow(InsufficientScopeError);
+    expect(() => auditor.validateOverride('actor-001', [], 'short')).toThrow(
+      InsufficientScopeError,
+    );
   });
 });

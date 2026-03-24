@@ -57,8 +57,8 @@ erDiagram
 
     ORG_UNIT_TENANT_LINK {
         uuid id PK
-        uuid org_unit_id FK_UK "CHECK nivel=4"
-        uuid tenant_id FK_UK
+        uuid org_unit_id FK "UK, CHECK nivel=4"
+        uuid tenant_id FK "UK"
         uuid created_by FK
         timestamptz deleted_at "soft-unlink"
     }

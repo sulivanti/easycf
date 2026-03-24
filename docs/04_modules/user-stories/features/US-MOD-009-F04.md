@@ -1,6 +1,6 @@
 # US-MOD-009-F04 — UX: Inbox de Aprovações (UX-APROV-001)
 
-**Status Ágil:** `APPROVED`
+**Status Ágil:** `READY`
 **Versão:** 1.0.0
 **Data:** 2026-03-15
 **Módulo Destino:** **MOD-009** (Aprovações e Alçadas — UX)
@@ -9,7 +9,7 @@
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-009, US-MOD-009-F02, US-MOD-009-F03, DOC-UX-010

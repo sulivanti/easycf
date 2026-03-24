@@ -152,6 +152,41 @@ Após todos os agentes executados, emita um resumo consolidado:
 - Execute `/codegen-all` para processar o próximo módulo
 ```
 
+## PASSO 7.5: Cleanup Gate (MUST)
+
+Após o relatório e antes de registrar execution state, execute limpeza obrigatória:
+
+### 7.5.1 — Prettier nos arquivos gerados
+
+Rode `pnpm format --write` nos arquivos criados/modificados nesta sessão de codegen. Isso garante formatação consistente sem depender de cleanup manual posterior.
+
+### 7.5.2 — Temp files
+
+Verifique presença de arquivos `tmp-*` no root do monorepo. Se existirem e estiverem cobertos pelo `.gitignore` (pattern `tmp-*`), delete-os:
+
+```bash
+rm -f tmp-*
+```
+
+### 7.5.3 — Cache dirs regeneráveis
+
+Verifique e limpe diretórios de cache no root que são regeneráveis:
+- `.astro/` — cache do Astro (regenerado por `astro build`)
+- `.turbo/` — cache do Turborepo (regenerado por qualquer `turbo run`)
+
+Se existirem, delete-os. **NÃO** delete `node_modules/`, `.git/`, ou diretórios de output (`dist/`, `build/`).
+
+### 7.5.4 — Unused dependencies check
+
+Para cada `package.json` tocado durante o codegen (`apps/api/package.json`, `apps/web/package.json`):
+
+1. Liste todos os pacotes em `dependencies` (excluindo `devDependencies`)
+2. Para cada pacote, verifique se existe pelo menos 1 import/require no código fonte do app correspondente (`apps/api/src/` ou `apps/web/src/`)
+3. Pacotes sem nenhum import → emita warning no relatório: `"⚠ Pacote '{name}' em {app}/package.json não tem imports — considerar remoção"`
+4. **NÃO** remova automaticamente — apenas reporte
+
+> **Ref:** Este gate previne acúmulo de dependências órfãs (Issue #15 da auditoria v0.9.0).
+
 ## PASSO 8: Registrar Execution State
 
 Após o relatório consolidado, registre o estado de execução do codegen.

@@ -1,0 +1,1888 @@
+openapi: 3.1.0
+info:
+  title: ECF — Contextual Params Module (MOD-007)
+  version: 1.0.0
+  description: |
+    Contextual Parameterization module API — framer types, framers, target objects,
+    incidence rules, routines, routine items, and the evaluation engine.
+  contact:
+    name: ECF Team
+
+servers:
+  - url: /api/v1
+    description: API v1
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: contextual-params
+    description: Contextual parameterization — framers, routines, rules, and evaluation engine
+
+paths:
+  # ─── Framer Types (FR-001) ──────────────────────────────────────────────────
+
+  /admin/framer-types:
+    get:
+      operationId: contextual_params_admin_framer_types_list
+      summary: List framer types
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+      responses:
+        "200":
+          description: Paginated list of framer types
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FramerTypeListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+    post:
+      operationId: contextual_params_admin_framer_types_create
+      summary: Create a framer type
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateFramerTypeBody"
+      responses:
+        "201":
+          description: Framer type created
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FramerTypeResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  # ─── Framers (FR-002) ──────────────────────────────────────────────────────
+
+  /admin/framers:
+    get:
+      operationId: contextual_params_admin_framers_list
+      summary: List framers with filters
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/ActiveInactiveStatus"
+        - name: framer_type_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Paginated list of framers
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FramerListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+    post:
+      operationId: contextual_params_admin_framers_create
+      summary: Create a framer
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateFramerBody"
+      responses:
+        "201":
+          description: Framer created
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FramerResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/framers/{id}:
+    patch:
+      operationId: contextual_params_admin_framers_update
+      summary: Update a framer
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateFramerBody"
+      responses:
+        "200":
+          description: Framer updated
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FramerResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+    delete:
+      operationId: contextual_params_admin_framers_delete
+      summary: Soft delete a framer
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      responses:
+        "204":
+          description: Framer deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ─── Target Objects (FR-003) ────────────────────────────────────────────────
+
+  /admin/target-objects:
+    get:
+      operationId: contextual_params_admin_target_objects_list
+      summary: List target objects
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+      responses:
+        "200":
+          description: Paginated list of target objects
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TargetObjectListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+    post:
+      operationId: contextual_params_admin_target_objects_create
+      summary: Create a target object
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTargetObjectBody"
+      responses:
+        "201":
+          description: Target object created
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TargetObjectResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/target-objects/{id}/fields:
+    post:
+      operationId: contextual_params_admin_target_fields_create
+      summary: Add a field to a target object
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTargetFieldBody"
+      responses:
+        "201":
+          description: Target field created
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TargetFieldResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  # ─── Incidence Rules (FR-004, FR-010) ───────────────────────────────────────
+
+  /admin/incidence-rules:
+    get:
+      operationId: contextual_params_admin_incidence_rules_list
+      summary: List incidence rules with filters
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+        - name: framer_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: target_object_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/ActiveInactiveStatus"
+      responses:
+        "200":
+          description: Paginated list of incidence rules
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncidenceRuleListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+    post:
+      operationId: contextual_params_admin_incidence_rules_create
+      summary: Create an incidence rule
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateIncidenceRuleBody"
+      responses:
+        "201":
+          description: Incidence rule created
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncidenceRuleResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/incidence-rules/{id}:
+    patch:
+      operationId: contextual_params_admin_incidence_rules_update
+      summary: Update an incidence rule
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateIncidenceRuleBody"
+      responses:
+        "200":
+          description: Incidence rule updated
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncidenceRuleResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+    delete:
+      operationId: contextual_params_admin_incidence_rules_delete
+      summary: Inactivate an incidence rule
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      responses:
+        "204":
+          description: Incidence rule inactivated
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /admin/incidence-rules/{id}/link-routine:
+    post:
+      operationId: contextual_params_admin_incidence_rules_link_routine
+      summary: Link a published routine to an incidence rule
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LinkRoutineBody"
+      responses:
+        "201":
+          description: Routine linked to incidence rule
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LinkRoutineResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/incidence-rules/{id}/unlink-routine/{routineId}:
+    delete:
+      operationId: contextual_params_admin_incidence_rules_unlink_routine
+      summary: Unlink a routine from an incidence rule
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+        - name: routineId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Routine unlinked from incidence rule
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ─── Routines (FR-005, FR-007, FR-008) ──────────────────────────────────────
+
+  /admin/routines:
+    get:
+      operationId: contextual_params_admin_routines_list
+      summary: List routines with filters
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/RoutineStatus"
+        - name: routine_type
+          in: query
+          schema:
+            $ref: "#/components/schemas/RoutineType"
+      responses:
+        "200":
+          description: Paginated list of routines
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoutineListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+    post:
+      operationId: contextual_params_admin_routines_create
+      summary: Create a draft routine
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoutineBody"
+      responses:
+        "201":
+          description: Draft routine created
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoutineResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/routines/{id}:
+    get:
+      operationId: contextual_params_admin_routines_get
+      summary: Get routine detail with items, links, and version history
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      responses:
+        "200":
+          description: Routine detail
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoutineDetailResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    patch:
+      operationId: contextual_params_admin_routines_update
+      summary: Update a draft routine
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRoutineBody"
+      responses:
+        "200":
+          description: Routine updated
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoutineResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/routines/{id}/publish:
+    post:
+      operationId: contextual_params_admin_routines_publish
+      summary: Publish a draft routine (DRAFT -> PUBLISHED)
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishRoutineBody"
+      responses:
+        "200":
+          description: Routine published
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublishRoutineResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/routines/{id}/fork:
+    post:
+      operationId: contextual_params_admin_routines_fork
+      summary: Fork a published routine into a new draft
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForkRoutineBody"
+      responses:
+        "201":
+          description: Routine forked — new draft created
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForkRoutineResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  # ─── Routine Items (FR-006) ─────────────────────────────────────────────────
+
+  /admin/routines/{id}/items:
+    post:
+      operationId: contextual_params_admin_routine_items_create
+      summary: Add an item to a draft routine
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoutineItemBody"
+      responses:
+        "201":
+          description: Routine item created
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoutineItemResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/routine-items/{id}:
+    patch:
+      operationId: contextual_params_admin_routine_items_update
+      summary: Update a routine item
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRoutineItemBody"
+      responses:
+        "200":
+          description: Routine item updated
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoutineItemResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+    delete:
+      operationId: contextual_params_admin_routine_items_delete
+      summary: Delete a routine item
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/UuidId"
+      responses:
+        "204":
+          description: Routine item deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ─── Evaluation Engine (FR-009, INT-001) ────────────────────────────────────
+
+  /routine-engine/evaluate:
+    post:
+      operationId: contextual_params_routine_engine_evaluate
+      summary: Evaluate contextual parameterization rules for an object
+      description: |
+        Runs the 6-step evaluation engine: resolves incidence rules, collects
+        linked routines, merges routine items, and returns the computed
+        field visibility, requirements, defaults, domain restrictions,
+        and validations. Supports dry-run mode for UI preview.
+      tags: [contextual-params]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvaluateRequestBody"
+      responses:
+        "200":
+          description: Evaluation result
+          headers:
+            X-Correlation-ID:
+              $ref: "#/components/headers/XCorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluateResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Correlation ID for distributed tracing
+
+    UuidId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Cursor for keyset pagination
+
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  headers:
+    XCorrelationId:
+      description: Correlation ID echoed back
+      schema:
+        type: string
+        format: uuid
+
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+
+    ValidationError:
+      description: Validation error
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+
+  schemas:
+    # ─── Enums ──────────────────────────────────────────────────────────────
+
+    ActiveInactiveStatus:
+      type: string
+      enum: [ACTIVE, INACTIVE]
+
+    RoutineStatus:
+      type: string
+      enum: [DRAFT, PUBLISHED, DEPRECATED]
+
+    RoutineType:
+      type: string
+      enum: [BEHAVIOR, INTEGRATION]
+
+    ItemType:
+      type: string
+      enum:
+        - FIELD_VISIBILITY
+        - REQUIRED
+        - DEFAULT
+        - DOMAIN
+        - DERIVATION
+        - VALIDATION
+        - EVIDENCE
+
+    ItemAction:
+      type: string
+      enum:
+        - SHOW
+        - HIDE
+        - SET_REQUIRED
+        - SET_OPTIONAL
+        - SET_DEFAULT
+        - RESTRICT_DOMAIN
+        - VALIDATE
+        - REQUIRE_EVIDENCE
+
+    FieldType:
+      type: string
+      enum: [TEXT, NUMBER, DATE, SELECT, BOOLEAN, FILE]
+
+    # ─── Problem Details (RFC 9457) ──────────────────────────────────────────
+
+    ProblemDetails:
+      type: object
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+          description: URI reference identifying the problem type
+        title:
+          type: string
+          description: Short human-readable summary
+        status:
+          type: integer
+          description: HTTP status code
+        detail:
+          type: string
+          description: Human-readable explanation
+        instance:
+          type: string
+          description: URI reference for the specific occurrence
+        extensions:
+          type: object
+          properties:
+            correlationId:
+              type: string
+          additionalProperties: true
+
+    # ─── Pagination ──────────────────────────────────────────────────────────
+
+    PaginationMeta:
+      type: object
+      required: [has_more]
+      properties:
+        next_cursor:
+          type: string
+          nullable: true
+        has_more:
+          type: boolean
+
+    # ─── Framer Types ────────────────────────────────────────────────────────
+
+    CreateFramerTypeBody:
+      type: object
+      required: [codigo, nome]
+      properties:
+        codigo:
+          type: string
+          minLength: 1
+          maxLength: 50
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 200
+        descricao:
+          type: string
+
+    FramerTypeResponse:
+      type: object
+      required: [id, codigo, nome, created_at, updated_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        nome:
+          type: string
+        descricao:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    FramerTypeListItem:
+      type: object
+      required: [id, codigo, nome, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        nome:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    FramerTypeListResponse:
+      type: object
+      required: [data, next_cursor, has_more]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/FramerTypeListItem"
+        next_cursor:
+          type: string
+          nullable: true
+        has_more:
+          type: boolean
+
+    # ─── Framers ─────────────────────────────────────────────────────────────
+
+    CreateFramerBody:
+      type: object
+      required: [codigo, nome, framer_type_id, valid_from]
+      properties:
+        codigo:
+          type: string
+          minLength: 1
+          maxLength: 50
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 200
+        framer_type_id:
+          type: string
+          format: uuid
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+
+    UpdateFramerBody:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 200
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+          nullable: true
+
+    FramerResponse:
+      type: object
+      required:
+        - id
+        - codigo
+        - nome
+        - framer_type_id
+        - status
+        - version
+        - valid_from
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        nome:
+          type: string
+        framer_type_id:
+          type: string
+          format: uuid
+        status:
+          $ref: "#/components/schemas/ActiveInactiveStatus"
+        version:
+          type: integer
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    FramerListItem:
+      type: object
+      required:
+        - id
+        - codigo
+        - nome
+        - framer_type_id
+        - status
+        - valid_from
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        nome:
+          type: string
+        framer_type_id:
+          type: string
+          format: uuid
+        status:
+          $ref: "#/components/schemas/ActiveInactiveStatus"
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    FramerListResponse:
+      type: object
+      required: [data, next_cursor, has_more]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/FramerListItem"
+        next_cursor:
+          type: string
+          nullable: true
+        has_more:
+          type: boolean
+
+    # ─── Target Objects & Fields ─────────────────────────────────────────────
+
+    CreateTargetObjectBody:
+      type: object
+      required: [codigo, nome]
+      properties:
+        codigo:
+          type: string
+          minLength: 1
+          maxLength: 50
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 200
+        modulo_ecf:
+          type: string
+          maxLength: 20
+        descricao:
+          type: string
+
+    TargetObjectResponse:
+      type: object
+      required: [id, codigo, nome, created_at, updated_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        nome:
+          type: string
+        modulo_ecf:
+          type: string
+          nullable: true
+        descricao:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    TargetObjectListItem:
+      type: object
+      required: [id, codigo, nome, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        nome:
+          type: string
+        modulo_ecf:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    TargetObjectListResponse:
+      type: object
+      required: [data, next_cursor, has_more]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/TargetObjectListItem"
+        next_cursor:
+          type: string
+          nullable: true
+        has_more:
+          type: boolean
+
+    CreateTargetFieldBody:
+      type: object
+      required: [field_key, field_type]
+      properties:
+        field_key:
+          type: string
+          minLength: 1
+          maxLength: 100
+        field_label:
+          type: string
+          maxLength: 200
+        field_type:
+          $ref: "#/components/schemas/FieldType"
+        is_system:
+          type: boolean
+          default: false
+
+    TargetFieldResponse:
+      type: object
+      required:
+        - id
+        - target_object_id
+        - field_key
+        - field_type
+        - is_system
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        target_object_id:
+          type: string
+          format: uuid
+        field_key:
+          type: string
+        field_label:
+          type: string
+          nullable: true
+        field_type:
+          type: string
+        is_system:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    # ─── Incidence Rules ─────────────────────────────────────────────────────
+
+    CreateIncidenceRuleBody:
+      type: object
+      required: [framer_id, target_object_id, valid_from]
+      properties:
+        framer_id:
+          type: string
+          format: uuid
+        target_object_id:
+          type: string
+          format: uuid
+        condition_expr:
+          type: string
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+
+    UpdateIncidenceRuleBody:
+      type: object
+      properties:
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: "#/components/schemas/ActiveInactiveStatus"
+
+    IncidenceRuleResponse:
+      type: object
+      required:
+        - id
+        - framer_id
+        - target_object_id
+        - valid_from
+        - status
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        framer_id:
+          type: string
+          format: uuid
+        target_object_id:
+          type: string
+          format: uuid
+        condition_expr:
+          type: string
+          nullable: true
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: "#/components/schemas/ActiveInactiveStatus"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    IncidenceRuleListItem:
+      type: object
+      required:
+        - id
+        - framer_id
+        - target_object_id
+        - status
+        - valid_from
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        framer_id:
+          type: string
+          format: uuid
+        target_object_id:
+          type: string
+          format: uuid
+        status:
+          $ref: "#/components/schemas/ActiveInactiveStatus"
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    IncidenceRuleListResponse:
+      type: object
+      required: [data, next_cursor, has_more]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/IncidenceRuleListItem"
+        next_cursor:
+          type: string
+          nullable: true
+        has_more:
+          type: boolean
+
+    LinkRoutineBody:
+      type: object
+      required: [routine_id]
+      properties:
+        routine_id:
+          type: string
+          format: uuid
+
+    LinkRoutineResponse:
+      type: object
+      required: [id, routine_id, incidence_rule_id, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        routine_id:
+          type: string
+          format: uuid
+        incidence_rule_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+
+    # ─── Routines ────────────────────────────────────────────────────────────
+
+    CreateRoutineBody:
+      type: object
+      required: [codigo, nome]
+      properties:
+        codigo:
+          type: string
+          minLength: 1
+          maxLength: 50
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 200
+        routine_type:
+          $ref: "#/components/schemas/RoutineType"
+          default: BEHAVIOR
+
+    UpdateRoutineBody:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 200
+
+    PublishRoutineBody:
+      type: object
+      properties:
+        auto_deprecate_previous:
+          type: boolean
+          default: false
+
+    ForkRoutineBody:
+      type: object
+      required: [change_reason]
+      properties:
+        change_reason:
+          type: string
+          minLength: 10
+
+    RoutineResponse:
+      type: object
+      required:
+        - id
+        - codigo
+        - nome
+        - routine_type
+        - version
+        - status
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        nome:
+          type: string
+        routine_type:
+          $ref: "#/components/schemas/RoutineType"
+        version:
+          type: integer
+        status:
+          $ref: "#/components/schemas/RoutineStatus"
+        parent_routine_id:
+          type: string
+          format: uuid
+          nullable: true
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        approved_by:
+          type: string
+          format: uuid
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    RoutineListItem:
+      type: object
+      required:
+        - id
+        - codigo
+        - nome
+        - routine_type
+        - version
+        - status
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        nome:
+          type: string
+        routine_type:
+          $ref: "#/components/schemas/RoutineType"
+        version:
+          type: integer
+        status:
+          $ref: "#/components/schemas/RoutineStatus"
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    RoutineListResponse:
+      type: object
+      required: [data, next_cursor, has_more]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoutineListItem"
+        next_cursor:
+          type: string
+          nullable: true
+        has_more:
+          type: boolean
+
+    RoutineDetailResponse:
+      allOf:
+        - $ref: "#/components/schemas/RoutineResponse"
+        - type: object
+          required: [items, incidence_links, version_history]
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/RoutineDetailItem"
+            incidence_links:
+              type: array
+              items:
+                $ref: "#/components/schemas/IncidenceLinkItem"
+            version_history:
+              type: array
+              items:
+                $ref: "#/components/schemas/VersionHistoryItem"
+
+    RoutineDetailItem:
+      type: object
+      required: [id, item_type, action, is_blocking, ordem]
+      properties:
+        id:
+          type: string
+          format: uuid
+        item_type:
+          type: string
+        target_field_id:
+          type: string
+          format: uuid
+          nullable: true
+        action:
+          type: string
+        value: {}
+        validation_message:
+          type: string
+          nullable: true
+        is_blocking:
+          type: boolean
+        ordem:
+          type: integer
+
+    IncidenceLinkItem:
+      type: object
+      required: [id, incidence_rule_id, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        incidence_rule_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+
+    VersionHistoryItem:
+      type: object
+      required: [id, previous_version_id, changed_by, change_reason, changed_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        previous_version_id:
+          type: string
+          format: uuid
+        changed_by:
+          type: string
+          format: uuid
+        change_reason:
+          type: string
+        changed_at:
+          type: string
+          format: date-time
+
+    PublishRoutineResponse:
+      type: object
+      required: [id, status, published_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          const: PUBLISHED
+        published_at:
+          type: string
+          format: date-time
+        deprecated_parent_id:
+          type: string
+          format: uuid
+          nullable: true
+
+    ForkRoutineResponse:
+      type: object
+      required:
+        - id
+        - codigo
+        - version
+        - status
+        - parent_routine_id
+        - items_copied
+        - links_copied
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        version:
+          type: integer
+        status:
+          type: string
+          const: DRAFT
+        parent_routine_id:
+          type: string
+          format: uuid
+        items_copied:
+          type: integer
+        links_copied:
+          type: integer
+
+    # ─── Routine Items ───────────────────────────────────────────────────────
+
+    CreateRoutineItemBody:
+      type: object
+      required: [item_type, action, ordem]
+      properties:
+        item_type:
+          $ref: "#/components/schemas/ItemType"
+        action:
+          $ref: "#/components/schemas/ItemAction"
+        target_field_id:
+          type: string
+          format: uuid
+        value: {}
+        condition_expr:
+          type: string
+        validation_message:
+          type: string
+          maxLength: 500
+        is_blocking:
+          type: boolean
+          default: false
+        ordem:
+          type: integer
+          minimum: 0
+
+    UpdateRoutineItemBody:
+      type: object
+      properties:
+        item_type:
+          $ref: "#/components/schemas/ItemType"
+        action:
+          $ref: "#/components/schemas/ItemAction"
+        target_field_id:
+          type: string
+          format: uuid
+          nullable: true
+        value: {}
+        condition_expr:
+          type: string
+          nullable: true
+        validation_message:
+          type: string
+          maxLength: 500
+          nullable: true
+        is_blocking:
+          type: boolean
+        ordem:
+          type: integer
+          minimum: 0
+
+    RoutineItemResponse:
+      type: object
+      required:
+        - id
+        - routine_id
+        - item_type
+        - action
+        - is_blocking
+        - ordem
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        routine_id:
+          type: string
+          format: uuid
+        item_type:
+          type: string
+        action:
+          type: string
+        target_field_id:
+          type: string
+          format: uuid
+          nullable: true
+        value: {}
+        validation_message:
+          type: string
+          nullable: true
+        is_blocking:
+          type: boolean
+        ordem:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    # ─── Evaluate Engine ─────────────────────────────────────────────────────
+
+    EvaluateRequestBody:
+      type: object
+      required: [object_type, context]
+      properties:
+        object_type:
+          type: string
+          minLength: 1
+        object_id:
+          type: string
+          format: uuid
+        context:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [framer_id]
+            properties:
+              framer_id:
+                type: string
+                format: uuid
+        stage_id:
+          type: string
+          format: uuid
+        dry_run:
+          type: boolean
+          default: false
+
+    EvaluateResponse:
+      type: object
+      required:
+        - visible_fields
+        - hidden_fields
+        - required_fields
+        - optional_fields
+        - defaults
+        - domain_restrictions
+        - validations
+        - blocking_validations
+        - applied_routines
+        - dry_run
+      properties:
+        visible_fields:
+          type: array
+          items:
+            type: string
+        hidden_fields:
+          type: array
+          items:
+            type: string
+        required_fields:
+          type: array
+          items:
+            type: string
+        optional_fields:
+          type: array
+          items:
+            type: string
+        defaults:
+          type: array
+          items:
+            type: object
+            required: [field_id, value]
+            properties:
+              field_id:
+                type: string
+              value: {}
+        domain_restrictions:
+          type: array
+          items:
+            type: object
+            required: [field_id, allowed_values]
+            properties:
+              field_id:
+                type: string
+              allowed_values: {}
+        validations:
+          type: array
+          items:
+            type: object
+            required: [field_id, message]
+            properties:
+              field_id:
+                type: string
+              message:
+                type: string
+                nullable: true
+        blocking_validations:
+          type: array
+          items:
+            type: string
+        applied_routines:
+          type: array
+          items:
+            type: object
+            required: [routine_id, codigo, version]
+            properties:
+              routine_id:
+                type: string
+                format: uuid
+              codigo:
+                type: string
+              version:
+                type: integer
+        dry_run:
+          type: boolean

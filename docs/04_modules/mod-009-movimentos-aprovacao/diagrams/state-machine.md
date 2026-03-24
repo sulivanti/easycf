@@ -51,11 +51,13 @@ flowchart TD
 
     ESCALATE --> DECISION
 
-    style REQUEST fill:#3498DB,color:#fff,stroke:#2980B9
-    style FREE fill:#27AE60,color:#fff,stroke:#1E8449
-    style AUTO fill:#27AE60,color:#fff,stroke:#1E8449
-    style APPROVED fill:#27AE60,color:#fff,stroke:#1E8449
-    style REJECTED fill:#E74C3C,color:#fff,stroke:#C0392B
+    classDef trigger fill:#3498DB,color:#fff,stroke:#2980B9
+    classDef success fill:#27AE60,color:#fff,stroke:#1E8449
+    classDef error fill:#E74C3C,color:#fff,stroke:#C0392B
+
+    class REQUEST trigger
+    class FREE,AUTO,APPROVED success
+    class REJECTED error
 ```
 
 ## Critérios de Controle (4 combinações)

@@ -31,10 +31,11 @@ flowchart TD
     SUCCESS2 --> LIST
     SUCCESS3 --> RESEND
 
-    style LIST fill:#3498DB,color:#fff,stroke:#2980B9
-    style SUCCESS1 fill:#27AE60,color:#fff,stroke:#1E8449
-    style SUCCESS2 fill:#27AE60,color:#fff,stroke:#1E8449
-    style SUCCESS3 fill:#27AE60,color:#fff,stroke:#1E8449
-    style ERR1 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style ERR2 fill:#E74C3C,color:#fff,stroke:#C0392B
+    classDef trigger fill:#3498DB,color:#fff,stroke:#2980B9
+    classDef success fill:#27AE60,color:#fff,stroke:#1E8449
+    classDef error fill:#E74C3C,color:#fff,stroke:#C0392B
+
+    class LIST trigger
+    class SUCCESS1,SUCCESS2,SUCCESS3 success
+    class ERR1,ERR2 error
 ```

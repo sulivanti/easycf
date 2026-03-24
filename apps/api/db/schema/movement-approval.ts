@@ -25,6 +25,7 @@ import {
   check,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
+import { tenants, users } from './foundation.js';
 
 // ---------------------------------------------------------------------------
 // 1. movement_control_rules — Regras de Controle de Movimentação (DATA-009 §1)
@@ -33,7 +34,9 @@ export const movementControlRules = pgTable(
   'movement_control_rules',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    tenantId: uuid('tenant_id').notNull(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'restrict' }),
     codigo: varchar('codigo', { length: 50 }).notNull(),
     nome: varchar('nome', { length: 200 }).notNull(),
     descricao: text('descricao'),
@@ -50,8 +53,8 @@ export const movementControlRules = pgTable(
     validUntil: timestamp('valid_until', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-    createdBy: uuid('created_by'),
-    updatedBy: uuid('updated_by'),
+    createdBy: uuid('created_by').references(() => users.id, { onDelete: 'restrict' }),
+    updatedBy: uuid('updated_by').references(() => users.id, { onDelete: 'restrict' }),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
   (table) => [
@@ -83,7 +86,9 @@ export const approvalRules = pgTable(
   'approval_rules',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    tenantId: uuid('tenant_id').notNull(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'restrict' }),
     controlRuleId: uuid('control_rule_id')
       .notNull()
       .references(() => movementControlRules.id, { onDelete: 'restrict' }),
@@ -96,8 +101,8 @@ export const approvalRules = pgTable(
     escalationRuleId: uuid('escalation_rule_id'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-    createdBy: uuid('created_by'),
-    updatedBy: uuid('updated_by'),
+    createdBy: uuid('created_by').references(() => users.id, { onDelete: 'restrict' }),
+    updatedBy: uuid('updated_by').references(() => users.id, { onDelete: 'restrict' }),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
   (table) => [
@@ -118,7 +123,9 @@ export const controlledMovements = pgTable(
   'controlled_movements',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    tenantId: uuid('tenant_id').notNull(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'restrict' }),
     controlRuleId: uuid('control_rule_id')
       .notNull()
       .references(() => movementControlRules.id, { onDelete: 'restrict' }),
@@ -148,8 +155,8 @@ export const controlledMovements = pgTable(
     idempotencyKey: varchar('idempotency_key', { length: 100 }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-    createdBy: uuid('created_by'),
-    updatedBy: uuid('updated_by'),
+    createdBy: uuid('created_by').references(() => users.id, { onDelete: 'restrict' }),
+    updatedBy: uuid('updated_by').references(() => users.id, { onDelete: 'restrict' }),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
   (table) => [
@@ -189,7 +196,9 @@ export const approvalInstances = pgTable(
   'approval_instances',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    tenantId: uuid('tenant_id').notNull(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'restrict' }),
     movementId: uuid('movement_id')
       .notNull()
       .references(() => controlledMovements.id, { onDelete: 'cascade' }),
@@ -204,8 +213,8 @@ export const approvalInstances = pgTable(
     timeoutAt: timestamp('timeout_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-    createdBy: uuid('created_by'),
-    updatedBy: uuid('updated_by'),
+    createdBy: uuid('created_by').references(() => users.id, { onDelete: 'restrict' }),
+    updatedBy: uuid('updated_by').references(() => users.id, { onDelete: 'restrict' }),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
   (table) => [
@@ -232,7 +241,9 @@ export const movementExecutions = pgTable(
   'movement_executions',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    tenantId: uuid('tenant_id').notNull(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'restrict' }),
     movementId: uuid('movement_id')
       .notNull()
       .references(() => controlledMovements.id, { onDelete: 'restrict' }),
@@ -243,8 +254,8 @@ export const movementExecutions = pgTable(
     retryCount: integer('retry_count').notNull().default(0),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-    createdBy: uuid('created_by'),
-    updatedBy: uuid('updated_by'),
+    createdBy: uuid('created_by').references(() => users.id, { onDelete: 'restrict' }),
+    updatedBy: uuid('updated_by').references(() => users.id, { onDelete: 'restrict' }),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
   (table) => [
@@ -263,7 +274,9 @@ export const movementHistory = pgTable(
   'movement_history',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    tenantId: uuid('tenant_id').notNull(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'restrict' }),
     movementId: uuid('movement_id')
       .notNull()
       .references(() => controlledMovements.id, { onDelete: 'cascade' }),
@@ -286,7 +299,9 @@ export const movementOverrideLog = pgTable(
   'movement_override_log',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    tenantId: uuid('tenant_id').notNull(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'restrict' }),
     movementId: uuid('movement_id')
       .notNull()
       .references(() => controlledMovements.id, { onDelete: 'restrict' }),

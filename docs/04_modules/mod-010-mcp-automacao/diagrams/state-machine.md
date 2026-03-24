@@ -66,15 +66,13 @@ flowchart TD
     DISPATCH -->|CONTROLLED| D2["MOD-009 → 202 + movement_id"]
     DISPATCH -->|EVENT_ONLY| D3["Emitir evento → 200"]
 
-    style REQ fill:#3498DB,color:#fff,stroke:#2980B9
-    style D1 fill:#27AE60,color:#fff,stroke:#1E8449
-    style D2 fill:#E67E22,color:#fff,stroke:#CA6F1E
-    style D3 fill:#27AE60,color:#fff,stroke:#1E8449
-    style ERR1 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style ERR2 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style ERR3 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style ERR4 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style ERR5 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style ERR6 fill:#E74C3C,color:#fff,stroke:#C0392B
-    style ERR7 fill:#E74C3C,color:#fff,stroke:#C0392B
+    classDef trigger fill:#3498DB,color:#fff,stroke:#2980B9
+    classDef success fill:#27AE60,color:#fff,stroke:#1E8449
+    classDef warning fill:#E67E22,color:#fff,stroke:#CA6F1E
+    classDef error fill:#E74C3C,color:#fff,stroke:#C0392B
+
+    class REQ trigger
+    class D1,D3 success
+    class D2 warning
+    class ERR1,ERR2,ERR3,ERR4,ERR5,ERR6,ERR7 error
 ```

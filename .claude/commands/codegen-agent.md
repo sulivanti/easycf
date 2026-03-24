@@ -279,12 +279,114 @@ Resultado: estrutura corrigida para Pattern A, React Query verificado. ✅
 1. Verifique que interfaces de porta (repositories) usam tipos do domínio, não tipos Drizzle
 2. Verifique que use-cases retornam DTOs ou value objects, não entidades cruas
 
-### 7.3 Para AGN-COD-VAL (Validador Global):
+### 7.3 Build Gate — Compilação TypeScript (MUST — todos os agentes exceto AGN-COD-VAL)
+
+Após emitir todos os arquivos e passar pelas validações 7.1/7.2, o agente DEVE verificar compilação TypeScript:
+
+1. Determine o app afetado:
+   - Agentes DB, CORE, APP, API → `apps/api`
+   - Agente WEB → `apps/web`
+
+2. Execute: `pnpm --filter {app} exec tsc --noEmit`
+
+3. Analise os erros:
+   - **Erros em arquivos dentro de `allowed_prefixes`** (gerados por este agente) → **CORRIJA** antes de prosseguir. Causes comuns: path aliases incorretos, imports faltantes, tipos incompatíveis, JSX sem configuração.
+   - **Erros pré-existentes fora de `allowed_prefixes`** → registre no relatório como `"⚠ {N} erros pré-existentes fora do escopo deste agente"` mas **NÃO bloqueie**.
+
+4. Se a correção gerar novos erros, itere até que os erros dentro de `allowed_prefixes` sejam zero.
+
+**Exemplo:**
+
+```
+🔍 Build Gate 7.3 — tsc --noEmit (apps/api)
+
+  Erros no escopo (allowed_prefixes):
+    ❌ src/modules/contextual-params/domain/entities/framer.entity.ts(12,5):
+       Cannot find module '@modules/foundation/domain/errors/domain-errors'
+    → Correção: ajustado import para path correto
+
+  Erros fora do escopo: 0
+
+  Resultado após correção: ✅ 0 erros no escopo
+```
+
+> **Ref:** Este gate previne código que não compila (Issue #16 da auditoria v0.9.0 — 63+ erros TS web).
+
+### 7.4 Barrel Export Gate (MUST — apenas AGN-COD-APP)
+
+Se o agente executado é **AGN-COD-APP**, DEVE verificar/criar barrel export:
+
+1. Verifique se `apps/api/src/modules/{slug}/index.ts` existe
+2. Se **não existe**, crie-o re-exportando os artefatos públicos do módulo:
+
+```typescript
+// @contract EX-APP-{NNN}
+// Barrel export — interface pública do módulo {slug}
+export * from './domain/entities';
+export * from './domain/errors';
+export * from './application/use-cases';
+export * from './application/dtos';
+```
+
+3. Se **já existe**, verifique que exporta pelo menos entities e use-cases. Adicione exports faltantes.
+4. Adapte os exports conforme os diretórios que realmente existem (não exporte de diretórios inexistentes).
+
+> **Ref:** Este gate previne módulos sem barrel export (Issue #14 da auditoria v0.9.0 — 7/9 módulos sem index.ts).
+
+### 7.5 OpenAPI Spec Gate (MUST — apenas AGN-COD-API)
+
+Se o agente executado é **AGN-COD-API**, DEVE verificar existência de spec OpenAPI:
+
+1. Conte quantos arquivos `*.route.ts` existem em `apps/api/src/modules/{slug}/presentation/`
+2. Se `count > 0`, verifique se existe pelo menos um spec YAML correspondente em `apps/api/openapi/` que contenha paths do módulo
+3. Se **nenhum spec existe** e existem routes:
+   - **GERE** o spec YAML (`apps/api/openapi/mod-{NNN}-{slug}.yaml`) com base nas routes existentes
+   - Siga o template EX-OAS-001 (OpenAPI 3.1.0, operationId único, tags, ProblemDetails)
+   - Invoque `/validate-openapi` após gerar
+4. Registre no relatório: `"✅ OpenAPI spec gerado: mod-{NNN}-{slug}.yaml ({N} paths)"` ou `"✅ OpenAPI spec existente validado"`
+
+> **Ref:** Este gate previne módulos com routes mas sem spec OpenAPI (Issue #2 da auditoria v0.9.0 — MOD-007 sem spec).
+
+### 7.6 Cross-Module FK Gate (MUST — apenas AGN-COD-DB)
+
+Se o agente executado é **AGN-COD-DB**, DEVE verificar integridade de FKs cross-module:
+
+1. Leia o schema Drizzle gerado/atualizado
+2. Para cada coluna `tenantId`, `createdBy`, `updatedBy` encontrada:
+   - Verifique que possui `.references(() => {table}.id)` apontando para a tabela correta de MOD-000 Foundation:
+     - `tenantId` → `tenants.id`
+     - `createdBy` → `users.id`
+     - `updatedBy` → `users.id`
+   - Se a referência estiver **ausente**, adicione-a e o import correspondente do schema Foundation
+3. Verifique que o arquivo importa as tabelas referenciadas de `@db/schema/foundation.schema`
+
+**Exemplo:**
+
+```
+🔍 FK Gate 7.6 — Cross-Module References
+
+  movement_control_rules:
+    ❌ tenantId sem .references() → adicionado .references(() => tenants.id)
+    ❌ createdBy sem .references() → adicionado .references(() => users.id)
+    ✅ updatedBy já possui .references(() => users.id)
+
+  approval_instances:
+    ❌ tenantId sem .references() → adicionado .references(() => tenants.id)
+
+  Import adicionado: import { tenants, users } from '@db/schema/foundation.schema';
+
+  Resultado: 3 FKs adicionadas, 1 já existente. ✅
+```
+
+> **Ref:** Este gate previne schemas sem FKs cross-module (Issue #13 da auditoria v0.9.0 — MOD-009 sem refs para MOD-000).
+
+### 7.7 Para AGN-COD-VAL (Validador Global):
 
 Não gera arquivos — apenas valida o output de todos os agentes anteriores:
 - Formato de saída: `code_validation` (summary + findings + checks) conforme PKG-COD-001 §4.2
 - Checagens mínimas: Problem Details RFC 9457, correlation_id, idempotency, layering_clean_arch, tests_present, openapi_present_and_linted, x_permissions_documented
 - **Adicional:** execute as checagens §7.2 de TODOS os agentes como validação cruzada
+- **Adicional:** execute os gates §7.3 (Build), §7.4 (Barrel), §7.5 (OpenAPI), §7.6 (FK) como validação cruzada — reporte violações mas não corrija (a correção é responsabilidade do agente original)
 - Invoque todas as skills de `post_validation` do registro
 
 ## PASSO 8: Relatório
@@ -347,13 +449,30 @@ Após o relatório, registre o estado de execução deste agente específico.
 - Se `codegen.started_at` já existe, preserve; senão, defina com o timestamp atual
 - Se **todos** os 6 agentes (ou todos os aplicáveis ao nível) estão `done` ou `skipped`, defina `codegen.completed_at`
 
-### Validação Temporal (MUST)
+### Validação Temporal (MUST — Hard Block)
 
-Antes de escrever o JSON, valide:
-1. `codegen.completed_at` (se definido) **DEVE** ser posterior a `codegen.started_at` — se não for, corrija `completed_at` para o timestamp atual
-2. Cada `agents.{id}.completed_at` **DEVE** ser posterior a `codegen.started_at` — se não for, corrija
-3. Todos os timestamps **DEVEM** usar ISO 8601 UTC (formato `YYYY-MM-DDTHH:mm:ssZ`)
-4. Se detectar paradoxo temporal em dados existentes, corrija-os e registre no relatório: `"⚠ Timestamps corrigidos: completed_at era anterior a started_at"`
+Antes de escrever o JSON, valide **obrigatoriamente**:
+
+1. **Regra de timestamp real:** O campo `completed_at` de QUALQUER agente ou do codegen DEVE ser preenchido com o timestamp **real do momento atual** (`new Date().toISOString()` ou equivalente). **NUNCA** copie timestamps de mensagens anteriores do chat, outputs de ferramentas, ou estimativas. O timestamp deve refletir quando a escrita do JSON efetivamente acontece.
+
+2. **Consistência started < completed:** `codegen.completed_at` (se definido) **DEVE** ser estritamente posterior a `codegen.started_at`. Diferença mínima de 1 minuto. Se `started_at == completed_at` (same-minute), defina `completed_at` como o timestamp atual.
+
+3. **Consistência agentes vs codegen:** Cada `agents.{id}.completed_at` **DEVE** ser:
+   - Posterior a `codegen.started_at`
+   - Anterior ou igual a `codegen.completed_at` (se definido)
+   - Se qualquer agente violar, corrija para o timestamp atual
+
+4. **Formato:** Todos os timestamps **DEVEM** usar ISO 8601 UTC (formato `YYYY-MM-DDTHH:mm:ss.000Z`)
+
+5. **Detecção e correção de paradoxos existentes:** Ao ler um execution-state existente, se detectar timestamps que violam as regras acima (ex: `completed_at` anterior a `started_at`), **CORRIJA-OS** para o timestamp atual e registre no relatório:
+
+```
+⚠ Paradoxo temporal corrigido:
+  - codegen.agents.AGN-COD-VAL.completed_at era 2026-03-23T04:30:00Z (anterior a codegen.started_at 2026-03-23T23:30:00Z)
+  - Corrigido para: 2026-03-24T{HH:mm:ss}.000Z (timestamp atual)
+```
+
+> **Ref:** Este gate previne timestamps impossíveis (Issues #3 e #5 da auditoria v0.9.0 — MOD-004 same-minute, MOD-008 timestamp retroativo).
 
 ## PASSO 10: Registrar Pendências (apenas AGN-COD-VAL)
 

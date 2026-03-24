@@ -4,9 +4,7 @@ import {
   type MovementControlRuleProps,
 } from '../../../../src/modules/movement-approval/domain/entities/movement-control-rule.entity.js';
 
-function makeControlRule(
-  overrides: Partial<MovementControlRuleProps> = {},
-): MovementControlRule {
+function makeControlRule(overrides: Partial<MovementControlRuleProps> = {}): MovementControlRule {
   return MovementControlRule.create({
     id: 'crule-001',
     tenantId: 'tenant-001',

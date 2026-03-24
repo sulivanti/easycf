@@ -47,7 +47,11 @@ A pasta segue o princípio de **rastreabilidade**: qualquer mudança de especifi
 │   │   ├── imp/
 │   │   └── tst/
 │   ├── adr/                   ← Decisões arquiteturais do módulo local
-│   ├── diagrams/              ← Diagramas Mermaid, C4, de Sequência
+│   ├── diagrams/              ← Diagramas Mermaid por módulo (ver §13)
+│   │   ├── architecture.md    ← Camadas (Presentation → Application → Domain → Infra)
+│   │   ├── domain-model.md    ← ER diagram (entidades, aggregates, VOs) — Nível 2 only
+│   │   ├── state-machine.md   ← stateDiagram-v2 (ciclos de vida) — Nível 2 only
+│   │   └── ux-flow.md         ← Fluxos UX (jornadas, screens, decisões)
 │   └── snippets/              ← Trechos de código úteis, configs parciais
 │
 ├── mod-001-backoffice-admin/  ← Módulo Nível 1 (exemplo)
@@ -306,8 +310,9 @@ Ao criar um novo módulo `mod-NNN-nome` manualmente, siga este checklist obrigat
 [ ] 8. Criar CONVENTIONS.md copiando o padrão do MOD-001
 [ ] 9. Criar permissions.yaml com os escopos do módulo
 [ ] 10. Criar amendments/ com subpastas: br/ fr/ data/ int/ sec/ ux/ nfr/ tst/
-[ ] 11. Adicionar stub no DOC-DEV-001 (docs/03_especificacoes/)
-[ ] 12. Atualizar INDEX.md em docs/
+[ ] 11. Criar diagrams/ com stubs obrigatórios por nível (ver §13 e DOC-DEV-001 §5.4)
+[ ] 12. Adicionar stub no DOC-DEV-001 (docs/03_especificacoes/)
+[ ] 13. Atualizar INDEX.md em docs/
 ```
 
 > **Regra de herança obrigatória:** Todo módulo DEVE herdar entidades e contratos de `mod-000-foundation`.
@@ -327,3 +332,40 @@ Ao criar um novo módulo `mod-NNN-nome` manualmente, siga este checklist obrigat
 7. **Metadados obrigatórios** em todo arquivo: `estado_item`, `owner`, `data_ultima_revisao`, `rastreia_para`, `evidencias`.
 8. **Permissões** sempre declaradas em `permissions.yaml` no padrão `recurso:ação`.
 9. **TST-NNN obrigatório** em cada módulo — casos de teste devem ser especificados antes ou junto com o FR. Leia `TESTING-STRATEGY.md` para os padrões globais.
+10. **Diagramas obrigatórios** em `diagrams/` — ver §13 abaixo e `DOC-DEV-001 §5.4` para convenções completas.
+
+---
+
+## 13. Diagramas por Módulo (`diagrams/`)
+
+> **Norma canônica:** `DOC-DEV-001 §5.4` define as regras completas. Esta seção é um resumo operacional.
+
+Cada módulo possui uma pasta `diagrams/` com diagramas Mermaid em arquivos `.md`. Os diagramas variam por **nível arquitetural**:
+
+### Obrigatoriedade por nível
+
+| Diagrama | Arquivo | Nível 1 (Clean Leve) | Nível 2 (DDD-lite) |
+|---|---|---|---|
+| Arquitetura de Camadas | `architecture.md` | **Obrigatório** | **Obrigatório** |
+| Modelo de Domínio (ER) | `domain-model.md` | — | **Obrigatório** |
+| Máquina de Estados | `state-machine.md` | — | **Obrigatório** (se entidades com status) |
+| Fluxo UX | `ux-flow.md` | Recomendado | Recomendado (se houver UX) |
+| Contexto de Dependências | `dependency-context.md` | Opcional | Opcional |
+
+### Convenções
+
+- **Nomes:** `kebab-case.md` (ex: `architecture.md`, `domain-model.md`)
+- **Título:** `# MOD-NNN — <Título do Diagrama>`
+- **Formato:** Mermaid inline em Markdown (text-based, git-friendly)
+- **Paleta de cores:** usar as classDef padronizadas (DOC-DEV-001 §5.4.3)
+- **Manutenção:** atualizar na mesma PR que altera entidades/use cases/transições
+
+### Diagramas globais (cross-módulo)
+
+Diagramas que abrangem múltiplos módulos ficam em `docs/04_modules/_diagrams-global/`:
+
+| Arquivo | Conteúdo |
+|---|---|
+| `system-integration.md` | Grafo de dependências completo, camadas topológicas, fluxo de integração runtime |
+
+> Referência detalhada: `docs/04_modules/DEPENDENCY-GRAPH.md` (DOC-DEP-001)

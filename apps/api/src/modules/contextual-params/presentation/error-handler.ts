@@ -6,54 +6,30 @@
  */
 
 import type { FastifyReply, FastifyRequest } from 'fastify';
-
-interface DomainErrorLike {
-  readonly code: string;
-  readonly statusCode: number;
-  readonly message: string;
-}
-
-const KNOWN_ERROR_CODES = new Set([
-  'CODIGO_IMMUTABLE',
-  'INCIDENCE_CONFLICT',
-  'ROUTINE_IMMUTABLE',
-  'ROUTINE_NO_ITEMS',
-  'ROUTINE_DRAFT_LINK',
-  'ROUTINE_DEPRECATED_LINK',
-  'LIMIT_EXCEEDED',
-]);
-
-function isDomainError(error: unknown): error is DomainErrorLike {
-  return (
-    error instanceof Error &&
-    'code' in error &&
-    typeof (error as unknown as DomainErrorLike).code === 'string' &&
-    KNOWN_ERROR_CODES.has((error as unknown as DomainErrorLike).code)
-  );
-}
+import { DomainError } from '../../foundation/domain/errors/domain-errors.js';
 
 export function contextualParamsErrorHandler(
   error: Error,
   request: FastifyRequest,
   reply: FastifyReply,
 ): boolean {
-  if (!isDomainError(error)) {
+  if (!(error instanceof DomainError)) {
     return false;
   }
 
   const correlationId = (request.headers['x-correlation-id'] as string) ?? request.id;
 
   const problem = {
-    type: `/problems/${error.code.toLowerCase().replace(/_/g, '-')}`,
-    title: error.code,
-    status: error.statusCode,
+    type: error.type,
+    title: error.name,
+    status: error.statusHint,
     detail: error.message,
     instance: request.url,
     correlationId,
   };
 
   void reply
-    .status(error.statusCode)
+    .status(error.statusHint)
     .header('X-Correlation-ID', correlationId)
     .header('Content-Type', 'application/problem+json')
     .send(problem);

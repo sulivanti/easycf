@@ -5,6 +5,7 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 2.2.0  | 2026-03-24 | manage-pendentes | PENDENTE-008 IMPLEMENTADA — 7 domain errors refatorados: extends DomainError, type RFC 9457, statusHint, tsc clean |
 > | 2.1.0  | 2026-03-24 | manage-pendentes | PENDENTE-008 DECIDIDA — Opção A (refatorar 7 domain errors para estender DomainError) |
 > | 2.0.0  | 2026-03-24 | manage-pendentes | PENDENTE-007 IMPLEMENTADA — pnpm format + lint clean, 0 errors em case-execution |
 > | 1.9.0  | 2026-03-24 | manage-pendentes | PENDENTE-007 DECIDIDA — Opção A (correção incremental 3 fases: format, lint:fix, refactor React) |
@@ -41,9 +42,9 @@
 | PENDENTE-005 | 🟡 MÉDIA | ✅ IMPLEMENTADA | BIZ | LACUNA | ~~Comportamento de gates ao reabrir caso COMPLETED~~ |
 | PENDENTE-006 | 🟠 ALTA | ✅ IMPLEMENTADA | ARC | CONTRADIÇÃO | ~~Endpoints API divergem da especificação MOD-006 §7~~ |
 | PENDENTE-007 | 🟡 MÉDIA | ✅ IMPLEMENTADA | ARC | CONTRADIÇÃO | ~~Erros de lint do codegen (ESLint + Prettier)~~ |
-| PENDENTE-008 | 🟡 MÉDIA | 🟢 DECIDIDA | ARC | CONTRADIÇÃO | Domain errors estendem Error ao invés de DomainError (faltam type + statusHint) |
+| PENDENTE-008 | 🟡 MÉDIA | ✅ IMPLEMENTADA | ARC | CONTRADIÇÃO | ~~Domain errors estendem Error ao invés de DomainError (faltam type + statusHint)~~ |
 
-Total: 8 | Abertas: 0 | Decididas: 1 | Implementadas: 7 | Bloqueantes: 0
+Total: 8 | Abertas: 0 | Decididas: 0 | Implementadas: 8 | Bloqueantes: 0
 
 ---
 
@@ -500,13 +501,17 @@ Opção A — Correção incremental em 3 fases, consistente com a decisão já 
 
 ## PENDENTE-008 — Domain errors estendem Error ao invés de DomainError
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** MÉDIA
 - **domínio:** ARC
 - **tipo:** CONTRADIÇÃO
 - **origem:** VALIDATE
 - **criado_em:** 2026-03-24
 - **criado_por:** validate-all
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **justificativa_decisao:** Esforço baixo (7 arquivos com mudanças mecânicas) e garante consistência com o padrão DomainError estabelecido em 5+ módulos. Elimina tratamento ad-hoc no error handler e habilita mapeamento automático RFC 9457.
 - **modulo:** MOD-006
 - **rastreia_para:** DOC-ESC-001, DOC-GNP-00, MOD-000
 - **tags:** domain-error, architecture, error-hierarchy
@@ -541,11 +546,11 @@ Opção A — Refatorar para estender DomainError. O esforço é baixo (7 arquiv
 
 ### Resolução (preenchido quando DECIDIDA)
 
-> **Decisão:** —
-> **Decidido por:** — em —
-> **Justificativa:** —
-> **Artefato de saída:** —
-> **Implementado em:** —
+> **Decisão:** Opção A — Refatorar errors para estender DomainError
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Esforço baixo (7 arquivos mecânicos), consistência com padrão DomainError de 5+ módulos, habilita error handler genérico RFC 9457.
+> **Artefato de saída:** 7 arquivos refatorados em apps/api/src/modules/case-execution/domain/errors/ (extends DomainError, type RFC 9457, statusHint)
+> **Implementado em:** 2026-03-24
 
 ---
 

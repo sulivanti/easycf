@@ -5,7 +5,9 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 0.11.0 | 2026-03-24 | validate-all  | Revalidação completa — PENDENTE-001 mantida (10 Prettier warnings). Blockquote tables corrigidos. |
+> | 0.13.0 | 2026-03-24 | manage-pendentes | PENDENTE-001 implementada — lint fix 3 fases (format + lint:fix + refactor) |
+| 0.12.0 | 2026-03-24 | manage-pendentes | PENDENTE-001 decidida — Opção A (correção incremental 3 fases) |
+| 0.11.0 | 2026-03-24 | validate-all  | Revalidação completa — PENDENTE-001 mantida (10 Prettier warnings). Blockquote tables corrigidos. |
 > | 0.10.0 | 2026-03-24 | validate-all  | Adição PENDENTE-001 — erros lint codegen (10 ocorrências) |
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.5.0  | 2026-03-19 | AGN-DEV-10  | Enriquecimento Batch 4 — pendências identificadas a partir de cross-reading de todos os artefatos do módulo |
@@ -29,8 +31,9 @@
 | PEN-009-005 | baixa | implementada | DATA-009 | decisão_técnica | Estratégia de particionamento de `movement_history` para volumes altos |
 | PEN-009-006 | média | implementada | FR-009 / INT-009 | funcionalidade | Endpoint de reprocessamento de movimento FAILED |
 | PEN-009-007 | baixa | implementada | UX-009 | funcionalidade | Notificação real-time (WebSocket/SSE) vs polling para atualização do inbox |
+| PENDENTE-001 | 🟡 MÉDIA | ✅ IMPLEMENTADA | ARC | CONTRADIÇÃO | ~~Erros de lint do codegen (ESLint + Prettier)~~ |
 
-Total: 7 | Abertas: 0 | Decididas: 0 | Implementadas: 7 | Bloqueantes: 0
+Total: 8 | Abertas: 0 | Decididas: 0 | Implementadas: 8 | Bloqueantes: 0
 
 ---
 
@@ -175,7 +178,7 @@ Total: 7 | Abertas: 0 | Decididas: 0 | Implementadas: 7 | Bloqueantes: 0
 
 ## PENDENTE-001 — Erros de lint do codegen (ESLint + Prettier)
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** MÉDIA
 - **domínio:** ARC
 - **tipo:** CONTRADIÇÃO
@@ -218,13 +221,13 @@ Adicionar `eslint-disable` nos arquivos afetados e criar backlog de correção.
 
 Opção A — Correção incremental em 3 fases, consistente com a decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). As fases 1 e 2 são totalmente automatizáveis. A fase 3 segue padrão repetitivo (extrair setState para callback pattern).
 
-### Resolução (preenchido quando DECIDIDA)
+### Resolução
 
-> **Decisão:** —
-> **Decidido por:** — em —
-> **Justificativa:** —
-> **Artefato de saída:** —
-> **Implementado em:** —
+> **Decisão:** Opção A — Correção incremental em 3 fases (format → lint:fix → refactor)
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Alinhada com decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). Fases 1 e 2 automatizáveis (pnpm format + pnpm lint:fix), fase 3 segue padrão repetitivo (extrair setState para callback pattern). Baixo risco, cada fase independente e reversível.
+> **Artefato de saída:** Correções lint aplicadas em apps/web/src/modules/movement-approval e apps/api/src/modules/movement-approval
+> **Implementado em:** 2026-03-24
 
 ---
 
@@ -233,4 +236,4 @@ Opção A — Correção incremental em 3 fases, consistente com a decisão já 
 - **data_ultima_revisao:** 2026-03-24
 - **rastreia_para:** US-MOD-009, FR-009, INT-009, SEC-009, DATA-009, NFR-009, UX-009, DATA-003, DOC-PADRAO-002
 - **referencias_exemplos:** N/A
-- **evidencias:** PENDENTE-001 (10 ocorrências lint — web/movement-approval: 7, api/movement-approval: 3)
+- **evidencias:** PENDENTE-001 IMPLEMENTADA — lint corrigido via 3 fases (format + lint:fix + refactor)

@@ -5,12 +5,13 @@
  * or the current user's role is not in allowed_roles.
  */
 
-export class InvalidTransitionError extends Error {
-  public readonly code = 'INVALID_TRANSITION';
-  public readonly statusCode = 422;
+import { DomainError } from '../../../foundation/domain/errors/domain-errors.js';
+
+export class InvalidTransitionError extends DomainError {
+  readonly type = '/problems/invalid-transition';
+  readonly statusHint = 422;
 
   constructor(fromStageId: string, toStageId: string, reason: string) {
     super(`Transition from stage ${fromStageId} to ${toStageId} is invalid: ${reason}.`);
-    this.name = 'InvalidTransitionError';
   }
 }

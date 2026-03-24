@@ -5,7 +5,10 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 1.1.0  | 2026-03-24 | validate-all  | Adição PENDENTE-011 — domain errors não estendem DomainError base class |
+> | 1.4.0  | 2026-03-24 | manage-pendentes | PENDENTE-011→IMPLEMENTADA — 6 errors estendem DomainError, error-handler usa instanceof |
+| 1.3.0  | 2026-03-24 | manage-pendentes | PENDENTE-011→DECIDIDA(A) — refatorar domain errors para estender DomainError |
+| 1.2.0  | 2026-03-24 | manage-pendentes | PENDENTE-010→DECIDIDA(A)+IMPLEMENTADA — lint corrigido em fed0682 |
+| 1.1.0  | 2026-03-24 | validate-all  | Adição PENDENTE-011 — domain errors não estendem DomainError base class |
 > | 1.0.0  | 2026-03-24 | validate-all  | Adição PENDENTE-010 — erros lint codegen (12 ocorrências) |
 > | 0.9.0  | 2026-03-22 | arquitetura | PENDENTE-007→IMPLEMENTADA (Opção B: links como histórico), PENDENTE-008→IMPLEMENTADA (Opção A: bulk INSERT) |
 > | 0.8.0  | 2026-03-20 | AGN-DEV-10  | Re-enriquecimento PENDENTE Batch 4 — PEN-007/PENDENTE-008 adicionados (auto-deprecate links, bulk items) |
@@ -23,7 +26,7 @@
 - **owner:** Marcos Sulivan
 - **data_ultima_revisao:** 2026-03-24
 - **rastreia_para:** US-MOD-007, BR-007, FR-007, INT-007, DATA-007, SEC-007, NFR-007, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005, ADR-006, DOC-PADRAO-002
-- **evidencias:** PENDENTE-010 (12 ocorrências lint codegen — web/contextual-params: 12), PENDENTE-011 (domain errors não estendem DomainError — 6 errors em param-errors.ts)
+- **evidencias:** ~~PENDENTE-010 (12 ocorrências lint codegen — web/contextual-params: 12)~~ ✅ IMPLEMENTADA, ~~PENDENTE-011 (domain errors não estendem DomainError — 6 errors em param-errors.ts)~~ ✅ IMPLEMENTADA
 
 ---
 
@@ -332,15 +335,19 @@ Gate 3 (DOC-ARC-003B) falha para TODOS os manifests de MOD-007 e para os 3 manif
 
 ---
 
-## PENDENTE-010 — Erros de lint do codegen (ESLint + Prettier)
+## ~~PENDENTE-010 — Erros de lint do codegen (ESLint + Prettier)~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** MÉDIA
 - **domínio:** ARC
 - **tipo:** CONTRADIÇÃO
 - **origem:** VALIDATE
 - **criado_em:** 2026-03-24
 - **criado_por:** validate-all
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-24
 - **modulo:** MOD-007
 - **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002, PEN-000/PENDENTE-018
 - **tags:** lint, eslint, prettier, codegen
@@ -377,25 +384,29 @@ Adicionar `eslint-disable` nos arquivos afetados e criar backlog de correção.
 
 Opção A — Correção incremental em 3 fases, consistente com a decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). As fases 1 e 2 são totalmente automatizáveis. A fase 3 segue padrão repetitivo (extrair setState para callback pattern).
 
-### Resolução (preenchido quando DECIDIDA)
+### Resolução
 
-> **Decisão:** —
-> **Decidido por:** — em —
-> **Justificativa:** —
-> **Artefato de saída:** —
-> **Implementado em:** —
+> **Decisão:** Opção A — Correção incremental em 3 fases (alinhada com PEN-000 PENDENTE-018)
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Consistente com decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). Fases 1 e 2 automatizáveis (pnpm format + lint:fix). Fase 3 segue padrão repetitivo (extrair setState para callback pattern). Opção B (eslint-disable) descartada — esconde problemas reais.
+> **Artefato de saída:** Commit fed0682 — codegen completo MOD-002 a MOD-011 + type safety + lint zero
+> **Implementado em:** 2026-03-24 — lint e prettier passam com 0 erros (verificado: eslint exit 0, prettier check All matched)
 
 ---
 
-## PENDENTE-011 — Domain errors não estendem DomainError base class
+## ~~PENDENTE-011 — Domain errors não estendem DomainError base class~~
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** MEDIA
 - **dominio:** ARC
 - **tipo:** CONTRADIÇÃO
 - **origem:** VALIDATE
 - **criado_em:** 2026-03-24
 - **criado_por:** validate-all
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-24
 - **modulo:** MOD-007
 - **rastreia_para:** DOC-GNP-00, DOC-ARC-001, PEN-000
 - **tags:** domain-error, base-class, architecture, cross-module
@@ -428,10 +439,10 @@ Documentar a divergência como aceitável. Error-handler funciona via duck-typin
 
 Opção A — refatorar para alinhar com padrão canônico. Escopo pequeno (6 errors + error-handler). Deve ser feito junto com MOD-006 para consistência.
 
-### Resolução (preenchido quando DECIDIDA)
+### Resolução
 
-> **Decisão:** —
-> **Decidido por:** — em —
-> **Justificativa:** —
-> **Artefato de saída:** —
-> **Implementado em:** —
+> **Decisão:** Opção A — Refatorar para estender DomainError base class
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Alinhamento com padrão canônico (DOC-GNP-00). Escopo pequeno (6 errors + error-handler por módulo). Compatível com middleware centralizado futuro (instanceof DomainError). Opção B (aceitar divergência) descartada — risco arquitetural acumulado em 2 módulos. Deve ser feito junto com MOD-006 para consistência.
+> **Artefato de saída:** param-errors.ts (6 errors → DomainError), error-handler.ts (instanceof DomainError). MOD-006 já refatorado previamente.
+> **Implementado em:** 2026-03-24

@@ -5,12 +5,13 @@
  * Cases must be OPEN to accept transitions; ON_HOLD must be resumed first.
  */
 
-export class CaseNotOpenError extends Error {
-  public readonly code = 'CASE_NOT_OPEN';
-  public readonly statusCode = 422;
+import { DomainError } from '../../../foundation/domain/errors/domain-errors.js';
+
+export class CaseNotOpenError extends DomainError {
+  readonly type = '/problems/case-not-open';
+  readonly statusHint = 422;
 
   constructor(caseId: string, currentStatus: string) {
     super(`Case ${caseId} is ${currentStatus}. Only OPEN cases can be transitioned.`);
-    this.name = 'CaseNotOpenError';
   }
 }

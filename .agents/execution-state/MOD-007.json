@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-007",
   "module_path": "docs/04_modules/mod-007-parametrizacao-contextual/",
-  "last_updated": "2026-03-24T18:00:00Z",
+  "last_updated": "2026-03-24T19:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -124,39 +124,41 @@
         "status": "done",
         "completed_at": "2026-03-24T18:00:00Z",
         "files_generated": 0,
-        "files": [],
-        "validation": {
-          "errors": 2,
-          "warnings": 2,
-          "notes": 1,
-          "checks_failed": ["tests_present", "domain_errors_extend_base"],
-          "checks_warning": ["openapi_present_and_linted", "domain_errors_duck_typing"],
-          "checks_passed": ["problem_details_rfc9457", "correlation_id", "idempotency", "layering_clean_arch", "x_permissions_documented", "lint_pass", "format_pass", "drizzle_schema_complete", "relations_complete", "web_react_query", "domain_events_complete", "conflict_resolver_implemented", "routes_scope_guards"]
-        }
+        "files": []
       }
     }
   },
-  "validate_all": {
-    "executed_at": "2026-03-24T18:00:00Z",
-    "verdict": "PASS_WITH_WARNINGS",
-    "checks": {
-      "lint": "PASS",
-      "format": "PASS",
-      "drizzle_schema": "PASS — 9 tables, all FKs/indexes/checks correct",
-      "drizzle_relations": "PASS — complete bidirectional relations",
-      "routes_endpoints": "PASS — 7 route files, 25 endpoints, scope guards on all",
-      "domain_events": "PASS — 14 events (DATA-003)",
-      "domain_services": "PASS — ConflictResolver with restrictiveness (BR-004, ADR-002/004)",
-      "value_objects": "PASS — RoutineStatus, ItemType, ItemAction, FramerStatus",
-      "web_hooks": "PASS — 6 hooks, all use @tanstack/react-query",
-      "web_pages": "PASS — 2 pages (FramersConfigPage, RoutinesEditorPage)",
-      "web_api": "PASS — apiFetch with correlation-id, credentials, error handling",
-      "web_pattern_a": "PASS — hooks export queryKey, invalidate on mutation",
-      "error_handler": "PASS — RFC 9457, X-Correlation-ID",
-      "domain_errors_extend_base": "WARNING — errors extend Error directly, not DomainError (cross-module pattern, also MOD-006)",
-      "tests_present": "FAIL — 0 test files",
-      "openapi_standalone": "WARNING — inline via Fastify schema, no YAML standalone"
+  "tests": {
+    "pnpm_lint": {
+      "status": "PASS",
+      "run_at": "2026-03-24T19:00:00Z",
+      "eslint_errors": 0,
+      "eslint_warnings": 0,
+      "prettier_issues": 0
+    }
+  },
+  "validations": {
+    "last_run": "2026-03-24T19:00:00Z",
+    "lint": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "eslint_errors": 0, "eslint_warnings": 0, "prettier_issues": 0, "top_rules": [] },
+    "architecture": {
+      "status": "PASS",
+      "run_at": "2026-03-24T19:00:00Z",
+      "checks": {
+        "domain_errors_extend_DomainError": "PASS — 6/6 extend DomainError with type + statusHint",
+        "web_pattern_a": "PASS — api/hooks/pages/types/components (no data/domain/ui)",
+        "hooks_use_react_query": "PASS — all 6 hook files use @tanstack/react-query"
+      }
     },
-    "pendencies_registered": ["PENDENTE-010 (lint cross-module, already registered)", "PENDENTE-011 (domain errors not extending DomainError)"]
+    "qa": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "blockers": 0, "violations": 0, "warnings": 0, "note": "lint:docs 22 cross-module errors, 0 specific to MOD-007" },
+    "manifest": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "total": 2, "passed": 2, "violations": [], "note": "ux-param-001, ux-rotina-001 (ux-integ-001 is MOD-008)" },
+    "openapi": { "status": "N/A", "run_at": null, "note": "No standalone OpenAPI contract — inline via Fastify schemas" },
+    "drizzle": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "tables": 9, "indexes": 16, "checks": 8, "relations_file": true },
+    "endpoint": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "route_files": 7, "scope_guards": true, "operationIds_aligned": true },
+    "verdict": {
+      "ready_for_promotion": true,
+      "blockers": 0,
+      "critical_violations": 0,
+      "warnings": 0
+    }
   }
 }

@@ -133,7 +133,25 @@
       "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/mod-006-execucao-casos/requirements/ -type f -name *.md -path */nfr/*)",
       "Bash(find /d/Dev/EasyCodeFramework/apps/api/src/modules/case-execution/ -type f -name *.ts)",
       "Bash(find /d/Dev/EasyCodeFramework/apps/web/src/modules/case-execution/ -type f \\\\\\(-name *.ts -o -name *.tsx \\\\\\))",
-      "Bash(find /d/Dev/EasyCodeFramework/apps/api/db/schema/ -type f -name *.ts)"
+      "Bash(find /d/Dev/EasyCodeFramework/apps/api/db/schema/ -type f -name *.ts)",
+      "Bash(pnpm tsc:*)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(pnpm --filter api lint)",
+      "Bash(pnpm --filter web format:check)",
+      "Bash(pnpm --filter api format:check)",
+      "Bash(pnpm --filter web format)",
+      "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/mod-008* -name \"*.md\")",
+      "Bash(find D:DevEasyCodeFrameworkappsapisrcmodulescase-executiondomainaggregates -type f -name *.ts)",
+      "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/mod-009* -name \"*.md\")",
+      "Bash(find D:DevEasyCodeFrameworkappsapisrcmodulescontextual-paramsdomainaggregates -type f -name *.ts)",
+      "Bash(while read:*)",
+      "Read(//d/Dev/EasyCodeFramework/**)",
+      "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/mod-010* -name \"*.md\")",
+      "Bash(find /d/Dev/EasyCodeFramework/docs/04_modules/mod-011* -name \"*.md\")",
+      "Bash(find D:DevEasyCodeFrameworkappsapisrcmodulescase-executiondomain -name *.ts -type f)",
+      "Bash(find D:DevEasyCodeFrameworkappsapisrcmodulescase-executionapplicationports -name *.ts -type f)",
+      "Bash(find /d/Dev/EasyCodeFramework -name *MOD-008* -o -name *mod-008*)",
+      "Bash(pnpm --filter @ecf/web lint)"
     ]
   },
   "hooks": {

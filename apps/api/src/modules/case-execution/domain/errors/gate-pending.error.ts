@@ -5,9 +5,11 @@
  * The transition engine checks all required (non-INFORMATIVE) gates before advancing.
  */
 
-export class GatePendingError extends Error {
-  public readonly code = 'GATE_PENDING';
-  public readonly statusCode = 422;
+import { DomainError } from '../../../foundation/domain/errors/domain-errors.js';
+
+export class GatePendingError extends DomainError {
+  readonly type = '/problems/gate-pending';
+  readonly statusHint = 422;
 
   constructor(
     public readonly caseId: string,
@@ -15,6 +17,5 @@ export class GatePendingError extends Error {
   ) {
     const names = pendingGates.map((g) => `'${g.gateName}'`).join(', ');
     super(`Gate${pendingGates.length > 1 ? 's' : ''} ${names} not resolved.`);
-    this.name = 'GatePendingError';
   }
 }

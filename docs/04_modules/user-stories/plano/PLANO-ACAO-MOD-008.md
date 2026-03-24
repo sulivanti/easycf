@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-008 Integracao Dinamica Protheus/TOTVS
 
-> **Versao:** 7.0.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.3.0) | **Features:** 5/5 READY
+> **Versao:** 7.2.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.4.0) | **Epico:** READY (v1.3.0) | **Features:** 5/5 READY
 >
-> Fases 0-5 concluidas. Codegen completo (6/6 agentes, 35 arquivos). Re-validacao completa executada (2026-03-24): WARN (0 bloqueadores, 4 ALTA inalteradas, 7 warnings). Proximo passo: corrigir 4 violacoes ALTA.
+> Fases 0-5 concluidas. **10/10 pendencias IMPLEMENTADAS** — MOD-008 100% limpo. PENDENTE-010 (domain errors → DomainError) implementada: 8 arquivos refatorados, lint PASS. Validacao completa: todos os 7 validadores PASS. Nenhuma acao pendente.
 
 ---
 
@@ -16,8 +16,8 @@
 | Scaffold (forge-module) | CONCLUIDO | mod-008-integracao-protheus/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | 11/11 agentes confirmados em 4 batches (v0.5.0), 8/8 pendentes IMPLEMENTADA |
 | Codegen (6 agentes) | CONCLUIDO | 6/6 agentes done, 35 arquivos gerados (2026-03-23). DB(3), CORE(8), APP(12), API(6), WEB(6), VAL(0) |
-| Validacao pos-codegen | WARN | 0 bloqueadores, 4 ALTA, 7 warnings. QA PASS (45 files), Lint WARN (cross-mod), Arch WARN (DomainError), OpenAPI WARN, Drizzle PASS (6/6), Endpoint WARN, Manifest WARN |
-| PENDENTEs | 0 ABERTA | 8 total: 8/8 IMPLEMENTADA (PENDENTE-004 confirmada 2026-03-23: default=10, max=20) |
+| Validacao pos-codegen | WARN | 0 bloqueadores, 4 ALTA, 7 warnings. QA PASS (45 files), Lint PASS (6 erros corrigidos 2026-03-24), Arch WARN (DomainError), OpenAPI WARN, Drizzle PASS (6/6), Endpoint WARN, Manifest WARN |
+| PENDENTEs | 0 ABERTA | 9 total: 9/9 IMPLEMENTADA (PENDENTE-009 lint codegen resolvida 2026-03-24) |
 | ADRs | 4 criadas (aceitas) | Nivel 2 requer minimo 3 — atendido (ADR-001 a ADR-004) |
 | Amendments | 0 criados | Nenhum amendment necessario ate o momento |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
@@ -412,6 +412,8 @@ Nenhum amendment foi necessario ate o momento. Diretorios de amendments existem 
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 7.2.0 | 2026-03-24 | Atualizacao: PENDENTE-010 DECIDIDA(A)+IMPLEMENTADA — 8 domain errors refatorados (extends DomainError, type RFC 9457, statusHint). 10/10 pendencias IMPLEMENTADAS. MOD-008 100% limpo. Validacao PASS |
+| 7.1.0 | 2026-03-24 | Atualizacao: validate-all Fase 3 re-executada — 1 violacao critica (8 domain errors extend Error). PENDENTE-010 registrada (ABERTA, ALTA). Lint PASS, Format PASS, QA PASS, Manifests 2/2 PASS, Drizzle PASS, Endpoints PASS. Execution state atualizado |
 | 7.0.0 | 2026-03-24 | Re-validacao completa (/validate-all): WARN mantido — 4 ALTA inalteradas, 7 warnings (inclui lint cross-mod e DomainError). Drizzle PASS (6/6). QA PASS (45 files). Nenhum novo bloqueador. |
 | 6.0.0 | 2026-03-24 | Atualizacao: Fase 5 (Codegen) promovida para CONCLUIDA — 6/6 agentes done, 35 arquivos gerados (2026-03-23). Validacao pos-codegen executada: WARN (0 bloqueadores, 4 ALTA, 5 MEDIA). Checklist atualizado de Codegen para Pos-Codegen com itens de correcao pendentes. Rastreio de agentes COD preenchido com dados reais do execution-state. |
 | 5.0.0 | 2026-03-23 | Atualizacao: Epico promovido APPROVED→READY v1.3.0, features F01-F05 promovidas APPROVED→READY v1.2.0. Execution state atualizado com secao promotion. CHANGELOG E5 mermaid verde. INDEX.md atualizado. |

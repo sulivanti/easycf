@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-007 Parametrizacao Contextual e Rotinas
 
-> **Versao:** 6.0.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** READY (v1.3.0) | **Epico:** READY (v1.4.0) | **Features:** 5/5 READY
+> **Versao:** 9.1.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.4.0) | **Epico:** READY (v1.4.0) | **Features:** 5/5 READY
 >
-> Fases 0-5 concluidas. Validacao pos-codegen executada (2026-03-24): PASS_WITH_WARNINGS. Lint PASS, Drizzle PASS, Endpoints PASS, React-Query PASS. Warnings: domain errors nao estendem DomainError, OpenAPI standalone ausente. FAIL: tests_present. Proximo passo: criar testes unitarios.
+> Fases 0-5 concluidas. Validacao Fase 3 re-executada: 6/6 validadores PASS + 1 N/A (OpenAPI inline). Lint 0 errors, arquitetura 6/6 DomainError + Pattern A + React Query, QA 0 bloqueadores, manifests 2/2, Drizzle 9 tabelas, endpoints 7 route files. 0 bloqueadores, 0 violacoes, 0 avisos. Domain errors corrigidos (PENDENTE-011 resolvida).
 
 ---
 
@@ -16,7 +16,7 @@
 | Scaffold (forge-module) | CONCLUIDO | mod-007-parametrizacao-contextual/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-11 confirmados, v0.4.0, todas as pendentes resolvidas |
 | Codegen (6 agentes) | CONCLUIDO | 6 agentes done (DB:3, CORE:14, APP:22, API:10, WEB:8, VAL:0). 57 arquivos gerados. Checks: 5/7 passed |
-| PENDENTEs | 0 abertas | 9 total: 9 IMPLEMENTADA (001-009) |
+| PENDENTEs | 0 abertas | 11 total: 11 IMPLEMENTADA (001-011) |
 | ADRs | 6 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 a ADR-006) |
 | Amendments | 0 | Nenhum |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
@@ -122,6 +122,8 @@ O enriquecimento foi executado em 4 batches, com todos os 11 agentes confirmados
 | 7 | PENDENTE-007 | IMPLEMENTADA | MEDIA | Manter links como historico (Opcao B) |
 | 8 | PENDENTE-008 | IMPLEMENTADA | BAIXA | Bulk INSERT (unico statement) para fork |
 | 9 | PENDENTE-009 | IMPLEMENTADA | ALTA | 7 scopes param:* registrados em DOC-FND-000 v1.8.0 |
+| 10 | PENDENTE-010 | IMPLEMENTADA | MÉDIA | Correção incremental lint (Opção A) — corrigido em fed0682 |
+| 11 | PENDENTE-011 | IMPLEMENTADA | MÉDIA | Domain errors estendem DomainError, error-handler usa instanceof |
 
 > Detalhes completos: requirements/pen-007-pendente.md
 
@@ -214,7 +216,7 @@ O modulo foi promovido a READY em 2026-03-23 via `/promote-module`. Todos os cri
 
 | # | Criterio | Status | Evidencia |
 |---|----------|--------|-----------|
-| DoR-1 | 0 pendentes ABERTA ou EM_ANALISE | SIM | 9/9 IMPLEMENTADA |
+| DoR-1 | 0 pendentes ABERTA ou EM_ANALISE | SIM | 11/11 IMPLEMENTADA |
 | DoR-2 | Todos os pilares com artefato | SIM | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1) = 10/10 |
 | DoR-3 | ADRs minimos para Nivel 2 (3+) | SIM | 6 ADRs (ADR-001 a ADR-006) |
 | DoR-4 | Epico READY | SIM | US-MOD-007 READY v1.4.0 |
@@ -324,8 +326,8 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ainda.
 ```
 10   /manage-pendentes list PEN-007
                            Estado atual MOD-007:
-                             PEN-007: 9 itens total
-                               9 IMPLEMENTADA (001-009)
+                             PEN-007: 11 itens total
+                               11 IMPLEMENTADA (001-011)
                                0 ABERTA
                              SLA: nenhum vencido
 ```
@@ -398,7 +400,8 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ainda.
 - [x] Executar `/validate-all` pos-codegen — PASS_WITH_WARNINGS (2026-03-24)
 - [ ] Criar testes unitarios (tests_present: FAIL)
 - [ ] Gerar OpenAPI YAML standalone (openapi_present: WARNING)
-- [ ] Refatorar domain errors para estender DomainError (PENDENTE-011)
+- [x] Resolver lint errors (PENDENTE-010) — IMPLEMENTADA via fed0682
+- [x] Refatorar domain errors para estender DomainError (PENDENTE-011) — IMPLEMENTADA
 
 > **Nota:** Codegen do MOD-007 concluido. Desbloqueia MOD-008 (heranca de behavior_routines), MOD-010 (motor de parametrizacao) e MOD-011 (routine-engine/evaluate) para codegen.
 
@@ -406,6 +409,10 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ainda.
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 9.1.0 | 2026-03-24 | Atualizacao: validate-all Fase 3 re-executada — 6/6 validadores PASS + 1 N/A. Lint 0 errors, arquitetura 6/6 DomainError PASS, Pattern A PASS, React Query PASS, QA PASS, manifests 2/2 PASS, Drizzle 9 tabelas PASS, endpoints 7 routes PASS. 0 bloqueadores, 0 violacoes, 0 avisos. Execution state atualizado |
+| 9.0.0 | 2026-03-24 | Atualizacao: PENDENTE-011 implementada — 6 errors estendem DomainError, error-handler usa instanceof. 11/11 IMPLEMENTADA. 0 pendentes abertas. |
+| 8.0.0 | 2026-03-24 | Atualizacao: PENDENTE-011 decidida(A) — refatorar domain errors para estender DomainError. DoR-1 desbloqueado (DECIDIDA não bloqueia). Proximo: implement. |
+| 7.0.0 | 2026-03-24 | Atualizacao: PENDENTE-010 decidida(A)+implementada (lint corrigido em fed0682). 10/11 IMPLEMENTADA, 1 ABERTA (011). DoR-1 pendente por PENDENTE-011. |
 | 6.0.0 | 2026-03-24 | Atualizacao: validate-all pos-codegen executado. Lint PASS, Drizzle PASS (9 tabelas), Endpoints PASS (25), React-Query PASS (6 hooks), Pattern A PASS. Warnings: domain errors nao estendem DomainError (cross-module), OpenAPI standalone ausente. FAIL: tests_present. PENDENTE-011 registrada. Verdict: PASS_WITH_WARNINGS |
 | 5.0.0 | 2026-03-24 | Atualizacao: Fase 5 CONCLUIDA (codegen completo 2026-03-24: 6 agentes, 57 arquivos, 3 batches). VAL: 5/7 checks PASS, tests_present FAIL, openapi standalone WARNING. Checklist reorientado para pos-codegen |
 | 4.0.0 | 2026-03-23 | Atualizacao: Epico promovido APPROVED→READY v1.4.0, Features F01-F05 promovidas APPROVED→READY, CHANGELOG E5 verde, execution-state atualizado com secao promotion, INDEX.md sincronizado |

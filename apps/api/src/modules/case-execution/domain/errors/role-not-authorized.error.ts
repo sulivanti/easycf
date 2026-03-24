@@ -5,12 +5,13 @@
  * Example: resolving an APPROVAL gate without can_approve=true.
  */
 
-export class RoleNotAuthorizedError extends Error {
-  public readonly code = 'ROLE_NOT_AUTHORIZED';
-  public readonly statusCode = 403;
+import { DomainError } from '../../../foundation/domain/errors/domain-errors.js';
+
+export class RoleNotAuthorizedError extends DomainError {
+  readonly type = '/problems/role-not-authorized';
+  readonly statusHint = 403;
 
   constructor(userId: string, requiredCapability: string) {
     super(`User ${userId} does not have the required capability: ${requiredCapability}.`);
-    this.name = 'RoleNotAuthorizedError';
   }
 }

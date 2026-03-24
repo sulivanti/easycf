@@ -5,12 +5,13 @@
  * but none was provided in the request.
  */
 
-export class EvidenceRequiredError extends Error {
-  public readonly code = 'EVIDENCE_REQUIRED';
-  public readonly statusCode = 422;
+import { DomainError } from '../../../foundation/domain/errors/domain-errors.js';
+
+export class EvidenceRequiredError extends DomainError {
+  readonly type = '/problems/evidence-required';
+  readonly statusHint = 422;
 
   constructor(transitionId: string) {
     super(`Transition ${transitionId} requires evidence. Provide evidence in the request body.`);
-    this.name = 'EvidenceRequiredError';
   }
 }

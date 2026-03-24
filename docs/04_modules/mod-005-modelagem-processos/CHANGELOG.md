@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.0.3 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. Lint: PASS. QA: WARN (infra-level). Manifests: PASS (2/2, V-M01 resolvido). OpenAPI: WARN (deprecate falta no OAS). Drizzle: PASS (7/7). Endpoints: PASS (todas 5 violações anteriores resolvidas). Arquitetural: PASS (DomainError OK, Pattern A OK). 0 bloqueadores, 0 críticas, 5 avisos. |
 | 1.0.2 | 2026-03-24 | validate-all | Re-validação completa. Lint: PASS. Format: PASS. QA: WARN (5 TS — reactflow deps). Drizzle: PASS (7/7). Endpoints: FAIL (1 bloqueador + 3 críticas persistem: V-E01 DomainError, V-E02 deprecate sem rota, V-E03 status codes, V-E06 web deprecate broken). Manifests: WARN (V-M01 update action). Nova pendência: nenhuma (todas pré-existentes). |
 | 1.0.1 | 2026-03-23 | validate-all | Validação Fase 3 com 1 bloqueador + 4 violações críticas — ver pen file. QA: WARN (infra-level). Manifests: 1/2. OpenAPI: PASS. Drizzle: PASS. Endpoints: FAIL. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Épico + features já READY. Ciclo de estabilidade avança para Etapa 5. |

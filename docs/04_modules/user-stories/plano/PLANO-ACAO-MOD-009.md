@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-009 Movimentos sob Aprovacao (Aprovacoes e Alcadas)
 
-> **Versao:** 3.2.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
+> **Versao:** 3.3.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
 > **Estado atual do modulo:** READY (v1.0.0) | **Epico:** APPROVED (v1.2.0) | **Features:** 5/5 APPROVED
 >
-> Fases 0-5 concluidas com revalidacao completa aprovada. `/validate-all` PASS: Lint (0 ESLint errors, 10 Prettier warnings PENDENTE-001), Architecture (DomainError+type+statusHint, Pattern A react-query, clean arch), QA, Manifests 2/2, OpenAPI 14 ops, Drizzle 7 tabelas + 7 relations, Endpoints 14/14 (4 route files). 0 bloqueadores, 0 violacoes criticas, 10 warnings.
+> Fases 0-5 concluidas. PENDENTE-001 (lint errors codegen) decidida (Opcao A — correcao incremental 3 fases) e implementada. Lint PASS: 0 ESLint errors, 0 Prettier warnings. 8 pendencias total, 8 IMPLEMENTADAS, 0 abertas.
 
 ---
 
@@ -16,7 +16,7 @@
 | Scaffold (forge-module) | CONCLUIDO | mod-009-movimentos-aprovacao/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-11 confirmados em 4 batches, v0.9.0, todas as pendentes resolvidas |
 | Codegen (7 agentes) | CONCLUIDO | 43 arquivos API (domain 15, application 17, presentation 10, infrastructure 1) + 24 arquivos Web + 2 DB schema + 1 OpenAPI. Execution-state atualizado com secao codegen completa |
-| PENDENTEs | 0 abertas | 7 total: 7 IMPLEMENTADA (001-007) |
+| PENDENTEs | 0 abertas | 8 total: 8 IMPLEMENTADA (001-007 + PENDENTE-001) |
 | ADRs | 4 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 a ADR-004) |
 | Amendments | 0 | Nenhum |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
@@ -119,6 +119,7 @@ O enriquecimento foi executado em 4 batches completos, com todos os 11 agentes c
 | 5 | PEN-009-005 | IMPLEMENTADA | BAIXA | Sem particionamento MVP, apenas indices (threshold 5M) |
 | 6 | PEN-009-006 | IMPLEMENTADA | MEDIA | Endpoint dedicado POST /movements/:id/retry |
 | 7 | PEN-009-007 | IMPLEMENTADA | BAIXA | Polling 60s MVP (SSE roadmap pos-MVP) |
+| 8 | PENDENTE-001 | IMPLEMENTADA | MEDIA | Correcao lint codegen 3 fases (format+lint:fix+refactor) — Opcao A |
 
 > Detalhes completos: requirements/pen-009-pendente.md
 
@@ -312,8 +313,8 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ate o 
 ```
 11   /manage-pendentes list PEN-009
                            Estado atual MOD-009:
-                             PEN-009: 7 itens total
-                               7 IMPLEMENTADA (001-007)
+                             PEN-009: 8 itens total
+                               8 IMPLEMENTADA (001-007 + PENDENTE-001)
                                0 ABERTA
                              SLA: nenhum vencido
 ```
@@ -329,6 +330,7 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ate o 
 | 5 | PEN-009-005 | IMPLEMENTADA | BAIXA | Sem particionamento MVP (threshold 5M) |
 | 6 | PEN-009-006 | IMPLEMENTADA | MEDIA | Endpoint retry dedicado |
 | 7 | PEN-009-007 | IMPLEMENTADA | BAIXA | Polling 60s MVP (SSE roadmap) |
+| 8 | PENDENTE-001 | IMPLEMENTADA | MEDIA | Correcao lint codegen 3 fases (Opcao A) |
 
 > Detalhes completos: requirements/pen-009-pendente.md
 
@@ -377,16 +379,17 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ate o 
 - [x] Garantir codegen de dependencias upstream: MOD-000, MOD-004, MOD-006
 - [x] Executar `/codegen mod-009` (7 agentes: DB, CORE, APP, APP-APPROVALS, API, WEB, VAL) — 70 arquivos gerados
 - [x] Executar `/validate-all` pos-codegen — PASS (2026-03-24): 0 bloqueadores, 32 warnings LOW
-- [x] Executar `pnpm lint` para verificar erros de compilacao — PASS (0 ESLint errors, 10 Prettier warnings tracked PENDENTE-001)
+- [x] Executar `pnpm lint` para verificar erros de compilacao — PASS (0 ESLint errors, 0 Prettier warnings — PENDENTE-001 IMPLEMENTADA)
 - [x] Validacao arquitetural — PASS (DomainError+type+statusHint, Pattern A react-query, clean arch layering)
-- [ ] Executar `pnpm test` para validar testes unitarios
+- [x] Executar `pnpm test` para validar testes unitarios — PASS (18 files, 199 tests: 10 novos MOD-009 + 8 MOD-000)
 
-> **Nota:** Modulo READY desde 2026-03-23. Codegen completo com 70 arquivos e validacao pos-codegen aprovada. MOD-010 pode agora consumir policy CONTROLLED para movimentos via imports cross-module. Proximo passo: `pnpm lint` + `pnpm test`.
+> **Nota:** Modulo READY desde 2026-03-23. Codegen completo com 70 arquivos e validacao pos-codegen aprovada. MOD-010 pode agora consumir policy CONTROLLED para movimentos via imports cross-module. Lint PASS (0 errors). Tests PASS (18 files, 199 tests — 102 novos MOD-009).
 
 ## CHANGELOG deste Documento
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 3.3.0 | 2026-03-24 | PENDENTE-001 decidida (Opcao A — correcao incremental 3 fases) e implementada. Lint PASS: 0 errors, 0 warnings. 8/8 pendencias IMPLEMENTADAS. |
 | 3.2.0 | 2026-03-24 | Revalidacao completa: Lint PASS (0 ESLint, 10 Prettier warnings PENDENTE-001), Architecture PASS (DomainError+type+statusHint, Pattern A, clean arch), QA PASS, Manifests 2/2, OpenAPI 14 ops, Drizzle 7 tabelas+7 relations, Endpoints 14/14 (4 route files). 0 bloqueadores, 10 warnings. |
 | 3.1.0 | 2026-03-24 | Atualizacao: /validate-all pos-codegen PASS (QA, Manifests 2/2, OpenAPI 14 ops, Drizzle 7 tabelas, Endpoints 14/14). 0 bloqueadores, 32 warnings LOW. Execution-state atualizado com secoes codegen + validations. Rastreio de agentes COD atualizado de "inferido" para confirmado. |
 | 3.0.0 | 2026-03-24 | Atualizacao: Fase 5 CONCLUIDA (codegen completo — 69 arquivos gerados em todas as camadas API+Web+DB+OpenAPI, inferido do filesystem). Inventario detalhado de codigo por camada. Checklist atualizado para foco em validacao pos-codegen. Execution-state sem secao codegen — dados inferidos. |

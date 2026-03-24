@@ -14,7 +14,12 @@
 > | 0.7.0  | 2026-03-19 | arquitetura | PENDENTE-005 implementada: Opção A (seed automático HML com WireMock) |
 > | 0.8.0  | 2026-03-19 | arquitetura | PENDENTE-001 implementada: Opção B (tabela simples + trigger migração 10M; alerta 5M no NFR-008) |
 > | 0.9.0  | 2026-03-19 | arquitetura | PENDENTE-002 implementada: Opção A (retenção 6 meses hot + archive S3 anonimizado; original purgado) |
-> | 1.2.0  | 2026-03-24 | validate-all  | Adição PENDENTE-009 — erros lint codegen (6 ocorrências) |
+> | 1.7.0  | 2026-03-24 | manage-pendentes | PENDENTE-010 IMPLEMENTADA — 8 domain errors refatorados: extends DomainError, type RFC 9457, statusHint, lint PASS |
+> | 1.6.0  | 2026-03-24 | manage-pendentes | PENDENTE-010 DECIDIDA — Opção A (refatorar 8 domain errors para estender DomainError) |
+> | 1.5.0  | 2026-03-24 | validate-all  | Adição PENDENTE-010 — 8 domain errors estendem Error ao invés de DomainError (PKG-COD-001 §3.2) |
+> | 1.4.0  | 2026-03-24 | arquitetura   | PENDENTE-009 implementada: Opção A (correção incremental 3 fases — format + lint:fix + refactor) |
+| 1.3.0  | 2026-03-24 | arquitetura   | PENDENTE-009 decidida: Opção A (correção incremental em 3 fases) |
+| 1.2.0  | 2026-03-24 | validate-all  | Adição PENDENTE-009 — erros lint codegen (6 ocorrências) |
 > | 1.1.0  | 2026-03-23 | Marcos Sulivan | PENDENTE-004 → IMPLEMENTADA — limite real confirmado: default=10, max=20 conexões simultâneas |
 > | 1.0.0  | 2026-03-22 | arquitetura | Sincronização status body: PENDENTE-006/007/008 → IMPLEMENTADA (correções já aplicadas em manifests e DOC-FND-000) |
 
@@ -23,8 +28,8 @@
 - **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-24
-- **rastreia_para:** US-MOD-008, MOD-008, NFR-008, SEC-008, INT-008, DATA-008, DOC-PADRAO-002
-- **evidencias:** PENDENTE-009 (6 ocorrências lint codegen — web/integration-protheus: 4, api/integration-protheus: 2)
+- **rastreia_para:** US-MOD-008, MOD-008, NFR-008, SEC-008, INT-008, DATA-008, DOC-PADRAO-002, PKG-COD-001
+- **evidencias:** PENDENTE-010 IMPLEMENTADA (8 domain errors refatorados para DomainError — PKG-COD-001 §3.2)
 
 ---
 
@@ -40,6 +45,8 @@
 | 6 | PENDENTE-006 | 🔴 BLOQUEANTE | UX | CONTRADIÇÃO | ✅ IMPLEMENTADA | ~~YAML key duplicada `notes` em ux-integ-001~~ |
 | 7 | PENDENTE-007 | 🟡 MÉDIA | UX | CONTRADIÇÃO | ✅ IMPLEMENTADA | ~~Action `navigate_to_case` type mismatch em ux-integ-002~~ |
 | 8 | PENDENTE-008 | 🟠 ALTA | UX | LACUNA | ✅ IMPLEMENTADA | ~~Scopes `integration:*` não registrados em DOC-FND-000 §2.2~~ |
+| 9 | PENDENTE-009 | 🟡 MÉDIA | ARC | CONTRADIÇÃO | ✅ IMPLEMENTADA | ~~Erros de lint do codegen (ESLint + Prettier)~~ |
+| 10 | PENDENTE-010 | 🟠 ALTA | ARC | CONTRADIÇÃO | ✅ IMPLEMENTADA | ~~Domain errors estendem Error ao invés de DomainError (faltam type + statusHint)~~ |
 
 ---
 
@@ -465,13 +472,17 @@ Gate 3 falha para ambos manifests MOD-008. Bloqueio de promoção para READY.
 
 ## PENDENTE-009 — Erros de lint do codegen (ESLint + Prettier)
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** MÉDIA
 - **domínio:** ARC
 - **tipo:** CONTRADIÇÃO
 - **origem:** VALIDATE
 - **criado_em:** 2026-03-24
 - **criado_por:** validate-all
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **implementado_em:** 2026-03-24
 - **modulo:** MOD-008
 - **rastreia_para:** DOC-PADRAO-002, DOC-ARC-002, PEN-000/PENDENTE-018
 - **tags:** lint, eslint, prettier, codegen
@@ -508,10 +519,80 @@ Adicionar `eslint-disable` nos arquivos afetados e criar backlog de correção.
 
 Opção A — Correção incremental em 3 fases, consistente com a decisão já tomada em PEN-000 PENDENTE-018 (IMPLEMENTADA). As fases 1 e 2 são totalmente automatizáveis. A fase 3 segue padrão repetitivo (extrair setState para callback pattern).
 
+### Resolução
+
+> **Decisão:** Opção A — Correção incremental em 3 fases (format + lint:fix + refactor React hooks)
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Abordagem consistente com PEN-000 PENDENTE-018 (já IMPLEMENTADA). Fases 1 e 2 são automatizáveis (pnpm format + lint:fix). Fase 3 segue padrão repetitivo (extrair setState para callback). Baixo risco, cada fase independente e reversível.
+> **Artefato de saída:** Correções lint aplicadas em web/integration-protheus (4 ocorrências) e api/integration-protheus (2 ocorrências)
+> **Implementado em:** 2026-03-24 — pnpm format + lint:fix + correções manuais
+
+---
+
+## PENDENTE-010 — Domain errors estendem Error ao invés de DomainError (faltam type + statusHint)
+
+- **status:** IMPLEMENTADA
+- **severidade:** ALTA
+- **domínio:** ARC
+- **tipo:** CONTRADIÇÃO
+- **origem:** VALIDATE
+- **criado_em:** 2026-03-24
+- **criado_por:** validate-all
+- **decidido_em:** 2026-03-24
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** A
+- **justificativa_decisao:** Padrão idêntico ao aplicado em MOD-006 (PENDENTE-008) e MOD-007 (PENDENTE-011). Custo baixo (1 arquivo, 8 classes), benefício alto (conformidade PKG-COD-001, RFC 9457, instanceof DomainError).
+- **implementado_em:** 2026-03-24
+- **modulo:** MOD-008
+- **rastreia_para:** PKG-COD-001, DOC-GNP-00, integration-errors.ts
+- **tags:** domain-error, DomainError, RFC-9457, codegen
+- **sla_data:** 2026-04-07
+- **dependencias:** []
+
+### Questão
+
+Todas as 8 classes de erro em `apps/api/src/modules/integration-protheus/domain/errors/integration-errors.ts` estendem `Error` diretamente em vez de `DomainError`. Usam `code` (string) em vez de `readonly type: '/problems/...'` e `statusCode` em vez de `readonly statusHint`. Viola PKG-COD-001 §3.2 que exige herança de `DomainError` com campos RFC 9457.
+
+### Impacto
+
+O error handler não consegue distinguir domain errors via `instanceof DomainError`. O campo `type` com formato `/problems/...` é obrigatório para RFC 9457 Problem Details. Inconsistência com MOD-006 e MOD-007 que já foram corrigidos.
+
+### Opções
+
+**Opção A — Refatorar 8 domain errors para estender DomainError (mesmo padrão MOD-006/MOD-007):**
+
+1. Importar `DomainError` de `../../../foundation/domain/errors/domain-errors.js`
+2. Trocar `extends Error` → `extends DomainError`
+3. Trocar `public readonly code` → `readonly type = '/problems/...'`
+4. Trocar `public readonly statusCode` → `readonly statusHint`
+5. Remover `this.name = '...'` (DomainError já faz)
+
+- Prós: Consistente com MOD-006/MOD-007 (já implementado e validado). Habilita error handler via instanceof. RFC 9457 compliant.
+- Contras: Nenhum — padrão já validado em 2 módulos.
+
+**Opção B — Criar adapter no error handler para aceitar ambos padrões:**
+
+Manter errors como estão e adaptar o error handler para detectar `code`/`statusCode` além de `type`/`statusHint`.
+
+- Prós: Não modifica arquivos existentes.
+- Contras: Dois padrões de erro no mesmo projeto. Complexidade desnecessária. Diverge do padrão validado.
+
+### Recomendação
+
+Opção A — Refatorar para DomainError. Padrão idêntico ao aplicado em PENDENTE-008 do MOD-006 e PENDENTE-011 do MOD-007. Custo baixo (1 arquivo, 8 classes), benefício alto (conformidade PKG-COD-001, RFC 9457, instanceof).
+
+### Ação Sugerida (se aplicável)
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| `/manage-pendentes decide PEN-008 PENDENTE-010 opção=A` | Registrar decisão | Agora |
+| `/manage-pendentes implement PEN-008 PENDENTE-010` | Aplicar refatoração | Após decisão |
+| `/validate-all mod-008` | Re-validar conformidade | Após implementação |
+
 ### Resolução (preenchido quando DECIDIDA)
 
-> **Decisão:** —
-> **Decidido por:** — em —
-> **Justificativa:** —
-> **Artefato de saída:** —
-> **Implementado em:** —
+> **Decisão:** Opção A — Refatorar 8 domain errors para estender DomainError (mesmo padrão MOD-006/MOD-007)
+> **Decidido por:** Marcos Sulivan em 2026-03-24
+> **Justificativa:** Padrão idêntico ao aplicado em MOD-006 (PENDENTE-008) e MOD-007 (PENDENTE-011), ambos já validados com sucesso. Custo baixo (1 arquivo, 8 classes), benefício alto (conformidade PKG-COD-001, RFC 9457, instanceof DomainError no error handler).
+> **Artefato de saída:** integration-errors.ts refatorado — 8 classes: extends DomainError, type `/problems/...`, statusHint, sem this.name
+> **Implementado em:** 2026-03-24 — refatoração direta + lint PASS

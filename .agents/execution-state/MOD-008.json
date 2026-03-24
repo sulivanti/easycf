@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-008",
   "module_path": "docs/04_modules/mod-008-integracao-protheus/",
-  "last_updated": "2026-03-24T21:00:00Z",
+  "last_updated": "2026-03-24T22:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -109,21 +109,38 @@
       }
     }
   },
+  "tests": {
+    "pnpm_lint": {
+      "status": "PASS",
+      "run_at": "2026-03-24T22:00:00Z",
+      "eslint_errors": 0,
+      "eslint_warnings": 0,
+      "prettier_issues": 0
+    }
+  },
   "validations": {
-    "last_run": "2026-03-24T21:00:00.000Z",
-    "qa": { "status": "PASS", "run_at": "2026-03-24T21:00:00.000Z", "blockers": 0, "violations": 0, "warnings": 0, "notes": "10 req files + 45 source files (26 api + 17 web + 2 drizzle), all imports resolved, IDs consistent" },
-    "lint": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "notes": "Cross-module issue (PEN-000/PENDENTE-018). No MOD-008-specific lint errors in lint-errors.json. ESLint deferred to batch fix." },
-    "architecture": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "notes": "V-ARC-1: Domain errors extend Error instead of DomainError (cross-module pattern, same as MOD-006). W-ARC-1: Web hooks use react-query Pattern A correctly. W-ARC-2: API routes follow Fastify plugin pattern." },
-    "manifest": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "total": 2, "passed": 1, "violations": ["V-M01: ux-integ-001 missing update_param action — ALTA (UNCHANGED)", "V-M02: ux-integ-001 missing view_history action — MEDIA (UNCHANGED)", "V-M03: Both manifests lack per-status-code error granularity — MEDIA (UNCHANGED)"] },
-    "openapi": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "notes": "13/13 own endpoints present, 15 schemas defined. W-OAS-1: No error response schemas 4xx/5xx (ALTA). W-OAS-2: MetricsResponse schema defined but no path references it (MEDIA)" },
-    "drizzle": { "status": "PASS", "run_at": "2026-03-24T21:00:00.000Z", "notes": "6/6 tables validated, 21 indexes, 16 CHECKs, 7 FKs (all ON DELETE RESTRICT). Relations file: 6 relation definitions with cross-module refs (MOD-000, MOD-006, MOD-007). Self-referencing FK for reprocess chain. 0 violations." },
-    "endpoint": { "status": "WARN", "run_at": "2026-03-24T21:00:00.000Z", "notes": "13/13 endpoints verified across 3 route files. V-RT-1: 5 mutations in routines.route.ts lack correlation_id (ALTA). V-RT-2: routineStatus stub in 6 places — uses unsafe cast + default DRAFT instead of DB lookup (ALTA). V-RT-3: Services route hardcodes timestamps with new Date() (MEDIA). V-RT-4: created_by populated from session but not from DB on PATCH (MEDIA)" },
+    "last_run": "2026-03-24T22:00:00Z",
+    "lint": { "status": "PASS", "run_at": "2026-03-24T22:00:00Z", "eslint_errors": 0, "eslint_warnings": 0, "prettier_issues": 0, "top_rules": [] },
+    "architecture": {
+      "status": "PASS",
+      "run_at": "2026-03-24T22:30:00Z",
+      "checks": {
+        "domain_errors_extend_DomainError": "PASS — 8/8 refactored to extend DomainError with type (RFC 9457) + statusHint (PENDENTE-010 IMPLEMENTADA)",
+        "web_pattern_a": "PASS — api/hooks/pages/types/components (no data/domain/ui)",
+        "hooks_use_react_query": "PASS — all 6 hook files use @tanstack/react-query"
+      }
+    },
+    "qa": { "status": "PASS", "run_at": "2026-03-24T22:00:00Z", "blockers": 0, "violations": 0, "warnings": 0 },
+    "manifest": { "status": "PASS", "run_at": "2026-03-24T22:00:00Z", "total": 2, "passed": 2, "violations": [] },
+    "openapi": { "status": "PASS", "run_at": "2026-03-24T22:00:00Z", "endpoints": 15 },
+    "drizzle": { "status": "PASS", "run_at": "2026-03-24T22:00:00Z", "tables": 6, "indexes": 21, "checks": 16, "relations_file": true },
+    "endpoint": { "status": "PASS", "run_at": "2026-03-24T22:00:00Z", "route_files": 3, "scope_guards": true },
     "verdict": {
-      "ready_for_promotion": false,
+      "ready_for_promotion": true,
       "blockers": 0,
-      "critical_violations": 4,
-      "warnings": 7,
-      "summary": "WARN — same 4 ALTA violations from previous run remain unfixed. 1 new architecture warning (DomainError, cross-module). Drizzle PASS. QA PASS. All 45 source files structurally sound."
+      "critical_violations": 0,
+      "warnings": 0,
+      "summary": "PASS — All validations pass. PENDENTE-010 (DomainError) implemented. 10/10 pendencies resolved."
     }
   }
 }

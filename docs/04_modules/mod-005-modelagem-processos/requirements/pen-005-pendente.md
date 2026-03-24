@@ -26,6 +26,7 @@
 | 1.9.0  | 2026-03-24 | manage-pendentes | PENDENTE-014 DECIDIDA → Opção A (adicionar ação update ao manifest) |
 | 2.0.0  | 2026-03-24 | manage-pendentes | PENDENTE-016 IMPLEMENTADA — resolvida por PENDENTE-011 (web client já corrigido) |
 | 2.1.0  | 2026-03-24 | manage-pendentes | PENDENTE-013 IMPLEMENTADA — DTOs Zod alinhados com OAS (gates +stage_id/descricao, roles flat) |
+| 2.2.0  | 2026-03-24 | manage-pendentes | PENDENTE-014 IMPLEMENTADA — ação update_stage_position adicionada ao manifest ux-proc-001 (amendment) |
 
 # PEN-005 — Questões Abertas da Modelagem de Processos
 
@@ -471,9 +472,9 @@ Opcao A — OAS e fonte de verdade (DOC-ARC-001). DTOs Zod devem conformar ao co
 
 ---
 
-### PENDENTE-014 — ux-proc-001 missing action update (mover estagio no canvas)
+### ~~PENDENTE-014 — ux-proc-001 missing action update (mover estagio no canvas)~~
 
-- **status:** DECIDIDA
+- **status:** IMPLEMENTADA
 - **severidade:** ALTA
 - **dominio:** UX
 - **tipo:** LACUNA
@@ -521,8 +522,8 @@ Opcao A — adicionar acao explicita. Manifests devem mapear todas as interacoes
 > **Decisao:** Opção A — Adicionar ação update ao manifest ux-proc-001
 > **Decidido por:** Marcos Sulivan em 2026-03-24
 > **Justificativa:** Manifests devem mapear todas as interações API (DOC-UX-001). canvas_x/canvas_y são persistidos (DATA-005). OperationId admin_stages_update já existe no OAS — deve estar mapeado no manifest. Módulo READY — implementação via amendment.
-> **Artefato de saida:** —
-> **Implementado em:** —
+> **Artefato de saida:** AMD-UX-PROC-001-001 (amendments/ux/), ux-proc-001.editor-visual.yaml v1.1.0
+> **Implementado em:** 2026-03-24
 
 ---
 

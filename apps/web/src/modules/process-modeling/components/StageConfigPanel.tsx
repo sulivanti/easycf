@@ -216,7 +216,13 @@ function GatesTab({ stage }: { stage: FlowStageItem }) {
 
 // ── Roles Tab ─────────────────────────────────────────────────
 
-function RolesTab({ stage, rolesMap }: { stage: FlowStageItem; rolesMap: Map<string, { nome?: string; can_approve?: boolean }> }) {
+function RolesTab({
+  stage,
+  rolesMap,
+}: {
+  stage: FlowStageItem;
+  rolesMap: Map<string, { nome?: string; can_approve?: boolean }>;
+}) {
   if (stage.roles.length === 0) {
     return <p className="text-gray-400 text-sm">{COPY.empty_roles}</p>;
   }

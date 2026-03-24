@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.4.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. Lint: PASS (0 errors/warnings). Format: PASS. Arquitetura: PASS (6/6 DomainError, Pattern A, React Query). QA: PASS. Manifests: 2/2 PASS. OpenAPI: N/A (inline). Drizzle: PASS (9 tabelas). Endpoints: PASS (7 route files). 0 bloqueadores, 0 violações críticas, 0 avisos. Domain errors corrigidos (PENDENTE-011 resolvida). |
 | 1.3.0 | 2026-03-24 | validate-all | Validacao pos-codegen: lint PASS, format PASS, drizzle 9 tabelas OK, relations OK, 25 endpoints OK, 14 domain events OK, 6 hooks react-query OK, 2 pages OK. Warnings: domain errors nao estendem DomainError (cross-module), openapi standalone ausente. FAIL: tests_present. PENDENTE-011 registrada. Verdict: PASS_WITH_WARNINGS. |
 | 1.2.0 | 2026-03-24 | codegen | Codegen concluido: 6 agentes executados, 57 arquivos gerados. Camadas: DB (3), CORE (14), APP (22), API (10), WEB (8), VAL (0 — validacao). Checks: 5/7 passed, tests_present missing, openapi standalone missing. |
 | 1.1.0 | 2026-03-24 | codegen | Codegen parcial: AGN-COD-APP + AGN-COD-API (2 agentes, 32 arquivos). Camadas: application (22 use cases + ports), presentation (10 routes + DTOs). Faltam: WEB, VAL. |

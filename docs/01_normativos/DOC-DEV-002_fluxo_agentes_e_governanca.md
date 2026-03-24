@@ -160,3 +160,7 @@ flowchart TD
 ```
 ````
 *(Neste exemplo, o módulo está na **Etapa 4**, desenvolvimento DRAFT em ritmo acelerado na IDE).*
+
+### 5.4 Diagramas de Módulo (Referência)
+
+> Os diagramas visuais por módulo (arquitetura de camadas, modelo de domínio, máquinas de estado, fluxos UX) seguem o padrão formalizado em **DOC-DEV-001 §5.4**. A paleta de cores Mermaid é derivada das convenções deste documento (§5.3): verde = completo, laranja = em andamento, cinza = estável. Consulte DOC-DEV-001 §5.4.3 para a tabela completa de `classDef` por camada arquitetural.

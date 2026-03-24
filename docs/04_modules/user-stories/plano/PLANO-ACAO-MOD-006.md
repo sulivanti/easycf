@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-006 Execucao de Casos
 
-> **Versao:** 4.6.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
+> **Versao:** 4.9.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
 > **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v0.9.0) | **Features:** 4/4 READY
 >
-> Fases 0-5 concluidas. 8 pendencias total: 7 IMPLEMENTADAS, 1 ABERTA (PENDENTE-008 domain errors nao estendem DomainError). PENDENTE-007 (lint codegen) IMPLEMENTADA — pnpm format + lint clean, 0 errors em case-execution. Proximo passo: decidir e implementar PENDENTE-008.
+> Fases 0-5 concluidas. **8/8 pendencias IMPLEMENTADAS** — MOD-006 100% limpo. Validacao Fase 3 re-executada: 7/7 validadores PASS (lint, format, arquitetura, QA, manifests 2/2, OpenAPI 16/16, Drizzle 5 tabelas, endpoints 16/16). 0 bloqueadores, 0 violacoes criticas, 0 avisos. Pronto para merge.
 
 ---
 
@@ -16,11 +16,11 @@
 | Scaffold (forge-module) | CONCLUIDO | mod-006-execucao-casos/ com estrutura completa Nivel 2 |
 | Enriquecimento (10 agentes) | CONCLUIDO | AGN-DEV-01 a AGN-DEV-10 confirmados via CHANGELOG + requirements, v0.4.0, 5 pendentes resolvidas |
 | Codegen (6 agentes) | CONCLUIDO | 6/6 done. 48 arquivos gerados. PENDENTE-006 IMPLEMENTADA: AGN-COD-API re-executado, correcoes confirmadas, validate-all PASS |
-| PENDENTEs | 1 aberta | 8 total: 7 IMPLEMENTADA (001-007), 1 ABERTA (008 DomainError hierarchy) |
+| PENDENTEs | 0 abertas | 8 total: 8 IMPLEMENTADA (001-008) — 100% resolvidas |
 | ADRs | 5 criadas (seladas READY) | Nivel 2 requer minimo 3 — atendido (ADR-001 motor atomico, ADR-002 freeze cycle_version, ADR-003 3 historicos, ADR-004 optimistic locking, ADR-005 background job expiracao) |
 | Amendments | 0 proprios (2 cross-module) | DOC-FND-000-M01 (6 scopes process:case:*) e DOC-FND-000-M02 (scope reopen) criados no Foundation |
 | Requirements | 10/10 existem (selados READY) | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v1.5.0 | Ultima entrada 2026-03-24 (validate-all completa: lint, format, QA, manifests, OpenAPI, Drizzle, endpoints PASS). Pipeline Mermaid Etapa 5 (Selo READY) |
+| CHANGELOG | v1.6.0 | Ultima entrada 2026-03-24 (validate-all Fase 3 aprovada: 7/7 PASS, 0 violacoes). Pipeline Mermaid Etapa 5 (Selo READY) |
 | Screen Manifests | 2/2 existem | ux-case-001.painel-caso, ux-case-002.listagem-casos |
 | Dependencias | 4 upstream (MOD-000, MOD-003, MOD-004, MOD-005) | Consome auth/RBAC de MOD-000, org_units de MOD-003, delegacoes de MOD-004, blueprints de MOD-005 |
 | Bloqueios | 1 recebido (BLK-002) | MOD-006 bloqueado por MOD-005 (blueprints + cycle_version_id freeze devem estar implementados) — afeta codegen, nao spec |
@@ -333,10 +333,10 @@ O modulo esta READY e selado. Qualquer alteracao futura requer amendment formal 
 16   /manage-pendentes list PEN-006
                            Estado atual MOD-006:
                              PEN-006: 8 itens total
-                               7 IMPLEMENTADA (001-007)
-                               1 ABERTA (008 DomainError hierarchy)
+                               8 IMPLEMENTADA (001-008)
+                               0 ABERTA
                                0 DECIDIDA
-                             SLA: nenhum vencido
+                             SLA: nenhum vencido — 100% resolvidas
 ```
 
 #### Painel de Pendencias — Resumo Compacto
@@ -350,7 +350,7 @@ O modulo esta READY e selado. Qualquer alteracao futura requer amendment formal 
 | 5 | PENDENTE-005 | IMPLEMENTADA | MEDIA | Opcao B — `target_stage_id` obrigatorio no REOPENED | FR-007, FR-002, DATA-006, BR-016 |
 | 6 | PENDENTE-006 | IMPLEMENTADA | ALTA | Opcao A — codigo alinhado com spec (routes, operationIds, params, OpenAPI) | cases.route.ts, mod-006-case-execution.yaml |
 | 7 | PENDENTE-007 | IMPLEMENTADA | MEDIA | Opcao A — correcao incremental 3 fases (format+lint clean, 0 errors) | pnpm format + lint (2026-03-24) |
-| 8 | PENDENTE-008 | ABERTA | MEDIA | 7 domain errors estendem Error ao inves de DomainError (faltam type+statusHint) | domain/errors/*.error.ts |
+| 8 | PENDENTE-008 | IMPLEMENTADA | MEDIA | Opcao A — 7 domain errors refatorados: extends DomainError, type RFC 9457, statusHint, tsc clean | domain/errors/*.error.ts |
 
 > Detalhes completos: requirements/pen-006-pendente.md
 
@@ -447,7 +447,7 @@ Amendments cross-module: DOC-FND-000-M01 (6 scopes), DOC-FND-000-M02 (scope reop
   - [x] Drizzle: PASS (2 avisos menores)
   - [x] Endpoints: PASS (16/16 endpoints, todas as 5 correcoes PENDENTE-006 confirmadas)
 
-> **Nota:** MOD-006 quase completamente finalizado. 7/8 pendencias IMPLEMENTADAS, 1 ABERTA (PENDENTE-008 — domain errors estendem Error ao inves de DomainError). Codegen completo e validado: 48 arquivos. Lint e format: 0 errors em case-execution. Proximo passo: `/manage-pendentes decide PEN-006 PENDENTE-008 opcao=A`.
+> **Nota:** MOD-006 **completamente finalizado**. 8/8 pendencias IMPLEMENTADAS. Codegen completo e validado: 48 arquivos. Lint, format e architecture: PASS. Todas as validacoes verdes. Nenhuma acao pendente.
 
 ---
 
@@ -455,6 +455,9 @@ Amendments cross-module: DOC-FND-000-M01 (6 scopes), DOC-FND-000-M02 (scope reop
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 4.9.0 | 2026-03-24 | Atualizacao: validate-all Fase 3 re-executada — 7/7 validadores PASS (lint 0 errors, arquitetura 7/7 DomainError + Pattern A + React Query, QA 0 bloqueadores, manifests 2/2, OpenAPI 16/16, Drizzle 5 tabelas, endpoints 16/16). 0 bloqueadores, 0 violacoes, 0 avisos. Execution state atualizado |
+| 4.8.0 | 2026-03-24 | Atualizacao: PENDENTE-008 IMPLEMENTADA — 7 domain errors refatorados (extends DomainError, type RFC 9457, statusHint). 8/8 pendencias IMPLEMENTADAS. MOD-006 100% limpo |
+| 4.7.0 | 2026-03-24 | Atualizacao: PENDENTE-008 DECIDIDA (Opcao A — refatorar 7 domain errors para estender DomainError). 7/8 IMPLEMENTADAS, 1 DECIDIDA. Proximo: implement |
 | 4.6.0 | 2026-03-24 | Atualizacao: PENDENTE-007 DECIDIDA (Opcao A) e IMPLEMENTADA — pnpm format + lint clean, 0 errors em case-execution. 7/8 pendencias fechadas. 1 ABERTA (PENDENTE-008 DomainError) |
 | 4.4.0 | 2026-03-24 | Atualizacao: PENDENTE-006 IMPLEMENTADA (correcoes confirmadas no codigo). 6/6 pendencias fechadas. Modulo completamente limpo |
 | 4.3.0 | 2026-03-24 | Atualizacao: PENDENTE-006 corrigida — AGN-COD-API re-executado (3 arquivos), validate-all PASS (5/5 validadores, 16/16 endpoints, OpenAPI gerado). Checklist completo. Codegen MOD-006 finalizado |

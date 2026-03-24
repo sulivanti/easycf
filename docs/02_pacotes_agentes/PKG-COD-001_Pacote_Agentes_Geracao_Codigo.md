@@ -1,5 +1,6 @@
 # PKG-COD-001 — Pacote 2: Agentes de Geração de Código (GNP + CEE + CHE) (6 agentes)
 
+**id:** PKG-COD-001
 **Versão:** 1.5
 **Data:** 2026-03-24
 **Base:** DOC-DEV-001 + DOC-ESC-001 + DOC-GNP-00 v2.0 + DOC-GPA-001 + EX-OAS-* + Events↔Permissions Pack + UX-010

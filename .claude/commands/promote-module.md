@@ -242,6 +242,33 @@ Registre o estado de promocao no execution state do modulo.
 
 - Preserve secoes existentes (`scaffold`, `codegen`, `validations`, `tests`) — faca merge, nao sobrescreva
 
+## PASSO 6.5 — Gate de Consistência Pós-Promoção (MUST)
+
+Após registrar o execution state, valide consistência entre os três artefatos de status. **Todos** os checks abaixo DEVEM passar. Se qualquer um falhar, CORRIJA antes de prosseguir.
+
+### Checks obrigatórios:
+
+1. **Execution state → promotion:** `.agents/execution-state/MOD-{NNN}.json` DEVE conter `promotion.completed: true` e `promotion.completed_at` com timestamp válido
+2. **Manifesto → status:** O manifesto do módulo (`<dirname>.md`) DEVE ter `estado_item: READY`
+3. **Features → status:** TODAS as features em `user-stories/features/US-{MOD-ID}-F*.md` DEVEM ter `status_agil: READY` (não `APPROVED`, não `DRAFT`)
+4. **Épico → status:** O épico em `user-stories/epics/US-{MOD-ID}.md` DEVE ter `status_agil: READY`
+
+### Se falhar:
+
+```
+❌ Gate 6.5 — Inconsistência detectada:
+  - [1] ✅ Execution state: promotion.completed = true
+  - [2] ✅ Manifesto: estado_item = READY
+  - [3] ❌ Features: US-MOD-009-F03 tem status_agil = APPROVED (esperado: READY)
+  - [4] ✅ Épico: status_agil = READY
+
+  Correção: alterando US-MOD-009-F03 status_agil APPROVED → READY
+```
+
+Corrija automaticamente divergências detectadas (edite o arquivo) e re-valide. Só prossiga quando todos os 4 checks passarem.
+
+> **Ref:** Este gate previne a situação onde o manifesto diz READY mas features ficam em APPROVED ou execution-state sem registro de promoção (Issues #8 e #12 da auditoria v0.9.0).
+
 ## PASSO 7 — QA Final
 
 Execute `/qa docs` novamente.

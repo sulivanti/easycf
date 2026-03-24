@@ -1,6 +1,6 @@
 # US-MOD-009-F03 — API: Inbox de Aprovações, Execução e Override
 
-**Status Ágil:** `APPROVED`
+**Status Ágil:** `READY`
 **Versão:** 1.0.0
 **Data:** 2026-03-15
 **Módulo Destino:** **MOD-009** (Aprovações e Alçadas — Backend)
@@ -8,7 +8,7 @@
 
 ## Metadados de Governança
 
-- **status_agil:** APPROVED
+- **status_agil:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-15
 - **rastreia_para:** US-MOD-009, US-MOD-009-F01, US-MOD-009-F02, DOC-ARC-001

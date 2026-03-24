@@ -176,6 +176,73 @@ Verifique conformidade com padrões obrigatórios do PKG-COD-001:
 **Resultado: PASS** (0 violações)
 ```
 
+### 4.0.7 — Promotion Consistency Check (sempre, se manifesto diz READY)
+
+Se o manifesto do módulo tem `estado_item: READY`, valide consistência entre os três artefatos de status:
+
+1. **Execution state:** `.agents/execution-state/MOD-{NNN}.json` DEVE conter `promotion.completed: true`
+2. **Features:** TODAS as features em `user-stories/features/US-{MOD-ID}-F*.md` DEVEM ter `status_agil: READY` (não `APPROVED`, não `DRAFT`)
+3. **Épico:** `user-stories/epics/US-{MOD-ID}.md` DEVE ter `status_agil: READY`
+
+**Classificação:**
+
+| Condição | Status |
+|---|---|
+| Manifesto não é READY | `N/A` |
+| Todos os 3 checks passam | `PASS` |
+| Execution state sem `promotion` | `WARN` (módulo pode ter sido promovido manualmente) |
+| Features com status != READY | `FAIL` (inconsistência — features ficaram para trás) |
+
+**Exemplo — FAIL:**
+
+```
+### 4.0.7 — Promotion Consistency — MOD-009
+
+| Check | Esperado | Encontrado | Status |
+|---|---|---|---|
+| Execution state promotion | completed: true | seção ausente | WARN |
+| Features READY | 5/5 READY | 5/5 APPROVED | FAIL |
+| Épico READY | READY | READY | PASS |
+
+→ **5 features com status APPROVED ao invés de READY** — inconsistência com manifesto.
+```
+
+> **Ref:** Este gate detecta divergências entre manifesto, features e execution state (Issues #8 e #12 da auditoria v0.9.0).
+
+### 4.0.8 — Temporal Integrity Check (sempre, se execution state existe)
+
+Se `.agents/execution-state/MOD-{NNN}.json` existe e contém seção `codegen`, valide integridade temporal:
+
+1. `codegen.completed_at` DEVE ser estritamente posterior a `codegen.started_at` (não same-minute)
+2. Para cada agente em `codegen.agents`: `completed_at` DEVE ser posterior a `codegen.started_at`
+3. Para cada agente em `codegen.agents`: `completed_at` DEVE ser anterior ou igual a `codegen.completed_at`
+4. Se `promotion.completed_at` existe: DEVE ser posterior a `codegen.completed_at` (promoção acontece depois do codegen)
+
+**Classificação:**
+
+| Condição | Status |
+|---|---|
+| Sem execution state ou sem codegen | `N/A` |
+| Todos timestamps consistentes | `PASS` |
+| Same-minute (started == completed) | `WARN` |
+| Timestamp impossível (completed < started) | `FAIL` |
+
+**Exemplo — FAIL:**
+
+```
+### 4.0.8 — Temporal Integrity — MOD-008
+
+| Check | started_at | completed_at | Delta | Status |
+|---|---|---|---|---|
+| codegen | 2026-03-23T23:30:00Z | 2026-03-24T17:30:00Z | +18h | PASS |
+| AGN-COD-DB | — | 2026-03-24T00:15:00Z | +45m | PASS |
+| AGN-COD-VAL | — | 2026-03-23T04:30:00Z | **-19h** | FAIL |
+
+→ **AGN-COD-VAL.completed_at é 19h ANTERIOR a codegen.started_at** — timestamp impossível.
+```
+
+> **Ref:** Este gate detecta paradoxos temporais nos execution states (Issues #3 e #5 da auditoria v0.9.0).
+
 ### 4.1 — QA Geral (sempre)
 
 Invoque: `/qa all`

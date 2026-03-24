@@ -69,8 +69,8 @@ Cada módulo possui raiz em `04_modules/` com `<dirname>.md` (manifesto do módu
 | MOD-003 — Estrutura Organizacional | [mod-003-estrutura-organizacional.md](04_modules/mod-003-estrutura-organizacional/mod-003-estrutura-organizacional.md) | DRAFT |
 | MOD-004 — Identidade Avançada | [mod-004-identidade-avancada.md](04_modules/mod-004-identidade-avancada/mod-004-identidade-avancada.md) | DRAFT |
 | MOD-005 — Modelagem de Processos (Blueprint) | [mod-005-modelagem-processos.md](04_modules/mod-005-modelagem-processos/mod-005-modelagem-processos.md) | DRAFT |
-| MOD-006 — Execução de Casos | [mod-006-execucao-casos.md](04_modules/mod-006-execucao-casos/mod-006-execucao-casos.md) | DRAFT |
-| MOD-007 — Parametrização Contextual e Rotinas | [mod-007-parametrizacao-contextual.md](04_modules/mod-007-parametrizacao-contextual/mod-007-parametrizacao-contextual.md) | DRAFT |
+| MOD-006 — Execução de Casos | [mod-006-execucao-casos.md](04_modules/mod-006-execucao-casos/mod-006-execucao-casos.md) | READY |
+| MOD-007 — Parametrização Contextual e Rotinas | [mod-007-parametrizacao-contextual.md](04_modules/mod-007-parametrizacao-contextual/mod-007-parametrizacao-contextual.md) | READY |
 | MOD-008 — Integração Dinâmica Protheus/TOTVS | [mod-008-integracao-protheus.md](04_modules/mod-008-integracao-protheus/mod-008-integracao-protheus.md) | DRAFT |
 | MOD-009 — Movimentos sob Aprovação (Aprovações e Alçadas) | [mod-009-movimentos-aprovacao.md](04_modules/mod-009-movimentos-aprovacao/mod-009-movimentos-aprovacao.md) | DRAFT |
 | MOD-010 — MCP e Automação Governada | [mod-010-mcp-automacao.md](04_modules/mod-010-mcp-automacao/mod-010-mcp-automacao.md) | DRAFT |
@@ -114,20 +114,20 @@ Cada módulo possui raiz em `04_modules/` com `<dirname>.md` (manifesto do módu
 
 | Feature | Tema | Screen Manifest | Status |
 |---|---|---|---|
-| [US-MOD-006-F01](04_modules/user-stories/features/US-MOD-006-F01.md) | API abertura + motor de transição | — (Backend) | APPROVED |
-| [US-MOD-006-F02](04_modules/user-stories/features/US-MOD-006-F02.md) | API gates + responsáveis + eventos | — (Backend) | APPROVED |
-| [US-MOD-006-F03](04_modules/user-stories/features/US-MOD-006-F03.md) | UX Painel do caso + timeline | UX-CASE-001 | APPROVED |
-| [US-MOD-006-F04](04_modules/user-stories/features/US-MOD-006-F04.md) | UX Listagem de casos | UX-CASE-002 | APPROVED |
+| [US-MOD-006-F01](04_modules/user-stories/features/US-MOD-006-F01.md) | API abertura + motor de transição | — (Backend) | READY |
+| [US-MOD-006-F02](04_modules/user-stories/features/US-MOD-006-F02.md) | API gates + responsáveis + eventos | — (Backend) | READY |
+| [US-MOD-006-F03](04_modules/user-stories/features/US-MOD-006-F03.md) | UX Painel do caso + timeline | UX-CASE-001 | READY |
+| [US-MOD-006-F04](04_modules/user-stories/features/US-MOD-006-F04.md) | UX Listagem de casos | UX-CASE-002 | READY |
 
 ### Features — MOD-007
 
 | Feature | Tema | Screen Manifest | Status |
 |---|---|---|---|
-| [US-MOD-007-F01](04_modules/user-stories/features/US-MOD-007-F01.md) | API Enquadradores + Objetos + Incidências | — (Backend) | APPROVED |
-| [US-MOD-007-F02](04_modules/user-stories/features/US-MOD-007-F02.md) | API Rotinas + Itens + Versionamento | — (Backend) | APPROVED |
-| [US-MOD-007-F03](04_modules/user-stories/features/US-MOD-007-F03.md) | Motor de Avaliação (runtime) | — (Backend) | APPROVED |
-| [US-MOD-007-F04](04_modules/user-stories/features/US-MOD-007-F04.md) | UX Configurador de Enquadradores | UX-PARAM-001 | APPROVED |
-| [US-MOD-007-F05](04_modules/user-stories/features/US-MOD-007-F05.md) | UX Cadastro de Rotinas | UX-ROTINA-001 | APPROVED |
+| [US-MOD-007-F01](04_modules/user-stories/features/US-MOD-007-F01.md) | API Enquadradores + Objetos + Incidências | — (Backend) | READY |
+| [US-MOD-007-F02](04_modules/user-stories/features/US-MOD-007-F02.md) | API Rotinas + Itens + Versionamento | — (Backend) | READY |
+| [US-MOD-007-F03](04_modules/user-stories/features/US-MOD-007-F03.md) | Motor de Avaliação (runtime) | — (Backend) | READY |
+| [US-MOD-007-F04](04_modules/user-stories/features/US-MOD-007-F04.md) | UX Configurador de Enquadradores | UX-PARAM-001 | READY |
+| [US-MOD-007-F05](04_modules/user-stories/features/US-MOD-007-F05.md) | UX Cadastro de Rotinas | UX-ROTINA-001 | READY |
 
 ### Features — MOD-008
 

@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-007 Parametrizacao Contextual e Rotinas
 
-> **Versao:** 3.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** APPROVED (v1.3.0) | **Features:** 5/5 APPROVED
+> **Versao:** 4.0.0 | **Data:** 2026-03-23 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.4.0) | **Features:** 5/5 READY
 >
-> Fases 0-4 concluidas (modulo promovido a READY em 2026-03-23). Proximo passo: Fase 5 (Geracao de Codigo) — executar `/app-scaffold all` para criar scaffold de apps, depois `/codegen mod-007`.
+> Fases 0-4 concluidas (modulo promovido a READY em 2026-03-23, epico+features selados READY). Proximo passo: Fase 5 (Geracao de Codigo) — executar `/app-scaffold` seguido de `/codegen mod-007`.
 
 ---
 
@@ -11,11 +11,11 @@
 
 | Item | Estado | Detalhe |
 |------|--------|---------|
-| Epico US-MOD-007 | APPROVED (v1.3.0) | DoR completo, 5 features vinculadas, 4 gaps do Documento Mestre enderecados |
-| Features F01-F05 | 5/5 APPROVED | F01 (Enquadradores+Objetos+Incidencias), F02 (Rotinas+Itens+Versionamento), F03 (Motor de Avaliacao), F04 (UX Configurador), F05 (UX Cadastro Rotinas) |
+| Epico US-MOD-007 | READY (v1.4.0) | DoR completo, 5 features vinculadas, 4 gaps do Documento Mestre enderecados |
+| Features F01-F05 | 5/5 READY | F01 (Enquadradores+Objetos+Incidencias), F02 (Rotinas+Itens+Versionamento), F03 (Motor de Avaliacao), F04 (UX Configurador), F05 (UX Cadastro Rotinas) |
 | Scaffold (forge-module) | CONCLUIDO | mod-007-parametrizacao-contextual/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Agentes 01-11 confirmados, v0.4.0, todas as pendentes resolvidas |
-| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ nao existe ainda; modulo READY — elegivel para codegen |
+| Codegen (6 agentes) | NAO INICIADO | Scaffold apps/ concluido (2026-03-23). Executar `/codegen mod-007` |
 | PENDENTEs | 0 abertas | 9 total: 9 IMPLEMENTADA (001-009) |
 | ADRs | 6 criadas | Nivel 2 requer minimo 3 — atendido (ADR-001 a ADR-006) |
 | Amendments | 0 | Nenhum |
@@ -40,15 +40,15 @@ O epico US-MOD-007 define o modulo de parametrizacao contextual e rotinas de com
 
 ```
 1    (manual)              Revisar e finalizar epico US-MOD-007:             CONCLUIDO
-                           - Escopo fechado (5 features: 3 Backend + 2 UX)  status_agil = APPROVED
-                           - 4 gaps do Documento Mestre enderecados          v1.3.0
+                           - Escopo fechado (5 features: 3 Backend + 2 UX)  status_agil = READY
+                           - 4 gaps do Documento Mestre enderecados          v1.4.0
                            - Resolucao de conflito em duas camadas definida
                            - Motor de avaliacao sem cache (decisao 2026-03-15)
                            - DoR 100% completo
                            Arquivo: docs/04_modules/user-stories/epics/US-MOD-007.md
 
 2    (manual)              Revisar e finalizar features F01-F05:             CONCLUIDO
-                           - F01: API Enquadradores + Objetos + Incidencias  5/5 APPROVED
+                           - F01: API Enquadradores + Objetos + Incidencias  5/5 READY
                            - F02: API Rotinas + Itens + Versionamento
                            - F03: Motor de Avaliacao (runtime)
                            - F04: UX Configurador de Enquadradores
@@ -197,8 +197,8 @@ O modulo foi promovido a READY em 2026-03-23 via `/promote-module`. Todos os cri
 | DoR-1 | 0 pendentes ABERTA ou EM_ANALISE | SIM | 9/9 IMPLEMENTADA |
 | DoR-2 | Todos os pilares com artefato | SIM | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1) = 10/10 |
 | DoR-3 | ADRs minimos para Nivel 2 (3+) | SIM | 6 ADRs (ADR-001 a ADR-006) |
-| DoR-4 | Epico APPROVED | SIM | US-MOD-007 APPROVED v1.3.0 |
-| DoR-5 | Todas as features APPROVED | SIM | 5/5 APPROVED |
+| DoR-4 | Epico READY | SIM | US-MOD-007 READY v1.4.0 |
+| DoR-5 | Todas as features READY | SIM | 5/5 READY |
 | DoR-6 | Screen Manifests validados | SIM | 2/2 PASS (ux-param-001, ux-rotina-001) |
 | DoR-7 | /qa verde | SIM | validate-all PASS 2026-03-22 |
 
@@ -206,7 +206,7 @@ O modulo foi promovido a READY em 2026-03-23 via `/promote-module`. Todos os cri
 
 ### Fase 5: Geracao de Codigo — NAO INICIADA
 
-O modulo esta READY (v1.0.0), o que habilita a geracao de codigo. Contudo, o scaffold de aplicacoes (`apps/api/` e `apps/web/`) ainda nao existe — pre-requisito para qualquer agente COD. MOD-007 e Nivel 2 (DDD-lite + Full Clean), portanto todos os 6 agentes de codigo sao aplicaveis: AGN-COD-DB, AGN-COD-CORE, AGN-COD-APP, AGN-COD-API, AGN-COD-WEB, AGN-COD-VAL. O slug do modulo e `contextual-params` (resolvido de `apps/api/src/modules/contextual-params/`).
+O modulo esta READY (v1.0.0), o que habilita a geracao de codigo. O scaffold de aplicacoes (`apps/api/` e `apps/web/`) foi concluido em 2026-03-23. MOD-007 e Nivel 2 (DDD-lite + Full Clean), portanto todos os 6 agentes de codigo sao aplicaveis: AGN-COD-DB, AGN-COD-CORE, AGN-COD-APP, AGN-COD-API, AGN-COD-WEB, AGN-COD-VAL. O slug do modulo e `contextual-params` (resolvido de `apps/api/src/modules/contextual-params/`).
 
 > **Decision tree de codegen:**
 >
@@ -221,11 +221,10 @@ O modulo esta READY (v1.0.0), o que habilita a geracao de codigo. Contudo, o sca
 > ```
 
 ```
-7a   /app-scaffold all     Criar scaffold de aplicacoes:                     A EXECUTAR
-                           - apps/api/ (Fastify + Drizzle + OpenAPI)
+7a   /app-scaffold all     Criar scaffold de aplicacoes:                     CONCLUIDO
+                           - apps/api/ (Fastify + Drizzle + OpenAPI)          2026-03-23
                            - apps/web/ (React + Vite)
                            - package.json, tsconfig.json, estrutura base
-                           Pre-requisito: one-time, compartilhado por todos os modulos
 
 7b   /codegen mod-007      Gerar codigo do modulo (6 agentes):               A EXECUTAR
                            Slug: contextual-params
@@ -249,8 +248,8 @@ O modulo esta READY (v1.0.0), o que habilita a geracao de codigo. Contudo, o sca
 
 **Scaffold e pre-requisitos:**
 
-- `apps/api/package.json` — NAO EXISTE (requer `/app-scaffold all`)
-- `apps/web/package.json` — NAO EXISTE (requer `/app-scaffold all`)
+- `apps/api/package.json` — EXISTE (scaffold concluido 2026-03-23)
+- `apps/web/package.json` — EXISTE (scaffold concluido 2026-03-23)
 - Ordem topologica: MOD-007 esta na camada 5. Dependencias upstream (MOD-000 a MOD-006) devem ter codigo gerado antes para que imports e tipos compartilhados estejam disponiveis.
 
 **Validacoes pos-codegen:**
@@ -331,8 +330,8 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ainda.
   [Fase 0]         [Fase 1]         [Fase 2]           [Fase 3]         [Fase 4]         [Fase 5]         [Fase 6]
   Pre-Modulo  -->  Genese     -->  Enriquecimento -->  Validacao   -->  Promocao   -->  Codegen    -->  Pos-READY
   CONCLUIDA        CONCLUIDA       CONCLUIDA           CONCLUIDA        CONCLUIDA        <<<AQUI>>>      SOB DEMANDA
-  Epico APPROVED   Scaffold v0.1   11 agentes OK       validate-all     READY v1.0.0     scaffold?       amendments
-  5/5 features     9 tabelas       6 ADRs, 9 PEN       PASS 2026-03-22  DoR 7/7 OK       6 agentes COD   quando necessario
+  Epico READY      Scaffold v0.1   11 agentes OK       validate-all     READY v1.0.0     scaffold OK     amendments
+  5/5 READY        9 tabelas       6 ADRs, 9 PEN       PASS 2026-03-22  DoR 7/7 OK       6 agentes COD   quando necessario
 
   Dependencias upstream: MOD-000 → MOD-003 → MOD-004 → MOD-005 → MOD-006 → MOD-007
   Camada topologica: 5
@@ -354,7 +353,7 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ainda.
 
 ## Checklist Rapido — O que Falta para Codegen
 
-- [ ] Executar `/app-scaffold all` (scaffold de apps/ — one-time, compartilhado)
+- [x] Executar `/app-scaffold all` — scaffold apps/ concluido (2026-03-23)
 - [ ] Garantir que MOD-000..MOD-006 tenham codigo gerado (ordem topologica)
 - [ ] Executar `/codegen mod-007` (6 agentes: DB → CORE → APP → API → WEB → VAL)
 - [ ] Executar `/validate-drizzle` pos-codegen (schema.ts)
@@ -367,6 +366,7 @@ O modulo foi promovido a READY em 2026-03-23. Nenhum amendment foi criado ainda.
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 4.0.0 | 2026-03-23 | Atualizacao: Epico promovido APPROVED→READY v1.4.0, Features F01-F05 promovidas APPROVED→READY, CHANGELOG E5 verde, execution-state atualizado com secao promotion, INDEX.md sincronizado |
 | 3.0.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (modulo promovido a READY v1.0.0 em 2026-03-23), Fase 5 (Codegen) adicionada como NAO INICIADA com rastreio de 6 agentes COD, checklist reorientado para codegen |
 | 2.0.0 | 2026-03-23 | Recriacao: Fases 0-3 CONCLUIDAS (validate-all PASS 2026-03-22), Fase 4 PENDENTE, PENDENTE-007/008/009 agora IMPLEMENTADA (0 abertas), DoR 7/7 atendido, modulo elegivel para promocao |
 | 1.0.0 | 2026-03-22 | Criacao completa: Fases 0-2 CONCLUIDAS, Fase 3 PENDENTE, detalhamento completo das 8 pendentes (6 resolvidas + 2 abertas), rastreio de 10 agentes, mapa de cobertura de 5 validadores, particularidades Nivel 2 DDD-lite, 4 gaps enderecados, 6 ADRs, motor sem cache, conflito 2 camadas |

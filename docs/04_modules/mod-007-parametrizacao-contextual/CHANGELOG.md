@@ -24,7 +24,7 @@ flowchart TD
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
+    style E5  fill:#27AE60,color:#fff,stroke:#1E8449
     style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
 ```
 

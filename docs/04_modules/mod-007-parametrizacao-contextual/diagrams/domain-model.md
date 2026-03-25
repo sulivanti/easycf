@@ -1,5 +1,51 @@
 # MOD-007 — Modelo de Domínio
 
+## Motor de Avaliação (6 Passos)
+
+```mermaid
+graph TD
+    START(("Evento<br/>disparado"))
+    S1["1. Encontrar Regras Ativas<br/>IncidenceRule.status=ACTIVE<br/>triggerEvent match"]
+    S2["2. Encontrar Rotinas Publicadas<br/>BehaviorRoutine.status=PUBLISHED<br/>vinculadas às regras"]
+    S3["3. Avaliar RoutineItems<br/>conditionExpr · ordem<br/>7 tipos × 8 ações"]
+    S4["4. Resolver Conflitos<br/>mais restritivo vence<br/>isBlocking prevalece"]
+    S5["5. Montar Resposta<br/>ações a aplicar<br/>validationMessages"]
+    S6["6. Emitir DomainEvents<br/>ROUTINE_EVALUATED<br/>ITEM_APPLIED · ITEM_BLOCKED"]
+
+    START --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+    S5 --> S6
+
+    CF["CONTEXT_FRAMER<br/>contextualiza avaliação<br/>framerType · validFrom/Until"]
+    TF["TARGET_FIELD<br/>campo alvo da ação"]
+
+    CF -.->|"contextualiza"| S3
+    TF -.->|"campo alvo"| S3
+
+    classDef start fill:#2d6a4f,stroke:#1b4332,color:#fff
+    classDef step1 fill:#E67E22,stroke:#CA6F1E,color:#fff
+    classDef step2 fill:#D4721E,stroke:#BA6118,color:#fff
+    classDef step3 fill:#C0651A,stroke:#A85716,color:#fff
+    classDef step4 fill:#AD5916,stroke:#964D12,color:#fff
+    classDef step5 fill:#994D12,stroke:#84410E,color:#fff
+    classDef step6 fill:#85410E,stroke:#72360A,color:#fff
+    classDef support fill:#3498DB,stroke:#2980B9,color:#fff
+
+    class START start
+    class S1 step1
+    class S2 step2
+    class S3 step3
+    class S4 step4
+    class S5 step5
+    class S6 step6
+    class CF,TF support
+```
+
+## Entidades e Relacionamentos
+
 ```mermaid
 erDiagram
     BEHAVIOR_ROUTINE ||--o{ ROUTINE_ITEM : "contém ações"

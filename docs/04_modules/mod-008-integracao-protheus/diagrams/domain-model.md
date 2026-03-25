@@ -1,5 +1,48 @@
 # MOD-008 — Modelo de Domínio
 
+## Pipeline de Integração (Outbox Pattern)
+
+```mermaid
+graph LR
+    CE["CaseEvent<br/>MOD-006 dispara"]
+    OB["Outbox<br/>INSERT log in TX<br/>status=QUEUED"]
+    BQ["BullMQ Queue<br/>job enfileirado"]
+    HC["HTTP Call<br/>httpMethod · endpoint"]
+
+    OK["SUCCESS<br/>httpStatus · response"]
+    FAIL["FAILED<br/>errorMessage"]
+    RT["Retry<br/>exponential backoff<br/>retryCount++"]
+    DLQ["DLQ<br/>Dead Letter Queue<br/>status=DLQ"]
+    RR["Reprocess Request<br/>requestedBy · motivo"]
+
+    CE --> OB
+    OB --> BQ
+    BQ --> HC
+    HC -->|"2xx"| OK
+    HC -->|"erro"| FAIL
+    FAIL -->|"retry < max"| RT
+    RT -->|"re-enfileira"| BQ
+    FAIL -->|"retry >= max"| DLQ
+    DLQ -.->|"manual"| RR
+    RR -.->|"re-enfileira"| BQ
+
+    classDef source fill:#2d6a4f,stroke:#1b4332,color:#fff
+    classDef queue fill:#40916c,stroke:#2d6a4f,color:#fff
+    classDef httpcall fill:#52b788,stroke:#40916c,color:#fff
+    classDef success fill:#27AE60,stroke:#1E8449,color:#fff
+    classDef fail fill:#E74C3C,stroke:#CB4335,color:#fff
+    classDef dlq fill:#E67E22,stroke:#CA6F1E,color:#fff
+
+    class CE source
+    class OB,BQ queue
+    class HC httpcall
+    class OK success
+    class FAIL,RT fail
+    class DLQ,RR dlq
+```
+
+## Entidades e Relacionamentos
+
 ```mermaid
 erDiagram
     INTEGRATION_SERVICE ||--o{ INTEGRATION_ROUTINE : "destino"

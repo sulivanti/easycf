@@ -1,5 +1,44 @@
 # MOD-004 — Modelo de Domínio
 
+## 3 Mecanismos de Controle de Acesso
+
+```mermaid
+graph TD
+    U["USER<br/>identidade base"]
+
+    subgraph BINDING ["OrgScope — Binding Organizacional"]
+        UOS["USER_ORG_SCOPE<br/>PRIMARY | SECONDARY<br/>validFrom · validUntil"]
+        OU["ORG_UNIT<br/>N1–N4"]
+    end
+
+    subgraph SHARING ["AccessShare — Compartilhamento Controlado"]
+        AS["ACCESS_SHARE<br/>resourceType · allowedActions<br/>reason obrigatório<br/>validUntil obrigatório"]
+    end
+
+    subgraph DELEGATION ["AccessDelegation — Delegação Temporária"]
+        AD["ACCESS_DELEGATION<br/>delegatedScopes subset<br/>reason obrigatório<br/>validUntil obrigatório"]
+        RO["ROLE<br/>papel delegado"]
+    end
+
+    U -->|"binding N1–N4"| UOS
+    UOS -->|"vinculado a"| OU
+    U -->|"grantor/grantee"| AS
+    U -->|"delegator/delegatee"| AD
+    AD -->|"papel delegado"| RO
+
+    classDef user fill:#1B4F72,stroke:#154360,color:#fff
+    classDef binding fill:#2E86C1,stroke:#2471A3,color:#fff
+    classDef sharing fill:#27AE60,stroke:#1E8449,color:#fff
+    classDef deleg fill:#8E44AD,stroke:#7D3C98,color:#fff
+
+    class U user
+    class UOS,OU binding
+    class AS sharing
+    class AD,RO deleg
+```
+
+## Entidades e Relacionamentos
+
 ```mermaid
 erDiagram
     USER ||--o{ USER_ORG_SCOPE : "binding"

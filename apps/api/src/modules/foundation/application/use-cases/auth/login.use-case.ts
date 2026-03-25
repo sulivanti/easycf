@@ -21,6 +21,8 @@ import type {
   SessionRepository,
   DomainEventRepository,
   UnitOfWork,
+  TenantUserRepository,
+  RoleRepository,
 } from '../../ports/repositories.js';
 import type { PasswordHashService, TokenService, TokenPair } from '../../ports/services.js';
 
@@ -66,6 +68,8 @@ export class LoginUseCase {
     private readonly uow: UnitOfWork,
     private readonly hashService: PasswordHashService,
     private readonly tokenService: TokenService,
+    private readonly tenantUserRepo: TenantUserRepository,
+    private readonly roleRepo: RoleRepository,
   ) {}
 
   async execute(input: LoginInput): Promise<LoginResult> {
@@ -99,7 +103,18 @@ export class LoginUseCase {
       return { mfaRequired: true, tempToken, expiresIn: 300 };
     }
 
-    // 5. Create session + tokens in transaction
+    // 5. Resolve active tenant + scopes for JWT (FR-000-C05)
+    const tenantUsers = await this.tenantUserRepo.findByUserId(user.id);
+    const activeTenantUser = tenantUsers.find(tu => tu.status === 'ACTIVE');
+    if (!activeTenantUser) {
+      throw new AuthenticationFailedError();
+    }
+
+    const role = await this.roleRepo.findById(activeTenantUser.roleId);
+    const scopes = role?.scopes?.map((s: { value: string }) => s.value) ?? [];
+    const tenantId = activeTenantUser.tenantId;
+
+    // 6. Create session + tokens in transaction
     return this.uow.transaction(async (tx) => {
       const session = Session.create(user.id, input.rememberMe ?? false, input.deviceFp);
       const created = await this.sessionRepo.create(session.toProps(), tx);
@@ -107,12 +122,14 @@ export class LoginUseCase {
       const tokenPair = await this.tokenService.generatePair({
         userId: user.id,
         sessionId: created.id,
+        tenantId,
+        scopes,
       });
 
       // Emit domain events
       await this.eventRepo.create(
         createFoundationEvent({
-          tenantId: '', // resolved by caller/middleware
+          tenantId,
           entityType: 'session',
           entityId: created.id,
           eventType: 'auth.login_success',
@@ -129,7 +146,7 @@ export class LoginUseCase {
 
       await this.eventRepo.create(
         createFoundationEvent({
-          tenantId: '',
+          tenantId,
           entityType: 'session',
           entityId: created.id,
           eventType: 'session.created',

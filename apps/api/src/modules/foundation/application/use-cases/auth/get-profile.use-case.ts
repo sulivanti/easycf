@@ -10,6 +10,7 @@ import type {
   UserRepository,
   TenantUserRepository,
   RoleRepository,
+  TenantRepository,
 } from '../../ports/repositories.js';
 import type { CacheService } from '../../ports/services.js';
 
@@ -21,11 +22,9 @@ export interface GetProfileInput {
 export interface ProfileOutput {
   readonly id: string;
   readonly email: string;
-  readonly codigo: string;
-  readonly fullName: string;
+  readonly name: string;
   readonly avatarUrl: string | null;
-  readonly status: string;
-  readonly activeTenantId: string | null;
+  readonly tenant: { readonly id: string; readonly name: string } | null;
   readonly scopes: readonly string[];
 }
 
@@ -35,6 +34,7 @@ export class GetProfileUseCase {
     private readonly tenantUserRepo: TenantUserRepository,
     private readonly roleRepo: RoleRepository,
     private readonly cache: CacheService,
+    private readonly tenantRepo: TenantRepository,
   ) {}
 
   async execute(input: GetProfileInput): Promise<ProfileOutput> {
@@ -43,8 +43,9 @@ export class GetProfileUseCase {
       throw new EntityNotFoundError('User', input.userId);
     }
 
-    // Resolve scopes for active tenant (BR-011: cached in Redis)
+    // Resolve scopes + tenant for active tenant (BR-011: cached in Redis)
     let scopes: readonly string[] = [];
+    let tenant: { id: string; name: string } | null = null;
 
     if (input.activeTenantId) {
       const binding = await this.tenantUserRepo.findByKey(input.userId, input.activeTenantId);
@@ -58,17 +59,21 @@ export class GetProfileUseCase {
           },
           300, // 5min TTL
         );
+
+        // Resolve tenant name (FR-000-C02)
+        const tenantProps = await this.tenantRepo.findById(input.activeTenantId);
+        if (tenantProps) {
+          tenant = { id: tenantProps.id, name: tenantProps.name };
+        }
       }
     }
 
     return {
       id: userProps.id,
       email: userProps.email.value,
-      codigo: userProps.codigo,
-      fullName: userProps.profile?.fullName ?? '',
+      name: userProps.profile?.fullName ?? '',
       avatarUrl: userProps.profile?.avatarUrl ?? null,
-      status: userProps.status,
-      activeTenantId: input.activeTenantId ?? null,
+      tenant,
       scopes,
     };
   }

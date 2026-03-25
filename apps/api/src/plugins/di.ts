@@ -341,10 +341,10 @@ async function diPluginImpl(app: FastifyInstance): Promise<void> {
   const eventRepo = new DrizzleDomainEventRepository(db);
   const passwordResetTokenRepo = new StubPasswordResetTokenRepository();
 
-  const loginUseCase = new LoginUseCase(userRepo, sessionRepo, eventRepo, uow, hashService, tokenService);
+  const loginUseCase = new LoginUseCase(userRepo, sessionRepo, eventRepo, uow, hashService, tokenService, tenantUserRepo, roleRepo);
   const logoutUseCase = new LogoutUseCase(sessionRepo, eventRepo);
   const refreshTokenUseCase = new RefreshTokenUseCase(sessionRepo, eventRepo, uow, tokenService);
-  const getProfileUseCase = new GetProfileUseCase(userRepo, tenantUserRepo, roleRepo, cache);
+  const getProfileUseCase = new GetProfileUseCase(userRepo, tenantUserRepo, roleRepo, cache, tenantRepo);
   const updateProfileUseCase = new UpdateProfileUseCase(userRepo, eventRepo, uow);
   const changePasswordUseCase = new ChangePasswordUseCase(userRepo, eventRepo, uow, hashService);
   const forgotPasswordUseCase = new ForgotPasswordUseCase(userRepo, passwordResetTokenRepo, eventRepo, uow, hashUtil, emailService);

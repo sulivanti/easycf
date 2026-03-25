@@ -1847,11 +1847,14 @@ components:
       properties:
         id: { type: string, format: uuid }
         email: { type: string, format: email }
-        codigo: { type: string }
-        full_name: { type: string }
+        name: { type: string }
         avatar_url: { type: string, nullable: true }
-        status: { type: string }
-        active_tenant_id: { type: string, format: uuid, nullable: true }
+        tenant:
+          type: object
+          nullable: true
+          properties:
+            id: { type: string, format: uuid }
+            name: { type: string }
         scopes: { type: array, items: { type: string } }
 
     UpdateProfileRequest:

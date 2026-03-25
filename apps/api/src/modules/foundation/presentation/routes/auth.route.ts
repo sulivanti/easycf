@@ -176,11 +176,9 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       return reply.status(200).send({
         id: result.id,
         email: result.email,
-        codigo: result.codigo,
-        full_name: result.fullName,
+        name: result.name,
         avatar_url: result.avatarUrl,
-        status: result.status,
-        active_tenant_id: result.activeTenantId,
+        tenant: result.tenant,
         scopes: result.scopes,
       });
     },
@@ -215,11 +213,9 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       return reply.status(200).send({
         id: profile.id,
         email: profile.email,
-        codigo: profile.codigo,
-        full_name: profile.fullName,
+        name: profile.name,
         avatar_url: profile.avatarUrl,
-        status: profile.status,
-        active_tenant_id: profile.activeTenantId,
+        tenant: profile.tenant,
         scopes: profile.scopes,
       });
     },

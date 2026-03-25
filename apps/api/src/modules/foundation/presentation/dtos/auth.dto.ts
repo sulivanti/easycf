@@ -51,11 +51,12 @@ export const refreshResponse = z.object({
 export const profileResponse = z.object({
   id: z.string().uuid(),
   email: z.string().email(),
-  codigo: z.string(),
-  full_name: z.string(),
+  name: z.string(),
   avatar_url: z.string().nullable(),
-  status: z.string(),
-  active_tenant_id: z.string().uuid().nullable(),
+  tenant: z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+  }).nullable(),
   scopes: z.array(z.string()),
 });
 

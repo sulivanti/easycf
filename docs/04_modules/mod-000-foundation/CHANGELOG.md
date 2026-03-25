@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.7.7 | 2026-03-25 | create-amendment | Amendment FR-000-C05: LoginUseCase resolve tenant/scopes antes de gerar JWT. Novas deps: TenantUserRepository + RoleRepository. JWT agora contém `tid` e `scopes`. Ref: spec-fix-auth-flow-session-expired Fase 2. |
 | 1.7.6 | 2026-03-25 | merge-amendment | Merge INT-000-C01: nova INT-005 Auth Refresh API — schema `RefreshResponse` sem `user`. OpenAPI v1.yaml atualizado. Base INT-000 bumped para v0.3.1. Derivado de FR-000-C04. |
 | 1.7.5 | 2026-03-25 | merge-amendment | Merge FR-000-C04: FR-001 anotação snake_case, FR-003 contrato refresh explicitado sem `user` (schema `refreshResponse` separado). Base FR-000 bumped para v0.9.2. |
 | 1.7.4 | 2026-03-25 | cascade-amendment | Cascade de FR-000-C04: 1 amendment derivado criado — INT-000-C01 (OpenAPI v1.yaml: trocar LoginResponse por RefreshResponse no endpoint /auth/refresh). |

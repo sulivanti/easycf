@@ -51,7 +51,7 @@ services:
       REDIS_URL: redis://redis:6379
     networks:
       - internal
-      - web
+      - proxy-nw
     depends_on:
       postgres:
         condition: service_healthy
@@ -68,14 +68,14 @@ services:
     ports:
       - "8080:80"
     networks:
-      - web
+      - proxy-nw
     restart: unless-stopped
 
 networks:
   internal:
     driver: bridge
-  web:
-    driver: bridge
+  proxy-nw:
+    external: true
 
 volumes:
   pg-data:

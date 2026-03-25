@@ -1,9 +1,9 @@
 # DOC-GNP-00 — Guia Normativo e Padrões (TS + Node + Vite/React)
 
 - **id:** DOC-GNP-00
-- **version:** 2.0.0
+- **version:** 2.1.0
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-02-20
+- **data_ultima_revisao:** 2026-03-25
 - **owner:** arquitetura
 - **scope:** global (padronização do produto final em monorepo)
 
@@ -41,6 +41,28 @@ Script de verificação (Node) que falha se referenciar ID inexistente (gate de 
 ## 2) CI/CD — gates mínimos (referência)
 
 - OpenAPI lint/validação (Spectral + validate) e rastreabilidade de IDs (EX-CI-006, EX-CI-007).
+
+### 2.1) Artefatos Obrigatórios por Workspace (Gate de Build)
+
+Todo workspace DEVE ter seus artefatos mínimos presentes antes de merge na branch principal. A ausência impede o build Docker e o deploy.
+
+#### Workspace `apps/api/`
+
+| Artefato | Obrigatório | Descrição |
+|----------|-------------|-----------|
+| `src/index.ts` | ✅ | Entry point Fastify. Referenciado pelo `build` script do `package.json`. Sem ele, `tsup` falha. |
+| `drizzle.config.ts` | ✅ | Configuração do Drizzle Kit. Sem ele, `drizzle-kit push` e `drizzle-kit generate` falham. |
+| `db/schema/index.ts` | ✅ | Barrel export de todos os schemas Drizzle. Referenciado pelo `drizzle.config.ts`. |
+| `db/seed-admin.ts` | ✅ | Seed script para criar admin + tenant + role iniciais no primeiro deploy. |
+
+#### Workspace `apps/web/`
+
+| Artefato | Obrigatório | Descrição |
+|----------|-------------|-----------|
+| `index.html` | ✅ | Entry point do Vite. Sem ele, `vite build` falha. |
+| `src/main.tsx` | ✅ | Bootstrap React com auth context inicializado do localStorage. |
+| `src/routes/index.tsx` | ✅ | Rota raiz `/` com redirect para `/login` ou `/dashboard`. |
+| `src/routes/login.tsx` | ✅ | Rota de login importando `LoginPage` do módulo foundation (NÃO inline). |
 
 ---
 

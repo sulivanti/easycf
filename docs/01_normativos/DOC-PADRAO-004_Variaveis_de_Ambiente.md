@@ -1,9 +1,9 @@
 # DOC-PADRAO-004 — Padrões de Variáveis de Ambiente e Configuração
 
 - **id:** DOC-PADRAO-004
-- **version:** 2.0.0
+- **version:** 2.1.0
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-06
+- **data_ultima_revisao:** 2026-03-25
 - **owner:** infraestrutura
 - **scope:** global (variáveis de ambiente e configuração)
 
@@ -66,13 +66,13 @@ O catálogo abaixo mapeia todas as variáveis do `.env.example`. A coluna **Obri
 | `POSTGRES_USER` | ✅ | `admin` | Usuário do PostgreSQL |
 | `POSTGRES_PASSWORD` | ✅ | — | Senha do PostgreSQL |
 | `POSTGRES_DB` | ✅ | — | Nome do banco de dados |
-| `DATABASE_URL` | ✅ | — | String de conexão Drizzle ORM (`postgresql://user:pass@host:port/db`) |
+| `DATABASE_URL` | ✅ | — | String de conexão Drizzle ORM (`postgresql://user:pass@host:port/db`). **Em Docker:** usar hostname do container (`postgres`), não `localhost`. |
 
 ### 3.4. Cache e Fila (Redis)
 
 | Variável | Obrigatória | Padrão | Descrição |
 |---|---|---|---|
-| `REDIS_URL` | ✅ | `redis://localhost:6379` | URL de conexão com o Redis |
+| `REDIS_URL` | ✅ | `redis://localhost:6379` | URL de conexão com o Redis. **Em Docker:** usar `redis://redis:6379` (hostname do container). |
 
 ### 3.5. Segurança (JWT)
 
@@ -123,7 +123,7 @@ O catálogo abaixo mapeia todas as variáveis do `.env.example`. A coluna **Obri
 
 | Variável | Obrigatória | Padrão | Descrição |
 |---|---|---|---|
-| `PUBLIC_REGISTRATION_ENABLED` | — | `true` | Permite que novos usuários se cadastrem sem convite |
+| `PUBLIC_REGISTRATION_ENABLED` | — | `true` | Permite que novos usuários se cadastrem sem convite. **Status: PENDENTE DE IMPLEMENTAÇÃO** — variável definida mas não consumida pelo código. O endpoint `POST /api/v1/users` é público independentemente deste valor. |
 
 ### 3.11. Storage e Upload de Arquivos
 
@@ -150,6 +150,20 @@ Ver documentação completa em [DOC-PADRAO-005](./DOC-PADRAO-005_Storage_e_Uploa
 | `STORAGE_SCAN_ENDPOINT` | ✅* | — | Endpoint do serviço de scan (ex: ClamAV) |
 
 > ✅* = Obrigatória apenas quando `STORAGE_SCAN_ENABLED=true`.
+
+---
+
+## 3.12. Hostnames em Ambientes Docker
+
+Quando a aplicação roda em containers Docker, os hostnames das dependências mudam de `localhost` para os **nomes dos serviços** definidos no `docker-compose.yml`:
+
+| Ambiente | Host Postgres | Host Redis | Exemplo DATABASE_URL |
+|----------|--------------|------------|---------------------|
+| Local (sem Docker) | `localhost` | `localhost` | `postgresql://admin:pass@localhost:5432/ecf` |
+| Docker Compose (dev) | `postgres` | `redis` | `postgresql://admin:pass@postgres:5432/ecf` |
+| Docker Compose (prod) | `postgres` | `redis` | `postgresql://admin:pass@postgres:5432/ecf` |
+
+> **Regra:** O `docker-compose.prod.yml` DEVE sobrescrever `DATABASE_URL` e `REDIS_URL` na seção `environment` do serviço `api` para usar hostnames de container, independentemente do que estiver no `.env`.
 
 ---
 

@@ -1,9 +1,9 @@
 # DOC-UX-011 — Padrões de Application Shell e Navegação
 
 - **id:** DOC-UX-011
-- **version:** 1.1.0
+- **version:** 1.2.0
 - **status:** READY
-- **data_ultima_revisao:** 2026-03-24
+- **data_ultima_revisao:** 2026-03-25
 - **owner:** produto + arquitetura + UX
 - **scope:** global (Application Shell e navegação)
 
@@ -41,11 +41,14 @@ A árvore de rotas reside em `apps/web/src/routes/` com a seguinte estrutura bas
 ```
 src/routes/
 ├── __root.tsx          ← Layout raiz (Application Shell)
+├── index.tsx           ← Rota raiz / → redirect para /login ou /dashboard
 ├── _auth.tsx           ← Layout autenticado (sidebar + header)
 ├── _auth.dashboard.tsx ← Dashboard pós-login
 ├── login.tsx           ← Página de login (rota pública)
 └── _auth.{module}/     ← Rotas de cada módulo (lazy-loaded)
 ```
+
+> **REGRA OBRIGATÓRIA:** A rota `index.tsx` (path `/`) DEVE existir e redirecionar para `/login` (se não autenticado) ou `/dashboard` (se autenticado). Sem ela, o TanStack Router retorna "Not Found" ao acessar a raiz do domínio.
 
 #### Code Splitting
 
@@ -119,6 +122,8 @@ Aplicado na rota `/login`. Redireciona usuários já autenticados para o dashboa
 
 ```typescript
 // src/routes/login.tsx
+import { LoginPage } from '@modules/foundation/pages/login/LoginPage';
+
 export const Route = createFileRoute('/login')({
   beforeLoad: async ({ context }) => {
     if (context.auth.user) {
@@ -128,6 +133,8 @@ export const Route = createFileRoute('/login')({
   component: LoginPage,
 });
 ```
+
+> **PROIBIDO:** Route files NÃO DEVEM conter formulários HTML inline ou componentes de página embutidos. O `component` DEVE sempre importar o Page Component real do módulo correspondente (ex: `@modules/foundation/pages/login/LoginPage`). Formulários inline em route files são placeholders que silenciosamente não funcionam em produção.
 
 #### ScopeGuard
 
@@ -199,8 +206,10 @@ Quando a automação do framework gerar um frontend vazio para um novo projeto, 
 - **[CA-02]** O armazenamento do array de permissões (via Router Context do `@tanstack/react-router`) está implementado e alimentado logo no load principal da aplicação.
 - **[CA-03]** Componente de Menu lateral aceita um prop/array de rotas e filtra internamente baseado nas guards de escopo (`scopes`).
 - **[CA-04]** A URL `/` em ambiente autenticado aciona um Dashboard amigável lendo os dados de perfil (DOC-FND-000 §1.2 — `GET /auth/me`).
-- **[CA-05]** Navegação in-app DEVE usar `<Link>` ou `router.navigate()` do `@tanstack/react-router`. O uso de `window.location.href` para navegação interna é **PROIBIDO**.
+- **[CA-05]** Navegação in-app DEVE usar `<Link>` ou `router.navigate()` do `@tanstack/react-router`. O uso de `window.location.href` para navegação interna é **PROIBIDO**, exceto após login bem-sucedido onde é necessário full reload para reler o auth context do localStorage.
 - **[CA-06]** Rotas de módulo DEVEM ser lazy-loaded via `lazy()` do TanStack Router. O bundle principal não deve incluir código de módulos individuais.
+- **[CA-07]** Route files (`src/routes/*.tsx`) DEVEM importar Page Components dos módulos. É **PROIBIDO** embutir formulários, lógica de negócio ou componentes de página inline em route files. Route files são apenas wrappers de roteamento.
+- **[CA-08]** A rota raiz `/` (index.tsx) DEVE existir com redirect para `/login` ou `/dashboard`.
 
 ---
 
@@ -212,5 +221,6 @@ Quando a automação do framework gerar um frontend vazio para um novo projeto, 
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.2.0 | 2026-03-25 | Amendment M02: Rota index obrigatória, proibição de formulários inline em route files, exceção window.location.href pós-login, novos CA-07 e CA-08. Lições do primeiro deploy em produção. |
 | 1.1.0 | 2026-03-24 | Amendment M01: §2.2 Estratégia de Roteamento SPA, §3.3 Route Guards, CA-02 atualizado para Router Context, novos CA-05 e CA-06 |
 | 1.0.0 | 2026-03-06 | Versão inicial |

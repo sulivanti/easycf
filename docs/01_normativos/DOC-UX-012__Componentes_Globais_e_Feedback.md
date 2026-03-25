@@ -1,9 +1,9 @@
 # DOC-UX-012 — Componentes Globais e Feedback
 
 - **id:** DOC-UX-012
-- **version:** 1.1.0
+- **version:** 1.2.0
 - **status:** READY
-- **data_ultima_revisao:** 2026-03-24
+- **data_ultima_revisao:** 2026-03-25
 - **owner:** produto + arquitetura + UX
 - **scope:** global (componentes globais e feedback visual)
 
@@ -99,6 +99,39 @@ Transições e animações de feedback DEVEM usar a biblioteca `motion` (DOC-PAD
 
 ---
 
+## 5.3 Inicialização do Auth Context (RouterProvider)
+
+O `RouterProvider` do `@tanstack/react-router` recebe um `context` que inclui o estado de autenticação. Este contexto DEVE ser populado **antes** da renderização inicial, lendo tokens persistidos no `localStorage`.
+
+**Regra:** O `main.tsx` (ou componente `App` raiz) DEVE:
+
+1. Verificar se existem tokens válidos em `localStorage` (chave `auth_tokens`).
+2. Decodificar o JWT (payload base64) para extrair `sub` (userId) e demais claims.
+3. Passar o objeto `auth: { user: { id, email } }` ao `RouterProvider` via prop `context`.
+4. Se não houver tokens, passar `auth: { user: null }`.
+
+```typescript
+// apps/web/src/main.tsx
+function getAuthFromStorage(): AuthContext {
+  try {
+    const raw = localStorage.getItem('auth_tokens');
+    if (!raw) return { user: null };
+    const { access_token } = JSON.parse(raw);
+    if (!access_token) return { user: null };
+    const payload = JSON.parse(atob(access_token.split('.')[1]));
+    return { user: { id: payload.sub, email: payload.email ?? '' } };
+  } catch {
+    return { user: null };
+  }
+}
+```
+
+> **Atenção:** Sem esta inicialização, o guard `_auth.tsx` sempre verá `user: null` e redirecionará para `/login` infinitamente, mesmo após login bem-sucedido.
+
+**Pós-login:** Como o `context` é lido apenas na montagem do `App`, após salvar tokens no `localStorage` o login DEVE usar `window.location.href = '/'` para forçar full reload e reler o context. Esta é a **única exceção** à regra de DOC-UX-011 CA-05 que proíbe `window.location.href`.
+
+---
+
 ## 6. Critérios de Aceitação para o Gerador (Scaffold CLI)
 
 Quando os geradores (Agente COD / CLI) criarem código de UI de base para projetos usando EasyCodeFramework, esses padrões serão validados da seguinte forma:
@@ -108,6 +141,7 @@ Quando os geradores (Agente COD / CLI) criarem código de UI de base para projet
 - **[CA-03]** Tema selecionado persiste quando uma página individual (Page Refresh F5) é recarregada manualmente.
 - **[CA-04]** Componentes de Botões gerados (`Button` exportado em `@shared/ui/`) aceitam prop unificada `isLoading=true` desativando a própria interação. O Spinner integrado DEVE ser animado via `motion` ou `animate-spin` do Tailwind.
 - **[CA-05]** Inline `style={{}}` é **PROIBIDO** para layout, cor e tipografia. Todo styling DEVE usar classes Tailwind CSS. Ver DOC-UX-013 §3.4 para exceções permitidas.
+- **[CA-06]** O `main.tsx` DEVE inicializar o auth context do `RouterProvider` lendo tokens do `localStorage`. O context `auth.user` NUNCA deve ser hardcoded como `null` — deve refletir o estado real de autenticação.
 
 ---
 
@@ -119,5 +153,6 @@ Quando os geradores (Agente COD / CLI) criarem código de UI de base para projet
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.2.0 | 2026-03-25 | Amendment M02: Nova §5.3 Inicialização do Auth Context (RouterProvider), novo CA-06 obrigando leitura de tokens do localStorage no main.tsx. Lições do primeiro deploy. |
 | 1.1.0 | 2026-03-24 | Amendment M01: §4.1 referencia DOC-UX-013 §5, nova §4.2 Shared Component Library, nova §5.2 Requisitos de Animação, CA-04 expandido com Spinner animado, novo CA-05 proibindo inline styles |
 | 1.0.0 | 2026-03-06 | Versão inicial |

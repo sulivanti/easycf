@@ -6,6 +6,7 @@
 // Wired: MOD-000, MOD-003, MOD-004, MOD-005, MOD-006, MOD-007, MOD-008, MOD-009, MOD-010
 
 import type { FastifyInstance } from 'fastify';
+import fp from 'fastify-plugin';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
@@ -306,7 +307,7 @@ import { GetCallLogMetricsUseCase } from '../modules/integration-protheus/applic
 // Plugin
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export async function diPlugin(app: FastifyInstance): Promise<void> {
+async function diPluginImpl(app: FastifyInstance): Promise<void> {
   // ─────────────────────────────────────────────────────────────────────────
   // 1. Database connection
   // ─────────────────────────────────────────────────────────────────────────
@@ -783,3 +784,5 @@ export async function diPlugin(app: FastifyInstance): Promise<void> {
   app.decorate('movementApproval', container);
   app.decorate('mcpAutomation', container);
 }
+
+export const diPlugin = fp(diPluginImpl, { name: 'di-plugin' });

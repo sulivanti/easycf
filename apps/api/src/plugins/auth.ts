@@ -10,11 +10,12 @@
  */
 
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import fp from 'fastify-plugin';
 
-export async function authPlugin(app: FastifyInstance): Promise<void> {
+async function authPluginImpl(app: FastifyInstance): Promise<void> {
   // Decorate request with empty defaults (required by Fastify for type safety)
+  // Note: 'user' is already decorated by @fastify/jwt (decoratorName default)
   app.decorateRequest('session', { tenantId: '', userId: '' });
-  app.decorateRequest('user', { id: '', tenantId: '' });
 
   // verifySession — verifies JWT from cookie or Authorization header
   app.decorate('verifySession', async function verifySession(
@@ -73,3 +74,5 @@ export async function authPlugin(app: FastifyInstance): Promise<void> {
     };
   });
 }
+
+export const authPlugin = fp(authPluginImpl, { name: 'auth-plugin' });

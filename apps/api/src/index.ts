@@ -16,6 +16,10 @@ import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import cookie from '@fastify/cookie';
 import jwt from '@fastify/jwt';
+import {
+  serializerCompiler,
+  validatorCompiler,
+} from 'fastify-type-provider-zod';
 
 // — Auth & DI plugins (DOC-ARC-004 §5) —
 import { authPlugin } from './plugins/auth.js';
@@ -93,6 +97,10 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '15m';
 // ─────────────────────────────────────────────────────────────────────────────
 
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'info' } });
+
+// Zod type provider — converts Zod schemas to JSON Schema for Fastify validation
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
 
 await app.register(helmet);
 await app.register(cors, {

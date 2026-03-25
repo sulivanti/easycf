@@ -189,7 +189,9 @@
       "Bash(find /d/Dev/EasyCodeFramework -type d \\\\\\(-iname *normativa* -o -iname *normativo* -o -iname *standards* -o -iname *standard* \\\\\\))",
       "Bash(find /d/Dev/EasyCodeFramework -maxdepth 2 -type f \\\\\\(-name skills.json -o -name skills.yaml -o -name *skills* \\\\\\))",
       "Bash(npx skills:*)",
-      "Bash(npm list:*)"
+      "Bash(npm list:*)",
+      "Bash(find /d/Dev/EasyCodeFramework/apps/web/src -type f \\\\\\(-name *.ts -o -name *.tsx \\\\\\))",
+      "Bash(2)"
     ]
   },
   "hooks": {

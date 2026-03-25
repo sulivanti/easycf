@@ -4,20 +4,20 @@
 
 ```mermaid
 graph TD
-    START(("Transição<br/>solicitada"))
-    S1{"1. Status = OPEN?"}
-    S2{"2. Transição<br/>válida no grafo?"}
-    S3{"3. Role<br/>autorizado?"}
-    S4{"4. Gates<br/>resolvidos?"}
-    S5{"5. Evidência<br/>fornecida?"}
-    OK["Transição Executada"]
-    TL["3 Timelines Atualizadas<br/>StageHistory · CaseEvent<br/>GateInstance"]
+    START(("Carlos solicita mover<br/>Pedido #1234"))
+    S1{"Pedido #1234<br/>está aberto?"}
+    S2{"Análise Técnica →<br/>Emissão da OC<br/>é transição válida?"}
+    S3{"Carlos (Comprador)<br/>tem permissão?"}
+    S4{"Aprovação do Gerente<br/>já foi concedida?"}
+    S5{"Evidência (3 cotações)<br/>foi anexada?"}
+    OK["Pedido #1234 avança<br/>para Emissão da OC"]
+    TL["Histórico atualizado<br/>Carlos moveu em 15/03<br/>motivo: cotações aprovadas"]
 
-    R1["Rejeitado:<br/>Case não está OPEN"]
-    R2["Rejeitado:<br/>Transição inexistente"]
-    R3["Rejeitado:<br/>Sem permissão"]
-    R4["Rejeitado:<br/>Gates pendentes"]
-    R5["Rejeitado:<br/>Evidência ausente"]
+    R1["Rejeitado:<br/>Pedido já foi concluído"]
+    R2["Rejeitado:<br/>Não pode pular etapas"]
+    R3["Rejeitado:<br/>Carlos não é responsável"]
+    R4["Rejeitado:<br/>Gerente ainda não aprovou"]
+    R5["Rejeitado:<br/>Faltam as 3 cotações"]
 
     START --> S1
     S1 -->|"Sim"| S2

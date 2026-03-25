@@ -20,8 +20,8 @@ graph TD
     N2a --> N3b
     N3a --> N4a
     N3b --> N4b
-    N4a -.->|"OrgUnitTenantLink<br/>(apenas N4→N5)"| N5a
-    N4b -.->|"OrgUnitTenantLink"| N5b
+    N4a -.->|"Vínculo Unidade→Filial<br/>(apenas N4→N5)"| N5a
+    N4b -.->|"Vínculo Unidade→Filial"| N5b
 
     classDef n1 fill:#2d6a4f,stroke:#1b4332,color:#fff
     classDef n2 fill:#40916c,stroke:#2d6a4f,color:#fff

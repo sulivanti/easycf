@@ -4,13 +4,13 @@
 
 ```mermaid
 graph TD
-    START(("Evento<br/>disparado"))
-    S1["1. Encontrar Regras Ativas<br/>IncidenceRule.status=ACTIVE<br/>triggerEvent match"]
-    S2["2. Encontrar Rotinas Publicadas<br/>BehaviorRoutine.status=PUBLISHED<br/>vinculadas às regras"]
-    S3["3. Avaliar RoutineItems<br/>conditionExpr · ordem<br/>7 tipos × 8 ações"]
-    S4["4. Resolver Conflitos<br/>mais restritivo vence<br/>isBlocking prevalece"]
-    S5["5. Montar Resposta<br/>ações a aplicar<br/>validationMessages"]
-    S6["6. Emitir DomainEvents<br/>ROUTINE_EVALUATED<br/>ITEM_APPLIED · ITEM_BLOCKED"]
+    START(("Pedido de Compra<br/>é aberto"))
+    S1["1. Buscar regras ativas<br/>Regra: Compra de Serviço<br/>dispara ao abrir pedido"]
+    S2["2. Buscar rotina publicada<br/>Rotina: Regras de<br/>Serviço Nacional v3"]
+    S3["3. Avaliar cada item da rotina<br/>Campo Projeto → obrigatório<br/>Campo Almoxarifado → oculto<br/>Campo Centro de Custo → derivado"]
+    S4["4. Resolver conflitos<br/>se duas rotinas atuam no<br/>mesmo campo, a mais<br/>restritiva prevalece"]
+    S5["5. Montar resposta<br/>3 campos afetados<br/>1 mensagem de validação"]
+    S6["6. Emitir eventos<br/>Rotina avaliada com sucesso<br/>3 itens aplicados"]
 
     START --> S1
     S1 --> S2
@@ -19,11 +19,11 @@ graph TD
     S4 --> S5
     S5 --> S6
 
-    CF["CONTEXT_FRAMER<br/>contextualiza avaliação<br/>framerType · validFrom/Until"]
-    TF["TARGET_FIELD<br/>campo alvo da ação"]
+    CF["Contexto: Compra de Serviço<br/>ativo desde 01/01<br/>sem data de expiração"]
+    TF["Campo-alvo: Projeto<br/>(do Pedido de Compra)"]
 
     CF -.->|"contextualiza"| S3
-    TF -.->|"campo alvo"| S3
+    TF -.->|"campo afetado"| S3
 
     classDef start fill:#2d6a4f,stroke:#1b4332,color:#fff
     classDef step1 fill:#E67E22,stroke:#CA6F1E,color:#fff

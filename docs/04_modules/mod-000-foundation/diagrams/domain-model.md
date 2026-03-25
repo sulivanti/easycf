@@ -4,22 +4,22 @@
 
 ```mermaid
 graph TD
-    U["USER<br/>id · email · status"]
-    CU["CONTENT_USERS<br/>fullName · cpfCnpj · avatar"]
-    S["SESSION<br/>kill-switch · deviceFp<br/>rememberMe · expiresAt"]
-    TU["TENANT_USER<br/>pivot N:M"]
-    T["TENANT<br/>codigo · status"]
-    R["ROLE<br/>codigo · status"]
-    RP["ROLE_PERMISSION<br/>Scope VO<br/>dominio:entidade:acao"]
-    DE["DOMAIN_EVENTS<br/>36 event types<br/>aggregateId · payload"]
+    U["Ana Silva<br/>(Usuária)"]
+    CU["Perfil de Ana<br/>nome completo, CPF,<br/>foto de avatar"]
+    S["Sessão Ativa<br/>notebook do escritório<br/>expira em 8h"]
+    TU["Ana na Filial SP-01<br/>como Gestora de Compras"]
+    T["Filial SP-01<br/>(Tenant)"]
+    R["Gestor de Compras<br/>(Papel)"]
+    RP["Permissões do Papel<br/>compras:pedido:criar<br/>compras:pedido:aprovar<br/>compras:fornecedor:consultar"]
+    DE["Evento de Domínio<br/>Ana fez login<br/>às 09:15 na Filial SP-01"]
 
-    U -->|"1:1 profile"| CU
-    U -->|"1:N sessions"| S
-    U -->|"N:M via pivot"| TU
-    T -->|"N:M via pivot"| TU
-    R -->|"assigned via"| TU
-    R -->|"has scopes"| RP
-    U -.->|"emite"| DE
+    U -->|"tem perfil"| CU
+    U -->|"sessão ativa"| S
+    U -->|"atua em"| TU
+    T -->|"contém"| TU
+    R -->|"atribuído em"| TU
+    R -->|"possui permissões"| RP
+    U -.->|"gera evento"| DE
 
     classDef user fill:#2d6a4f,stroke:#1b4332,color:#fff
     classDef auth fill:#40916c,stroke:#2d6a4f,color:#fff

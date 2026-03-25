@@ -4,27 +4,27 @@
 
 ```mermaid
 graph LR
-    CE["CaseEvent<br/>MOD-006 dispara"]
-    OB["Outbox<br/>INSERT log in TX<br/>status=QUEUED"]
-    BQ["BullMQ Queue<br/>job enfileirado"]
-    HC["HTTP Call<br/>httpMethod · endpoint"]
+    CE["Pedido #1234 avançou<br/>para Emissão da OC"]
+    OB["Registro na fila<br/>Incluir Pedido no Protheus<br/>aguardando envio"]
+    BQ["Fila de integração<br/>job enfileirado"]
+    HC["Chamada HTTP<br/>POST /api/compras<br/>Protheus Produção"]
 
-    OK["SUCCESS<br/>httpStatus · response"]
-    FAIL["FAILED<br/>errorMessage"]
-    RT["Retry<br/>exponential backoff<br/>retryCount++"]
-    DLQ["DLQ<br/>Dead Letter Queue<br/>status=DLQ"]
-    RR["Reprocess Request<br/>requestedBy · motivo"]
+    OK["Sucesso<br/>SC #8890 criada<br/>no Protheus"]
+    FAIL["Falha<br/>Protheus retornou erro 500"]
+    RT["Tentativa 2 de 5<br/>aguarda 30s antes<br/>de reenviar"]
+    DLQ["Fila de erros<br/>5 tentativas esgotadas<br/>aguardando ação manual"]
+    RR["Ana solicita reprocessamento<br/>motivo: Protheus voltou<br/>após manutenção"]
 
     CE --> OB
     OB --> BQ
     BQ --> HC
-    HC -->|"2xx"| OK
+    HC -->|"sucesso"| OK
     HC -->|"erro"| FAIL
-    FAIL -->|"retry < max"| RT
-    RT -->|"re-enfileira"| BQ
-    FAIL -->|"retry >= max"| DLQ
-    DLQ -.->|"manual"| RR
-    RR -.->|"re-enfileira"| BQ
+    FAIL -->|"ainda tem tentativas"| RT
+    RT -->|"reenvia"| BQ
+    FAIL -->|"tentativas esgotadas"| DLQ
+    DLQ -.->|"ação manual"| RR
+    RR -.->|"reenvia"| BQ
 
     classDef source fill:#2d6a4f,stroke:#1b4332,color:#fff
     classDef queue fill:#40916c,stroke:#2d6a4f,color:#fff

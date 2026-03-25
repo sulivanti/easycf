@@ -4,36 +4,36 @@
 
 ```mermaid
 graph TD
-    subgraph LIFECYCLE ["Ciclo de Vida do ProcessCycle"]
-        DRAFT["DRAFT<br/>rascunho editável"]
-        PUB["PUBLISHED<br/>em uso"]
-        DEP["DEPRECATED<br/>somente leitura"]
-        DRAFT -->|"publish"| PUB
-        PUB -->|"deprecate"| DEP
-        PUB -.->|"fork (nova versão)"| DRAFT
+    subgraph LIFECYCLE ["Ciclo de Vida"]
+        DRAFT["Ciclo de Compras v2<br/>(Rascunho — editável)"]
+        PUB["Ciclo de Compras v1<br/>(Publicado — em uso)"]
+        DEP["Ciclo de Compras v0<br/>(Descontinuado)"]
+        DRAFT -->|"publicar"| PUB
+        PUB -->|"descontinuar"| DEP
+        PUB -.->|"criar nova versão"| DRAFT
     end
 
-    subgraph GRAFO ["Exemplo de Grafo de Estágios"]
-        SI["Stage Inicial<br/>isInitial=true"]
-        SA["Stage A<br/>ordem 1"]
-        G["Gate<br/>APPROVAL · DOCUMENT<br/>CHECKLIST · INFORMATIVE"]
-        SB["Stage B<br/>ordem 2"]
-        ST["Stage Terminal<br/>isTerminal=true"]
-        SI -->|"transição"| SA
-        SA -->|"pré-condição"| G
-        G -->|"resolvido"| SB
-        SB -->|"transição"| ST
+    subgraph GRAFO ["Fluxo: Ciclo de Compras v1"]
+        SI["Abertura do Pedido<br/>(estágio inicial)"]
+        SA["Análise Técnica"]
+        G["Aprovação do Gerente<br/>(gate obrigatório)"]
+        SB["Emissão da OC"]
+        ST["Conclusão<br/>(estágio final)"]
+        SI -->|"avança para"| SA
+        SA -->|"requer aprovação"| G
+        G -->|"aprovado"| SB
+        SB -->|"avança para"| ST
     end
 
-    MS["MACRO_STAGE<br/>swimlane agrupador"]
-    PR["PROCESS_ROLE<br/>papéis do ciclo"]
-    SR["STAGE_ROLE<br/>responsáveis por stage"]
-    FK["Fork<br/>parentCycleId<br/>version++"]
+    MS["Macroetapa: Requisição<br/>(agrupa estágios)"]
+    PR["Comprador, Gestor<br/>(papéis do ciclo)"]
+    SR["Análise Técnica:<br/>responsável = Comprador"]
+    FK["Nova versão v2<br/>baseada na v1"]
 
     MS -.->|"agrupa"| SA
     MS -.->|"agrupa"| SB
-    PR -.->|"vinculado via"| SR
-    PUB -.->|"fork"| FK
+    PR -.->|"atribuído em"| SR
+    PUB -.->|"origina"| FK
 
     classDef draft fill:#F39C12,stroke:#D68910,color:#fff
     classDef published fill:#27AE60,stroke:#1E8449,color:#fff

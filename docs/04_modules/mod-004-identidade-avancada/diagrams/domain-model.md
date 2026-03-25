@@ -4,26 +4,26 @@
 
 ```mermaid
 graph TD
-    U["USER<br/>identidade base"]
+    U["Ana Silva<br/>(Usuária)"]
 
-    subgraph BINDING ["OrgScope — Binding Organizacional"]
-        UOS["USER_ORG_SCOPE<br/>PRIMARY | SECONDARY<br/>validFrom · validUntil"]
-        OU["ORG_UNIT<br/>N1–N4"]
+    subgraph BINDING ["Escopo Organizacional"]
+        UOS["Escopo Primário de Ana<br/>Regional Sul<br/>ativo desde 01/01"]
+        OU["Regional Sul<br/>(Nível 3)"]
     end
 
-    subgraph SHARING ["AccessShare — Compartilhamento Controlado"]
-        AS["ACCESS_SHARE<br/>resourceType · allowedActions<br/>reason obrigatório<br/>validUntil obrigatório"]
+    subgraph SHARING ["Compartilhamento de Acesso"]
+        AS["Ana compartilha<br/>Pedido #4521 com Carlos<br/>motivo: férias de Ana<br/>até 15/04"]
     end
 
-    subgraph DELEGATION ["AccessDelegation — Delegação Temporária"]
-        AD["ACCESS_DELEGATION<br/>delegatedScopes subset<br/>reason obrigatório<br/>validUntil obrigatório"]
-        RO["ROLE<br/>papel delegado"]
+    subgraph DELEGATION ["Delegação Temporária"]
+        AD["Ana delega para Maria<br/>papel Aprovador<br/>motivo: licença médica<br/>até 30/03"]
+        RO["Aprovador<br/>(Papel delegado)"]
     end
 
-    U -->|"binding N1–N4"| UOS
-    UOS -->|"vinculado a"| OU
-    U -->|"grantor/grantee"| AS
-    U -->|"delegator/delegatee"| AD
+    U -->|"escopo primário"| UOS
+    UOS -->|"vinculada a"| OU
+    U -->|"compartilha acesso"| AS
+    U -->|"delega papel"| AD
     AD -->|"papel delegado"| RO
 
     classDef user fill:#1B4F72,stroke:#154360,color:#fff

@@ -4,38 +4,38 @@
 
 ```mermaid
 graph TD
-    OP(("Operação<br/>Interceptada"))
-    RE["Rule Evaluation<br/>por prioridade<br/>MovementControlRule"]
+    OP(("Pedido #5678<br/>R$ 50.000"))
+    RE["Avalia regras de controle<br/>Regra: Compras acima<br/>de R$ 10.000"]
 
     subgraph CHAIN ["Cadeia de Aprovação"]
-        N1["Nível 1<br/>ApprovalRule"]
-        N2["Nível 2<br/>ApprovalRule"]
-        N3["Nível N<br/>ApprovalRule"]
-        N1 -->|"approved"| N2
-        N2 -->|"approved"| N3
+        N1["Nível 1<br/>Gerente Regional<br/>prazo: 24h"]
+        N2["Nível 2<br/>Diretor Financeiro<br/>prazo: 48h"]
+        N3["Nível 3<br/>VP de Operações<br/>prazo: 72h"]
+        N1 -->|"aprovou"| N2
+        N2 -->|"aprovou"| N3
     end
 
-    AUTO["Auto-Approved<br/>scope suficiente"]
-    PEND["PENDING<br/>aguardando aprovação"]
-    APR["APPROVED<br/>todos níveis OK"]
-    REJ["REJECTED<br/>qualquer nível rejeita"]
-    OVR["OVERRIDDEN<br/>justificativa min 20 chars"]
-    TOUT["TIMEOUT<br/>escalation automática"]
-    EXEC["EXECUTED<br/>operação realizada"]
-    FAILED["FAILED<br/>erro na execução"]
+    AUTO["Aprovação automática<br/>valor abaixo do limite"]
+    PEND["Aguardando aprovação<br/>do Gerente Regional"]
+    APR["Todos os níveis<br/>aprovaram"]
+    REJ["Diretor Financeiro<br/>rejeitou o pedido"]
+    OVR["Ana (Diretora) forçou<br/>aprovação com justificativa"]
+    TOUT["Gerente não respondeu<br/>em 24h — escala para<br/>Diretor Financeiro"]
+    EXEC["Pedido #5678 executado<br/>no Protheus"]
+    FAILED["Falha ao executar<br/>no Protheus"]
 
     OP --> RE
-    RE -->|"sem regra aplicável"| AUTO
-    RE -->|"regra encontrada"| PEND
+    RE -->|"valor abaixo do limite"| AUTO
+    RE -->|"valor acima de R$ 10.000"| PEND
     PEND --> N1
     N3 -->|"todos aprovaram"| APR
     N1 -->|"rejeitou"| REJ
     N2 -->|"rejeitou"| REJ
-    N1 -->|"timeout"| TOUT
-    TOUT -.->|"escalation"| N2
+    N1 -->|"expirou prazo"| TOUT
+    TOUT -.->|"escala para próximo"| N2
     APR --> EXEC
-    APR -->|"erro"| FAILED
-    OVR -.->|"bypass cadeia"| EXEC
+    APR -->|"erro no Protheus"| FAILED
+    OVR -.->|"força execução"| EXEC
 
     classDef start fill:#2d6a4f,stroke:#1b4332,color:#fff
     classDef eval fill:#2E86C1,stroke:#2471A3,color:#fff

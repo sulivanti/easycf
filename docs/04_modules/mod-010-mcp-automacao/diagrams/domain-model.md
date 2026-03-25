@@ -4,37 +4,37 @@
 
 ```mermaid
 graph TD
-    START(("Request<br/>recebido"))
-    S1{"1. Auth<br/>API Key válida?"}
-    S2{"2. Agent<br/>status=ACTIVE?"}
-    S3["3. Fetch Action<br/>actionTypeCode"]
-    S4{"4. AgentActionLink<br/>ativo e válido?"}
-    S5{"5. Scopes<br/>suficientes?"}
-    S6{"6. Blocklist<br/>check passed?"}
-    S7["7. INSERT Execution<br/>status=RECEIVED"]
-    S8["8. Evaluate Policy"]
+    START(("Bot-Compras envia<br/>requisição"))
+    S1{"API Key do<br/>Bot-Compras é válida?"}
+    S2{"Bot-Compras<br/>está ativo?"}
+    S3["Identificar ação solicitada<br/>Consultar Saldo"]
+    S4{"Bot-Compras tem<br/>permissão para<br/>Consultar Saldo?"}
+    S5{"Escopo compras:saldo:ler<br/>é suficiente?"}
+    S6{"Ação não está<br/>na lista de bloqueio?"}
+    S7["Registrar execução<br/>recebida"]
+    S8["Avaliar política da ação"]
 
-    DIRECT["DIRECT<br/>executa imediato<br/>HTTP 200"]
-    CONTROLLED["CONTROLLED<br/>cria Movement MOD-009<br/>HTTP 202"]
-    EVENT["EVENT_ONLY<br/>emite evento<br/>HTTP 200"]
-    BLOCKED["BLOCKED<br/>HTTP 403"]
+    DIRECT["Execução direta<br/>Bot consulta saldo<br/>e recebe resposta"]
+    CONTROLLED["Submeter Pedido #9012<br/>requer aprovação humana<br/>movimento criado"]
+    EVENT["Apenas notifica<br/>evento registrado<br/>sem execução direta"]
+    BLOCKED["Bloqueado<br/>Bot não tem permissão"]
 
     START --> S1
-    S1 -->|"OK"| S2
-    S1 -->|"Falha"| BLOCKED
-    S2 -->|"OK"| S3
-    S2 -->|"Falha"| BLOCKED
+    S1 -->|"válida"| S2
+    S1 -->|"inválida"| BLOCKED
+    S2 -->|"ativo"| S3
+    S2 -->|"inativo"| BLOCKED
     S3 --> S4
-    S4 -->|"OK"| S5
-    S4 -->|"Falha"| BLOCKED
-    S5 -->|"OK"| S6
-    S5 -->|"Falha"| BLOCKED
-    S6 -->|"OK"| S7
-    S6 -->|"Falha"| BLOCKED
+    S4 -->|"permitido"| S5
+    S4 -->|"não permitido"| BLOCKED
+    S5 -->|"suficiente"| S6
+    S5 -->|"insuficiente"| BLOCKED
+    S6 -->|"liberado"| S7
+    S6 -->|"bloqueado"| BLOCKED
     S7 --> S8
-    S8 -->|"canBeDirect=true"| DIRECT
-    S8 -->|"CONTROLLED"| CONTROLLED
-    S8 -->|"EVENT_ONLY"| EVENT
+    S8 -->|"política: DIRETO"| DIRECT
+    S8 -->|"política: SOB APROVAÇÃO"| CONTROLLED
+    S8 -->|"política: APENAS EVENTO"| EVENT
 
     classDef start fill:#2d6a4f,stroke:#1b4332,color:#fff
     classDef check fill:#2E86C1,stroke:#2471A3,color:#fff

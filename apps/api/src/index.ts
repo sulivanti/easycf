@@ -11,6 +11,7 @@ import {
   users,
   contentUsers,
   tenantUsers,
+  tenants,
   roles,
   rolePermissions,
   userSessions,
@@ -150,6 +151,84 @@ app.post('/api/v1/auth/login', async (request, reply) => {
       full_name: profile?.fullName ?? '',
       status: user.status,
     },
+  });
+});
+
+// GET /api/v1/auth/me (FR-004, FR-000-C02)
+app.get('/api/v1/auth/me', async (request, reply) => {
+  // Verify JWT from cookie or Authorization header
+  const token =
+    request.cookies.accessToken ??
+    (request.headers.authorization?.startsWith('Bearer ')
+      ? request.headers.authorization.slice(7)
+      : undefined);
+
+  if (!token) {
+    return reply.status(401).send({ message: 'Não autenticado.' });
+  }
+
+  let payload: { sub: string; tid: string | null };
+  try {
+    payload = app.jwt.verify<{ sub: string; tid: string | null }>(token);
+  } catch {
+    return reply.status(401).send({ message: 'Token inválido ou expirado.' });
+  }
+
+  // Find user
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, payload.sub))
+    .limit(1);
+
+  if (!user) {
+    return reply.status(401).send({ message: 'Usuário não encontrado.' });
+  }
+
+  // Get profile (content_users)
+  const [profile] = await db
+    .select()
+    .from(contentUsers)
+    .where(eq(contentUsers.userId, user.id))
+    .limit(1);
+
+  // Get tenant + role + scopes
+  const [tenantLink] = await db
+    .select()
+    .from(tenantUsers)
+    .where(and(eq(tenantUsers.userId, user.id), eq(tenantUsers.status, 'ACTIVE')))
+    .limit(1);
+
+  let tenant: { id: string; name: string } = { id: '', name: '' };
+  let scopes: string[] = [];
+
+  if (tenantLink) {
+    // Resolve tenant name
+    const [tenantRow] = await db
+      .select()
+      .from(tenants)
+      .where(eq(tenants.id, tenantLink.tenantId))
+      .limit(1);
+
+    if (tenantRow) {
+      tenant = { id: tenantRow.id, name: tenantRow.name };
+    }
+
+    // Resolve scopes
+    const perms = await db
+      .select()
+      .from(rolePermissions)
+      .where(eq(rolePermissions.roleId, tenantLink.roleId));
+    scopes = perms.map((p) => p.scope);
+  }
+
+  return reply.status(200).send({
+    id: user.id,
+    name: profile?.fullName ?? '',
+    email: user.email,
+    avatar_url: profile?.avatarUrl ?? null,
+    tenant,
+    scopes,
   });
 });
 

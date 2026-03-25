@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.7.1 | 2026-03-25 | create-amendment | Amendment FR-000-C02: rota GET /auth/me ausente no entrypoint index.ts + divergência de shape backend/frontend (full_name→name, active_tenant_id→tenant:{id,name}). Dashboard, sidebar e header completamente quebrados. |
 | 1.7.0 | 2026-03-25 | merge-amendment | Merge FR-000-C01 + DOC-FND-000-M01..M04: seed-admin.ts corrigido (25→63 scopes, alinhado com DOC-FND-000 §2.2). Selos retroativos: M01 (6 scopes case:*), M02 (reopen), M03 (7 approval:*), M04 (6 mcp:*). Sidebar e RBAC agora funcionais para todos os módulos. |
 | 1.6.0 | 2026-03-25 | cascade-amendment | Cascade de FR-000-M01: 3 amendments derivados criados — DATA-000-M01 (coluna invite_token_created_at), INT-000-M01 (schemas OpenAPI Users API), SEC-000-M01 (regra anti-escalação role_id). Desbloqueia codegen MOD-002. |
 | 1.5.0 | 2026-03-25 | arquitetura | Migração: 8 normative amendments movidos de amendments/normativos/ para docs/01_normativos/amendments/{DOC-ID}/. Normativos são transversais e não pertencem a módulos. |

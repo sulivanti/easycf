@@ -5,7 +5,7 @@
 # Emenda: DOC-PADRAO-005-C01
 
 - **Documento base:** [DOC-PADRAO-005](../../DOC-PADRAO-005_Storage_e_Upload.md) §10 — Catálogo de Entity Types
-- **estado_item:** DRAFT
+- **estado_item:** MERGED
 - **Natureza:** C (Correção)
 - **Data:** 2026-03-18
 - **owner:** arquitetura
@@ -80,3 +80,11 @@ Adicionar à tabela de validações de `POST /uploads/presign`:
 - **SEC-000:** Nenhum impacto direto — controle de acesso permanece inalterado.
 - **BR-000:** Considerar regra de negócio explícita para limites de storage por entity_type.
 - **Ação requerida:** Ao enriquecer FR-000 e BR-000 futuramente, incorporar a validação de `max_attachments` nos cenários Gherkin.
+
+---
+
+## Resolução do Merge
+
+> **Merged por:** merge-amendment em 2026-03-25
+> **Versão base após merge:** DOC-PADRAO-005 v1.0.1
+> **Alterações aplicadas:** §10 expandida com `max_attachments`, CON-005, Gate STR-6, validação de limite no §6.1

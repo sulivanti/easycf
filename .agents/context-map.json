@@ -173,6 +173,20 @@
         { "id": "DOC-DEP-001", "path": "docs/04_modules/DEPENDENCY-GRAPH.md", "sections": ["§1", "§3", "§5"], "reason": "Grafo de adjacência, bloqueios e ordem topológica para dependências e posição na cadeia" }
       ],
       "delegates_to": []
+    },
+    "redis-ref": {
+      "_note": "Skill de referência temporária — remover após amendments merged",
+      "docs": [
+        { "id": "DOC-PADRAO-002", "sections": ["§3.4"], "reason": "Dependências Redis/ioredis — lacuna crítica a preencher" },
+        { "id": "DOC-PADRAO-001", "sections": ["§3.3"], "reason": "Container Redis config no docker-compose" },
+        { "id": "DOC-GNP-00", "sections": ["EX-REDIS-*"], "reason": "Exemplos cache/filas/pub-sub a criar" }
+      ]
+    },
+    "ui-ux-ref": {
+      "_note": "Skill de referência temporária — remover após amendments merged",
+      "docs": [
+        { "id": "DOC-UX-013", "sections": "*", "reason": "Design System — enriquecer com acessibilidade, responsividade, performance e padrões de interação" }
+      ]
     }
   }
 }

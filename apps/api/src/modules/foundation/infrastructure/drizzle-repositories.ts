@@ -105,7 +105,10 @@ export class DrizzleUserRepository implements UserRepository {
     let query = c
       .select()
       .from(users)
-      .innerJoin(tenantUsers, and(eq(tenantUsers.userId, users.id), eq(tenantUsers.tenantId, tenantId)))
+      .innerJoin(
+        tenantUsers,
+        and(eq(tenantUsers.userId, users.id), eq(tenantUsers.tenantId, tenantId)),
+      )
       .leftJoin(contentUsers, eq(contentUsers.userId, users.id))
       .where(isNull(users.deletedAt))
       .orderBy(desc(users.createdAt))
@@ -115,7 +118,10 @@ export class DrizzleUserRepository implements UserRepository {
       query = c
         .select()
         .from(users)
-        .innerJoin(tenantUsers, and(eq(tenantUsers.userId, users.id), eq(tenantUsers.tenantId, tenantId)))
+        .innerJoin(
+          tenantUsers,
+          and(eq(tenantUsers.userId, users.id), eq(tenantUsers.tenantId, tenantId)),
+        )
         .leftJoin(contentUsers, eq(contentUsers.userId, users.id))
         .where(and(isNull(users.deletedAt), eq(users.id, params.cursor)))
         .orderBy(desc(users.createdAt))
@@ -449,10 +455,7 @@ export class DrizzleRoleRepository implements RoleRepository {
 
     if (!row) return null;
 
-    const perms = await c
-      .select()
-      .from(rolePermissions)
-      .where(eq(rolePermissions.roleId, row.id));
+    const perms = await c.select().from(rolePermissions).where(eq(rolePermissions.roleId, row.id));
     return this.toDomain(row, perms);
   }
 
@@ -474,10 +477,7 @@ export class DrizzleRoleRepository implements RoleRepository {
 
     // Load permissions for all roles in batch
     const roleIds = data.map((r) => r.id);
-    const allPerms =
-      roleIds.length > 0
-        ? await c.select().from(rolePermissions)
-        : [];
+    const allPerms = roleIds.length > 0 ? await c.select().from(rolePermissions) : [];
 
     const permsMap = new Map<string, typeof allPerms>();
     for (const p of allPerms) {
@@ -535,10 +535,7 @@ export class DrizzleRoleRepository implements RoleRepository {
       .where(eq(roles.id, role.id))
       .returning();
 
-    const perms = await c
-      .select()
-      .from(rolePermissions)
-      .where(eq(rolePermissions.roleId, role.id));
+    const perms = await c.select().from(rolePermissions).where(eq(rolePermissions.roleId, role.id));
     return this.toDomain(updated!, perms);
   }
 
@@ -635,10 +632,7 @@ export class DrizzleTenantUserRepository implements TenantUserRepository {
     };
   }
 
-  async findByUserId(
-    userId: string,
-    tx?: TransactionContext,
-  ): Promise<readonly TenantUserProps[]> {
+  async findByUserId(userId: string, tx?: TransactionContext): Promise<readonly TenantUserProps[]> {
     const c = conn(this.db, tx);
     const rows = await c
       .select()
@@ -647,10 +641,7 @@ export class DrizzleTenantUserRepository implements TenantUserRepository {
     return rows.map((r) => this.toDomain(r));
   }
 
-  async create(
-    tenantUser: TenantUserProps,
-    tx?: TransactionContext,
-  ): Promise<TenantUserProps> {
+  async create(tenantUser: TenantUserProps, tx?: TransactionContext): Promise<TenantUserProps> {
     const c = conn(this.db, tx);
     const [created] = await c
       .insert(tenantUsers)
@@ -665,10 +656,7 @@ export class DrizzleTenantUserRepository implements TenantUserRepository {
     return this.toDomain(created!);
   }
 
-  async update(
-    tenantUser: TenantUserProps,
-    tx?: TransactionContext,
-  ): Promise<TenantUserProps> {
+  async update(tenantUser: TenantUserProps, tx?: TransactionContext): Promise<TenantUserProps> {
     const c = conn(this.db, tx);
     const [updated] = await c
       .update(tenantUsers)
@@ -800,7 +788,9 @@ export class DrizzleDomainEventRepository implements DomainEventRepository {
 
 export class StubPasswordResetTokenRepository implements PasswordResetTokenRepository {
   async findByHash(_tokenHash: string): Promise<PasswordResetTokenProps | null> {
-    throw new Error('PasswordResetToken table not yet created. Forgot/Reset password not available.');
+    throw new Error(
+      'PasswordResetToken table not yet created. Forgot/Reset password not available.',
+    );
   }
 
   async create(_token: PasswordResetTokenProps): Promise<void> {

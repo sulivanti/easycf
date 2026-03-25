@@ -21,8 +21,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@shared/ui/dropdown-menu';
-import { useLogout } from '../hooks/use-logout';
 import { ChangePasswordModal } from './ChangePasswordModal';
+import { ProfileAvatar } from './ProfileAvatar';
+import { LogoutConfirmDialog } from './LogoutConfirmDialog';
 import type { AuthMeResponse } from '../types/backoffice-admin.types';
 
 interface Props {
@@ -30,18 +31,9 @@ interface Props {
   isLoading: boolean;
 }
 
-function getInitials(name: string): string {
-  return name
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0].toUpperCase())
-    .join('');
-}
-
 export function ProfileWidget({ user, isLoading }: Props) {
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
-  const logout = useLogout();
+  const [logoutOpen, setLogoutOpen] = useState(false);
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -60,13 +52,7 @@ export function ProfileWidget({ user, isLoading }: Props) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="sm" className="gap-2 px-2">
-            {user.avatar_url ? (
-              <img src={user.avatar_url} alt="" className="size-8 rounded-full object-cover" />
-            ) : (
-              <div className="flex size-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-                {getInitials(user.name)}
-              </div>
-            )}
+            <ProfileAvatar name={user.name} avatarUrl={user.avatar_url} size="sm" />
             <span className="text-sm font-medium">{user.name}</span>
           </Button>
         </DropdownMenuTrigger>
@@ -95,16 +81,16 @@ export function ProfileWidget({ user, isLoading }: Props) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="destructive"
-            disabled={logout.isPending}
-            onSelect={() => logout.mutate()}
+            onSelect={() => setLogoutOpen(true)}
           >
             <LogOut className="size-4" />
-            {logout.isPending ? 'Saindo...' : 'Sair'}
+            Sair
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
       <ChangePasswordModal open={changePasswordOpen} onClose={() => setChangePasswordOpen(false)} />
+      <LogoutConfirmDialog open={logoutOpen} onOpenChange={setLogoutOpen} />
     </>
   );
 }

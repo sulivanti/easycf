@@ -1,7 +1,7 @@
 # DOC-UX-011 — Padrões de Application Shell e Navegação
 
 - **id:** DOC-UX-011
-- **version:** 1.3.0
+- **version:** 1.4.0
 - **status:** READY
 - **data_ultima_revisao:** 2026-03-25
 - **owner:** produto + arquitetura + UX
@@ -194,7 +194,41 @@ A identificação do usuário ativo DEVE estar sempre visível no Shell da aplic
    - Identificação em texto do Tenant/Filial ativo.
    - Nome e E-mail do usuário.
    - Link de atalho para "Minha Conta" ou "Alterar Senha" (conforme contrato de alteração de senha — DOC-FND-000 §1.3).
-   - Botão de "Sair" (Logout), que DEVE consumir a rota de logout (invalidando sessões ativas).
+   - Botão de "Sair" (Logout), que DEVE abrir um **LogoutConfirmDialog** (§6.2) antes de consumir a rota de logout (invalidando sessões ativas). O logout NÃO DEVE ser executado diretamente — a confirmação explícita do usuário é obrigatória.
+
+### 6.2 LogoutConfirmDialog
+
+#### 6.2.1 Regra
+
+O Widget de Perfil (§6.1) DEVE exibir um diálogo de confirmação modal antes de executar a ação de logout. A execução direta (sem confirmação) é **PROIBIDA**.
+
+#### 6.2.2 Requisitos do Dialog
+
+1. **Acionamento:** O botão "Sair" do dropdown (§6.1 item 2) DEVE abrir o dialog ao invés de executar logout diretamente
+2. **Título:** "Confirmar saída"
+3. **Mensagem:** "Tem certeza que deseja sair? Sua sessão será encerrada."
+4. **Botões:**
+   - "Cancelar" (variant `outline`) — fecha o dialog sem efeito
+   - "Sair" (variant `destructive`) — executa a mutation de logout
+5. **Loading state:** Durante a execução da mutation, o botão "Sair" DEVE exibir spinner + texto "Saindo..." e ambos botões DEVEM estar desabilitados (prevenção de double-click)
+6. **Escape:** O dialog DEVE fechar ao pressionar Escape (comportamento padrão do componente `Dialog`)
+7. **Componentes:** DEVE usar `Dialog`, `DialogContent`, `DialogHeader`, `DialogFooter`, `Button` de `@shared/ui/` (CON-002 do projeto)
+
+#### 6.2.3 Telemetria
+
+O LogoutConfirmDialog DEVE emitir UIActionEnvelope (DOC-ARC-003) com:
+- `screenId`: `UX-SHELL-001`
+- `actionId`: `confirm_logout`
+
+#### 6.2.4 Localização do Componente
+
+O componente DEVE ser exportado de `apps/web/src/modules/backoffice-admin/components/LogoutConfirmDialog.tsx` e composto dentro do ProfileWidget.
+
+#### 6.2.5 Especificação Técnica Detalhada
+
+Os contratos completos (props, acceptance criteria, edge cases, estratégia de testes) estão formalizados em:
+
+> [`docs/03_especificacoes/spec-auth-ui-components.md`](../03_especificacoes/spec-auth-ui-components.md) — seção "LogoutConfirmDialog" (REQ-LC-001 a REQ-LC-010, AC-007 a AC-010)
 
 ---
 
@@ -270,6 +304,7 @@ export const Route = createRoute({
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.4.0 | 2026-03-25 | Amendment M03: nova §6.2 LogoutConfirmDialog obrigatório no Widget de Perfil — confirmação antes de logout, loading state, telemetria (DOC-UX-011-M03). |
 | 1.3.0 | 2026-03-25 | Amendment M01 (Coming Soon): nova §8 — Rotas Pendentes (ComingSoonPage pattern), novo CA-09 (toda rota do sidebar DEVE ter route file). |
 | 1.2.0 | 2026-03-25 | Amendment M02: Rota index obrigatória, proibição de formulários inline em route files, exceção window.location.href pós-login, novos CA-07 e CA-08. Lições do primeiro deploy em produção. |
 | 1.1.0 | 2026-03-24 | Amendment M01: §2.2 Estratégia de Roteamento SPA, §3.3 Route Guards, CA-02 atualizado para Router Context, novos CA-05 e CA-06 |

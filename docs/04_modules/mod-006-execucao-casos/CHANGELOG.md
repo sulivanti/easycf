@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.7.0 | 2026-03-25 | merge-amendment | Merge INT-006-M01: nova seção §7 Email Queue — Convenções BullMQ/Redis (fila `mod-006:email`, singleton, removeOnComplete, db1, health check). INT-006 bumped para v0.5.0. Derivado de DOC-PADRAO-002-M01. |
 | 1.6.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. Lint: PASS (0 errors/warnings). Format: PASS. Arquitetura: PASS (7/7 DomainError, Pattern A, React Query). QA: PASS. Manifests: 2/2 PASS. OpenAPI: PASS (16/16). Drizzle: PASS (5 tabelas). Endpoints: PASS (16/16). 0 bloqueadores, 0 violações críticas, 0 avisos. |
 | 1.5.0 | 2026-03-24 | validate-all | Validação completa (lint+format+architecture+qa+manifest+openapi+drizzle+endpoint). Lint: PASS. Format: PASS. QA: PASS. Manifests: 2/2 PASS. Drizzle: PASS (5 tabelas, 12 indexes, 4 checks). OpenAPI: PASS (16/16). Endpoints: PASS (16/16). Arquitetura: WARN — 7 domain errors estendem Error ao invés de DomainError (PENDENTE-008). Web Pattern A: PASS. Hooks React Query: PASS. 0 bloqueadores, 0 violações críticas, 3 avisos (PENDENTE-007 lint, PENDENTE-008 DomainError, qa:all cross-module). |
 | 1.4.0 | 2026-03-24 | validate-all | Validação pós-correção PENDENTE-006 aprovada. QA: PASS. Manifests: 2/2 PASS. Drizzle: PASS (2 avisos menores). OpenAPI: PASS (16/16 endpoints, operationIds corretos). Endpoints: PASS (16/16, todas as 5 correções PENDENTE-006 aplicadas). 0 bloqueadores, 0 violações críticas, 2 avisos. |

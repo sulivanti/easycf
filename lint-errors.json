@@ -1,4 +1,3 @@
 [
-  "[Erro] context-map.json: skill 'codegen-agent' referencia doc 'PKG-COD-001' que não existe em normativos/ ou pacotes_agentes/",
-  "[Erro] context-map.json: skill 'codegen' referencia doc 'PKG-COD-001' que não existe em normativos/ ou pacotes_agentes/"
+  "[Erro] Referência de arquivo quebrada: '../01_normativos/DOC-ARC-003__Rastreabilidade_Observabilidade.md' em D:\\Dev\\EasyCodeFramework\\docs\\03_especificacoes\\spec-auth-ui-components.md:380"
 ]

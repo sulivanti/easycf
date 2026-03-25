@@ -1,9 +1,9 @@
 # DOC-PADRAO-002 — Padrões de Dependências Node.js (package.json)
 
 - **id:** DOC-PADRAO-002
-- **version:** 1.3.0
+- **version:** 1.4.0
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-24
+- **data_ultima_revisao:** 2026-03-25
 - **owner:** infraestrutura
 - **scope:** global (gestão de dependências pnpm/Turbo)
 
@@ -79,7 +79,114 @@ O bloco de `dependencies` foca unicamente no que rodará em produção.
 
 ### 3.4. Cache e Filas
 
-- **Redis:** `ioredis` (Cliente padrão, robusto para integração com BullMQ ou uso direto).
+#### 3.4.1 Cliente Redis
+
+- **ioredis:** `ioredis@^5.x` — Cliente Redis padrão do projeto. Suporta Cluster, Sentinel, pipelining e Lua scripting.
+
+**Configuração padrão obrigatória (singleton por processo):**
+
+```typescript
+import Redis from 'ioredis';
+
+export const redis = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379', {
+  maxRetriesPerRequest: 3,
+  retryStrategy(times) {
+    return Math.min(times * 200, 2000); // backoff até 2s
+  },
+  lazyConnect: true,
+  connectTimeout: 5000,
+  commandTimeout: 5000,
+});
+```
+
+**Regras:**
+- **MUST** usar `REDIS_URL` do ambiente (conforme DOC-PADRAO-004 §3.4).
+- **MUST** usar instância singleton — nunca criar conexão por request.
+- **MUST** configurar `retryStrategy` com backoff exponencial.
+- **SHOULD** usar `lazyConnect: true` para controlar momento da conexão.
+- **MUST NOT** usar `enableReadyCheck: false` em produção.
+
+#### 3.4.2 Filas — BullMQ
+
+- **bullmq:** `bullmq@^5.x` — Sistema de filas baseado em Redis. Dependência core para processamento assíncrono.
+
+**Regras:**
+- **MUST** reutilizar a conexão ioredis do §3.4.1 (opção `connection`).
+- **MUST** nomear filas com prefixo do módulo: `{mod-NNN}:{domínio}` (ex: `mod-006:email`, `mod-008:ingest`).
+- **SHOULD** configurar `defaultJobOptions.removeOnComplete` para evitar crescimento infinito.
+- **MAY** adicionar `@bull-board/api` + `@bull-board/fastify` como devDependency para dashboard de debug.
+
+#### 3.4.3 Key Naming Convention
+
+Padrão obrigatório para todas as chaves Redis do projeto:
+
+```
+{módulo}:{entidade}:{id}[:{atributo}]
+```
+
+**Exemplos:**
+
+| Chave | Uso |
+|-------|-----|
+| `mod-003:tenant:uuid` | Cache de tenant |
+| `mod-000:rbac:user:uuid` | Cache RBAC por usuário |
+| `mod-006:notify:job:uuid` | Job de notificação |
+| `session:token-hash` | Sessão de usuário |
+| `ratelimit:ip:addr` | Rate limiting por IP |
+
+**Regras:**
+- **MUST** usar `:` como separador (convenção Redis universal).
+- **MUST** prefixar com módulo owner (`mod-NNN:`) exceto chaves transversais (session, ratelimit).
+- **MUST NOT** usar espaços, underscores ou chaves longas (URLs inteiras, etc.).
+- **SHOULD** manter chaves curtas — consomem memória.
+
+#### 3.4.4 TTL e Políticas de Expiração
+
+**TTL padrão por categoria:**
+
+| Categoria | TTL | Justificativa |
+|-----------|-----|---------------|
+| Cache RBAC | 5 min (300s) | Balança freshness vs performance |
+| Sessão | 24h (86400s) | Alinhado com JWT expiry |
+| Cache geral (queries) | 1h (3600s) | Default seguro |
+| Rate limiting | 1–60s | Conforme janela de rate limit |
+| Jobs BullMQ (completed) | 24h | Cleanup automático |
+| Locks distribuídos | 10–30s | Auto-release em caso de crash |
+
+**Regras:**
+- **MUST** definir TTL em toda chave de cache — sem exceção.
+- **MUST NOT** usar `SET` sem `EX`/`PX` para chaves de cache.
+- **SHOULD** usar `setex` ou equivalente atômico para garantir TTL.
+- Para dados persistentes (ex: configuração), usar **MUST** com `noeviction` no database separado.
+
+#### 3.4.5 Separação de Redis Databases
+
+| Database | Uso | Eviction Policy |
+|----------|-----|-----------------|
+| db0 | Cache (RBAC, queries, geral) | `allkeys-lru` |
+| db1 | Filas BullMQ | `noeviction` |
+| db2 | Sessions | `volatile-ttl` |
+
+**Regras:**
+- **MUST** separar cache e filas em databases distintas para evitar eviction de jobs.
+- **SHOULD** configurar `maxmemory` por instância (recomendado: 256MB para dev, sizing por ambiente em prod).
+- Conexões ioredis para cada database devem ser instâncias separadas com `db` option.
+
+#### 3.4.6 Health Check
+
+```typescript
+async function redisHealthCheck(redis: Redis): Promise<'ok' | 'degraded'> {
+  try {
+    const pong = await redis.ping();
+    return pong === 'PONG' ? 'ok' : 'degraded';
+  } catch {
+    return 'degraded';
+  }
+}
+```
+
+- **MUST** expor health check Redis no endpoint `/health` (conforme DOC-PADRAO-001).
+- **SHOULD** incluir latência do PING no payload de health.
 
 ### 3.5. Frontend (SPA)
 
@@ -259,6 +366,7 @@ O agente de frontend (`AGN-COD-WEB`) **DEVE** usar exclusivamente:
 
 | Versão | Data | Descrição |
 |---|---|---|
+| 1.4.0 | 2026-03-25 | §3.4 expandida com ioredis ^5.x config, BullMQ ^5.x, key naming, TTL, databases, health check (DOC-PADRAO-002-M01) |
 | 1.3.0 | 2026-03-24 | §3.5 expandida com shadcn/ui stack: cva, clsx, tailwind-merge, Radix UI, vaul, sonner |
 | 1.2.0 | 2026-03-24 | Nova §3.5 Frontend (SPA) com TanStack Router, React Query, motion, Tailwind v4. Atualizada §6 com regras AGN-COD-WEB |
 | 1.1.0 | 2026-03-24 | Expandida §4.3 com detalhamento completo de ESLint v9 Flat Config, plugins, regras, Prettier e scripts |

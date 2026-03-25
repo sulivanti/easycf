@@ -36,6 +36,10 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.8.1 | 2026-03-25 | merge-amendment | Merge batch MOD-000: DATA-000-C02 (SYSTEM_TENANT_ID §8), FR-000-C02 (/auth/me shape), FR-000-C03 (entry point rewrite), FR-000-C05 (JWT tenant/scopes), FR-000-C06 (forceLogout redirect loop), UX-000-C01 (tabela erros 401). Todos MERGED. |
+| 1.8.0 | 2026-03-25 | create-amendment | Amendment UX-000-C01: tabela de erros UX-000 detalhada para 401 (limpeza tokens + full reload). Nova jornada "Sessão Expirada por Timeout" em UX-001. Ref: spec-fix-session-timeout-redirect-loop. |
+| 1.7.10 | 2026-03-25 | create-amendment | Amendment FR-000-C06: sessão expirada causa redirect loop no frontend — AppShell não limpa localStorage antes de navegar para /login. Solução: nova utility `forceLogout` (limpa tokens + cache + full reload), toast com id fixo, retry desabilitado em 401. Ref: spec-fix-session-timeout-redirect-loop. |
+| 1.7.8 | 2026-03-25 | merge-amendment | Merge INT-000-M02: nova seção INT-007 Cache RBAC — Convenções Redis (ioredis singleton, key `mod-000:rbac:user:{uuid}`, TTL 300s, db0, health check). INT-000 bumped para v0.4.0. Derivado de DOC-PADRAO-002-M01. |
 | 1.7.7 | 2026-03-25 | create-amendment | Amendment FR-000-C05: LoginUseCase resolve tenant/scopes antes de gerar JWT. Novas deps: TenantUserRepository + RoleRepository. JWT agora contém `tid` e `scopes`. Ref: spec-fix-auth-flow-session-expired Fase 2. |
 | 1.7.6 | 2026-03-25 | merge-amendment | Merge INT-000-C01: nova INT-005 Auth Refresh API — schema `RefreshResponse` sem `user`. OpenAPI v1.yaml atualizado. Base INT-000 bumped para v0.3.1. Derivado de FR-000-C04. |
 | 1.7.5 | 2026-03-25 | merge-amendment | Merge FR-000-C04: FR-001 anotação snake_case, FR-003 contrato refresh explicitado sem `user` (schema `refreshResponse` separado). Base FR-000 bumped para v0.9.2. |

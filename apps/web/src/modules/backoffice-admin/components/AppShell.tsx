@@ -10,7 +10,8 @@
  */
 
 import { useEffect, type ReactNode } from 'react';
-import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
+import { Link, useRouterState } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Info,
   Users,
@@ -34,6 +35,7 @@ import { useAuthMe } from '../hooks/use-auth-me';
 import { filterSidebarByScopes } from './sidebar-config';
 import { ProfileWidget } from './ProfileWidget';
 import { ApiError } from '../api/api-client';
+import { forceLogout } from '@modules/foundation/utils/force-logout';
 import type { SidebarGroup } from '../types/backoffice-admin.types';
 
 interface Props {
@@ -211,22 +213,24 @@ function Breadcrumb({ currentPath }: { currentPath: string }) {
 
 export function AppShell({ children }: Props) {
   const { data: user, isLoading, error } = useAuthMe();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
 
   useEffect(() => {
     if (error instanceof ApiError && error.status === 401) {
       toast.error('Sua sessão expirou. Faça login novamente.', {
+        id: 'session-expired',
         description: error.correlationId ? `ID: ${error.correlationId}` : undefined,
       });
-      navigate({ to: '/login' });
+      forceLogout(queryClient);
+      return;
     } else if (error instanceof ApiError) {
       toast.error('Não foi possível carregar seu perfil. Tente novamente.', {
         description: error.correlationId ? `ID: ${error.correlationId}` : undefined,
       });
     }
-  }, [error, navigate]);
+  }, [error, queryClient]);
 
   if (isLoading) {
     return (

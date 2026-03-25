@@ -62,6 +62,10 @@ export function useAuthMe(screenId: ScreenId = 'UX-SHELL-001', enabled = true) {
     queryFn: () => fetchAuthMe({ screenId, actionId }),
     staleTime: 30_000,
     enabled,
+    retry: (_failureCount, error) => {
+      if (error.status === 401) return false;
+      return _failureCount < 1;
+    },
   });
 }
 

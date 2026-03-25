@@ -53,10 +53,12 @@ export const profileResponse = z.object({
   email: z.string().email(),
   name: z.string(),
   avatar_url: z.string().nullable(),
-  tenant: z.object({
-    id: z.string().uuid(),
-    name: z.string(),
-  }).nullable(),
+  tenant: z
+    .object({
+      id: z.string().uuid(),
+      name: z.string(),
+    })
+    .nullable(),
   scopes: z.array(z.string()),
 });
 

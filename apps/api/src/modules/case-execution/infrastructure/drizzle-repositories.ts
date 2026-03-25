@@ -80,7 +80,9 @@ export class DrizzleCaseInstanceRepository implements CaseInstanceRepository {
     tenantId: string,
     status: CaseStatus,
     expectedUpdatedAt: Date,
-    extra?: Partial<Pick<CaseInstanceRow, 'completedAt' | 'cancelledAt' | 'cancellationReason' | 'currentStageId'>>,
+    extra?: Partial<
+      Pick<CaseInstanceRow, 'completedAt' | 'cancelledAt' | 'cancellationReason' | 'currentStageId'>
+    >,
   ): Promise<CaseInstanceRow> {
     const now = new Date();
     const [row] = await this.db
@@ -108,7 +110,8 @@ export class DrizzleCaseInstanceRepository implements CaseInstanceRepository {
     if (filter.status) conditions.push(eq(caseInstances.status, filter.status));
     if (filter.stageId) conditions.push(eq(caseInstances.currentStageId, filter.stageId));
     if (filter.objectId) conditions.push(eq(caseInstances.objectId, filter.objectId));
-    if (filter.search) conditions.push(sql`${caseInstances.codigo} ILIKE ${'%' + filter.search + '%'}`);
+    if (filter.search)
+      conditions.push(sql`${caseInstances.codigo} ILIKE ${'%' + filter.search + '%'}`);
 
     // myResponsibility filter: subquery on active assignments
     if (filter.myResponsibility) {
@@ -227,10 +230,7 @@ export class DrizzleGateInstanceRepository implements GateInstanceRepository {
   }
 
   async findByCaseId(caseId: string): Promise<GateInstanceRow[]> {
-    const rows = await this.db
-      .select()
-      .from(gateInstances)
-      .where(eq(gateInstances.caseId, caseId));
+    const rows = await this.db.select().from(gateInstances).where(eq(gateInstances.caseId, caseId));
     return rows.map((r) => this.toDomain(r));
   }
 
@@ -257,7 +257,12 @@ export class DrizzleGateInstanceRepository implements GateInstanceRepository {
   }
 
   async createMany(
-    data: Array<Omit<GateInstanceRow, 'id' | 'resolvedBy' | 'resolvedAt' | 'decision' | 'parecer' | 'evidence' | 'checklistItems'>>,
+    data: Array<
+      Omit<
+        GateInstanceRow,
+        'id' | 'resolvedBy' | 'resolvedAt' | 'decision' | 'parecer' | 'evidence' | 'checklistItems'
+      >
+    >,
   ): Promise<GateInstanceRow[]> {
     if (data.length === 0) return [];
     const rows = await this.db
@@ -348,7 +353,10 @@ export class DrizzleCaseAssignmentRepository implements CaseAssignmentRepository
     return rows.map((r) => this.toDomain(r));
   }
 
-  async findActiveByCaseAndRole(caseId: string, processRoleId: string): Promise<CaseAssignmentRow | null> {
+  async findActiveByCaseAndRole(
+    caseId: string,
+    processRoleId: string,
+  ): Promise<CaseAssignmentRow | null> {
     const [row] = await this.db
       .select()
       .from(caseAssignments)
@@ -395,12 +403,7 @@ export class DrizzleCaseAssignmentRepository implements CaseAssignmentRepository
     const rows = await this.db
       .select()
       .from(caseAssignments)
-      .where(
-        and(
-          eq(caseAssignments.isActive, true),
-          lt(caseAssignments.validUntil, now),
-        ),
-      );
+      .where(and(eq(caseAssignments.isActive, true), lt(caseAssignments.validUntil, now)));
     return rows.map((r) => this.toDomain(r));
   }
 

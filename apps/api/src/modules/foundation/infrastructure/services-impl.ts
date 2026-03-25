@@ -44,14 +44,12 @@ export class FastifyJwtTokenService implements TokenService {
   ) {}
 
   async generatePair(payload: TokenPayload): Promise<TokenPair> {
-    const accessToken = this.app.jwt.sign(
-      {
-        sub: payload.userId,
-        sid: payload.sessionId,
-        tid: payload.tenantId ?? null,
-        scopes: payload.scopes ?? [],
-      },
-    );
+    const accessToken = this.app.jwt.sign({
+      sub: payload.userId,
+      sid: payload.sessionId,
+      tid: payload.tenantId ?? null,
+      scopes: payload.scopes ?? [],
+    });
 
     const refreshToken = this.app.jwt.sign(
       { sub: payload.userId, sid: payload.sessionId, type: 'refresh' },
@@ -83,16 +81,11 @@ export class FastifyJwtTokenService implements TokenService {
 
   async generateTempToken(payload: TempTokenPayload, ttlSeconds: number): Promise<string> {
     const { userId, scope, ...rest } = payload;
-    return this.app.jwt.sign(
-      { sub: userId, scope, ...rest },
-      { expiresIn: `${ttlSeconds}s` },
-    );
+    return this.app.jwt.sign({ sub: userId, scope, ...rest }, { expiresIn: `${ttlSeconds}s` });
   }
 
   async verifyTempToken(token: string, expectedScope: string): Promise<TempTokenPayload> {
-    const decoded = this.app.jwt.verify<TempTokenPayload & { sub: string; scope: string }>(
-      token,
-    );
+    const decoded = this.app.jwt.verify<TempTokenPayload & { sub: string; scope: string }>(token);
 
     if (decoded.scope !== expectedScope) {
       throw new Error(`Token scope mismatch: expected ${expectedScope}, got ${decoded.scope}`);
@@ -181,7 +174,9 @@ export class CryptoHashUtilService implements HashUtilService {
 
 export class LogEmailService implements EmailService {
   async sendPasswordReset(email: string, _token: string, expiresAt: Date): Promise<void> {
-    console.log(`[EmailService] Password reset email → ${email} (expires: ${expiresAt.toISOString()})`);
+    console.log(
+      `[EmailService] Password reset email → ${email} (expires: ${expiresAt.toISOString()})`,
+    );
   }
 
   async sendWelcome(email: string, fullName: string): Promise<void> {

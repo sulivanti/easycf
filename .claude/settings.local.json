@@ -191,7 +191,13 @@
       "Bash(npx skills:*)",
       "Bash(npm list:*)",
       "Bash(find /d/Dev/EasyCodeFramework/apps/web/src -type f \\\\\\(-name *.ts -o -name *.tsx \\\\\\))",
-      "Bash(2)"
+      "Bash(2)",
+      "Bash(-print)",
+      "Bash(mkdir -p \"D:/Dev/EasyCodeFramework/docs/04_modules/mod-006-execucao-casos/amendments/int\")",
+      "Bash(mkdir -p \"D:/Dev/EasyCodeFramework/docs/04_modules/mod-008-integracao-protheus/amendments/int\")",
+      "Bash(pnpm -F @ecf/web build)",
+      "Bash(pnpm -F @easycode/web build)",
+      "Bash(claude mcp:*)"
     ]
   },
   "hooks": {

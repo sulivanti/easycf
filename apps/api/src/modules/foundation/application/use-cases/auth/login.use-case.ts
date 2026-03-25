@@ -105,7 +105,7 @@ export class LoginUseCase {
 
     // 5. Resolve active tenant + scopes for JWT (FR-000-C05)
     const tenantUsers = await this.tenantUserRepo.findByUserId(user.id);
-    const activeTenantUser = tenantUsers.find(tu => tu.status === 'ACTIVE');
+    const activeTenantUser = tenantUsers.find((tu) => tu.status === 'ACTIVE');
     if (!activeTenantUser) {
       throw new AuthenticationFailedError();
     }

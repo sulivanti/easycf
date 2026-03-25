@@ -12,6 +12,12 @@ Documentos normativos não pertencem a módulos — este CHANGELOG substitui o P
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 0.14.0 | 2026-03-25 | merge-amendment | Merge DOC-UX-011-M03: nova §6.2 LogoutConfirmDialog obrigatório no Widget de Perfil. DOC-UX-011 v1.4.0. Ref: spec-auth-ui-components. |
+| 0.13.0 | 2026-03-25 | merge-amendment | Merge DOC-PADRAO-005-C01: §10 expandida com `max_attachments` por entity_type, CON-005, Gate STR-6. DOC-PADRAO-005 v1.0.1. Resolve PENDENTE-004. |
+| 0.12.0 | 2026-03-25 | create-amendment | Criação DOC-UX-011-M03: §6.2 LogoutConfirmDialog obrigatório no Widget de Perfil — confirmação antes de logout, prevenção de logout acidental. Referencia spec-auth-ui-components (REQ-LC-001 a REQ-LC-010). |
+| 0.11.0 | 2026-03-25 | merge-amendment | Merge batch: DOC-PADRAO-002-M01 (§3.4 Cache e Filas expandida v1.4.0), INT-000-M02 (RBAC cache mod-000), INT-006-M01 (email queue mod-006), INT-008-M01 (ingest queue mod-008). Todos MERGED. |
+| 0.10.0 | 2026-03-25 | cascade-amendment | Cascata DOC-PADRAO-002-M01 → 3 derivados: INT-000-M02 (mod-000 RBAC cache), INT-006-M01 (mod-006 email queue), INT-008-M01 (mod-008 ingestão queue). Alinhamento com §3.4.1–3.4.5. |
+| 0.9.0 | 2026-03-25 | create-amendment | Criação DOC-PADRAO-002-M01: §3.4 expansão Cache e Filas — ioredis ^5.x config padrão, BullMQ ^5.x como dep core, key naming convention, TTL por categoria, separação databases, health check. Incorpora regras da skill redis-development. |
 | 0.8.0 | 2026-03-25 | merge-amendment | Merge batch: DOC-PADRAO-001-M01 (Docker multi-stage §4.2-4.4), DOC-PADRAO-004-M01 (hostnames Docker §3.12), DOC-UX-011-M02 (CA-07/CA-08 proibição inline), DOC-UX-012-M02 (auth context §5.3 CA-06), DOC-GNP-00-M01 (artefatos obrigatórios §2.1). Todos MERGED. |
 | 0.7.0 | 2026-03-25 | merge-amendment | Merge DOC-UX-011-M01: nova §8 Coming Soon Pattern + CA-09 no DOC-UX-011 v1.3.0. |
 | 0.6.0 | 2026-03-25 | merge-amendment | Merge DOC-PADRAO-001-C01: §4.4 Seed referencia catálogo canônico (DOC-FND-000 §2.2). DOC-PADRAO-001 v1.1.1. |

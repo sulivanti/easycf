@@ -7,6 +7,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-15 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-15 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
+> | 0.6.1  | 2026-03-25 | merge-amendment | Merge DATA-000-C02: regra SYSTEM_TENANT_ID para eventos pré-auth em domain_events §8 + null coercion em campos opcionais. Ref: spec-fix-domain-events-tenant-id. |
 > | 0.6.0  | 2026-03-25 | merge-amendment | Merge DATA-000-M01: nova coluna invite_token_created_at na tabela users (derivado de FR-000-M01). Viabiliza cálculo invite_token_expired no UserDetail. |
 > | 0.5.0  | 2026-03-18 | usuário     | Nota chave amigável tenant_users: concatenação userId+tenantCode em runtime (PENDENTE-003 opção A) |
 >
@@ -156,6 +157,14 @@ Toda entidade principal do Foundation DEVE conter:
 - `(tenant_id, event_type, created_at DESC)` — filtro por tipo
 - `UNIQUE(tenant_id, dedupe_key)` WHERE dedupe_key IS NOT NULL — dedupe
 
+**Regra de tenant_id para eventos pré-autenticação:**
+
+> Eventos pré-autenticação (login, forgot-password, reset-password) DEVEM usar a constante `SYSTEM_TENANT_ID` (`00000000-0000-0000-0000-000000000000`) como `tenant_id`. Eventos pós-autenticação DEVEM propagar o `tenantId` da sessão ativa (`request.session.tenantId`). O codegen NÃO DEVE gerar `tenantId: ''` como placeholder.
+
+**Regra de campos nullable:**
+
+> Campos `causation_id`, `dedupe_key` e `created_by` DEVEM ser serializados como `NULL` (não `undefined` nem string vazia) quando não fornecidos. A factory `createFoundationEvent()` DEVE aplicar fallback `?? null` em todos os campos opcionais.
+
 ---
 
 ## Relacionamentos e Constraints (MUST)
@@ -181,7 +190,7 @@ erDiagram
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
+- **data_ultima_revisao:** 2026-03-25
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F05, US-MOD-000-F06, US-MOD-000-F07, US-MOD-000-F09, FR-000, BR-000, SEC-000, DOC-FND-000, DOC-ARC-003
 - **referencias_exemplos:** DOC-FND-000 §1-§3 (contratos auth/RBAC/events), DOC-ARC-003 §1-§4 (rastreabilidade)
 - **evidencias:** Extraído de US-MOD-000-F01, F05, F06, F07, F09

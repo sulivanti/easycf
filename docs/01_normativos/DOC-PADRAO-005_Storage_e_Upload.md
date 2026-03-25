@@ -1,9 +1,9 @@
 # DOC-PADRAO-005 — Armazenamento em Storage: Uploads, Anexos e Arquivos
 
 - **id:** DOC-PADRAO-005
-- **version:** 1.0.0
+- **version:** 1.0.1
 - **status:** READY
-- **data_ultima_revisao:** 2026-03-06
+- **data_ultima_revisao:** 2026-03-25
 - **owner:** infraestrutura
 - **scope:** global (storage provider-agnóstico)
 
@@ -76,6 +76,7 @@ A arquitetura é **provider-agnóstica** (MinIO, AWS S3, Cloudflare R2, Supabase
 - **CON-002:** Somente um avatar `confirmed` pode existir por `user_id` por `tenant_id`. Ao confirmar novo avatar, o anterior recebe `deleted_at = NOW()`.
 - **CON-003:** Registros com `purpose = 'temp'` e `expires_at` vencido DEVEM ser removidos do bucket e marcados com `deleted_at` pelo Job de purge.
 - **CON-004:** O `entity_type` DEVE ser declarado no Catálogo de Entity Types desta normativa (§10) antes de uso em produção.
+- **CON-005:** O backend DEVE rejeitar `POST /uploads/presign` com `HTTP 409 Conflict` quando o número de `storage_objects` com `upload_status IN ('pending', 'confirmed')` para o par `(entity_type, entity_id)` atingir o `max_attachments` definido no catálogo §10. Erro RFC 9457: `type: /problems/attachment-limit-exceeded`.
 
 ---
 
@@ -217,6 +218,7 @@ interface PresignResponse {
 | MIME allowlist | Verificar contra allowlist por `purpose` (ver §7) |
 | Tamanho | `size_bytes` ≤ limite do `purpose` (ver variáveis de ambiente §11) |
 | Entity type | Registrado no catálogo §10 |
+| Limite de anexos | `COUNT(storage_objects WHERE entity_type AND entity_id AND upload_status IN ('pending','confirmed') AND deleted_at IS NULL) < max_attachments` do catálogo §10. Se violado → `409` (CON-005) |
 
 ### 6.2 PUT `{presigned_url}`
 
@@ -336,14 +338,14 @@ Disparado após confirmação de `purpose = 'attachment'` ou `'import'` quando `
 
 Todo `entity_type` utilizado em uploads DEVE ser registrado nesta tabela antes de uso em produção. Novos `entity_type`s são adicionados via PR que atualiza esta seção.
 
-| entity_type | Módulo | Purposes permitidos | Observações |
-|---|---|---|---|
-| `user` | Foundation (DOC-FND-000 §6) | `avatar`, `attachment` | Avatar: único ativo por usuário |
-| `tenant` | Foundation (DOC-FND-000 §6) | `attachment` | Documentos do tenant |
-| `import_job` | Core | `import` | Vinculado ao `job_id` |
-| `export_job` | Core | `export` | Expira após `expires_at` |
+| entity_type | Módulo | Purposes permitidos | max_attachments | Observações |
+|---|---|---|---|---|
+| `user` | Foundation (DOC-FND-000 §6) | `avatar`, `attachment` | `1` (avatar), `10` (attachment) | Avatar: único ativo por usuário; attachments: documentos pessoais |
+| `tenant` | Foundation (DOC-FND-000 §6) | `attachment` | `20` | Documentos do tenant (contratos, logos, etc.) |
+| `import_job` | Core | `import` | `1` | Um arquivo por job de importação |
+| `export_job` | Core | `export` | `1` | Um arquivo por job de exportação |
 
-> Módulos futuros devem adicionar suas linhas nesta tabela abrindo um PR com atualização desta normativa.
+> Módulos futuros DEVEM declarar `max_attachments` ao registrar novos `entity_type`s. Valor `0` = ilimitado (requer justificativa em ADR).
 
 ---
 
@@ -474,6 +476,7 @@ STORAGE_SCAN_ENDPOINT=                  # ex: http://clamav:3310
 | **Gate STR-3** | Endpoints de presign DEVEM declarar permissão `{entity_type}:write` no OpenAPI (`x-permissions`) |
 | **Gate STR-4** | Nenhuma coluna `avatar_url` de texto livre pode existir em tabelas de usuário — o vínculo é feito via `storage_objects` |
 | **Gate STR-5** | O campo `object_key` e `bucket` NUNCA devem aparecer em DTOs de resposta ao cliente |
+| **Gate STR-6** | Todo `entity_type` no catálogo §10 DEVE ter `max_attachments` definido (valor numérico > 0 ou `0` com ADR justificando) |
 
 ---
 
@@ -488,8 +491,9 @@ STORAGE_SCAN_ENDPOINT=                  # ex: http://clamav:3310
 
 **Metadados:**
 
-- **Versão:** 1.0.0
+- **Versão:** 1.0.1
 - **Criação:** 2026-03-06
 - **Status:** READY
 - **Changelog:**
+  - `1.0.1` (2026-03-25): §10 expandida com coluna `max_attachments` por entity_type. Nova CON-005 (rejeitar upload acima do limite). Gate STR-6. Validação de limite no fluxo presign §6.1 (DOC-PADRAO-005-C01).
   - `1.0.0` (2026-03-06): Versão inicial — cobre fluxo two-step, modelo de dados, RBAC, domain events, jobs assíncronos, allowlist MIME, paths no bucket, variáveis de ambiente e gates de CI.

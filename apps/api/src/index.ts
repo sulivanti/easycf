@@ -1,36 +1,99 @@
+/**
+ * @contract DOC-ARC-004, FR-000-C03
+ *
+ * API Entry Point — Fastify server with all module route plugins registered.
+ *
+ * Registration order (DOC-ARC-004 §3):
+ *  1. Core plugins (helmet, cors, cookie, jwt)
+ *  2. Auth/DI plugins (verifySession, requireScope, dipiContainer)
+ *  3. Route plugins (all modules)
+ *  4. Global error handler (foundationErrorHandler)
+ *  5. app.listen()
+ */
+
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import cookie from '@fastify/cookie';
 import jwt from '@fastify/jwt';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import { eq, and } from 'drizzle-orm';
-import { compare } from 'bcrypt';
+
+// — Auth & DI plugins (DOC-ARC-004 §5) —
+import { authPlugin } from './plugins/auth.js';
+import { diPlugin } from './plugins/di.js';
+
+// — Route plugins: MOD-000 Foundation —
 import {
-  users,
-  contentUsers,
-  tenantUsers,
-  tenants,
-  roles,
-  rolePermissions,
-  userSessions,
-} from '../db/schema/index.js';
+  authRoutes,
+  usersRoutes,
+  rolesRoutes,
+  tenantsRoutes,
+  infoRoute,
+  foundationErrorHandler,
+} from './modules/foundation/index.js';
+
+// — Route plugins: MOD-003 Org Units —
+import { orgUnitsRoutes } from './modules/org-units/index.js';
+
+// — Route plugins: MOD-004 Identity Advanced —
+import {
+  adminOrgScopesRoutes,
+  myOrgScopesRoutes,
+  adminAccessSharesRoutes,
+  mySharedAccessesRoutes,
+  accessDelegationsRoutes,
+} from './modules/identity-advanced/index.js';
+
+// — Route plugins: MOD-005 Process Modeling —
+import {
+  cyclesRoutes,
+  stagesRoutes,
+  processRolesRoutes,
+} from './modules/process-modeling/index.js';
+
+// — Route plugins: MOD-006 Case Execution (absolute paths) —
+import { caseExecutionRoutes } from './modules/case-execution/index.js';
+
+// — Route plugins: MOD-007 Contextual Params —
+import { contextualParamsPlugin } from './modules/contextual-params/index.js';
+
+// — Route plugins: MOD-008 Integration Protheus (alias engineRoutes → integrationEngineRoutes) —
+import {
+  servicesRoutes,
+  routinesRoutes,
+  engineRoutes as integrationEngineRoutes,
+} from './modules/integration-protheus/index.js';
+
+// — Route plugins: MOD-009 Movement Approval (alias engineRoutes → movementEngineRoutes) —
+import {
+  rulesRoutes,
+  engineRoutes as movementEngineRoutes,
+  movementsRoutes,
+  approvalsRoutes,
+} from './modules/movement-approval/index.js';
+
+// — Route plugins: MOD-010 MCP —
+import {
+  agentsRoutes,
+  actionsRoutes,
+  executionsRoutes,
+  gatewayRoutes,
+} from './modules/mcp/index.js';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Configuration
+// ─────────────────────────────────────────────────────────────────────────────
 
 const PORT = Number(process.env.API_PORT) || 3000;
 const HOST = '0.0.0.0';
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-min-32-chars-long-replace-me';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '15m';
-const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
-const IS_PROD = process.env.NODE_ENV === 'production';
 
-// Database
-const sql = postgres(process.env.DATABASE_URL!);
-const db = drizzle(sql);
+// ─────────────────────────────────────────────────────────────────────────────
+// Fastify instance + core plugins
+// ─────────────────────────────────────────────────────────────────────────────
 
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'info' } });
 
-// Plugins
 await app.register(helmet);
 await app.register(cors, {
   origin: process.env.CORS_ORIGIN?.split(',') ?? ['http://localhost:5173'],
@@ -42,200 +105,77 @@ await app.register(jwt, {
   sign: { expiresIn: JWT_EXPIRES_IN },
 });
 
-// Health / Info
-app.get('/api/v1/info', async () => ({
-  name: '@easycode/api',
-  version: '0.10.0',
-  env: process.env.NODE_ENV ?? 'development',
-  uptime: process.uptime(),
-}));
+// ─────────────────────────────────────────────────────────────────────────────
+// Auth & DI plugins (BEFORE routes — DOC-ARC-004 §3)
+// ─────────────────────────────────────────────────────────────────────────────
 
-// POST /api/v1/auth/login
-app.post('/api/v1/auth/login', async (request, reply) => {
-  const { email, password, remember_me } = request.body as {
-    email: string;
-    password: string;
-    remember_me?: boolean;
-  };
+await app.register(authPlugin);
+await app.register(diPlugin);
 
-  // Find user
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(and(eq(users.email, email), eq(users.status, 'ACTIVE')))
-    .limit(1);
+// ─────────────────────────────────────────────────────────────────────────────
+// Route plugins — all modules (DOC-ARC-004 §7)
+// ─────────────────────────────────────────────────────────────────────────────
 
-  if (!user) {
-    return reply.status(401).send({ message: 'Credenciais inválidas.' });
-  }
+// MOD-000 Foundation — relative paths
+await app.register(authRoutes, { prefix: '/api/v1/auth' });
+await app.register(usersRoutes, { prefix: '/api/v1/users' });
+await app.register(rolesRoutes, { prefix: '/api/v1/roles' });
+await app.register(tenantsRoutes, { prefix: '/api/v1/tenants' });
+await app.register(infoRoute, { prefix: '/api/v1' });
 
-  // Verify password
-  const valid = await compare(password, user.passwordHash);
-  if (!valid) {
-    return reply.status(401).send({ message: 'Credenciais inválidas.' });
-  }
+// MOD-003 Org Units — relative paths
+await app.register(orgUnitsRoutes, { prefix: '/api/v1/org-units' });
 
-  // Get profile
-  const [profile] = await db
-    .select()
-    .from(contentUsers)
-    .where(eq(contentUsers.userId, user.id))
-    .limit(1);
+// MOD-004 Identity Advanced — relative paths
+await app.register(adminOrgScopesRoutes, { prefix: '/api/v1/admin/users' });
+await app.register(myOrgScopesRoutes, { prefix: '/api/v1/my' });
+await app.register(adminAccessSharesRoutes, { prefix: '/api/v1/admin/access-shares' });
+await app.register(mySharedAccessesRoutes, { prefix: '/api/v1/my' });
+await app.register(accessDelegationsRoutes, { prefix: '/api/v1/access-delegations' });
 
-  // Get tenant + role + scopes
-  const [tenantLink] = await db
-    .select()
-    .from(tenantUsers)
-    .where(and(eq(tenantUsers.userId, user.id), eq(tenantUsers.status, 'ACTIVE')))
-    .limit(1);
+// MOD-005 Process Modeling — relative paths
+await app.register(cyclesRoutes, { prefix: '/api/v1/admin' });
+await app.register(stagesRoutes, { prefix: '/api/v1/admin' });
+await app.register(processRolesRoutes, { prefix: '/api/v1/admin' });
 
-  let scopes: string[] = [];
-  if (tenantLink) {
-    const perms = await db
-      .select()
-      .from(rolePermissions)
-      .where(eq(rolePermissions.roleId, tenantLink.roleId));
-    scopes = perms.map((p) => p.scope);
-  }
+// MOD-006 Case Execution — absolute paths (no prefix, debt técnico)
+await app.register(caseExecutionRoutes);
 
-  // Create session
-  const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + (remember_me ? 30 : 1));
+// MOD-007 Contextual Params — composite plugin, relative paths
+await app.register(contextualParamsPlugin, { prefix: '/api/v1' });
 
-  const [session] = await db
-    .insert(userSessions)
-    .values({
-      userId: user.id,
-      rememberMe: remember_me ?? false,
-      expiresAt,
-    })
-    .returning();
+// MOD-008 Integration Protheus — relative paths
+await app.register(servicesRoutes, { prefix: '/api/v1' });
+await app.register(routinesRoutes, { prefix: '/api/v1' });
+await app.register(integrationEngineRoutes, { prefix: '/api/v1' });
 
-  // Generate tokens
-  const tokenPayload = {
-    sub: user.id,
-    sid: session.id,
-    tid: tenantLink?.tenantId ?? null,
-    scopes,
-  };
+// MOD-009 Movement Approval — absolute paths (no prefix, debt técnico)
+await app.register(rulesRoutes);
+await app.register(movementEngineRoutes);
+await app.register(movementsRoutes);
+await app.register(approvalsRoutes);
 
-  const accessToken = app.jwt.sign(tokenPayload);
-  const refreshToken = app.jwt.sign(
-    { sub: user.id, sid: session.id, type: 'refresh' },
-    { expiresIn: JWT_REFRESH_EXPIRES_IN },
-  );
+// MOD-010 MCP — absolute paths (no prefix, debt técnico)
+await app.register(agentsRoutes);
+await app.register(actionsRoutes);
+await app.register(executionsRoutes);
+await app.register(gatewayRoutes);
 
-  // Set cookies
-  void reply
-    .setCookie('accessToken', accessToken, {
-      httpOnly: true,
-      sameSite: 'lax',
-      path: '/',
-      secure: IS_PROD,
-    })
-    .setCookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      sameSite: 'lax',
-      path: '/api/v1/auth/refresh',
-      secure: IS_PROD,
-    });
+// ─────────────────────────────────────────────────────────────────────────────
+// Global error handler (DOC-ARC-004 §4)
+// ─────────────────────────────────────────────────────────────────────────────
 
-  return reply.status(200).send({
-    access_token: accessToken,
-    refresh_token: refreshToken,
-    token_type: 'Bearer',
-    expires_in: 900,
-    user: {
-      id: user.id,
-      email: user.email,
-      full_name: profile?.fullName ?? '',
-      status: user.status,
-    },
-  });
-});
+app.setErrorHandler(foundationErrorHandler);
 
-// GET /api/v1/auth/me (FR-004, FR-000-C02)
-app.get('/api/v1/auth/me', async (request, reply) => {
-  // Verify JWT from cookie or Authorization header
-  const token =
-    request.cookies.accessToken ??
-    (request.headers.authorization?.startsWith('Bearer ')
-      ? request.headers.authorization.slice(7)
-      : undefined);
-
-  if (!token) {
-    return reply.status(401).send({ message: 'Não autenticado.' });
-  }
-
-  let payload: { sub: string; tid: string | null };
-  try {
-    payload = app.jwt.verify<{ sub: string; tid: string | null }>(token);
-  } catch {
-    return reply.status(401).send({ message: 'Token inválido ou expirado.' });
-  }
-
-  // Find user
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, payload.sub))
-    .limit(1);
-
-  if (!user) {
-    return reply.status(401).send({ message: 'Usuário não encontrado.' });
-  }
-
-  // Get profile (content_users)
-  const [profile] = await db
-    .select()
-    .from(contentUsers)
-    .where(eq(contentUsers.userId, user.id))
-    .limit(1);
-
-  // Get tenant + role + scopes
-  const [tenantLink] = await db
-    .select()
-    .from(tenantUsers)
-    .where(and(eq(tenantUsers.userId, user.id), eq(tenantUsers.status, 'ACTIVE')))
-    .limit(1);
-
-  let tenant: { id: string; name: string } = { id: '', name: '' };
-  let scopes: string[] = [];
-
-  if (tenantLink) {
-    // Resolve tenant name
-    const [tenantRow] = await db
-      .select()
-      .from(tenants)
-      .where(eq(tenants.id, tenantLink.tenantId))
-      .limit(1);
-
-    if (tenantRow) {
-      tenant = { id: tenantRow.id, name: tenantRow.name };
-    }
-
-    // Resolve scopes
-    const perms = await db
-      .select()
-      .from(rolePermissions)
-      .where(eq(rolePermissions.roleId, tenantLink.roleId));
-    scopes = perms.map((p) => p.scope);
-  }
-
-  return reply.status(200).send({
-    id: user.id,
-    name: profile?.fullName ?? '',
-    email: user.email,
-    avatar_url: profile?.avatarUrl ?? null,
-    tenant,
-    scopes,
-  });
-});
-
+// ─────────────────────────────────────────────────────────────────────────────
 // Start
+// ─────────────────────────────────────────────────────────────────────────────
+
 try {
   await app.listen({ port: PORT, host: HOST });
   app.log.info(`API running on ${HOST}:${PORT}`);
+  app.log.info('Registered routes:');
+  app.log.info(app.printRoutes());
 } catch (err) {
   app.log.error(err);
   process.exit(1);

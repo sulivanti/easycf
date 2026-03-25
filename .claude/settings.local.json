@@ -173,7 +173,18 @@
       "Read(//d/Dev/EasyCodeFramework/apps/api/src/modules/**)",
       "Bash(echo \"EXIT=$?\")",
       "Bash(gh issue:*)",
-      "Bash(npx vite:*)"
+      "Bash(npx vite:*)",
+      "Bash(find /d/Dev/EasyCodeFramework/apps/web -type f \\\\\\(-name *.tsx -o -name *.ts -o -name *.jsx -o -name *.js \\\\\\))",
+      "Bash(wc -l /d/Dev/EasyCodeFramework/docs/01_normativos/*.md)",
+      "Bash(wc -l /d/Dev/EasyCodeFramework/.claude/commands/*.md)",
+      "Bash(wc:*)",
+      "Bash(pnpm --filter api exec tsc --noEmit)",
+      "Bash(pnpm --filter web exec tsc --noEmit)",
+      "Bash(pnpm exec:*)",
+      "Bash(pnpm -w exec tsx scripts/validate-route-registration.ts)",
+      "Bash(pnpm dlx:*)",
+      "Bash(pnpm ls:*)",
+      "Bash(pnpm --filter @easycode/api build)"
     ]
   },
   "hooks": {

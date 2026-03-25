@@ -5,8 +5,8 @@ import { LoginPage } from '@modules/foundation/pages/login/LoginPage';
 export const Route = createRoute({
   path: '/login',
   getParentRoute: () => rootRoute,
-  validateSearch: (search: Record<string, unknown>) => ({
-    token: (search.token as string) ?? undefined,
+  validateSearch: (search: Record<string, unknown>): { token?: string } => ({
+    token: search.token as string | undefined,
   }),
   beforeLoad: async ({ context }) => {
     if (context.auth?.user) {

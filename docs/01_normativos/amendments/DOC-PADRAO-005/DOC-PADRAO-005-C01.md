@@ -1,11 +1,10 @@
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
->
-> - Emenda sobre documento base em estado READY.
+> - Emenda sobre documento normativo em estado READY.
 > - Para novas emendas, use a skill `create-amendment`.
 
 # Emenda: DOC-PADRAO-005-C01
 
-- **Documento base:** [DOC-PADRAO-005](../../../../01_normativos/DOC-PADRAO-005_Storage_e_Upload.md) §10 — Catálogo de Entity Types
+- **Documento base:** [DOC-PADRAO-005](../../DOC-PADRAO-005_Storage_e_Upload.md) §10 — Catálogo de Entity Types
 - **estado_item:** DRAFT
 - **Natureza:** C (Correção)
 - **Data:** 2026-03-18

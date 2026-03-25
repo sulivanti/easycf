@@ -37,8 +37,8 @@ function mapUserListItem(item: UserListItem): UserListItemDTO {
     fullName: item.full_name,
     email: item.email,
     status: (item.status as UserListItemDTO['status']) ?? 'ACTIVE',
-    roleId: '',
-    roleName: '',
+    roleId: item.role_id ?? '',
+    roleName: item.role_name ?? '',
     createdAt: item.created_at,
   };
 }
@@ -48,7 +48,7 @@ function mapUserDetail(detail: UserDetail): UserDetailDTO {
     id: detail.id,
     fullName: detail.full_name,
     status: (detail.status as UserDetailDTO['status']) ?? 'ACTIVE',
-    inviteTokenExpired: false,
+    inviteTokenExpired: detail.invite_token_expired ?? false,
     createdAt: detail.created_at,
   };
 }

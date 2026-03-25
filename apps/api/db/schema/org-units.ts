@@ -21,7 +21,7 @@ import {
   check,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
-import { tenants } from './foundation.js';
+import { tenants, users } from './foundation.js';
 
 // ---------------------------------------------------------------------------
 // 1. org_units — Unidades Organizacionais N1–N4 (DATA-001 §org_units)
@@ -34,18 +34,16 @@ export const orgUnits = pgTable(
     nome: varchar('nome', { length: 200 }).notNull(),
     descricao: text('descricao'),
     nivel: integer('nivel').notNull(),
-    parentId: uuid('parent_id'),
-    status: text('status').notNull().$type<'ACTIVE' | 'INACTIVE'>(),
-    createdBy: uuid('created_by'),
+    parentId: uuid('parent_id').references((): any => orgUnits.id, { onDelete: 'restrict' }),
+    status: varchar('status', { length: 20 }).notNull().$type<'ACTIVE' | 'INACTIVE'>(),
+    createdBy: uuid('created_by')
+      .notNull()
+      .references(() => users.id),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
   (table) => [
-    // Self-referencing FK — parent hierarchy (ON DELETE RESTRICT)
-    // Note: Drizzle does not support self-referencing .references() inline;
-    // the FK is declared via raw SQL in migration or via explicit reference below.
-
     // CHECK: nivel must be 1–4 (DATA-001: N1=Corporate Group, N2=Unit, N3=Macro-area, N4=Sub-unit)
     check('org_units_nivel_check', sql`${table.nivel} >= 1 AND ${table.nivel} <= 4`),
 
@@ -83,7 +81,9 @@ export const orgUnitTenantLinks = pgTable(
     tenantId: uuid('tenant_id')
       .notNull()
       .references(() => tenants.id, { onDelete: 'restrict' }),
-    createdBy: uuid('created_by'),
+    createdBy: uuid('created_by')
+      .notNull()
+      .references(() => users.id),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },

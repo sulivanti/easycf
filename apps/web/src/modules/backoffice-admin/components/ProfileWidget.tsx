@@ -9,7 +9,8 @@
  */
 
 import { useState } from 'react';
-import { KeyRound, LogOut } from 'lucide-react';
+import { KeyRound, LogOut, User, Monitor } from 'lucide-react';
+import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@shared/ui/button';
 import { Skeleton } from '@shared/ui/skeleton';
 import {
@@ -41,6 +42,7 @@ function getInitials(name: string): string {
 export function ProfileWidget({ user, isLoading }: Props) {
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const logout = useLogout();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -78,6 +80,14 @@ export function ProfileWidget({ user, isLoading }: Props) {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem onSelect={() => navigate({ to: '/profile' })}>
+            <User className="size-4" />
+            Meu Perfil
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => navigate({ to: '/sessoes' })}>
+            <Monitor className="size-4" />
+            Sessões Ativas
+          </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => setChangePasswordOpen(true)}>
             <KeyRound className="size-4" />
             Alterar Senha

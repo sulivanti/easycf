@@ -6,7 +6,7 @@
 # Emenda: DOC-FND-000-M04
 
 - **Documento base:** [DOC-FND-000](../../../../01_normativos/DOC-FND-000__Foundation.md)
-- **estado_item:** DRAFT
+- **estado_item:** MERGED
 - **Natureza:** M (Melhoria)
 - **Data:** 2026-03-19
 - **owner:** Marcos Sulivan
@@ -37,3 +37,11 @@ Versão DOC-FND-000 bumped: 1.6.0 → 1.7.0.
 - **Pilares afetados:** SEC-010 (MOD-010) — referências a "Amendment MOD-000-F12 pendente" atualizadas para "scopes registrados"; INT-010 INT-005 — dependência de amendment satisfeita; mod-010 mod.md §8 — scopes agora existem no catálogo canônico
 - **Ação requerida:** Nenhuma — os artefatos MOD-010 já referenciam os scopes corretamente. Gate CI (DOC-ARC-003B) agora passa para Screen Manifests do MOD-010.
 - **Migration SQL:** INSERT dos 6 scopes na tabela `scopes` do MOD-000 deve ser incluído no PR de deploy do MOD-010.
+
+---
+
+## Resolução do Merge
+
+> **Merged por:** merge-amendment (selo retroativo) em 2026-03-25
+> **Versão base após merge:** DOC-FND-000 v1.7.0
+> **Alterações aplicadas:** 6 scopes mcp:* registrados no catálogo §2.2. Seed-admin.ts atualizado.

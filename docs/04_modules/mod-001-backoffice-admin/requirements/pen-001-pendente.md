@@ -5,6 +5,8 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 0.25.0 | 2026-03-25 | arquitetura    | PENDENTE-010 → DECIDIDA → IMPLEMENTADA (Opção C — CHANGELOG normativos + binding reverso + skill atualizada) |
+> | 0.24.0 | 2026-03-25 | arquitetura    | Adição PENDENTE-010 — normative amendments sem trilha de auditoria (pulam PASSO 3/4 do create-amendment) |
 > | 0.23.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-009 → IMPLEMENTADA — correção lint 3 fases (format + lint:fix + refactor hooks) |
 > | 0.22.0 | 2026-03-24 | Marcos Sulivan | PENDENTE-009 → DECIDIDA (Opção A) — correção incremental em 3 fases |
 > | 0.21.0 | 2026-03-24 | validate-all  | Adição PENDENTE-009 — erros lint codegen (7 ocorrências) |
@@ -468,11 +470,47 @@ Opção A — Correção incremental em 3 fases, consistente com a decisão já 
 
 ---
 
+## ~~PENDENTE-010~~ — ✅ IMPLEMENTADA: Normative amendments sem trilha de auditoria (PASSO 3/4 ausente)
+
+- **Questão:** Amendments de documentos normativos (DOC-UX-011-M01, DOC-UX-011-M02, DOC-PADRAO-001-C01/M01, DOC-PADRAO-004-M01, DOC-UX-012-M02, DOC-GNP-00-M01) residem em `docs/01_normativos/amendments/` e são transversais. O fluxo `/create-amendment` pula PASSO 3 (upward binding ao manifesto de módulo) e PASSO 4 (entrada no CHANGELOG de módulo) para esses artefatos, pois não pertencem a nenhum módulo específico. A única trilha de auditoria é o próprio arquivo de emenda e o INDEX.md na pasta de normativos. Quando um módulo depende de um normativo (ex: UX-001-C01 depende de DOC-UX-011-M02 CA-07), essa dependência não aparece automaticamente no CHANGELOG do módulo consumidor.
+- **Impacto:** Rastreabilidade: sem CHANGELOG formal para normativos, mudanças transversais (que afetam todos os módulos) ficam sub-documentadas. Revisores precisam navegar manualmente até `docs/01_normativos/amendments/INDEX.md` para verificar estado. Dependências cruzadas normativo→módulo não são explicitadas automaticamente.
+- **Opções:**
+  - **Opção A — CHANGELOG para normativos:** Criar `docs/01_normativos/amendments/CHANGELOG.md` com histórico de versões dos normativos, análogo ao CHANGELOG de módulo. O `/create-amendment` e `/merge-amendment` incluiriam PASSO 4 adaptado para normativos.
+  - **Opção B — Binding reverso no módulo consumidor:** Quando um amendment de módulo referencia um normativo via `rastreia_para`, o CHANGELOG do módulo consumidor DEVE incluir nota explícita da dependência normativa (ex: "Deps: DOC-UX-011-M02 CA-07"). Feito manualmente ou via automação no codegen.
+  - **Opção C — Ambos A + B:** CHANGELOG de normativos + binding reverso nos módulos consumidores.
+- **Recomendação:** Opção C — CHANGELOG de normativos garante trilha de auditoria centralizada; binding reverso garante que cada módulo documente suas dependências normativas explicitamente. Custo baixo (uma entrada extra por amendment).
+- **status:** IMPLEMENTADA
+- **severidade:** BAIXA
+- **domínio:** GOV
+- **tipo:** LACUNA
+- **origem:** CODEGEN (descoberto durante codegen UX-001-C01/C02/M01/M02)
+- **criado_em:** 2026-03-25
+- **criado_por:** arquitetura
+- **decidido_em:** 2026-03-25
+- **decidido_por:** arquitetura
+- **opcao_escolhida:** C
+- **justificativa_decisao:** CHANGELOG centralizado para normativos (Opção A) garante trilha de auditoria sem depender de nenhum módulo específico. Binding reverso (Opção B) garante que cada módulo documente suas dependências normativas no próprio CHANGELOG (ex: `Deps normativas: DOC-UX-011-M02 CA-07`). Custo marginal: uma entrada extra por amendment no CHANGELOG de normativos, uma nota extra no CHANGELOG de módulo consumidor.
+- **modulo:** MOD-001 (transversal — afeta todos os módulos)
+- **rastreia_para:** DOC-GNP-00, DOC-DEV-001, create-amendment, merge-amendment
+- **tags:** governanca, audit-trail, normativos, amendments, changelog
+- **sla_data:** —
+- **dependencias:** []
+
+### Resolução
+
+> **Decisão:** Opção C — CHANGELOG de normativos + binding reverso nos módulos consumidores
+> **Decidido por:** arquitetura em 2026-03-25
+> **Justificativa:** Ambas as abordagens complementares: CHANGELOG centralizado para auditoria transversal, binding reverso para rastreabilidade no módulo.
+> **Artefato de saída:** `docs/01_normativos/amendments/CHANGELOG.md` (criado com histórico retroativo de 8 amendments), `.claude/commands/create-amendment.md` (PASSO 4a para normativos + reminder de binding reverso no Passo Final). MOD-001 CHANGELOG v1.3.0 já inclui `Deps normativas:` como exemplo do binding reverso.
+> **Implementado em:** 2026-03-25
+
+---
+
 > **Nota de governanca:** Todos os PENDENTEs devem ser resolvidos antes de promover o modulo para `estado_item: READY`. Resolucao = tomar a decisao, incorporar no requisito afetado e atualizar status para RESOLVIDO.
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-24
+- **data_ultima_revisao:** 2026-03-25
 - **rastreia_para:** US-MOD-001, FR-001, FR-004, FR-005, UX-001, BR-005, NFR-001, DOC-FND-000, ADR-003, DOC-PADRAO-002
 - **referencias_exemplos:** EX-CI-007
-- **evidencias:** PENDENTE-009 — IMPLEMENTADA (0 errors confirmados em 2026-03-24, já corrigidos via PEN-000/PENDENTE-018)
+- **evidencias:** PENDENTE-010 — IMPLEMENTADA (CHANGELOG normativos criado, /create-amendment PASSO 4a adicionado, binding reverso no Passo Final)

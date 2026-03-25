@@ -4,12 +4,13 @@ Aplica (merge) uma emenda aprovada no documento base, incorporando as alteraçõ
 
 > **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `merge-amendment`
 
-## Relação com `/create-amendment`
+## Relação com o ciclo de amendments
 
 | Etapa | Skill | O que faz |
 |---|---|---|
 | 1. Criar emenda | `/create-amendment` | Cria arquivo de amendment sem tocar o base |
-| 2. Aplicar emenda | `/merge-amendment` (esta skill) | Incorpora conteúdo no base e sela o amendment |
+| 2. Analisar cascata | `/cascade-amendment` | Identifica pilares afetados e cria amendments derivados |
+| 3. Aplicar emenda | `/merge-amendment` (esta skill) | Incorpora conteúdo no base e sela o amendment |
 
 ## Argumento
 
@@ -61,7 +62,9 @@ vs versão atual do base (campo "version:" no base)?
 
 ### Gate 5 — Amendments Concorrentes
 
-Verifique se existem outros amendments DRAFT ou APPROVED para o mesmo documento base:
+Verifique se existem outros amendments DRAFT ou APPROVED para o mesmo documento base.
+Para normativos: busque em `docs/01_normativos/amendments/{DOC-ID}/`.
+Para requisitos de módulo: busque em `docs/04_modules/mod-NNN/amendments/{pilar}/`.
 
 ```text
 Outros amendments ativos para o mesmo base?
@@ -69,6 +72,23 @@ Outros amendments ativos para o mesmo base?
 ├── 1+ encontrados → AVISE: "Existem {N} amendments pendentes para o mesmo documento base:
 │                     {lista}. Aplicar este pode conflitar com os demais."
 │                     Peça confirmação para prosseguir.
+```
+
+### Gate 6 — Cascade Check
+
+Se "Impacto nos Pilares" lista ações concretas em outros pilares/módulos (qualquer natureza M/C/R):
+
+```text
+1. Busque amendments derivados (campo "Derivado de:" apontando para este amendment,
+   ou rastreia_para contendo o ID deste amendment)
+2. Decisão:
+   ├── Derivados encontrados → AVISE: "Existem {N} amendments derivados.
+   │   Recomenda-se mergear o pai primeiro, depois os derivados."
+   ├── Nenhum derivado + ações concretas listadas → AVISE:
+   │   "Impacto em {pilares} sem amendments derivados encontrados.
+   │    Considere executar /cascade-amendment {path} antes de mergear."
+   │   Peça confirmação para prosseguir.
+   └── Impacto apenas informativo (sem ações concretas) → Prossiga sem aviso.
 ```
 
 ## Ciclo de Vida do Amendment
@@ -89,7 +109,7 @@ DRAFT → APPROVED → MERGED
 
 ### Naming Convention
 
-Formato: `{Pilar}-{ID}-{Natureza}{Sequencial}.md`
+**Para requisitos de módulo:** `{Pilar}-{ID}-{Natureza}{Sequencial}.md`
 
 | Componente | Valores | Exemplo |
 |------------|---------|---------|
@@ -99,6 +119,17 @@ Formato: `{Pilar}-{ID}-{Natureza}{Sequencial}.md`
 | Sequencial | Incremento por pilar/ID | `01`, `02` |
 
 Exemplos: `FR-001-M01.md`, `BR-001-C02.md`, `DOC-FND-000-M04.md`
+
+**Para normativos transversais** (`docs/01_normativos/`): `{DOC-ID}-{Natureza}{Sequencial}.md`
+
+| Componente | Valores | Exemplo |
+|------------|---------|---------|
+| DOC-ID | ID completo do normativo | `DOC-PADRAO-001` |
+| Natureza | `M`, `C`, `R` | `M` |
+| Sequencial | Incremento por DOC-ID | `01`, `02` |
+
+Exemplos: `DOC-PADRAO-001-M01.md`, `DOC-UX-011-C01.md`, `DOC-GNP-00-M01.md`
+Path: `docs/01_normativos/amendments/{DOC-ID}/`
 
 ## PASSO 1: Análise do Amendment
 
@@ -135,7 +166,18 @@ Exemplos: `FR-001-M01.md`, `BR-001-C02.md`, `DOC-FND-000-M04.md`
 > **Alterações aplicadas:** {resumo curto}
 ```
 
-## PASSO 4: CHANGELOG do Módulo
+## PASSO 4: Registro de Auditoria
+
+### PASSO 4a (Normativos): Atualizar INDEX de Amendments
+
+> Se o amendment é de um normativo (path inicia com `docs/01_normativos/amendments/`): execute este passo ao invés do PASSO 4b.
+
+1. Abra `docs/01_normativos/amendments/INDEX.md`
+2. Localize a linha do amendment na tabela
+3. Atualize o campo Estado: `DRAFT` ou `APPROVED` → `MERGED`
+4. Se `rastreia_para` do amendment inclui PENDENTE-NNN, avise: "Verifique se PENDENTE-NNN em `pen-{MOD}-pendente.md` foi atualizado para IMPLEMENTADA."
+
+### PASSO 4b (Requisitos de módulo): CHANGELOG do Módulo
 
 1. Abra `CHANGELOG.md` na raiz do módulo
 2. Adicione entrada com versão, data, responsável e referência ao amendment:
@@ -151,5 +193,8 @@ Exemplos: `FR-001-M01.md`, `BR-001-C02.md`, `DOC-FND-000-M04.md`
 Responda ao usuário com:
 - Amendment aplicado (link)
 - Documento base atualizado (link + nova versão)
+- INDEX.md de normativos atualizado (se aplicável)
 - Pilares impactados (se houver ação pendente em outros pilares)
+- Se `rastreia_para` inclui PENDENTE-NNN: avise para verificar se a pendência foi atualizada para IMPLEMENTADA
+- Se existem amendments derivados: liste-os com estado e sugira ordem de merge (derivados após o pai)
 - Resultado do linter

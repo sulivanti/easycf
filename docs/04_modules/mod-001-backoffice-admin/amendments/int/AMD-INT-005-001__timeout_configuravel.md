@@ -54,3 +54,11 @@ Passa `timeout: 3_000` na chamada de `apiRequest` para `GET /auth/me`, alinhando
 - **Compatibilidade:** Retrocompatível — `timeout` é opcional, valor default permanece 5000ms
 - **Artefatos modificados:** `api-client.ts`, `use-auth-me.ts`
 - **Testes:** Testes existentes não afetados (não dependem do valor de timeout)
+
+---
+
+## Resolução do Merge
+
+> **Merged por:** merge-amendment em 2026-03-25
+> **Versão base após merge:** 0.6.0
+> **Alterações aplicadas:** Timeout configurável por endpoint documentado — GET /auth/me usa 3000ms

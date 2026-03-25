@@ -36,6 +36,15 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.7.0 | 2026-03-25 | merge-amendment | Merge FR-000-C01 + DOC-FND-000-M01..M04: seed-admin.ts corrigido (25→63 scopes, alinhado com DOC-FND-000 §2.2). Selos retroativos: M01 (6 scopes case:*), M02 (reopen), M03 (7 approval:*), M04 (6 mcp:*). Sidebar e RBAC agora funcionais para todos os módulos. |
+| 1.6.0 | 2026-03-25 | cascade-amendment | Cascade de FR-000-M01: 3 amendments derivados criados — DATA-000-M01 (coluna invite_token_created_at), INT-000-M01 (schemas OpenAPI Users API), SEC-000-M01 (regra anti-escalação role_id). Desbloqueia codegen MOD-002. |
+| 1.5.0 | 2026-03-25 | arquitetura | Migração: 8 normative amendments movidos de amendments/normativos/ para docs/01_normativos/amendments/{DOC-ID}/. Normativos são transversais e não pertencem a módulos. |
+| 1.4.3 | 2026-03-25 | merge-amendment | Merge DOC-UX-011-M01: nova §8 (Coming Soon Pattern) + CA-09 no DOC-UX-011 v1.3.0. |
+| 1.4.2 | 2026-03-25 | merge-amendment | Merge DOC-PADRAO-001-C01: §4.4 Seed Inicial agora referencia catálogo canônico (DOC-FND-000 §2.2). Base DOC-PADRAO-001 bumped para v1.1.1. |
+| 1.4.1 | 2026-03-25 | create-amendment | Amendment FR-000-C01: correção scopes do seed — `tenants:tenant:*` → `tenants:branch:*`, adicionados `system:audit:read/sensitive`, `users:user:import/export/comment`, `storage:file:upload/read`. Alinhamento com catálogo canônico DOC-FND-000 §2.2. Sem correção, sidebar não mostra Filiais nem Auditoria. |
+| 1.4.0 | 2026-03-25 | create-amendment | 5 amendments M02 (lições deploy): DOC-UX-011-M02 (rota index, CA-07/CA-08), DOC-UX-012-M02 (auth context §5.3, CA-06), DOC-PADRAO-001-M01 (Docker multi-stage §4.2-4.4), DOC-GNP-00-M01 (artefatos obrigatórios §2.1), DOC-PADRAO-004-M01 (hostnames Docker §3.12). Todos status_implementacao: MERGED. |
+| 1.3.0 | 2026-03-25 | create-amendment | Amendment DOC-UX-011-M01: novo pattern "Coming Soon" para rotas de módulos pendentes — componente ComingSoonPage shared + CA-09 (toda rota do sidebar DEVE ter route file). |
+| 1.2.1 | 2026-03-25 | create-amendment | Amendment DOC-PADRAO-001-C01: §4.4 Seed Inicial deve referenciar catálogo canônico de scopes (DOC-FND-000 §2.2) — vinculação explícita para evitar seed desatualizado em deploys. |
 | 1.2.0 | 2026-03-24 | create-amendment | Amendment FR-000-M01: DTO gaps Users API (F05) — adiciona role_id/role_name em UserListItem, invite_token_expired em UserDetail, mode/role_id em CreateUserRequest. Motivação: MOD-002 (Gestão de Usuários frontend) usa defaults hardcoded como workaround. |
 | 1.1.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. QA: PASS. Manifests: 5/5. OpenAPI: PASS. Drizzle: PASS. Endpoints: PASS. 0 bloqueadores, 2 avisos (operationId MFA/sessions). |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, 9 requisitos (BR/FR/DATA/DATA-003/SEC/SEC-002/INT/UX/NFR), 4 ADRs selados. Épico + 17 features já READY. Ciclo de estabilidade avança para Etapa 5. |

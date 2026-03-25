@@ -12,7 +12,7 @@
 # MOD-000 — Foundation (Framework de Automação / Geradores)
 
 - **id:** MOD-000
-- **version:** 1.0.0
+- **version:** 1.5.0
 - **estado_item:** READY
 - **owner:** arquitetura
 - **data_ultima_revisao:** 2026-03-24
@@ -136,10 +136,12 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 ## 8. Amendments
 
 <!-- start amendments-index -->
-- [DOC-PADRAO-005-C01](amendments/normativos/DOC-PADRAO-005-C01.md) — Limites de anexos configuráveis por entity_type (PENDENTE-004)
 - [DOC-FND-000-M01](amendments/sec/DOC-FND-000-M01.md) — 6 scopes process:case:* registrados no catálogo canônico §2.2 (MOD-006, PEN-006 PENDENTE-004)
 - [DOC-FND-000-M02](amendments/sec/DOC-FND-000-M02.md) — 7º scope process:case:reopen no catálogo §2.2 (PEN-006 PENDENTE-001)
 - [DOC-FND-000-M03](amendments/sec/DOC-FND-000-M03.md) — 7 scopes approval:* registrados no catálogo §2.2 (MOD-009, PEN-009 PENDENTE-002)
 - [DOC-FND-000-M04](amendments/sec/DOC-FND-000-M04.md) — 6 scopes mcp:* registrados no catálogo §2.2 (MOD-010, PEN-010 PENDENTE-004)
 - [FR-000-M01](amendments/fr/FR-000-M01.md) — DTO gaps Users API (F05): role_id/role_name em UserListItem, invite_token_expired em UserDetail, mode/role_id em CreateUserRequest (MOD-002)
+- [FR-000-C01](amendments/fr/FR-000-C01.md) — Correção scopes do seed: alinhar com catálogo canônico DOC-FND-000 §2.2 (tenants:branch:*, system:audit:*, storage:file:*)
 <!-- end amendments-index -->
+
+> **Nota:** 8 amendments de documentos normativos foram migrados para `docs/01_normativos/amendments/{DOC-ID}/` em 2026-03-25. Normativos são transversais e não pertencem a nenhum módulo específico. Ver: DOC-PADRAO-001-C01, DOC-PADRAO-001-M01, DOC-PADRAO-004-M01, DOC-PADRAO-005-C01, DOC-UX-011-M01, DOC-UX-011-M02, DOC-UX-012-M02, DOC-GNP-00-M01.

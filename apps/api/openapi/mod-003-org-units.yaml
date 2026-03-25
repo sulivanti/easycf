@@ -1,0 +1,545 @@
+# @contract INT-001, EX-OAS-001, FR-001..FR-005, SEC-001
+#
+# OpenAPI 3.1 specification for Organizational Structure (MOD-003).
+# 9 endpoints: CRUD, tree query, restore, tenant link/unlink.
+# All errors follow RFC 9457 Problem Details.
+
+openapi: "3.1.0"
+info:
+  title: EasyA2 API — Organizational Structure (MOD-003)
+  version: "1.0.0"
+  description: |
+    Organizational Structure module: manages 5-level hierarchy (N1–N4 as org_units,
+    N5 as existing tenants linked via org_unit_tenant_links).
+    Provides CRUD, tree query via CTE, soft delete/restore, and tenant binding.
+    Cross-tenant by design (ADR-003). All errors follow RFC 9457 Problem Details.
+
+servers:
+  - url: /api/v1
+
+tags:
+  - name: org-units
+    description: "Organizational Structure (MOD-003): hierarchy N1–N5, CRUD, tree, tenant links"
+
+# ============================================================================
+# Paths
+# ============================================================================
+paths:
+  /org-units:
+    post:
+      operationId: org_units_create
+      tags: [org-units]
+      summary: Create organizational unit (N1–N4)
+      description: |
+        Creates a node in the organizational hierarchy. Nivel is derived from parent (BR-002).
+        Supports Idempotency-Key (BR-012). Emits X-Limit-Warning when active count > 80% soft limit.
+      security:
+        - bearerAuth: []
+      x-permissions: ["org:unit:write"]
+      parameters:
+        - $ref: "#/components/parameters/CorrelationId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrgUnitRequest"
+      responses:
+        "201":
+          description: Org unit created
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+            X-Limit-Warning:
+              schema: { type: string }
+              description: Emitted when active node count exceeds 80% of soft limit (500)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateOrgUnitResponse"
+        "409":
+          description: Duplicate codigo (BR-008)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "422":
+          description: Validation error (max level, immutable field, etc.)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+    get:
+      operationId: org_units_list
+      tags: [org-units]
+      summary: List org units (flat, paginated)
+      description: |
+        Flat listing with cursor-based pagination. Filters: nivel, status, parent_id, search.
+        Default limit 20, max 100 (FR-005).
+      security:
+        - bearerAuth: []
+      x-permissions: ["org:unit:read"]
+      parameters:
+        - $ref: "#/components/parameters/CorrelationId"
+        - name: cursor
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - name: nivel
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 4 }
+        - name: status
+          in: query
+          schema: { type: string, enum: [ACTIVE, INACTIVE] }
+        - name: parent_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: search
+          in: query
+          schema: { type: string, maxLength: 200 }
+      responses:
+        "200":
+          description: Paginated list of org units
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrgUnitListResponse"
+
+  /org-units/tree:
+    get:
+      operationId: org_units_tree
+      tags: [org-units]
+      summary: Get organizational tree (N1→N5)
+      description: |
+        Returns full hierarchy via CTE recursivo. N4 nodes include linked tenants (N5).
+        Soft-deleted nodes excluded (FR-002).
+      security:
+        - bearerAuth: []
+      x-permissions: ["org:unit:read"]
+      parameters:
+        - $ref: "#/components/parameters/CorrelationId"
+      responses:
+        "200":
+          description: Tree structure
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrgUnitTreeResponse"
+
+  /org-units/{id}:
+    get:
+      operationId: org_units_get
+      tags: [org-units]
+      summary: Get org unit detail
+      description: Returns node with ancestors (breadcrumb) and linked tenants (FR-001).
+      security:
+        - bearerAuth: []
+      x-permissions: ["org:unit:read"]
+      parameters:
+        - $ref: "#/components/parameters/OrgUnitId"
+        - $ref: "#/components/parameters/CorrelationId"
+      responses:
+        "200":
+          description: Org unit detail
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrgUnitDetailResponse"
+        "404":
+          description: Org unit not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+    patch:
+      operationId: org_units_update
+      tags: [org-units]
+      summary: Update org unit (nome, descricao)
+      description: |
+        Updates mutable fields. codigo (BR-003) and parent_id (BR-010) are immutable —
+        including them triggers 422.
+      security:
+        - bearerAuth: []
+      x-permissions: ["org:unit:write"]
+      parameters:
+        - $ref: "#/components/parameters/OrgUnitId"
+        - $ref: "#/components/parameters/CorrelationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrgUnitRequest"
+      responses:
+        "200":
+          description: Org unit updated
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateOrgUnitResponse"
+        "404":
+          description: Org unit not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "422":
+          description: Immutable field or validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+    delete:
+      operationId: org_units_delete
+      tags: [org-units]
+      summary: Soft delete org unit
+      description: |
+        Sets status=INACTIVE + deleted_at. Blocked if node has active children (BR-005).
+      security:
+        - bearerAuth: []
+      x-permissions: ["org:unit:delete"]
+      parameters:
+        - $ref: "#/components/parameters/OrgUnitId"
+        - $ref: "#/components/parameters/CorrelationId"
+      responses:
+        "200":
+          description: Org unit deactivated
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+        "404":
+          description: Org unit not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "422":
+          description: Has active children
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+  /org-units/{id}/restore:
+    patch:
+      operationId: org_units_restore
+      tags: [org-units]
+      summary: Restore soft-deleted org unit
+      description: |
+        Restores a soft-deleted node. Parent must be active (or node is N1) — BR-009.
+      security:
+        - bearerAuth: []
+      x-permissions: ["org:unit:write"]
+      parameters:
+        - $ref: "#/components/parameters/OrgUnitId"
+        - $ref: "#/components/parameters/CorrelationId"
+      responses:
+        "200":
+          description: Org unit restored
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+        "404":
+          description: Org unit not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "422":
+          description: Parent is inactive
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+  /org-units/{id}/tenants:
+    post:
+      operationId: org_units_link_tenant
+      tags: [org-units]
+      summary: Link tenant (N5) to N4 node
+      description: |
+        Binds existing tenant (MOD-000) to N4 org unit. Only N4 allowed (BR-006).
+        Supports Idempotency-Key (BR-012).
+      security:
+        - bearerAuth: []
+      x-permissions: ["org:unit:write"]
+      parameters:
+        - $ref: "#/components/parameters/OrgUnitId"
+        - $ref: "#/components/parameters/CorrelationId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LinkTenantRequest"
+      responses:
+        "201":
+          description: Tenant linked
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LinkTenantResponse"
+        "404":
+          description: Org unit or tenant not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "409":
+          description: Duplicate link
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "422":
+          description: Not an N4 node
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+  /org-units/{id}/tenants/{tenantId}:
+    delete:
+      operationId: org_units_unlink_tenant
+      tags: [org-units]
+      summary: Unlink tenant from N4 node
+      description: Soft unlink — sets deleted_at on the link record (FR-003).
+      security:
+        - bearerAuth: []
+      x-permissions: ["org:unit:delete"]
+      parameters:
+        - $ref: "#/components/parameters/OrgUnitId"
+        - name: tenantId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - $ref: "#/components/parameters/CorrelationId"
+      responses:
+        "200":
+          description: Tenant unlinked
+          headers:
+            X-Correlation-ID:
+              schema: { type: string, format: uuid }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+        "404":
+          description: Link not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+# ============================================================================
+# Components
+# ============================================================================
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    OrgUnitId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    CorrelationId:
+      name: X-Correlation-ID
+      in: header
+      schema: { type: string, format: uuid }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      schema: { type: string }
+
+  schemas:
+    # -- Request schemas --------------------------------------------------------
+    CreateOrgUnitRequest:
+      type: object
+      required: [codigo, nome]
+      properties:
+        codigo: { type: string, minLength: 1, maxLength: 50 }
+        nome: { type: string, minLength: 1, maxLength: 200 }
+        descricao: { type: string, maxLength: 2000, nullable: true }
+        parent_id: { type: string, format: uuid, nullable: true }
+
+    UpdateOrgUnitRequest:
+      type: object
+      properties:
+        nome: { type: string, minLength: 1, maxLength: 200 }
+        descricao: { type: string, maxLength: 2000, nullable: true }
+        codigo: { type: string, description: "Immutable — will be rejected if changed (BR-003)" }
+        parent_id: { type: string, format: uuid, description: "Immutable — will be rejected if changed (BR-010)" }
+
+    LinkTenantRequest:
+      type: object
+      required: [tenant_id]
+      properties:
+        tenant_id: { type: string, format: uuid }
+
+    # -- Response schemas -------------------------------------------------------
+    CreateOrgUnitResponse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        codigo: { type: string }
+        nome: { type: string }
+        descricao: { type: string, nullable: true }
+        nivel: { type: integer, minimum: 1, maximum: 4 }
+        parent_id: { type: string, format: uuid, nullable: true }
+        status: { type: string, enum: [ACTIVE] }
+
+    UpdateOrgUnitResponse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        codigo: { type: string }
+        nome: { type: string }
+        descricao: { type: string, nullable: true }
+        nivel: { type: integer }
+        status: { type: string }
+
+    OrgUnitDetailResponse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        codigo: { type: string }
+        nome: { type: string }
+        descricao: { type: string, nullable: true }
+        nivel: { type: integer }
+        parent_id: { type: string, format: uuid, nullable: true }
+        status: { type: string }
+        created_by: { type: string, format: uuid, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+        deleted_at: { type: string, format: date-time, nullable: true }
+        ancestors:
+          type: array
+          items:
+            $ref: "#/components/schemas/AncestorNode"
+        tenants:
+          type: array
+          items:
+            $ref: "#/components/schemas/TenantSummary"
+
+    AncestorNode:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        codigo: { type: string }
+        nome: { type: string }
+        nivel: { type: integer }
+
+    TenantSummary:
+      type: object
+      properties:
+        tenant_id: { type: string, format: uuid }
+        codigo: { type: string }
+        name: { type: string }
+
+    OrgUnitListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrgUnitListItem"
+        next_cursor: { type: string, nullable: true }
+        has_more: { type: boolean }
+
+    OrgUnitListItem:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        codigo: { type: string }
+        nome: { type: string }
+        nivel: { type: integer }
+        status: { type: string }
+        parent_id: { type: string, format: uuid, nullable: true }
+        created_at: { type: string, format: date-time }
+
+    OrgUnitTreeResponse:
+      type: object
+      properties:
+        tree:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrgUnitTreeNode"
+
+    OrgUnitTreeNode:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        codigo: { type: string }
+        nome: { type: string }
+        descricao: { type: string, nullable: true }
+        nivel: { type: integer }
+        status: { type: string }
+        tenants:
+          type: array
+          items:
+            $ref: "#/components/schemas/TenantSummary"
+        children:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrgUnitTreeNode"
+
+    LinkTenantResponse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        org_unit_id: { type: string, format: uuid }
+        tenant_id: { type: string, format: uuid }
+        tenant_codigo: { type: string }
+
+    # -- Error schema -----------------------------------------------------------
+    ProblemDetails:
+      type: object
+      description: RFC 9457 Problem Details
+      properties:
+        type: { type: string, description: "Problem type URI" }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string, format: uri }
+        correlation_id: { type: string, format: uuid }

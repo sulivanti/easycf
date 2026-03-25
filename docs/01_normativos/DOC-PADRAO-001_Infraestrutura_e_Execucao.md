@@ -1,7 +1,7 @@
 # DOC-PADRAO-001 — Padrões de Ambientes e Execução (Node.js + Docker)
 
 - **id:** DOC-PADRAO-001
-- **version:** 1.1.0
+- **version:** 1.1.1
 - **status:** ACTIVE
 - **data_ultima_revisao:** 2026-03-25
 - **owner:** infraestrutura
@@ -156,7 +156,9 @@ Todo deploy em ambiente novo DEVE executar, após `drizzle-kit push`:
 docker compose -f docker-compose.prod.yml exec api npx tsx db/seed-admin.ts
 ```
 
-O seed cria: tenant padrão, role `super-admin` com todas as permissões, e usuário admin inicial. Variáveis opcionais: `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME`.
+O seed cria: tenant padrão, role `super-admin` com **todos os scopes do catálogo canônico** ([DOC-FND-000 §2.2](DOC-FND-000__Foundation.md)), e usuário admin inicial. Variáveis opcionais: `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME`.
+
+> **Regra de consistência:** O script `db/seed-admin.ts` DEVE importar ou referenciar a lista canônica de scopes definida em DOC-FND-000 §2.2. Quando novos scopes forem registrados via amendments ao catálogo (ex: DOC-FND-000-M01…M04), o seed DEVE ser atualizado para incluí-los. A ausência de scopes no seed resulta em sidebar vazia e funcionalidades inacessíveis no primeiro deploy.
 
 ## 5. Gerenciamento do Projeto Node.js (`package.json`)
 

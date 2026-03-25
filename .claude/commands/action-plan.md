@@ -1,6 +1,6 @@
 # Skill: action-plan
 
-Gera ou atualiza o Plano de Acao de um modulo, diagnosticando automaticamente o estado atual de cada fase do ciclo de vida (Pre-Modulo → Genese → Enriquecimento → Validacao → Promocao → Pos-READY).
+Gera ou atualiza o Plano de Acao de um modulo, diagnosticando automaticamente o estado atual de cada fase do ciclo de vida (Pre-Modulo → Genese → Enriquecimento → Validacao → Promocao → Geracao de Codigo → Pos-READY: Amendment → Deploy).
 
 > **Caminhos:** `.agents/paths.json` | **Contexto normativo:** `.agents/context-map.json` → `action-plan` | **Execution State:** `.agents/execution-state/MOD-{NNN}.json`
 
@@ -115,6 +115,20 @@ Liste arquivos em `adr/ADR-*.md`:
 Liste arquivos em `amendments/`:
 - Contagem total
 - Nomes dos amendments existentes (ex: DOC-FND-000-M01)
+- Para **cada** amendment, determine o `status_implementacao`:
+
+| Status | Significado | Como detectar |
+|--------|------------|---------------|
+| DRAFT | Amendment criado, nao mergeado | Arquivo existe em `amendments/`, estado_item = DRAFT |
+| MERGED | Mergeado no doc base, codigo nao atualizado | Amendment estado_item = MERGED, mas sem evidencia de alteracao em `apps/` pos-merge |
+| CODIFICADO | Codigo atualizado, nao validado | Commits recentes em `apps/` referenciam o amendment ID, mas sem `/validate-all` posterior |
+| VALIDADO | Codigo validado, nao deployado | `/validate-all` PASS apos o commit do amendment |
+| DEPLOYED | Em producao | Tag/release inclui o commit do amendment |
+
+**Deteccao por inferencia (fallback):** Se nao ha evidencia explicita, infira a partir de:
+1. `git log --oneline apps/` — commits mencionando o amendment ID
+2. Datas: amendment criado antes do ultimo codegen? → provavelmente CODIFICADO
+3. Amendments pre-READY (criados antes da promocao) que passaram pelo codegen inicial → CODIFICADO
 
 ### 1.8 — CHANGELOG.md
 
@@ -264,13 +278,20 @@ estado_item == READY? (pre-requisito para codegen)
 
 > Nota: Se o execution-state existir, use `codegen.agents.{AGN}.status` para diagnostico preciso (done/pending/skipped/error) em vez de inferir pela existencia de arquivos. Para modulos Nivel 0 (WEB only), apenas AGN-COD-WEB e AGN-COD-VAL sao aplicaveis. Para Nivel 1 (sem CORE), AGN-COD-CORE sera "skipped".
 
-### Fase 6: Pos-READY
+### Fase 6: Pos-READY (Amendment → Deploy)
 
 ```text
 Amendments existem?
-├── SIM → Fase 6: EM USO (listar amendments)
-└── NAO → Fase 6: SOB DEMANDA
+├── NAO → Fase 6: SOB DEMANDA
+└── SIM → Qual o status_implementacao mais atrasado?
+    ├── Algum DRAFT → Fase 6: EM USO — amendments pendentes de merge (passos 9-11)
+    ├── Algum MERGED (spec ok, codigo nao) → Fase 6: EM USO — implementacao pendente (passos 12-13)
+    ├── Algum CODIFICADO (codigo ok, nao validado) → Fase 6: EM USO — validacao pendente (passo 14)
+    ├── Algum VALIDADO (validado, nao deployado) → Fase 6: EM USO — deploy pendente (passos 15-16)
+    └── Todos DEPLOYED → Fase 6: CONCLUIDA (ciclo completo)
 ```
+
+> Nota: O estado da Fase 6 e determinado pelo amendment **mais atrasado** no pipeline. Se ha 3 amendments DEPLOYED e 1 MERGED, a fase e "EM USO — implementacao pendente".
 
 ---
 
@@ -373,7 +394,7 @@ O plano deve ser um **documento hibrido**: estrutura rigorosa do template (PASSO
 | Codegen (6 agentes) | {CONCLUIDO/EM ANDAMENTO/NAO INICIADO/BLOQUEADO} | {descricao — scaffold ok?, camadas com codigo, agentes pendentes} |
 | PENDENTEs | {N_ABERTAS} abertas | {TOTAL}/{TOTAL} {status_summary} |
 | ADRs | {N} criadas ({status}) | Nivel {L} requer minimo {M} — {atendido/nao atendido} |
-| Amendments | {N} criados | {nomes dos amendments e contexto} |
+| Amendments | {N} criados ({N_PENDING} pendentes impl.) | {nomes + status_implementacao: DRAFT/MERGED/CODIFICADO/VALIDADO/DEPLOYED} |
 | Requirements | {N}/{N} existem | {lista de pilares com contagem: BR(N), FR(N), ...} |
 | CHANGELOG | v{VERSION} | Ultima entrada {DATA} |
 | Screen Manifests | {N}/{N} existem | {lista de IDs} |
@@ -404,7 +425,77 @@ O plano deve ser um **documento hibrido**: estrutura rigorosa do template (PASSO
 
 11. **Fase 5 — Scaffold e pre-requisitos** — Incluir verificacao de scaffold (apps/api/package.json, apps/web/package.json) e comando `/app-scaffold` se nao existir. Incluir nota sobre ordem topologica e dependencias upstream que precisam ter codigo gerado antes.
 
-12. **Fase 6 — Contexto dos amendments** — Se houver amendments, incluir descricao de cada um com 1 linha de contexto explicando o que resolve e quando foi criado (pre-READY vs pos-READY).
+12. **Fase 6 — Contexto dos amendments e pipeline de implementacao** — Se houver amendments, incluir:
+
+    **12a. Tabela de amendments com status_implementacao:**
+    ```markdown
+    #### Amendments Pipeline
+
+    | # | Amendment | Natureza | Status Impl. | Modulos Impactados | Proximo Passo |
+    |---|-----------|----------|--------------|--------------------|---------------|
+    | 1 | {AMD_ID} | {M/C} | {DRAFT/MERGED/CODIFICADO/VALIDADO/DEPLOYED} | {MOD-NNN, ...} | {passo N: descricao} |
+    ```
+
+    **12b. Passos 9-11 (spec)** — Manter o formato existente (update-spec → create-amendment → merge-amendment).
+
+    **12c. Passos 12-16 (codigo → deploy)** — Para amendments com status MERGED ou posterior, incluir:
+
+    ```
+    12   (analise de impacto)   Apos merge-amendment, mapear impacto no codigo:  SOB DEMANDA
+                               Gate: amendment status == MERGED
+                               1. Ler amendment → pilares afetados (FR, SEC, UX...)
+                               2. Cruzar com module_paths → arquivos .ts/.tsx impactados
+                               3. Classificar estrategia:
+                                  ├── Delta simples (1-3 arquivos) → edicao manual
+                                  ├── Delta estrutural (novo endpoint/tela) → /codegen-agent
+                                  └── Normativo cross-modulo → loop por modulo afetado
+                               Saida: lista de arquivos a alterar + estrategia escolhida
+
+    13   /codegen-agent MOD-NNN AGN-COD-XX   (ou edicao manual conforme passo 12)
+                               Implementar as mudancas no codigo:                SOB DEMANDA
+                               Gate: Passo 12 concluido (estrategia definida)
+                               Se delta simples → edicao manual dos arquivos
+                               Se delta estrutural → /codegen-agent no agente adequado:
+                                 ├── Novo endpoint     → AGN-COD-API
+                                 ├── Novo schema DB    → AGN-COD-DB
+                                 ├── Nova tela/comp.   → AGN-COD-WEB
+                                 ├── Novo domain logic → AGN-COD-CORE
+                                 └── Novo service      → AGN-COD-APP
+                               Se normativo cross-modulo → repetir 12-13 por modulo
+                               Pos-condicao: codigo atualizado, sem TODO/stub pendente
+
+    14   /validate-all MOD-NNN  Re-validar modulo(s) afetado(s):                SOB DEMANDA
+                               Gate: Passo 13 concluido
+                               Executa mesma bateria da Fase 3:
+                                 0. Lint Check (ESLint + Prettier)
+                                 0.5 Validacao Arquitetural
+                                 1. /qa
+                                 2. /validate-manifest (se UX afetado)
+                                 3. /validate-openapi (se API afetada)
+                                 4. /validate-drizzle (se DATA afetado)
+                                 5. /validate-endpoint (se routes afetadas)
+                               Pos-condicao: PASS em todos os aplicaveis
+                               Se FAIL → corrigir e re-executar (loop 13→14)
+
+    15   pnpm test && pnpm build
+                               Build e testes de integracao:                     SOB DEMANDA
+                               Gate: Passo 14 PASS
+                               1. pnpm test (unit + component tests)
+                               2. pnpm build (confirma compilacao limpa)
+                               3. Se teste falha → corrigir e loop 13→15
+                               Pos-condicao: green build, zero errors
+
+    16   (deploy)              Deploy conforme DOC-PADRAO-001 §4.2-4.4:         SOB DEMANDA
+                               Gate: Passo 15 green
+                               1. git commit + push (mensagem referencia amendment ID)
+                               2. Docker build multi-stage (api + web)
+                               3. docker compose -f docker-compose.prod.yml up
+                               4. Healthcheck endpoints respondendo
+                               5. Seed atualizado (se scopes/dados mudaram)
+                               Pos-condicao: amendment DEPLOYED em producao
+    ```
+
+    **12d. Contexto individual** — Para cada amendment, 1 linha explicando o que resolve e quando foi criado (pre-READY vs pos-READY).
 
 13. **Decision trees** — Incluir os 4 decision trees padrao (enriquecimento, validacao, codegen, pendencias) nos locais corretos — copiar ipsis literis do template abaixo. **IMPORTANTE:** Cada decision tree DEVE usar blockquote (`>`) com bloco de codigo interno (` ``` ` dentro do `>`). Sem o bloco de codigo interno, o markdown colapsa as linhas da arvore em um unico paragrafo. Formato correto:
     ```
@@ -431,7 +522,7 @@ O plano deve ser um **documento hibrido**: estrutura rigorosa do template (PASSO
 
 18. **Particularidades** — Incluir descricoes detalhadas (nao apenas factuais). Explicar o impacto de cada particularidade e por que importa.
 
-19. **Checklist Rapido** — Listar apenas os itens que faltam para READY. Se o modulo ja e READY, mostrar checklist de codegen com itens pendentes. Incluir nota final sobre dependencias e impacto downstream.
+19. **Checklist Rapido** — Listar apenas os itens que faltam para READY. Se o modulo ja e READY, mostrar checklist de codegen com itens pendentes. **Se ha amendments pendentes de implementacao**, adicionar secao de checklist pos-READY. Incluir nota final sobre dependencias e impacto downstream.
 
     **Fonte de dados para o checklist:** Se `.agents/execution-state/MOD-{NNN}.json` existir, use-o como **fonte primaria** para marcar itens `[x]` ou `[ ]`:
 
@@ -447,11 +538,27 @@ O plano deve ser um **documento hibrido**: estrutura rigorosa do template (PASSO
 
     Se o execution-state **nao existir**, faca inferencia a partir do filesystem (1.11) como fallback — mas nao invente dados de timestamp.
 
+    **Checklist Pos-READY (amendments):** Quando o modulo e READY e ha amendments com status != DEPLOYED, adicionar:
+
+    ```markdown
+    ### Amendments Pendentes
+
+    | # | Amendment | Status Atual | Proximo Passo |
+    |---|-----------|--------------|---------------|
+    | 1 | {AMD_ID} | {status_implementacao} | [ ] {descricao do proximo passo} |
+    ```
+
+    Regras:
+    - MERGED → `[ ] Analise de impacto (passo 12)` + `[ ] Implementacao (passo 13)`
+    - CODIFICADO → `[ ] /validate-all (passo 14)`
+    - VALIDADO → `[ ] pnpm test && pnpm build (passo 15)` + `[ ] Deploy (passo 16)`
+    - DEPLOYED → `[x] Concluido`
+
 20. **CHANGELOG do Documento** — Se `--update`, adicionar nova entrada preservando historico. Se criacao, iniciar com v1.0.0.
 
 ### Decision Trees Padrao
 
-Incluir estes blocos nos locais indicados (Fase 2, Fase 3, Fase 5, Gestao de Pendencias):
+Incluir estes blocos nos locais indicados (Fase 2, Fase 3, Fase 5, Fase 6, Gestao de Pendencias):
 
 **Decision tree de enriquecimento (antes da Fase 2):**
 ```
@@ -486,6 +593,20 @@ Incluir estes blocos nos locais indicados (Fase 2, Fase 3, Fase 5, Gestao de Pen
 >     ├── Todos modulos READY (ordem topologica)  → /codegen-all (--dry-run para preview)
 >     ├── Todos agentes de 1 modulo               → /codegen mod-NNN
 >     └── 1 agente especifico                     → /codegen-agent mod-NNN AGN-COD-XX
+```
+
+**Decision tree de amendments (antes da Fase 6):**
+```
+> **Decision tree de amendments (pos-READY):**
+> Amendment existe com status != DEPLOYED?
+> ├── DRAFT → Passo 10 (/create-amendment) ou 11 (/merge-amendment)
+> ├── MERGED (spec ok, codigo nao) → Passo 12 (analise de impacto)
+> │   ├── Delta simples (1-3 arquivos)       → edicao manual
+> │   ├── Delta estrutural (novo endpoint)   → /codegen-agent MOD-NNN AGN-COD-XX
+> │   └── Normativo cross-modulo             → loop 12-13 por modulo afetado
+> ├── CODIFICADO (codigo ok, nao validado) → Passo 14 (/validate-all MOD-NNN)
+> ├── VALIDADO (validado, nao deployado) → Passos 15-16 (build + deploy)
+> └── DEPLOYED → Concluido (nenhuma acao)
 ```
 
 **Decision tree de pendencias (secao Gestao de Pendencias):**
@@ -578,7 +699,7 @@ Emita no chat:
 | 3 | Validacao | {CONCLUIDA/EM ANDAMENTO/PENDENTE} |
 | 4 | Promocao | {CONCLUIDA/PENDENTE} |
 | 5 | Geracao de Codigo | {CONCLUIDA/EM ANDAMENTO/NAO INICIADA/BLOQUEADA} |
-| 6 | Pos-READY | {EM USO/SOB DEMANDA} |
+| 6 | Pos-READY (Amendment → Deploy) | {CONCLUIDA/EM USO — {status}/SOB DEMANDA} |
 
 ### Metricas
 - Requirements: {N}/{N} existem
@@ -586,6 +707,7 @@ Emita no chat:
 - ADRs: {N} ({status}) — minimo {M} para Nivel {L}: {atendido/nao atendido}
 - Screen Manifests: {N}/{N}
 - Bloqueios: {N}
+- Amendments: {N} total — {N} DRAFT, {N} MERGED, {N} CODIFICADO, {N} VALIDADO, {N} DEPLOYED
 
 ### Proximo Passo
 {descricao do proximo passo recomendado com o comando a executar}

@@ -7,6 +7,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-15 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-15 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
+> | 0.6.0  | 2026-03-25 | merge-amendment | Merge DATA-000-M01: nova coluna invite_token_created_at na tabela users (derivado de FR-000-M01). Viabiliza cálculo invite_token_expired no UserDetail. |
 > | 0.5.0  | 2026-03-18 | usuário     | Nota chave amigável tenant_users: concatenação userId+tenantCode em runtime (PENDENTE-003 opção A) |
 >
 | 0.4.0  | 2026-03-18 | usuário     | Correção CHECK regex role_permissions 2-seg → 3-seg (PENDENTE-006, DOC-FND-000 §2.1) |
@@ -50,6 +51,7 @@ Toda entidade principal do Foundation DEVE conter:
 | `mfa_secret` | text | NULL | | TOTP secret (RFC 6238), se MFA ativo |
 | `status` | text | NOT NULL | CHECK(ACTIVE,BLOCKED,PENDING,INACTIVE) | |
 | `force_pwd_reset` | boolean | NOT NULL | default=false | Forçar troca na próx. autenticação |
+| `invite_token_created_at` | timestamptz | NULL | default=null | Momento em que o token de convite foi gerado. null = sem convite. Atualizado a cada reenvio. |
 | `created_at` | timestamptz | NOT NULL | default=now() | |
 | `updated_at` | timestamptz | NOT NULL | default=now() | |
 | `deleted_at` | timestamptz | NULL | | Soft-delete (LGPD) |

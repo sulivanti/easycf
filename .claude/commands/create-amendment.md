@@ -6,7 +6,7 @@ Cria uma emenda (amendment) governada para detalhar, corrigir ou revisar especif
 
 > **Ciclo de vida:** Stubs em `DRAFT` são enriquecidos diretamente. Esta skill é ativada **somente** quando o documento alvo já atingiu `READY` (ou `ACEITA` para ADRs). Se o arquivo está em `DRAFT`, edite-o diretamente — não use esta skill.
 
-## Relação com `/update-specification`
+## Relação com outras skills
 
 | Estado do documento | Skill correta |
 |---|---|
@@ -14,6 +14,16 @@ Cria uma emenda (amendment) governada para detalhar, corrigir ou revisar especif
 | `READY` ou `ACEITA` | `/create-amendment` (esta skill) |
 
 O `/update-specification` detecta o estado e delega automaticamente para esta skill quando o documento é `READY`. Você também pode invocar `/create-amendment` diretamente.
+
+### Ciclo completo de amendments
+
+| Etapa | Skill | O que faz |
+|---|---|---|
+| 1. Criar emenda | `/create-amendment` (esta skill) | Cria arquivo de amendment sem tocar o base |
+| 2. Analisar cascata | `/cascade-amendment` | Identifica pilares afetados e cria amendments derivados |
+| 3. Aplicar emenda | `/merge-amendment` | Incorpora conteúdo no base e sela o amendment |
+
+> A etapa 2 é recomendada quando "Impacto nos Pilares" lista ações concretas em outros pilares/módulos (qualquer natureza M/C/R). Para amendments self-contained, pule direto para o merge.
 
 ## Argumento
 
@@ -53,12 +63,26 @@ Se a motivação é uma correção factual (ex: dado errado no doc), o Gate 2 po
 
 ## PASSO 1: Descoberta e Sequenciamento
 
-1. Identifique o módulo: `docs/04_modules/mod-{NNN}-{nome}/`
-2. Navegue até (ou crie se não existir): `amendments/{pilar}/`
-3. Liste arquivos existentes para calcular próximo número sequencial
-4. Defina nome: `{Pilar}-{ID}-{Natureza}{Sequencial}.md` (ex: `FR-001-M01.md`, `BR-001-C02.md`)
+1. **Identifique o tipo de documento alvo:**
 
-> **Regra de criação de diretório:** Se `amendments/` ou `amendments/{pilar}/` não existirem, crie-os.
+```text
+Documento base está em docs/01_normativos/?
+├── SIM (é um normativo transversal — DOC-PADRAO-*, DOC-UX-*, DOC-GNP-*, DOC-ARC-*, etc.)
+│   → Caminho: docs/01_normativos/amendments/{DOC-ID}/
+│   → Nome: {DOC-ID}-{Natureza}{Seq}.md (ex: DOC-PADRAO-001-M01.md)
+│   → Link no template: ../../{filename}.md
+│   → PASSO 3: Atualize docs/01_normativos/amendments/INDEX.md (adicione linha na tabela)
+│   → PASSO 4: Atualize docs/01_normativos/amendments/CHANGELOG.md (PASSO 4a abaixo)
+└── NÃO (é um requisito de módulo — FR-*, BR-*, SEC-*, etc.)
+    → Comportamento atual inalterado (passos 2-4 abaixo)
+```
+
+2. **Para requisitos de módulo:** Identifique o módulo: `docs/04_modules/mod-{NNN}-{nome}/`
+3. Navegue até (ou crie se não existir): `amendments/{pilar}/`
+4. Liste arquivos existentes para calcular próximo número sequencial
+5. Defina nome: `{Pilar}-{ID}-{Natureza}{Sequencial}.md` (ex: `FR-001-M01.md`, `BR-001-C02.md`)
+
+> **Regra de criação de diretório:** Se `amendments/` ou `amendments/{pilar}/` não existirem, crie-os. Para normativos: se `docs/01_normativos/amendments/{DOC-ID}/` não existir, crie-o.
 
 ## PASSO 2: Criação do Arquivo de Emenda (ZERO ALUCINAÇÃO)
 
@@ -66,12 +90,14 @@ Consulte `docs/01_normativos/DOC-DEV-001_especificacao_executavel.md` e o normat
 
 ```markdown
 > ⚠️ **ARQUIVO GERIDO POR AUTOMAÇÃO.**
-> - Emenda sobre documento base em estado READY.
+> - Emenda sobre documento normativo/requisito em estado READY.
 > - Para novas emendas, use a skill `create-amendment`.
 
-# Emenda: {Pilar}-{ID}-{Natureza}{Sequencial}
+# Emenda: {ID do amendment}
 
-- **Documento base:** [{Pilar}-{ID}](../../requirements/{pilar}/{Pilar}-{ID}.md)
+- **Documento base:** [{ID}]({link relativo ao doc base})
+  <!-- Para normativos: ../../{filename}.md -->
+  <!-- Para requisitos de módulo: ../../requirements/{pilar}/{Pilar}-{ID}.md -->
 - **estado_item:** DRAFT
 - **Natureza:** {M|C|R} ({Melhoria|Correção|Revisão})
 - **Data:** {Data Atual}
@@ -95,12 +121,38 @@ Consulte `docs/01_normativos/DOC-DEV-001_especificacao_executavel.md` e o normat
 
 > **IMPORTANTE:** O arquivo base (READY) **NÃO é editado**. Todo o conteúdo novo fica no amendment.
 
-## PASSO 3: Amarração Ascendente (somente no manifesto do módulo e CHANGELOG)
+## PASSO 3: Amarração Ascendente
+
+### PASSO 3a (Normativos): Atualizar INDEX de Amendments
+
+> Se o amendment é de um normativo (`docs/01_normativos/`): execute este passo ao invés do PASSO 3b.
+
+1. Abra (ou crie se não existir) `docs/01_normativos/amendments/INDEX.md`
+2. Adicione uma linha na tabela com:
+   - Amendment ID (link relativo ao arquivo: `{DOC-ID}/{DOC-ID}-{Natureza}{Seq}.md`)
+   - Documento base (ID)
+   - Natureza (M/C/R)
+   - Estado: `DRAFT`
+   - Data de criação
+   - Resumo (da Motivação, max 80 chars). Se `rastreia_para` inclui PENDENTE-NNN, adicione `(resolve PENDENTE-NNN)` ao final
+3. **NÃO edite o arquivo base READY** — a rastreabilidade é feita via INDEX.md e pelo bump de versão no normativo (no merge)
+
+### PASSO 3b (Requisitos de módulo): Amarração no Manifesto
 
 1. **No manifesto do módulo (`<dirname>.md`):** Adicione o amendment no bloco de índice (`<!-- start index -->`) ou crie seção `## 8. Amendments` se não existir
 2. **NÃO edite o arquivo base READY** — a rastreabilidade é feita via manifesto do módulo e CHANGELOG, não via injeção no arquivo selado
 
 ## PASSO 4: Changelog
+
+### PASSO 4a (Normativos): CHANGELOG de Amendments Normativos
+
+> Se o amendment é de um normativo (`docs/01_normativos/`): execute este passo ao invés do PASSO 4b.
+
+1. Abra `docs/01_normativos/amendments/CHANGELOG.md`
+2. Bump semântico na tabela de versões (mesmas regras abaixo)
+3. Adicione linha com versão, data, `create-amendment`, e descrição incluindo o ID do normativo e resumo da motivação
+
+### PASSO 4b (Requisitos de módulo): CHANGELOG do Módulo
 
 1. Abra `CHANGELOG.md` na raiz do módulo
 2. Bump semântico na tabela de versões:
@@ -112,12 +164,18 @@ Consulte `docs/01_normativos/DOC-DEV-001_especificacao_executavel.md` e o normat
 
 ## PASSO 5: Atualização do Índice
 
-Invoque `/project:update-index` para atualizar o manifesto do módulo com o novo amendment.
+> Se normativo: o índice já foi atualizado no PASSO 3a. Não invoque `/update-index`.
+
+Para requisitos de módulo: invoque `/project:update-index` para atualizar o manifesto do módulo com o novo amendment.
 
 ## Passo Final: Comunicação
 
 Responda ao usuário com:
 - Link do arquivo de emenda criado
-- Bump semântico aplicado
+- Bump semântico aplicado (módulos) ou CHANGELOG de normativos atualizado
+- INDEX.md de normativos atualizado (se aplicável)
+- **Binding reverso:** Se o amendment normativo é consumido por módulos específicos (ex: CA-07 usado por UX-001-C01), lembre o usuário de incluir `Deps normativas: {IDs}` no CHANGELOG do módulo consumidor ao fazer o codegen
 - Confirmação de que o arquivo base READY **não foi tocado**
 - Lista de pilares impactados (se houver)
+- Se `rastreia_para` inclui PENDENTE-NNN: lembre o usuário de verificar o status da pendência
+- **Cascata:** Se "Impacto nos Pilares" lista ações concretas em outros pilares/módulos (qualquer natureza M/C/R), sugira: "Execute `/cascade-amendment {caminho-do-amendment}` para analisar e criar amendments derivados nos pilares afetados."

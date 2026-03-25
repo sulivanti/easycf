@@ -101,7 +101,7 @@ Módulo UX-First sem lógica de domínio própria. Consome endpoints do MOD-000 
 - [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos do Backoffice Admin
 - [UX-001](requirements/ux/UX-001.md) — Jornadas e Fluxos do Backoffice Admin
 - [NFR-001](requirements/nfr/NFR-001.md) — Requisitos Não Funcionais do Backoffice Admin
-- [PEN-001](requirements/pen-001-pendente.md) — Questões Abertas do Backoffice Admin
+- [PEN-001](requirements/pen-001-pendente.md) — Questões Abertas do Backoffice Admin (10 pendências: 10 IMPLEMENTADA, 0 ABERTA)
 <!-- end index -->
 
 ## 7. Decisões (ADR)
@@ -111,3 +111,14 @@ Módulo UX-First sem lógica de domínio própria. Consome endpoints do MOD-000 
 - [ADR-002](adr/ADR-002__telemetria_pre_pos_auth.md) — Separação de Telemetria Pré/Pós-Autenticação via UIActionEnvelope
 - [ADR-003](adr/ADR-003__zero_blank_screen.md) — Princípio Zero-Blank-Screen com Skeleton Timeout de 3 Segundos
 <!-- end adr-index -->
+
+## 8. Amendments
+
+<!-- start amendments-index -->
+- [UX-001-C01](amendments/ux/UX-001-C01.md) — _auth.tsx deve importar AppShell real em vez de layout placeholder inline (CA-07)
+- [UX-001-C02](amendments/ux/UX-001-C02.md) — _auth.dashboard.tsx deve importar DashboardPage real em vez de componente inline (CA-07)
+- [UX-001-M01](amendments/ux/UX-001-M01.md) — Rotas Coming Soon para /usuarios, /perfis, /filiais, /auditoria (CA-09)
+- [UX-001-M02](amendments/ux/UX-001-M02.md) — Navegação completa: sidebar 9 grupos, 20 route files, breadcrumbs, ProfileWidget links, shortcuts expandidos
+- [AMD-INT-005-001](amendments/int/AMD-INT-005-001__timeout_configuravel.md) — Timeout configurável por endpoint
+- [AMD-SEC-001-001](amendments/sec/AMD-SEC-001-001__interceptor_401_global.md) — Interceptor 401 global no api-client
+<!-- end amendments-index -->

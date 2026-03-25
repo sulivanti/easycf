@@ -6,7 +6,7 @@
 # Emenda: DOC-FND-000-M01
 
 - **Documento base:** [DOC-FND-000](../../../../01_normativos/DOC-FND-000__Foundation.md)
-- **estado_item:** DRAFT
+- **estado_item:** MERGED
 - **Natureza:** M (Melhoria)
 - **Data:** 2026-03-19
 - **owner:** Marcos Sulivan
@@ -36,3 +36,11 @@ Versão DOC-FND-000 bumped: 1.3.0 → 1.4.0.
 
 - **Pilares afetados:** SEC-006 (MOD-006) — referências a "scopes a registrar" podem ser atualizadas para "scopes registrados"
 - **Ação requerida:** Quando PENDENTE-001 for decidida e resultar em 7º scope (`process:case:reopen`), criar DOC-FND-000-M02
+
+---
+
+## Resolução do Merge
+
+> **Merged por:** merge-amendment (selo retroativo) em 2026-03-25
+> **Versão base após merge:** DOC-FND-000 v1.4.0
+> **Alterações aplicadas:** 6 scopes process:case:* registrados no catálogo §2.2. Seed-admin.ts atualizado com todos os scopes.

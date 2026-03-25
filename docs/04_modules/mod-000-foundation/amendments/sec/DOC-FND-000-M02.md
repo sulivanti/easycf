@@ -6,7 +6,7 @@
 # Emenda: DOC-FND-000-M02
 
 - **Documento base:** [DOC-FND-000](../../../../01_normativos/DOC-FND-000__Foundation.md)
-- **estado_item:** DRAFT
+- **estado_item:** MERGED
 - **Natureza:** M (Melhoria)
 - **Data:** 2026-03-19
 - **owner:** Marcos Sulivan
@@ -33,3 +33,11 @@ Versão DOC-FND-000 bumped: 1.4.0 → 1.5.0.
 
 - **Pilares afetados:** SEC-006 (MOD-006) — atualizar referências de "escopo a definir" para `process:case:reopen`; SEC-002 (MOD-006) — adicionar entrada na matriz de autorização para REOPENED; mod.md §1.2 — adicionar persona com scope reopen
 - **Ação requerida:** Editar SEC-006, SEC-002, BR-016 e FR-007 para referenciar `process:case:reopen` ao invés de "escopo especial (a definir)"
+
+---
+
+## Resolução do Merge
+
+> **Merged por:** merge-amendment (selo retroativo) em 2026-03-25
+> **Versão base após merge:** DOC-FND-000 v1.5.0
+> **Alterações aplicadas:** 7º scope process:case:reopen adicionado ao catálogo §2.2. Total: 7 scopes process:case:*.

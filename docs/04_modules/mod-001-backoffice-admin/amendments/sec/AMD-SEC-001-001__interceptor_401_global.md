@@ -53,3 +53,12 @@ O `window.location.href = '/login'` executa antes do throw, garantindo que o red
 - **Compatibilidade:** Retrocompatível — callers que já tratavam 401 com redirect podem remover o tratamento redundante
 - **Artefatos modificados:** `api-client.ts`
 - **Testes:** Testes existentes de api-client devem ser atualizados para mockar `window.location`
+- **estado_item:** MERGED
+
+---
+
+## Resolução do Merge
+
+> **Merged por:** merge-amendment em 2026-03-25
+> **Versão base após merge:** SEC-001 v0.6.0
+> **Alterações aplicadas:** Interceptor HTTP 401 global documentado em SEC-001 §2

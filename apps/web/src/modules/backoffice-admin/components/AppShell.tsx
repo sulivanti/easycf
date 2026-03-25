@@ -11,7 +11,23 @@
 
 import { useEffect, type ReactNode } from 'react';
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
-import { Info, Users, Shield, Building, Activity, Settings, Cpu } from 'lucide-react';
+import {
+  Info,
+  Users,
+  Shield,
+  Building,
+  Activity,
+  Settings,
+  Cpu,
+  Network,
+  Fingerprint,
+  Workflow,
+  Briefcase,
+  SlidersHorizontal,
+  Plug,
+  Inbox,
+  Bot,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { Skeleton } from '@shared/ui/skeleton';
 import { useAuthMe } from '../hooks/use-auth-me';
@@ -35,6 +51,14 @@ const ICONS: Record<string, React.ElementType> = {
   activity: Activity,
   settings: Settings,
   cpu: Cpu,
+  network: Network,
+  fingerprint: Fingerprint,
+  workflow: Workflow,
+  briefcase: Briefcase,
+  sliders: SlidersHorizontal,
+  plug: Plug,
+  inbox: Inbox,
+  bot: Bot,
 };
 
 function IconFor({ name, className }: { name: string; className?: string }) {
@@ -129,6 +153,27 @@ const ROUTE_LABELS: Record<string, string> = {
   perfis: 'Perfis e Permissões',
   filiais: 'Filiais',
   auditoria: 'Auditoria',
+  profile: 'Meu Perfil',
+  sessoes: 'Sessões Ativas',
+  'org-units': 'Estrutura Organizacional',
+  identity: 'Identidade',
+  'org-scope': 'Escopos Organizacionais',
+  delegations: 'Compartilhamentos',
+  processos: 'Processos',
+  ciclos: 'Ciclos',
+  editor: 'Editor',
+  cases: 'Casos',
+  framers: 'Enquadradores',
+  routines: 'Rotinas',
+  integration: 'Integrações',
+  monitor: 'Monitor',
+  approvals: 'Aprovações',
+  inbox: 'Caixa de Entrada',
+  config: 'Configuração',
+  mcp: 'Automação',
+  agents: 'Agentes',
+  executions: 'Execuções',
+  form: 'Formulário',
 };
 
 function Breadcrumb({ currentPath }: { currentPath: string }) {

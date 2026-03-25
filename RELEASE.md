@@ -1,5 +1,5 @@
-# EasyCodeFramework Template — v0.11.0
-Versão: **0.11.0**
+# EasyCodeFramework Template — v0.11.1
+Versão: **0.11.1**
 Release Date: 2026-03-25
 
 Este é o repositório de distribuição do EasyCodeFramework.

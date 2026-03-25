@@ -36,6 +36,10 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.7.6 | 2026-03-25 | merge-amendment | Merge INT-000-C01: nova INT-005 Auth Refresh API — schema `RefreshResponse` sem `user`. OpenAPI v1.yaml atualizado. Base INT-000 bumped para v0.3.1. Derivado de FR-000-C04. |
+| 1.7.5 | 2026-03-25 | merge-amendment | Merge FR-000-C04: FR-001 anotação snake_case, FR-003 contrato refresh explicitado sem `user` (schema `refreshResponse` separado). Base FR-000 bumped para v0.9.2. |
+| 1.7.4 | 2026-03-25 | cascade-amendment | Cascade de FR-000-C04: 1 amendment derivado criado — INT-000-C01 (OpenAPI v1.yaml: trocar LoginResponse por RefreshResponse no endpoint /auth/refresh). |
+| 1.7.3 | 2026-03-25 | create-amendment | Amendment FR-000-C04: mapeamento camelCase→snake_case nas rotas de auth (FR-001 login, FR-003 refresh, FR-004 /me). DEF-001: `reply.send(result)` enviava camelCase, serializerCompiler rejeitava. DEF-002: rota /refresh referenciava `result.user` inexistente no RefreshTokenOutput — criação de `refreshResponse` separado. Ref: spec-fix-auth-route-response-mapping. |
 | 1.7.2 | 2026-03-25 | create-amendment | Amendment DATA-000-C02: tenant_id vazio (`''`) em domain_events causa crash no INSERT durante login e todos os 13 use-cases MOD-000. Correção: SYSTEM_TENANT_ID fallback + null coercion em campos opcionais. Ref: spec-fix-domain-events-tenant-id. |
 | 1.7.1 | 2026-03-25 | create-amendment | Amendment FR-000-C02: rota GET /auth/me ausente no entrypoint index.ts + divergência de shape backend/frontend (full_name→name, active_tenant_id→tenant:{id,name}). Dashboard, sidebar e header completamente quebrados. |
 | 1.7.0 | 2026-03-25 | merge-amendment | Merge FR-000-C01 + DOC-FND-000-M01..M04: seed-admin.ts corrigido (25→63 scopes, alinhado com DOC-FND-000 §2.2). Selos retroativos: M01 (6 scopes case:*), M02 (reopen), M03 (7 approval:*), M04 (6 mcp:*). Sidebar e RBAC agora funcionais para todos os módulos. |

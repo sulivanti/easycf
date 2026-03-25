@@ -90,7 +90,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LoginResponse"
+                $ref: "#/components/schemas/RefreshResponse"
         "401":
           $ref: "#/components/responses/ProblemDetails401"
 
@@ -1832,6 +1832,15 @@ components:
         mfa_required: { type: boolean, enum: [true] }
         temp_token: { type: string }
         expires_in: { type: integer, enum: [300] }
+
+    RefreshResponse:
+      type: object
+      required: [access_token, refresh_token, token_type, expires_in]
+      properties:
+        access_token: { type: string }
+        refresh_token: { type: string }
+        token_type: { type: string, enum: [Bearer] }
+        expires_in: { type: integer }
 
     ProfileResponse:
       type: object

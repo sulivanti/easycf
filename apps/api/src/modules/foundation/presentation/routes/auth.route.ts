@@ -14,6 +14,7 @@ import {
   loginBody,
   loginResponse,
   loginMfaResponse,
+  refreshResponse,
   changePasswordBody,
   forgotPasswordBody,
   forgotPasswordResponse,
@@ -43,7 +44,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
         correlationId,
       });
 
-      // BR-010: Set httpOnly cookies
+      // BR-010: Set httpOnly cookies + map camelCase → snake_case for DTO
       if ('tokenPair' in result) {
         void reply
           .setCookie('accessToken', result.tokenPair.accessToken, {
@@ -58,9 +59,27 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
             path: '/api/v1/auth/refresh',
             secure: process.env.NODE_ENV === 'production',
           });
+
+        return reply.status(200).send({
+          access_token: result.tokenPair.accessToken,
+          refresh_token: result.tokenPair.refreshToken,
+          token_type: 'Bearer' as const,
+          expires_in: result.tokenPair.expiresIn,
+          user: {
+            id: result.user.id,
+            email: result.user.email,
+            full_name: result.user.fullName,
+            status: result.user.status,
+          },
+        });
       }
 
-      return reply.status(200).send(result);
+      // MFA response
+      return reply.status(200).send({
+        mfa_required: result.mfaRequired,
+        temp_token: result.tempToken,
+        expires_in: result.expiresIn,
+      });
     },
   });
 
@@ -99,7 +118,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     schema: {
       tags: ['auth'],
       operationId: 'auth_refresh',
-      response: { 200: loginResponse },
+      response: { 200: refreshResponse },
     },
     handler: async (request, reply) => {
       const refreshToken = request.cookies.refreshToken;
@@ -129,7 +148,12 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
           secure: process.env.NODE_ENV === 'production',
         });
 
-      return reply.status(200).send(result);
+      return reply.status(200).send({
+        access_token: result.tokenPair.accessToken,
+        refresh_token: result.tokenPair.refreshToken,
+        token_type: 'Bearer' as const,
+        expires_in: result.tokenPair.expiresIn,
+      });
     },
   });
 
@@ -149,7 +173,16 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
         activeTenantId: request.session.tenantId,
       });
 
-      return reply.status(200).send(result);
+      return reply.status(200).send({
+        id: result.id,
+        email: result.email,
+        codigo: result.codigo,
+        full_name: result.fullName,
+        avatar_url: result.avatarUrl,
+        status: result.status,
+        active_tenant_id: result.activeTenantId,
+        scopes: result.scopes,
+      });
     },
   });
 
@@ -179,7 +212,16 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
         activeTenantId: request.session.tenantId,
       });
 
-      return reply.status(200).send(profile);
+      return reply.status(200).send({
+        id: profile.id,
+        email: profile.email,
+        codigo: profile.codigo,
+        full_name: profile.fullName,
+        avatar_url: profile.avatarUrl,
+        status: profile.status,
+        active_tenant_id: profile.activeTenantId,
+        scopes: profile.scopes,
+      });
     },
   });
 

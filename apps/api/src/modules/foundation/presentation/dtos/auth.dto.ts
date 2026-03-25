@@ -36,6 +36,16 @@ export const loginMfaResponse = z.object({
 });
 
 // ---------------------------------------------------------------------------
+// POST /auth/refresh (FR-000-C04: schema separado — sem campo user)
+// ---------------------------------------------------------------------------
+export const refreshResponse = z.object({
+  access_token: z.string(),
+  refresh_token: z.string(),
+  token_type: z.literal('Bearer'),
+  expires_in: z.number().int(),
+});
+
+// ---------------------------------------------------------------------------
 // GET /auth/me
 // ---------------------------------------------------------------------------
 export const profileResponse = z.object({

@@ -333,7 +333,8 @@ export function LoginPage() {
   const [mfaTempToken, setMfaTempToken] = useState('');
 
   function handleLoginSuccess() {
-    navigate({ to: '/' });
+    // Full reload to re-read auth tokens from localStorage into router context
+    window.location.href = '/';
   }
 
   return (

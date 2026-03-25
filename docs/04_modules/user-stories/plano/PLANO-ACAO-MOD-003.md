@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-003 Estrutura Organizacional
 
-> **Versao:** 6.0.0 | **Data:** 2026-03-24 | **Owner:** Marcos Sulivan
+> **Versao:** 6.1.0 | **Data:** 2026-03-25 | **Owner:** Marcos Sulivan
 > **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.1.0) | **Features:** 4/4 READY
 >
-> Fases 0-5 concluidas + validate-all pos-codegen APROVADO (7 validadores PASS). Proximo passo: `pnpm install` + `pnpm test`.
+> Fases 0-5 concluidas + codegen re-run (FKs cross-module, infrastructure/schema.ts, barrel fix, OpenAPI spec). Proximo passo: `pnpm install` + `pnpm test`.
 
 ---
 
@@ -15,12 +15,12 @@
 | Features F01-F04 | 4/4 READY | F01 (API Core CRUD + Tree), F02 (Arvore UX), F03 (Formulario UX), F04 (Restore) — todas READY |
 | Scaffold (forge-module) | CONCLUIDO | mod-003-estrutura-organizacional/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Todos os agentes confirmados, v0.3.0, 6 pendentes resolvidas |
-| Codegen (6 agentes) | CONCLUIDO (2026-03-23) | 6/6 agentes done (DB, CORE, APP, API, WEB, VAL). 31 arquivos gerados em 6 camadas |
+| Codegen (6 agentes) | CONCLUIDO (2026-03-25 re-run) | 6/6 agentes done (DB, CORE, APP, API, WEB, VAL). 36 arquivos. Re-run: +infrastructure/schema.ts, FKs corrigidas, barrel fix, OpenAPI mod-003 spec |
 | PENDENTEs | 0 abertas | 7 total: 4 RESOLVIDA (001, 003, 005, 007) + 3 IMPLEMENTADA (002, 004, 006) |
 | ADRs | 4 READY (proposed) | Nivel 2 requer minimo 3 — atendido (ADR-001 N5=Tenant, ADR-002 CTE Recursivo, ADR-003 Cross-Tenant, ADR-004 Idempotency-Key) |
 | Amendments | 3 criados | FR-001-C01 (constraint catch), US-MOD-003-M01 (F04 no epico), US-MOD-003-F01-M01 (org.unit_restored) |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
-| CHANGELOG | v1.0.0 | Ultima entrada 2026-03-23 (Promocao DRAFT→READY) |
+| CHANGELOG | v1.2.0 | Ultima entrada 2026-03-25 (codegen re-run: FKs, infrastructure/schema, barrel, OpenAPI) |
 | Screen Manifests | 2/2 existem | ux-org-001.org-tree.yaml, ux-org-002.org-form.yaml |
 | Dependencias | 1 upstream (MOD-000 READY) | Consome tenants (F07), catalogo de escopos (F12), auth, domain_events |
 | Bloqueios | 0 | Nenhum BLK-* afeta MOD-003 |
@@ -237,12 +237,12 @@ O codegen completo do MOD-003 foi executado em 2026-03-23 via `/codegen` em 3 ba
 
 | # | Agente | Camada | Path | Status | Arquivos |
 |---|--------|--------|------|--------|----------|
-| 1 | AGN-COD-DB | infrastructure | apps/api/db/schema/ | CONCLUIDO (2026-03-23T22:30) | 3 (org-units.ts, org-units.relations.ts, index.ts) |
-| 2 | AGN-COD-CORE | domain | apps/api/src/modules/org-units/domain/ | CONCLUIDO (2026-03-23T22:35) | 5 (errors, entities x2, events, index) |
-| 3 | AGN-COD-APP | application | apps/api/src/modules/org-units/application/ | CONCLUIDO (2026-03-23T22:45) | 11 (ports, 9 use cases, index) |
-| 4 | AGN-COD-API | presentation | apps/api/src/modules/org-units/presentation/, apps/api/openapi/ | CONCLUIDO (2026-03-23T23:00) | 4 (dtos, routes, index, v1.yaml) |
-| 5 | AGN-COD-WEB | web | apps/web/src/modules/org-units/ | CONCLUIDO (2026-03-23T23:15) | 8 (types, queries, mappers, view-model, permissions, OrgTreeNode, OrgTreeScreen, OrgFormScreen) |
-| 6 | AGN-COD-VAL | validation | (cross-layer) | CONCLUIDO (2026-03-23T23:20) | 0 (validacao: 11 ✅, 1 ⚠️ tests_present) |
+| 1 | AGN-COD-DB | infrastructure | apps/api/db/schema/, apps/api/src/modules/org-units/infrastructure/ | CONCLUIDO (re-run 2026-03-25T06:20) | 4 (org-units.ts 🔄FKs, org-units.relations.ts, index.ts, infrastructure/schema.ts ✅novo) |
+| 2 | AGN-COD-CORE | domain | apps/api/src/modules/org-units/domain/ | CONCLUIDO (2026-03-25T06:22) | 5 (errors, entities x2, events, index) — ja completo, sem alteracoes |
+| 3 | AGN-COD-APP | application | apps/api/src/modules/org-units/application/ | CONCLUIDO (re-run 2026-03-25T06:26) | 12 (ports, 9 use cases, app/index, module/index.ts 🔄barrel fix) |
+| 4 | AGN-COD-API | presentation | apps/api/src/modules/org-units/presentation/, apps/api/openapi/ | CONCLUIDO (re-run 2026-03-25T06:30) | 5 (dtos, routes, index, v1.yaml, mod-003-org-units.yaml ✅novo) |
+| 5 | AGN-COD-WEB | web | apps/web/src/modules/org-units/ | CONCLUIDO (2026-03-25T06:32) | 10 (types, api, 5 hooks, OrgTreeNode, OrgTreePage, OrgFormPage) — ja completo, sem alteracoes |
+| 6 | AGN-COD-VAL | validation | (cross-layer) | CONCLUIDO (2026-03-25T06:34) | 0 (validacao cruzada: 9 checks ✅, 0 failed) |
 
 #### Validacao Cruzada (AGN-COD-VAL) — Resultado
 
@@ -387,13 +387,13 @@ MOD-003 e referencia canonica de pertencimento para todos os modulos.
 ## Checklist Rapido — Pos-Codegen
 
 - [x] Executar `/app-scaffold all` — criar apps/api e apps/web — CONCLUIDO (2026-03-23T14:00)
-- [x] Executar `/codegen mod-003` — gerar codigo em todas as 6 camadas — CONCLUIDO (2026-03-23T23:20, 31 arquivos)
-  - [x] AGN-COD-DB — 3 arquivos (schema Drizzle + relations + barrel export)
-  - [x] AGN-COD-CORE — 5 arquivos (entities, errors, events, barrel)
-  - [x] AGN-COD-APP — 11 arquivos (ports, 9 use cases, barrel)
-  - [x] AGN-COD-API — 4 arquivos (DTOs Zod, routes Fastify, barrel, OpenAPI v1.yaml)
-  - [x] AGN-COD-WEB — 8 arquivos (types, queries, mappers, view-model, permissions, 2 screens, 1 component)
-  - [x] AGN-COD-VAL — validacao cruzada (11 ✅, 1 ⚠️)
+- [x] Executar `/codegen mod-003` — gerar codigo em todas as 6 camadas — CONCLUIDO (re-run 2026-03-25, 36 arquivos)
+  - [x] AGN-COD-DB — 4 arquivos (schema Drizzle 🔄FKs cross-module, relations, barrel, infrastructure/schema.ts ✅)
+  - [x] AGN-COD-CORE — 5 arquivos (entities, errors, events, barrel) — ja completo
+  - [x] AGN-COD-APP — 12 arquivos (ports, 9 use cases, app barrel, module barrel 🔄desambiguado)
+  - [x] AGN-COD-API — 5 arquivos (DTOs Zod, routes Fastify, barrel, v1.yaml, mod-003-org-units.yaml ✅)
+  - [x] AGN-COD-WEB — 10 arquivos (types, api, 5 hooks, component, 2 pages) — ja completo
+  - [x] AGN-COD-VAL — validacao cruzada (9 checks ✅, 0 failed)
 - [x] Executar `/validate-all` pos-codigo — APROVADO (7 validadores PASS, 2026-03-24)
 - [ ] Executar `pnpm install` — instalar dependencias
 - [ ] Executar `pnpm test` / `pnpm lint` — verificar testes e linting
@@ -408,6 +408,7 @@ MOD-003 e referencia canonica de pertencimento para todos os modulos.
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 6.1.0 | 2026-03-25 | Atualizacao: codegen re-run (3 batches). DB: FKs cross-module (createdBy→users.id, parentId self-ref), status→varchar(20), infrastructure/schema.ts criado. APP: barrel export desambiguado (CreateOrgUnitInput). API: OpenAPI spec mod-003-org-units.yaml (9 paths). CORE+WEB: ja completos, sem alteracoes. VAL: 9 checks ✅. Execution state atualizado. |
 | 6.0.0 | 2026-03-24 | Atualizacao: /validate-all pos-codegen CONCLUIDO — 7 validadores PASS, veredicto APROVADO. PENDENTE-007 → RESOLVIDA (lint 0 erros). Fase 3 re-executada com resultados completos. Checklist pos-codegen atualizado. |
 | 5.0.0 | 2026-03-23 | Atualizacao: Fase 5 CONCLUIDA (codegen 31 arquivos em 3 batches, 6/6 agentes done), rastreio COD atualizado com timestamps e contagem real, validacao cruzada VAL (11 ✅ 1 ⚠️), checklist pos-codegen atualizado, resumo visual reflete estado pos-codegen |
 | 4.0.0 | 2026-03-23 | Atualizacao: Fase 4 CONCLUIDA (promocao READY v1.0.0 em 2026-03-23), F04 promovida TODO→READY (4/4 features), MOD-000 upstream READY, Fase 5 desbloqueada (NAO INICIADA), checklist atualizado para codegen, Resumo Visual reflete estado pos-READY |

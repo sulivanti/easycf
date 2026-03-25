@@ -1,9 +1,9 @@
 # DOC-PADRAO-001 — Padrões de Ambientes e Execução (Node.js + Docker)
 
 - **id:** DOC-PADRAO-001
-- **version:** 1.0.0
+- **version:** 1.1.1
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-04
+- **data_ultima_revisao:** 2026-03-25
 - **owner:** infraestrutura
 - **scope:** global (API, Workers, Docker)
 
@@ -89,12 +89,76 @@ Essa separação permite que os serviços de aplicação rodem fora do Docker (v
 
 ## 4. O Dockerfile
 
-O `Dockerfile` oficial da aplicação deverá conter a estrutura otimizada:
+### 4.1 Desenvolvimento
 
-1. Imagem base ultra-leve (`node:20-alpine`).
-2. Habilitação do `pnpm` nativo via CLI (`corepack enable`).
-3. Instalação agressiva via lockfile (`pnpm-lock.yaml`).
-4. Inicialização via scripts mapeados no `package.json` (`pnpm dev`, `pnpm dev:worker`).
+O `Dockerfile` de desenvolvimento usa `node:20-alpine` com volume mount para hot-reload (ver §3.3 serviço `api`).
+
+### 4.2 Produção — Multi-Stage Build
+
+Em produção, os Dockerfiles DEVEM usar **multi-stage build** com 3 estágios:
+
+| Estágio | Base | Função |
+|---------|------|--------|
+| `deps` | `node:20-alpine` + pnpm | Instala dependências com `--frozen-lockfile` |
+| `build` | `node:20-alpine` + pnpm | Copia deps + source, executa `tsup` (API) ou `vite build` (Web) |
+| `runtime` | `node:20-alpine` (API) ou `nginx:alpine` (Web) | Copia apenas artefatos de build + node_modules de produção |
+
+**Arquivos obrigatórios:**
+
+- `Dockerfile.api` — Build da API Fastify com `tsup`, runtime com `node dist/index.js`
+- `Dockerfile.web` — Build do Vite, runtime com `nginx:alpine` servindo estáticos + SPA fallback
+- `nginx/web.conf` — Config Nginx interna do container web com `try_files $uri $uri/ /index.html`
+- `.dockerignore` — Exclui `node_modules`, `dist`, `.git`, `.env`, `docs`, `.agents`, `coverage`
+
+### 4.3 Composição de Produção (`docker-compose.prod.yml`)
+
+O arquivo `docker-compose.prod.yml` DEVE separar as preocupações de rede:
+
+| Serviço | Rede | Portas no host | Notas |
+|---------|------|---------------|-------|
+| `postgres` | `internal` apenas | Nenhuma | Não expor externamente |
+| `redis` | `internal` apenas | Nenhuma | Não expor externamente |
+| `api` | `internal` + `proxy-nw` | `3100:3000`* | Healthcheck em postgres e redis |
+| `web` | `proxy-nw` | `8080:80` | Nginx servindo estáticos |
+
+> \* A porta do host pode variar conforme disponibilidade na VPS. Verificar conflitos antes do deploy (ex: Grafana na 3000).
+
+**Redes:**
+
+- `internal` (bridge) — Comunicação entre API ↔ Postgres ↔ Redis. Isolada do host.
+- `proxy-nw` (external) — Rede compartilhada com o Nginx reverse proxy da VPS.
+
+**Healthchecks obrigatórios:**
+
+```yaml
+postgres:
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin}"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+
+redis:
+  healthcheck:
+    test: ["CMD", "redis-cli", "ping"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+```
+
+A API DEVE depender de ambos com `condition: service_healthy`.
+
+### 4.4 Seed Inicial (Primeiro Deploy)
+
+Todo deploy em ambiente novo DEVE executar, após `drizzle-kit push`:
+
+```bash
+docker compose -f docker-compose.prod.yml exec api npx tsx db/seed-admin.ts
+```
+
+O seed cria: tenant padrão, role `super-admin` com **todos os scopes do catálogo canônico** ([DOC-FND-000 §2.2](DOC-FND-000__Foundation.md)), e usuário admin inicial. Variáveis opcionais: `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME`.
+
+> **Regra de consistência:** O script `db/seed-admin.ts` DEVE importar ou referenciar a lista canônica de scopes definida em DOC-FND-000 §2.2. Quando novos scopes forem registrados via amendments ao catálogo (ex: DOC-FND-000-M01…M04), o seed DEVE ser atualizado para incluí-los. A ausência de scopes no seed resulta em sidebar vazia e funcionalidades inacessíveis no primeiro deploy.
 
 ## 5. Gerenciamento do Projeto Node.js (`package.json`)
 

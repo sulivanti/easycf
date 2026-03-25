@@ -727,7 +727,7 @@ export class DrizzleDomainEventRepository implements DomainEventRepository {
       payload: event.payload,
       correlationId: event.correlationId,
       causationId: event.causationId ?? null,
-      createdBy: event.createdBy,
+      createdBy: event.createdBy ?? null,
       sensitivityLevel: event.sensitivityLevel,
       dedupeKey: event.dedupeKey ?? null,
     });
@@ -745,7 +745,7 @@ export class DrizzleDomainEventRepository implements DomainEventRepository {
         payload: e.payload,
         correlationId: e.correlationId,
         causationId: e.causationId ?? null,
-        createdBy: e.createdBy,
+        createdBy: e.createdBy ?? null,
         sensitivityLevel: e.sensitivityLevel,
         dedupeKey: e.dedupeKey ?? null,
       })),

@@ -126,10 +126,15 @@ export const EVENT_SENSITIVITY: Record<FoundationEventType, 0 | 1 | 2 | 3> = {
 };
 
 // ---------------------------------------------------------------------------
+// System tenant — used for pre-auth events (login, forgot-password, etc.)
+// ---------------------------------------------------------------------------
+export const SYSTEM_TENANT_ID = '00000000-0000-0000-0000-000000000000';
+
+// ---------------------------------------------------------------------------
 // Factory helper — creates a domain event with defaults
 // ---------------------------------------------------------------------------
 export function createFoundationEvent(params: {
-  tenantId: string;
+  tenantId?: string;
   entityType: FoundationEntityType;
   entityId: string;
   eventType: FoundationEventType;
@@ -140,7 +145,7 @@ export function createFoundationEvent(params: {
   dedupeKey?: string;
 }): DomainEventBase {
   return {
-    tenantId: params.tenantId,
+    tenantId: params.tenantId || SYSTEM_TENANT_ID,
     entityType: params.entityType,
     entityId: params.entityId,
     eventType: params.eventType,
@@ -148,7 +153,7 @@ export function createFoundationEvent(params: {
     correlationId: params.correlationId,
     createdBy: params.createdBy,
     sensitivityLevel: EVENT_SENSITIVITY[params.eventType],
-    causationId: params.causationId,
-    dedupeKey: params.dedupeKey,
+    causationId: params.causationId ?? null,
+    dedupeKey: params.dedupeKey ?? null,
   };
 }

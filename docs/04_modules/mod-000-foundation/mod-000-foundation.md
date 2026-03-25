@@ -143,6 +143,7 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [FR-000-M01](amendments/fr/FR-000-M01.md) — DTO gaps Users API (F05): role_id/role_name em UserListItem, invite_token_expired em UserDetail, mode/role_id em CreateUserRequest (MOD-002)
 - [FR-000-C01](amendments/fr/FR-000-C01.md) — Correção scopes do seed: alinhar com catálogo canônico DOC-FND-000 §2.2 (tenants:branch:*, system:audit:*, storage:file:*)
 - [FR-000-C02](amendments/fr/FR-000-C02.md) — Correção: rota GET /auth/me ausente no index.ts + shape backend/frontend desalinhado (name, tenant objeto, scopes)
+- [DATA-000-C02](amendments/data/DATA-000-C02.md) — Correção: tenant_id vazio em domain_events causa crash no INSERT (login e todos use-cases MOD-000)
 <!-- end amendments-index -->
 
 > **Nota:** 8 amendments de documentos normativos foram migrados para `docs/01_normativos/amendments/{DOC-ID}/` em 2026-03-25. Normativos são transversais e não pertencem a nenhum módulo específico. Ver: DOC-PADRAO-001-C01, DOC-PADRAO-001-M01, DOC-PADRAO-004-M01, DOC-PADRAO-005-C01, DOC-UX-011-M01, DOC-UX-011-M02, DOC-UX-012-M02, DOC-GNP-00-M01.

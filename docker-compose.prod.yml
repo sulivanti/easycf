@@ -43,7 +43,7 @@ services:
       dockerfile: Dockerfile.api
     container_name: ${PROJECT_NAME:-ecf}-api
     ports:
-      - "3000:3000"
+      - "3100:3000"
     env_file: .env
     environment:
       NODE_ENV: production

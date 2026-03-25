@@ -3,8 +3,7 @@
 // Composition Root — instantiates DB, repositories, services, and use cases.
 // Populates request.dipiContainer and app.* registries.
 //
-// Wired: MOD-000, MOD-003, MOD-004, MOD-005, MOD-006, MOD-007
-// Pending: MOD-008, MOD-009, MOD-010
+// Wired: MOD-000, MOD-003, MOD-004, MOD-005, MOD-006, MOD-007, MOD-008, MOD-009, MOD-010
 
 import type { FastifyInstance } from 'fastify';
 import { drizzle } from 'drizzle-orm/postgres-js';
@@ -209,6 +208,99 @@ import { DeleteRoutineItemUseCase } from '../modules/contextual-params/applicati
 import { LinkRoutineUseCase } from '../modules/contextual-params/application/use-cases/link-routine.use-case.js';
 import { UnlinkRoutineUseCase } from '../modules/contextual-params/application/use-cases/unlink-routine.use-case.js';
 import { EvaluateRulesUseCase } from '../modules/contextual-params/application/use-cases/evaluate-rules.use-case.js';
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// MOD-009 Movement-Approval — Infrastructure + Use Cases
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import {
+  DrizzleControlRuleRepository,
+  DrizzleApprovalRuleRepository,
+  DrizzleMovementRepository,
+  DrizzleApprovalInstanceRepository,
+  DrizzleMovementExecutionRepository,
+  DrizzleMovementHistoryRepository,
+  DrizzleOverrideLogRepository,
+  DrizzleMovApprovalUnitOfWork,
+  DrizzleMovApprovalEventRepository,
+  CryptoIdGenerator as MovApprovalIdGen,
+  DrizzleCodigoGenerator,
+} from '../modules/movement-approval/infrastructure/drizzle-repositories.js';
+
+import { CreateControlRuleUseCase } from '../modules/movement-approval/application/use-cases/rules/create-control-rule.use-case.js';
+import { UpdateControlRuleUseCase } from '../modules/movement-approval/application/use-cases/rules/update-control-rule.use-case.js';
+import { ListControlRulesUseCase } from '../modules/movement-approval/application/use-cases/rules/list-control-rules.use-case.js';
+import { CreateApprovalRuleUseCase } from '../modules/movement-approval/application/use-cases/rules/create-approval-rule.use-case.js';
+import { UpdateApprovalRuleUseCase } from '../modules/movement-approval/application/use-cases/rules/update-approval-rule.use-case.js';
+import { EvaluateMovementUseCase } from '../modules/movement-approval/application/use-cases/engine/evaluate-movement.use-case.js';
+import { ApproveMovementUseCase } from '../modules/movement-approval/application/use-cases/approvals/approve-movement.use-case.js';
+import { RejectMovementUseCase } from '../modules/movement-approval/application/use-cases/approvals/reject-movement.use-case.js';
+import { ListMyApprovalsUseCase } from '../modules/movement-approval/application/use-cases/approvals/list-my-approvals.use-case.js';
+import { GetMovementUseCase } from '../modules/movement-approval/application/use-cases/movements/get-movement.use-case.js';
+import { ListMovementsUseCase } from '../modules/movement-approval/application/use-cases/movements/list-movements.use-case.js';
+import { CancelMovementUseCase } from '../modules/movement-approval/application/use-cases/movements/cancel-movement.use-case.js';
+import { OverrideMovementUseCase } from '../modules/movement-approval/application/use-cases/movements/override-movement.use-case.js';
+import { RetryMovementUseCase } from '../modules/movement-approval/application/use-cases/movements/retry-movement.use-case.js';
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// MOD-010 MCP-Automation — Infrastructure + Use Cases
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import {
+  DrizzleMcpAgentRepository,
+  DrizzleMcpActionTypeRepository,
+  DrizzleMcpActionRepository,
+  DrizzleMcpAgentActionLinkRepository,
+  DrizzleMcpExecutionRepository,
+  DrizzleMcpUnitOfWork,
+  DrizzleMcpEventRepository,
+  CryptoMcpIdGenerator,
+  StubApiKeyService,
+  StubMovementEngineGateway,
+  StubRoutineEvaluator,
+  StubIntegrationQueue,
+  StubActionExecutorRegistry,
+} from '../modules/mcp/infrastructure/drizzle-repositories.js';
+
+import { CreateAgentUseCase } from '../modules/mcp/application/use-cases/agents/create-agent.use-case.js';
+import { ListAgentsUseCase } from '../modules/mcp/application/use-cases/agents/list-agents.use-case.js';
+import { RevokeAgentUseCase } from '../modules/mcp/application/use-cases/agents/revoke-agent.use-case.js';
+import { RotateAgentKeyUseCase } from '../modules/mcp/application/use-cases/agents/rotate-agent-key.use-case.js';
+import { EnablePhase2UseCase } from '../modules/mcp/application/use-cases/agents/enable-phase2.use-case.js';
+import { UpdateAgentUseCase } from '../modules/mcp/application/use-cases/agents/update-agent.use-case.js';
+import { CreateActionUseCase } from '../modules/mcp/application/use-cases/actions/create-action.use-case.js';
+import { UpdateActionUseCase } from '../modules/mcp/application/use-cases/actions/update-action.use-case.js';
+import { GrantAgentActionUseCase } from '../modules/mcp/application/use-cases/links/grant-agent-action.use-case.js';
+import { RevokeAgentActionUseCase } from '../modules/mcp/application/use-cases/links/revoke-agent-action.use-case.js';
+import { ListExecutionsUseCase, GetExecutionUseCase } from '../modules/mcp/application/use-cases/executions/list-executions.use-case.js';
+import { ExecuteMcpUseCase } from '../modules/mcp/application/use-cases/gateway/execute-mcp.use-case.js';
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// MOD-008 Integration-Protheus — Infrastructure + Use Cases
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import {
+  DrizzleIntegrationServiceRepository,
+  DrizzleIntegrationRoutineRepository,
+  DrizzleFieldMappingRepository,
+  DrizzleIntegrationParamRepository,
+  DrizzleCallLogRepository,
+  DrizzleReprocessRequestRepository,
+  StubEncryptionService,
+  StubQueuePort,
+} from '../modules/integration-protheus/infrastructure/drizzle-repositories.js';
+
+import { CreateServiceUseCase } from '../modules/integration-protheus/application/use-cases/create-service.use-case.js';
+import { UpdateServiceUseCase } from '../modules/integration-protheus/application/use-cases/update-service.use-case.js';
+import { ListServicesUseCase } from '../modules/integration-protheus/application/use-cases/list-services.use-case.js';
+import { ConfigureRoutineUseCase } from '../modules/integration-protheus/application/use-cases/configure-routine.use-case.js';
+import { ForkIntegrationRoutineUseCase } from '../modules/integration-protheus/application/use-cases/fork-integration-routine.use-case.js';
+import { CreateFieldMappingUseCase, UpdateFieldMappingUseCase, DeleteFieldMappingUseCase } from '../modules/integration-protheus/application/use-cases/manage-field-mappings.use-case.js';
+import { CreateParamUseCase, UpdateParamUseCase } from '../modules/integration-protheus/application/use-cases/manage-params.use-case.js';
+import { ExecuteIntegrationUseCase } from '../modules/integration-protheus/application/use-cases/execute-integration.use-case.js';
+import { ReprocessCallUseCase } from '../modules/integration-protheus/application/use-cases/reprocess-call.use-case.js';
+import { ListCallLogsUseCase, GetCallLogUseCase } from '../modules/integration-protheus/application/use-cases/list-call-logs.use-case.js';
+import { GetCallLogMetricsUseCase } from '../modules/integration-protheus/application/use-cases/get-call-log-metrics.use-case.js';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Plugin
@@ -511,7 +603,99 @@ export async function diPlugin(app: FastifyInstance): Promise<void> {
   const evaluateRulesUseCase = new EvaluateRulesUseCase(incidenceRuleRepo, routineRepo, routineItemRepo, routineLinkRepo, paramEventRepo, paramUow, paramIdGen);
 
   // ─────────────────────────────────────────────────────────────────────────
-  // 9. Build DI container
+  // 9. MOD-008 Integration-Protheus — Repositories + Use Cases
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const integServiceRepo = new DrizzleIntegrationServiceRepository(db);
+  const integRoutineRepo = new DrizzleIntegrationRoutineRepository(db);
+  const fieldMappingRepo = new DrizzleFieldMappingRepository(db);
+  const integParamRepo = new DrizzleIntegrationParamRepository(db);
+  const callLogRepo = new DrizzleCallLogRepository(db);
+  const reprocessRepo = new DrizzleReprocessRequestRepository(db);
+  const encryption = new StubEncryptionService();
+  const queuePort = new StubQueuePort();
+
+  const createServiceUseCase = new CreateServiceUseCase(integServiceRepo, eventRepo, uow, hashUtil, encryption);
+  const updateServiceUseCase = new UpdateServiceUseCase(integServiceRepo, eventRepo, uow, encryption);
+  const listServicesUseCase = new ListServicesUseCase(integServiceRepo);
+  const configureRoutineUseCase = new ConfigureRoutineUseCase(integRoutineRepo, integServiceRepo, eventRepo, uow, hashUtil);
+  const forkIntegRoutineUseCase = new ForkIntegrationRoutineUseCase(integRoutineRepo, fieldMappingRepo, integParamRepo, uow, hashUtil);
+  const createFieldMappingUseCase = new CreateFieldMappingUseCase(fieldMappingRepo, uow, hashUtil);
+  const updateFieldMappingUseCase = new UpdateFieldMappingUseCase(fieldMappingRepo, uow);
+  const deleteFieldMappingUseCase = new DeleteFieldMappingUseCase(fieldMappingRepo, uow);
+  const createParamUseCase = new CreateParamUseCase(integParamRepo, uow, hashUtil);
+  const updateParamUseCase = new UpdateParamUseCase(integParamRepo, uow);
+  const executeIntegrationUseCase = new ExecuteIntegrationUseCase(integServiceRepo, integRoutineRepo, fieldMappingRepo, integParamRepo, callLogRepo, eventRepo, uow, hashUtil, queuePort);
+  const reprocessCallUseCase = new ReprocessCallUseCase(callLogRepo, reprocessRepo, eventRepo, uow, hashUtil, queuePort);
+  const listCallLogsUseCase = new ListCallLogsUseCase(callLogRepo);
+  const getCallLogUseCase = new GetCallLogUseCase(callLogRepo);
+  const getCallLogMetricsUseCase = new GetCallLogMetricsUseCase(callLogRepo);
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 10. MOD-009 Movement-Approval — Repositories + Use Cases
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const controlRuleRepo = new DrizzleControlRuleRepository(db);
+  const approvalRuleRepo = new DrizzleApprovalRuleRepository(db);
+  const movementRepo = new DrizzleMovementRepository(db);
+  const approvalInstanceRepo = new DrizzleApprovalInstanceRepository(db);
+  const movExecutionRepo = new DrizzleMovementExecutionRepository(db);
+  const movHistoryRepo = new DrizzleMovementHistoryRepository(db);
+  const overrideLogRepo = new DrizzleOverrideLogRepository(db);
+  const movApprovalUow = new DrizzleMovApprovalUnitOfWork(db);
+  const movApprovalEventRepo = new DrizzleMovApprovalEventRepository(db);
+  const movApprovalIdGen = new MovApprovalIdGen();
+  const codigoGen = new DrizzleCodigoGenerator(db);
+
+  const createControlRuleUseCase = new CreateControlRuleUseCase(controlRuleRepo, movApprovalEventRepo, movApprovalUow, movApprovalIdGen);
+  const updateControlRuleUseCase = new UpdateControlRuleUseCase(controlRuleRepo, movApprovalEventRepo, movApprovalUow);
+  const listControlRulesUseCase = new ListControlRulesUseCase(controlRuleRepo);
+  const createApprovalRuleUseCase = new CreateApprovalRuleUseCase(controlRuleRepo, approvalRuleRepo, movApprovalEventRepo, movApprovalUow, movApprovalIdGen);
+  const updateApprovalRuleUseCase = new UpdateApprovalRuleUseCase(approvalRuleRepo, movApprovalEventRepo, movApprovalUow);
+  const evaluateMovementUseCase = new EvaluateMovementUseCase(controlRuleRepo, approvalRuleRepo, movementRepo, approvalInstanceRepo, movHistoryRepo, movApprovalEventRepo, movApprovalUow, movApprovalIdGen, codigoGen);
+  const approveMovementUseCase = new ApproveMovementUseCase(movementRepo, approvalInstanceRepo, approvalRuleRepo, movHistoryRepo, movApprovalEventRepo, movApprovalUow, movApprovalIdGen);
+  const rejectMovementUseCase = new RejectMovementUseCase(movementRepo, approvalInstanceRepo, movHistoryRepo, movApprovalEventRepo, movApprovalUow, movApprovalIdGen);
+  const listMyApprovalsUseCase = new ListMyApprovalsUseCase(approvalInstanceRepo);
+  const getMovementUseCase = new GetMovementUseCase(movementRepo, approvalInstanceRepo, movHistoryRepo);
+  const listMovementsUseCase = new ListMovementsUseCase(movementRepo);
+  const cancelMovementUseCase = new CancelMovementUseCase(movementRepo, movHistoryRepo, movApprovalEventRepo, movApprovalUow, movApprovalIdGen);
+  const overrideMovementUseCase = new OverrideMovementUseCase(movementRepo, movHistoryRepo, overrideLogRepo, movApprovalEventRepo, movApprovalUow, movApprovalIdGen);
+  const retryMovementUseCase = new RetryMovementUseCase(movementRepo, movHistoryRepo, movExecutionRepo, movApprovalEventRepo, movApprovalUow, movApprovalIdGen);
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 11. MOD-010 MCP-Automation — Repositories + Use Cases
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const mcpAgentRepo = new DrizzleMcpAgentRepository(db);
+  const mcpActionTypeRepo = new DrizzleMcpActionTypeRepository(db);
+  const mcpActionRepo = new DrizzleMcpActionRepository(db);
+  const mcpLinkRepo = new DrizzleMcpAgentActionLinkRepository(db);
+  const mcpExecRepo = new DrizzleMcpExecutionRepository(db);
+  const mcpUow = new DrizzleMcpUnitOfWork(db);
+  const mcpEventRepo = new DrizzleMcpEventRepository(db);
+  const mcpIdGen = new CryptoMcpIdGenerator();
+  const apiKeyService = new StubApiKeyService();
+  const movementEngineGw = new StubMovementEngineGateway();
+  const routineEvaluator = new StubRoutineEvaluator();
+  const integrationQueue = new StubIntegrationQueue();
+  const executorRegistry = new StubActionExecutorRegistry();
+
+  const createAgentUseCase = new CreateAgentUseCase(mcpAgentRepo, mcpEventRepo, mcpUow, mcpIdGen, apiKeyService);
+  const listAgentsUseCase = new ListAgentsUseCase(mcpAgentRepo);
+  const revokeAgentUseCase = new RevokeAgentUseCase(mcpAgentRepo, mcpEventRepo, mcpUow);
+  const rotateAgentKeyUseCase = new RotateAgentKeyUseCase(mcpAgentRepo, mcpEventRepo, mcpUow, apiKeyService);
+  const enablePhase2UseCase = new EnablePhase2UseCase(mcpAgentRepo, mcpEventRepo, mcpUow);
+  const updateAgentUseCase = new UpdateAgentUseCase(mcpAgentRepo, mcpEventRepo, mcpUow);
+  const createActionUseCase = new CreateActionUseCase(mcpActionRepo, mcpActionTypeRepo, mcpEventRepo, mcpUow, mcpIdGen);
+  const updateActionUseCase = new UpdateActionUseCase(mcpActionRepo, mcpActionTypeRepo, mcpEventRepo, mcpUow);
+  const grantAgentActionUseCase = new GrantAgentActionUseCase(mcpAgentRepo, mcpActionRepo, mcpLinkRepo, mcpEventRepo, mcpUow, mcpIdGen);
+  const revokeAgentActionUseCase = new RevokeAgentActionUseCase(mcpLinkRepo, mcpActionRepo, mcpEventRepo, mcpUow);
+  const listExecutionsUseCase = new ListExecutionsUseCase(mcpExecRepo);
+  const getExecutionUseCase = new GetExecutionUseCase(mcpExecRepo);
+  const executeMcpUseCase = new ExecuteMcpUseCase(mcpAgentRepo, mcpActionRepo, mcpLinkRepo, mcpExecRepo, mcpEventRepo, mcpUow, mcpIdGen, apiKeyService, movementEngineGw, routineEvaluator, integrationQueue, executorRegistry);
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 12. Build DI container
   // ─────────────────────────────────────────────────────────────────────────
 
   const container = {
@@ -564,16 +748,38 @@ export async function diPlugin(app: FastifyInstance): Promise<void> {
     createRoutineItemUseCase, updateRoutineItemUseCase, deleteRoutineItemUseCase,
     linkRoutineUseCase, unlinkRoutineUseCase,
     evaluateRulesUseCase,
+
+    // MOD-008 Integration-Protheus
+    createServiceUseCase, updateServiceUseCase, listServicesUseCase,
+    configureRoutineUseCase, forkIntegRoutineUseCase,
+    createFieldMappingUseCase, updateFieldMappingUseCase, deleteFieldMappingUseCase,
+    createParamUseCase, updateParamUseCase,
+    executeIntegrationUseCase, reprocessCallUseCase,
+    listCallLogsUseCase, getCallLogUseCase, getCallLogMetricsUseCase,
+
+    // MOD-009 Movement-Approval
+    createControlRuleUseCase, updateControlRuleUseCase, listControlRulesUseCase,
+    createApprovalRuleUseCase, updateApprovalRuleUseCase,
+    evaluateMovementUseCase,
+    approveMovementUseCase, rejectMovementUseCase, listMyApprovalsUseCase,
+    getMovementUseCase, listMovementsUseCase, cancelMovementUseCase,
+    overrideMovementUseCase, retryMovementUseCase,
+
+    // MOD-010 MCP-Automation
+    createAgentUseCase, listAgentsUseCase, revokeAgentUseCase,
+    rotateAgentKeyUseCase, enablePhase2UseCase, updateAgentUseCase,
+    createActionUseCase, updateActionUseCase,
+    grantAgentActionUseCase, revokeAgentActionUseCase,
+    listExecutionsUseCase, getExecutionUseCase, executeMcpUseCase,
   };
 
   // ─────────────────────────────────────────────────────────────────────────
-  // 10. Decorate Fastify
+  // 13. Decorate Fastify
   // ─────────────────────────────────────────────────────────────────────────
 
   app.decorateRequest('dipiContainer', { getter: () => container });
 
-  // Module registries (MOD-009, MOD-010 — wired incrementally)
   app.decorate('caseExecution', container);
-  app.decorate('movementApproval', {});
-  app.decorate('mcpAutomation', {});
+  app.decorate('movementApproval', container);
+  app.decorate('mcpAutomation', container);
 }

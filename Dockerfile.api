@@ -39,8 +39,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=build /app/apps/api/dist ./apps/api/dist
 COPY --from=build /app/apps/api/package.json ./apps/api/package.json
+COPY --from=build /app/apps/api/tsconfig.json ./apps/api/tsconfig.json
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
-# Include db schema for drizzle-kit push
+# Include db schema + seed for drizzle-kit push and seed
 COPY apps/api/db ./apps/api/db
 
 WORKDIR /app/apps/api

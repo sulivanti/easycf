@@ -72,9 +72,9 @@ export const orgUnitDetailResponse = z.object({
   parent_id: z.string().uuid().nullable(),
   status: z.string(),
   created_by: z.string().uuid().nullable(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
-  deleted_at: z.string().datetime().nullable(),
+  created_at: z.string(),
+  updated_at: z.string(),
+  deleted_at: z.string().nullable(),
   ancestors: z.array(orgUnitAncestor),
   tenants: z.array(orgUnitTenantSummary),
 });
@@ -98,7 +98,7 @@ export const orgUnitListItem = z.object({
   nivel: z.number().int(),
   status: z.string(),
   parent_id: z.string().uuid().nullable(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------

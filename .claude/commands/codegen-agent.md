@@ -279,6 +279,11 @@ Resultado: estrutura corrigida para Pattern A, React Query verificado. ✅
 1. Verifique que interfaces de porta (repositories) usam tipos do domínio, não tipos Drizzle
 2. Verifique que use-cases retornam DTOs ou value objects, não entidades cruas
 
+**AGN-COD-API — DTO Datetime Compliance (EX-DTO-001):**
+1. Verifique que NENHUM arquivo em `presentation/dtos/` ou `presentation/routes/` contenha `.datetime()`
+2. Se encontrado → CORRIJA substituindo `.datetime().nullable()` por `.nullable()` e `.datetime()` por nada (remover)
+3. Registre no relatório: `"✅ EX-DTO-001: {N} ocorrências .datetime() corrigidas em response DTOs"` ou `"✅ EX-DTO-001: nenhum .datetime() encontrado"`
+
 ### 7.3 Build Gate — Compilação TypeScript (MUST — todos os agentes exceto AGN-COD-VAL)
 
 Após emitir todos os arquivos e passar pelas validações 7.1/7.2, o agente DEVE verificar compilação TypeScript:

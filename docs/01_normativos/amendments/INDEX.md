@@ -15,3 +15,5 @@
 | [DOC-GNP-00-M01](DOC-GNP-00/DOC-GNP-00-M01.md) | DOC-GNP-00 | M | MERGED | 2026-03-25 | §2.1 Artefatos obrigatórios por workspace (entry points, drizzle.config) |
 | [DOC-PADRAO-002-M01](DOC-PADRAO-002/DOC-PADRAO-002-M01.md) | DOC-PADRAO-002 | M | MERGED | 2026-03-25 | §3.4 Expansão Cache e Filas: ioredis config, BullMQ, key naming, TTL, databases |
 | [DOC-UX-011-M03](DOC-UX-011/DOC-UX-011-M03.md) | DOC-UX-011 | M | MERGED | 2026-03-25 | §6.2 LogoutConfirmDialog obrigatório no Widget de Perfil (ref: spec-auth-ui-components) |
+| [DOC-GNP-00-C01](DOC-GNP-00/DOC-GNP-00-C01.md) | DOC-GNP-00 | C | MERGED | 2026-03-26 | EX-DTO-001: proíbe .datetime() em Zod response DTOs (causa HTTP 500) |
+| [PKG-COD-001-C01](PKG-COD-001/PKG-COD-001-C01.md) | PKG-COD-001 | C | MERGED | 2026-03-26 | Anti-pattern DTO datetime em §3.4 AGN-COD-API (ref: EX-DTO-001) |

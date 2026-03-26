@@ -12,6 +12,10 @@ Documentos normativos não pertencem a módulos — este CHANGELOG substitui o P
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 0.15.1 | 2026-03-26 | merge-amendment | Merge PKG-COD-001-C01: anti-pattern DTO datetime em §3.4 AGN-COD-API. PKG-COD-001 v1.5.1. Ref: EX-DTO-001. |
+| 0.15.0 | 2026-03-26 | merge-amendment | Merge DOC-GNP-00-C01: novo EX-DTO-001 inserido após EX-DB-001. DOC-GNP-00 v2.1.1. Campos datetime em Zod response DTOs MUST usar z.string(). |
+| 0.14.2 | 2026-03-26 | create-amendment | Criação PKG-COD-001-C01: anti-pattern DTO datetime em §3.4 AGN-COD-API — codegen MUST NOT gerar .datetime() em response DTOs. Ref: DOC-GNP-00-C01 EX-DTO-001. |
+| 0.14.1 | 2026-03-26 | create-amendment | Criação DOC-GNP-00-C01: novo EX-DTO-001 — campos datetime em Zod response DTOs MUST usar z.string(), MUST NOT usar .datetime(). Previne HTTP 500 do serializerCompiler. |
 | 0.14.0 | 2026-03-25 | merge-amendment | Merge DOC-UX-011-M03: nova §6.2 LogoutConfirmDialog obrigatório no Widget de Perfil. DOC-UX-011 v1.4.0. Ref: spec-auth-ui-components. |
 | 0.13.0 | 2026-03-25 | merge-amendment | Merge DOC-PADRAO-005-C01: §10 expandida com `max_attachments` por entity_type, CON-005, Gate STR-6. DOC-PADRAO-005 v1.0.1. Resolve PENDENTE-004. |
 | 0.12.0 | 2026-03-25 | create-amendment | Criação DOC-UX-011-M03: §6.2 LogoutConfirmDialog obrigatório no Widget de Perfil — confirmação antes de logout, prevenção de logout acidental. Referencia spec-auth-ui-components (REQ-LC-001 a REQ-LC-010). |

@@ -39,7 +39,13 @@ export async function usersRoutes(app: FastifyInstance): Promise<void> {
         createdBy,
       });
 
-      return reply.status(201).send(result);
+      return reply.status(201).send({
+        id: result.id,
+        email: result.email,
+        codigo: result.codigo,
+        full_name: result.fullName ?? request.body.full_name,
+        status: result.status,
+      });
     },
   });
 
@@ -125,7 +131,21 @@ export async function usersRoutes(app: FastifyInstance): Promise<void> {
         cpfCnpj: request.body.cpf_cnpj,
       });
 
-      return reply.status(200).send({ ...user, ...request.body });
+      // Re-fetch after update to get fresh data
+      const updated = await request.dipiContainer.userRepo.findById(request.params.id);
+      const u = updated ?? user;
+
+      return reply.status(200).send({
+        id: u.id,
+        codigo: u.codigo,
+        email: u.email?.value ?? u.email,
+        full_name: u.profile?.fullName ?? '',
+        cpf_cnpj: u.profile?.cpfCnpj ?? null,
+        avatar_url: u.profile?.avatarUrl ?? null,
+        status: u.status,
+        created_at: u.createdAt instanceof Date ? u.createdAt.toISOString() : u.createdAt,
+        updated_at: u.updatedAt instanceof Date ? u.updatedAt.toISOString() : u.updatedAt,
+      });
     },
   });
 

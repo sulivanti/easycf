@@ -33,7 +33,7 @@ export const userListItem = z.object({
   email: z.string().email(),
   full_name: z.string(),
   status: z.string(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------
@@ -47,8 +47,8 @@ export const userDetailResponse = z.object({
   cpf_cnpj: z.string().nullable(),
   avatar_url: z.string().nullable(),
   status: z.string(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string(),
+  updated_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------

@@ -1,16 +1,28 @@
 /**
- * @contract FR-005, UX-DASH-001, BR-008, BR-009, BR-010
+ * @contract FR-005, UX-DASH-001, BR-008, BR-009, BR-010, DOC-UX-011 §2.2
  *
  * Dashboard executivo pós-login.
  * - WelcomeWidget (saudação por horário local) + ModuleShortcuts (cards por scopes)
  * - Skeleton com timeout 3s → estado de erro + retry (BR-009)
  * - Erro 5xx NÃO desconecta (BR-010)
  * - Dados exclusivamente de auth_me via React Query (BR-008)
+ * - Visual A1: page header branco, cards com accent laranja (DOC-UX-011-M04)
  */
 
 import { useState, useEffect, useRef, startTransition } from 'react';
 import { Link } from '@tanstack/react-router';
-import { Users, Shield, Building, Activity, RefreshCw } from 'lucide-react';
+import {
+  Users,
+  Shield,
+  Building,
+  Activity,
+  RefreshCw,
+  Network,
+  Workflow,
+  Briefcase,
+  Inbox,
+  ChevronRight,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Button } from '@shared/ui/button';
@@ -31,19 +43,26 @@ const SHORTCUT_ICONS: Record<string, React.ElementType> = {
   shield: Shield,
   building: Building,
   activity: Activity,
+  network: Network,
+  workflow: Workflow,
+  briefcase: Briefcase,
+  inbox: Inbox,
 };
 
 // ---------------------------------------------------------------------------
-// Skeleton
+// Skeleton (A1 theme)
 // ---------------------------------------------------------------------------
 
 function DashboardSkeleton() {
   return (
-    <div className="space-y-6">
-      <Skeleton className="h-20 w-full rounded-lg" />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="-m-6">
+      <div className="border-b border-a1-border bg-white px-6 py-4.5">
+        <Skeleton className="h-6 w-64 bg-a1-border" />
+        <Skeleton className="mt-2 h-4 w-40 bg-a1-border" />
+      </div>
+      <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-32 rounded-lg" />
+          <Skeleton key={i} className="h-28 rounded-[10px] bg-a1-border" />
         ))}
       </div>
     </div>
@@ -51,26 +70,28 @@ function DashboardSkeleton() {
 }
 
 // ---------------------------------------------------------------------------
-// WelcomeWidget
+// WelcomeWidget (A1 page header style)
 // ---------------------------------------------------------------------------
 
 function WelcomeWidget({ name, tenantName }: { name: string; tenantName: string }) {
   return (
-    <div className="rounded-lg bg-primary/5 p-5">
-      <h1 className="text-xl font-bold text-foreground">{getGreeting(name)}</h1>
-      <p className="mt-1 text-sm text-muted-foreground">{tenantName}</p>
+    <div className="border-b border-a1-border bg-white px-6 py-4.5">
+      <h1 className="font-display text-xl font-bold tracking-[-0.4px] text-a1-text-primary">
+        {getGreeting(name)}
+      </h1>
+      <p className="mt-0.5 font-display text-xs text-a1-text-hint">{tenantName}</p>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// ModuleShortcuts
+// ModuleShortcuts (A1 card grid)
 // ---------------------------------------------------------------------------
 
 function ModuleShortcuts({ cards }: { cards: ShortcutCard[] }) {
   if (cards.length === 0) {
     return (
-      <div className="py-12 text-center text-sm text-muted-foreground">
+      <div className="py-12 text-center font-display text-[13px] text-a1-text-auxiliary">
         Nenhum módulo disponível para seu perfil. Contate o administrador.
       </div>
     );
@@ -84,13 +105,18 @@ function ModuleShortcuts({ cards }: { cards: ShortcutCard[] }) {
           <Link
             key={card.id}
             to={card.route}
-            className="group rounded-lg border border-border bg-background p-4 transition-all hover:border-primary/30 hover:shadow-md"
+            className="group flex flex-col gap-3 rounded-[10px] border border-a1-border bg-white p-5 transition-all hover:shadow-md"
           >
-            <div className="mb-3 flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
-              {Icon ? <Icon className="size-5" /> : null}
+            <div className="flex items-center justify-between">
+              <div className="flex size-9 items-center justify-center rounded-lg bg-a1-accent/10">
+                {Icon ? <Icon className="size-[18px] stroke-a1-accent" strokeWidth={1.8} /> : null}
+              </div>
+              <ChevronRight className="size-4 stroke-a1-text-placeholder transition-colors group-hover:stroke-a1-text-auxiliary" />
             </div>
-            <div className="text-sm font-semibold">{card.label}</div>
-            <div className="mt-1 text-xs text-muted-foreground">{card.description}</div>
+            <div className="flex flex-col gap-1">
+              <div className="font-display text-[15px] font-bold text-a1-text-primary">{card.label}</div>
+              <div className="font-display text-xs text-a1-text-hint">{card.description}</div>
+            </div>
           </Link>
         );
       })}
@@ -105,7 +131,9 @@ function ModuleShortcuts({ cards }: { cards: ShortcutCard[] }) {
 function ErrorState({ onRetry, isRetrying }: { onRetry: () => void; isRetrying: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <p className="mb-4 text-sm text-muted-foreground">Erro ao carregar dados. Tente novamente.</p>
+      <p className="mb-4 font-display text-[13px] text-a1-text-auxiliary">
+        Erro ao carregar dados. Tente novamente.
+      </p>
       <Button onClick={onRetry} isLoading={isRetrying}>
         <RefreshCw className="size-4" />
         Tentar novamente
@@ -172,9 +200,11 @@ export function DashboardPage() {
   const shortcuts = filterShortcutsByScopes(user.scopes);
 
   return (
-    <div className="space-y-6">
+    <div className="-m-6">
       <WelcomeWidget name={user.name} tenantName={user.tenant.name} />
-      <ModuleShortcuts cards={shortcuts} />
+      <div className="p-6">
+        <ModuleShortcuts cards={shortcuts} />
+      </div>
     </div>
   );
 }

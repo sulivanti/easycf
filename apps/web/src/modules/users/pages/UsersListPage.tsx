@@ -119,25 +119,37 @@ export function UsersListPage({
   const hasFilters = !!(searchInput || statusFilter || roleFilter);
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Gestão de Usuários</h1>
-        {showCreate && <Button onClick={onNavigateToCreate}>Novo Usuário</Button>}
+    <div className="-m-6">
+      {/* Page Header — A1 */}
+      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
+        <div className="flex flex-col gap-0.5">
+          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
+            Gestão de Usuários
+          </h1>
+          <p className="font-display text-[11px] text-a1-text-hint">
+            Gerencie contas, perfis e permissões de acesso
+          </p>
+        </div>
+        {showCreate && (
+          <Button onClick={onNavigateToCreate} className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90">
+            + Novo Usuário
+          </Button>
+        )}
       </div>
 
+      <div className="space-y-4 p-6">
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <Input
           placeholder="Buscar por nome ou e-mail..."
           value={searchInput}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="w-64"
+          className="w-64 border-a1-border bg-white font-display text-[13px]"
         />
         <select
           value={statusFilter}
           onChange={(e) => handleStatusChange(e.target.value)}
-          className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+          className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
         >
           {STATUS_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -148,7 +160,7 @@ export function UsersListPage({
         <select
           value={roleFilter}
           onChange={(e) => handleRoleChange(e.target.value)}
-          className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+          className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
         >
           <option value="">Todos os perfis</option>
           {(roles ?? []).map((role) => (
@@ -158,7 +170,7 @@ export function UsersListPage({
           ))}
         </select>
         {hasFilters && (
-          <Button variant="link" size="sm" onClick={handleClearFilters}>
+          <Button variant="link" size="sm" onClick={handleClearFilters} className="font-display text-a1-accent">
             Limpar filtros
           </Button>
         )}
@@ -202,6 +214,7 @@ export function UsersListPage({
         onConfirm={handleDeactivateConfirm}
         onCancel={() => setDeactivateTarget(null)}
       />
+      </div>
     </div>
   );
 }

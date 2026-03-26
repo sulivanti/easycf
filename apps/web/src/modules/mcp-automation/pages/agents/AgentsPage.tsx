@@ -75,27 +75,37 @@ export function AgentsPage() {
   const [tab, setTab] = useState<Tab>('agents');
 
   return (
-    <div className="flex flex-col gap-6 p-6">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold">MCP — Agentes e Acoes</h1>
-        <nav className="flex gap-1 rounded-lg border p-1">
+    <div className="-m-6">
+      {/* Page Header — A1 */}
+      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
+        <div className="flex flex-col gap-0.5">
+          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
+            MCP — Agentes e Ações
+          </h1>
+          <p className="font-display text-[11px] text-a1-text-hint">
+            Gerencie agentes de automação, ações e permissões
+          </p>
+        </div>
+        <nav className="flex gap-1 rounded-[7px] border border-a1-border bg-a1-bg p-1">
           {(['agents', 'actions', 'matrix'] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                tab === t ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
+              className={`rounded-md px-3 py-1.5 font-display text-[13px] font-medium transition-colors ${
+                tab === t ? 'bg-a1-dark text-white' : 'text-a1-text-auxiliary hover:bg-white'
               }`}
             >
-              {t === 'agents' ? 'Agentes' : t === 'actions' ? 'Catalogo de Acoes' : 'Permissoes'}
+              {t === 'agents' ? 'Agentes' : t === 'actions' ? 'Catálogo de Ações' : 'Permissões'}
             </button>
           ))}
         </nav>
-      </header>
+      </div>
 
-      {tab === 'agents' && <AgentsTab />}
-      {tab === 'actions' && <ActionsTab />}
-      {tab === 'matrix' && <MatrixTab />}
+      <div className="p-6">
+        {tab === 'agents' && <AgentsTab />}
+        {tab === 'actions' && <ActionsTab />}
+        {tab === 'matrix' && <MatrixTab />}
+      </div>
     </div>
   );
 }

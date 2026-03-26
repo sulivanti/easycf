@@ -175,13 +175,22 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
     flow.macro_stages.length === 0 || flow.macro_stages.every((ms) => ms.stages.length === 0);
 
   return (
-    <div className="h-screen flex flex-col">
-      {/* Header bar */}
-      <div className="px-4 py-2 border-b border-gray-200 flex items-center justify-between bg-white">
-        <div>
-          <span className="font-bold">{flow.cycle.nome}</span>
-          <span className="ml-2 text-xs text-gray-500">
-            v{flow.cycle.version} · {flow.cycle.status}
+    <div className="-m-6 flex h-[calc(100vh-52px)] flex-col">
+      {/* Header bar — A1 */}
+      <div className="flex shrink-0 items-center justify-between border-b border-a1-border bg-white px-6 py-3">
+        <div className="flex items-center gap-3">
+          <span className="font-display text-[15px] font-bold text-a1-text-primary">{flow.cycle.nome}</span>
+          <span className="font-display text-[11px] text-a1-text-hint">
+            v{flow.cycle.version}
+          </span>
+          <span className={`rounded-full px-2.5 py-0.5 font-display text-[10px] font-bold ${
+            flow.cycle.status === 'PUBLISHED'
+              ? 'bg-success-500/10 text-success-600'
+              : flow.cycle.status === 'DEPRECATED'
+                ? 'bg-danger-500/10 text-danger-600'
+                : 'bg-a1-accent/10 text-a1-accent'
+          }`}>
+            {flow.cycle.status}
           </span>
         </div>
         <div className="flex gap-2">

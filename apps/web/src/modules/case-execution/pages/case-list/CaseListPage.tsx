@@ -95,24 +95,36 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
   }
 
   return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold">Casos</h1>
-          {items.length > 0 && <Badge variant="secondary">{items.length}</Badge>}
+    <div className="-m-6">
+      {/* Page Header — A1 */}
+      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
+        <div className="flex flex-col gap-0.5">
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
+              Casos
+            </h1>
+            {items.length > 0 && (
+              <span className="rounded-full bg-a1-dark px-2 py-0.5 font-display text-[9px] font-bold text-white">
+                {items.length}
+              </span>
+            )}
+          </div>
+          <p className="font-display text-[11px] text-a1-text-hint">
+            Acompanhamento de instâncias de processos em execução
+          </p>
         </div>
         <div className="flex gap-2">{canWrite && <NewCaseDrawer onCreated={onSelectCase} />}</div>
       </div>
 
+      <div className="p-6">
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3 mb-4">
+      <div className="mb-4 flex flex-wrap items-center gap-3">
         <Input
           type="search"
           placeholder="Buscar por código..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="w-64"
+          className="w-64 border-a1-border bg-white font-display text-[13px]"
         />
         <select
           value={filters.status ?? ''}
@@ -123,7 +135,7 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
               cursor: undefined,
             }))
           }
-          className="px-3 py-2 text-sm border border-gray-300 rounded-md bg-white"
+          className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
         >
           <option value="">Todos os status</option>
           <option value="OPEN">Aberto</option>
@@ -131,7 +143,7 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
           <option value="COMPLETED">Concluído</option>
           <option value="CANCELLED">Cancelado</option>
         </select>
-        <label className="flex items-center gap-2 text-sm">
+        <label className="flex items-center gap-2 font-display text-[13px] text-a1-text-auxiliary">
           <input
             type="checkbox"
             checked={filters.assigned_to_me ?? false}
@@ -142,7 +154,7 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
                 cursor: undefined,
               }))
             }
-            className="rounded border-gray-300"
+            className="accent-a1-accent rounded"
           />
           Minha responsabilidade
         </label>
@@ -185,6 +197,7 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
           </Button>
         </div>
       )}
+      </div>
     </div>
   );
 }

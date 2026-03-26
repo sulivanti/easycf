@@ -181,45 +181,54 @@ export function OrgTreePage({
   }
 
   return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <h1 className="text-xl font-semibold">Estrutura Organizacional</h1>
+    <div className="-m-6">
+      {/* Page Header — A1 */}
+      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
+        <div className="flex flex-col gap-0.5">
+          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
+            Estrutura Organizacional
+          </h1>
+          <p className="font-display text-[11px] text-a1-text-hint">
+            Hierarquia N1 → N4 · Nível e parent_id imutáveis após criação
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Input
+            type="search"
+            placeholder="Buscar por nome ou código..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            aria-label="Buscar unidades organizacionais"
+            className="w-56 border-a1-border bg-white font-display text-[13px]"
+          />
+          {canWriteOrgUnit(userScopes) && (
+            <Button onClick={() => onNavigateCreate()} className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90">
+              + Nova Unidade
+            </Button>
+          )}
+        </div>
+      </div>
 
-        <Input
-          type="search"
-          placeholder="Buscar por nome ou código..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          aria-label="Buscar unidades organizacionais"
-          className="max-w-xs"
-        />
-
-        <label className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer select-none">
+      <div className="p-6">
+        {/* Show inactive toggle */}
+        <label className="mb-4 flex items-center gap-1.5 font-display text-[13px] text-a1-text-auxiliary cursor-pointer select-none">
           <input
             type="checkbox"
             checked={showInactive}
             onChange={(e) => setShowInactive(e.target.checked)}
-            className="accent-primary"
+            className="accent-a1-accent"
           />
           Mostrar inativos
         </label>
 
-        {canWriteOrgUnit(userScopes) && (
-          <Button onClick={() => onNavigateCreate()} className="ml-auto">
-            Novo nível
-          </Button>
+        {/* Empty search */}
+        {filteredTree.length === 0 && searchTerm.trim() !== '' && (
+          <p className="font-display text-[13px] text-a1-text-auxiliary">{COPY.label.emptySearch}</p>
         )}
-      </div>
 
-      {/* Empty search */}
-      {filteredTree.length === 0 && searchTerm.trim() !== '' && (
-        <p className="text-sm text-muted-foreground">{COPY.label.emptySearch}</p>
-      )}
-
-      {/* Tree */}
-      {filteredTree.length > 0 && (
-        <ul role="tree" aria-label="Árvore organizacional" className="list-none p-0">
+        {/* Tree */}
+        {filteredTree.length > 0 && (
+          <ul role="tree" aria-label="Árvore organizacional" className="list-none p-0">
           {filteredTree.map((node, idx) => (
             <OrgTreeNode
               key={node.id}
@@ -242,23 +251,24 @@ export function OrgTreePage({
         </ul>
       )}
 
-      {/* Confirmation dialog */}
-      <Dialog open={confirm.open} onOpenChange={(open) => !open && closeConfirm()}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{confirm.title}</DialogTitle>
-            <DialogDescription>{confirm.description}</DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={closeConfirm}>
-              {COPY.modal.cancel}
-            </Button>
-            <Button variant="destructive" onClick={confirm.onConfirm}>
-              {confirm.confirmLabel}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        {/* Confirmation dialog */}
+        <Dialog open={confirm.open} onOpenChange={(open) => !open && closeConfirm()}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{confirm.title}</DialogTitle>
+              <DialogDescription>{confirm.description}</DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={closeConfirm}>
+                {COPY.modal.cancel}
+              </Button>
+              <Button variant="destructive" onClick={confirm.onConfirm}>
+                {confirm.confirmLabel}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 }

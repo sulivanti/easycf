@@ -1,11 +1,12 @@
 /**
- * @contract FR-004, FR-007, UX-SHELL-001, INT-002, INT-006
+ * @contract FR-004, FR-007, UX-SHELL-001, INT-002, INT-006, DOC-UX-011 §2.2
  *
  * ProfileWidget — dropdown no Header (direita).
  * - Avatar (iniciais como fallback), nome, email, tenant
  * - "Alterar Senha" → abre ChangePasswordModal
  * - "Sair" → POST /auth/logout com isLoading
  * - Skeleton durante loading
+ * - variant="dark" para topbar A1 escura
  */
 
 import { useState } from 'react';
@@ -29,18 +30,20 @@ import type { AuthMeResponse } from '../types/backoffice-admin.types';
 interface Props {
   user: AuthMeResponse | undefined;
   isLoading: boolean;
+  variant?: 'light' | 'dark';
 }
 
-export function ProfileWidget({ user, isLoading }: Props) {
+export function ProfileWidget({ user, isLoading, variant = 'light' }: Props) {
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const navigate = useNavigate();
+  const isDark = variant === 'dark';
 
   if (isLoading) {
     return (
       <div className="flex items-center gap-2">
-        <Skeleton className="size-8 rounded-full" />
-        <Skeleton className="h-3.5 w-20" />
+        <Skeleton className={`size-8 rounded-full ${isDark ? 'bg-white/10' : ''}`} />
+        <Skeleton className={`h-3.5 w-20 ${isDark ? 'bg-white/10' : ''}`} />
       </div>
     );
   }
@@ -51,9 +54,20 @@ export function ProfileWidget({ user, isLoading }: Props) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm" className="gap-2 px-2">
-            <ProfileAvatar name={user.name} avatarUrl={user.avatar_url} size="sm" />
-            <span className="text-sm font-medium">{user.name}</span>
+          <Button
+            variant="ghost"
+            size="sm"
+            className={`gap-2.5 px-2 ${isDark ? 'hover:bg-white/10' : ''}`}
+          >
+            <div className="flex flex-col items-end gap-px">
+              <span className={`font-display text-xs font-medium ${isDark ? 'text-white' : 'text-foreground'}`}>
+                {user.name}
+              </span>
+              <span className={`font-display text-[10px] ${isDark ? 'text-[#444444]' : 'text-muted-foreground'}`}>
+                {user.tenant.name}
+              </span>
+            </div>
+            <ProfileAvatar name={user.name} avatarUrl={user.avatar_url} size="sm" useA1Color />
           </Button>
         </DropdownMenuTrigger>
 

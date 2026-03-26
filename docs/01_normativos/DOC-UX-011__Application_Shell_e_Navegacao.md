@@ -1,9 +1,9 @@
 # DOC-UX-011 — Padrões de Application Shell e Navegação
 
 - **id:** DOC-UX-011
-- **version:** 1.4.0
+- **version:** 1.5.0
 - **status:** READY
-- **data_ultima_revisao:** 2026-03-25
+- **data_ultima_revisao:** 2026-03-26
 - **owner:** produto + arquitetura + UX
 - **scope:** global (Application Shell e navegação)
 
@@ -30,7 +30,55 @@ O layout base DEVE ser composto minimamente por:
 3. **Breadcrumb Bar:** Faixa horizontal imediatamente acima do conteúdo da página, indicando o rastro de navegação.
 4. **Main Content Area:** A área dinâmica onde as telas (ex: `/customers`, `/invoices/123`) serão renderizadas.
 
-### 2.2 Estratégia de Roteamento SPA
+### 2.2 Identidade Visual A1
+
+O Application Shell DEVE adotar a identidade visual A1 (Grupo A1), utilizando os tokens definidos em DOC-UX-013 §2.1 (bloco A1 Brand).
+
+#### Topbar (Header)
+
+| Propriedade | Valor |
+|-------------|-------|
+| Altura | `h-13` (52px) |
+| Fundo | `bg-a1-dark` (#111111) |
+| Layout | flex, três zonas: logo (w-[220px]) / breadcrumb (flex grow) / profile |
+
+**Zona esquerda (logo):** Largura fixa w-[220px] alinhada com sidebar, border-right 1px #1E1E1E. Logo: ícone 26x26px rounded-[5px] bg-a1-accent com SVG "A1". Texto: "Grupo A1" (branco bold 13px) + "Portal Interno" (#444 10px).
+
+**Zona central (breadcrumb):** Separador "/" em #333, segmentos inativos #555 text-xs, segmento ativo branco font-semibold.
+
+**Zona direita (profile):** Nome branco font-medium text-xs, subtexto tenant #444 text-[10px], avatar circle 30px bg-a1-accent com iniciais branco bold 11px.
+
+#### Sidebar
+
+| Propriedade | Valor |
+|-------------|-------|
+| Largura | `w-[220px]` |
+| Fundo | `bg-white` |
+| Border | `border-r border-a1-border` (#E8E8E6) |
+| Padding | `py-4 px-2.5` |
+
+**Section headers:** uppercase tracking-[1.4px] text-[9px] font-bold text-a1-text-placeholder (#CCC), mb-1.25 px-2.
+
+**Items inativos:** flex items-center rounded-md py-2 px-2.5 gap-2.25, texto text-[13px] text-a1-text-auxiliary (#888), ícones stroke #BBB 14px strokeWidth 1.5.
+
+**Item ativo:** bg-a1-active-bg (#FFF5EC), border-left 2.5px solid a1-accent (#F58C32), texto a1-accent font-bold, ícone stroke #F58C32.
+
+**Badges:** rounded-full bg-a1-dark text-white text-[9px].
+
+#### Content Area
+
+| Propriedade | Valor |
+|-------------|-------|
+| Fundo | `bg-a1-bg` (#F5F5F3) |
+| Padding | `p-6` (mantido) |
+
+#### Skeleton States A1
+
+- SidebarSkeleton: w-[220px] bg-white border-r border-a1-border
+- HeaderSkeleton: h-13 bg-a1-dark
+- Skeleton bars: bg-a1-border com animate-pulse
+
+### 2.3 Estratégia de Roteamento SPA
 
 O frontend DEVE utilizar **@tanstack/react-router** como router SPA. É PROIBIDO o uso de `react-router-dom` ou navegação via `window.location.href`.
 
@@ -304,6 +352,7 @@ export const Route = createRoute({
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.5.0 | 2026-03-26 | Amendment M04: nova §2.2 Identidade Visual A1 — topbar dark #111, sidebar branca w-220 accent laranja, content bg #F5F5F3, skeleton states A1. Ref: Ux-Paginas.md, DOC-UX-013-M01. |
 | 1.4.0 | 2026-03-25 | Amendment M03: nova §6.2 LogoutConfirmDialog obrigatório no Widget de Perfil — confirmação antes de logout, loading state, telemetria (DOC-UX-011-M03). |
 | 1.3.0 | 2026-03-25 | Amendment M01 (Coming Soon): nova §8 — Rotas Pendentes (ComingSoonPage pattern), novo CA-09 (toda rota do sidebar DEVE ter route file). |
 | 1.2.0 | 2026-03-25 | Amendment M02: Rota index obrigatória, proibição de formulários inline em route files, exceção window.location.href pós-login, novos CA-07 e CA-08. Lições do primeiro deploy em produção. |

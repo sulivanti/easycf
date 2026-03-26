@@ -42,6 +42,24 @@
   --color-info-500: #06b6d4;
   --color-info-600: #0891b2;
 
+  /* A1 Brand */
+  --color-a1-accent: #F58C32;
+  --color-a1-dark: #111111;
+  --color-a1-bg: #F5F5F3;
+  --color-a1-bg-alt: #FAFAF8;
+  --color-a1-border: #E8E8E6;
+  --color-a1-border-light: #F0F0EE;
+  --color-a1-active-bg: #FFF5EC;
+
+  /* A1 Text Hierarchy */
+  --color-a1-text-primary: #111111;
+  --color-a1-text-secondary: #333333;
+  --color-a1-text-tertiary: #555555;
+  --color-a1-text-auxiliary: #888888;
+  --color-a1-text-hint: #AAAAAA;
+  --color-a1-text-placeholder: #CCCCCC;
+  --color-a1-text-muted-icon: #BBBBBB;
+
   /* Border Radius */
   --radius-sm: 0.25rem;
   --radius-md: 0.375rem;

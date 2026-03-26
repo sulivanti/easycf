@@ -155,21 +155,28 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
   const visibleTabs = isAdmin ? TABS : TABS.filter((t) => t.key !== 'all');
 
   return (
-    <div className="flex h-full flex-col">
-      {/* Header */}
-      <header className="flex items-center justify-between border-b border-border px-6 py-4">
-        <h1 className="text-xl font-semibold text-foreground">Aprovações</h1>
+    <div className="-m-6 flex h-[calc(100vh-52px)] flex-col">
+      {/* Page Header — A1 */}
+      <header className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
+        <div className="flex flex-col gap-0.5">
+          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
+            Aprovações
+          </h1>
+          <p className="font-display text-[11px] text-a1-text-hint">
+            Gerencie movimentos pendentes de aprovação
+          </p>
+        </div>
       </header>
 
-      {/* Tabs */}
-      <nav className="flex gap-1 border-b border-border px-6" aria-label="Painéis de aprovação">
+      {/* Tabs — A1 */}
+      <nav className="flex gap-1 border-b border-a1-border bg-white px-6" aria-label="Painéis de aprovação">
         {visibleTabs.map((tab) => (
           <button
             key={tab.key}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
+            className={`px-4 py-2.5 font-display text-[13px] font-medium transition-colors ${
               activeTab === tab.key
-                ? 'border-b-2 border-primary text-primary'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'border-b-[2.5px] border-a1-accent text-a1-accent'
+                : 'text-a1-text-auxiliary hover:text-a1-text-primary'
             }`}
             onClick={() => handleTabChange(tab.key)}
           >
@@ -179,18 +186,18 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
       </nav>
 
       {/* Filters */}
-      <div className="flex items-center gap-3 border-b border-border px-6 py-3">
+      <div className="flex items-center gap-3 border-b border-a1-border bg-white px-6 py-3">
         <Input
           type="search"
           placeholder="Buscar por código ou operação..."
           value={searchInput}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="max-w-xs"
+          className="max-w-xs border-a1-border bg-white font-display text-[13px]"
         />
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as MovementStatus | '')}
-          className="rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+          className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
         >
           {STATUS_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -203,6 +210,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
           size="sm"
           onClick={() => movementsQuery.refetch()}
           disabled={movementsQuery.isFetching}
+          className="border-a1-border font-display text-[13px]"
         >
           Atualizar
         </Button>
@@ -210,7 +218,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
 
       {/* Error */}
       {movementsQuery.isError && (
-        <div className="mx-6 mt-3 rounded-md bg-destructive/10 px-4 py-2 text-sm text-destructive">
+        <div className="mx-6 mt-3 rounded-md bg-destructive/10 px-4 py-2 font-display text-[13px] text-destructive">
           {movementsQuery.error instanceof Error
             ? movementsQuery.error.message
             : 'Erro ao carregar movimentos.'}
@@ -220,7 +228,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
       {/* Split view */}
       <div className="flex flex-1 overflow-hidden">
         {/* Movement list */}
-        <div className="w-full max-w-md shrink-0 overflow-y-auto border-r border-border p-4 space-y-3 lg:w-[40%]">
+        <div className="w-full max-w-md shrink-0 overflow-y-auto border-r border-a1-border bg-white p-4 space-y-3 lg:w-[40%]">
           {movementsQuery.isLoading && !movements ? (
             <div className="space-y-3">
               {Array.from({ length: 5 }).map((_, i) => (

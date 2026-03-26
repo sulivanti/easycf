@@ -1,8 +1,8 @@
 /**
- * @contract FR-000-C06, UX-SHELL-001
+ * @contract FR-000-C06, UX-SHELL-001, DOC-UX-011 §2.2
  *
  * ProfileAvatar — renders user avatar image with initials fallback.
- * Deterministic background color based on name hash.
+ * Supports A1 brand color (useA1Color) or deterministic background color.
  */
 
 import { useState } from 'react';
@@ -13,10 +13,11 @@ interface ProfileAvatarProps {
   avatarUrl: string | null;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
+  useA1Color?: boolean;
 }
 
 const SIZE_CLASSES = {
-  sm: 'size-8 text-xs',
+  sm: 'size-[30px] text-[11px]',
   md: 'size-10 text-sm',
   lg: 'size-14 text-base',
 } as const;
@@ -48,7 +49,7 @@ function getAvatarColor(name: string): string {
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
-export function ProfileAvatar({ name, avatarUrl, size = 'md', className }: ProfileAvatarProps) {
+export function ProfileAvatar({ name, avatarUrl, size = 'md', className, useA1Color }: ProfileAvatarProps) {
   const [imgError, setImgError] = useState(false);
   const sizeClass = SIZE_CLASSES[size];
 
@@ -66,9 +67,9 @@ export function ProfileAvatar({ name, avatarUrl, size = 'md', className }: Profi
   return (
     <div
       className={cn(
-        'flex items-center justify-center rounded-full font-semibold text-white',
+        'flex items-center justify-center rounded-full font-bold text-white',
         sizeClass,
-        getAvatarColor(name),
+        useA1Color ? 'bg-a1-accent' : getAvatarColor(name),
         className,
       )}
     >

@@ -1,6 +1,6 @@
-# EasyCodeFramework Template — v0.11.3
-Versão: **0.11.3**
-Release Date: 2026-03-25
+# EasyCodeFramework Template — v0.11.4
+Versão: **0.11.4**
+Release Date: 2026-03-26
 
 Este é o repositório de distribuição do EasyCodeFramework.
 Use `npx degit sulivanti/easycf-template` para iniciar seu projeto.

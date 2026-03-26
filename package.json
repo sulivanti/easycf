@@ -1,6 +1,6 @@
 {
     "name": "@easycf/monorepo",
-    "version": "0.11.4",
+    "version": "0.11.5",
     "private": true,
     "description": "The Enterprise-Grade Agnostic Code Framework",
     "scripts": {
@@ -17,7 +17,10 @@
         "lint": "eslint apps/",
         "lint:fix": "eslint apps/ --fix",
         "format": "prettier --write \"apps/**/*.{ts,tsx,json}\"",
-        "format:check": "prettier --check \"apps/**/*.{ts,tsx,json}\""
+        "format:check": "prettier --check \"apps/**/*.{ts,tsx,json}\"",
+        "test:api:unit": "pnpm -C apps/api vitest run test/**/domain/** test/**/application/** test/**/presentation/**",
+        "test:api:integration": "pnpm -C apps/api vitest run test/**/integration/**",
+        "test:web": "pnpm -C apps/web vitest run"
     },
     "devDependencies": {
         "@eslint/js": "^9.39.4",

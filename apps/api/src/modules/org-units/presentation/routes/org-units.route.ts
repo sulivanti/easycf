@@ -100,8 +100,18 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
         limit: request.query.limit,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return reply.status(200).send({
-        data: result.data,
+        data: result.data.map((item: Record<string, any>) => ({
+          id: item.id,
+          codigo: item.codigo,
+          nome: item.nome,
+          nivel: item.nivel,
+          status: item.status,
+          parent_id: item.parentId ?? null,
+          created_at:
+            item.createdAt instanceof Date ? item.createdAt.toISOString() : item.createdAt,
+        })),
         next_cursor: result.nextCursor,
         has_more: result.hasMore,
       });
@@ -138,12 +148,24 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
       });
 
       return reply.status(200).send({
-        ...result,
-        parent_id: result.parentId,
-        created_by: result.createdBy,
-        created_at: result.createdAt,
-        updated_at: result.updatedAt,
-        deleted_at: result.deletedAt,
+        id: result.id,
+        codigo: result.codigo,
+        nome: result.nome,
+        descricao: result.descricao ?? null,
+        nivel: result.nivel,
+        parent_id: result.parentId ?? null,
+        status: result.status,
+        created_by: result.createdBy ?? null,
+        created_at:
+          result.createdAt instanceof Date ? result.createdAt.toISOString() : result.createdAt,
+        updated_at:
+          result.updatedAt instanceof Date ? result.updatedAt.toISOString() : result.updatedAt,
+        deleted_at: result.deletedAt
+          ? result.deletedAt instanceof Date
+            ? result.deletedAt.toISOString()
+            : result.deletedAt
+          : null,
+        ancestors: result.ancestors,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tenants: result.tenants.map((t: Record<string, any>) => ({
           tenant_id: t.tenantId,
@@ -179,7 +201,14 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
           updatedBy: request.session.userId,
         });
 
-        return reply.status(200).send(result);
+        return reply.status(200).send({
+          id: result.id,
+          codigo: result.codigo,
+          nome: result.nome,
+          descricao: result.descricao ?? null,
+          nivel: result.nivel,
+          status: result.status,
+        });
       },
     },
   );

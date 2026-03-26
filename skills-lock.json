@@ -56,6 +56,11 @@
       "sourceType": "github",
       "computedHash": "2c7f20de4b2125541f1b96cd5a99f6738ec129026dda2d1ae7f726dac3894fb2"
     },
+    "test-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "126f1ebf6ccd414f42544f6e83d8cc5adb089e1108eaffb7c400701e37eecd9f"
+    },
     "theme-factory": {
       "source": "anthropics/skills",
       "sourceType": "github",
@@ -75,6 +80,11 @@
       "source": "github/awesome-copilot",
       "sourceType": "github",
       "computedHash": "56832dcff10483e3b9755c73d8d88286e5ae4274b3ae75092b9a6aa245a943cb"
+    },
+    "webapp-testing": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "5a6a18c0137cfbabec058e86fc1c8f6919d846a7b2a34ee978cc8ced866ee2e5"
     }
   }
 }

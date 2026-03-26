@@ -1,8 +1,8 @@
 # PKG-COD-001 — Pacote 2: Agentes de Geração de Código (GNP + CEE + CHE) (6 agentes)
 
 **id:** PKG-COD-001
-**Versão:** 1.5
-**Data:** 2026-03-24
+**Versão:** 1.5.1
+**Data:** 2026-03-26
 **Base:** DOC-DEV-001 + DOC-ESC-001 + DOC-GNP-00 v2.0 + DOC-GPA-001 + EX-OAS-* + Events↔Permissions Pack + UX-010
 
 Este pacote define **6 agentes especialistas** para geração de código e validação, focando em atuar de forma isolada nas **Camadas da Arquitetura** do projeto.
@@ -201,6 +201,20 @@ export class ResourceNotAvailableError extends Error {
 
   - `apps/api/openapi/snippets/timeline-notifications.x-permissions.yaml`
 
+**Anti-Pattern DTO Datetime (MUST NOT, EX-DTO-001)**
+
+Em Zod schemas de response DTO, campos datetime **MUST** usar `z.string()` — **NUNCA** `z.string().datetime()`. O `serializerCompiler` do `fastify-type-provider-zod` valida estritamente o response body e `.datetime()` rejeita ISO strings retornadas pelo PostgreSQL/Drizzle, causando HTTP 500. Ref: DOC-GNP-00 EX-DTO-001.
+
+```typescript
+// ❌ MUST NOT — causa HTTP 500
+created_at: z.string().datetime()
+updated_at: z.string().datetime().nullable()
+
+// ✅ MUST — seguro para serialização
+created_at: z.string()
+updated_at: z.string().nullable()
+```
+
 ### 3.5 AGN-COD-WEB — Frontend
 
 - **Allowed Prefixes:** `apps/web/src/modules/{slug}/`
@@ -334,6 +348,7 @@ OpenAPI (quando AGN-COD-API):
 
 ## 6) Changelog
 
+- v1.5.1 (2026-03-26): Merge PKG-COD-001-C01: anti-pattern DTO datetime em §3.4 AGN-COD-API — MUST NOT usar `.datetime()` em Zod response DTOs. Ref: DOC-GNP-00 EX-DTO-001.
 - v1.5 (2026-03-24): Adição de **Contratos Obrigatórios** em §3.2 (DomainError, RFC 9457) e §3.5 (Pattern A, React Query hooks). Causa raiz: auditoria detectou 27 classes de erro com `extends Error` e 2 padrões web incompatíveis gerados por codegen sem enforcement.
 - v1.4 (2026-03-24): Expansão de §3.5 AGN-COD-WEB com regras MUST para Tailwind, shared components, TanStack Router, motion e React Query. Allowed prefixes refinados para `apps/web/src/modules/{slug}/`.
 - v1.3 (2026-03-02): Adição do subtópico 0.4 que obriga o uso de skills do diretório `.claude/commands`.

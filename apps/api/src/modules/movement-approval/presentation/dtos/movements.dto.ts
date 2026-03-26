@@ -60,8 +60,8 @@ export const movementListItem = z.object({
   current_level: z.number().int(),
   total_levels: z.number().int(),
   status: movementStatusSchema,
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string(),
+  updated_at: z.string(),
 });
 
 export const listMovementsResponse = z.object({
@@ -81,9 +81,9 @@ export const approvalInstanceItem = z.object({
   approver_id: z.string().uuid().nullable(),
   status: approvalInstanceStatusSchema,
   opinion: z.string().nullable(),
-  decided_at: z.string().datetime().nullable(),
-  timeout_at: z.string().datetime().nullable(),
-  created_at: z.string().datetime(),
+  decided_at: z.string().nullable(),
+  timeout_at: z.string().nullable(),
+  created_at: z.string(),
 });
 
 export const historyItem = z.object({
@@ -92,7 +92,7 @@ export const historyItem = z.object({
   actor_id: z.string().uuid().nullable(),
   payload: z.record(z.unknown()).nullable(),
   correlation_id: z.string().uuid().nullable(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
 });
 
 export const movementDetailResponse = z.object({
@@ -111,8 +111,8 @@ export const movementDetailResponse = z.object({
   total_levels: z.number().int(),
   status: movementStatusSchema,
   idempotency_key: z.string().nullable(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string(),
+  updated_at: z.string(),
   approval_instances: z.array(approvalInstanceItem),
   history: z.array(historyItem),
 });
@@ -123,7 +123,7 @@ export const movementDetailResponse = z.object({
 export const cancelMovementResponse = z.object({
   id: z.string().uuid(),
   status: z.literal('CANCELLED'),
-  updated_at: z.string().datetime(),
+  updated_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------
@@ -136,7 +136,7 @@ export const overrideMovementBody = z.object({
 export const overrideMovementResponse = z.object({
   id: z.string().uuid(),
   status: z.literal('OVERRIDDEN'),
-  updated_at: z.string().datetime(),
+  updated_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------
@@ -145,5 +145,5 @@ export const overrideMovementResponse = z.object({
 export const retryMovementResponse = z.object({
   id: z.string().uuid(),
   status: movementStatusSchema,
-  updated_at: z.string().datetime(),
+  updated_at: z.string(),
 });

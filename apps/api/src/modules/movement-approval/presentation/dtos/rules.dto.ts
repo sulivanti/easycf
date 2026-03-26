@@ -55,10 +55,10 @@ export const controlRuleItem = z.object({
   value_threshold: z.string().nullable(),
   priority: z.number().int(),
   status: controlRuleStatusSchema,
-  valid_from: z.string().datetime().nullable(),
-  valid_until: z.string().datetime().nullable(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  valid_from: z.string().nullable(),
+  valid_until: z.string().nullable(),
+  created_at: z.string(),
+  updated_at: z.string(),
 });
 
 export const listControlRulesResponse = z.object({
@@ -82,8 +82,8 @@ export const createControlRuleBody = z.object({
   criteria_type: criteriaTypeSchema,
   value_threshold: z.string().optional(),
   priority: z.number().int().min(0).default(0),
-  valid_from: z.string().datetime().optional(),
-  valid_until: z.string().datetime().optional(),
+  valid_from: z.string().optional(),
+  valid_until: z.string().optional(),
 });
 
 export const createControlRuleResponse = controlRuleItem;
@@ -99,8 +99,8 @@ export const updateControlRuleBody = z.object({
   value_threshold: z.string().nullable().optional(),
   priority: z.number().int().min(0).optional(),
   status: controlRuleStatusSchema.optional(),
-  valid_from: z.string().datetime().nullable().optional(),
-  valid_until: z.string().datetime().nullable().optional(),
+  valid_from: z.string().nullable().optional(),
+  valid_until: z.string().nullable().optional(),
 });
 
 export const updateControlRuleResponse = controlRuleItem;
@@ -129,8 +129,8 @@ export const approvalRuleItem = z.object({
   allow_self_approve: z.boolean(),
   timeout_minutes: z.number().int(),
   escalation_rule_id: z.string().uuid().nullable(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string(),
+  updated_at: z.string(),
 });
 
 export const createApprovalRuleResponse = approvalRuleItem;

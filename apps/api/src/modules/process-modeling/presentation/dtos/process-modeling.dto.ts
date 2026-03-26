@@ -45,10 +45,10 @@ export const cycleResponse = z.object({
   version: z.number().int(),
   status: cycleStatusEnum,
   parent_cycle_id: z.string().uuid().nullable(),
-  published_at: z.string().datetime().nullable(),
+  published_at: z.string().nullable(),
   created_by: z.string().uuid(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string(),
+  updated_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------
@@ -74,8 +74,8 @@ export const cycleListItem = z.object({
   nome: z.string(),
   version: z.number().int(),
   status: cycleStatusEnum,
-  published_at: z.string().datetime().nullable(),
-  created_at: z.string().datetime(),
+  published_at: z.string().nullable(),
+  created_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------

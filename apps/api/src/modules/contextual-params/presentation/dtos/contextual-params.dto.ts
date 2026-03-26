@@ -41,14 +41,14 @@ export const createFramerBody = z.object({
   codigo: z.string().min(1).max(50),
   nome: z.string().min(1).max(200),
   framer_type_id: z.string().uuid(),
-  valid_from: z.string().datetime(),
-  valid_until: z.string().datetime().optional(),
+  valid_from: z.string(),
+  valid_until: z.string().optional(),
 });
 
 export const updateFramerBody = z.object({
   nome: z.string().min(1).max(200).optional(),
-  valid_from: z.string().datetime().optional(),
-  valid_until: z.string().datetime().nullable().optional(),
+  valid_from: z.string().optional(),
+  valid_until: z.string().nullable().optional(),
 });
 
 export const framerResponse = z.object({
@@ -136,13 +136,13 @@ export const createIncidenceRuleBody = z.object({
   framer_id: z.string().uuid(),
   target_object_id: z.string().uuid(),
   condition_expr: z.string().optional(),
-  valid_from: z.string().datetime(),
-  valid_until: z.string().datetime().optional(),
+  valid_from: z.string(),
+  valid_until: z.string().optional(),
 });
 
 export const updateIncidenceRuleBody = z.object({
-  valid_from: z.string().datetime().optional(),
-  valid_until: z.string().datetime().nullable().optional(),
+  valid_from: z.string().optional(),
+  valid_until: z.string().nullable().optional(),
   status: z.enum(['ACTIVE', 'INACTIVE']).optional(),
 });
 

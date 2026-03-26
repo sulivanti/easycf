@@ -93,7 +93,7 @@ export const openCaseResponse = z.object({
   object_id: z.string().uuid().nullable(),
   org_unit_id: z.string().uuid().nullable(),
   opened_by: z.string().uuid(),
-  opened_at: z.string().datetime(),
+  opened_at: z.string(),
 });
 
 // ─── POST /cases/:id/transition — Transition Stage (FR-002) ─────────────────
@@ -167,7 +167,7 @@ export const resolveGateResponse = z.object({
   status: gateResolutionStatusSchema,
   decision: gateDecisionSchema.nullable(),
   resolved_by: z.string().uuid(),
-  resolved_at: z.string().datetime(),
+  resolved_at: z.string(),
 });
 
 // ─── POST /cases/:id/gates/:gateId/waive — Waive Gate (FR-005) ──────────────
@@ -181,7 +181,7 @@ export const waiveGateResponse = z.object({
   gate_id: z.string().uuid(),
   status: z.literal('WAIVED'),
   resolved_by: z.string().uuid(),
-  resolved_at: z.string().datetime(),
+  resolved_at: z.string(),
 });
 
 // ─── POST /cases/:id/assignments — Assign Responsible (FR-006) ──────────────
@@ -191,7 +191,7 @@ export const assignBody = z.object({
   user_id: z.string().uuid(),
   stage_id: z.string().uuid(),
   delegation_id: z.string().uuid().optional(),
-  valid_until: z.string().datetime().optional(),
+  valid_until: z.string().optional(),
 });
 
 export const assignResponse = z.object({
@@ -201,14 +201,14 @@ export const assignResponse = z.object({
   process_role_id: z.string().uuid(),
   user_id: z.string().uuid(),
   is_active: z.boolean(),
-  assigned_at: z.string().datetime(),
+  assigned_at: z.string(),
   replaced_assignment_id: z.string().uuid().nullable(),
 });
 
 // ─── PATCH /cases/:id/assignments/:aid — Update Assignment (FR-006) ─────────
 
 export const updateAssignmentBody = z.object({
-  valid_until: z.string().datetime().optional(),
+  valid_until: z.string().optional(),
   is_active: z.boolean().optional(),
   substitution_reason: z.string().max(500).optional(),
 });
@@ -220,8 +220,8 @@ export const updateAssignmentResponse = z.object({
   process_role_id: z.string().uuid(),
   user_id: z.string().uuid(),
   is_active: z.boolean(),
-  assigned_at: z.string().datetime(),
-  valid_until: z.string().datetime().nullable(),
+  assigned_at: z.string(),
+  valid_until: z.string().nullable(),
 });
 
 // ─── POST /cases/:id/events — Record Event (FR-007) ─────────────────────────
@@ -239,7 +239,7 @@ export const recordEventResponse = z.object({
   event_type: caseEventTypeSchema,
   descricao: z.string(),
   created_by: z.string().uuid(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
   stage_id: z.string().uuid(),
 });
 
@@ -247,7 +247,7 @@ export const recordEventResponse = z.object({
 
 export const timelineEntryResponse = z.object({
   type: z.enum(['STAGE_CHANGE', 'GATE_RESOLVED', 'EVENT']),
-  timestamp: z.string().datetime(),
+  timestamp: z.string(),
   actor: z.object({
     id: z.string().uuid(),
     name: z.string(),
@@ -269,8 +269,8 @@ export const listCasesQuery = z.object({
   stage_id: z.string().uuid().optional(),
   object_id: z.string().uuid().optional(),
   assigned_to_me: z.enum(['true', 'false']).optional(),
-  opened_after: z.string().datetime().optional(),
-  opened_before: z.string().datetime().optional(),
+  opened_after: z.string().optional(),
+  opened_before: z.string().optional(),
   search: z.string().max(200).optional(),
   cursor: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(50).default(20),
@@ -284,7 +284,7 @@ export const caseListItem = z.object({
   status: caseStatusSchema,
   pending_gates_count: z.number().int(),
   my_role: z.string().nullable(),
-  opened_at: z.string().datetime(),
+  opened_at: z.string(),
 });
 
 export const listCasesResponse = z.object({
@@ -306,12 +306,12 @@ export const caseDetailResponse = z.object({
   object_id: z.string().uuid().nullable(),
   org_unit_id: z.string().uuid().nullable(),
   opened_by: z.string().uuid(),
-  opened_at: z.string().datetime(),
-  completed_at: z.string().datetime().nullable(),
-  cancelled_at: z.string().datetime().nullable(),
+  opened_at: z.string(),
+  completed_at: z.string().nullable(),
+  cancelled_at: z.string().nullable(),
   cancellation_reason: z.string().nullable(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string(),
+  updated_at: z.string(),
   current_stage_gates: z.array(
     z.object({
       gate_instance_id: z.string().uuid(),
@@ -330,8 +330,8 @@ export const caseDetailResponse = z.object({
       process_role_id: z.string().uuid(),
       user_id: z.string().uuid(),
       assigned_by: z.string().uuid(),
-      assigned_at: z.string().datetime(),
-      valid_until: z.string().datetime().nullable(),
+      assigned_at: z.string(),
+      valid_until: z.string().nullable(),
       is_active: z.boolean(),
     }),
   ),
@@ -350,7 +350,7 @@ export const gateInstanceItem = z.object({
   stage_id: z.string().uuid(),
   status: gateResolutionStatusSchema,
   resolved_by: z.string().uuid().nullable(),
-  resolved_at: z.string().datetime().nullable(),
+  resolved_at: z.string().nullable(),
   decision: gateDecisionSchema.nullable(),
   parecer: z.string().nullable(),
 });
@@ -368,8 +368,8 @@ export const assignmentItem = z.object({
   process_role_id: z.string().uuid(),
   user_id: z.string().uuid(),
   assigned_by: z.string().uuid(),
-  assigned_at: z.string().datetime(),
-  valid_until: z.string().datetime().nullable(),
+  assigned_at: z.string(),
+  valid_until: z.string().nullable(),
   is_active: z.boolean(),
   delegation_id: z.string().uuid().nullable(),
 });
@@ -386,7 +386,7 @@ export const eventItem = z.object({
   event_type: caseEventTypeSchema,
   descricao: z.string(),
   created_by: z.string().uuid(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
   stage_id: z.string().uuid(),
   metadata: z.record(z.unknown()).nullable(),
 });

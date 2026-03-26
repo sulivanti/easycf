@@ -104,8 +104,8 @@ export const sessionItem = z.object({
   id: z.string().uuid(),
   device_fp: z.string().nullable(),
   remember_me: z.boolean(),
-  expires_at: z.string().datetime(),
-  created_at: z.string().datetime(),
+  expires_at: z.string(),
+  created_at: z.string(),
   is_current: z.boolean(),
 });
 

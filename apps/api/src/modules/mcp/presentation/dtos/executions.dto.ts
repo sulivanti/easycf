@@ -33,8 +33,8 @@ export const listExecutionsQuery = paginationQuery.extend({
   action_id: z.string().uuid().optional(),
   status: executionStatusSchema.optional(),
   policy_applied: executionPolicySchema.optional(),
-  received_at_from: z.string().datetime().optional(),
-  received_at_to: z.string().datetime().optional(),
+  received_at_from: z.string().optional(),
+  received_at_to: z.string().optional(),
 });
 
 export const executionListItem = z.object({
@@ -48,8 +48,8 @@ export const executionListItem = z.object({
   blocked_reason: z.string().nullable(),
   linked_movement_id: z.string().uuid().nullable(),
   duration_ms: z.number().int().nullable(),
-  received_at: z.string().datetime(),
-  completed_at: z.string().datetime().nullable(),
+  received_at: z.string(),
+  completed_at: z.string().nullable(),
 });
 
 export const listExecutionsResponse = paginatedResponse(executionListItem);
@@ -73,6 +73,6 @@ export const executionDetailResponse = z.object({
   result_payload: z.record(z.unknown()).nullable(),
   error_message: z.string().nullable(),
   duration_ms: z.number().int().nullable(),
-  received_at: z.string().datetime(),
-  completed_at: z.string().datetime().nullable(),
+  received_at: z.string(),
+  completed_at: z.string().nullable(),
 });

@@ -37,7 +37,7 @@ export const tenantListItem = z.object({
   codigo: z.string(),
   name: z.string(),
   status: z.string(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------
@@ -67,5 +67,5 @@ export const tenantUserListItem = z.object({
   user_email: z.string().optional(),
   user_full_name: z.string().optional(),
   status: z.string(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
 });

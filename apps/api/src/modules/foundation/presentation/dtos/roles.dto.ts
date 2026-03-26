@@ -46,7 +46,7 @@ export const roleListItem = z.object({
   name: z.string(),
   status: z.string(),
   scopes_count: z.number().int(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------
@@ -59,6 +59,6 @@ export const roleDetailResponse = z.object({
   description: z.string().nullable(),
   status: z.string(),
   scopes: z.array(z.string()),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string(),
+  updated_at: z.string(),
 });

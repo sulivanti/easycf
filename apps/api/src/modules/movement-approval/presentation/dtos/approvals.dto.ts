@@ -20,8 +20,8 @@ export const myApprovalItem = z.object({
   movement_id: z.string().uuid(),
   level: z.number().int(),
   status: approvalInstanceStatusSchema,
-  timeout_at: z.string().datetime().nullable(),
-  created_at: z.string().datetime(),
+  timeout_at: z.string().nullable(),
+  created_at: z.string(),
   movement: z.object({
     id: z.string().uuid(),
     codigo: z.string(),
@@ -49,7 +49,7 @@ export const approveResponse = z.object({
   status: movementStatusSchema,
   current_level: z.number().int(),
   total_levels: z.number().int(),
-  updated_at: z.string().datetime(),
+  updated_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------
@@ -62,5 +62,5 @@ export const rejectBody = z.object({
 export const rejectResponse = z.object({
   id: z.string().uuid(),
   status: z.literal('REJECTED'),
-  updated_at: z.string().datetime(),
+  updated_at: z.string(),
 });

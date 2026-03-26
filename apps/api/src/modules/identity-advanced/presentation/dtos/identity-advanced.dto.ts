@@ -37,7 +37,7 @@ export const createOrgScopeBody = z.object({
   org_unit_id: z.string().uuid(),
   scope_type: z.enum(['PRIMARY', 'SECONDARY']),
   granted_by: z.string().uuid().nullable().optional(),
-  valid_until: z.string().datetime().nullable().optional(),
+  valid_until: z.string().nullable().optional(),
 });
 
 export const createOrgScopeResponse = z.object({
@@ -46,8 +46,8 @@ export const createOrgScopeResponse = z.object({
   org_unit_id: z.string().uuid(),
   scope_type: z.enum(['PRIMARY', 'SECONDARY']),
   status: z.string(),
-  valid_from: z.string().datetime(),
-  valid_until: z.string().datetime().nullable(),
+  valid_from: z.string(),
+  valid_until: z.string().nullable(),
 });
 
 // GET /api/v1/admin/users/:id/org-scopes & GET /api/v1/my/org-scopes
@@ -62,8 +62,8 @@ export const orgScopeListItem = z.object({
   id: z.string().uuid(),
   scope_type: z.string(),
   org_unit: orgScopeOrgUnit,
-  valid_from: z.string().datetime(),
-  valid_until: z.string().datetime().nullable(),
+  valid_from: z.string(),
+  valid_until: z.string().nullable(),
   status: z.string(),
 });
 
@@ -82,7 +82,7 @@ export const createAccessShareBody = z.object({
   allowed_actions: z.array(z.string().min(1)).min(1),
   reason: z.string().min(1).max(2000),
   authorized_by: z.string().uuid(),
-  valid_until: z.string().datetime(),
+  valid_until: z.string(),
 });
 
 export const createAccessShareResponse = z.object({
@@ -92,8 +92,8 @@ export const createAccessShareResponse = z.object({
   resource_type: z.string(),
   resource_id: z.string().uuid(),
   status: z.string(),
-  valid_from: z.string().datetime(),
-  valid_until: z.string().datetime(),
+  valid_from: z.string(),
+  valid_until: z.string(),
 });
 
 // GET /api/v1/admin/access-shares
@@ -113,12 +113,12 @@ export const accessShareListItem = z.object({
   allowed_actions: z.array(z.string()),
   reason: z.string(),
   authorized_by: z.string().uuid(),
-  valid_from: z.string().datetime(),
-  valid_until: z.string().datetime(),
+  valid_from: z.string(),
+  valid_until: z.string(),
   status: z.string(),
-  revoked_at: z.string().datetime().nullable(),
+  revoked_at: z.string().nullable(),
   revoked_by: z.string().uuid().nullable(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
 });
 
 // ============================================================================
@@ -132,7 +132,7 @@ export const createAccessDelegationBody = z.object({
   org_unit_id: z.string().uuid().nullable().optional(),
   delegated_scopes: z.array(z.string().min(1)).min(1),
   reason: z.string().min(1).max(2000),
-  valid_until: z.string().datetime(),
+  valid_until: z.string(),
 });
 
 export const createAccessDelegationResponse = z.object({
@@ -141,7 +141,7 @@ export const createAccessDelegationResponse = z.object({
   delegatee_id: z.string().uuid(),
   delegated_scopes: z.array(z.string()),
   status: z.string(),
-  valid_until: z.string().datetime(),
+  valid_until: z.string(),
 });
 
 // GET /api/v1/access-delegations
@@ -153,10 +153,10 @@ export const delegationListItem = z.object({
   org_unit_id: z.string().uuid().nullable(),
   delegated_scopes: z.array(z.string()),
   reason: z.string(),
-  valid_until: z.string().datetime(),
+  valid_until: z.string(),
   status: z.string(),
-  created_at: z.string().datetime(),
-  revoked_at: z.string().datetime().nullable(),
+  created_at: z.string(),
+  revoked_at: z.string().nullable(),
 });
 
 export const delegationListResponse = z.object({

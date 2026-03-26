@@ -61,8 +61,8 @@ export const serviceResponse = z.object({
   status: serviceStatusEnum,
   environment: environmentEnum,
   created_by: z.string().uuid(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string(),
+  updated_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------
@@ -97,7 +97,7 @@ export const serviceListItem = z.object({
   timeout_ms: z.number().int(),
   status: serviceStatusEnum,
   environment: environmentEnum,
-  created_at: z.string().datetime(),
+  created_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------
@@ -222,8 +222,8 @@ export const logsListQuery = z.object({
   status: callLogStatusEnum.optional(),
   service_id: z.string().uuid().optional(),
   correlation_id: z.string().optional(),
-  period_start: z.string().datetime().optional(),
-  period_end: z.string().datetime().optional(),
+  period_start: z.string().optional(),
+  period_end: z.string().optional(),
 });
 
 export const callLogListItem = z.object({
@@ -237,8 +237,8 @@ export const callLogListItem = z.object({
   response_status: z.number().int().nullable(),
   error_message: z.string().nullable(),
   duration_ms: z.number().int().nullable(),
-  queued_at: z.string().datetime(),
-  created_at: z.string().datetime(),
+  queued_at: z.string(),
+  created_at: z.string(),
 });
 
 export const callLogDetailResponse = z.object({
@@ -254,13 +254,13 @@ export const callLogDetailResponse = z.object({
   response_status: z.number().int().nullable(),
   response_body: z.record(z.unknown()).nullable(),
   error_message: z.string().nullable(),
-  started_at: z.string().datetime().nullable(),
-  completed_at: z.string().datetime().nullable(),
+  started_at: z.string().nullable(),
+  completed_at: z.string().nullable(),
   duration_ms: z.number().int().nullable(),
-  queued_at: z.string().datetime(),
+  queued_at: z.string(),
   reprocess_reason: z.string().nullable(),
   reprocessed_by: z.string().uuid().nullable(),
-  created_at: z.string().datetime(),
+  created_at: z.string(),
 });
 
 // ---------------------------------------------------------------------------

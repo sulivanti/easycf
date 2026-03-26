@@ -36,10 +36,10 @@ export const agentListItem = z.object({
   allowed_scopes: z.array(z.string()),
   status: agentStatusSchema,
   phase2_create_enabled: z.boolean(),
-  last_used_at: z.string().datetime().nullable(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
-  revoked_at: z.string().datetime().nullable(),
+  last_used_at: z.string().nullable(),
+  created_at: z.string(),
+  updated_at: z.string(),
+  revoked_at: z.string().nullable(),
 });
 
 export const listAgentsResponse = paginatedResponse(agentListItem);
@@ -98,7 +98,7 @@ export const enablePhase2Response = z.object({
   agent_id: z.string().uuid(),
   phase2_create_enabled: z.literal(true),
   enabled_by: z.string().uuid(),
-  enabled_at: z.string().datetime(),
+  enabled_at: z.string(),
   reason: z.string(),
 });
 
@@ -107,7 +107,7 @@ export const enablePhase2Response = z.object({
 // ---------------------------------------------------------------------------
 export const grantAgentActionBody = z.object({
   action_id: z.string().uuid(),
-  valid_until: z.string().datetime().optional(),
+  valid_until: z.string().optional(),
 });
 
 export const agentActionLinkItem = z.object({
@@ -116,8 +116,8 @@ export const agentActionLinkItem = z.object({
   agent_id: z.string().uuid(),
   action_id: z.string().uuid(),
   granted_by: z.string().uuid(),
-  granted_at: z.string().datetime(),
-  valid_until: z.string().datetime().nullable(),
+  granted_at: z.string(),
+  valid_until: z.string().nullable(),
 });
 
 export const grantAgentActionResponse = agentActionLinkItem;

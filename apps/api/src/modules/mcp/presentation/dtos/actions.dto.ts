@@ -42,8 +42,8 @@ export const actionListItem = z.object({
   linked_integration_id: z.string().uuid().nullable(),
   description: z.string().nullable(),
   status: actionStatusSchema,
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string(),
+  updated_at: z.string(),
 });
 
 export const listActionsResponse = paginatedResponse(actionListItem);

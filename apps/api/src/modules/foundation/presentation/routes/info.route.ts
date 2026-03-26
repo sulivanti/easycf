@@ -10,7 +10,7 @@ import { z } from 'zod';
 const infoResponse = z.object({
   version: z.string(),
   environment: z.string(),
-  timestamp: z.string().datetime(),
+  timestamp: z.string(),
 });
 
 export async function infoRoute(app: FastifyInstance): Promise<void> {

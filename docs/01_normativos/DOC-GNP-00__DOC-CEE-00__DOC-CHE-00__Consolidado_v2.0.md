@@ -1,9 +1,9 @@
 # DOC-GNP-00 — Guia Normativo e Padrões (TS + Node + Vite/React)
 
 - **id:** DOC-GNP-00
-- **version:** 2.1.0
+- **version:** 2.1.1
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-25
+- **data_ultima_revisao:** 2026-03-26
 - **owner:** arquitetura
 - **scope:** global (padronização do produto final em monorepo)
 
@@ -225,7 +225,7 @@ Snippet referência:
 
 ---
 
-# (ANEXO ADITIVO) Infraestrutura e Observabilidade — EX-IDEMP-001, EX-RES-001, EX-OBS-001, EX-TRACE-001, EX-DB-001, EX-NAME-001
+# (ANEXO ADITIVO) Infraestrutura e Observabilidade — EX-IDEMP-001, EX-RES-001, EX-OBS-001, EX-TRACE-001, EX-DB-001, EX-DTO-001, EX-NAME-001
 
 > Exemplos canônicos de padrões de infraestrutura, resiliência e observabilidade. Âncoras para o Gate de IDs (EX-CI-007).
 
@@ -448,6 +448,28 @@ export const users = pgTable('users', {
 // CREATE INDEX idx_users_tenant_id ON users(tenant_id);
 // CREATE INDEX idx_users_tenant_deleted ON users(tenant_id, deleted_at);
 ```
+
+## EX-DTO-001 — Campos datetime em Zod Response DTOs (MUST)
+
+Em Zod schemas usados como response DTO (registrados via `fastify-type-provider-zod`), campos datetime **MUST** usar `z.string()`. **MUST NOT** usar `z.string().datetime()`.
+
+**Motivo:** O `serializerCompiler` valida estritamente o response body. `.datetime()` rejeita ISO strings com timezone offsets ou precisão de microssegundos retornadas pelo PostgreSQL/Drizzle, causando HTTP 500.
+
+```typescript
+// ❌ Anti-pattern — causa HTTP 500 em runtime
+const ResponseDTO = z.object({
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime().nullable(),
+});
+
+// ✅ Correto — z.string() aceita qualquer formato ISO retornado pelo DB
+const ResponseDTO = z.object({
+  created_at: z.string(),
+  updated_at: z.string().nullable(),
+});
+```
+
+**Escopo:** Apenas response DTOs (serialização). Para request DTOs (input validation), `.datetime()` pode ser usado se validação strict for desejada.
 
 ## EX-NAME-001 — Naming convention (banco, API, código)
 

@@ -43,11 +43,7 @@ export class DrizzleOrgScopeRepository implements OrgScopeRepository {
 
   async findById(id: string, tx?: TransactionContext): Promise<UserOrgScopeProps | null> {
     const c = conn(this.db, tx);
-    const [row] = await c
-      .select()
-      .from(userOrgScopes)
-      .where(eq(userOrgScopes.id, id))
-      .limit(1);
+    const [row] = await c.select().from(userOrgScopes).where(eq(userOrgScopes.id, id)).limit(1);
     return row ? this.toDomain(row) : null;
   }
 
@@ -154,12 +150,7 @@ export class DrizzleOrgScopeRepository implements OrgScopeRepository {
     const rows = await c
       .select()
       .from(userOrgScopes)
-      .where(
-        and(
-          eq(userOrgScopes.status, 'ACTIVE'),
-          lt(userOrgScopes.validUntil, now),
-        ),
-      )
+      .where(and(eq(userOrgScopes.status, 'ACTIVE'), lt(userOrgScopes.validUntil, now)))
       .limit(limit);
     return rows.map((r) => this.toDomain(r));
   }
@@ -209,11 +200,7 @@ export class DrizzleAccessShareRepository implements AccessShareRepository {
 
   async findById(id: string, tx?: TransactionContext): Promise<AccessShareProps | null> {
     const c = conn(this.db, tx);
-    const [row] = await c
-      .select()
-      .from(accessShares)
-      .where(eq(accessShares.id, id))
-      .limit(1);
+    const [row] = await c.select().from(accessShares).where(eq(accessShares.id, id)).limit(1);
     return row ? this.toDomain(row) : null;
   }
 
@@ -297,12 +284,7 @@ export class DrizzleAccessShareRepository implements AccessShareRepository {
     const rows = await c
       .select()
       .from(accessShares)
-      .where(
-        and(
-          eq(accessShares.status, 'ACTIVE'),
-          lt(accessShares.validUntil, now),
-        ),
-      )
+      .where(and(eq(accessShares.status, 'ACTIVE'), lt(accessShares.validUntil, now)))
       .limit(limit);
     return rows.map((r) => this.toDomain(r));
   }
@@ -464,12 +446,7 @@ export class DrizzleAccessDelegationRepository implements AccessDelegationReposi
     const rows = await c
       .select()
       .from(accessDelegations)
-      .where(
-        and(
-          eq(accessDelegations.status, 'ACTIVE'),
-          lt(accessDelegations.validUntil, now),
-        ),
-      )
+      .where(and(eq(accessDelegations.status, 'ACTIVE'), lt(accessDelegations.validUntil, now)))
       .limit(limit);
     return rows.map((r) => this.toDomain(r));
   }
@@ -539,10 +516,7 @@ export class DrizzleUserLookupAdapter implements UserLookupPort {
     return !!row;
   }
 
-  async getOrgUnitInfo(
-    orgUnitId: string,
-    tx?: TransactionContext,
-  ): Promise<OrgUnitInfo | null> {
+  async getOrgUnitInfo(orgUnitId: string, tx?: TransactionContext): Promise<OrgUnitInfo | null> {
     const c = conn(this.db, tx);
     const [row] = await c
       .select({

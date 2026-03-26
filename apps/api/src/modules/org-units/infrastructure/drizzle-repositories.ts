@@ -36,11 +36,7 @@ export class DrizzleOrgUnitRepository implements OrgUnitRepository {
 
   async findById(id: string, tx?: TransactionContext): Promise<OrgUnitProps | null> {
     const c = conn(this.db, tx);
-    const [row] = await c
-      .select()
-      .from(orgUnits)
-      .where(eq(orgUnits.id, id))
-      .limit(1);
+    const [row] = await c.select().from(orgUnits).where(eq(orgUnits.id, id)).limit(1);
     return row ? this.toDomain(row) : null;
   }
 
@@ -154,7 +150,13 @@ export class DrizzleOrgUnitRepository implements OrgUnitRepository {
 
   async getAncestors(id: string, tx?: TransactionContext): Promise<readonly AncestorNode[]> {
     const c = conn(this.db, tx);
-    const result = await c.execute<{ id: string; codigo: string; nome: string; nivel: number; parent_id: string | null }>(
+    const result = await c.execute<{
+      id: string;
+      codigo: string;
+      nome: string;
+      nivel: number;
+      parent_id: string | null;
+    }>(
       sql`WITH RECURSIVE ancestors AS (
         SELECT id, codigo, nome, nivel, parent_id FROM org_units WHERE id = ${id}
         UNION ALL
@@ -162,12 +164,14 @@ export class DrizzleOrgUnitRepository implements OrgUnitRepository {
         FROM org_units o INNER JOIN ancestors a ON o.id = a.parent_id
       ) SELECT id, codigo, nome, nivel FROM ancestors WHERE id != ${id} ORDER BY nivel ASC`,
     );
-    return (result as unknown as { id: string; codigo: string; nome: string; nivel: number }[]).map((r) => ({
-      id: r.id,
-      codigo: r.codigo,
-      nome: r.nome,
-      nivel: r.nivel as OrgUnitNivel,
-    }));
+    return (result as unknown as { id: string; codigo: string; nome: string; nivel: number }[]).map(
+      (r) => ({
+        id: r.id,
+        codigo: r.codigo,
+        nome: r.nome,
+        nivel: r.nivel as OrgUnitNivel,
+      }),
+    );
   }
 
   async findActiveChildrenIds(id: string, tx?: TransactionContext): Promise<readonly string[]> {

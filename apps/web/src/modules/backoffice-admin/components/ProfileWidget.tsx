@@ -79,10 +79,7 @@ export function ProfileWidget({ user, isLoading }: Props) {
             Alterar Senha
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="destructive"
-            onSelect={() => setLogoutOpen(true)}
-          >
+          <DropdownMenuItem variant="destructive" onSelect={() => setLogoutOpen(true)}>
             <LogOut className="size-4" />
             Sair
           </DropdownMenuItem>

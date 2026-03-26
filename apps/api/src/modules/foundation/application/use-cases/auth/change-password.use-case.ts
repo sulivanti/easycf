@@ -22,6 +22,7 @@ export interface ChangePasswordInput {
   readonly userId: string;
   readonly currentPassword: string;
   readonly newPassword: string;
+  readonly tenantId: string;
   readonly correlationId: string;
 }
 
@@ -55,7 +56,7 @@ export class ChangePasswordUseCase {
 
       await this.eventRepo.create(
         createFoundationEvent({
-          tenantId: '',
+          tenantId: input.tenantId,
           entityType: 'user',
           entityId: user.id,
           eventType: 'auth.password_changed',

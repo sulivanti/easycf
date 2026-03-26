@@ -127,3 +127,4 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 - [FR-001-C01](amendments/fr/FR-001-C01.md) — Estratégia de constraint catch (PostgreSQL 23505 → 409) para unicidade de codigo
 - [US-MOD-003-M01](amendments/us/US-MOD-003-M01.md) — Inclusão de F04 (Restore) no tree view, tabela de sub-histórias e endpoints do épico
 - [US-MOD-003-F01-M01](amendments/us/US-MOD-003-F01-M01.md) — Adição do domain event org.unit_restored à tabela de F01
+- [FR-001-C02](amendments/fr/FR-001-C02.md) — Correção: createOrgUnitEvent() extrai tenantId do payload (inexistente em CRUD) → string vazia causa crash no INSERT domain_events. Fix: SYSTEM_TENANT_ID fallback + tenantId explícito em link/unlink

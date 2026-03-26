@@ -151,6 +151,7 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [SEC-000-M01](amendments/sec/SEC-000-M01.md) — Melhoria: regra anti-escalação via role_id na criação de usuários
 - [FR-000-C06](amendments/fr/FR-000-C06.md) — Correção: sessão expirada causa redirect loop — AppShell não limpa localStorage antes de navegar para /login. Solução: forceLogout (limpa tokens + cache + full reload)
 - [UX-000-C01](amendments/ux/UX-000-C01.md) — Correção: tabela de erros UX-000 não detalha comportamento do 401 (limpeza tokens, full reload). Adição jornada "Sessão Expirada por Timeout"
+- [FR-000-C07](amendments/fr/FR-000-C07.md) — Correção: 5 use cases pós-auth passam tenantId vazio → fallback mascara perda de rastreabilidade. Fix: propagar request.session.tenantId em change-password, logout, update-profile, create-role, update-role
 <!-- end amendments-index -->
 
 > **Nota:** 8 amendments de documentos normativos foram migrados para `docs/01_normativos/amendments/{DOC-ID}/` em 2026-03-25. Normativos são transversais e não pertencem a nenhum módulo específico. Ver: DOC-PADRAO-001-C01, DOC-PADRAO-001-M01, DOC-PADRAO-004-M01, DOC-PADRAO-005-C01, DOC-UX-011-M01, DOC-UX-011-M02, DOC-UX-012-M02, DOC-GNP-00-M01.

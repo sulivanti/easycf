@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.8.2 | 2026-03-25 | merge-amendment | Merge FR-000-C07: 5 use cases pós-auth propagam request.session.tenantId em domain events (change-password, logout, update-profile, create-role, update-role). Base FR-000 bumped para v0.9.7. Ref: spec-fix-domain-events-tenant-id v2.0. |
 | 1.8.1 | 2026-03-25 | merge-amendment | Merge batch MOD-000: DATA-000-C02 (SYSTEM_TENANT_ID §8), FR-000-C02 (/auth/me shape), FR-000-C03 (entry point rewrite), FR-000-C05 (JWT tenant/scopes), FR-000-C06 (forceLogout redirect loop), UX-000-C01 (tabela erros 401). Todos MERGED. |
 | 1.8.0 | 2026-03-25 | create-amendment | Amendment UX-000-C01: tabela de erros UX-000 detalhada para 401 (limpeza tokens + full reload). Nova jornada "Sessão Expirada por Timeout" em UX-001. Ref: spec-fix-session-timeout-redirect-loop. |
 | 1.7.10 | 2026-03-25 | create-amendment | Amendment FR-000-C06: sessão expirada causa redirect loop no frontend — AppShell não limpa localStorage antes de navegar para /login. Solução: nova utility `forceLogout` (limpa tokens + cache + full reload), toast com id fixo, retry desabilitado em 401. Ref: spec-fix-session-timeout-redirect-loop. |

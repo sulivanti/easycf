@@ -16,10 +16,7 @@ import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import cookie from '@fastify/cookie';
 import jwt from '@fastify/jwt';
-import {
-  serializerCompiler,
-  validatorCompiler,
-} from 'fastify-type-provider-zod';
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
 // — Auth & DI plugins (DOC-ARC-004 §5) —
 import { authPlugin } from './plugins/auth.js';

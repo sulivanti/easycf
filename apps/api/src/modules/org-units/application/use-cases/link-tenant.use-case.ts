@@ -100,6 +100,7 @@ export class LinkTenantUseCase {
 
       await this.eventRepo.create(
         createOrgUnitEvent({
+          tenantId: input.tenantId,
           entityType: 'org_unit_tenant_link',
           entityId: linkId,
           eventType: 'org.tenant_linked',

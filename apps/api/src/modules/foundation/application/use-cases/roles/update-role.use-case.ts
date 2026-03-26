@@ -23,6 +23,7 @@ export interface UpdateRoleInput {
   readonly description?: string | null;
   readonly scopes: readonly string[];
   readonly updatedBy: string;
+  readonly tenantId: string;
   readonly correlationId: string;
 }
 
@@ -56,7 +57,7 @@ export class UpdateRoleUseCase {
 
       await this.eventRepo.create(
         createFoundationEvent({
-          tenantId: '',
+          tenantId: input.tenantId,
           entityType: 'role',
           entityId: input.roleId,
           eventType: 'role.updated',

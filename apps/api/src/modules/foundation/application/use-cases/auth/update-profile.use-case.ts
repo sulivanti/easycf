@@ -18,6 +18,7 @@ export interface UpdateProfileInput {
   readonly userId: string;
   readonly fullName?: string;
   readonly avatarUrl?: string | null;
+  readonly tenantId: string;
   readonly correlationId: string;
 }
 
@@ -52,7 +53,7 @@ export class UpdateProfileUseCase {
 
       await this.eventRepo.create(
         createFoundationEvent({
-          tenantId: '',
+          tenantId: input.tenantId,
           entityType: 'user',
           entityId: user.id,
           eventType: 'user.profile_updated',

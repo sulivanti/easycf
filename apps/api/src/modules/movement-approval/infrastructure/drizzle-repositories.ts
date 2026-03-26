@@ -216,9 +216,7 @@ export class DrizzleControlRuleRepository implements ControlRuleRepository {
     return this.toDomain(updated!);
   }
 
-  private toDomain(
-    row: typeof movementControlRules.$inferSelect,
-  ): MovementControlRuleProps {
+  private toDomain(row: typeof movementControlRules.$inferSelect): MovementControlRuleProps {
     return {
       id: row.id,
       tenantId: row.tenantId,
@@ -288,10 +286,7 @@ export class DrizzleApprovalRuleRepository implements ApprovalRuleRepository {
     return rows.map((r) => this.toDomain(r));
   }
 
-  async create(
-    entity: ApprovalRuleProps,
-    tx?: TransactionContext,
-  ): Promise<ApprovalRuleProps> {
+  async create(entity: ApprovalRuleProps, tx?: TransactionContext): Promise<ApprovalRuleProps> {
     const c = conn(this.db, tx);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [created] = await c
@@ -312,10 +307,7 @@ export class DrizzleApprovalRuleRepository implements ApprovalRuleRepository {
     return this.toDomain(created!);
   }
 
-  async update(
-    entity: ApprovalRuleProps,
-    tx?: TransactionContext,
-  ): Promise<ApprovalRuleProps> {
+  async update(entity: ApprovalRuleProps, tx?: TransactionContext): Promise<ApprovalRuleProps> {
     const c = conn(this.db, tx);
     const [updated] = await c
       .update(approvalRules)
@@ -488,9 +480,7 @@ export class DrizzleMovementRepository implements MovementRepository {
     return this.toDomain(updated!);
   }
 
-  private toDomain(
-    row: typeof controlledMovements.$inferSelect,
-  ): ControlledMovementProps {
+  private toDomain(row: typeof controlledMovements.$inferSelect): ControlledMovementProps {
     return {
       id: row.id,
       tenantId: row.tenantId,
@@ -655,9 +645,7 @@ export class DrizzleApprovalInstanceRepository implements ApprovalInstanceReposi
     return this.toDomain(updated!);
   }
 
-  private toDomain(
-    row: typeof approvalInstances.$inferSelect,
-  ): ApprovalInstanceProps {
+  private toDomain(row: typeof approvalInstances.$inferSelect): ApprovalInstanceProps {
     return {
       id: row.id,
       tenantId: row.tenantId,
@@ -720,9 +708,7 @@ export class DrizzleMovementExecutionRepository implements MovementExecutionRepo
     return rows.map((r) => this.toDomain(r));
   }
 
-  private toDomain(
-    row: typeof movementExecutions.$inferSelect,
-  ): MovementExecutionEntry {
+  private toDomain(row: typeof movementExecutions.$inferSelect): MovementExecutionEntry {
     return {
       id: row.id,
       tenantId: row.tenantId,
@@ -764,10 +750,7 @@ export class DrizzleMovementHistoryRepository implements MovementHistoryReposito
       .select()
       .from(movementHistory)
       .where(
-        and(
-          eq(movementHistory.movementId, movementId),
-          eq(movementHistory.tenantId, tenantId),
-        ),
+        and(eq(movementHistory.movementId, movementId), eq(movementHistory.tenantId, tenantId)),
       )
       .orderBy(movementHistory.createdAt);
 

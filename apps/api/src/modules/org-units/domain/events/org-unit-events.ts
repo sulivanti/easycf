@@ -7,6 +7,7 @@
  */
 
 import type { DomainEventBase } from '../../../foundation/domain/events/foundation-events.js';
+import { SYSTEM_TENANT_ID } from '../../../foundation/domain/events/foundation-events.js';
 
 // ---------------------------------------------------------------------------
 // Event type literal union
@@ -64,6 +65,7 @@ export const ORG_UNIT_EVENT_SENSITIVITY: Record<OrgUnitEventType, 0> = {
 // Factory — creates a domain event for org-units
 // ---------------------------------------------------------------------------
 export function createOrgUnitEvent(params: {
+  tenantId?: string;
   entityType: OrgUnitEntityType;
   entityId: string;
   eventType: OrgUnitEventType;
@@ -74,8 +76,8 @@ export function createOrgUnitEvent(params: {
   dedupeKey?: string;
 }): DomainEventBase {
   return {
-    // org_units is cross-tenant (ADR-003) — use empty string as sentinel
-    tenantId: (params.payload['tenant_id'] as string) ?? '',
+    // org_units is cross-tenant (ADR-003) — SYSTEM_TENANT_ID as sentinel (FR-001-C02)
+    tenantId: params.tenantId || SYSTEM_TENANT_ID,
     entityType: params.entityType,
     entityId: params.entityId,
     eventType: params.eventType,

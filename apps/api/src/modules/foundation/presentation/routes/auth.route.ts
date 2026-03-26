@@ -99,6 +99,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       await request.dipiContainer.logoutUseCase.execute({
         sessionId: request.session.id,
         userId: request.session.userId,
+        tenantId: request.session.tenantId,
         correlationId,
       });
 
@@ -202,6 +203,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
         userId: request.session.userId,
         fullName: request.body.full_name,
         avatarUrl: request.body.avatar_url,
+        tenantId: request.session.tenantId,
         correlationId,
       });
 
@@ -239,6 +241,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
         userId: request.session.userId,
         currentPassword: request.body.current_password,
         newPassword: request.body.new_password,
+        tenantId: request.session.tenantId,
         correlationId,
       });
 

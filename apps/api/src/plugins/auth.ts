@@ -18,53 +18,51 @@ async function authPluginImpl(app: FastifyInstance): Promise<void> {
   app.decorateRequest('session', { tenantId: '', userId: '' });
 
   // verifySession — verifies JWT from cookie or Authorization header
-  app.decorate('verifySession', async function verifySession(
-    request: FastifyRequest,
-    reply: FastifyReply,
-  ): Promise<void> {
-    const token =
-      request.cookies.accessToken ??
-      (request.headers.authorization?.startsWith('Bearer ')
-        ? request.headers.authorization.slice(7)
-        : undefined);
+  app.decorate(
+    'verifySession',
+    async function verifySession(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+      const token =
+        request.cookies.accessToken ??
+        (request.headers.authorization?.startsWith('Bearer ')
+          ? request.headers.authorization.slice(7)
+          : undefined);
 
-    if (!token) {
-      void reply.status(401).send({ message: 'Não autenticado.' });
-      return;
-    }
+      if (!token) {
+        void reply.status(401).send({ message: 'Não autenticado.' });
+        return;
+      }
 
-    try {
-      const payload = app.jwt.verify<{
-        sub: string;
-        sid: string;
-        tid: string | null;
-        scopes?: string[];
-      }>(token);
+      try {
+        const payload = app.jwt.verify<{
+          sub: string;
+          sid: string;
+          tid: string | null;
+          scopes?: string[];
+        }>(token);
 
-      request.session = {
-        tenantId: payload.tid ?? '',
-        userId: payload.sub,
-        sessionId: payload.sid,
-        scopes: payload.scopes ?? [],
-      };
+        request.session = {
+          tenantId: payload.tid ?? '',
+          userId: payload.sub,
+          sessionId: payload.sid,
+          scopes: payload.scopes ?? [],
+        };
 
-      request.user = {
-        id: payload.sub,
-        tenantId: payload.tid ?? '',
-      };
-    } catch {
-      void reply.status(401).send({ message: 'Token inválido ou expirado.' });
-    }
-  });
+        request.user = {
+          id: payload.sub,
+          tenantId: payload.tid ?? '',
+        };
+      } catch {
+        void reply.status(401).send({ message: 'Token inválido ou expirado.' });
+      }
+    },
+  );
 
   // requireScope — factory that returns an onRequest hook checking a specific scope
-  app.decorate('requireScope', function requireScope(
-    scope: string,
-  ): (request: FastifyRequest, reply: FastifyReply) => Promise<void> {
-    return async function checkScope(
-      request: FastifyRequest,
-      reply: FastifyReply,
-    ): Promise<void> {
+  app.decorate('requireScope', function requireScope(scope: string): (
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ) => Promise<void> {
+    return async function checkScope(request: FastifyRequest, reply: FastifyReply): Promise<void> {
       const scopes = (request.session as Record<string, unknown>).scopes as string[] | undefined;
       if (!scopes?.includes(scope)) {
         void reply.status(403).send({

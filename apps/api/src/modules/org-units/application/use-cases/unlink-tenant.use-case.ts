@@ -49,6 +49,7 @@ export class UnlinkTenantUseCase {
 
       await this.eventRepo.create(
         createOrgUnitEvent({
+          tenantId: input.tenantId,
           entityType: 'org_unit_tenant_link',
           entityId: link.id,
           eventType: 'org.tenant_unlinked',

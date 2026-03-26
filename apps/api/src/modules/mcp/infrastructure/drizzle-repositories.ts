@@ -81,10 +81,7 @@ export class DrizzleMcpAgentRepository implements McpAgentRepository {
     return row ? this.toDomain(row) : null;
   }
 
-  async findAllActiveByTenant(
-    tenantId: string,
-    tx?: TransactionContext,
-  ): Promise<McpAgentProps[]> {
+  async findAllActiveByTenant(tenantId: string, tx?: TransactionContext): Promise<McpAgentProps[]> {
     const c = conn(this.db, tx);
     const rows = await c
       .select()
@@ -109,7 +106,10 @@ export class DrizzleMcpAgentRepository implements McpAgentRepository {
 
     if (params.status) conditions.push(eq(mcpAgents.status, params.status as any));
     if (params.ownerUserId) conditions.push(eq(mcpAgents.ownerUserId, params.ownerUserId));
-    if (params.cursor) conditions.push(dsql`${mcpAgents.createdAt} <= (SELECT ${mcpAgents.createdAt} FROM ${mcpAgents} WHERE ${mcpAgents.id} = ${params.cursor})`);
+    if (params.cursor)
+      conditions.push(
+        dsql`${mcpAgents.createdAt} <= (SELECT ${mcpAgents.createdAt} FROM ${mcpAgents} WHERE ${mcpAgents.id} = ${params.cursor})`,
+      );
 
     const rows = await c
       .select()
@@ -204,11 +204,7 @@ export class DrizzleMcpActionTypeRepository implements McpActionTypeRepository {
 
   async findById(id: string, tx?: TransactionContext): Promise<McpActionTypeProps | null> {
     const c = conn(this.db, tx);
-    const [row] = await c
-      .select()
-      .from(mcpActionTypes)
-      .where(eq(mcpActionTypes.id, id))
-      .limit(1);
+    const [row] = await c.select().from(mcpActionTypes).where(eq(mcpActionTypes.id, id)).limit(1);
     return row ? this.toDomain(row) : null;
   }
 
@@ -292,9 +288,13 @@ export class DrizzleMcpActionRepository implements McpActionRepository {
     const conditions: ReturnType<typeof eq>[] = [eq(mcpActions.tenantId, params.tenantId)];
 
     if (params.actionTypeId) conditions.push(eq(mcpActions.actionTypeId, params.actionTypeId));
-    if (params.executionPolicy) conditions.push(eq(mcpActions.executionPolicy, params.executionPolicy as any));
+    if (params.executionPolicy)
+      conditions.push(eq(mcpActions.executionPolicy, params.executionPolicy as any));
     if (params.status) conditions.push(eq(mcpActions.status, params.status as any));
-    if (params.cursor) conditions.push(dsql`${mcpActions.createdAt} <= (SELECT ${mcpActions.createdAt} FROM ${mcpActions} WHERE ${mcpActions.id} = ${params.cursor})`);
+    if (params.cursor)
+      conditions.push(
+        dsql`${mcpActions.createdAt} <= (SELECT ${mcpActions.createdAt} FROM ${mcpActions} WHERE ${mcpActions.id} = ${params.cursor})`,
+      );
 
     const rows = await c
       .select()
@@ -397,10 +397,7 @@ export class DrizzleMcpAgentActionLinkRepository implements McpAgentActionLinkRe
       .select()
       .from(mcpAgentActionLinks)
       .where(
-        and(
-          eq(mcpAgentActionLinks.agentId, agentId),
-          eq(mcpAgentActionLinks.actionId, actionId),
-        ),
+        and(eq(mcpAgentActionLinks.agentId, agentId), eq(mcpAgentActionLinks.actionId, actionId)),
       )
       .limit(1);
     return row ? this.toDomain(row) : null;
@@ -420,10 +417,7 @@ export class DrizzleMcpAgentActionLinkRepository implements McpAgentActionLinkRe
         and(
           eq(mcpAgentActionLinks.agentId, agentId),
           eq(mcpAgentActionLinks.actionId, actionId),
-          or(
-            isNull(mcpAgentActionLinks.validUntil),
-            gte(mcpAgentActionLinks.validUntil, now),
-          ),
+          or(isNull(mcpAgentActionLinks.validUntil), gte(mcpAgentActionLinks.validUntil, now)),
         ),
       )
       .limit(1);
@@ -440,10 +434,7 @@ export class DrizzleMcpAgentActionLinkRepository implements McpAgentActionLinkRe
       .select()
       .from(mcpAgentActionLinks)
       .where(
-        and(
-          eq(mcpAgentActionLinks.agentId, agentId),
-          eq(mcpAgentActionLinks.tenantId, tenantId),
-        ),
+        and(eq(mcpAgentActionLinks.agentId, agentId), eq(mcpAgentActionLinks.tenantId, tenantId)),
       );
     return rows.map((r) => this.toDomain(r));
   }
@@ -469,19 +460,12 @@ export class DrizzleMcpAgentActionLinkRepository implements McpAgentActionLinkRe
     return this.toDomain(created!);
   }
 
-  async delete(
-    agentId: string,
-    actionId: string,
-    tx?: TransactionContext,
-  ): Promise<boolean> {
+  async delete(agentId: string, actionId: string, tx?: TransactionContext): Promise<boolean> {
     const c = conn(this.db, tx);
     const result = await c
       .delete(mcpAgentActionLinks)
       .where(
-        and(
-          eq(mcpAgentActionLinks.agentId, agentId),
-          eq(mcpAgentActionLinks.actionId, actionId),
-        ),
+        and(eq(mcpAgentActionLinks.agentId, agentId), eq(mcpAgentActionLinks.actionId, actionId)),
       )
       .returning();
     return result.length > 0;
@@ -542,10 +526,15 @@ export class DrizzleMcpExecutionRepository implements McpExecutionRepository {
     if (params.agentId) conditions.push(eq(mcpExecutions.agentId, params.agentId));
     if (params.actionId) conditions.push(eq(mcpExecutions.actionId, params.actionId));
     if (params.status) conditions.push(eq(mcpExecutions.status, params.status as any));
-    if (params.policyApplied) conditions.push(eq(mcpExecutions.policyApplied, params.policyApplied as any));
-    if (params.receivedAtFrom) conditions.push(gte(mcpExecutions.receivedAt, params.receivedAtFrom));
+    if (params.policyApplied)
+      conditions.push(eq(mcpExecutions.policyApplied, params.policyApplied as any));
+    if (params.receivedAtFrom)
+      conditions.push(gte(mcpExecutions.receivedAt, params.receivedAtFrom));
     if (params.receivedAtTo) conditions.push(lte(mcpExecutions.receivedAt, params.receivedAtTo));
-    if (params.cursor) conditions.push(dsql`${mcpExecutions.receivedAt} <= (SELECT ${mcpExecutions.receivedAt} FROM ${mcpExecutions} WHERE ${mcpExecutions.id} = ${params.cursor})`);
+    if (params.cursor)
+      conditions.push(
+        dsql`${mcpExecutions.receivedAt} <= (SELECT ${mcpExecutions.receivedAt} FROM ${mcpExecutions} WHERE ${mcpExecutions.id} = ${params.cursor})`,
+      );
 
     const rows = await c
       .select()
@@ -616,13 +605,11 @@ export class DrizzleMcpExecutionRepository implements McpExecutionRepository {
     if (update.errorMessage !== undefined) values.errorMessage = update.errorMessage;
     if (update.durationMs !== undefined) values.durationMs = update.durationMs;
     if (update.linkedMovementId !== undefined) values.linkedMovementId = update.linkedMovementId;
-    if (update.linkedIntegrationLogId !== undefined) values.linkedIntegrationLogId = update.linkedIntegrationLogId;
+    if (update.linkedIntegrationLogId !== undefined)
+      values.linkedIntegrationLogId = update.linkedIntegrationLogId;
     if (update.blockedReason !== undefined) values.blockedReason = update.blockedReason;
 
-    await c
-      .update(mcpExecutions)
-      .set(values)
-      .where(eq(mcpExecutions.id, id));
+    await c.update(mcpExecutions).set(values).where(eq(mcpExecutions.id, id));
   }
 
   private toDomain(row: typeof mcpExecutions.$inferSelect): McpExecutionProps {

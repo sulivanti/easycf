@@ -35,6 +35,7 @@ export async function rolesRoutes(app: FastifyInstance): Promise<void> {
         description: request.body.description,
         scopes: request.body.scopes,
         createdBy: request.session.userId,
+        tenantId: request.session.tenantId,
         correlationId,
       });
 
@@ -119,6 +120,7 @@ export async function rolesRoutes(app: FastifyInstance): Promise<void> {
         description: request.body.description,
         scopes: request.body.scopes,
         updatedBy: request.session.userId,
+        tenantId: request.session.tenantId,
         correlationId,
       });
 

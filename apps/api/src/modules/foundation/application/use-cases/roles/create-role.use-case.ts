@@ -20,6 +20,7 @@ export interface CreateRoleInput {
   readonly description?: string;
   readonly scopes: readonly string[];
   readonly createdBy: string;
+  readonly tenantId: string;
   readonly correlationId: string;
 }
 
@@ -60,7 +61,7 @@ export class CreateRoleUseCase {
 
       await this.eventRepo.create(
         createFoundationEvent({
-          tenantId: '',
+          tenantId: input.tenantId,
           entityType: 'role',
           entityId: id,
           eventType: 'role.created',

@@ -11,6 +11,7 @@ import type { SessionRepository, DomainEventRepository } from '../../ports/repos
 export interface LogoutInput {
   readonly sessionId: string;
   readonly userId: string;
+  readonly tenantId: string;
   readonly correlationId: string;
 }
 
@@ -25,7 +26,7 @@ export class LogoutUseCase {
 
     await this.eventRepo.create(
       createFoundationEvent({
-        tenantId: '',
+        tenantId: input.tenantId,
         entityType: 'session',
         entityId: input.sessionId,
         eventType: 'auth.logout',

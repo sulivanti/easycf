@@ -188,7 +188,7 @@ Path: `docs/01_normativos/amendments/{DOC-ID}/`
 1. Execute o linter: `node .agents/scripts/lint-docs.js`
 2. Se houver erros, corrija antes de finalizar
 
-## Passo Final: Comunicação
+## Passo Final: Comunicação e Próximo Passo
 
 Responda ao usuário com:
 - Amendment aplicado (link)
@@ -198,3 +198,26 @@ Responda ao usuário com:
 - Se `rastreia_para` inclui PENDENTE-NNN: avise para verificar se a pendência foi atualizada para IMPLEMENTADA
 - Se existem amendments derivados: liste-os com estado e sugira ordem de merge (derivados após o pai)
 - Resultado do linter
+
+### Próximo passo no pipeline
+
+Sempre indique o próximo passo concreto:
+
+```text
+Amendment veio de uma spec?
+├── SIM → Leia a spec referenciada (campo rastreia_para) e sugira:
+│         "Implementar as correções de código conforme a spec {path}.
+│          Arquivos afetados: {lista do Appendix A}.
+│          Após implementação: /git release"
+└── NÃO → "Amendments merged. Se há código a alterar, implemente conforme
+│          o Detalhamento do amendment. Após implementação: /git release"
+```
+
+Se o merge conclui o último amendment de uma spec, mostre o pipeline completo:
+```
+✅ /create-specification — Spec criada
+✅ /create-amendment — Amendment(s) criado(s)
+✅ /merge-amendment — Aplicado(s) nos documentos base
+➡️ Implementação código — {N} arquivos a editar
+⬚ /git release — após implementação e build OK
+```

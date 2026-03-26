@@ -27,9 +27,20 @@ O `/update-specification` detecta o estado e delega automaticamente para esta sk
 
 ## Argumento
 
-$ARGUMENTS deve conter o ID do requisito, pilar e natureza (ex: `FR-001 melhoria "adicionar endpoint restore"`). Se não fornecido, pergunte ao usuário:
+$ARGUMENTS pode conter:
 
-- **Caminho da User Story** (arquivo em `user-stories/features/`) ou motivação textual
+1. **ID do requisito + pilar + natureza** (ex: `FR-001 melhoria "adicionar endpoint restore"`)
+2. **Referência a uma spec** (ex: `com base na spec docs/03_especificacoes/spec-fix-domain-events-tenant-id.md`)
+
+Se vem de uma spec (caso 2):
+- Leia a spec completa, em particular "Appendix A: Plano de Execução" e "Arquivos modificados"
+- Identifique os módulos afetados e os pilares (FR, DATA, SEC, etc.)
+- Crie **um amendment por módulo** afetado, referenciando a spec no campo `rastreia_para`
+- Cada amendment deve conter apenas as mudanças relativas ao seu módulo
+
+Se não fornecido, pergunte ao usuário:
+
+- **Caminho da User Story** (arquivo em `user-stories/features/`), spec, ou motivação textual
 - **Pilar:** `br`, `fr`, `data`, `int`, `sec`, `ux`, `nfr`, `adr`
 - **Natureza:** `M` (Melhoria), `R` (Revisão), `C` (Correção)
 
@@ -168,10 +179,10 @@ Consulte `docs/01_normativos/DOC-DEV-001_especificacao_executavel.md` e o normat
 
 Para requisitos de módulo: invoque `/project:update-index` para atualizar o manifesto do módulo com o novo amendment.
 
-## Passo Final: Comunicação
+## Passo Final: Comunicação e Próximo Passo
 
 Responda ao usuário com:
-- Link do arquivo de emenda criado
+- Link do(s) arquivo(s) de emenda criado(s)
 - Bump semântico aplicado (módulos) ou CHANGELOG de normativos atualizado
 - INDEX.md de normativos atualizado (se aplicável)
 - **Binding reverso:** Se o amendment normativo é consumido por módulos específicos (ex: CA-07 usado por UX-001-C01), lembre o usuário de incluir `Deps normativas: {IDs}` no CHANGELOG do módulo consumidor ao fazer o codegen
@@ -179,3 +190,22 @@ Responda ao usuário com:
 - Lista de pilares impactados (se houver)
 - Se `rastreia_para` inclui PENDENTE-NNN: lembre o usuário de verificar o status da pendência
 - **Cascata:** Se "Impacto nos Pilares" lista ações concretas em outros pilares/módulos (qualquer natureza M/C/R), sugira: "Execute `/cascade-amendment {caminho-do-amendment}` para analisar e criar amendments derivados nos pilares afetados."
+
+### Próximo passo no pipeline
+
+Sempre indique o próximo passo concreto:
+
+```text
+Amendments têm cascata?
+├── SIM → "Execute /cascade-amendment {paths} para criar amendments derivados"
+├── NÃO (self-contained) → "Execute /merge-amendment {paths} para aplicar nos documentos base"
+```
+
+Se vieram de uma spec, inclua o pipeline completo:
+```
+✅ /create-specification — Spec criada
+✅ /create-amendment — {N} amendment(s) criado(s)
+➡️ /merge-amendment {paths} — próximo passo
+⬚ Implementação código — após merge
+⬚ /git release — após implementação
+```

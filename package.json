@@ -1,6 +1,6 @@
 {
     "name": "@easycf/monorepo",
-    "version": "0.11.6",
+    "version": "0.12.0",
     "private": true,
     "description": "The Enterprise-Grade Agnostic Code Framework",
     "scripts": {

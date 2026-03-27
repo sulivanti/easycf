@@ -1,9 +1,9 @@
 # DOC-UX-013 — Design System e Tokens Visuais
 
 - **id:** DOC-UX-013
-- **version:** 1.2.0
+- **version:** 1.6.0
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-26
+- **data_ultima_revisao:** 2026-03-27
 - **owner:** produto + arquitetura + UX
 - **scope:** global (design system, tokens visuais, styling)
 
@@ -87,10 +87,37 @@ Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-
   --color-a1-text-hint: #AAAAAA;
   --color-a1-text-placeholder: #CCCCCC;
   --color-a1-text-muted-icon: #BBBBBB;
+
+  /* Accent Variants */
+  --color-accent-hover: #E07B28;
+  --color-accent-border: #F5C89A;
+
+  /* Semantic Context Aliases */
+  --color-bg-page: #F5F5F3;       /* alias --color-a1-bg */
+  --color-bg-sidebar: #FFFFFF;
+  --color-bg-card: #FFFFFF;
+
+  /* Status Backgrounds (light variants para badges/alerts) */
+  --color-status-success-bg: #DCFCE7;
+  --color-status-warning-bg: #FEF3C7;
+  --color-status-error-bg: #FEE2E2;
+  --color-status-info-bg: #DBEAFE;
+  --color-status-neutral-bg: #F1F5F9;
+  --color-status-purple-bg: #F3E8FF;
+
+  /* Topbar (dark header A1 — ref DOC-UX-011-M04) */
+  --color-topbar-bg: #111111;
+  --color-topbar-separator: #2A2A2A;
+  --color-topbar-text: #FFFFFF;
+  --color-topbar-text-muted: #999999;
+  --color-topbar-badge-bg: #F58C32;
+  --color-topbar-badge-border: #E07B28;
 }
 ```
 
 **Regra:** Módulos NÃO DEVEM definir cores adicionais fora do `@theme`. Se novas cores forem necessárias, devem ser adicionadas via amendment ao design system.
+
+**Regra:** Páginas que implementam o layout A1 DEVEM usar tokens de contexto (`bg-page`, `bg-sidebar`, etc.) ao invés de referenciar `a1-bg` diretamente. Isso permite futura troca de tema sem alterar páginas.
 
 ### 2.2 Tipografia
 
@@ -123,6 +150,24 @@ Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-
 | Caption | 400 (normal) | 11px / 14px | Datas, metadados, hints |
 | Micro | 400 (normal) | 10px / 12px | Sub-labels, tenant info |
 
+#### Type Scale Tokens
+
+```css
+@theme {
+  /* Type Scale A1 (font-size) */
+  --type-display: 1.75rem;    /* 28px — títulos hero, branding */
+  --type-title: 1.25rem;      /* 20px — títulos de página */
+  --type-subtitle: 1rem;      /* 16px — subtítulos */
+  --type-body: 0.8125rem;     /* 13px — texto padrão, tabelas */
+  --type-label: 0.6875rem;    /* 11px — labels de formulário CAPS */
+  --type-caption: 0.6875rem;  /* 11px — datas, metadados */
+  --type-section: 0.5625rem;  /* 9px — headers de sidebar CAPS */
+  --type-micro: 0.625rem;     /* 10px — sub-labels, tenant info */
+}
+```
+
+**Regra:** Os `--type-*` definem apenas font-size. Line-height e font-weight devem ser aplicados via classes Tailwind (`leading-*`, `font-bold`, etc.) conforme a tabela da Escala Tipográfica A1 acima.
+
 ### 2.3 Espaçamento
 
 Grid de 4px. Escala:
@@ -141,6 +186,25 @@ Grid de 4px. Escala:
 | `--spacing-12` | `3rem` (48px) |
 | `--spacing-16` | `4rem` (64px) |
 
+#### Spacing Semântico
+
+Aliases semânticos dos `--spacing-*` numéricos para uso em componentes shared/ui:
+
+```css
+@theme {
+  /* Semantic Spacing */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-2xl: 2.5rem;   /* 40px */
+  --space-3xl: 3rem;     /* 48px */
+}
+```
+
+**Regra:** Componentes em `shared/ui/` DEVEM preferir os nomes semânticos (`--space-*`). Os tokens numéricos (`--spacing-N`) permanecem válidos para uso granular em layouts de página.
+
 ### 2.4 Radii, Shadows e Timing
 
 ```css
@@ -152,6 +216,9 @@ Grid de 4px. Escala:
   --radius-xl: 0.75rem;
   --radius-2xl: 1rem;
   --radius-full: 9999px;
+  --radius-xs: 0.125rem;   /* 2px — inputs menores, tags */
+  --radius-pill: 9999px;   /* alias de --radius-full para badges/pills */
+  --radius-circle: 50%;    /* avatares, ícones circulares */
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -255,7 +322,19 @@ src/shared/
     ├── table.tsx           ← shadcn Table
     ├── skeleton.tsx        ← shadcn Skeleton (animate-pulse)
     ├── sonner.tsx          ← shadcn Sonner (toast system)
-    └── spinner.tsx         ← Spinner customizado (animate-spin)
+    ├── spinner.tsx         ← Spinner customizado (animate-spin)
+    ├── form-field.tsx      ← FormField (label + input + error + hint)
+    ├── search-bar.tsx      ← SearchBar (input com ícone busca + clear)
+    ├── filter-bar.tsx      ← FilterBar (container horizontal de filtros)
+    ├── select.tsx          ← Select (dropdown nativo estilizado, cva)
+    ├── toggle.tsx          ← Toggle (switch on/off, a11y)
+    ├── status-badge.tsx    ← StatusBadge (badge com cor por status semântico, cva)
+    ├── pagination.tsx      ← Pagination (navegação de páginas)
+    ├── empty-state.tsx     ← EmptyState (placeholder lista vazia)
+    ├── tag.tsx             ← Tag (label removível para filtros ativos)
+    ├── icon-button.tsx     ← IconButton (botão apenas ícone com tooltip)
+    ├── confirmation-modal.tsx ← ConfirmationModal (dialog confirmação pré-configurado)
+    └── page-header.tsx     ← PageHeader (cabeçalho padrão de página)
 ```
 
 > **Nota de naming:** shadcn usa `dialog.tsx` para modais e `sonner.tsx` para toasts. O barrel `index.ts` re-exporta com aliases se necessário (ex: `export { Dialog as Modal } from './dialog'`).
@@ -297,6 +376,25 @@ O scaffold DEVE instalar os seguintes componentes via shadcn CLI:
 | `dropdown-menu` | `npx shadcn@latest add dropdown-menu` | `@radix-ui/react-dropdown-menu` | Widget de Perfil (DOC-UX-011 §6) |
 | `tooltip` | `npx shadcn@latest add tooltip` | `@radix-ui/react-tooltip` | Dicas contextuais |
 | `label` | `npx shadcn@latest add label` | `@radix-ui/react-label` | Labels acessíveis para inputs |
+
+#### Componentes customizados ECF (não shadcn)
+
+| Componente | Arquivo | Uso no ECF |
+|-----------|---------|------------|
+| `FormField` | `form-field.tsx` | Wrapper label + input + error + hint para formulários |
+| `SearchBar` | `search-bar.tsx` | Input de busca com ícone e clear |
+| `FilterBar` | `filter-bar.tsx` | Container horizontal de filtros |
+| `Select` | `select.tsx` | Dropdown nativo estilizado (cva: size) |
+| `Toggle` | `toggle.tsx` | Switch on/off (`role="switch"`, keyboard a11y) |
+| `StatusBadge` | `status-badge.tsx` | Badge semântico com cor por status (cva: success/warning/error/info/neutral/purple) |
+| `Pagination` | `pagination.tsx` | Navegação de páginas para listagens |
+| `EmptyState` | `empty-state.tsx` | Placeholder quando lista vazia |
+| `Tag` | `tag.tsx` | Label removível para filtros ativos |
+| `IconButton` | `icon-button.tsx` | Botão apenas ícone com tooltip integrado |
+| `ConfirmationModal` | `confirmation-modal.tsx` | Dialog pré-configurado para ações destrutivas |
+| `PageHeader` | `page-header.tsx` | Cabeçalho padrão (título + breadcrumb + ações) |
+
+> **Regra:** Toda ação destrutiva (DELETE, revoke, cancel) DEVE usar `ConfirmationModal`. Toda página DEVE usar `PageHeader` como primeiro elemento do conteúdo principal.
 
 #### Customizações obrigatórias pós-geração
 
@@ -406,6 +504,8 @@ O ThemeToggle DEVE:
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.6.0 | 2026-03-27 | Amendments M03+M04+M05: 12 novos componentes shared/ui — Form (FormField, SearchBar, FilterBar, Select, Toggle), Data (StatusBadge, Pagination, EmptyState, Tag, IconButton), Feedback (ConfirmationModal, PageHeader). |
+| 1.3.0 | 2026-03-27 | Amendment M02: ~35 tokens semânticos — accent variants, context aliases (bg-page/sidebar/card), 6x status-bg, 6x topbar, 7x spacing semântico, 8x type scale, 3x radii extras. Ref: stitch HTMLs, DOC-UX-011-M04. |
 | 1.2.0 | 2026-03-26 | Amendment M01: tokens A1 (§2.1 cores brand + text hierarchy, §2.2 escala tipográfica A1 + regra font-display, §3.4 exceção SVG inline). Ref: Ux-Paginas.md (Paper). |
 | 1.1.0 | 2026-03-24 | §4 reescrita para shadcn/ui como base da component library (Radix UI, cva, tailwind-merge, cn()), anti-patterns e CA-06 adicionados |
 | 1.0.0 | 2026-03-24 | Versão inicial — design tokens, Tailwind v4, shared components, dark/light theme |

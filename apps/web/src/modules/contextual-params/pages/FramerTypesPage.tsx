@@ -1,0 +1,165 @@
+/**
+ * @contract FR-001, UX-007
+ * Page: Catálogo de Tipos de Enquadrador — tabela read-mostly com criação.
+ * Route: /parametros/tipos-framer
+ */
+
+import { useState, type FormEvent } from 'react';
+import { toast } from 'sonner';
+import { Button } from '@shared/ui/button';
+import { Input } from '@shared/ui/input';
+import { Label } from '@shared/ui/label';
+import { Skeleton } from '@shared/ui/skeleton';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@shared/ui/dialog';
+import { useFramerTypes, useCreateFramerType } from '../hooks/use-framers.js';
+
+export function FramerTypesPage() {
+  const { data: framerTypes, isLoading, isError, error } = useFramerTypes();
+  const createMutation = useCreateFramerType();
+  const [showCreate, setShowCreate] = useState(false);
+  const [codigo, setCodigo] = useState('');
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+
+  const items = framerTypes?.data ?? [];
+
+  function resetForm() {
+    setCodigo('');
+    setNome('');
+    setDescricao('');
+    setShowCreate(false);
+  }
+
+  async function handleCreate(e: FormEvent) {
+    e.preventDefault();
+    try {
+      await createMutation.mutateAsync({
+        codigo: codigo.trim(),
+        nome: nome.trim(),
+        descricao: descricao.trim() || undefined,
+      });
+      toast.success('Tipo de enquadrador criado com sucesso.');
+      resetForm();
+    } catch {
+      toast.error('Erro ao criar tipo de enquadrador.');
+    }
+  }
+
+  return (
+    <div className="-m-6">
+      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
+        <div className="flex flex-col gap-0.5">
+          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
+            Tipos de Enquadrador
+          </h1>
+          <p className="font-display text-[11px] text-a1-text-hint">
+            Catálogo de referência para classificação de enquadradores
+          </p>
+        </div>
+        <Button size="sm" onClick={() => setShowCreate(true)}>
+          Criar tipo
+        </Button>
+      </div>
+
+      <div className="p-6 space-y-6">
+        {isError && (
+          <div
+            role="alert"
+            className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+          >
+            <p>{(error as Error)?.message ?? 'Erro ao carregar dados.'}</p>
+          </div>
+        )}
+
+        {isLoading ? (
+          <div className="space-y-2" aria-busy="true">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-12 w-full" />
+            ))}
+          </div>
+        ) : items.length === 0 ? (
+          <div className="rounded-md border border-dashed p-8 text-center">
+            <p className="text-sm text-muted-foreground">
+              Nenhum tipo cadastrado. Crie o primeiro.
+            </p>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Código</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Criado em</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell className="font-medium font-mono text-xs">{item.codigo}</TableCell>
+                  <TableCell>{item.nome}</TableCell>
+                  <TableCell>{new Date(item.created_at).toLocaleDateString('pt-BR')}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </div>
+
+      {/* Create Dialog */}
+      <Dialog open={showCreate} onOpenChange={(open) => !open && resetForm()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Novo Tipo de Enquadrador</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleCreate} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="ft-codigo">Código</Label>
+              <Input
+                id="ft-codigo"
+                required
+                maxLength={50}
+                value={codigo}
+                onChange={(e) => setCodigo(e.target.value)}
+                placeholder="ex: FISCAL, TRABALHISTA"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ft-nome">Nome</Label>
+              <Input
+                id="ft-nome"
+                required
+                maxLength={255}
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ft-desc">Descrição</Label>
+              <Input
+                id="ft-desc"
+                maxLength={1000}
+                value={descricao}
+                onChange={(e) => setDescricao(e.target.value)}
+              />
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="ghost" onClick={resetForm}>
+                Cancelar
+              </Button>
+              <Button type="submit" isLoading={createMutation.isPending}>
+                Criar
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

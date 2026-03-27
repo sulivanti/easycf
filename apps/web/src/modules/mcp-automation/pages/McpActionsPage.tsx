@@ -1,0 +1,312 @@
+/**
+ * @contract FR-005, UX-MCP-001
+ * Page: Catálogo standalone de MCP Actions — tabela com filtros.
+ * Route: /mcp/actions
+ *
+ * Reuses same data hooks as AgentsPage actions tab but provides
+ * a dedicated route for direct access.
+ */
+
+import { useState, type FormEvent } from 'react';
+import { toast } from 'sonner';
+import { Button } from '@shared/ui/button';
+import { Input } from '@shared/ui/input';
+import { Label } from '@shared/ui/label';
+import { Badge } from '@shared/ui/badge';
+import { Skeleton } from '@shared/ui/skeleton';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@shared/ui/dialog';
+import { useActionList, useCreateAction } from '../hooks/use-actions.js';
+import type {
+  ExecutionPolicy,
+  ActionStatus,
+  CreateActionPayload,
+} from '../types/mcp-automation.types.js';
+
+const POLICY_VARIANT: Record<ExecutionPolicy, 'default' | 'secondary' | 'outline'> = {
+  DIRECT: 'default',
+  CONTROLLED: 'secondary',
+  EVENT_ONLY: 'outline',
+};
+
+const STATUS_VARIANT: Record<ActionStatus, 'default' | 'secondary'> = {
+  ACTIVE: 'default',
+  INACTIVE: 'secondary',
+};
+
+const POLICIES: ExecutionPolicy[] = ['DIRECT', 'CONTROLLED', 'EVENT_ONLY'];
+
+export function McpActionsPage() {
+  const [policyFilter, setPolicyFilter] = useState<ExecutionPolicy | undefined>();
+  const [statusFilter, setStatusFilter] = useState<ActionStatus | undefined>();
+  const { data: actions, isLoading, isError, error } = useActionList({
+    execution_policy: policyFilter,
+    status: statusFilter,
+  });
+  const createMutation = useCreateAction();
+  const [showCreate, setShowCreate] = useState(false);
+
+  const items = actions?.data ?? [];
+
+  return (
+    <div className="-m-6">
+      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
+        <div className="flex flex-col gap-0.5">
+          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
+            Catálogo de Ações MCP
+          </h1>
+          <p className="font-display text-[11px] text-a1-text-hint">
+            Ações disponíveis para agentes MCP executarem
+          </p>
+        </div>
+        <Button size="sm" onClick={() => setShowCreate(true)}>
+          Nova ação
+        </Button>
+      </div>
+
+      {/* Filters */}
+      <div className="flex items-center gap-3 border-b border-border bg-white px-6 py-3">
+        <select
+          value={policyFilter ?? ''}
+          onChange={(e) => setPolicyFilter((e.target.value as ExecutionPolicy) || undefined)}
+          className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+        >
+          <option value="">Todas as políticas</option>
+          {POLICIES.map((p) => (
+            <option key={p} value={p}>
+              {p}
+            </option>
+          ))}
+        </select>
+        <select
+          value={statusFilter ?? ''}
+          onChange={(e) => setStatusFilter((e.target.value as ActionStatus) || undefined)}
+          className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+        >
+          <option value="">Todos os status</option>
+          <option value="ACTIVE">Ativo</option>
+          <option value="INACTIVE">Inativo</option>
+        </select>
+        {(policyFilter || statusFilter) && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setPolicyFilter(undefined);
+              setStatusFilter(undefined);
+            }}
+          >
+            Limpar
+          </Button>
+        )}
+      </div>
+
+      <div className="p-6 space-y-6">
+        {isError && (
+          <div
+            role="alert"
+            className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+          >
+            <p>{(error as Error)?.message ?? 'Erro ao carregar dados.'}</p>
+          </div>
+        )}
+
+        {isLoading ? (
+          <div className="space-y-2" aria-busy="true">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-12 w-full" />
+            ))}
+          </div>
+        ) : items.length === 0 ? (
+          <div className="rounded-md border border-dashed p-8 text-center">
+            <p className="text-sm text-muted-foreground">Nenhuma ação MCP encontrada.</p>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Código</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Política</TableHead>
+                <TableHead>Objeto Alvo</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Criado em</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((action) => (
+                <TableRow key={action.id}>
+                  <TableCell className="font-medium font-mono text-xs">{action.codigo}</TableCell>
+                  <TableCell>{action.nome}</TableCell>
+                  <TableCell>
+                    <Badge variant={POLICY_VARIANT[action.execution_policy]}>
+                      {action.execution_policy}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-xs">{action.target_object_type}</TableCell>
+                  <TableCell>
+                    <Badge variant={STATUS_VARIANT[action.status]}>{action.status}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    {new Date(action.created_at).toLocaleDateString('pt-BR')}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </div>
+
+      {/* Create Dialog */}
+      <CreateActionDialog
+        open={showCreate}
+        isPending={createMutation.isPending}
+        onClose={() => setShowCreate(false)}
+        onSubmit={async (data) => {
+          await createMutation.mutateAsync(data);
+          toast.success('Ação MCP criada com sucesso.');
+          setShowCreate(false);
+        }}
+      />
+    </div>
+  );
+}
+
+// ── Create Dialog ─────────────────────────────────────────────────────────────
+
+function CreateActionDialog({
+  open,
+  isPending,
+  onClose,
+  onSubmit,
+}: {
+  open: boolean;
+  isPending: boolean;
+  onClose: () => void;
+  onSubmit: (data: CreateActionPayload) => Promise<void>;
+}) {
+  const [codigo, setCodigo] = useState('');
+  const [nome, setNome] = useState('');
+  const [actionTypeId, setActionTypeId] = useState('');
+  const [policy, setPolicy] = useState<ExecutionPolicy>('CONTROLLED');
+  const [targetObjectType, setTargetObjectType] = useState('');
+  const [description, setDescription] = useState('');
+
+  function reset() {
+    setCodigo('');
+    setNome('');
+    setActionTypeId('');
+    setPolicy('CONTROLLED');
+    setTargetObjectType('');
+    setDescription('');
+    onClose();
+  }
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    try {
+      await onSubmit({
+        codigo: codigo.trim(),
+        nome: nome.trim(),
+        action_type_id: actionTypeId.trim(),
+        execution_policy: policy,
+        target_object_type: targetObjectType.trim(),
+        required_scopes: [],
+        description: description.trim() || undefined,
+      });
+      reset();
+    } catch {
+      toast.error('Erro ao criar ação.');
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && reset()}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Nova Ação MCP</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="act-codigo">Código</Label>
+            <Input
+              id="act-codigo"
+              required
+              maxLength={50}
+              value={codigo}
+              onChange={(e) => setCodigo(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="act-nome">Nome</Label>
+            <Input
+              id="act-nome"
+              required
+              maxLength={255}
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="act-type-id">Action Type ID</Label>
+            <Input
+              id="act-type-id"
+              required
+              value={actionTypeId}
+              onChange={(e) => setActionTypeId(e.target.value)}
+              placeholder="UUID do tipo de ação"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="act-policy">Política de Execução</Label>
+            <select
+              id="act-policy"
+              value={policy}
+              onChange={(e) => setPolicy(e.target.value as ExecutionPolicy)}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+            >
+              {POLICIES.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="act-target">Objeto Alvo</Label>
+            <Input
+              id="act-target"
+              required
+              value={targetObjectType}
+              onChange={(e) => setTargetObjectType(e.target.value)}
+              placeholder="ex: PEDIDO_VENDA"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="act-desc">Descrição</Label>
+            <Input
+              id="act-desc"
+              maxLength={1000}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="ghost" onClick={reset}>
+              Cancelar
+            </Button>
+            <Button type="submit" isLoading={isPending}>
+              Criar
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

@@ -9,16 +9,11 @@ import { toast } from 'sonner';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
-import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@shared/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
+import { StatusBadge } from '@shared/ui/status-badge';
+import { EmptyState } from '@shared/ui/empty-state';
 import {
   useIncidenceRules,
   useCreateIncidenceRule,
@@ -28,9 +23,9 @@ import { useFramersList } from '../hooks/use-framers.js';
 import { useTargetObjects } from '../hooks/use-target-objects.js';
 import type { FramerStatus, IncidenceRuleListFilters } from '../types/contextual-params.types.js';
 
-const STATUS_VARIANT: Record<FramerStatus, 'default' | 'secondary'> = {
-  ACTIVE: 'default',
-  INACTIVE: 'secondary',
+const STATUS_MAP: Record<FramerStatus, 'success' | 'neutral'> = {
+  ACTIVE: 'success',
+  INACTIVE: 'neutral',
 };
 
 export function IncidenceRulesPage() {
@@ -103,7 +98,7 @@ export function IncidenceRulesPage() {
         {isError && (
           <div
             role="alert"
-            className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+            className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
           >
             <p>{(error as Error)?.message ?? 'Erro ao carregar dados.'}</p>
           </div>
@@ -112,53 +107,53 @@ export function IncidenceRulesPage() {
         {isLoading ? (
           <div className="space-y-2" aria-busy="true">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
+              <Skeleton key={i} className="h-12 w-full bg-a1-border" />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-md border border-dashed p-8 text-center">
-            <p className="text-sm text-muted-foreground">Nenhuma regra de incidência encontrada.</p>
-          </div>
+          <EmptyState title="Sem regras" description="Nenhuma regra de incidência encontrada." />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Enquadrador</TableHead>
-                <TableHead>Target Object</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Vigência</TableHead>
-                <TableHead>Criado em</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {items.map((rule) => (
-                <TableRow key={rule.id}>
-                  <TableCell className="font-medium">{framerName(rule.framer_id)}</TableCell>
-                  <TableCell>{targetName(rule.target_object_id)}</TableCell>
-                  <TableCell>
-                    <Badge variant={STATUS_VARIANT[rule.status]}>{rule.status}</Badge>
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    {new Date(rule.valid_from).toLocaleDateString('pt-BR')}
-                    {rule.valid_until
-                      ? ` — ${new Date(rule.valid_until).toLocaleDateString('pt-BR')}`
-                      : ' — sem fim'}
-                  </TableCell>
-                  <TableCell>{new Date(rule.created_at).toLocaleDateString('pt-BR')}</TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="xs"
-                      onClick={() => handleToggleStatus(rule.id, rule.status)}
-                    >
-                      {rule.status === 'ACTIVE' ? 'Desativar' : 'Ativar'}
-                    </Button>
-                  </TableCell>
+          <div className="rounded-lg border border-a1-border bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Enquadrador</TableHead>
+                  <TableHead>Target Object</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Vigência</TableHead>
+                  <TableHead>Criado em</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {items.map((rule) => (
+                  <TableRow key={rule.id}>
+                    <TableCell className="font-medium">{framerName(rule.framer_id)}</TableCell>
+                    <TableCell>{targetName(rule.target_object_id)}</TableCell>
+                    <TableCell>
+                      <StatusBadge status={STATUS_MAP[rule.status]}>{rule.status}</StatusBadge>
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      {new Date(rule.valid_from).toLocaleDateString('pt-BR')}
+                      {rule.valid_until
+                        ? ` — ${new Date(rule.valid_until).toLocaleDateString('pt-BR')}`
+                        : ' — sem fim'}
+                    </TableCell>
+                    <TableCell>{new Date(rule.created_at).toLocaleDateString('pt-BR')}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => handleToggleStatus(rule.id, rule.status)}
+                      >
+                        {rule.status === 'ACTIVE' ? 'Desativar' : 'Ativar'}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </div>
 

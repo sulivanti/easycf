@@ -9,8 +9,9 @@ import { useState, useEffect, startTransition, type FormEvent } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
-import { Label } from '@shared/ui/label';
 import { Skeleton } from '@shared/ui/skeleton';
+import { PageHeader } from '@shared/ui/page-header';
+import { FormField } from '@shared/ui/form-field';
 import { useUser, useCreateUser, useUpdateUser } from '../../hooks/use-users.js';
 
 export function UserFormPage({
@@ -72,94 +73,89 @@ export function UserFormPage({
   if (isEdit && loadingUser) {
     return (
       <div className="max-w-md space-y-4" aria-busy="true">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-8 w-48 bg-a1-border" />
+        <Skeleton className="h-10 w-full bg-a1-border" />
+        <Skeleton className="h-10 w-full bg-a1-border" />
+        <Skeleton className="h-10 w-full bg-a1-border" />
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md space-y-4">
-      <h1 className="text-2xl font-bold tracking-tight">
-        {isEdit ? 'Editar Usuário' : 'Cadastrar Usuário'}
-      </h1>
+    <div className="space-y-6">
+      <PageHeader title={isEdit ? 'Editar Usuário' : 'Cadastrar Usuário'} />
 
-      {error && (
-        <div
-          role="alert"
-          className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
-        >
-          <p>{error.message}</p>
-        </div>
-      )}
-
-      {!isEdit && (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="user-email">E-mail</Label>
-            <Input
-              id="user-email"
-              type="email"
-              required
-              maxLength={255}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-            />
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-md space-y-4 rounded-lg border border-a1-border bg-white p-6"
+      >
+        {error && (
+          <div
+            role="alert"
+            className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
+          >
+            <p>{error.message}</p>
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="user-password">Senha</Label>
-            <Input
-              id="user-password"
-              type="password"
-              required
-              minLength={8}
-              maxLength={128}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
-            />
-          </div>
-        </>
-      )}
-
-      <div className="space-y-2">
-        <Label htmlFor="user-name">Nome completo</Label>
-        <Input
-          id="user-name"
-          type="text"
-          required
-          maxLength={255}
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="user-cpf">CPF/CNPJ</Label>
-        <Input
-          id="user-cpf"
-          type="text"
-          maxLength={20}
-          value={cpfCnpj}
-          onChange={(e) => setCpfCnpj(e.target.value)}
-        />
-      </div>
-
-      <div className="flex gap-2">
-        <Button type="submit" isLoading={submitting}>
-          {isEdit ? 'Salvar' : 'Cadastrar'}
-        </Button>
-        {onCancel && (
-          <Button type="button" variant="ghost" onClick={onCancel}>
-            Cancelar
-          </Button>
         )}
-      </div>
-    </form>
+
+        {!isEdit && (
+          <>
+            <FormField label="E-mail" name="user-email" required>
+              <Input
+                type="email"
+                required
+                maxLength={255}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+              />
+            </FormField>
+
+            <FormField label="Senha" name="user-password" required>
+              <Input
+                type="password"
+                required
+                minLength={8}
+                maxLength={128}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
+              />
+            </FormField>
+          </>
+        )}
+
+        <FormField label="Nome completo" name="user-name" required>
+          <Input
+            type="text"
+            required
+            maxLength={255}
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
+        </FormField>
+
+        <FormField label="CPF/CNPJ" name="user-cpf">
+          <Input
+            type="text"
+            maxLength={20}
+            value={cpfCnpj}
+            onChange={(e) => setCpfCnpj(e.target.value)}
+          />
+        </FormField>
+
+        <div className="flex gap-2">
+          <Button type="submit" isLoading={submitting}>
+            {isEdit ? 'Salvar' : 'Cadastrar'}
+          </Button>
+          {onCancel && (
+            <Button type="button" variant="ghost" onClick={onCancel}>
+              Cancelar
+            </Button>
+          )}
+        </div>
+      </form>
+    </div>
   );
 }
 

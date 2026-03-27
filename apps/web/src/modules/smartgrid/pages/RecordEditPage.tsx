@@ -12,6 +12,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Button } from '@shared/ui/button';
+import { PageHeader } from '@shared/ui/page-header';
 import type { GridColumn, ValidationItem } from '../types/smartgrid.types';
 import { COPY } from '../types/smartgrid.types';
 import { evaluateSingle, mapResponseToEditColumns } from '../api/smartgrid.api';
@@ -136,7 +137,7 @@ export function RecordEditPage({
     return (
       <div className="space-y-3 p-8">
         {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={i} className="h-10 w-full" />
+          <Skeleton key={i} className="h-10 w-full bg-a1-border" />
         ))}
       </div>
     );
@@ -145,7 +146,7 @@ export function RecordEditPage({
   if (screenState === 'error') {
     return (
       <div role="alert" className="p-8 text-center">
-        <p className="text-destructive">{COPY.evaluateRecordError}</p>
+        <p className="text-danger-600">{COPY.evaluateRecordError}</p>
         <Button variant="outline" onClick={onNavigateBack} className="mt-4">
           Voltar
         </Button>
@@ -159,9 +160,8 @@ export function RecordEditPage({
 
   return (
     <div>
-      <div className="border-b border-border px-4 py-3">
-        <h2 className="m-0 text-xl font-semibold">Alterar registro</h2>
-        <span className="text-sm text-muted-foreground">ID: {recordId}</span>
+      <div className="border-b border-a1-border px-4 py-3">
+        <PageHeader title="Alterar registro" description={`ID: ${recordId}`} />
       </div>
 
       <SmartEditForm

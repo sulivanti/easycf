@@ -27,6 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from '@shared/ui';
+import { PageHeader } from '@shared/ui/page-header';
 import { useCallLogsList, useCallLogDetail, useReprocessCall } from '../hooks/use-call-logs.js';
 import { useCallLogMetrics } from '../hooks/use-metrics.js';
 import { canReadLogs, canReprocessDlq } from '../types/permissions.js';
@@ -88,11 +89,16 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
 
   // Permission gate
   if (!canReadLogs(userScopes)) {
-    return <p className="mt-20 text-center text-sm text-muted-foreground">{COPY.no_permission}</p>;
+    return <p className="mt-20 text-center text-sm text-a1-text-auxiliary">{COPY.no_permission}</p>;
   }
 
   return (
     <div className="p-6">
+      <PageHeader
+        title="Monitor de Integrações"
+        description="Acompanhe logs e métricas de integrações Protheus"
+      />
+
       {/* Metrics */}
       <MonitorHeader metrics={metricsQuery.data} isLoading={metricsQuery.isLoading} />
 
@@ -104,7 +110,7 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
           className={`border-b-2 px-5 py-2.5 text-sm transition-colors ${
             activeTab === 'all'
               ? 'border-blue-600 font-semibold text-blue-600'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
+              : 'border-transparent text-a1-text-auxiliary hover:text-foreground'
           }`}
         >
           Todos os logs
@@ -115,7 +121,7 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
           className={`flex items-center gap-2 border-b-2 px-5 py-2.5 text-sm transition-colors ${
             activeTab === 'dlq'
               ? 'border-red-600 font-semibold text-red-600'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
+              : 'border-transparent text-a1-text-auxiliary hover:text-foreground'
           }`}
         >
           DLQ
@@ -169,85 +175,87 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
           {logsQuery.isLoading && (
             <div className="space-y-2">
               {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-10 rounded" />
+                <Skeleton key={i} className="h-10 rounded bg-a1-border" />
               ))}
             </div>
           )}
 
           {!logsQuery.isLoading && logs.length === 0 && (
-            <p className="py-8 text-center text-sm text-muted-foreground">
+            <p className="py-8 text-center text-sm text-a1-text-auxiliary">
               {activeTab === 'dlq' ? COPY.empty_dlq : COPY.no_logs}
             </p>
           )}
 
           {logs.length > 0 && (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Rotina</TableHead>
-                  <TableHead>Correlation ID</TableHead>
-                  <TableHead className="text-center">#</TableHead>
-                  <TableHead className="text-right">HTTP</TableHead>
-                  <TableHead className="text-right">Duração</TableHead>
-                  <TableHead>Enfileirado</TableHead>
-                  {activeTab === 'dlq' && <TableHead className="text-right">Ações</TableHead>}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {logs.map((log) => (
-                  <TableRow
-                    key={log.id}
-                    className={`cursor-pointer ${selectedLogId === log.id ? 'bg-accent' : ''}`}
-                    onClick={() => setSelectedLogId(log.id)}
-                  >
-                    <TableCell>
-                      <Badge className={STATUS_BADGE[log.status]}>{log.status}</Badge>
-                    </TableCell>
-                    <TableCell className="text-sm">
-                      {log.routine_name ?? '—'}
-                      {log.routine_version != null && (
-                        <span className="ml-1 text-xs text-muted-foreground">
-                          v{log.routine_version}
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell className="font-mono text-xs">
-                      {log.correlation_id.slice(0, 12)}...
-                    </TableCell>
-                    <TableCell className="text-center text-sm">
-                      {log.attempt_number}/{log.retry_max}
-                    </TableCell>
-                    <TableCell
-                      className={`text-right text-sm ${httpStatusClass(log.response_status)}`}
-                    >
-                      {log.response_status ?? '—'}
-                    </TableCell>
-                    <TableCell className="text-right text-sm">
-                      {log.duration_ms != null ? `${log.duration_ms}ms` : '—'}
-                    </TableCell>
-                    <TableCell className="text-xs text-muted-foreground">
-                      {relativeTime(log.queued_at)}
-                    </TableCell>
-                    {activeTab === 'dlq' && canReprocessDlq(userScopes) && (
-                      <TableCell className="text-right">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="text-amber-600"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setReprocessLogId(log.id);
-                          }}
-                        >
-                          Reprocessar
-                        </Button>
-                      </TableCell>
-                    )}
+            <div className="rounded-lg border border-a1-border bg-white">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Rotina</TableHead>
+                    <TableHead>Correlation ID</TableHead>
+                    <TableHead className="text-center">#</TableHead>
+                    <TableHead className="text-right">HTTP</TableHead>
+                    <TableHead className="text-right">Duração</TableHead>
+                    <TableHead>Enfileirado</TableHead>
+                    {activeTab === 'dlq' && <TableHead className="text-right">Ações</TableHead>}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {logs.map((log) => (
+                    <TableRow
+                      key={log.id}
+                      className={`cursor-pointer ${selectedLogId === log.id ? 'bg-accent' : ''}`}
+                      onClick={() => setSelectedLogId(log.id)}
+                    >
+                      <TableCell>
+                        <Badge className={STATUS_BADGE[log.status]}>{log.status}</Badge>
+                      </TableCell>
+                      <TableCell className="text-sm">
+                        {log.routine_name ?? '—'}
+                        {log.routine_version != null && (
+                          <span className="ml-1 text-xs text-a1-text-auxiliary">
+                            v{log.routine_version}
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell className="font-mono text-xs">
+                        {log.correlation_id.slice(0, 12)}...
+                      </TableCell>
+                      <TableCell className="text-center text-sm">
+                        {log.attempt_number}/{log.retry_max}
+                      </TableCell>
+                      <TableCell
+                        className={`text-right text-sm ${httpStatusClass(log.response_status)}`}
+                      >
+                        {log.response_status ?? '—'}
+                      </TableCell>
+                      <TableCell className="text-right text-sm">
+                        {log.duration_ms != null ? `${log.duration_ms}ms` : '—'}
+                      </TableCell>
+                      <TableCell className="text-xs text-a1-text-auxiliary">
+                        {relativeTime(log.queued_at)}
+                      </TableCell>
+                      {activeTab === 'dlq' && canReprocessDlq(userScopes) && (
+                        <TableCell className="text-right">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-amber-600"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setReprocessLogId(log.id);
+                            }}
+                          >
+                            Reprocessar
+                          </Button>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
 
           {hasMore && (

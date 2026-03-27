@@ -39,14 +39,22 @@ function DataViewWrapper() {
         navigate({
           to: '/dados/$modulo/$rotina/$id',
           params: { modulo, rotina, id: recordId },
-          search: { framerId: resolvedFramerId, objectType: resolvedObjectType, targetEndpoint: resolvedEndpoint },
+          search: {
+            framerId: resolvedFramerId,
+            objectType: resolvedObjectType,
+            targetEndpoint: resolvedEndpoint,
+          },
         })
       }
       onNavigateToBulkInsert={() =>
         navigate({
           to: '/dados/$modulo/$rotina/inclusao-em-massa',
           params: { modulo, rotina },
-          search: { framerId: resolvedFramerId, objectType: resolvedObjectType, targetEndpoint: resolvedEndpoint },
+          search: {
+            framerId: resolvedFramerId,
+            objectType: resolvedObjectType,
+            targetEndpoint: resolvedEndpoint,
+          },
         })
       }
       onNavigateToBulkDelete={(records) => {
@@ -55,7 +63,11 @@ function DataViewWrapper() {
         navigate({
           to: '/dados/$modulo/$rotina/exclusao-em-massa',
           params: { modulo, rotina },
-          search: { framerId: resolvedFramerId, objectType: resolvedObjectType, targetEndpoint: resolvedEndpoint },
+          search: {
+            framerId: resolvedFramerId,
+            objectType: resolvedObjectType,
+            targetEndpoint: resolvedEndpoint,
+          },
         });
       }}
     />

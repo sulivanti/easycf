@@ -12,14 +12,13 @@ import { Label } from '@shared/ui/label';
 import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
+import { EmptyState } from '@shared/ui/empty-state';
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@shared/ui/dialog';
-import { useTargetObjects, useTargetFields, useCreateTargetField } from '../hooks/use-target-objects.js';
+  useTargetObjects,
+  useTargetFields,
+  useCreateTargetField,
+} from '../hooks/use-target-objects.js';
 import type { FieldType } from '../types/contextual-params.types.js';
 
 const FIELD_TYPES: FieldType[] = ['TEXT', 'NUMBER', 'DATE', 'SELECT', 'BOOLEAN', 'FILE'];
@@ -47,7 +46,7 @@ export function TargetObjectsPage() {
         {isError && (
           <div
             role="alert"
-            className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+            className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
           >
             <p>{(error as Error)?.message ?? 'Erro ao carregar dados.'}</p>
           </div>
@@ -56,50 +55,50 @@ export function TargetObjectsPage() {
         {isLoading ? (
           <div className="space-y-2" aria-busy="true">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
+              <Skeleton key={i} className="h-12 w-full bg-a1-border" />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-md border border-dashed p-8 text-center">
-            <p className="text-sm text-muted-foreground">Nenhum target object encontrado.</p>
-          </div>
+          <EmptyState title="Nenhum target object" description="Nenhum target object encontrado." />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Código</TableHead>
-                <TableHead>Nome</TableHead>
-                <TableHead>Módulo ECF</TableHead>
-                <TableHead>Criado em</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium font-mono text-xs">{item.codigo}</TableCell>
-                  <TableCell>{item.nome}</TableCell>
-                  <TableCell>
-                    {item.modulo_ecf ? (
-                      <Badge variant="secondary">{item.modulo_ecf}</Badge>
-                    ) : (
-                      <span className="text-muted-foreground">—</span>
-                    )}
-                  </TableCell>
-                  <TableCell>{new Date(item.created_at).toLocaleDateString('pt-BR')}</TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="xs"
-                      onClick={() => setSelectedObjectId(item.id)}
-                    >
-                      Campos
-                    </Button>
-                  </TableCell>
+          <div className="rounded-lg border border-a1-border bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Módulo ECF</TableHead>
+                  <TableHead>Criado em</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {items.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="font-medium font-mono text-xs">{item.codigo}</TableCell>
+                    <TableCell>{item.nome}</TableCell>
+                    <TableCell>
+                      {item.modulo_ecf ? (
+                        <Badge variant="secondary">{item.modulo_ecf}</Badge>
+                      ) : (
+                        <span className="text-a1-text-auxiliary">—</span>
+                      )}
+                    </TableCell>
+                    <TableCell>{new Date(item.created_at).toLocaleDateString('pt-BR')}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => setSelectedObjectId(item.id)}
+                      >
+                        Campos
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </div>
 
@@ -166,11 +165,11 @@ function FieldsPanel({
           {isLoading ? (
             <div className="space-y-2">
               {Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton key={i} className="h-8 w-full" />
+                <Skeleton key={i} className="h-8 w-full bg-a1-border" />
               ))}
             </div>
           ) : fieldItems.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Nenhum campo cadastrado.</p>
+            <p className="text-sm text-a1-text-auxiliary">Nenhum campo cadastrado.</p>
           ) : (
             <Table>
               <TableHeader>

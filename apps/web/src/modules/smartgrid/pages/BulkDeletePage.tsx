@@ -10,6 +10,7 @@ import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import type { DeleteValidationResult, DeleteBatchResult } from '../types/smartgrid.types';
 import { COPY } from '../types/smartgrid.types';
+import { PageHeader } from '@shared/ui/page-header';
 import { useValidateForDelete, useDeleteBatch } from '../hooks/use-delete';
 import { SelectionList } from '../components/SelectionList';
 import { DeleteConfirmationPanel } from '../components/DeleteConfirmationPanel';
@@ -102,11 +103,11 @@ export function BulkDeletePage({
 
   return (
     <div>
-      <div className="border-b border-border px-4 py-3">
-        <h2 className="m-0 text-xl font-semibold">Exclusão em massa</h2>
-        <span className="text-sm text-muted-foreground">
-          {records.length} registros selecionados
-        </span>
+      <div className="border-b border-a1-border px-4 py-3">
+        <PageHeader
+          title="Exclusão em massa"
+          description={`${records.length} registros selecionados`}
+        />
       </div>
 
       {phase === 'selection' && (

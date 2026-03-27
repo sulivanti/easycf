@@ -60,10 +60,14 @@ export function ProfileWidget({ user, isLoading, variant = 'light' }: Props) {
             className={`gap-2.5 px-2 ${isDark ? 'hover:bg-white/10' : ''}`}
           >
             <div className="flex flex-col items-end gap-px">
-              <span className={`font-display text-xs font-medium ${isDark ? 'text-white' : 'text-foreground'}`}>
+              <span
+                className={`font-display text-xs font-medium ${isDark ? 'text-white' : 'text-foreground'}`}
+              >
                 {user.name}
               </span>
-              <span className={`font-display text-[10px] ${isDark ? 'text-[#444444]' : 'text-muted-foreground'}`}>
+              <span
+                className={`font-display text-[10px] ${isDark ? 'text-[#444444]' : 'text-muted-foreground'}`}
+              >
                 {user.tenant.name}
               </span>
             </div>

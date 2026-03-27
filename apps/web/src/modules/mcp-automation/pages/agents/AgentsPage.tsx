@@ -33,6 +33,8 @@ import {
   DrawerClose,
   Spinner,
 } from '@shared/ui';
+import { EmptyState } from '@shared/ui/empty-state';
+import { StatusBadge } from '@shared/ui/status-badge';
 import {
   useAgentList,
   useCreateAgent,
@@ -158,77 +160,90 @@ function AgentsTab() {
         <Button onClick={() => setDrawerOpen(true)}>Novo Agente</Button>
       </div>
 
-      {error && <p className="text-sm text-destructive">{(error as Error).message}</p>}
+      {error && <p className="text-sm text-danger-600">{(error as Error).message}</p>}
 
       {isLoading ? (
         <TableSkeleton rows={5} cols={6} />
       ) : data && data.data.length > 0 ? (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Codigo</TableHead>
-              <TableHead>Nome</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Phase 2</TableHead>
-              <TableHead>Ultimo uso</TableHead>
-              <TableHead className="text-right">Acoes</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.data.map((agent) => {
-              const isRevoked = agent.status === 'REVOKED';
-              return (
-                <TableRow key={agent.id} className={isRevoked ? 'opacity-60' : ''}>
-                  <TableCell className="font-mono text-sm">{agent.codigo}</TableCell>
-                  <TableCell>{agent.nome}</TableCell>
-                  <TableCell>
-                    <Badge variant={STATUS_VARIANT[agent.status]}>
-                      {STATUS_LABEL[agent.status]}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{agent.phase2_create_enabled ? 'Sim' : 'Nao'}</TableCell>
-                  <TableCell>
-                    {agent.last_used_at
-                      ? new Date(agent.last_used_at).toLocaleDateString('pt-BR')
-                      : '\u2014'}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {!isRevoked && (
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleRotateKey(agent)}
-                          disabled={rotateMutation.isPending}
-                        >
-                          {rotateMutation.isPending ? (
-                            <Spinner className="h-3 w-3" />
-                          ) : (
-                            'Rodar Chave'
-                          )}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => setRevokeTarget(agent)}
-                        >
-                          Revogar
-                        </Button>
-                      </div>
-                    )}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      ) : (
-        <div className="flex flex-col items-center gap-2 py-12 text-muted-foreground">
-          <p>Nenhum agente cadastrado. Crie o primeiro agente MCP.</p>
-          <Button variant="outline" onClick={() => setDrawerOpen(true)}>
-            Criar Agente
-          </Button>
+        <div className="rounded-lg border border-a1-border bg-white">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Codigo</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Phase 2</TableHead>
+                <TableHead>Ultimo uso</TableHead>
+                <TableHead className="text-right">Acoes</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.data.map((agent) => {
+                const isRevoked = agent.status === 'REVOKED';
+                return (
+                  <TableRow key={agent.id} className={isRevoked ? 'opacity-60' : ''}>
+                    <TableCell className="font-mono text-sm">{agent.codigo}</TableCell>
+                    <TableCell>{agent.nome}</TableCell>
+                    <TableCell>
+                      <StatusBadge
+                        status={
+                          agent.status === 'ACTIVE'
+                            ? 'success'
+                            : agent.status === 'REVOKED'
+                              ? 'error'
+                              : 'neutral'
+                        }
+                      >
+                        {STATUS_LABEL[agent.status]}
+                      </StatusBadge>
+                    </TableCell>
+                    <TableCell>{agent.phase2_create_enabled ? 'Sim' : 'Nao'}</TableCell>
+                    <TableCell>
+                      {agent.last_used_at
+                        ? new Date(agent.last_used_at).toLocaleDateString('pt-BR')
+                        : '\u2014'}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {!isRevoked && (
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleRotateKey(agent)}
+                            disabled={rotateMutation.isPending}
+                          >
+                            {rotateMutation.isPending ? (
+                              <Spinner className="h-3 w-3" />
+                            ) : (
+                              'Rodar Chave'
+                            )}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => setRevokeTarget(agent)}
+                          >
+                            Revogar
+                          </Button>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
         </div>
+      ) : (
+        <EmptyState
+          title="Nenhum agente cadastrado"
+          description="Crie o primeiro agente MCP."
+          action={
+            <Button variant="outline" onClick={() => setDrawerOpen(true)}>
+              Criar Agente
+            </Button>
+          }
+        />
       )}
 
       <CreateAgentDrawer
@@ -362,13 +377,13 @@ function CreateAgentDrawer({
                 </Badge>
               ))}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-a1-text-auxiliary">
               Escopos de aprovacao (approval:decide, approval:override) sao bloqueados pelo backend.
             </p>
           </div>
 
           {createMutation.error && (
-            <p className="text-sm text-destructive">{(createMutation.error as Error).message}</p>
+            <p className="text-sm text-danger-600">{(createMutation.error as Error).message}</p>
           )}
 
           <DrawerFooter className="px-0">
@@ -421,46 +436,51 @@ function ActionsTab() {
         <Button onClick={() => setDrawerOpen(true)}>Nova Acao</Button>
       </div>
 
-      {error && <p className="text-sm text-destructive">{(error as Error).message}</p>}
+      {error && <p className="text-sm text-danger-600">{(error as Error).message}</p>}
 
       {isLoading ? (
         <TableSkeleton rows={5} cols={6} />
       ) : data && data.data.length > 0 ? (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Codigo</TableHead>
-              <TableHead>Nome</TableHead>
-              <TableHead>Politica</TableHead>
-              <TableHead>Objeto Alvo</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Criado em</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.data.map((action) => (
-              <TableRow key={action.id}>
-                <TableCell className="font-mono text-sm">{action.codigo}</TableCell>
-                <TableCell>{action.nome}</TableCell>
-                <TableCell>
-                  <Badge variant={POLICY_VARIANT[action.execution_policy]}>
-                    {action.execution_policy}
-                  </Badge>
-                </TableCell>
-                <TableCell>{action.target_object_type}</TableCell>
-                <TableCell>{action.status}</TableCell>
-                <TableCell>{new Date(action.created_at).toLocaleDateString('pt-BR')}</TableCell>
+        <div className="rounded-lg border border-a1-border bg-white">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Codigo</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Politica</TableHead>
+                <TableHead>Objeto Alvo</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Criado em</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      ) : (
-        <div className="flex flex-col items-center gap-2 py-12 text-muted-foreground">
-          <p>Nenhuma acao cadastrada. Crie a primeira acao MCP.</p>
-          <Button variant="outline" onClick={() => setDrawerOpen(true)}>
-            Criar Acao
-          </Button>
+            </TableHeader>
+            <TableBody>
+              {data.data.map((action) => (
+                <TableRow key={action.id}>
+                  <TableCell className="font-mono text-sm">{action.codigo}</TableCell>
+                  <TableCell>{action.nome}</TableCell>
+                  <TableCell>
+                    <Badge variant={POLICY_VARIANT[action.execution_policy]}>
+                      {action.execution_policy}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{action.target_object_type}</TableCell>
+                  <TableCell>{action.status}</TableCell>
+                  <TableCell>{new Date(action.created_at).toLocaleDateString('pt-BR')}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
+      ) : (
+        <EmptyState
+          title="Nenhuma ação cadastrada"
+          description="Crie a primeira ação MCP."
+          action={
+            <Button variant="outline" onClick={() => setDrawerOpen(true)}>
+              Criar Ação
+            </Button>
+          }
+        />
       )}
 
       <CreateActionDrawer
@@ -632,7 +652,7 @@ function CreateActionDrawer({
           </div>
 
           {createMutation.error && (
-            <p className="text-sm text-destructive">{(createMutation.error as Error).message}</p>
+            <p className="text-sm text-danger-600">{(createMutation.error as Error).message}</p>
           )}
 
           <DrawerFooter className="px-0">
@@ -704,14 +724,15 @@ function MatrixTab() {
 
   if (agents.length === 0 || actions.length === 0) {
     return (
-      <div className="py-12 text-center text-muted-foreground">
-        Cadastre agentes e acoes para gerenciar permissoes.
-      </div>
+      <EmptyState
+        title="Nenhuma permissão disponível"
+        description="Cadastre agentes e ações para gerenciar permissões."
+      />
     );
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-lg border border-a1-border bg-white">
       <Table>
         <TableHeader>
           <TableRow>
@@ -762,7 +783,7 @@ function TableSkeleton({ rows, cols }: { rows: number; cols: number }) {
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className="flex gap-4">
           {Array.from({ length: cols }).map((_, j) => (
-            <Skeleton key={j} className="h-8 flex-1" />
+            <Skeleton key={j} className="h-8 flex-1 bg-a1-border" />
           ))}
         </div>
       ))}

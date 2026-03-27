@@ -49,7 +49,13 @@ function getAvatarColor(name: string): string {
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
-export function ProfileAvatar({ name, avatarUrl, size = 'md', className, useA1Color }: ProfileAvatarProps) {
+export function ProfileAvatar({
+  name,
+  avatarUrl,
+  size = 'md',
+  className,
+  useA1Color,
+}: ProfileAvatarProps) {
   const [imgError, setImgError] = useState(false);
   const sizeClass = SIZE_CLASSES[size];
 

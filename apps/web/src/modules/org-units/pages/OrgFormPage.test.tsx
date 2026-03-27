@@ -3,6 +3,7 @@
  * Prevents: Incident #4 (silent failure on API errors).
  */
 
+/// <reference types="@testing-library/jest-dom" />
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -35,14 +36,24 @@ const { mockToast, mockCreateMutate, mockCreateMutation, mockUpdateMutate, mockU
     };
     const mockUpdateMutate = vi.fn();
     const mockUpdateMutation = { ...mockCreateMutation, mutate: mockUpdateMutate };
-    return { mockToast, mockCreateMutate, mockCreateMutation, mockUpdateMutate, mockUpdateMutation };
+    return {
+      mockToast,
+      mockCreateMutate,
+      mockCreateMutation,
+      mockUpdateMutate,
+      mockUpdateMutation,
+    };
   });
 
 vi.mock('sonner', () => ({ toast: mockToast }));
 vi.mock('../hooks/use-create-org-unit.js', () => ({ useCreateOrgUnit: () => mockCreateMutation }));
 vi.mock('../hooks/use-org-unit-actions.js', () => ({ useUpdateOrgUnit: () => mockUpdateMutation }));
-vi.mock('../hooks/use-org-unit-detail.js', () => ({ useOrgUnitDetail: () => ({ data: null, isLoading: false }) }));
-vi.mock('../hooks/use-org-units-list.js', () => ({ useOrgUnitsList: () => ({ data: { data: [] }, isLoading: false }) }));
+vi.mock('../hooks/use-org-unit-detail.js', () => ({
+  useOrgUnitDetail: () => ({ data: null, isLoading: false }),
+}));
+vi.mock('../hooks/use-org-units-list.js', () => ({
+  useOrgUnitsList: () => ({ data: { data: [] }, isLoading: false }),
+}));
 
 // ApiError — must be hoisted too for instanceof checks
 const { MockApiError } = vi.hoisted(() => {
@@ -128,9 +139,14 @@ describe('OrgFormPage — create mode', () => {
     const onSuccess = vi.fn();
 
     // Configure mutate to immediately call onSuccess callback
-    mockCreateMutate.mockImplementation((_data: unknown, options: { onSuccess: (result: { id: string; codigo: string; nome: string }) => void }) => {
-      options.onSuccess({ id: 'ou-new', codigo: 'TEST01', nome: 'Test Unit' });
-    });
+    mockCreateMutate.mockImplementation(
+      (
+        _data: unknown,
+        options: { onSuccess: (result: { id: string; codigo: string; nome: string }) => void },
+      ) => {
+        options.onSuccess({ id: 'ou-new', codigo: 'TEST01', nome: 'Test Unit' });
+      },
+    );
 
     const user = userEvent.setup();
     renderPage({ onSuccess });

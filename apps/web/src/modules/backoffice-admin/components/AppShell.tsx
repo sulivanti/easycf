@@ -238,7 +238,10 @@ function Breadcrumb({ currentPath }: { currentPath: string }) {
           {crumb.isLast ? (
             <span className="font-semibold text-white">{crumb.label}</span>
           ) : (
-            <Link to={crumb.path} className="text-a1-text-tertiary transition-colors hover:text-white">
+            <Link
+              to={crumb.path}
+              className="text-a1-text-tertiary transition-colors hover:text-white"
+            >
               {crumb.label}
             </Link>
           )}
@@ -297,9 +300,7 @@ export function AppShell({ children }: Props) {
               <span className="font-display text-[13px] font-bold tracking-[-0.2px] text-white">
                 Grupo A1
               </span>
-              <span className="font-display text-[10px] text-[#444444]">
-                Portal Interno
-              </span>
+              <span className="font-display text-[10px] text-[#444444]">Portal Interno</span>
             </div>
           </Link>
         </div>

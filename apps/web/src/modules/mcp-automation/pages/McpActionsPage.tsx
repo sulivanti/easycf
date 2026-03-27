@@ -15,13 +15,9 @@ import { Label } from '@shared/ui/label';
 import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@shared/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
+import { EmptyState } from '@shared/ui/empty-state';
+import { StatusBadge } from '@shared/ui/status-badge';
 import { useActionList, useCreateAction } from '../hooks/use-actions.js';
 import type {
   ExecutionPolicy,
@@ -45,7 +41,12 @@ const POLICIES: ExecutionPolicy[] = ['DIRECT', 'CONTROLLED', 'EVENT_ONLY'];
 export function McpActionsPage() {
   const [policyFilter, setPolicyFilter] = useState<ExecutionPolicy | undefined>();
   const [statusFilter, setStatusFilter] = useState<ActionStatus | undefined>();
-  const { data: actions, isLoading, isError, error } = useActionList({
+  const {
+    data: actions,
+    isLoading,
+    isError,
+    error,
+  } = useActionList({
     execution_policy: policyFilter,
     status: statusFilter,
   });
@@ -111,7 +112,7 @@ export function McpActionsPage() {
         {isError && (
           <div
             role="alert"
-            className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+            className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
           >
             <p>{(error as Error)?.message ?? 'Erro ao carregar dados.'}</p>
           </div>
@@ -120,46 +121,49 @@ export function McpActionsPage() {
         {isLoading ? (
           <div className="space-y-2" aria-busy="true">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
+              <Skeleton key={i} className="h-12 w-full bg-a1-border" />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-md border border-dashed p-8 text-center">
-            <p className="text-sm text-muted-foreground">Nenhuma ação MCP encontrada.</p>
-          </div>
+          <EmptyState
+            title="Nenhuma ação MCP encontrada"
+            description="Crie uma nova ação para começar."
+          />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Código</TableHead>
-                <TableHead>Nome</TableHead>
-                <TableHead>Política</TableHead>
-                <TableHead>Objeto Alvo</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Criado em</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {items.map((action) => (
-                <TableRow key={action.id}>
-                  <TableCell className="font-medium font-mono text-xs">{action.codigo}</TableCell>
-                  <TableCell>{action.nome}</TableCell>
-                  <TableCell>
-                    <Badge variant={POLICY_VARIANT[action.execution_policy]}>
-                      {action.execution_policy}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-xs">{action.target_object_type}</TableCell>
-                  <TableCell>
-                    <Badge variant={STATUS_VARIANT[action.status]}>{action.status}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    {new Date(action.created_at).toLocaleDateString('pt-BR')}
-                  </TableCell>
+          <div className="rounded-lg border border-a1-border bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Política</TableHead>
+                  <TableHead>Objeto Alvo</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Criado em</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {items.map((action) => (
+                  <TableRow key={action.id}>
+                    <TableCell className="font-medium font-mono text-xs">{action.codigo}</TableCell>
+                    <TableCell>{action.nome}</TableCell>
+                    <TableCell>
+                      <Badge variant={POLICY_VARIANT[action.execution_policy]}>
+                        {action.execution_policy}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-xs">{action.target_object_type}</TableCell>
+                    <TableCell>
+                      <StatusBadge status={action.status === 'ACTIVE' ? 'success' : 'neutral'}>
+                        {action.status === 'ACTIVE' ? 'Ativo' : 'Inativo'}
+                      </StatusBadge>
+                    </TableCell>
+                    <TableCell>{new Date(action.created_at).toLocaleDateString('pt-BR')}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </div>
 

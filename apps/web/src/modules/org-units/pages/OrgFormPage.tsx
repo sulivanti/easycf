@@ -13,6 +13,7 @@ import { Button } from '@shared/ui/button.js';
 import { Input } from '@shared/ui/input.js';
 import { Label } from '@shared/ui/label.js';
 import { Spinner } from '@shared/ui/spinner.js';
+import { PageHeader } from '@shared/ui/page-header';
 import { toast } from 'sonner';
 import { useOrgUnitDetail } from '../hooks/use-org-unit-detail.js';
 import { useOrgUnitsList } from '../hooks/use-org-units-list.js';
@@ -154,27 +155,29 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
     return (
       <div className="p-6 flex items-center gap-2">
         <Spinner className="h-4 w-4" />
-        <span className="text-sm text-muted-foreground">Carregando...</span>
+        <span className="text-sm text-a1-text-auxiliary">Carregando...</span>
       </div>
     );
   }
 
   return (
     <div className="p-6 max-w-lg">
-      <h1 className="text-xl font-semibold mb-2">
-        {mode === 'create' ? 'Criar Unidade Organizacional' : `Editar — ${formVM?.codigo ?? ''}`}
-      </h1>
+      <PageHeader
+        title={
+          mode === 'create' ? 'Criar Unidade Organizacional' : `Editar — ${formVM?.codigo ?? ''}`
+        }
+      />
 
       {/* Level indicator */}
       {derivedLevel && (
-        <p className="text-sm text-muted-foreground mb-4">
+        <p className="text-sm text-a1-text-auxiliary mb-4">
           {getLevelInfo(derivedLevel).shortLabel} — {getLevelInfo(derivedLevel).label}
         </p>
       )}
 
       {/* Breadcrumb (edit mode) */}
       {mode === 'edit' && formVM && formVM.breadcrumb.length > 0 && (
-        <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-4">
+        <nav aria-label="Breadcrumb" className="text-sm text-a1-text-auxiliary mb-4">
           {formVM.breadcrumb.map((a, i) => (
             <span key={a.id}>
               {i > 0 && ' → '}
@@ -188,7 +191,7 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Form-level error */}
         {fieldErrors._form && (
-          <div role="alert" className="text-sm text-destructive">
+          <div role="alert" className="text-sm text-danger-600">
             {fieldErrors._form}
           </div>
         )}
@@ -209,7 +212,7 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
                 aria-errormessage={fieldErrors.codigo ? 'codigo-error' : undefined}
                 aria-describedby="codigo-hint"
               />
-              <p id="codigo-hint" className="text-xs text-muted-foreground">
+              <p id="codigo-hint" className="text-xs text-a1-text-auxiliary">
                 O código não pode ser alterado após a criação.
               </p>
             </>
@@ -224,7 +227,7 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
             />
           )}
           {fieldErrors.codigo && (
-            <p id="codigo-error" role="alert" className="text-sm text-destructive">
+            <p id="codigo-error" role="alert" className="text-sm text-danger-600">
               {fieldErrors.codigo}
             </p>
           )}
@@ -252,7 +255,7 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
             onChange={(e) => setDescricao(e.target.value)}
             maxLength={2000}
             rows={3}
-            className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-a1-text-auxiliary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>
 

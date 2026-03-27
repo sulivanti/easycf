@@ -114,7 +114,9 @@ function ModuleShortcuts({ cards }: { cards: ShortcutCard[] }) {
               <ChevronRight className="size-4 stroke-a1-text-placeholder transition-colors group-hover:stroke-a1-text-auxiliary" />
             </div>
             <div className="flex flex-col gap-1">
-              <div className="font-display text-[15px] font-bold text-a1-text-primary">{card.label}</div>
+              <div className="font-display text-[15px] font-bold text-a1-text-primary">
+                {card.label}
+              </div>
               <div className="font-display text-xs text-a1-text-hint">{card.description}</div>
             </div>
           </Link>

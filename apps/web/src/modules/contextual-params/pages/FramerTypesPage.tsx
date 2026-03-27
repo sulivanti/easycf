@@ -11,13 +11,8 @@ import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@shared/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
+import { EmptyState } from '@shared/ui/empty-state';
 import { useFramerTypes, useCreateFramerType } from '../hooks/use-framers.js';
 
 export function FramerTypesPage() {
@@ -72,7 +67,7 @@ export function FramerTypesPage() {
         {isError && (
           <div
             role="alert"
-            className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+            className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
           >
             <p>{(error as Error)?.message ?? 'Erro ao carregar dados.'}</p>
           </div>
@@ -81,34 +76,35 @@ export function FramerTypesPage() {
         {isLoading ? (
           <div className="space-y-2" aria-busy="true">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
+              <Skeleton key={i} className="h-12 w-full bg-a1-border" />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-md border border-dashed p-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              Nenhum tipo cadastrado. Crie o primeiro.
-            </p>
-          </div>
+          <EmptyState
+            title="Nenhum tipo cadastrado"
+            description="Nenhum tipo cadastrado. Crie o primeiro."
+          />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Código</TableHead>
-                <TableHead>Nome</TableHead>
-                <TableHead>Criado em</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium font-mono text-xs">{item.codigo}</TableCell>
-                  <TableCell>{item.nome}</TableCell>
-                  <TableCell>{new Date(item.created_at).toLocaleDateString('pt-BR')}</TableCell>
+          <div className="rounded-lg border border-a1-border bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Criado em</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {items.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="font-medium font-mono text-xs">{item.codigo}</TableCell>
+                    <TableCell>{item.nome}</TableCell>
+                    <TableCell>{new Date(item.created_at).toLocaleDateString('pt-BR')}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </div>
 

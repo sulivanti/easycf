@@ -24,16 +24,42 @@ type Panel = 'login' | 'mfa' | 'forgot-password' | 'reset-password';
 
 function EnvelopeIcon({ className = 'shrink-0' }: { className?: string }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#AAAAAA" strokeWidth="1.5" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="#AAAAAA"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
       <rect x="2" y="3" width="12" height="10" rx="2" />
       <path d="M2 5.5l6 3.5 6-3.5" />
     </svg>
   );
 }
 
-function LockIcon({ color = '#AAAAAA', className = 'shrink-0' }: { color?: string; className?: string }) {
+function LockIcon({
+  color = '#AAAAAA',
+  className = 'shrink-0',
+}: {
+  color?: string;
+  className?: string;
+}) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
       <rect x="3" y="7" width="10" height="7" rx="2" />
       <path d="M5 7V5a3 3 0 0 1 6 0v2" />
     </svg>
@@ -42,7 +68,17 @@ function LockIcon({ color = '#AAAAAA', className = 'shrink-0' }: { color?: strin
 
 function EyeIcon({ className = 'shrink-0' }: { className?: string }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#AAAAAA" strokeWidth="1.5" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="#AAAAAA"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
       <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" />
       <circle cx="8" cy="8" r="2" />
     </svg>
@@ -51,7 +87,17 @@ function EyeIcon({ className = 'shrink-0' }: { className?: string }) {
 
 function EyeOffIcon({ className = 'shrink-0' }: { className?: string }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#AAAAAA" strokeWidth="1.5" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="#AAAAAA"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
       <path d="M1 8s2.5-5 7-5c1.4 0 2.6.4 3.6 1M15 8s-2.5 5-7 5c-1.4 0-2.6-.4-3.6-1" />
       <path d="M2 2l12 12" />
     </svg>
@@ -60,7 +106,17 @@ function EyeOffIcon({ className = 'shrink-0' }: { className?: string }) {
 
 function ArrowRightIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="#FFFFFF"
+      strokeWidth="2"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className="shrink-0"
+    >
       <path d="M3 8h10M9 4l4 4-4 4" />
     </svg>
   );
@@ -68,7 +124,17 @@ function ArrowRightIcon() {
 
 function ShieldIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#AAAAAA" strokeWidth="1.4" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="#AAAAAA"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className="shrink-0"
+    >
       <path d="M7 1L2 3.5v4C2 10 4.5 12.5 7 13c2.5-.5 5-3 5-5.5v-4L7 1z" />
     </svg>
   );
@@ -76,7 +142,17 @@ function ShieldIcon() {
 
 function HelpIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#AAAAAA" strokeWidth="1.4" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="#AAAAAA"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className="shrink-0"
+    >
       <circle cx="7" cy="7" r="5" />
       <path d="M7 5.5a1.5 1.5 0 0 1 0 3M7 10h.01" />
     </svg>
@@ -85,7 +161,17 @@ function HelpIcon() {
 
 function ShieldCodeIcon({ className = 'shrink-0' }: { className?: string }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#AAAAAA" strokeWidth="1.5" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="#AAAAAA"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
       <path d="M8 1L3 3.5v4C3 10 5.5 13 8 14c2.5-1 5-4 5-6.5v-4L8 1z" />
       <path d="M6.5 7l1.5 1.5L11 6" />
     </svg>
@@ -94,7 +180,17 @@ function ShieldCodeIcon({ className = 'shrink-0' }: { className?: string }) {
 
 function KeyIcon({ className = 'shrink-0' }: { className?: string }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#AAAAAA" strokeWidth="1.5" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="#AAAAAA"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
       <circle cx="5.5" cy="10.5" r="3" />
       <path d="M8 8l5-5M11 3l2 2" />
     </svg>
@@ -105,9 +201,24 @@ function KeyIcon({ className = 'shrink-0' }: { className?: string }) {
 
 function A1Logo() {
   return (
-    <div className="flex items-center justify-center shrink-0 rounded-[7px] bg-[#F58C32] size-9">
-      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
-        <text x="0" y="15" fontFamily="Arial" fontSize="16" fontWeight="900" fontStyle="italic" fill="#FFFFFF">
+    <div className="flex items-center justify-center shrink-0 rounded-[7px] bg-a1-accent size-9">
+      <svg
+        width="22"
+        height="16"
+        viewBox="0 0 22 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="shrink-0"
+      >
+        <text
+          x="0"
+          y="15"
+          fontFamily="Arial"
+          fontSize="16"
+          fontWeight="900"
+          fontStyle="italic"
+          fill="#FFFFFF"
+        >
           <tspan>A</tspan>
           <tspan fill="#111111">1</tspan>
         </text>
@@ -150,7 +261,9 @@ function StyledInput({
   rightElement?: React.ReactNode;
 }) {
   return (
-    <div className={`flex items-center h-12 rounded-lg px-3.5 gap-2.5 bg-[#F5F5F3] [border-width:1.5px] border-solid ${isFocused ? 'border-[#F58C32]' : 'border-[#E8E8E6]'} transition-colors focus-within:border-[#F58C32]`}>
+    <div
+      className={`flex items-center h-12 rounded-lg px-3.5 gap-2.5 bg-a1-bg [border-width:1.5px] border-solid ${isFocused ? 'border-a1-accent' : 'border-a1-border'} transition-colors focus-within:border-a1-accent`}
+    >
       {icon}
       <input
         id={id}
@@ -164,7 +277,7 @@ function StyledInput({
         maxLength={maxLength}
         inputMode={inputMode}
         pattern={pattern}
-        className="flex-1 bg-transparent font-display text-sm text-[#111111] placeholder:text-[#CCCCCC] outline-none"
+        className="flex-1 bg-transparent font-display text-sm text-a1-text-primary placeholder:text-a1-text-placeholder outline-none"
       />
       {rightElement}
     </div>
@@ -175,7 +288,10 @@ function StyledInput({
 
 function StyledLabel({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
   return (
-    <label htmlFor={htmlFor} className="uppercase tracking-[0.6px] text-[#333333] font-display font-semibold text-xs">
+    <label
+      htmlFor={htmlFor}
+      className="uppercase tracking-[0.6px] text-a1-text-secondary font-display font-semibold text-xs"
+    >
       {children}
     </label>
   );
@@ -191,20 +307,33 @@ function ErrorAlert({ error }: { error: Error | null }) {
       : undefined;
 
   return (
-    <div role="alert" className="flex items-start rounded-[7px] py-3 px-3.5 gap-2.5 bg-[#F5F5F3] border border-solid border-[#E8E8E6]">
-      <div className="w-[18px] h-[18px] flex items-center justify-center shrink-0 mt-px rounded-full bg-[#111111]">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+    <div
+      role="alert"
+      className="flex items-start rounded-[7px] py-3 px-3.5 gap-2.5 bg-a1-bg border border-solid border-a1-border"
+    >
+      <div className="w-[18px] h-[18px] flex items-center justify-center shrink-0 mt-px rounded-full bg-a1-dark">
+        <svg
+          width="10"
+          height="10"
+          viewBox="0 0 10 10"
+          fill="none"
+          stroke="#FFFFFF"
+          strokeWidth="2"
+          strokeLinecap="round"
+          xmlns="http://www.w3.org/2000/svg"
+          className="shrink-0"
+        >
           <path d="M5 2v3M5 7.5h.01" />
         </svg>
       </div>
       <div className="flex flex-col gap-0.5">
-        <div className="text-[#111111] font-display font-semibold text-[13px] leading-4">
+        <div className="text-a1-text-primary font-display font-semibold text-[13px] leading-4">
           {error.message}
         </div>
         {correlationId && (
           <button
             type="button"
-            className="text-[#888888] font-display text-xs leading-4 text-left hover:underline"
+            className="text-a1-text-auxiliary font-display text-xs leading-4 text-left hover:underline"
             onClick={() => {
               navigator.clipboard.writeText(correlationId);
               toast.info('Correlation ID copiado');
@@ -224,18 +353,22 @@ function CardFooter() {
   return (
     <>
       <div className="flex items-center gap-3 mt-7 mb-5">
-        <div className="flex-1 h-px bg-[#E8E8E6]" />
-        <span className="text-[#BBBBBB] font-display text-xs">acesso restrito</span>
-        <div className="flex-1 h-px bg-[#E8E8E6]" />
+        <div className="flex-1 h-px bg-a1-border" />
+        <span className="text-a1-text-muted-icon font-display text-xs">acesso restrito</span>
+        <div className="flex-1 h-px bg-a1-border" />
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <ShieldIcon />
-          <span className="text-[#AAAAAA] font-display text-[11px] leading-[14px]">Conexão segura (TLS)</span>
+          <span className="text-a1-text-hint font-display text-[11px] leading-[14px]">
+            Conexão segura (TLS)
+          </span>
         </div>
         <div className="flex items-center gap-[5px]">
           <HelpIcon />
-          <span className="text-[#888888] font-display font-medium text-[11px] leading-[14px]">Suporte</span>
+          <span className="text-a1-text-auxiliary font-display font-medium text-[11px] leading-[14px]">
+            Suporte
+          </span>
         </div>
       </div>
     </>
@@ -277,15 +410,19 @@ function LoginPanel({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
       <div className="flex flex-col mb-9 gap-1.5">
-        <h1 className="tracking-[-0.5px] text-[#111111] font-display font-extrabold text-2xl leading-[30px]">
+        <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
           Bem-vindo de volta
         </h1>
-        <p className="text-sm text-[#888888] font-display leading-[round(up,150%,1px)]">
+        <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
           Insira suas credenciais para acessar o portal.
         </p>
       </div>
 
-      {error && <div className="mb-4"><ErrorAlert error={error} /></div>}
+      {error && (
+        <div className="mb-4">
+          <ErrorAlert error={error} />
+        </div>
+      )}
 
       <div className="flex flex-col mb-4 gap-[7px]">
         <StyledLabel htmlFor="login-email">E-mail</StyledLabel>
@@ -308,7 +445,7 @@ function LoginPanel({
           <button
             type="button"
             onClick={onForgotClick}
-            className="text-[#F58C32] font-display font-medium text-xs hover:underline"
+            className="text-a1-accent font-display font-medium text-xs hover:underline"
           >
             Esqueci a senha
           </button>
@@ -322,7 +459,12 @@ function LoginPanel({
           autoComplete="current-password"
           required
           rightElement={
-            <button type="button" onClick={() => setShowPassword(!showPassword)} className="shrink-0" aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}>
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="shrink-0"
+              aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+            >
               {showPassword ? <EyeOffIcon /> : <EyeIcon />}
             </button>
           }
@@ -335,9 +477,9 @@ function LoginPanel({
           type="checkbox"
           checked={rememberMe}
           onChange={(e) => setRememberMe(e.target.checked)}
-          className="size-4 rounded border-[#E8E8E6] accent-[#F58C32]"
+          className="size-4 rounded border-a1-border accent-a1-accent"
         />
-        <label htmlFor="remember-me" className="text-sm font-display text-[#888888]">
+        <label htmlFor="remember-me" className="text-sm font-display text-a1-text-auxiliary">
           Manter conectado
         </label>
       </div>
@@ -345,7 +487,7 @@ function LoginPanel({
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-5 rounded-lg gap-2 bg-[#F58C32] hover:bg-[#e07d28] text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[52px] mb-5 rounded-lg gap-2 bg-a1-accent hover:bg-accent-hover text-white font-display font-bold text-[15px] tracking-[0.2px]"
       >
         Entrar
         {!loading && <ArrowRightIcon />}
@@ -376,15 +518,19 @@ function MfaPanel({ tempToken, onSuccess }: { tempToken: string; onSuccess: () =
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
       <div className="flex flex-col mb-9 gap-1.5">
-        <h1 className="tracking-[-0.5px] text-[#111111] font-display font-extrabold text-2xl leading-[30px]">
+        <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
           Verificar código
         </h1>
-        <p className="text-sm text-[#888888] font-display leading-[round(up,150%,1px)]">
+        <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
           Digite o código do seu autenticador.
         </p>
       </div>
 
-      {error && <div className="mb-4"><ErrorAlert error={error} /></div>}
+      {error && (
+        <div className="mb-4">
+          <ErrorAlert error={error} />
+        </div>
+      )}
 
       <div className="flex flex-col mb-7 gap-[7px]">
         <StyledLabel htmlFor="mfa-code">Código TOTP</StyledLabel>
@@ -406,7 +552,7 @@ function MfaPanel({ tempToken, onSuccess }: { tempToken: string; onSuccess: () =
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-5 rounded-lg gap-2 bg-[#F58C32] hover:bg-[#e07d28] text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[52px] mb-5 rounded-lg gap-2 bg-a1-accent hover:bg-accent-hover text-white font-display font-bold text-[15px] tracking-[0.2px]"
       >
         Verificar código
         {!loading && <ArrowRightIcon />}
@@ -432,17 +578,17 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
     return (
       <div className="flex flex-col items-center text-center">
         <div className="flex flex-col mb-9 gap-1.5">
-          <h1 className="tracking-[-0.5px] text-[#111111] font-display font-extrabold text-2xl leading-[30px]">
+          <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
             E-mail enviado
           </h1>
-          <p className="text-sm text-[#888888] font-display leading-[round(up,150%,1px)]">
+          <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
             Se o e-mail estiver cadastrado, você receberá um link em breve.
           </p>
         </div>
         <button
           type="button"
           onClick={onBack}
-          className="h-[52px] w-full mb-5 rounded-lg border border-[#E8E8E6] bg-white text-[#111111] font-display font-bold text-[15px] tracking-[0.2px] hover:bg-[#F5F5F3] transition-colors"
+          className="h-[52px] w-full mb-5 rounded-lg border border-a1-border bg-white text-a1-text-primary font-display font-bold text-[15px] tracking-[0.2px] hover:bg-a1-bg transition-colors"
         >
           Voltar ao login
         </button>
@@ -454,10 +600,10 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
       <div className="flex flex-col mb-9 gap-1.5">
-        <h1 className="tracking-[-0.5px] text-[#111111] font-display font-extrabold text-2xl leading-[30px]">
+        <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
           Recuperar senha
         </h1>
-        <p className="text-sm text-[#888888] font-display leading-[round(up,150%,1px)]">
+        <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
           Informe seu e-mail para receber o link de redefinição.
         </p>
       </div>
@@ -480,7 +626,7 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-3 rounded-lg gap-2 bg-[#F58C32] hover:bg-[#e07d28] text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[52px] mb-3 rounded-lg gap-2 bg-a1-accent hover:bg-accent-hover text-white font-display font-bold text-[15px] tracking-[0.2px]"
       >
         Enviar link
         {!loading && <ArrowRightIcon />}
@@ -489,7 +635,7 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
       <button
         type="button"
         onClick={onBack}
-        className="h-[44px] w-full mb-2 rounded-lg text-[#888888] font-display font-medium text-sm hover:text-[#111111] transition-colors"
+        className="h-[44px] w-full mb-2 rounded-lg text-a1-text-auxiliary font-display font-medium text-sm hover:text-a1-text-primary transition-colors"
       >
         Voltar ao login
       </button>
@@ -528,17 +674,17 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
     return (
       <div className="flex flex-col items-center text-center">
         <div className="flex flex-col mb-9 gap-1.5">
-          <h1 className="tracking-[-0.5px] text-[#111111] font-display font-extrabold text-2xl leading-[30px]">
+          <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
             Senha redefinida
           </h1>
-          <p className="text-sm text-[#888888] font-display leading-[round(up,150%,1px)]">
+          <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
             Senha redefinida com sucesso. Faça login.
           </p>
         </div>
         <button
           type="button"
           onClick={onBack}
-          className="h-[52px] w-full mb-5 rounded-lg border border-[#E8E8E6] bg-white text-[#111111] font-display font-bold text-[15px] tracking-[0.2px] hover:bg-[#F5F5F3] transition-colors"
+          className="h-[52px] w-full mb-5 rounded-lg border border-a1-border bg-white text-a1-text-primary font-display font-bold text-[15px] tracking-[0.2px] hover:bg-a1-bg transition-colors"
         >
           Ir para login
         </button>
@@ -547,23 +693,23 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
     );
   }
 
-  const validationErr = validationError
-    ? ({ message: validationError } as Error)
-    : null;
+  const validationErr = validationError ? ({ message: validationError } as Error) : null;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
       <div className="flex flex-col mb-9 gap-1.5">
-        <h1 className="tracking-[-0.5px] text-[#111111] font-display font-extrabold text-2xl leading-[30px]">
+        <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
           Redefinir senha
         </h1>
-        <p className="text-sm text-[#888888] font-display leading-[round(up,150%,1px)]">
+        <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
           Escolha uma nova senha para sua conta.
         </p>
       </div>
 
       {(error || validationErr) && (
-        <div className="mb-4"><ErrorAlert error={error ?? validationErr} /></div>
+        <div className="mb-4">
+          <ErrorAlert error={error ?? validationErr} />
+        </div>
       )}
 
       <div className="flex flex-col mb-4 gap-[7px]">
@@ -579,7 +725,12 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
           minLength={8}
           maxLength={128}
           rightElement={
-            <button type="button" onClick={() => setShowNew(!showNew)} className="shrink-0" aria-label={showNew ? 'Ocultar senha' : 'Mostrar senha'}>
+            <button
+              type="button"
+              onClick={() => setShowNew(!showNew)}
+              className="shrink-0"
+              aria-label={showNew ? 'Ocultar senha' : 'Mostrar senha'}
+            >
               {showNew ? <EyeOffIcon /> : <EyeIcon />}
             </button>
           }
@@ -599,7 +750,12 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
           minLength={8}
           maxLength={128}
           rightElement={
-            <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="shrink-0" aria-label={showConfirm ? 'Ocultar senha' : 'Mostrar senha'}>
+            <button
+              type="button"
+              onClick={() => setShowConfirm(!showConfirm)}
+              className="shrink-0"
+              aria-label={showConfirm ? 'Ocultar senha' : 'Mostrar senha'}
+            >
               {showConfirm ? <EyeOffIcon /> : <EyeIcon />}
             </button>
           }
@@ -609,7 +765,7 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-5 rounded-lg gap-2 bg-[#F58C32] hover:bg-[#e07d28] text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[52px] mb-5 rounded-lg gap-2 bg-a1-accent hover:bg-accent-hover text-white font-display font-bold text-[15px] tracking-[0.2px]"
       >
         Redefinir senha
         {!loading && <ArrowRightIcon />}
@@ -624,7 +780,7 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
 
 function BrandingPanel() {
   return (
-    <aside className="hidden lg:flex w-[580px] shrink-0 flex-col justify-between py-16 px-[72px] bg-[#111111]">
+    <aside className="hidden lg:flex w-[580px] shrink-0 flex-col justify-between py-16 px-[72px] bg-a1-dark">
       {/* Logo */}
       <div className="flex items-center gap-3">
         <A1Logo />
@@ -632,7 +788,7 @@ function BrandingPanel() {
           <div className="tracking-[-0.3px] text-white font-display font-extrabold text-base leading-5">
             Grupo A1
           </div>
-          <div className="tracking-[0.2px] text-[#444444] font-display text-[11px] leading-[14px]">
+          <div className="tracking-[0.2px] text-a1-text-auxiliary/60 font-display text-[11px] leading-[14px]">
             Portal Interno
           </div>
         </div>
@@ -642,28 +798,32 @@ function BrandingPanel() {
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-3">
           <h2 className="text-[44px] leading-[round(up,110%,1px)] tracking-[-1.5px] text-white font-display font-extrabold">
-            Soluções<br />para a<br />indústria.
+            Soluções
+            <br />
+            para a<br />
+            indústria.
           </h2>
-          <p className="text-[15px] leading-[round(up,170%,1px)] max-w-[360px] text-[#555555] font-display">
-            Plataforma de gestão de processos, aprovações e integração com Protheus — desenvolvida para o Grupo A1.
+          <p className="text-[15px] leading-[round(up,170%,1px)] max-w-[360px] text-a1-text-tertiary font-display">
+            Plataforma de gestão de processos, aprovações e integração com Protheus — desenvolvida
+            para o Grupo A1.
           </p>
         </div>
-        <div className="w-12 h-[3px] rounded-sm bg-[#F58C32]" />
+        <div className="w-12 h-[3px] rounded-sm bg-a1-accent" />
       </div>
 
       {/* Bottom: units + copyright */}
       <div className="flex flex-col gap-3">
-        <div className="uppercase tracking-[1.4px] text-[#333333] font-display font-semibold text-[10px] leading-3">
+        <div className="uppercase tracking-[1.4px] text-a1-text-secondary font-display font-semibold text-[10px] leading-3">
           Unidades do Grupo
         </div>
         <div className="flex flex-wrap gap-2">
           {['Engenharia', 'Industrial', 'Energia', 'Agro'].map((unit) => (
-            <div key={unit} className="rounded-[20px] py-1.5 px-3.5 border border-[#222222]">
+            <div key={unit} className="rounded-[20px] py-1.5 px-3.5 border border-topbar-separator">
               <span className="text-white font-sans text-base leading-5">{unit}</span>
             </div>
           ))}
         </div>
-        <div className="text-[#2A2A2A] font-display text-[11px] leading-[14px]">
+        <div className="text-topbar-separator font-display text-[11px] leading-[14px]">
           © 2026 Grupo A1 · Todos os direitos reservados
         </div>
       </div>
@@ -692,7 +852,7 @@ export function LoginPage() {
 
       {/* Right panel — form */}
       <main className="flex-1 flex items-center justify-center bg-white p-4">
-        <div className="w-full max-w-[420px] flex flex-col rounded-2xl py-[52px] px-12 bg-white border border-[#E8E8E6] lg:border-transparent lg:shadow-none">
+        <div className="w-full max-w-[420px] flex flex-col rounded-2xl py-[52px] px-12 bg-white border border-a1-border lg:border-transparent lg:shadow-none">
           {panel === 'login' && (
             <LoginPanel
               onMfaRequired={(token) => {

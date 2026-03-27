@@ -22,13 +22,15 @@ import {
   DialogHeader,
   DialogTitle,
   Input,
-  Label,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
+  PageHeader,
+  ConfirmationModal,
+  FormField,
 } from '../../../shared/ui/index.js';
 import { useCycles, useCreateCycle, useDeleteCycle } from '../hooks/use-cycles.js';
 import type {
@@ -93,10 +95,10 @@ export function CyclesListPage({ userScopes }: CyclesListPageProps) {
   if (isLoading && items.length === 0) {
     return (
       <div className="p-6">
-        <Skeleton className="h-8 w-48 mb-4" />
+        <Skeleton className="h-8 w-48 mb-4 bg-a1-border" />
         <div className="flex flex-col gap-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-12 w-full" />
+            <Skeleton key={i} className="h-12 w-full bg-a1-border" />
           ))}
         </div>
       </div>
@@ -105,87 +107,100 @@ export function CyclesListPage({ userScopes }: CyclesListPageProps) {
 
   // Error state
   if (error) {
-    return <div className="p-6 text-red-600">Erro ao carregar ciclos. {error.message}</div>;
+    return (
+      <div className="p-6">
+        <div
+          role="alert"
+          className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
+        >
+          Erro ao carregar ciclos. {error.message}
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold">Ciclos de Processo</h1>
-        <div className="flex gap-2">
-          <select
-            value={filters.status ?? ''}
-            onChange={(e) => handleFilterChange(e.target.value as CycleStatus | '')}
-            className="px-2 py-1 text-sm border border-gray-300 rounded-md bg-white"
-          >
-            <option value="">Todos</option>
-            <option value="DRAFT">Rascunho</option>
-            <option value="PUBLISHED">Publicado</option>
-            <option value="DEPRECATED">Depreciado</option>
-          </select>
-          {canWriteCycle(userScopes) && (
-            <Button size="sm" onClick={() => setCreateOpen(true)}>
-              Novo ciclo
-            </Button>
-          )}
-        </div>
-      </div>
+      <PageHeader
+        title="Ciclos de Processo"
+        actions={
+          <div className="flex gap-2">
+            <select
+              value={filters.status ?? ''}
+              onChange={(e) => handleFilterChange(e.target.value as CycleStatus | '')}
+              className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
+            >
+              <option value="">Todos</option>
+              <option value="DRAFT">Rascunho</option>
+              <option value="PUBLISHED">Publicado</option>
+              <option value="DEPRECATED">Depreciado</option>
+            </select>
+            {canWriteCycle(userScopes) && (
+              <Button size="sm" onClick={() => setCreateOpen(true)}>
+                Novo ciclo
+              </Button>
+            )}
+          </div>
+        }
+      />
 
       {/* Table */}
       {items.length === 0 ? (
-        <p className="text-gray-400">{COPY.empty_cycles}</p>
+        <p className="text-a1-text-auxiliary">{COPY.empty_cycles}</p>
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Código</TableHead>
-              <TableHead>Nome</TableHead>
-              <TableHead>Versão</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Criado em</TableHead>
-              <TableHead>Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {items.map((cycle) => {
-              const statusInfo = STATUS_META[cycle.status];
-              return (
-                <TableRow key={cycle.id}>
-                  <TableCell className="font-mono text-sm">{cycle.codigo}</TableCell>
-                  <TableCell>{cycle.nome}</TableCell>
-                  <TableCell>v{cycle.version}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
-                  </TableCell>
-                  <TableCell className="text-gray-500">
-                    {new Date(cycle.created_at).toLocaleDateString('pt-BR')}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <a
-                        href={`/processos/ciclos/${cycle.id}/editor`}
-                        className="text-blue-500 hover:text-blue-700 text-sm"
-                      >
-                        Editar
-                      </a>
-                      {canShowDelete(userScopes, cycle.status) && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-600 hover:text-red-800 h-auto p-0"
-                          onClick={() => setDeleteTarget({ id: cycle.id, nome: cycle.nome })}
+        <div className="rounded-lg border border-a1-border bg-white">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Código</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Versão</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Criado em</TableHead>
+                <TableHead>Ações</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((cycle) => {
+                const statusInfo = STATUS_META[cycle.status];
+                return (
+                  <TableRow key={cycle.id}>
+                    <TableCell className="font-mono text-sm">{cycle.codigo}</TableCell>
+                    <TableCell>{cycle.nome}</TableCell>
+                    <TableCell>v{cycle.version}</TableCell>
+                    <TableCell>
+                      <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
+                    </TableCell>
+                    <TableCell className="text-a1-text-auxiliary">
+                      {new Date(cycle.created_at).toLocaleDateString('pt-BR')}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <a
+                          href={`/processos/ciclos/${cycle.id}/editor`}
+                          className="text-blue-500 hover:text-blue-700 text-sm"
                         >
-                          Excluir
-                        </Button>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                          Editar
+                        </a>
+                        {canShowDelete(userScopes, cycle.status) && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-danger-600 hover:text-danger-600 h-auto p-0"
+                            onClick={() => setDeleteTarget({ id: cycle.id, nome: cycle.nome })}
+                          >
+                            Excluir
+                          </Button>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
       )}
 
       {/* Load more */}
@@ -205,26 +220,20 @@ export function CyclesListPage({ userScopes }: CyclesListPageProps) {
             <DialogDescription>Crie um novo ciclo de processo em rascunho.</DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-3 py-2">
-            <div>
-              <Label htmlFor="cycle-codigo">Código</Label>
+            <FormField label="Código" name="cycle-codigo">
               <Input
-                id="cycle-codigo"
                 value={newCodigo}
                 onChange={(e) => setNewCodigo(e.target.value)}
                 placeholder="COM"
-                className="mt-1"
               />
-            </div>
-            <div>
-              <Label htmlFor="cycle-nome">Nome</Label>
+            </FormField>
+            <FormField label="Nome" name="cycle-nome">
               <Input
-                id="cycle-nome"
                 value={newNome}
                 onChange={(e) => setNewNome(e.target.value)}
                 placeholder="Comercial"
-                className="mt-1"
               />
-            </div>
+            </FormField>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateOpen(false)}>
@@ -241,28 +250,16 @@ export function CyclesListPage({ userScopes }: CyclesListPageProps) {
       </Dialog>
 
       {/* Delete confirmation dialog */}
-      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirmar exclusão</DialogTitle>
-            <DialogDescription>
-              {deleteTarget ? COPY.confirm_delete_cycle(deleteTarget.nome) : ''}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
-              Cancelar
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={deleteMutation.isPending}
-            >
-              {deleteMutation.isPending ? 'Excluindo...' : 'Excluir'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationModal
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        title="Confirmar exclusão"
+        description={deleteTarget ? COPY.confirm_delete_cycle(deleteTarget.nome) : ''}
+        variant="destructive"
+        confirmLabel="Excluir"
+        onConfirm={handleDelete}
+        isLoading={deleteMutation.isPending}
+      />
     </div>
   );
 }

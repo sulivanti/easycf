@@ -12,21 +12,16 @@ import { Input } from '@shared/ui/input';
 import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@shared/ui/dialog';
+import { PageHeader } from '@shared/ui/page-header';
+import { EmptyState } from '@shared/ui/empty-state';
+import { ConfirmationModal } from '@shared/ui/confirmation-modal';
 import { useUsers, useDeleteUser } from '../../hooks/use-users.js';
 
 function UsersSkeleton() {
   return (
     <div className="space-y-2" aria-busy="true">
       {Array.from({ length: 5 }).map((_, i) => (
-        <Skeleton key={i} className="h-12 w-full" />
+        <Skeleton key={i} className="h-12 w-full bg-a1-border" />
       ))}
     </div>
   );
@@ -72,14 +67,16 @@ export function UsersListPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Usuários</h1>
-        {onCreateClick && (
-          <Button size="sm" onClick={onCreateClick}>
-            Cadastrar
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        title="Usuários"
+        actions={
+          onCreateClick && (
+            <Button size="sm" onClick={onCreateClick}>
+              Cadastrar
+            </Button>
+          )
+        }
+      />
 
       <div className="flex gap-2">
         <Input
@@ -98,7 +95,7 @@ export function UsersListPage({
       {error && (
         <div
           role="alert"
-          className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+          className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
         >
           <p>{error.message}</p>
         </div>
@@ -107,54 +104,55 @@ export function UsersListPage({
       {loading && users.length === 0 ? (
         <UsersSkeleton />
       ) : users.length === 0 ? (
-        <div className="rounded-md border border-dashed p-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            Nenhum usuário encontrado. Cadastre o primeiro.
-          </p>
-        </div>
+        <EmptyState
+          title="Nenhum item"
+          description="Nenhum usuário encontrado. Cadastre o primeiro."
+        />
       ) : (
         <>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Código</TableHead>
-                <TableHead>Nome</TableHead>
-                <TableHead>E-mail</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Criado em</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-mono text-xs">{user.codigo}</TableCell>
-                  <TableCell className="font-medium">{user.full_name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusVariant[user.status] ?? 'outline'}>{user.status}</Badge>
-                  </TableCell>
-                  <TableCell>{new Date(user.created_at).toLocaleDateString('pt-BR')}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      {onEditClick && (
-                        <Button variant="ghost" size="xs" onClick={() => onEditClick(user.id)}>
-                          Editar
-                        </Button>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="xs"
-                        onClick={() => setDeleteTarget({ id: user.id, name: user.full_name })}
-                      >
-                        Excluir
-                      </Button>
-                    </div>
-                  </TableCell>
+          <div className="rounded-lg border border-a1-border bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>E-mail</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Criado em</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {users.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="font-mono text-xs">{user.codigo}</TableCell>
+                    <TableCell className="font-medium">{user.full_name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>
+                      <Badge variant={statusVariant[user.status] ?? 'outline'}>{user.status}</Badge>
+                    </TableCell>
+                    <TableCell>{new Date(user.created_at).toLocaleDateString('pt-BR')}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
+                        {onEditClick && (
+                          <Button variant="ghost" size="xs" onClick={() => onEditClick(user.id)}>
+                            Editar
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="xs"
+                          onClick={() => setDeleteTarget({ id: user.id, name: user.full_name })}
+                        >
+                          Excluir
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
           {hasMore && (
             <div className="flex justify-center">
@@ -171,26 +169,16 @@ export function UsersListPage({
         </>
       )}
 
-      {/* Delete confirmation dialog */}
-      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirmar exclusão</DialogTitle>
-            <DialogDescription>
-              Tem certeza que deseja excluir o usuário <strong>{deleteTarget?.name}</strong>? Esta
-              ação não pode ser desfeita.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setDeleteTarget(null)}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" isLoading={deleting} onClick={handleDelete}>
-              Excluir
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationModal
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        title="Confirmar exclusão"
+        description={`Tem certeza que deseja excluir ${deleteTarget?.name}?`}
+        variant="destructive"
+        confirmLabel="Excluir"
+        onConfirm={handleDelete}
+        isLoading={deleting}
+      />
     </div>
   );
 }

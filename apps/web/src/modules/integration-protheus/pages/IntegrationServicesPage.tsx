@@ -12,13 +12,9 @@ import { Label } from '@shared/ui/label';
 import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@shared/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
+import { EmptyState } from '@shared/ui/empty-state';
+import { StatusBadge } from '@shared/ui/status-badge';
 import { useServicesList, useCreateService, useUpdateService } from '../hooks/use-services.js';
 import type {
   AuthType,
@@ -120,7 +116,7 @@ export function IntegrationServicesPage() {
         {isError && (
           <div
             role="alert"
-            className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+            className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
           >
             <p>{(error as Error)?.message ?? 'Erro ao carregar dados.'}</p>
           </div>
@@ -129,58 +125,63 @@ export function IntegrationServicesPage() {
         {isLoading ? (
           <div className="space-y-2" aria-busy="true">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
+              <Skeleton key={i} className="h-12 w-full bg-a1-border" />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-md border border-dashed p-8 text-center">
-            <p className="text-sm text-muted-foreground">Nenhum serviço encontrado.</p>
-          </div>
+          <EmptyState
+            title="Nenhum serviço encontrado"
+            description="Crie um novo serviço de integração para começar."
+          />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Código</TableHead>
-                <TableHead>Nome</TableHead>
-                <TableHead>URL Base</TableHead>
-                <TableHead>Auth</TableHead>
-                <TableHead>Ambiente</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Timeout</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {items.map((svc) => (
-                <TableRow key={svc.id}>
-                  <TableCell className="font-medium font-mono text-xs">{svc.codigo}</TableCell>
-                  <TableCell>{svc.nome}</TableCell>
-                  <TableCell className="max-w-[200px] truncate text-xs" title={svc.base_url}>
-                    {svc.base_url}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{svc.auth_type}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={ENV_VARIANT[svc.environment]}>{svc.environment}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={STATUS_VARIANT[svc.status]}>{svc.status}</Badge>
-                  </TableCell>
-                  <TableCell className="text-xs">{svc.timeout_ms}ms</TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="xs"
-                      onClick={() => handleToggleStatus(svc.id, svc.status)}
-                    >
-                      {svc.status === 'ACTIVE' ? 'Desativar' : 'Ativar'}
-                    </Button>
-                  </TableCell>
+          <div className="rounded-lg border border-a1-border bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>URL Base</TableHead>
+                  <TableHead>Auth</TableHead>
+                  <TableHead>Ambiente</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Timeout</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {items.map((svc) => (
+                  <TableRow key={svc.id}>
+                    <TableCell className="font-medium font-mono text-xs">{svc.codigo}</TableCell>
+                    <TableCell>{svc.nome}</TableCell>
+                    <TableCell className="max-w-[200px] truncate text-xs" title={svc.base_url}>
+                      {svc.base_url}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{svc.auth_type}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={ENV_VARIANT[svc.environment]}>{svc.environment}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <StatusBadge status={svc.status === 'ACTIVE' ? 'success' : 'neutral'}>
+                        {svc.status === 'ACTIVE' ? 'Ativo' : 'Inativo'}
+                      </StatusBadge>
+                    </TableCell>
+                    <TableCell className="text-xs">{svc.timeout_ms}ms</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => handleToggleStatus(svc.id, svc.status)}
+                      >
+                        {svc.status === 'ACTIVE' ? 'Desativar' : 'Ativar'}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </div>
 

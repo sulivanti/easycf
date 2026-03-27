@@ -23,6 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from '@shared/ui';
+import { PageHeader } from '@shared/ui/page-header';
+import { EmptyState } from '@shared/ui/empty-state';
 import { useExecutionList, useExecutionDetail } from '../../hooks/use-executions.js';
 import { ExecutionDetailPanel } from '../../components/ExecutionDetailPanel.js';
 import type {
@@ -105,7 +107,10 @@ export function ExecutionsPage() {
   return (
     <div className="flex flex-col gap-6 p-6">
       <header className="space-y-4">
-        <h1 className="text-2xl font-bold">Monitor de Execucoes MCP</h1>
+        <PageHeader
+          title="Monitor de Execuções MCP"
+          description="Acompanhe execuções de agentes em tempo real"
+        />
 
         {isLoading ? (
           <div
@@ -114,7 +119,7 @@ export function ExecutionsPage() {
             aria-label="Metricas de execucoes 24h"
           >
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-20 rounded-lg" />
+              <Skeleton key={i} className="h-20 rounded-lg bg-a1-border" />
             ))}
           </div>
         ) : metrics ? (
@@ -230,7 +235,7 @@ export function ExecutionsPage() {
         </Button>
       </div>
 
-      {error && <p className="text-sm text-destructive">{(error as Error).message}</p>}
+      {error && <p className="text-sm text-danger-600">{(error as Error).message}</p>}
 
       {/* Split View: table + detail */}
       <div className="flex flex-col gap-0 lg:flex-row">
@@ -238,39 +243,44 @@ export function ExecutionsPage() {
           {isLoading ? (
             <div className="space-y-2">
               {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-10 w-full" />
+                <Skeleton key={i} className="h-10 w-full bg-a1-border" />
               ))}
             </div>
           ) : data && data.data.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Agente</TableHead>
-                  <TableHead>Acao</TableHead>
-                  <TableHead>Politica</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Duracao</TableHead>
-                  <TableHead>Recebido em</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.data.map((exec) => (
-                  <ExecutionRow
-                    key={exec.id}
-                    execution={exec}
-                    selected={exec.id === selectedId}
-                    onSelect={() => setSelectedId(exec.id)}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <div className="flex flex-col items-center gap-2 py-12 text-muted-foreground">
-              <p>Nenhuma execucao encontrada com estes filtros.</p>
-              <Button variant="outline" size="sm" onClick={() => setFilters({})}>
-                Limpar filtros
-              </Button>
+            <div className="rounded-lg border border-a1-border bg-white">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Agente</TableHead>
+                    <TableHead>Acao</TableHead>
+                    <TableHead>Politica</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Duracao</TableHead>
+                    <TableHead>Recebido em</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.data.map((exec) => (
+                    <ExecutionRow
+                      key={exec.id}
+                      execution={exec}
+                      selected={exec.id === selectedId}
+                      onSelect={() => setSelectedId(exec.id)}
+                    />
+                  ))}
+                </TableBody>
+              </Table>
             </div>
+          ) : (
+            <EmptyState
+              title="Nenhuma execução encontrada"
+              description="Nenhuma execução encontrada com estes filtros."
+              action={
+                <Button variant="outline" size="sm" onClick={() => setFilters({})}>
+                  Limpar filtros
+                </Button>
+              }
+            />
           )}
         </div>
 
@@ -303,7 +313,7 @@ function ExecutionRow({
   return (
     <TableRow
       className={`cursor-pointer transition-colors ${
-        selected ? 'bg-accent' : 'hover:bg-muted/50'
+        selected ? 'bg-accent' : 'hover:bg-a1-bg'
       } ${isEscalation ? 'border-l-4 border-l-destructive' : ''}`}
       onClick={onSelect}
     >
@@ -353,7 +363,7 @@ function MetricCard({
   return (
     <div className={`flex flex-col gap-1 rounded-lg border-2 p-4 ${borderClass}`}>
       <span className="text-2xl font-bold">{value}</span>
-      <span className="text-sm text-muted-foreground">{label}</span>
+      <span className="text-sm text-a1-text-auxiliary">{label}</span>
     </div>
   );
 }

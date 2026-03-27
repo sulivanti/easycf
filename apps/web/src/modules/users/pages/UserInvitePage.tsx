@@ -11,6 +11,7 @@ import { Button } from '@shared/ui';
 import { Badge } from '@shared/ui';
 import { Skeleton } from '@shared/ui';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@shared/ui';
+import { PageHeader } from '@shared/ui/page-header';
 import { useUserDetail } from '../hooks/use-user-detail.js';
 import { useResendInvite } from '../hooks/use-resend-invite.js';
 import { COPY, toUserInviteViewModel } from '../types/users.types.js';
@@ -59,12 +60,12 @@ export function UserInvitePage({ userId, userScopes, onNavigateBack }: UserInvit
           <Button variant="ghost" size="sm" onClick={onNavigateBack}>
             &larr; Usuários
           </Button>
-          <Skeleton className="h-6 w-48" />
+          <Skeleton className="h-6 w-48 bg-a1-border" />
         </div>
-        <div className="rounded-lg border bg-card p-6 space-y-4">
-          <Skeleton className="h-8 w-64" />
-          <Skeleton className="h-4 w-48" />
-          <Skeleton className="h-10 w-40" />
+        <div className="rounded-lg border border-a1-border bg-white p-6 space-y-4">
+          <Skeleton className="h-8 w-64 bg-a1-border" />
+          <Skeleton className="h-4 w-48 bg-a1-border" />
+          <Skeleton className="h-10 w-40 bg-a1-border" />
         </div>
       </div>
     );
@@ -80,8 +81,8 @@ export function UserInvitePage({ userId, userScopes, onNavigateBack }: UserInvit
           </Button>
           <h1 className="text-xl font-semibold">Convite</h1>
         </div>
-        <div className="rounded-lg border bg-card p-6">
-          <p className="text-sm text-muted-foreground">{COPY.label.userNotFound}</p>
+        <div className="rounded-lg border border-a1-border bg-white p-6">
+          <p className="text-sm text-a1-text-auxiliary">{COPY.label.userNotFound}</p>
         </div>
       </div>
     );
@@ -97,12 +98,10 @@ export function UserInvitePage({ userId, userScopes, onNavigateBack }: UserInvit
           </Button>
           <h1 className="text-xl font-semibold">Convite</h1>
         </div>
-        <div className="rounded-md bg-destructive/10 p-4">
-          <p className="text-sm text-destructive">{COPY.error.loadUserFailed}</p>
+        <div className="rounded-md bg-status-error-bg p-4">
+          <p className="text-sm text-danger-600">{COPY.error.loadUserFailed}</p>
           {error instanceof ApiError && error.correlationId && (
-            <p className="mt-1 text-xs text-destructive/70">
-              Correlation ID: {error.correlationId}
-            </p>
+            <p className="mt-1 text-xs text-danger-500">Correlation ID: {error.correlationId}</p>
           )}
           <Button variant="link" size="sm" className="mt-2 p-0" onClick={() => refetch()}>
             {COPY.label.retry}
@@ -125,15 +124,18 @@ export function UserInvitePage({ userId, userScopes, onNavigateBack }: UserInvit
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       {/* Header with breadcrumb */}
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="sm" onClick={onNavigateBack}>
-          &larr; Usuários
-        </Button>
-        <h1 className="text-xl font-semibold">Convite — {viewModel.displayName}</h1>
-      </div>
+      <PageHeader
+        title={`Convite — ${viewModel.displayName}`}
+        breadcrumbs={[{ label: 'Usuários', href: '#' }, { label: 'Convite' }]}
+        actions={
+          <Button variant="ghost" size="sm" onClick={onNavigateBack}>
+            &larr; Voltar
+          </Button>
+        }
+      />
 
       {/* Status Card */}
-      <div className="rounded-lg border bg-card p-6 space-y-4">
+      <div className="rounded-lg border border-a1-border bg-white p-6 space-y-4">
         <div className="flex items-center gap-3">
           <h2 className="text-lg font-medium">{viewModel.displayName}</h2>
           <Badge variant={viewModel.statusBadge.variant}>{viewModel.statusBadge.label}</Badge>
@@ -142,24 +144,24 @@ export function UserInvitePage({ userId, userScopes, onNavigateBack }: UserInvit
         {/* Status-specific content */}
         {viewModel.status === 'PENDING' && (
           <div className="space-y-3">
-            <p className="text-sm text-muted-foreground">{COPY.label.invitePending}</p>
+            <p className="text-sm text-a1-text-auxiliary">{COPY.label.invitePending}</p>
             {viewModel.isInviteExpired && (
-              <div className="rounded-md bg-warning/10 p-3">
-                <p className="text-sm text-warning">{COPY.label.inviteExpired}</p>
+              <div className="rounded-md bg-status-warning-bg p-3">
+                <p className="text-sm text-warning-600">{COPY.label.inviteExpired}</p>
               </div>
             )}
           </div>
         )}
 
         {viewModel.status === 'ACTIVE' && (
-          <p className="text-sm text-muted-foreground">{COPY.label.userActive}</p>
+          <p className="text-sm text-a1-text-auxiliary">{COPY.label.userActive}</p>
         )}
 
         {viewModel.status === 'BLOCKED' && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <p className="text-sm text-muted-foreground">{COPY.label.userBlocked}</p>
+                <p className="text-sm text-a1-text-auxiliary">{COPY.label.userBlocked}</p>
               </TooltipTrigger>
               <TooltipContent>
                 <p>{COPY.label.userBlocked}</p>
@@ -169,7 +171,7 @@ export function UserInvitePage({ userId, userScopes, onNavigateBack }: UserInvit
         )}
 
         {viewModel.status === 'INACTIVE' && (
-          <p className="text-sm text-muted-foreground">{COPY.label.userInactive}</p>
+          <p className="text-sm text-a1-text-auxiliary">{COPY.label.userInactive}</p>
         )}
 
         {/* Resend section — only for PENDING with write scope */}

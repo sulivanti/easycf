@@ -82,28 +82,30 @@ export function McpActionTypesPage() {
       </div>
 
       <div className="p-6">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Código</TableHead>
-              <TableHead>Nome</TableHead>
-              <TableHead>Categoria</TableHead>
-              <TableHead>Descrição</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {ACTION_TYPES.map((at) => (
-              <TableRow key={at.id}>
-                <TableCell className="font-medium font-mono text-xs">{at.codigo}</TableCell>
-                <TableCell>{at.nome}</TableCell>
-                <TableCell>
-                  <Badge variant={CATEGORY_VARIANT[at.category]}>{at.category}</Badge>
-                </TableCell>
-                <TableCell className="text-sm text-muted-foreground">{at.descricao}</TableCell>
+        <div className="rounded-lg border border-a1-border bg-white">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Código</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Categoria</TableHead>
+                <TableHead>Descrição</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {ACTION_TYPES.map((at) => (
+                <TableRow key={at.id}>
+                  <TableCell className="font-medium font-mono text-xs">{at.codigo}</TableCell>
+                  <TableCell>{at.nome}</TableCell>
+                  <TableCell>
+                    <Badge variant={CATEGORY_VARIANT[at.category]}>{at.category}</Badge>
+                  </TableCell>
+                  <TableCell className="text-sm text-a1-text-auxiliary">{at.descricao}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );

@@ -27,6 +27,8 @@ export interface UserListItem {
   full_name: string;
   status: string;
   created_at: string;
+  role_id?: string;
+  role_name?: string;
 }
 
 export interface UserDetail {
@@ -39,6 +41,7 @@ export interface UserDetail {
   status: string;
   created_at: string;
   updated_at: string;
+  invite_token_expired?: boolean;
 }
 
 export interface UpdateUserRequest {

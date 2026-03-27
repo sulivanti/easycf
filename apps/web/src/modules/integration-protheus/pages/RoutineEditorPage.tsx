@@ -21,6 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@shared/ui';
+import { PageHeader } from '@shared/ui/page-header';
 import {
   useIntegrationRoutines,
   usePublishRoutine,
@@ -100,18 +101,18 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
     <div className="flex h-full">
       {/* Left: Routines list */}
       <div className="w-80 shrink-0 overflow-y-auto border-r border-border p-4">
-        <h2 className="mb-3 text-lg font-semibold">Rotinas de Integração</h2>
+        <PageHeader title="Rotinas de Integração" />
 
         {routinesQuery.isLoading && (
           <div className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-14 rounded" />
+              <Skeleton key={i} className="h-14 rounded bg-a1-border" />
             ))}
           </div>
         )}
 
         {!routinesQuery.isLoading && routines.length === 0 && (
-          <p className="py-8 text-center text-sm text-muted-foreground">{COPY.empty_routines}</p>
+          <p className="py-8 text-center text-sm text-a1-text-auxiliary">{COPY.empty_routines}</p>
         )}
 
         <div className="space-y-1">
@@ -128,7 +129,7 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
                 <span className="text-sm font-medium">{r.nome}</span>
                 <Badge className={ROUTINE_STATUS_BADGE[r.status]}>{r.status}</Badge>
               </div>
-              <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+              <div className="mt-0.5 flex items-center gap-2 text-xs text-a1-text-auxiliary">
                 <span>v{r.version}</span>
                 {r.service_name && (
                   <>
@@ -152,7 +153,7 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
       {/* Right: Editor */}
       <div className="flex-1 overflow-y-auto p-6">
         {!selectedId ? (
-          <p className="mt-20 text-center text-sm text-muted-foreground">
+          <p className="mt-20 text-center text-sm text-a1-text-auxiliary">
             Selecione uma rotina para editar.
           </p>
         ) : (
@@ -190,7 +191,7 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
                   className={`border-b-2 px-5 py-2.5 text-sm transition-colors ${
                     activeTab === tab
                       ? 'border-blue-600 font-semibold text-blue-600'
-                      : 'border-transparent text-muted-foreground hover:text-foreground'
+                      : 'border-transparent text-a1-text-auxiliary hover:text-foreground'
                   }`}
                 >
                   {TAB_LABELS[tab]}

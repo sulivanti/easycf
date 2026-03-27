@@ -61,7 +61,7 @@ export function CasePanelPage({ caseId, userScopes = [] }: CasePanelPageProps) {
 
   if (isLoading) return <PanelSkeleton />;
   if (error) return <ErrorState error={error} />;
-  if (!caseData) return <p className="p-6 text-gray-500">Caso não encontrado.</p>;
+  if (!caseData) return <p className="p-6 text-a1-text-auxiliary">Caso não encontrado.</p>;
 
   const readonly = isReadonly(caseData.status);
 
@@ -95,10 +95,12 @@ function CaseHeader({ caseData }: { caseData: CaseDetail }) {
     <header className="px-6 pt-6 pb-3 flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold font-mono">{caseData.codigo}</h1>
+          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary font-mono">
+            {caseData.codigo}
+          </h1>
           <CaseStatusBadge status={caseData.status} />
         </div>
-        <div className="flex items-center gap-4 text-sm text-gray-500">
+        <div className="flex items-center gap-4 text-sm text-a1-text-auxiliary">
           <span>Aberto em: {new Date(caseData.opened_at).toLocaleDateString('pt-BR')}</span>
           {caseData.object_type && <span>Objeto: {caseData.object_type}</span>}
         </div>
@@ -109,7 +111,7 @@ function CaseHeader({ caseData }: { caseData: CaseDetail }) {
         </div>
       )}
       {caseData.status === 'CANCELLED' && caseData.cancellation_reason && (
-        <div className="rounded-md bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-600">
+        <div className="rounded-md bg-a1-bg border border-a1-border px-3 py-2 text-sm text-a1-text-auxiliary">
           Cancelado: {caseData.cancellation_reason}
         </div>
       )}
@@ -128,7 +130,7 @@ const TABS: Array<{ id: TabId; label: string }> = [
 
 function TabBar({ activeTab, onChange }: { activeTab: TabId; onChange: (t: TabId) => void }) {
   return (
-    <nav className="flex border-b px-6">
+    <nav className="flex border-b border-a1-border px-6">
       {TABS.map((t) => (
         <button
           key={t.id}
@@ -136,8 +138,8 @@ function TabBar({ activeTab, onChange }: { activeTab: TabId; onChange: (t: TabId
             px-4 py-2 text-sm font-medium border-b-2 transition-colors
             ${
               activeTab === t.id
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'border-a1-accent text-a1-accent'
+                : 'border-transparent text-a1-text-auxiliary hover:text-a1-text-secondary'
             }
           `}
           onClick={() => onChange(t.id)}
@@ -200,7 +202,9 @@ function OverviewTab({
     <div className="flex flex-col gap-6">
       {/* Gates summary */}
       <section>
-        <h3 className="text-sm font-semibold text-gray-700 mb-2">Gates do Estágio Atual</h3>
+        <h3 className="text-sm font-semibold text-a1-text-secondary mb-2">
+          Gates do Estágio Atual
+        </h3>
         {pendingGates.length > 0 ? (
           <p className="text-sm text-yellow-700">
             {pendingGates.length} gate(s) pendente(s) — transição bloqueada.
@@ -214,9 +218,11 @@ function OverviewTab({
       {!readonly && (
         <TooltipProvider>
           <section>
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">Transições Disponíveis</h3>
+            <h3 className="text-sm font-semibold text-a1-text-secondary mb-2">
+              Transições Disponíveis
+            </h3>
             {transitions.length === 0 ? (
-              <p className="text-sm text-gray-400">Nenhuma transição disponível.</p>
+              <p className="text-sm text-a1-text-auxiliary">Nenhuma transição disponível.</p>
             ) : (
               <div className="flex flex-wrap gap-2">
                 {transitions.map((t) => {
@@ -291,7 +297,7 @@ function OverviewTab({
 
       {/* Errors */}
       {(transition.error || control.error) && (
-        <p className="text-sm text-red-600">{(transition.error ?? control.error)?.message}</p>
+        <p className="text-sm text-danger-600">{(transition.error ?? control.error)?.message}</p>
       )}
 
       {/* Cancel confirmation dialog */}
@@ -374,14 +380,14 @@ function GatesTab({ caseId, readonly }: { caseId: string; readonly: boolean }) {
     return (
       <div className="flex flex-col gap-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton key={i} className="h-24 w-full" />
+          <Skeleton key={i} className="h-24 w-full bg-a1-border" />
         ))}
       </div>
     );
   }
 
   if (!gates || gates.length === 0) {
-    return <p className="text-sm text-gray-400 py-4">{COPY.empty_gates}</p>;
+    return <p className="text-sm text-a1-text-auxiliary py-4">{COPY.empty_gates}</p>;
   }
 
   return (
@@ -398,7 +404,7 @@ function GatesTab({ caseId, readonly }: { caseId: string; readonly: boolean }) {
         />
       ))}
       {(resolve.error || waive.error) && (
-        <p className="text-sm text-red-600">{(resolve.error ?? waive.error)?.message}</p>
+        <p className="text-sm text-danger-600">{(resolve.error ?? waive.error)?.message}</p>
       )}
     </div>
   );
@@ -435,7 +441,7 @@ function AssignmentsTab({
     return (
       <div className="flex flex-col gap-2">
         {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton key={i} className="h-12 w-full" />
+          <Skeleton key={i} className="h-12 w-full bg-a1-border" />
         ))}
       </div>
     );
@@ -444,7 +450,7 @@ function AssignmentsTab({
   return (
     <div className="flex flex-col gap-4">
       {!assignments || assignments.length === 0 ? (
-        <p className="text-sm text-gray-400 py-4">{COPY.empty_assignments}</p>
+        <p className="text-sm text-a1-text-auxiliary py-4">{COPY.empty_assignments}</p>
       ) : (
         <div className="flex flex-col gap-2">
           {assignments.map((a) => (
@@ -494,7 +500,7 @@ function AssignmentsTab({
               </Button>
             </div>
           )}
-          {assign.error && <p className="text-sm text-red-600">{assign.error.message}</p>}
+          {assign.error && <p className="text-sm text-danger-600">{assign.error.message}</p>}
         </>
       )}
     </div>
@@ -508,9 +514,11 @@ function AssignmentRow({ assignment }: { assignment: Assignment }) {
         <span className="text-sm font-medium">
           {assignment.process_role_name ?? assignment.process_role_id}
         </span>
-        <span className="text-sm text-gray-500">{assignment.user_name ?? assignment.user_id}</span>
+        <span className="text-sm text-a1-text-auxiliary">
+          {assignment.user_name ?? assignment.user_id}
+        </span>
       </div>
-      <div className="flex items-center gap-3 text-xs text-gray-400">
+      <div className="flex items-center gap-3 text-xs text-a1-text-auxiliary">
         <span>{new Date(assignment.assigned_at).toLocaleDateString('pt-BR')}</span>
         {assignment.valid_until && (
           <span>até {new Date(assignment.valid_until).toLocaleDateString('pt-BR')}</span>
@@ -543,7 +551,7 @@ function TimelineTab({ caseId, readonly }: { caseId: string; readonly: boolean }
     return (
       <div className="flex flex-col gap-3">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-16 w-full" />
+          <Skeleton key={i} className="h-16 w-full bg-a1-border" />
         ))}
       </div>
     );
@@ -577,7 +585,7 @@ function TimelineTab({ caseId, readonly }: { caseId: string; readonly: boolean }
         </div>
       )}
       <TimelineFeed entries={entries ?? []} />
-      {recordEvent.error && <p className="text-sm text-red-600">{recordEvent.error.message}</p>}
+      {recordEvent.error && <p className="text-sm text-danger-600">{recordEvent.error.message}</p>}
     </div>
   );
 }
@@ -587,10 +595,10 @@ function TimelineTab({ caseId, readonly }: { caseId: string; readonly: boolean }
 function PanelSkeleton() {
   return (
     <div className="p-6 flex flex-col gap-4">
-      <Skeleton className="h-8 w-64" />
-      <Skeleton className="h-4 w-48" />
-      <Skeleton className="h-10 w-full" />
-      <Skeleton className="h-64 w-full" />
+      <Skeleton className="h-8 w-64 bg-a1-border" />
+      <Skeleton className="h-4 w-48 bg-a1-border" />
+      <Skeleton className="h-10 w-full bg-a1-border" />
+      <Skeleton className="h-64 w-full bg-a1-border" />
     </div>
   );
 }
@@ -598,11 +606,13 @@ function PanelSkeleton() {
 function ErrorState({ error }: { error: Error & { correlationId?: string } }) {
   return (
     <div className="p-6">
-      <div className="rounded-md border border-red-200 bg-red-50 p-4">
-        <h3 className="font-medium text-red-800">{COPY.error_load_case}</h3>
-        <p className="mt-1 text-sm text-red-700">{error.message}</p>
+      <div className="rounded-md border border-a1-border bg-status-error-bg p-4">
+        <h3 className="font-medium text-danger-600">{COPY.error_load_case}</h3>
+        <p className="mt-1 text-sm text-danger-600">{error.message}</p>
         {error.correlationId && (
-          <p className="mt-2 text-xs text-red-500">Correlation ID: {error.correlationId}</p>
+          <p className="mt-2 text-xs text-a1-text-auxiliary">
+            Correlation ID: {error.correlationId}
+          </p>
         )}
       </div>
     </div>

@@ -26,6 +26,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  PageHeader,
 } from '@shared/ui';
 import {
   useRoutinesList,
@@ -254,7 +255,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
     return (
       <div className="p-6 space-y-3" aria-busy="true" aria-label="Carregando rotinas">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-10 rounded" />
+          <Skeleton key={i} className="h-10 rounded bg-a1-border" />
         ))}
       </div>
     );
@@ -264,7 +265,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
   if (routinesQuery.error) {
     return (
       <div className="p-6" role="alert">
-        <p className="text-destructive font-medium mb-2">Nao foi possivel carregar as rotinas.</p>
+        <p className="text-danger-600 font-medium mb-2">Nao foi possivel carregar as rotinas.</p>
         <Button variant="outline" onClick={() => routinesQuery.refetch()}>
           {COPY.btn_retry}
         </Button>
@@ -277,15 +278,17 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
   return (
     <div className="flex gap-4 h-[calc(100vh-120px)] p-6">
       {/* Left panel: Routines List */}
-      <div className="w-[360px] border-r border-border pr-4 overflow-y-auto shrink-0">
-        <div className="flex justify-between items-center mb-3">
-          <h1 className="text-lg font-bold">Rotinas</h1>
-          {canWrite && (
-            <Button size="sm" onClick={() => setShowCreateForm(true)}>
-              Nova rotina
-            </Button>
-          )}
-        </div>
+      <div className="w-[360px] border-r border-a1-border pr-4 overflow-y-auto shrink-0">
+        <PageHeader
+          title="Rotinas"
+          actions={
+            canWrite ? (
+              <Button size="sm" onClick={() => setShowCreateForm(true)}>
+                Nova rotina
+              </Button>
+            ) : undefined
+          }
+        />
 
         {/* Status filter */}
         <select
@@ -311,7 +314,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
         {showCreateForm && (
           <form
             onSubmit={handleCreateRoutine}
-            className="border border-border rounded-lg p-3 mb-3 space-y-2"
+            className="border border-a1-border rounded-lg p-3 mb-3 space-y-2"
           >
             <Input
               required
@@ -344,7 +347,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
 
         {/* Empty state */}
         {routines.length === 0 && (
-          <p className="text-muted-foreground text-sm py-8 text-center">{COPY.empty_routines}</p>
+          <p className="text-a1-text-auxiliary text-sm py-8 text-center">{COPY.empty_routines}</p>
         )}
 
         {/* List */}
@@ -360,7 +363,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
             className={`p-2.5 mb-1 rounded-md cursor-pointer transition-colors ${
               selectedId === r.id
                 ? 'bg-primary/5 border border-primary'
-                : 'border border-transparent hover:bg-muted/50'
+                : 'border border-transparent hover:bg-a1-bg'
             }`}
           >
             <div className="flex justify-between items-center">
@@ -368,7 +371,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
               <Badge className={`text-xs ${routineStatusClass(r.status)}`}>{r.status}</Badge>
             </div>
             <div className="text-sm text-foreground">{r.nome}</div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-xs text-a1-text-auxiliary">
               v{r.version} |{' '}
               {r.published_at ? new Date(r.published_at).toLocaleDateString() : 'Nao publicada'}
             </div>
@@ -379,16 +382,16 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
       {/* Right panel: Editor */}
       <div className="flex-1 overflow-y-auto pl-4">
         {!detail && !detailQuery.isLoading && (
-          <div className="text-muted-foreground text-center mt-10">
+          <div className="text-a1-text-auxiliary text-center mt-10">
             Selecione uma rotina para editar.
           </div>
         )}
 
         {detailQuery.isLoading && (
           <div className="space-y-3 py-4" aria-busy="true">
-            <Skeleton className="h-8 w-1/2 rounded" />
-            <Skeleton className="h-6 w-1/3 rounded" />
-            <Skeleton className="h-20 rounded" />
+            <Skeleton className="h-8 w-1/2 rounded bg-a1-border" />
+            <Skeleton className="h-6 w-1/3 rounded bg-a1-border" />
+            <Skeleton className="h-20 rounded bg-a1-border" />
           </div>
         )}
 
@@ -399,7 +402,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
               <div>
                 <h2 className="text-xl font-bold">
                   {detail.nome}{' '}
-                  <span className="text-sm text-muted-foreground font-normal">
+                  <span className="text-sm text-a1-text-auxiliary font-normal">
                     v{detail.version}
                   </span>
                 </h2>
@@ -439,14 +442,14 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
               </div>
             )}
             {isDeprecated && (
-              <div className="bg-muted px-4 py-2.5 rounded-md mb-4 text-sm text-muted-foreground">
+              <div className="bg-muted px-4 py-2.5 rounded-md mb-4 text-sm text-a1-text-auxiliary">
                 {COPY.deprecated_banner}
               </div>
             )}
 
             {/* Items list */}
             {sortedItems.length === 0 && (
-              <p className="text-muted-foreground text-sm py-4">{COPY.empty_items}</p>
+              <p className="text-a1-text-auxiliary text-sm py-4">{COPY.empty_items}</p>
             )}
 
             {sortedItems.map((item, idx) => (
@@ -457,13 +460,13 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
                 onDragEnter={() => handleDragEnter(idx)}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDrop}
-                className={`border border-border rounded-lg p-3 mb-2 transition-colors ${
+                className={`border border-a1-border rounded-lg p-3 mb-2 transition-colors ${
                   isDraft ? 'cursor-grab' : ''
                 } ${editingItemId === item.id ? 'bg-amber-50' : 'bg-background'}`}
               >
                 <div className="flex items-center gap-2">
                   {isDraft && canWrite && (
-                    <span className="cursor-grab text-muted-foreground select-none">&#9776;</span>
+                    <span className="cursor-grab text-a1-text-auxiliary select-none">&#9776;</span>
                   )}
                   <span className="font-bold text-sm w-6">{item.ordem}</span>
                   <Badge className={`text-xs ${itemTypeBadgeClass(item.item_type as ItemType)}`}>
@@ -495,7 +498,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-destructive"
+                        className="text-danger-600"
                         onClick={() => handleDeleteItem(item.id)}
                       >
                         Remover
@@ -564,7 +567,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
                 <div className="space-y-3">
                   {detail.version_history.map((vh) => (
                     <div key={vh.id} className="border-l-2 border-primary pl-3">
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-xs text-a1-text-auxiliary">
                         {new Date(vh.changed_at).toLocaleDateString()}
                       </div>
                       <div className="text-sm">{vh.change_reason}</div>
@@ -574,7 +577,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
               </div>
             )}
             {detail.version_history.length === 0 && (
-              <p className="text-muted-foreground text-xs mt-6">{COPY.history_empty}</p>
+              <p className="text-a1-text-auxiliary text-xs mt-6">{COPY.history_empty}</p>
             )}
           </div>
         )}
@@ -628,7 +631,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-y"
             />
             {forkReason.length > 0 && forkReason.length < 10 && (
-              <p className="text-destructive text-xs">{COPY.error_fork_reason}</p>
+              <p className="text-danger-600 text-xs">{COPY.error_fork_reason}</p>
             )}
           </div>
           <DialogFooter>

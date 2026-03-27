@@ -12,14 +12,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { Button } from '@shared/ui/button.js';
 import { Input } from '@shared/ui/input.js';
 import { Skeleton } from '@shared/ui/skeleton.js';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@shared/ui/dialog.js';
+import { ConfirmationModal } from '@shared/ui/confirmation-modal';
 import { toast } from 'sonner';
 import { useOrgTree } from '../hooks/use-org-tree.js';
 import {
@@ -150,7 +143,11 @@ export function OrgTreePage({
         aria-label="Carregando estrutura organizacional"
       >
         {Array.from({ length: 5 }, (_, i) => (
-          <Skeleton key={i} className="h-6 rounded-md" style={{ width: `${60 + i * 6}%` }} />
+          <Skeleton
+            key={i}
+            className="h-6 rounded-md bg-a1-border"
+            style={{ width: `${60 + i * 6}%` }}
+          />
         ))}
       </div>
     );
@@ -160,7 +157,7 @@ export function OrgTreePage({
   if (isError) {
     return (
       <div className="p-6 text-center" role="alert">
-        <p className="text-destructive mb-4">{COPY.error.loadFailed}</p>
+        <p className="text-danger-600 mb-4">{COPY.error.loadFailed}</p>
         <Button variant="outline" onClick={() => refetch()}>
           {COPY.label.retry}
         </Button>
@@ -172,7 +169,7 @@ export function OrgTreePage({
   if (!tree || tree.length === 0) {
     return (
       <div className="p-6 text-center">
-        <p className="text-muted-foreground mb-4">{COPY.label.emptyState}</p>
+        <p className="text-a1-text-auxiliary mb-4">{COPY.label.emptyState}</p>
         {canWriteOrgUnit(userScopes) && (
           <Button onClick={() => onNavigateCreate()}>{COPY.label.createFirst}</Button>
         )}
@@ -202,7 +199,10 @@ export function OrgTreePage({
             className="w-56 border-a1-border bg-white font-display text-[13px]"
           />
           {canWriteOrgUnit(userScopes) && (
-            <Button onClick={() => onNavigateCreate()} className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90">
+            <Button
+              onClick={() => onNavigateCreate()}
+              className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90"
+            >
               + Nova Unidade
             </Button>
           )}
@@ -223,51 +223,47 @@ export function OrgTreePage({
 
         {/* Empty search */}
         {filteredTree.length === 0 && searchTerm.trim() !== '' && (
-          <p className="font-display text-[13px] text-a1-text-auxiliary">{COPY.label.emptySearch}</p>
+          <p className="font-display text-[13px] text-a1-text-auxiliary">
+            {COPY.label.emptySearch}
+          </p>
         )}
 
         {/* Tree */}
         {filteredTree.length > 0 && (
           <ul role="tree" aria-label="Árvore organizacional" className="list-none p-0">
-          {filteredTree.map((node, idx) => (
-            <OrgTreeNode
-              key={node.id}
-              node={node}
-              level={1}
-              posInSet={idx + 1}
-              setSize={filteredTree.length}
-              defaultExpanded
-              showInactive={showInactive}
-              userScopes={userScopes}
-              onCreateChild={handleCreateChild}
-              onEdit={onNavigateEdit}
-              onDelete={handleDelete}
-              onRestore={handleRestore}
-              onLinkTenant={(id) => onNavigateEdit(id)}
-              onUnlinkTenant={handleUnlinkTenant}
-              onViewHistory={onNavigateHistory}
-            />
-          ))}
-        </ul>
-      )}
+            {filteredTree.map((node, idx) => (
+              <OrgTreeNode
+                key={node.id}
+                node={node}
+                level={1}
+                posInSet={idx + 1}
+                setSize={filteredTree.length}
+                defaultExpanded
+                showInactive={showInactive}
+                userScopes={userScopes}
+                onCreateChild={handleCreateChild}
+                onEdit={onNavigateEdit}
+                onDelete={handleDelete}
+                onRestore={handleRestore}
+                onLinkTenant={(id) => onNavigateEdit(id)}
+                onUnlinkTenant={handleUnlinkTenant}
+                onViewHistory={onNavigateHistory}
+              />
+            ))}
+          </ul>
+        )}
 
         {/* Confirmation dialog */}
-        <Dialog open={confirm.open} onOpenChange={(open) => !open && closeConfirm()}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{confirm.title}</DialogTitle>
-              <DialogDescription>{confirm.description}</DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button variant="outline" onClick={closeConfirm}>
-                {COPY.modal.cancel}
-              </Button>
-              <Button variant="destructive" onClick={confirm.onConfirm}>
-                {confirm.confirmLabel}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <ConfirmationModal
+          open={confirm.open}
+          onOpenChange={(open) => !open && closeConfirm()}
+          title={confirm.title}
+          description={confirm.description}
+          variant="destructive"
+          confirmLabel={confirm.confirmLabel}
+          cancelLabel={COPY.modal.cancel}
+          onConfirm={confirm.onConfirm}
+        />
       </div>
     </div>
   );

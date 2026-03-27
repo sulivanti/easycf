@@ -12,14 +12,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import { Skeleton } from '@shared/ui/skeleton';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@shared/ui/table';
+import { EmptyState } from '@shared/ui/empty-state';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
 import { useOperationConfig } from '../hooks/use-operation-config.js';
 
 interface DataViewPageProps {
@@ -54,7 +48,11 @@ export function DataViewPage({
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   // ── Column config from motor ───────────────────────────────────────────
-  const { columns, isLoading: configLoading, isError: configError } = useOperationConfig(framerId, objectType);
+  const {
+    columns,
+    isLoading: configLoading,
+    isError: configError,
+  } = useOperationConfig(framerId, objectType);
 
   // ── Data fetching ──────────────────────────────────────────────────────
   const {
@@ -86,17 +84,14 @@ export function DataViewPage({
   const visibleColumns = columns.filter((c) => c.visible);
 
   // ── Selection ──────────────────────────────────────────────────────────
-  const toggleSelect = useCallback(
-    (id: string) => {
-      setSelected((prev) => {
-        const next = new Set(prev);
-        if (next.has(id)) next.delete(id);
-        else next.add(id);
-        return next;
-      });
-    },
-    [],
-  );
+  const toggleSelect = useCallback((id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
 
   const toggleSelectAll = useCallback(() => {
     if (selected.size === records.length) {
@@ -121,10 +116,10 @@ export function DataViewPage({
   if (configLoading || (dataLoading && records.length === 0)) {
     return (
       <div className="space-y-4 p-6">
-        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-10 w-64 bg-a1-border" />
         <div className="space-y-2">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-12 w-full" />
+            <Skeleton key={i} className="h-12 w-full bg-a1-border" />
           ))}
         </div>
       </div>
@@ -135,8 +130,10 @@ export function DataViewPage({
   if (configError || dataError) {
     return (
       <div role="alert" className="p-6">
-        <div className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
-          <p>Não foi possível carregar os dados. Verifique se o motor está configurado corretamente.</p>
+        <div className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600">
+          <p>
+            Não foi possível carregar os dados. Verifique se o motor está configurado corretamente.
+          </p>
         </div>
       </div>
     );
@@ -195,14 +192,18 @@ export function DataViewPage({
       {/* ── Table ───────────────────────────────────────────────────── */}
       <div className="p-6">
         {records.length === 0 ? (
-          <div className="rounded-md border border-dashed p-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              Nenhum registro encontrado. Use "Inclusão em massa" para adicionar dados.
-            </p>
-          </div>
+          <EmptyState
+            title="Nenhum registro encontrado"
+            description="Use 'Inclusão em massa' para adicionar dados."
+            action={
+              <Button size="sm" onClick={onNavigateToBulkInsert}>
+                Inclusão em massa
+              </Button>
+            }
+          />
         ) : (
           <>
-            <div className="overflow-x-auto rounded-md border">
+            <div className="overflow-x-auto rounded-lg border border-a1-border bg-white">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -224,7 +225,10 @@ export function DataViewPage({
                   {records.map((record) => {
                     const recordId = String(record.id ?? record._id ?? '');
                     return (
-                      <TableRow key={recordId} data-state={selected.has(recordId) ? 'selected' : undefined}>
+                      <TableRow
+                        key={recordId}
+                        data-state={selected.has(recordId) ? 'selected' : undefined}
+                      >
                         <TableCell>
                           <input
                             type="checkbox"

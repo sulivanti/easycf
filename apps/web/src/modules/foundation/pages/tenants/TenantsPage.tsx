@@ -13,14 +13,10 @@ import { Label } from '@shared/ui/label';
 import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@shared/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
+import { PageHeader } from '@shared/ui/page-header';
+import { EmptyState } from '@shared/ui/empty-state';
+import { ConfirmationModal } from '@shared/ui/confirmation-modal';
 import {
   useTenants,
   useCreateTenant,
@@ -76,7 +72,7 @@ function TenantFormDialog({
           {error && (
             <div
               role="alert"
-              className="mt-2 rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+              className="mt-2 rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
             >
               <p>{error.message}</p>
             </div>
@@ -151,7 +147,7 @@ function TenantUsersPanel({ tenantId }: { tenantId: string }) {
   }
 
   return (
-    <div className="space-y-3 rounded-md bg-muted/50 p-4">
+    <div className="space-y-3 rounded-md bg-a1-bg p-4">
       <h3 className="text-sm font-semibold">Membros da filial</h3>
 
       <form onSubmit={handleAdd} className="flex gap-2">
@@ -178,11 +174,11 @@ function TenantUsersPanel({ tenantId }: { tenantId: string }) {
 
       {loading ? (
         <div className="space-y-2" aria-busy="true">
-          <Skeleton className="h-8 w-full" />
-          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full bg-a1-border" />
+          <Skeleton className="h-8 w-full bg-a1-border" />
         </div>
       ) : users.length === 0 ? (
-        <p className="text-xs text-muted-foreground">Nenhum usuário vinculado.</p>
+        <p className="text-xs text-a1-text-auxiliary">Nenhum usuário vinculado.</p>
       ) : (
         <Table>
           <TableHeader>
@@ -226,7 +222,7 @@ function TenantsSkeleton() {
   return (
     <div className="space-y-2" aria-busy="true">
       {Array.from({ length: 4 }).map((_, i) => (
-        <Skeleton key={i} className="h-12 w-full" />
+        <Skeleton key={i} className="h-12 w-full bg-a1-border" />
       ))}
     </div>
   );
@@ -266,17 +262,19 @@ export function TenantsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Filiais</h1>
-        <Button size="sm" onClick={() => setShowForm(true)}>
-          Criar filial
-        </Button>
-      </div>
+      <PageHeader
+        title="Filiais"
+        actions={
+          <Button size="sm" onClick={() => setShowForm(true)}>
+            Criar filial
+          </Button>
+        }
+      />
 
       {error && (
         <div
           role="alert"
-          className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+          className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
         >
           <p>{error.message}</p>
         </div>
@@ -285,87 +283,87 @@ export function TenantsPage() {
       {loading && tenants.length === 0 ? (
         <TenantsSkeleton />
       ) : tenants.length === 0 ? (
-        <div className="rounded-md border border-dashed p-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            Nenhuma filial encontrada. Crie a primeira.
-          </p>
-        </div>
+        <EmptyState title="Nenhum item" description="Nenhuma filial encontrada. Crie a primeira." />
       ) : (
         <>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Código</TableHead>
-                <TableHead>Nome</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Criado em</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {tenants.map((tenant) => (
-                <Fragment key={tenant.id}>
-                  <TableRow>
-                    <TableCell className="font-mono text-xs">{tenant.codigo}</TableCell>
-                    <TableCell className="font-medium">{tenant.name}</TableCell>
-                    <TableCell>
-                      <Badge variant={statusVariant[tenant.status] ?? 'secondary'}>
-                        {tenant.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{new Date(tenant.created_at).toLocaleDateString('pt-BR')}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-1">
-                        <Button
-                          variant="ghost"
-                          size="xs"
-                          onClick={() =>
-                            setExpandedTenantId(expandedTenantId === tenant.id ? null : tenant.id)
-                          }
-                        >
-                          {expandedTenantId === tenant.id ? 'Fechar' : 'Membros'}
-                        </Button>
-
-                        {tenant.status === 'ACTIVE' && (
-                          <Button
-                            variant="ghost"
-                            size="xs"
-                            onClick={() => handleStatusChange(tenant.id, 'BLOCKED')}
-                          >
-                            Bloquear
-                          </Button>
-                        )}
-                        {tenant.status === 'BLOCKED' && (
-                          <Button
-                            variant="ghost"
-                            size="xs"
-                            onClick={() => handleStatusChange(tenant.id, 'ACTIVE')}
-                          >
-                            Desbloquear
-                          </Button>
-                        )}
-
-                        <Button
-                          variant="ghost"
-                          size="xs"
-                          onClick={() => setDeleteTarget({ id: tenant.id, name: tenant.name })}
-                        >
-                          Excluir
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                  {expandedTenantId === tenant.id && (
+          <div className="rounded-lg border border-a1-border bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Criado em</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {tenants.map((tenant) => (
+                  <Fragment key={tenant.id}>
                     <TableRow>
-                      <TableCell colSpan={5} className="p-0">
-                        <TenantUsersPanel tenantId={tenant.id} />
+                      <TableCell className="font-mono text-xs">{tenant.codigo}</TableCell>
+                      <TableCell className="font-medium">{tenant.name}</TableCell>
+                      <TableCell>
+                        <Badge variant={statusVariant[tenant.status] ?? 'secondary'}>
+                          {tenant.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(tenant.created_at).toLocaleDateString('pt-BR')}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="xs"
+                            onClick={() =>
+                              setExpandedTenantId(expandedTenantId === tenant.id ? null : tenant.id)
+                            }
+                          >
+                            {expandedTenantId === tenant.id ? 'Fechar' : 'Membros'}
+                          </Button>
+
+                          {tenant.status === 'ACTIVE' && (
+                            <Button
+                              variant="ghost"
+                              size="xs"
+                              onClick={() => handleStatusChange(tenant.id, 'BLOCKED')}
+                            >
+                              Bloquear
+                            </Button>
+                          )}
+                          {tenant.status === 'BLOCKED' && (
+                            <Button
+                              variant="ghost"
+                              size="xs"
+                              onClick={() => handleStatusChange(tenant.id, 'ACTIVE')}
+                            >
+                              Desbloquear
+                            </Button>
+                          )}
+
+                          <Button
+                            variant="ghost"
+                            size="xs"
+                            onClick={() => setDeleteTarget({ id: tenant.id, name: tenant.name })}
+                          >
+                            Excluir
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
-                  )}
-                </Fragment>
-              ))}
-            </TableBody>
-          </Table>
+                    {expandedTenantId === tenant.id && (
+                      <TableRow>
+                        <TableCell colSpan={5} className="p-0">
+                          <TenantUsersPanel tenantId={tenant.id} />
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </Fragment>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
           {hasMore && (
             <div className="flex justify-center">
@@ -380,25 +378,16 @@ export function TenantsPage() {
       {/* Create tenant dialog */}
       <TenantFormDialog open={showForm} onOpenChange={setShowForm} onSuccess={() => refresh()} />
 
-      {/* Delete confirmation dialog */}
-      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirmar exclusão</DialogTitle>
-            <DialogDescription>
-              Tem certeza que deseja excluir a filial <strong>{deleteTarget?.name}</strong>?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setDeleteTarget(null)}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" isLoading={deleting} onClick={handleDelete}>
-              Excluir
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationModal
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        title="Confirmar exclusão"
+        description={`Tem certeza que deseja excluir ${deleteTarget?.name}?`}
+        variant="destructive"
+        confirmLabel="Excluir"
+        onConfirm={handleDelete}
+        isLoading={deleting}
+      />
     </div>
   );
 }

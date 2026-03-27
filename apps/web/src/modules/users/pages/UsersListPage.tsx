@@ -131,89 +131,97 @@ export function UsersListPage({
           </p>
         </div>
         {showCreate && (
-          <Button onClick={onNavigateToCreate} className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90">
+          <Button
+            onClick={onNavigateToCreate}
+            className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90"
+          >
             + Novo Usuário
           </Button>
         )}
       </div>
 
       <div className="space-y-4 p-6">
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <Input
-          placeholder="Buscar por nome ou e-mail..."
-          value={searchInput}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          className="w-64 border-a1-border bg-white font-display text-[13px]"
-        />
-        <select
-          value={statusFilter}
-          onChange={(e) => handleStatusChange(e.target.value)}
-          className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
-        >
-          {STATUS_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <select
-          value={roleFilter}
-          onChange={(e) => handleRoleChange(e.target.value)}
-          className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
-        >
-          <option value="">Todos os perfis</option>
-          {(roles ?? []).map((role) => (
-            <option key={role.id} value={role.id}>
-              {role.name}
-            </option>
-          ))}
-        </select>
-        {hasFilters && (
-          <Button variant="link" size="sm" onClick={handleClearFilters} className="font-display text-a1-accent">
-            Limpar filtros
-          </Button>
-        )}
-      </div>
-
-      {/* Error state */}
-      {isError && !isLoading && (
-        <div className="rounded-md bg-destructive/10 p-4">
-          <p className="text-sm text-destructive">{COPY.error.loadUsersFailed}</p>
-          {error instanceof ApiError && error.correlationId && (
-            <p className="mt-1 text-xs text-destructive/70">
-              Correlation ID: {error.correlationId}
-            </p>
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-3">
+          <Input
+            placeholder="Buscar por nome ou e-mail..."
+            value={searchInput}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="w-64 border-a1-border bg-white font-display text-[13px]"
+          />
+          <select
+            value={statusFilter}
+            onChange={(e) => handleStatusChange(e.target.value)}
+            className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
+          >
+            {STATUS_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={roleFilter}
+            onChange={(e) => handleRoleChange(e.target.value)}
+            className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
+          >
+            <option value="">Todos os perfis</option>
+            {(roles ?? []).map((role) => (
+              <option key={role.id} value={role.id}>
+                {role.name}
+              </option>
+            ))}
+          </select>
+          {hasFilters && (
+            <Button
+              variant="link"
+              size="sm"
+              onClick={handleClearFilters}
+              className="font-display text-a1-accent"
+            >
+              Limpar filtros
+            </Button>
           )}
-          <Button variant="link" size="sm" className="mt-2 p-0" onClick={() => invalidateList()}>
-            {COPY.label.retry}
-          </Button>
         </div>
-      )}
 
-      {/* Table */}
-      {!isError && (
-        <UsersTable
-          users={viewModels}
-          loading={isLoading}
-          canCreate={showCreate}
-          hasMore={!!data?.nextCursor}
-          loadingMore={isLoading && !!filters.cursor}
-          onLoadMore={handleLoadMore}
-          onCreateClick={onNavigateToCreate}
-          onDeactivateClick={(id, name) => setDeactivateTarget({ id, name })}
-          onInviteClick={onNavigateToInvite}
+        {/* Error state */}
+        {isError && !isLoading && (
+          <div className="rounded-md bg-destructive/10 p-4">
+            <p className="text-sm text-destructive">{COPY.error.loadUsersFailed}</p>
+            {error instanceof ApiError && error.correlationId && (
+              <p className="mt-1 text-xs text-destructive/70">
+                Correlation ID: {error.correlationId}
+              </p>
+            )}
+            <Button variant="link" size="sm" className="mt-2 p-0" onClick={() => invalidateList()}>
+              {COPY.label.retry}
+            </Button>
+          </div>
+        )}
+
+        {/* Table */}
+        {!isError && (
+          <UsersTable
+            users={viewModels}
+            loading={isLoading}
+            canCreate={showCreate}
+            hasMore={!!data?.nextCursor}
+            loadingMore={isLoading && !!filters.cursor}
+            onLoadMore={handleLoadMore}
+            onCreateClick={onNavigateToCreate}
+            onDeactivateClick={(id, name) => setDeactivateTarget({ id, name })}
+            onInviteClick={onNavigateToInvite}
+          />
+        )}
+
+        {/* Deactivate Modal */}
+        <DeactivateModal
+          open={!!deactivateTarget}
+          userName={deactivateTarget?.name ?? ''}
+          loading={deactivateMutation.isPending}
+          onConfirm={handleDeactivateConfirm}
+          onCancel={() => setDeactivateTarget(null)}
         />
-      )}
-
-      {/* Deactivate Modal */}
-      <DeactivateModal
-        open={!!deactivateTarget}
-        userName={deactivateTarget?.name ?? ''}
-        loading={deactivateMutation.isPending}
-        onConfirm={handleDeactivateConfirm}
-        onCancel={() => setDeactivateTarget(null)}
-      />
       </div>
     </div>
   );

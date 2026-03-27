@@ -11,13 +11,6 @@ import {
   Button,
   Skeleton,
   Spinner,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
   Drawer,
   DrawerContent,
   DrawerHeader,
@@ -26,6 +19,9 @@ import {
   DrawerClose,
   Input,
   Label,
+  ConfirmationModal,
+  PageHeader,
+  EmptyState,
 } from '@shared/ui';
 import { ApiError } from '../../foundation/api/http-client.js';
 import { useOrgScopes, useCreateOrgScope, useDeleteOrgScope } from '../hooks/use-org-scopes.js';
@@ -149,11 +145,11 @@ export function OrgScopeManagementPage({
     return (
       <div className="flex flex-col gap-4 p-6">
         <div className="flex items-center justify-between">
-          <Skeleton className="h-8 w-64" />
-          <Skeleton className="h-9 w-24" />
+          <Skeleton className="h-8 w-64 bg-a1-border" />
+          <Skeleton className="h-9 w-24 bg-a1-border" />
         </div>
         {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton key={i} className="h-20 w-full rounded-lg" />
+          <Skeleton key={i} className="h-20 w-full rounded-lg bg-a1-border" />
         ))}
       </div>
     );
@@ -163,7 +159,7 @@ export function OrgScopeManagementPage({
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
-        <p className="text-sm text-destructive">{COPY.error.loadScopesFailed}</p>
+        <p className="text-sm text-danger-600">{COPY.error.loadScopesFailed}</p>
         <Button variant="outline" onClick={() => refetch()}>
           {COPY.label.retry}
         </Button>
@@ -175,19 +171,17 @@ export function OrgScopeManagementPage({
   return (
     <div className="flex flex-col gap-6 p-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-semibold text-foreground">Escopo Organizacional</h1>
-          <p className="text-sm text-muted-foreground">{userName}</p>
-        </div>
-        {canWrite && <Button onClick={handleOpenAdd}>{COPY.label.addScope}</Button>}
-      </div>
+      <PageHeader
+        title="Escopo Organizacional"
+        description={userName}
+        actions={
+          canWrite ? <Button onClick={handleOpenAdd}>{COPY.label.addScope}</Button> : undefined
+        }
+      />
 
       {/* Empty */}
       {scopes && scopes.length === 0 && (
-        <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border py-12">
-          <p className="text-sm text-muted-foreground">{COPY.label.emptyScopes}</p>
-        </div>
+        <EmptyState title="Sem escopos" description={COPY.label.emptyScopes} />
       )}
 
       {/* Cards */}
@@ -221,7 +215,7 @@ export function OrgScopeManagementPage({
                 placeholder="UUID do nó organizacional"
               />
               {fieldErrors.get('org_unit_id') && (
-                <p className="text-xs text-destructive">{fieldErrors.get('org_unit_id')}</p>
+                <p className="text-xs text-danger-600">{fieldErrors.get('org_unit_id')}</p>
               )}
             </div>
 
@@ -245,7 +239,7 @@ export function OrgScopeManagementPage({
                 </Button>
               </div>
               {hasPrimary && scopeType === 'PRIMARY' && (
-                <p className="text-xs text-muted-foreground">{COPY.validation.duplicatePrimary}</p>
+                <p className="text-xs text-a1-text-auxiliary">{COPY.validation.duplicatePrimary}</p>
               )}
             </div>
 
@@ -259,12 +253,12 @@ export function OrgScopeManagementPage({
                 min={new Date().toISOString().split('T')[0]}
               />
               {validUntil && !isValidFutureDate(validUntil) && (
-                <p className="text-xs text-destructive">{COPY.validation.futureDate}</p>
+                <p className="text-xs text-danger-600">{COPY.validation.futureDate}</p>
               )}
             </div>
 
             {createScope.isError && fieldErrors.size === 0 && (
-              <p className="text-sm text-destructive">{COPY.error.unexpected}</p>
+              <p className="text-sm text-danger-600">{COPY.error.unexpected}</p>
             )}
           </div>
 
@@ -281,31 +275,17 @@ export function OrgScopeManagementPage({
       </Drawer>
 
       {/* Remove Confirmation Dialog */}
-      <Dialog open={!!removeTarget} onOpenChange={(o) => !o && setRemoveTarget(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {isPrimary ? COPY.modal.removePrimaryTitle : COPY.modal.removeSecondaryTitle}
-            </DialogTitle>
-            <DialogDescription>
-              {isPrimary ? COPY.modal.removePrimaryBody : COPY.modal.removeSecondaryBody}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">{COPY.modal.cancel}</Button>
-            </DialogClose>
-            <Button
-              variant={isPrimary ? 'destructive' : 'default'}
-              onClick={handleConfirmRemove}
-              disabled={deleteScope.isPending}
-            >
-              {deleteScope.isPending ? <Spinner className="mr-2 h-4 w-4" /> : null}
-              {isPrimary ? COPY.modal.removePrimaryConfirm : COPY.modal.removeConfirm}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationModal
+        open={!!removeTarget}
+        onOpenChange={(o) => !o && setRemoveTarget(null)}
+        title={isPrimary ? COPY.modal.removePrimaryTitle : COPY.modal.removeSecondaryTitle}
+        description={isPrimary ? COPY.modal.removePrimaryBody : COPY.modal.removeSecondaryBody}
+        variant={isPrimary ? 'destructive' : 'default'}
+        confirmLabel={isPrimary ? COPY.modal.removePrimaryConfirm : COPY.modal.removeConfirm}
+        cancelLabel={COPY.modal.cancel}
+        onConfirm={handleConfirmRemove}
+        isLoading={deleteScope.isPending}
+      />
     </div>
   );
 }

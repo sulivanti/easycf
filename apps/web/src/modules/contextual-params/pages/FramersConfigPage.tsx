@@ -23,12 +23,8 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+  ConfirmationModal,
+  PageHeader,
 } from '@shared/ui';
 import {
   useFramersList,
@@ -200,7 +196,7 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
     return (
       <div className="p-6 space-y-3" aria-busy="true" aria-label="Carregando enquadradores">
         {Array.from({ length: 5 }).map((_, i) => (
-          <Skeleton key={i} className="h-8 rounded" />
+          <Skeleton key={i} className="h-8 rounded bg-a1-border" />
         ))}
       </div>
     );
@@ -212,9 +208,9 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
   if (firstError) {
     return (
       <div className="p-6" role="alert">
-        <p className="text-destructive font-medium mb-2">{COPY.error_load_framers}</p>
+        <p className="text-danger-600 font-medium mb-2">{COPY.error_load_framers}</p>
         {'correlationId' in (firstError as unknown as Record<string, unknown>) && (
-          <p className="text-xs text-muted-foreground mb-3">
+          <p className="text-xs text-a1-text-auxiliary mb-3">
             Correlation ID: {(firstError as unknown as Record<string, string>).correlationId}
           </p>
         )}
@@ -242,17 +238,19 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <h1 className="text-2xl font-bold">Parametrizacao Contextual</h1>
-        {canWrite && (
-          <Button onClick={() => setDrawer({ open: true, mode: 'create' })}>
-            Novo enquadrador
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        title="Parametrizacao Contextual"
+        actions={
+          canWrite ? (
+            <Button onClick={() => setDrawer({ open: true, mode: 'create' })}>
+              Novo enquadrador
+            </Button>
+          ) : undefined
+        }
+      />
 
       {/* Panel tabs */}
-      <div className="flex gap-1 mb-6 border-b border-border" role="tablist">
+      <div className="flex gap-1 mb-6 border-b border-a1-border" role="tablist">
         {PANELS.map((panel) => (
           <button
             key={panel.key}
@@ -262,8 +260,8 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
             onClick={() => setActivePanel(panel.key)}
             className={`px-4 py-2 text-sm font-medium transition-colors -mb-px ${
               activePanel === panel.key
-                ? 'border-b-2 border-primary text-primary'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'border-b-2 border-a1-accent text-a1-accent'
+                : 'text-a1-text-auxiliary hover:text-a1-text-secondary'
             }`}
           >
             {panel.label}
@@ -292,83 +290,91 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
           </div>
 
           {framers.length === 0 ? (
-            <p className="text-muted-foreground text-sm py-8 text-center">{COPY.empty_framers}</p>
+            <p className="text-a1-text-auxiliary text-sm py-8 text-center">{COPY.empty_framers}</p>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Codigo</TableHead>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Valido ate</TableHead>
-                  {(canWrite || canDelete) && <TableHead>Acoes</TableHead>}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {framers.map((f) => {
-                  const typeName = framerTypes.find((t) => t.id === f.framer_type_id)?.nome ?? '—';
-                  const expiring = isExpiringSoon(f.valid_until);
+            <div className="rounded-lg border border-a1-border bg-white">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Codigo</TableHead>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>Tipo</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Valido ate</TableHead>
+                    {(canWrite || canDelete) && <TableHead>Acoes</TableHead>}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {framers.map((f) => {
+                    const typeName =
+                      framerTypes.find((t) => t.id === f.framer_type_id)?.nome ?? '—';
+                    const expiring = isExpiringSoon(f.valid_until);
 
-                  return (
-                    <TableRow key={f.id}>
-                      <TableCell className="font-mono">{f.codigo}</TableCell>
-                      <TableCell>{f.nome}</TableCell>
-                      <TableCell>{typeName}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1.5">
-                          <Badge className={`text-xs ${framerStatusClass(f.status)}`}>
-                            {f.status}
-                          </Badge>
-                          {expiring && (
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger>
-                                  <Badge className="text-xs bg-amber-500 text-white">
-                                    Expirando
-                                  </Badge>
-                                </TooltipTrigger>
-                                <TooltipContent>{COPY.tooltip_expirando}</TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {f.valid_until ? new Date(f.valid_until).toLocaleDateString() : '—'}
-                      </TableCell>
-                      {(canWrite || canDelete) && (
+                    return (
+                      <TableRow key={f.id}>
+                        <TableCell className="font-mono">{f.codigo}</TableCell>
+                        <TableCell>{f.nome}</TableCell>
+                        <TableCell>{typeName}</TableCell>
                         <TableCell>
-                          <div className="flex gap-1">
-                            {canWrite && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() =>
-                                  setDrawer({ open: true, mode: 'edit', framerId: f.id, framer: f })
-                                }
-                              >
-                                Editar
-                              </Button>
-                            )}
-                            {canDeactivateFramer(userScopes, f.status) && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-destructive"
-                                onClick={() => setDeactivateTarget(f)}
-                              >
-                                Inativar
-                              </Button>
+                          <div className="flex items-center gap-1.5">
+                            <Badge className={`text-xs ${framerStatusClass(f.status)}`}>
+                              {f.status}
+                            </Badge>
+                            {expiring && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <Badge className="text-xs bg-amber-500 text-white">
+                                      Expirando
+                                    </Badge>
+                                  </TooltipTrigger>
+                                  <TooltipContent>{COPY.tooltip_expirando}</TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                             )}
                           </div>
                         </TableCell>
-                      )}
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+                        <TableCell>
+                          {f.valid_until ? new Date(f.valid_until).toLocaleDateString() : '—'}
+                        </TableCell>
+                        {(canWrite || canDelete) && (
+                          <TableCell>
+                            <div className="flex gap-1">
+                              {canWrite && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() =>
+                                    setDrawer({
+                                      open: true,
+                                      mode: 'edit',
+                                      framerId: f.id,
+                                      framer: f,
+                                    })
+                                  }
+                                >
+                                  Editar
+                                </Button>
+                              )}
+                              {canDeactivateFramer(userScopes, f.status) && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-danger-600"
+                                  onClick={() => setDeactivateTarget(f)}
+                                >
+                                  Inativar
+                                </Button>
+                              )}
+                            </div>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </div>
       )}
@@ -377,7 +383,7 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
       {activePanel === 'objects' && (
         <div>
           {targetObjects.length === 0 ? (
-            <p className="text-muted-foreground text-sm py-8 text-center">
+            <p className="text-a1-text-auxiliary text-sm py-8 text-center">
               Nenhum objeto-alvo cadastrado.
             </p>
           ) : (
@@ -385,13 +391,13 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
               {targetObjects.map((obj) => (
                 <div
                   key={obj.id}
-                  className="border border-border rounded-lg p-3 hover:bg-muted/30 transition-colors"
+                  className="border border-a1-border rounded-lg p-3 hover:bg-a1-bg transition-colors"
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-medium">{obj.nome}</span>
-                    <span className="text-xs text-muted-foreground">{obj.modulo_ecf ?? '—'}</span>
+                    <span className="text-xs text-a1-text-auxiliary">{obj.modulo_ecf ?? '—'}</span>
                   </div>
-                  <div className="text-sm text-muted-foreground font-mono">{obj.codigo}</div>
+                  <div className="text-sm text-a1-text-auxiliary font-mono">{obj.codigo}</div>
                 </div>
               ))}
             </div>
@@ -430,26 +436,16 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
       />
 
       {/* Deactivate Confirmation Dialog */}
-      <Dialog open={!!deactivateTarget} onOpenChange={(open) => !open && setDeactivateTarget(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Inativar Enquadrador</DialogTitle>
-            <DialogDescription>{COPY.confirm_deactivate}</DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeactivateTarget(null)}>
-              Cancelar
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDeactivateConfirm}
-              disabled={deleteFramerMut.isPending}
-            >
-              {deleteFramerMut.isPending ? 'Inativando...' : 'Inativar'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationModal
+        open={!!deactivateTarget}
+        onOpenChange={(open) => !open && setDeactivateTarget(null)}
+        title="Inativar Enquadrador"
+        description={COPY.confirm_deactivate}
+        variant="destructive"
+        confirmLabel="Inativar"
+        onConfirm={handleDeactivateConfirm}
+        isLoading={deleteFramerMut.isPending}
+      />
     </div>
   );
 }

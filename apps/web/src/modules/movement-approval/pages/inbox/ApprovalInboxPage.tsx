@@ -169,7 +169,10 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
       </header>
 
       {/* Tabs — A1 */}
-      <nav className="flex gap-1 border-b border-a1-border bg-white px-6" aria-label="Painéis de aprovação">
+      <nav
+        className="flex gap-1 border-b border-a1-border bg-white px-6"
+        aria-label="Painéis de aprovação"
+      >
         {visibleTabs.map((tab) => (
           <button
             key={tab.key}
@@ -218,7 +221,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
 
       {/* Error */}
       {movementsQuery.isError && (
-        <div className="mx-6 mt-3 rounded-md bg-destructive/10 px-4 py-2 font-display text-[13px] text-destructive">
+        <div className="mx-6 mt-3 rounded-md bg-status-error-bg px-4 py-2 font-display text-[13px] text-danger-600">
           {movementsQuery.error instanceof Error
             ? movementsQuery.error.message
             : 'Erro ao carregar movimentos.'}
@@ -258,7 +261,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
             </>
           ) : (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-a1-text-auxiliary">
                 {activeTab === 'inbox'
                   ? 'Nenhuma aprovação pendente.'
                   : activeTab === 'sent'
@@ -326,7 +329,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
             </MovementDetailPanel>
           ) : (
             <div className="flex h-full items-center justify-center">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-a1-text-auxiliary">
                 Selecione um movimento para ver os detalhes.
               </p>
             </div>

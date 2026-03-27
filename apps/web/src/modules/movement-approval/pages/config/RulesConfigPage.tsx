@@ -20,13 +20,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
 } from '@shared/ui';
+import { PageHeader } from '@shared/ui/page-header';
+import { ConfirmationModal } from '@shared/ui/confirmation-modal';
+import { StatusBadge } from '@shared/ui/status-badge';
 import {
   useControlRules,
   useControlRule,
@@ -120,14 +117,17 @@ export function RulesConfigPage() {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-border px-6 py-4">
-        <h1 className="text-xl font-semibold text-foreground">Configurador de Regras</h1>
-        <Button onClick={handleOpenCreate}>Nova Regra</Button>
+      <header className="border-b border-a1-border px-6 py-4">
+        <PageHeader
+          title="Configurador de Regras"
+          description="Gerencie regras de controle de aprovação"
+          actions={<Button onClick={handleOpenCreate}>Nova Regra</Button>}
+        />
       </header>
 
       {/* Error */}
       {rulesQuery.isError && (
-        <div className="mx-6 mt-3 rounded-md bg-destructive/10 px-4 py-2 text-sm text-destructive">
+        <div className="mx-6 mt-3 rounded-md bg-status-error-bg px-4 py-2 text-sm text-danger-600">
           {rulesQuery.error instanceof Error
             ? rulesQuery.error.message
             : 'Erro ao carregar regras.'}
@@ -140,80 +140,90 @@ export function RulesConfigPage() {
         {rulesQuery.isLoading && !rulesQuery.data ? (
           <div className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-10 w-full" />
+              <Skeleton key={i} className="h-10 w-full bg-a1-border" />
             ))}
           </div>
         ) : rules.length > 0 ? (
-          <Table aria-label="Regras de controle de aprovação">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Código</TableHead>
-                <TableHead>Operação</TableHead>
-                <TableHead>Entidade</TableHead>
-                <TableHead>Por Valor</TableHead>
-                <TableHead>Níveis</TableHead>
-                <TableHead>Auto-Aprov.</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Validade</TableHead>
-                <TableHead>Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rules.map((rule) => {
-                const expired = isExpiredValidity(rule);
-                return (
-                  <TableRow
-                    key={rule.id}
-                    className={expandedRuleId === rule.id ? 'bg-accent/50' : ''}
-                  >
-                    <TableCell>
-                      <Button variant="link" size="sm" onClick={() => handleToggleExpand(rule.id)}>
-                        {rule.codigo}
-                      </Button>
-                    </TableCell>
-                    <TableCell>{rule.operation}</TableCell>
-                    <TableCell>{rule.entity_type}</TableCell>
-                    <TableCell>{rule.by_value ? 'Sim' : 'Não'}</TableCell>
-                    <TableCell>{rule.approval_rules_count}</TableCell>
-                    <TableCell>{rule.allow_self_approve ? 'Sim' : 'Não'}</TableCell>
-                    <TableCell>
-                      <Badge variant={rule.is_active ? 'default' : 'secondary'}>
-                        {rule.is_active ? 'Ativa' : 'Inativa'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {rule.valid_until ? (
-                        <span className={expired ? 'text-amber-600 font-medium' : ''}>
-                          {new Date(rule.valid_until).toLocaleDateString('pt-BR')}
-                          {expired && ' (expirada)'}
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground">Indefinida</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        <Button variant="outline" size="xs" onClick={() => handleOpenEdit(rule.id)}>
-                          Editar
-                        </Button>
+          <div className="rounded-lg border border-a1-border bg-white">
+            <Table aria-label="Regras de controle de aprovação">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Operação</TableHead>
+                  <TableHead>Entidade</TableHead>
+                  <TableHead>Por Valor</TableHead>
+                  <TableHead>Níveis</TableHead>
+                  <TableHead>Auto-Aprov.</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Validade</TableHead>
+                  <TableHead>Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {rules.map((rule) => {
+                  const expired = isExpiredValidity(rule);
+                  return (
+                    <TableRow
+                      key={rule.id}
+                      className={expandedRuleId === rule.id ? 'bg-accent/50' : ''}
+                    >
+                      <TableCell>
                         <Button
-                          variant="destructive"
-                          size="xs"
-                          onClick={() => setDeleteTarget({ id: rule.id, codigo: rule.codigo })}
-                          disabled={deleteMut.isPending}
+                          variant="link"
+                          size="sm"
+                          onClick={() => handleToggleExpand(rule.id)}
                         >
-                          Excluir
+                          {rule.codigo}
                         </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                      </TableCell>
+                      <TableCell>{rule.operation}</TableCell>
+                      <TableCell>{rule.entity_type}</TableCell>
+                      <TableCell>{rule.by_value ? 'Sim' : 'Não'}</TableCell>
+                      <TableCell>{rule.approval_rules_count}</TableCell>
+                      <TableCell>{rule.allow_self_approve ? 'Sim' : 'Não'}</TableCell>
+                      <TableCell>
+                        <StatusBadge status={rule.is_active ? 'success' : 'neutral'}>
+                          {rule.is_active ? 'Ativa' : 'Inativa'}
+                        </StatusBadge>
+                      </TableCell>
+                      <TableCell>
+                        {rule.valid_until ? (
+                          <span className={expired ? 'text-amber-600 font-medium' : ''}>
+                            {new Date(rule.valid_until).toLocaleDateString('pt-BR')}
+                            {expired && ' (expirada)'}
+                          </span>
+                        ) : (
+                          <span className="text-a1-text-auxiliary">Indefinida</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="outline"
+                            size="xs"
+                            onClick={() => handleOpenEdit(rule.id)}
+                          >
+                            Editar
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="xs"
+                            onClick={() => setDeleteTarget({ id: rule.id, codigo: rule.codigo })}
+                            disabled={deleteMut.isPending}
+                          >
+                            Excluir
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <p className="text-sm text-muted-foreground">Nenhuma regra de controle cadastrada.</p>
+            <p className="text-sm text-a1-text-auxiliary">Nenhuma regra de controle cadastrada.</p>
             <Button variant="link" size="sm" className="mt-2" onClick={handleOpenCreate}>
               Criar primeira regra
             </Button>
@@ -238,34 +248,16 @@ export function RulesConfigPage() {
       />
 
       {/* Delete confirmation dialog */}
-      <Dialog open={!!deleteTarget} onOpenChange={(v) => !v && setDeleteTarget(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Excluir Regra</DialogTitle>
-            <DialogDescription>
-              Tem certeza que deseja excluir a regra <strong>{deleteTarget?.codigo}</strong>? Esta
-              ação não pode ser desfeita.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setDeleteTarget(null)}
-              disabled={deleteMut.isPending}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDeleteConfirm}
-              disabled={deleteMut.isPending}
-              isLoading={deleteMut.isPending}
-            >
-              Excluir
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationModal
+        open={!!deleteTarget}
+        onOpenChange={(v) => !v && setDeleteTarget(null)}
+        title="Confirmar exclusão"
+        description={`Tem certeza que deseja excluir a regra ${deleteTarget?.codigo ?? ''}? Esta ação não pode ser desfeita.`}
+        variant="destructive"
+        confirmLabel="Excluir"
+        onConfirm={handleDeleteConfirm}
+        isLoading={deleteMut.isPending}
+      />
     </div>
   );
 }
@@ -386,13 +378,13 @@ function DryRunSection() {
       </form>
 
       {evaluateMut.isError && (
-        <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-md bg-status-error-bg px-3 py-2 text-sm text-danger-600">
           {evaluateMut.error instanceof Error ? evaluateMut.error.message : 'Erro na simulação.'}
         </div>
       )}
 
       {evaluateMut.data && (
-        <div className="rounded-md border border-border bg-muted/30 p-4" aria-live="assertive">
+        <div className="rounded-md border border-a1-border bg-a1-bg p-4" aria-live="assertive">
           <h3 className="mb-2 text-sm font-semibold text-foreground">Resultado</h3>
           <div className="space-y-1 text-sm">
             <div>

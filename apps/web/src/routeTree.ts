@@ -41,10 +41,13 @@ import { Route as authParamIncidenciaRoute } from './routes/_auth.parametros.inc
 import { Route as authIntegrationMonitorRoute } from './routes/_auth.integration.monitor';
 import { Route as authIntegrationRoutinesRoute } from './routes/_auth.integration.routines';
 import { Route as authIntegrationServicesRoute } from './routes/_auth.integration.services';
+import { Route as authIntegrationReprocessRoute } from './routes/_auth.integration.reprocess';
 
 // Movement Approval (MOD-009)
 import { Route as authApprovalsInboxRoute } from './routes/_auth.approvals.inbox';
 import { Route as authApprovalsConfigRoute } from './routes/_auth.approvals.config';
+import { Route as authApprovalsMovementsRoute } from './routes/_auth.approvals.movements';
+import { Route as authApprovalsMovementDetailRoute } from './routes/_auth.approvals.movements.$id';
 
 // MCP Automation (MOD-010)
 import { Route as authMcpAgentsRoute } from './routes/_auth.mcp.agents';
@@ -87,8 +90,11 @@ const authRouteChildren = authRoute.addChildren([
   authIntegrationMonitorRoute,
   authIntegrationRoutinesRoute,
   authIntegrationServicesRoute,
+  authIntegrationReprocessRoute,
   authApprovalsInboxRoute,
   authApprovalsConfigRoute,
+  authApprovalsMovementsRoute,
+  authApprovalsMovementDetailRoute,
   authMcpAgentsRoute,
   authMcpExecutionsRoute,
   authMcpActionsRoute,

@@ -10,20 +10,14 @@ import {
   Button,
   Badge,
   Skeleton,
-  Spinner,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
+  ConfirmationModal,
+  PageHeader,
 } from '@shared/ui';
 import {
   useAccessShares,
@@ -151,7 +145,7 @@ export function SharesDelegationsPanelPage({
     if (data.length === 0) {
       return (
         <div className="flex items-center justify-center py-12">
-          <p className="text-sm text-muted-foreground">{COPY.label.emptyShares}</p>
+          <p className="text-sm text-a1-text-auxiliary">{COPY.label.emptyShares}</p>
         </div>
       );
     }
@@ -175,7 +169,7 @@ export function SharesDelegationsPanelPage({
               <TableRow key={share.id} className={share.status !== 'ACTIVE' ? 'opacity-60' : ''}>
                 <TableCell>
                   <span className="font-medium">{share.resource_type}</span>
-                  <span className="ml-1 text-muted-foreground">/ {share.resource_id}</span>
+                  <span className="ml-1 text-a1-text-auxiliary">/ {share.resource_id}</span>
                 </TableCell>
                 <TableCell className="font-mono text-xs">{share.grantee_id}</TableCell>
                 <TableCell className="max-w-[200px] truncate">{share.reason}</TableCell>
@@ -189,7 +183,7 @@ export function SharesDelegationsPanelPage({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-destructive hover:text-destructive"
+                        className="text-danger-600 hover:text-danger-600"
                         onClick={() => setRevokeTarget({ type: 'share', id: share.id })}
                       >
                         Revogar
@@ -213,9 +207,9 @@ export function SharesDelegationsPanelPage({
   ) {
     return (
       <div className="flex flex-col gap-3">
-        <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
+        <h3 className="text-sm font-medium text-a1-text-auxiliary">{title}</h3>
         {items.length === 0 ? (
-          <p className="py-4 text-center text-sm text-muted-foreground">{emptyMessage}</p>
+          <p className="py-4 text-center text-sm text-a1-text-auxiliary">{emptyMessage}</p>
         ) : (
           <Table>
             <TableHeader>
@@ -254,7 +248,7 @@ export function SharesDelegationsPanelPage({
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="text-destructive hover:text-destructive"
+                            className="text-danger-600 hover:text-danger-600"
                             onClick={() => setRevokeTarget({ type: 'delegation', id: d.id })}
                           >
                             Revogar
@@ -276,7 +270,7 @@ export function SharesDelegationsPanelPage({
     return (
       <div className="flex flex-col gap-3">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-12 w-full" />
+          <Skeleton key={i} className="h-12 w-full bg-a1-border" />
         ))}
       </div>
     );
@@ -285,7 +279,7 @@ export function SharesDelegationsPanelPage({
   function renderError(retryFn: () => void) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-12">
-        <p className="text-sm text-destructive">{COPY.error.loadFailed}</p>
+        <p className="text-sm text-danger-600">{COPY.error.loadFailed}</p>
         <Button variant="outline" onClick={retryFn}>
           {COPY.label.retry}
         </Button>
@@ -297,7 +291,7 @@ export function SharesDelegationsPanelPage({
 
   return (
     <div className="flex flex-col gap-6 p-6">
-      <h1 className="text-lg font-semibold text-foreground">Compartilhamentos e Delegações</h1>
+      <PageHeader title="Compartilhamentos e Delegações" />
 
       {/* Tab bar */}
       <div className="flex gap-1 rounded-lg border border-border p-1" role="tablist">
@@ -311,7 +305,7 @@ export function SharesDelegationsPanelPage({
               className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                 activeTab === tab.id
                   ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:bg-muted'
+                  : 'text-a1-text-auxiliary hover:bg-a1-bg'
               }`}
               onClick={() => setActiveTab(tab.id)}
             >
@@ -409,11 +403,11 @@ export function SharesDelegationsPanelPage({
 
           {/* Received shares */}
           <div className="flex flex-col gap-3">
-            <h3 className="text-sm font-medium text-muted-foreground">Acessos Compartilhados</h3>
+            <h3 className="text-sm font-medium text-a1-text-auxiliary">Acessos Compartilhados</h3>
             {myShared.isLoading && renderLoadingSkeleton()}
             {myShared.isError && renderError(() => myShared.refetch())}
             {myShared.data && myShared.data.length === 0 && (
-              <p className="py-4 text-center text-sm text-muted-foreground">
+              <p className="py-4 text-center text-sm text-a1-text-auxiliary">
                 {COPY.label.emptyReceived}
               </p>
             )}
@@ -435,7 +429,7 @@ export function SharesDelegationsPanelPage({
                     >
                       <TableCell>
                         <span className="font-medium">{share.resource_type}</span>
-                        <span className="ml-1 text-muted-foreground">/ {share.resource_id}</span>
+                        <span className="ml-1 text-a1-text-auxiliary">/ {share.resource_id}</span>
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">
@@ -461,7 +455,7 @@ export function SharesDelegationsPanelPage({
           {delegations.isLoading && renderLoadingSkeleton()}
           {delegations.data && delegations.data.received.length > 0 && (
             <div className="flex flex-col gap-3">
-              <h3 className="text-sm font-medium text-muted-foreground">Delegações Recebidas</h3>
+              <h3 className="text-sm font-medium text-a1-text-auxiliary">Delegações Recebidas</h3>
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -523,33 +517,29 @@ export function SharesDelegationsPanelPage({
       />
 
       {/* ─── Revoke Confirmation Dialog ──────────────────────── */}
-      <Dialog open={!!revokeTarget} onOpenChange={(o) => !o && setRevokeTarget(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {revokeTarget?.type === 'share'
-                ? COPY.modal.revokeShareTitle
-                : COPY.modal.revokeDelegationTitle}
-            </DialogTitle>
-            <DialogDescription>
-              {revokeTarget?.type === 'share'
-                ? COPY.modal.revokeShareBody
-                : COPY.modal.revokeDelegationBody}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">{COPY.modal.cancel}</Button>
-            </DialogClose>
-            <Button variant="destructive" onClick={handleRevoke} disabled={isRevoking}>
-              {isRevoking ? <Spinner className="mr-2 h-4 w-4" /> : null}
-              {revokeTarget?.type === 'share'
-                ? COPY.modal.revokeShareConfirm
-                : COPY.modal.revokeDelegationConfirm}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationModal
+        open={!!revokeTarget}
+        onOpenChange={(o) => !o && setRevokeTarget(null)}
+        title={
+          revokeTarget?.type === 'share'
+            ? COPY.modal.revokeShareTitle
+            : COPY.modal.revokeDelegationTitle
+        }
+        description={
+          revokeTarget?.type === 'share'
+            ? COPY.modal.revokeShareBody
+            : COPY.modal.revokeDelegationBody
+        }
+        variant="destructive"
+        confirmLabel={
+          revokeTarget?.type === 'share'
+            ? COPY.modal.revokeShareConfirm
+            : COPY.modal.revokeDelegationConfirm
+        }
+        cancelLabel={COPY.modal.cancel}
+        onConfirm={handleRevoke}
+        isLoading={isRevoking}
+      />
     </div>
   );
 }

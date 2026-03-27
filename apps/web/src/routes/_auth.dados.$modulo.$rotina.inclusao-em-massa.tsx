@@ -32,9 +32,7 @@ function BulkInsertWrapper() {
       objectType={objectType ?? rotina}
       operationName={operationName ?? `Inclusão em Massa — ${rotina}`}
       targetEndpoint={targetEndpoint ?? `/api/v1/admin/${modulo}`}
-      onNavigateBack={() =>
-        navigate({ to: '/dados/$modulo/$rotina', params: { modulo, rotina } })
-      }
+      onNavigateBack={() => navigate({ to: '/dados/$modulo/$rotina', params: { modulo, rotina } })}
     />
   );
 }

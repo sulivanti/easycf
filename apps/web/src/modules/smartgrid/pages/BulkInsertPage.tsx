@@ -11,6 +11,7 @@ import { useCallback, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Button } from '@shared/ui/button';
+import { EmptyState } from '@shared/ui/empty-state';
 import type { GridRow } from '../types/smartgrid.types';
 import { COPY } from '../types/smartgrid.types';
 import { createEmptyRow } from '../api/smartgrid.api';
@@ -222,8 +223,8 @@ export function BulkInsertPage({
   if (configLoading) {
     return (
       <div className="space-y-3 p-8">
-        <Skeleton className="h-6 w-64" />
-        <Skeleton className="h-48 w-full" />
+        <Skeleton className="h-6 w-64 bg-a1-border" />
+        <Skeleton className="h-48 w-full bg-a1-border" />
       </div>
     );
   }
@@ -231,7 +232,7 @@ export function BulkInsertPage({
   if (configError) {
     return (
       <div role="alert" className="p-8 text-center">
-        <p className="text-destructive">{COPY.motorLoadError}</p>
+        <p className="text-danger-600">{COPY.motorLoadError}</p>
         <Button variant="outline" onClick={onNavigateBack} className="mt-4">
           Voltar
         </Button>
@@ -261,12 +262,15 @@ export function BulkInsertPage({
       />
 
       {rows.length === 0 ? (
-        <div className="p-12 text-center text-muted-foreground">
-          <p>{COPY.emptyState}</p>
-          <Button variant="outline" onClick={handleAddLine} className="mt-4">
-            Adicionar linha
-          </Button>
-        </div>
+        <EmptyState
+          title="Nenhuma linha adicionada"
+          description={COPY.emptyState}
+          action={
+            <Button variant="outline" onClick={handleAddLine}>
+              Adicionar linha
+            </Button>
+          }
+        />
       ) : (
         <SmartDataGrid
           columns={columns}

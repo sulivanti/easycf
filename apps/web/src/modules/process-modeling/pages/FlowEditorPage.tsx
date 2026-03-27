@@ -39,6 +39,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  ConfirmationModal,
 } from '../../../shared/ui/index.js';
 import { useFlow } from '../hooks/use-flow.js';
 import { usePublishCycle, useForkCycle, useDeprecateCycle } from '../hooks/use-cycle-actions.js';
@@ -166,7 +167,16 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
 
   // Error state
   if (error) {
-    return <div className="p-6 text-red-600">Erro ao carregar o ciclo. {error.message}</div>;
+    return (
+      <div className="p-6">
+        <div
+          role="alert"
+          className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
+        >
+          Erro ao carregar o ciclo. {error.message}
+        </div>
+      </div>
+    );
   }
 
   if (!flow) return null;
@@ -179,17 +189,19 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
       {/* Header bar — A1 */}
       <div className="flex shrink-0 items-center justify-between border-b border-a1-border bg-white px-6 py-3">
         <div className="flex items-center gap-3">
-          <span className="font-display text-[15px] font-bold text-a1-text-primary">{flow.cycle.nome}</span>
-          <span className="font-display text-[11px] text-a1-text-hint">
-            v{flow.cycle.version}
+          <span className="font-display text-[15px] font-bold text-a1-text-primary">
+            {flow.cycle.nome}
           </span>
-          <span className={`rounded-full px-2.5 py-0.5 font-display text-[10px] font-bold ${
-            flow.cycle.status === 'PUBLISHED'
-              ? 'bg-success-500/10 text-success-600'
-              : flow.cycle.status === 'DEPRECATED'
-                ? 'bg-danger-500/10 text-danger-600'
-                : 'bg-a1-accent/10 text-a1-accent'
-          }`}>
+          <span className="font-display text-[11px] text-a1-text-hint">v{flow.cycle.version}</span>
+          <span
+            className={`rounded-full px-2.5 py-0.5 font-display text-[10px] font-bold ${
+              flow.cycle.status === 'PUBLISHED'
+                ? 'bg-success-500/10 text-success-600'
+                : flow.cycle.status === 'DEPRECATED'
+                  ? 'bg-danger-500/10 text-danger-600'
+                  : 'bg-a1-accent/10 text-a1-accent'
+            }`}
+          >
             {flow.cycle.status}
           </span>
         </div>
@@ -226,13 +238,15 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
         <div className="px-4 py-1.5 bg-amber-50 text-amber-800 text-xs">{COPY.readonly_banner}</div>
       )}
       {flow.cycle.status === 'DEPRECATED' && (
-        <div className="px-4 py-1.5 bg-red-50 text-red-800 text-xs">{COPY.deprecated_banner}</div>
+        <div className="px-4 py-1.5 bg-status-error-bg text-danger-600 text-xs">
+          {COPY.deprecated_banner}
+        </div>
       )}
 
       {/* Canvas */}
       <div className="flex-1 relative">
         {isEmpty ? (
-          <div className="flex items-center justify-center h-full text-gray-400">
+          <div className="flex items-center justify-center h-full text-a1-text-auxiliary">
             {COPY.empty_canvas}
           </div>
         ) : (
@@ -282,26 +296,16 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
       </Dialog>
 
       {/* Deprecate confirmation dialog */}
-      <Dialog open={deprecateOpen} onOpenChange={setDeprecateOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Deprecar ciclo</DialogTitle>
-            <DialogDescription>{COPY.confirm_deprecate}</DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeprecateOpen(false)}>
-              Cancelar
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDeprecate}
-              disabled={deprecateMutation.isPending}
-            >
-              {deprecateMutation.isPending ? 'Deprecando...' : 'Deprecar'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationModal
+        open={deprecateOpen}
+        onOpenChange={setDeprecateOpen}
+        title="Deprecar ciclo"
+        description={COPY.confirm_deprecate}
+        variant="destructive"
+        confirmLabel="Deprecar"
+        onConfirm={handleDeprecate}
+        isLoading={deprecateMutation.isPending}
+      />
     </div>
   );
 }

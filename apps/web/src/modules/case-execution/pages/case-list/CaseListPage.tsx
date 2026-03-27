@@ -75,10 +75,10 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
   if (isLoading && items.length === 0) {
     return (
       <div className="p-6">
-        <Skeleton className="h-8 w-48 mb-4" />
+        <Skeleton className="h-8 w-48 mb-4 bg-a1-border" />
         <div className="flex flex-col gap-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-12 w-full" />
+            <Skeleton key={i} className="h-12 w-full bg-a1-border" />
           ))}
         </div>
       </div>
@@ -88,8 +88,13 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
   // ── Error state ────────────────────────────────────────────────────────────
   if (error) {
     return (
-      <div className="p-6 text-red-600">
-        {COPY.error_load_cases} {error.message}
+      <div className="p-6">
+        <div
+          role="alert"
+          className="rounded-md border border-a1-border bg-status-error-bg p-3 text-sm text-danger-600"
+        >
+          {COPY.error_load_cases} {error.message}
+        </div>
       </div>
     );
   }
@@ -117,86 +122,88 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
       </div>
 
       <div className="p-6">
-      {/* Filters */}
-      <div className="mb-4 flex flex-wrap items-center gap-3">
-        <Input
-          type="search"
-          placeholder="Buscar por código..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          className="w-64 border-a1-border bg-white font-display text-[13px]"
-        />
-        <select
-          value={filters.status ?? ''}
-          onChange={(e) =>
-            setFilters((f) => ({
-              ...f,
-              status: (e.target.value || undefined) as CaseStatus | undefined,
-              cursor: undefined,
-            }))
-          }
-          className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
-        >
-          <option value="">Todos os status</option>
-          <option value="OPEN">Aberto</option>
-          <option value="ON_HOLD">Suspenso</option>
-          <option value="COMPLETED">Concluído</option>
-          <option value="CANCELLED">Cancelado</option>
-        </select>
-        <label className="flex items-center gap-2 font-display text-[13px] text-a1-text-auxiliary">
-          <input
-            type="checkbox"
-            checked={filters.assigned_to_me ?? false}
+        {/* Filters */}
+        <div className="mb-4 flex flex-wrap items-center gap-3">
+          <Input
+            type="search"
+            placeholder="Buscar por código..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="w-64 border-a1-border bg-white font-display text-[13px]"
+          />
+          <select
+            value={filters.status ?? ''}
             onChange={(e) =>
               setFilters((f) => ({
                 ...f,
-                assigned_to_me: e.target.checked || undefined,
+                status: (e.target.value || undefined) as CaseStatus | undefined,
                 cursor: undefined,
               }))
             }
-            className="accent-a1-accent rounded"
-          />
-          Minha responsabilidade
-        </label>
-      </div>
-
-      {/* Table */}
-      {items.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">
-          <p>{searchInput ? COPY.empty_search(searchInput) : COPY.empty_cases}</p>
-          {canWrite && !searchInput && (
-            <p className="mt-2 text-sm">Abra o primeiro caso para começar.</p>
-          )}
+            className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
+          >
+            <option value="">Todos os status</option>
+            <option value="OPEN">Aberto</option>
+            <option value="ON_HOLD">Suspenso</option>
+            <option value="COMPLETED">Concluído</option>
+            <option value="CANCELLED">Cancelado</option>
+          </select>
+          <label className="flex items-center gap-2 font-display text-[13px] text-a1-text-auxiliary">
+            <input
+              type="checkbox"
+              checked={filters.assigned_to_me ?? false}
+              onChange={(e) =>
+                setFilters((f) => ({
+                  ...f,
+                  assigned_to_me: e.target.checked || undefined,
+                  cursor: undefined,
+                }))
+              }
+              className="accent-a1-accent rounded"
+            />
+            Minha responsabilidade
+          </label>
         </div>
-      ) : (
-        <TooltipProvider>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Código</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Estágio</TableHead>
-                <TableHead>Gates Pendentes</TableHead>
-                <TableHead>Aberto em</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {items.map((c) => (
-                <CaseRow key={c.id} caseItem={c} onSelect={() => onSelectCase(c.id)} />
-              ))}
-            </TableBody>
-          </Table>
-        </TooltipProvider>
-      )}
 
-      {/* Load more */}
-      {hasMore && (
-        <div className="text-center mt-4">
-          <Button variant="outline" size="sm" onClick={handleLoadMore} disabled={isLoading}>
-            {isLoading ? 'Carregando...' : 'Carregar mais'}
-          </Button>
-        </div>
-      )}
+        {/* Table */}
+        {items.length === 0 ? (
+          <div className="text-center py-12 text-a1-text-auxiliary">
+            <p>{searchInput ? COPY.empty_search(searchInput) : COPY.empty_cases}</p>
+            {canWrite && !searchInput && (
+              <p className="mt-2 text-sm">Abra o primeiro caso para começar.</p>
+            )}
+          </div>
+        ) : (
+          <TooltipProvider>
+            <div className="rounded-lg border border-a1-border bg-white">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Código</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Estágio</TableHead>
+                    <TableHead>Gates Pendentes</TableHead>
+                    <TableHead>Aberto em</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {items.map((c) => (
+                    <CaseRow key={c.id} caseItem={c} onSelect={() => onSelectCase(c.id)} />
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </TooltipProvider>
+        )}
+
+        {/* Load more */}
+        {hasMore && (
+          <div className="text-center mt-4">
+            <Button variant="outline" size="sm" onClick={handleLoadMore} disabled={isLoading}>
+              {isLoading ? 'Carregando...' : 'Carregar mais'}
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -206,7 +213,7 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
 
 function CaseRow({ caseItem, onSelect }: { caseItem: CaseListItem; onSelect: () => void }) {
   return (
-    <TableRow className="cursor-pointer hover:bg-gray-50" onClick={onSelect}>
+    <TableRow className="cursor-pointer hover:bg-a1-bg" onClick={onSelect}>
       <TableCell className="font-mono text-sm">{caseItem.codigo}</TableCell>
       <TableCell>
         <CaseStatusBadge status={caseItem.status} />
@@ -225,10 +232,10 @@ function CaseRow({ caseItem, onSelect }: { caseItem: CaseListItem; onSelect: () 
             <TooltipContent>Clique para ver gates pendentes</TooltipContent>
           </Tooltip>
         ) : (
-          <span className="text-gray-400">—</span>
+          <span className="text-a1-text-auxiliary">—</span>
         )}
       </TableCell>
-      <TableCell className="text-sm text-gray-500">
+      <TableCell className="text-sm text-a1-text-auxiliary">
         {new Date(caseItem.opened_at).toLocaleDateString('pt-BR')}
       </TableCell>
     </TableRow>
@@ -298,7 +305,7 @@ function NewCaseDrawer({ onCreated }: { onCreated: (caseId: string) => void }) {
               className="mt-1"
             />
           </div>
-          {openCase.error && <p className="text-sm text-red-600">{openCase.error.message}</p>}
+          {openCase.error && <p className="text-sm text-danger-600">{openCase.error.message}</p>}
         </div>
         <DrawerFooter>
           <DrawerClose asChild>

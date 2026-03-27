@@ -49,8 +49,7 @@ function RecordEditWrapper() {
     },
   });
 
-  const handleBack = () =>
-    navigate({ to: '/dados/$modulo/$rotina', params: { modulo, rotina } });
+  const handleBack = () => navigate({ to: '/dados/$modulo/$rotina', params: { modulo, rotina } });
 
   if (isLoading) {
     return (

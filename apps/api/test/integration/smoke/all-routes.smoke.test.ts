@@ -131,10 +131,7 @@ describe('Smoke test — all routes respond without 500', () => {
  */
 describe('Dynamic route smoke test', () => {
   // Test only safe GET routes dynamically to avoid side effects
-  const safeGetRoutes = [
-    '/api/v1/org-units',
-    '/api/v1/org-units/tree',
-  ];
+  const safeGetRoutes = ['/api/v1/org-units', '/api/v1/org-units/tree'];
 
   it.each(safeGetRoutes)('GET %s → status !== 500', async (url) => {
     const res = await app.inject({

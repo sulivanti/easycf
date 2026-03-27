@@ -8,7 +8,11 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { createTestApp } from '../../helpers/create-test-app.js';
-import { setupTestDatabase, teardownTestDatabase, getTestDatabaseUrl } from '../../helpers/db-helper.js';
+import {
+  setupTestDatabase,
+  teardownTestDatabase,
+  getTestDatabaseUrl,
+} from '../../helpers/db-helper.js';
 import { signTestToken } from '../../helpers/auth-helper.js';
 import { SYSTEM_TENANT_ID } from '../../../src/modules/foundation/domain/events/foundation-events.js';
 
@@ -112,10 +116,7 @@ describe('POST /api/v1/org-units', () => {
     const { db, domainEvents, sql } = await getDb();
     const { eq } = await import('drizzle-orm');
 
-    const events = await db
-      .select()
-      .from(domainEvents)
-      .where(eq(domainEvents.entityId, createdId));
+    const events = await db.select().from(domainEvents).where(eq(domainEvents.entityId, createdId));
 
     await sql.end();
 
@@ -128,8 +129,7 @@ describe('POST /api/v1/org-units', () => {
     expect(createEvent!.tenantId).not.toBe('');
     // Should be either the session's tenantId or the SYSTEM_TENANT_ID sentinel
     expect(
-      createEvent!.tenantId === 'tenant-orgtest' ||
-      createEvent!.tenantId === SYSTEM_TENANT_ID,
+      createEvent!.tenantId === 'tenant-orgtest' || createEvent!.tenantId === SYSTEM_TENANT_ID,
     ).toBe(true);
   });
 
@@ -201,10 +201,7 @@ describe('PATCH / DELETE org-units — domain events', () => {
       .select()
       .from(domainEvents)
       .where(
-        and(
-          eq(domainEvents.entityId, createdId),
-          eq(domainEvents.eventType, 'org.unit_updated'),
-        ),
+        and(eq(domainEvents.entityId, createdId), eq(domainEvents.eventType, 'org.unit_updated')),
       );
 
     await sql.end();
@@ -229,10 +226,7 @@ describe('PATCH / DELETE org-units — domain events', () => {
       .select()
       .from(domainEvents)
       .where(
-        and(
-          eq(domainEvents.entityId, createdId),
-          eq(domainEvents.eventType, 'org.unit_deleted'),
-        ),
+        and(eq(domainEvents.entityId, createdId), eq(domainEvents.eventType, 'org.unit_deleted')),
       );
 
     await sql.end();

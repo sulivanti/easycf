@@ -26,7 +26,8 @@ beforeAll(async () => {
   app = await createTestApp({ databaseUrl: dbUrl });
 
   // Seed: create tenant, user, content_user, role + tenant_user via direct DB insert
-  const { db, users, contentUsers, tenants, roles, rolePermissions, tenantUsers } = await getDbAndTables();
+  const { db, users, contentUsers, tenants, roles, rolePermissions, tenantUsers } =
+    await getDbAndTables();
 
   const tenant = buildTenant({ codigo: 'MAIN', name: 'Main Tenant' });
   seededTenantId = tenant.id;
@@ -135,9 +136,7 @@ describe('POST /api/v1/auth/login', () => {
     const token = body.access_token;
 
     // Decode JWT payload (no verification — just inspect claims)
-    const payload = JSON.parse(
-      Buffer.from(token.split('.')[1], 'base64url').toString(),
-    );
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
 
     expect(payload).toHaveProperty('sub'); // userId
     expect(payload.sub).toBe(seededUserId);

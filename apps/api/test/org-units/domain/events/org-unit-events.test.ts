@@ -57,7 +57,10 @@ describe('createOrgUnitEvent', () => {
   it('enriches payload with operation_id and ui_actions', () => {
     const event = createOrgUnitEvent(baseParams);
 
-    expect(event.payload).toHaveProperty('operation_id', ORG_UNIT_OPERATION_IDS['org.unit_created']);
+    expect(event.payload).toHaveProperty(
+      'operation_id',
+      ORG_UNIT_OPERATION_IDS['org.unit_created'],
+    );
     expect(event.payload).toHaveProperty('ui_actions', ORG_UNIT_UI_ACTIONS['org.unit_created']);
     // Original payload fields preserved
     expect(event.payload).toHaveProperty('codigo', 'ROOT');

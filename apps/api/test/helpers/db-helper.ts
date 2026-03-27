@@ -41,7 +41,8 @@ export async function setupTestDatabase(): Promise<string> {
  * Returns the current connection string. Throws if DB not initialized.
  */
 export function getTestDatabaseUrl(): string {
-  if (!connectionString) throw new Error('Test database not initialized. Call setupTestDatabase() first.');
+  if (!connectionString)
+    throw new Error('Test database not initialized. Call setupTestDatabase() first.');
   return connectionString;
 }
 

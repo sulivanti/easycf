@@ -26,7 +26,10 @@
     "web_modules":         "apps/web/src/modules/",
     "skill_templates":     ".agents/templates/",
     "execution_state":     ".agents/execution-state/",
-    "normativo_amendments": "docs/01_normativos/amendments/"
+    "normativo_amendments": "docs/01_normativos/amendments/",
+    "design_tokens":        "apps/web/src/index.css",
+    "shared_ui":            "apps/web/src/modules/shared/ui/",
+    "design_system_doc":    "docs/01_normativos/DOC-UX-013*.md"
   },
   "_notes": {
     "drizzle_schemas": "Schemas Drizzle ficam em apps/api/db/schema/ (barrel: index.ts). Cada módulo tem {module}.ts + {module}.relations.ts",

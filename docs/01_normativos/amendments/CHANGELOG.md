@@ -12,6 +12,12 @@ Documentos normativos não pertencem a módulos — este CHANGELOG substitui o P
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 0.25.0 | 2026-03-27 | merge-amendment | Merge batch DOC-UX-013-M03+M04+M05: 12 componentes customizados ECF em §4.2/§4.4. DOC-UX-013 v1.6.0. Form(5), Data(5), Feedback(2). |
+| 0.24.0 | 2026-03-27 | create-amendment | Criacao DOC-UX-013-M05: 2 componentes Feedback/Layout — ConfirmationModal (dialog confirmacao destrutiva) e PageHeader (cabecalho padrao de pagina com breadcrumb + acoes). |
+| 0.23.0 | 2026-03-27 | create-amendment | Criacao DOC-UX-013-M04: 5 componentes Data — StatusBadge (badge semantico cva), Pagination, EmptyState, Tag (removivel), IconButton (icone + tooltip). |
+| 0.22.0 | 2026-03-27 | create-amendment | Criacao DOC-UX-013-M03: 5 componentes Form — FormField (label+input+error), SearchBar, FilterBar, Select (cva), Toggle (switch a11y). |
+| 0.21.0 | 2026-03-27 | merge-amendment | Merge DOC-UX-013-M02: 35 tokens semanticos em §2.1-2.4. DOC-UX-013 v1.3.0. Accent variants, context aliases, status-bg, topbar, spacing, type scale, radii. |
+| 0.20.0 | 2026-03-27 | create-amendment | Criacao DOC-UX-013-M02: ~30 tokens semanticos — context aliases (bg-page, bg-sidebar, bg-card), accent variants (hover, border), 6x status-bg, 6x topbar, 7x spacing semantico, 8x type scale, 3x radius extras. Ref: stitch HTMLs, DOC-UX-011-M04. |
 | 0.19.0 | 2026-03-26 | merge-amendment | Merge DOC-UX-011-M04: nova §2.2 Identidade Visual A1 no AppShell. DOC-UX-011 v1.5.0. Topbar dark, sidebar branca, accent laranja, skeleton states. |
 | 0.18.0 | 2026-03-26 | merge-amendment | Merge DOC-UX-013-M01: tokens A1 brand + text hierarchy em §2.1, escala tipografica A1 em §2.2, excecao SVG inline em §3.4. DOC-UX-013 v1.2.0. |
 | 0.17.0 | 2026-03-26 | create-amendment | Criacao DOC-UX-011-M04: redesign AppShell A1 — topbar dark #111, sidebar branca w-220 accent laranja, content bg #F5F5F3, skeleton states A1. Ref: Ux-Paginas.md, DOC-UX-013-M01. |

@@ -187,6 +187,12 @@
       "docs": [
         { "id": "DOC-UX-013", "sections": "*", "reason": "Design System — enriquecer com acessibilidade, responsividade, performance e padrões de interação" }
       ]
+    },
+    "penpot": {
+      "docs": [
+        { "id": "DOC-UX-013", "sections": "*", "reason": "Design System — tokens, cores, tipografia, shared components" },
+        { "id": "DOC-UX-011", "sections": ["§3", "§4"], "reason": "Application Shell — layout e componentes globais" }
+      ]
     }
   }
 }

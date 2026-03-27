@@ -19,3 +19,7 @@
 | [PKG-COD-001-C01](PKG-COD-001/PKG-COD-001-C01.md) | PKG-COD-001 | C | MERGED | 2026-03-26 | Anti-pattern DTO datetime em §3.4 AGN-COD-API (ref: EX-DTO-001) |
 | [DOC-UX-013-M01](DOC-UX-013/DOC-UX-013-M01.md) | DOC-UX-013 | M | MERGED | 2026-03-26 | Design tokens A1: cores brand, hierarquia de texto, tipografia display |
 | [DOC-UX-011-M04](DOC-UX-011/DOC-UX-011-M04.md) | DOC-UX-011 | M | MERGED | 2026-03-26 | Redesign AppShell A1: topbar dark, sidebar branca, accent laranja |
+| [DOC-UX-013-M02](DOC-UX-013/DOC-UX-013-M02.md) | DOC-UX-013 | M | MERGED | 2026-03-27 | Tokens semanticos: context aliases, status-bg, topbar, spacing, type scale, radii |
+| [DOC-UX-013-M03](DOC-UX-013/DOC-UX-013-M03.md) | DOC-UX-013 | M | MERGED | 2026-03-27 | Componentes Form: FormField, SearchBar, FilterBar, Select, Toggle |
+| [DOC-UX-013-M04](DOC-UX-013/DOC-UX-013-M04.md) | DOC-UX-013 | M | MERGED | 2026-03-27 | Componentes Data: StatusBadge, Pagination, EmptyState, Tag, IconButton |
+| [DOC-UX-013-M05](DOC-UX-013/DOC-UX-013-M05.md) | DOC-UX-013 | M | MERGED | 2026-03-27 | Componentes Feedback: ConfirmationModal, PageHeader |

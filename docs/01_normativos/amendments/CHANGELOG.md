@@ -12,6 +12,10 @@ Documentos normativos não pertencem a módulos — este CHANGELOG substitui o P
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 0.19.0 | 2026-03-26 | merge-amendment | Merge DOC-UX-011-M04: nova §2.2 Identidade Visual A1 no AppShell. DOC-UX-011 v1.5.0. Topbar dark, sidebar branca, accent laranja, skeleton states. |
+| 0.18.0 | 2026-03-26 | merge-amendment | Merge DOC-UX-013-M01: tokens A1 brand + text hierarchy em §2.1, escala tipografica A1 em §2.2, excecao SVG inline em §3.4. DOC-UX-013 v1.2.0. |
+| 0.17.0 | 2026-03-26 | create-amendment | Criacao DOC-UX-011-M04: redesign AppShell A1 — topbar dark #111, sidebar branca w-220 accent laranja, content bg #F5F5F3, skeleton states A1. Ref: Ux-Paginas.md, DOC-UX-013-M01. |
+| 0.16.0 | 2026-03-26 | create-amendment | Criacao DOC-UX-013-M01: design tokens A1 — cores brand (#F58C32, #111111, #F5F5F3, #E8E8E6), hierarquia de texto (6 niveis), tipografia display (Plus Jakarta Sans), excecao SVG inline. Ref: Ux-Paginas.md (Paper). |
 | 0.15.1 | 2026-03-26 | merge-amendment | Merge PKG-COD-001-C01: anti-pattern DTO datetime em §3.4 AGN-COD-API. PKG-COD-001 v1.5.1. Ref: EX-DTO-001. |
 | 0.15.0 | 2026-03-26 | merge-amendment | Merge DOC-GNP-00-C01: novo EX-DTO-001 inserido após EX-DB-001. DOC-GNP-00 v2.1.1. Campos datetime em Zod response DTOs MUST usar z.string(). |
 | 0.14.2 | 2026-03-26 | create-amendment | Criação PKG-COD-001-C01: anti-pattern DTO datetime em §3.4 AGN-COD-API — codegen MUST NOT gerar .datetime() em response DTOs. Ref: DOC-GNP-00-C01 EX-DTO-001. |

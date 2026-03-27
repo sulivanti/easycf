@@ -1,9 +1,9 @@
 # DOC-UX-013 — Design System e Tokens Visuais
 
 - **id:** DOC-UX-013
-- **version:** 1.1.0
+- **version:** 1.2.0
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-24
+- **data_ultima_revisao:** 2026-03-26
 - **owner:** produto + arquitetura + UX
 - **scope:** global (design system, tokens visuais, styling)
 
@@ -69,6 +69,24 @@ Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-
   --color-danger-600: #dc2626;
   --color-info-500: #06b6d4;
   --color-info-600: #0891b2;
+
+  /* A1 Brand */
+  --color-a1-accent: #F58C32;
+  --color-a1-dark: #111111;
+  --color-a1-bg: #F5F5F3;
+  --color-a1-bg-alt: #FAFAF8;
+  --color-a1-border: #E8E8E6;
+  --color-a1-border-light: #F0F0EE;
+  --color-a1-active-bg: #FFF5EC;
+
+  /* A1 Text Hierarchy */
+  --color-a1-text-primary: #111111;
+  --color-a1-text-secondary: #333333;
+  --color-a1-text-tertiary: #555555;
+  --color-a1-text-auxiliary: #888888;
+  --color-a1-text-hint: #AAAAAA;
+  --color-a1-text-placeholder: #CCCCCC;
+  --color-a1-text-muted-icon: #BBBBBB;
 }
 ```
 
@@ -89,7 +107,21 @@ Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-
 | `--text-3xl` | `1.875rem / 2.25rem` | Títulos principais |
 | `--text-4xl` | `2.25rem / 2.5rem` | Hero text |
 
-**Font loading:** Google Fonts CDN no `index.html` (Inter + JetBrains Mono). Para produção, recomenda-se self-hosting via `@fontsource`.
+**Font loading:** Google Fonts CDN no `index.html` (Inter + Plus Jakarta Sans + JetBrains Mono). Para produção, recomenda-se self-hosting via `@fontsource`.
+
+> **Regra de uso:** `--font-display` (Plus Jakarta Sans) DEVE ser usado para títulos, labels e texto de UI no contexto A1. `--font-sans` (Inter) permanece como fallback para corpo de texto genérico.
+
+#### Escala Tipográfica A1
+
+| Nível | Weight | Size | Uso |
+|-------|--------|------|-----|
+| Display | 800 (extrabold) | 28px / 34px | Títulos hero, branding |
+| Title | 700 (bold) | 20px / 24px | Títulos de página |
+| Label | 600 (semibold) | 11px / 14px CAPS | Labels de formulário, section headers |
+| Section | 700 (bold) | 9px / 12px CAPS tracking-[1.4px] | Headers de sidebar |
+| Body | 400 (normal) | 13px / 16px | Texto padrão, tabelas |
+| Caption | 400 (normal) | 11px / 14px | Datas, metadados, hints |
+| Micro | 400 (normal) | 10px / 12px | Sub-labels, tenant info |
 
 ### 2.3 Espaçamento
 
@@ -187,6 +219,7 @@ O arquivo `src/index.css` DEVE conter:
 **Exceções permitidas** (inline style aceitável):
 - Valores dinâmicos calculados em runtime (ex: `style={{ width: `${progress}%` }}`)
 - Posicionamento absoluto com coordenadas dinâmicas
+- SVGs inline com `viewBox`, `fill`, `stroke` e propriedades de renderização gráfica quando necessário para compatibilidade cross-browser (ex: `flexShrink: '0'`)
 
 ---
 
@@ -373,5 +406,6 @@ O ThemeToggle DEVE:
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.2.0 | 2026-03-26 | Amendment M01: tokens A1 (§2.1 cores brand + text hierarchy, §2.2 escala tipográfica A1 + regra font-display, §3.4 exceção SVG inline). Ref: Ux-Paginas.md (Paper). |
 | 1.1.0 | 2026-03-24 | §4 reescrita para shadcn/ui como base da component library (Radix UI, cva, tailwind-merge, cn()), anti-patterns e CA-06 adicionados |
 | 1.0.0 | 2026-03-24 | Versão inicial — design tokens, Tailwind v4, shared components, dark/light theme |

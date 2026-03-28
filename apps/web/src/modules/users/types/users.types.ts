@@ -83,20 +83,22 @@ export interface FieldError {
 
 // ── Status Badge (DATA-001 view-model) ───────────────────────
 
+import type { StatusType } from '@shared/ui/status-badge';
+
 export interface StatusBadge {
   label: string;
-  variant: 'default' | 'secondary' | 'destructive' | 'outline';
+  status: StatusType;
 }
 
 const STATUS_BADGE_MAP: Record<UserStatus, StatusBadge> = {
-  ACTIVE: { label: 'Ativo', variant: 'default' },
-  PENDING: { label: 'Aguardando ativação', variant: 'secondary' },
-  BLOCKED: { label: 'Bloqueado', variant: 'destructive' },
-  INACTIVE: { label: 'Inativo', variant: 'outline' },
+  ACTIVE: { label: 'Ativo', status: 'success' },
+  PENDING: { label: 'Aguardando ativação', status: 'warning' },
+  BLOCKED: { label: 'Bloqueado', status: 'error' },
+  INACTIVE: { label: 'Inativo', status: 'neutral' },
 };
 
 export function getStatusBadge(status: UserStatus): StatusBadge {
-  return STATUS_BADGE_MAP[status] ?? { label: status, variant: 'outline' };
+  return STATUS_BADGE_MAP[status] ?? { label: status, status: 'neutral' };
 }
 
 // ── Date formatting (pt-BR) ─────────────────────────────────

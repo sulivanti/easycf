@@ -26,6 +26,7 @@ import {
 import { toast } from 'sonner';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Button } from '@shared/ui/button';
+import { EmptyState } from '@shared/ui/empty-state';
 import { useAuthMe } from '../hooks/use-auth-me';
 import { getGreeting } from '../components/greeting';
 import { filterShortcutsByScopes } from '../components/shortcut-config';
@@ -91,9 +92,10 @@ function WelcomeWidget({ name, tenantName }: { name: string; tenantName: string 
 function ModuleShortcuts({ cards }: { cards: ShortcutCard[] }) {
   if (cards.length === 0) {
     return (
-      <div className="py-12 text-center font-display text-[13px] text-a1-text-auxiliary">
-        Nenhum módulo disponível para seu perfil. Contate o administrador.
-      </div>
+      <EmptyState
+        title="Nenhum módulo disponível"
+        description="Nenhum módulo disponível para seu perfil. Contate o administrador."
+      />
     );
   }
 

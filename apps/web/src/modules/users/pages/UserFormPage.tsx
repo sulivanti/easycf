@@ -12,6 +12,8 @@ import { Button } from '@shared/ui';
 import { Input } from '@shared/ui';
 import { Label } from '@shared/ui';
 import { Skeleton } from '@shared/ui';
+import { PageHeader } from '@shared/ui/page-header';
+import { Select } from '@shared/ui/select';
 import { useRoleOptions } from '../hooks/use-role-options.js';
 import { useCreateUser } from '../hooks/use-create-user.js';
 import {
@@ -141,15 +143,19 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
   const strengthConfig = STRENGTH_CONFIG[strengthLevel];
   const isSubmitDisabled = submitLoading || !fullName.trim() || !email.trim() || !roleId;
 
+  const roleOptions = (roles ?? []).map((role) => ({ value: role.id, label: role.name }));
+
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="sm" onClick={onNavigateToList}>
-          &larr; Voltar
-        </Button>
-        <h1 className="text-xl font-semibold">Novo Usuário</h1>
-      </div>
+      <PageHeader
+        title="Novo Usuário"
+        actions={
+          <Button variant="ghost" size="sm" onClick={onNavigateToList}>
+            &larr; Voltar
+          </Button>
+        }
+      />
 
       {/* Form */}
       <div className="rounded-lg border bg-card p-6">
@@ -229,21 +235,16 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
                 </Button>
               </div>
             ) : (
-              <select
+              <Select
                 id="roleId"
                 value={roleId}
                 onChange={(e) => setRoleId(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                options={roleOptions}
+                placeholder="Selecione um perfil"
+                className="w-full"
                 aria-describedby={fieldErrors.has('roleId') ? 'roleId-error' : undefined}
                 aria-invalid={fieldErrors.has('roleId')}
-              >
-                <option value="">Selecione um perfil</option>
-                {(roles ?? []).map((role) => (
-                  <option key={role.id} value={role.id}>
-                    {role.name}
-                  </option>
-                ))}
-              </select>
+              />
             )}
             {fieldErrors.has('roleId') && (
               <p id="roleId-error" className="text-xs text-destructive">

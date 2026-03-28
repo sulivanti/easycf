@@ -5,7 +5,6 @@
  */
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui';
-import { Badge } from '@shared/ui';
 import { Button } from '@shared/ui';
 import { Skeleton } from '@shared/ui';
 import {
@@ -14,6 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@shared/ui';
+import { StatusBadge } from '@shared/ui/status-badge';
+import { EmptyState } from '@shared/ui/empty-state';
 import type { UserViewModel } from '../types/users.types.js';
 import { COPY } from '../types/users.types.js';
 
@@ -48,27 +49,6 @@ function SkeletonRows({ count = 5 }: { count?: number }) {
   );
 }
 
-// ── Empty State ──────────────────────────────────────────────
-
-function EmptyState({
-  canCreate,
-  onCreateClick,
-}: {
-  canCreate: boolean;
-  onCreateClick?: () => void;
-}) {
-  return (
-    <div className="flex flex-col items-center py-12 text-center">
-      <p className="text-sm text-muted-foreground">{COPY.label.noResults}</p>
-      {canCreate && onCreateClick && (
-        <Button variant="default" size="sm" className="mt-4" onClick={onCreateClick}>
-          Criar primeiro usuário
-        </Button>
-      )}
-    </div>
-  );
-}
-
 // ── Table ────────────────────────────────────────────────────
 
 interface UsersTableProps {
@@ -95,7 +75,19 @@ export function UsersTable({
   onInviteClick,
 }: UsersTableProps) {
   if (!loading && users.length === 0) {
-    return <EmptyState canCreate={canCreate} onCreateClick={onCreateClick} />;
+    return (
+      <EmptyState
+        title="Nenhum usuário encontrado"
+        description="Cadastre o primeiro usuário ou ajuste os filtros."
+        action={
+          canCreate && onCreateClick ? (
+            <Button variant="default" size="sm" onClick={onCreateClick}>
+              Criar primeiro usuário
+            </Button>
+          ) : undefined
+        }
+      />
+    );
   }
 
   return (
@@ -121,7 +113,9 @@ export function UsersTable({
                 <TableCell className="text-muted-foreground">{user.email}</TableCell>
                 <TableCell className="text-muted-foreground">{user.roleName}</TableCell>
                 <TableCell>
-                  <Badge variant={user.statusBadge.variant}>{user.statusBadge.label}</Badge>
+                  <StatusBadge status={user.statusBadge.status}>
+                    {user.statusBadge.label}
+                  </StatusBadge>
                 </TableCell>
                 <TableCell className="text-muted-foreground">{user.createdAtFormatted}</TableCell>
                 <TableCell>

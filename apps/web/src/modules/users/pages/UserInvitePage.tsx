@@ -8,7 +8,7 @@
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@shared/ui';
-import { Badge } from '@shared/ui';
+import { StatusBadge } from '@shared/ui/status-badge';
 import { Skeleton } from '@shared/ui';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@shared/ui';
 import { PageHeader } from '@shared/ui/page-header';
@@ -138,7 +138,7 @@ export function UserInvitePage({ userId, userScopes, onNavigateBack }: UserInvit
       <div className="rounded-lg border border-a1-border bg-white p-6 space-y-4">
         <div className="flex items-center gap-3">
           <h2 className="text-lg font-medium">{viewModel.displayName}</h2>
-          <Badge variant={viewModel.statusBadge.variant}>{viewModel.statusBadge.label}</Badge>
+          <StatusBadge status={viewModel.statusBadge.status}>{viewModel.statusBadge.label}</StatusBadge>
         </div>
 
         {/* Status-specific content */}

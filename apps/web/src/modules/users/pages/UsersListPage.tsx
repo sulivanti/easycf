@@ -8,7 +8,10 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@shared/ui';
-import { Input } from '@shared/ui';
+import { PageHeader } from '@shared/ui/page-header';
+import { SearchBar } from '@shared/ui/search-bar';
+import { FilterBar } from '@shared/ui/filter-bar';
+import { Select } from '@shared/ui/select';
 import { UsersTable } from '../components/UsersTable.js';
 import { DeactivateModal } from '../components/DeactivateModal.js';
 import { useUsersList, useInvalidateUsersList } from '../hooks/use-users-list.js';
@@ -23,7 +26,7 @@ import {
 } from '../types/users.types.js';
 import { ApiError } from '../../foundation/api/http-client.js';
 
-const STATUS_OPTIONS: { value: UserStatus | ''; label: string }[] = [
+const STATUS_OPTIONS: { value: string; label: string }[] = [
   { value: '', label: 'Todos os status' },
   { value: 'ACTIVE', label: 'Ativo' },
   { value: 'PENDING', label: 'Aguardando ativação' },
@@ -70,13 +73,14 @@ export function UsersListPage({
     };
   }, []);
 
-  const handleStatusChange = useCallback((value: string) => {
-    const status = value as UserStatus | '';
+  const handleStatusChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    const status = e.target.value as UserStatus | '';
     setStatusFilter(status);
     setFilters((prev) => ({ ...prev, status: status || undefined, cursor: undefined }));
   }, []);
 
-  const handleRoleChange = useCallback((value: string) => {
+  const handleRoleChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
     setRoleFilter(value);
     setFilters((prev) => ({ ...prev, roleId: value || undefined, cursor: undefined }));
   }, []);
@@ -118,60 +122,49 @@ export function UsersListPage({
   const showCreate = canCreateUser(userScopes);
   const hasFilters = !!(searchInput || statusFilter || roleFilter);
 
+  const roleOptions = [
+    { value: '', label: 'Todos os perfis' },
+    ...(roles ?? []).map((role) => ({ value: role.id, label: role.name })),
+  ];
+
   return (
     <div className="-m-6">
       {/* Page Header — A1 */}
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Gestão de Usuários
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Gerencie contas, perfis e permissões de acesso
-          </p>
-        </div>
-        {showCreate && (
-          <Button
-            onClick={onNavigateToCreate}
-            className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90"
-          >
-            + Novo Usuário
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        title="Gestão de Usuários"
+        description="Gerencie contas, perfis e permissões de acesso"
+        className="border-b border-a1-border bg-white px-6 py-4.5"
+        actions={
+          showCreate ? (
+            <Button
+              onClick={onNavigateToCreate}
+              className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90"
+            >
+              + Novo Usuário
+            </Button>
+          ) : undefined
+        }
+      />
 
       <div className="space-y-4 p-6">
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3">
-          <Input
-            placeholder="Buscar por nome ou e-mail..."
+        <FilterBar>
+          <SearchBar
             value={searchInput}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="w-64 border-a1-border bg-white font-display text-[13px]"
+            onChange={handleSearchChange}
+            placeholder="Buscar por nome ou e-mail..."
+            className="w-64"
           />
-          <select
+          <Select
             value={statusFilter}
-            onChange={(e) => handleStatusChange(e.target.value)}
-            className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
-          >
-            {STATUS_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          <select
+            onChange={handleStatusChange}
+            options={STATUS_OPTIONS}
+          />
+          <Select
             value={roleFilter}
-            onChange={(e) => handleRoleChange(e.target.value)}
-            className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
-          >
-            <option value="">Todos os perfis</option>
-            {(roles ?? []).map((role) => (
-              <option key={role.id} value={role.id}>
-                {role.name}
-              </option>
-            ))}
-          </select>
+            onChange={handleRoleChange}
+            options={roleOptions}
+          />
           {hasFilters && (
             <Button
               variant="link"
@@ -182,7 +175,7 @@ export function UsersListPage({
               Limpar filtros
             </Button>
           )}
-        </div>
+        </FilterBar>
 
         {/* Error state */}
         {isError && !isLoading && (

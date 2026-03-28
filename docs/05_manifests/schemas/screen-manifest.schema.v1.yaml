@@ -8,8 +8,8 @@
 # Validado pela skill validate-screen-manifest.
 # ============================================================
 
-$schema: "https://easycf.dev/schemas/screen-manifest/v1"
-$version: "1.0.0"
+$schema: "https://easycf.dev/schemas/screen-manifest/v1.1"
+$version: "1.1.0"
 
 # ─── CAMPOS OBRIGATÓRIOS ─────────────────────────────────────
 required:
@@ -203,6 +203,14 @@ fields:
         description: { type: string }
         conditional: { type: string, description: "Condição de renderização. Ex: 'panel == login'" }
         actions_used: { type: array, items: { type: string }, description: "IDs das actions que este componente dispara." }
+        shared_ui_components:
+          type: array
+          items: { type: string }
+          description: |
+            Imports obrigatórios de @shared/ui/ para este component.
+            Cada entry mapeia para um arquivo em apps/web/src/shared/ui/.
+            Exemplo: ["PageHeader", "SearchBar", "Table"]
+            Ref: DOC-UX-014 §3 para mapeamento completo.
 
   navigation:
     type: object
@@ -231,6 +239,41 @@ fields:
         label: { type: string }
         default: { type: boolean }
         actions_scope: { type: array, items: { type: string } }
+
+  penpot_design:
+    type: object
+    description: "Referência ao design no Penpot. Informacional — usado por AGN-COD-WEB para decisões de layout."
+    fields:
+      project: { type: string, description: "Nome do projeto Penpot. Ex: 'ECF — Grupo A1'" }
+      file: { type: string, description: "Nome do arquivo Penpot que contém o design." }
+      component_name: { type: string, description: "Nome do componente/frame no Penpot." }
+      url: { type: string, description: "URL direta para o design no Penpot." }
+
+  state_coverage:
+    type: object
+    description: |
+      Cobertura de estados obrigatória para a tela. Define como loading, empty e error
+      são tratados visualmente. Ref: DOC-UX-014 §2 (regra universal).
+    fields:
+      loading:
+        type: object
+        fields:
+          strategy:
+            type: string
+            enum: [skeleton, spinner, overlay]
+            description: "Estratégia de loading. skeleton = placeholder animado, spinner = indicador rotativo, overlay = loader sobre conteúdo."
+      empty:
+        type: object
+        fields:
+          message: { type: string, description: "Mensagem exibida quando não há dados. Ex: 'Nenhum usuário encontrado'" }
+          illustration: { type: string, description: "Identificador da ilustração do EmptyState. Ex: 'no-results', 'all-caught-up'" }
+      error:
+        type: object
+        fields:
+          strategy:
+            type: string
+            enum: [toast, inline, redirect]
+            description: "Estratégia de erro. toast = Toast com correlationId, inline = mensagem no campo, redirect = redireciona para listagem."
 
   notes:
     type: string

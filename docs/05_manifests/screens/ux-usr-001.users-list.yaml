@@ -142,6 +142,7 @@ components:
       Cabeçalho com título "Gestão de Usuários", contador de usuários ativos
       e botão "Novo Usuário" (visível apenas com scope users:user:write).
     actions_used: [navigate_to_create]
+    shared_ui_components: ["PageHeader"]
 
   - id: "users-search-bar"
     name: "UsersSearchBar"
@@ -149,6 +150,7 @@ components:
       Campo de busca com debounce 400ms. Busca por nome ou e-mail.
       Sincronizado com query param ?q= da URL.
     actions_used: [search_users]
+    shared_ui_components: ["SearchBar"]
 
   - id: "users-filter-panel"
     name: "UsersFilterPanel"
@@ -157,6 +159,7 @@ components:
       e select de perfil (carregado via roles_list).
       Filtros sincronizados com query params da URL para deep link.
     actions_used: [filter_users, load_roles]
+    shared_ui_components: ["FilterBar", "Select"]
 
   - id: "users-table"
     name: "UsersTable"
@@ -168,6 +171,7 @@ components:
       Estado vazio: ilustração + "Nenhum usuário encontrado".
       Paginação cursor-based: botão "Carregar mais" no rodapé.
     actions_used: [view_users, paginate_users, deactivate_user]
+    shared_ui_components: ["Table", "StatusBadge", "Pagination", "Skeleton", "EmptyState"]
 
   - id: "deactivate-user-modal"
     name: "DeactivateUserModal"
@@ -178,6 +182,17 @@ components:
       LGPD: exibe NOME, nunca e-mail.
       Botões: "Cancelar" e "Desativar" (isLoading durante DELETE).
     actions_used: [deactivate_user]
+    shared_ui_components: ["ConfirmationModal", "Button"]
+
+# ─── STATE COVERAGE (DOC-UX-014 §1.1 list) ──────────────────
+state_coverage:
+  loading:
+    strategy: skeleton
+  empty:
+    message: "Nenhum usuário encontrado"
+    illustration: "no-results"
+  error:
+    strategy: toast
 
 # ─── NAVEGAÇÃO ───────────────────────────────────────────────
 navigation:
@@ -198,6 +213,10 @@ notes: |
   7. Endpoints consumidos de MOD-000-F05 e F06 — MOD-002 é UX-first, sem backend próprio.
 
 changelog:
+  - version: "2.1.0"
+    date: "2026-03-28"
+    author: "arquitetura"
+    description: "Backfill v1.1: shared_ui_components em todos os componentes, state_coverage top-level (DOC-UX-014 §1.1 list)."
   - version: "2.0.0"
     date: "2026-03-22"
     author: "arquitetura"

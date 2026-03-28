@@ -92,14 +92,18 @@
         "apps/web/src/modules/{slug}/"
       ],
       "pkg_section": "§3.5",
-      "required_docs": ["DOC-GNP-00", "DOC-UX-010", "DOC-UX-011", "DOC-UX-012", "DOC-UX-013"],
+      "required_docs": ["DOC-GNP-00", "DOC-UX-010", "DOC-UX-011", "DOC-UX-012", "DOC-UX-013", "DOC-UX-014"],
       "required_specs": ["UX-*", "FR-*"],
+      "required_manifests": "docs/05_manifests/screens/",
       "depends_on": ["AGN-COD-API"],
       "post_validation": [],
       "structural_checks": [
         "web_structure_pattern_a_only",
         "web_hooks_use_react_query",
-        "web_no_pattern_b_directories"
+        "web_no_pattern_b_directories",
+        "web_screen_manifest_consumed",
+        "web_blueprint_components_present",
+        "web_state_coverage_complete"
       ]
     },
     "AGN-COD-VAL": {

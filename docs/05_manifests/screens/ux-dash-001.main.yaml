@@ -62,6 +62,7 @@ components:
       Fonte dos dados: SEMPRE auth_me — nunca localStorage ou JWT decodificado.
     conditional: "sempre visível"
     actions_used: [load_dashboard_profile]
+    shared_ui_components: ["PageHeader", "Skeleton"]
 
   - id: "module-shortcuts"
     name: "ModuleShortcuts"
@@ -76,6 +77,7 @@ components:
       Hover: elevação e borda de destaque no card.
     conditional: "sempre visível"
     actions_used: [load_dashboard_profile]
+    shared_ui_components: ["Skeleton", "EmptyState"]
 
   - id: "dashboard-toast-error"
     name: "DashboardToastError"
@@ -86,6 +88,17 @@ components:
       Posição: top-right, auto-dismiss desabilitado (persiste até ação do usuário).
     conditional: "quando load_dashboard_profile retorna erro"
     actions_used: [load_dashboard_profile]
+    shared_ui_components: ["Toast"]
+
+# ─── STATE COVERAGE (DOC-UX-014 §1.4 dashboard) ─────────────
+state_coverage:
+  loading:
+    strategy: skeleton
+  empty:
+    message: "Nenhum módulo disponível para seu perfil. Contate o administrador."
+    illustration: "no-modules"
+  error:
+    strategy: toast
 
 # ─── CATÁLOGO DE ATALHOS (seed inicial MOD-001) ──────────────
 # Define os cards de acesso rápido disponíveis e seus requisitos de scope.
@@ -161,6 +174,10 @@ notes: |
   - auth_me.scopes[]       → filtra quais shortcut cards são exibidos
 
 changelog:
+  - version: "1.1.0"
+    date: "2026-03-28"
+    author: "arquitetura"
+    description: "Backfill v1.1: shared_ui_components em todos os componentes, state_coverage top-level (DOC-UX-014 §1.4 dashboard)."
   - version: "1.0.0"
     date: "2026-03-15"
     author: "arquitetura"

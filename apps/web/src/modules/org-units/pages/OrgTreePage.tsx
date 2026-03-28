@@ -216,7 +216,7 @@ export function OrgTreePage({
             type="checkbox"
             checked={showInactive}
             onChange={(e) => setShowInactive(e.target.checked)}
-            className="accent-a1-accent"
+            className="accent-primary-600"
           />
           Mostrar inativos
         </label>

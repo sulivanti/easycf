@@ -19,7 +19,7 @@ function SearchBar({ value, onChange, placeholder = 'Buscar...', className }: Se
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-9 w-full min-w-[200px] rounded-md border border-a1-border bg-white pl-9 pr-8 text-sm text-a1-text-primary outline-none placeholder:text-a1-text-placeholder focus-visible:border-a1-accent focus-visible:ring-[3px] focus-visible:ring-a1-accent/20"
+        className="h-9 w-full min-w-[200px] rounded-md border border-a1-border bg-white pl-9 pr-8 text-sm text-a1-text-primary outline-none placeholder:text-a1-text-placeholder focus-visible:border-primary-600 focus-visible:ring-[3px] focus-visible:ring-primary-600/20"
       />
       {value && (
         <button

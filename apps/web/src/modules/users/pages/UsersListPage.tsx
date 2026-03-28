@@ -177,7 +177,7 @@ export function UsersListPage({
               variant="link"
               size="sm"
               onClick={handleClearFilters}
-              className="font-display text-a1-accent"
+              className="font-display text-primary-600"
             >
               Limpar filtros
             </Button>

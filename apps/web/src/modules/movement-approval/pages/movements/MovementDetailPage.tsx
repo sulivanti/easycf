@@ -267,7 +267,7 @@ export function MovementDetailPage({ movementId }: MovementDetailPageProps) {
                             key={approver.id}
                             className="flex items-center gap-2 rounded-md bg-a1-bg px-3 py-1.5"
                           >
-                            <div className="flex size-6 items-center justify-center rounded-full bg-a1-accent/10 text-a1-accent">
+                            <div className="flex size-6 items-center justify-center rounded-full bg-primary-600/10 text-primary-600">
                               <UserIcon className="size-3.5" />
                             </div>
                             <span className="text-sm text-a1-text-primary">{approver.name}</span>
@@ -309,7 +309,7 @@ export function MovementDetailPage({ movementId }: MovementDetailPageProps) {
                   value={justification}
                   onChange={(e) => setJustification(e.target.value)}
                   rows={3}
-                  className="w-full rounded-md border border-a1-border bg-white px-3 py-2 text-sm text-a1-text-primary outline-none placeholder:text-a1-text-placeholder focus-visible:border-a1-accent focus-visible:ring-[3px] focus-visible:ring-a1-accent/20"
+                  className="w-full rounded-md border border-a1-border bg-white px-3 py-2 text-sm text-a1-text-primary outline-none placeholder:text-a1-text-placeholder focus-visible:border-primary-600 focus-visible:ring-[3px] focus-visible:ring-primary-600/20"
                   placeholder="Descreva o motivo do override..."
                 />
               </FormField>

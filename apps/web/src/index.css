@@ -42,32 +42,41 @@
   --color-info-500: #06b6d4;
   --color-info-600: #0891b2;
 
-  /* A1 Brand */
+  /* Brand (logo only) */
   --color-a1-accent: #F58C32;
   --color-a1-dark: #111111;
-  --color-a1-bg: #F5F5F3;
-  --color-a1-bg-alt: #FAFAF8;
-  --color-a1-border: #E8E8E6;
-  --color-a1-border-light: #F0F0EE;
-  --color-a1-active-bg: #FFF5EC;
+  --color-a1-bg: #f8fafc;
+  --color-a1-bg-alt: #f8fafc;
+  --color-a1-border: #e2e8f0;
+  --color-a1-border-light: #f1f5f9;
+  --color-a1-active-bg: #eff6ff;
 
-  /* A1 Text Hierarchy */
-  --color-a1-text-primary: #111111;
-  --color-a1-text-secondary: #333333;
-  --color-a1-text-tertiary: #555555;
-  --color-a1-text-auxiliary: #888888;
-  --color-a1-text-hint: #AAAAAA;
-  --color-a1-text-placeholder: #CCCCCC;
-  --color-a1-text-muted-icon: #BBBBBB;
+  /* Text Hierarchy (cool slate) */
+  --color-a1-text-primary: #1e293b;
+  --color-a1-text-secondary: #334155;
+  --color-a1-text-tertiary: #475569;
+  --color-a1-text-auxiliary: #64748b;
+  --color-a1-text-hint: #94a3b8;
+  --color-a1-text-placeholder: #cbd5e1;
+  --color-a1-text-muted-icon: #94a3b8;
 
-  /* Accent Variants */
-  --color-accent-hover: #E07B28;
-  --color-accent-border: #F5C89A;
+  /* Accent Variants (blue) */
+  --color-accent-hover: #1d4ed8;
+  --color-accent-border: #bfdbfe;
 
   /* Semantic Context Aliases */
-  --color-bg-page: #F5F5F3;
+  --color-bg-page: #f8fafc;
   --color-bg-sidebar: #FFFFFF;
   --color-bg-card: #FFFFFF;
+
+  /* Sidebar */
+  --color-sidebar-active-bg: #eff6ff;
+  --color-sidebar-active-text: #2563eb;
+
+  /* Layout Dimensions */
+  --topbar-height: 4rem;
+  --sidebar-collapsed: 4rem;
+  --sidebar-expanded: 14rem;
 
   /* Status Backgrounds */
   --color-status-success-bg: #DCFCE7;
@@ -77,13 +86,13 @@
   --color-status-neutral-bg: #F1F5F9;
   --color-status-purple-bg: #F3E8FF;
 
-  /* Topbar */
-  --color-topbar-bg: #111111;
-  --color-topbar-separator: #2A2A2A;
-  --color-topbar-text: #FFFFFF;
-  --color-topbar-text-muted: #999999;
-  --color-topbar-badge-bg: #F58C32;
-  --color-topbar-badge-border: #E07B28;
+  /* Topbar (light) */
+  --color-topbar-bg: #FFFFFF;
+  --color-topbar-separator: #e2e8f0;
+  --color-topbar-text: #1e293b;
+  --color-topbar-text-muted: #64748b;
+  --color-topbar-badge-bg: #2563eb;
+  --color-topbar-badge-border: #1d4ed8;
 
   /* Semantic Spacing */
   --space-xs: 0.25rem;

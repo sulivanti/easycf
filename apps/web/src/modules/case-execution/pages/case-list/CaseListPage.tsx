@@ -159,7 +159,7 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
                   cursor: undefined,
                 }))
               }
-              className="accent-a1-accent rounded"
+              className="accent-primary-600 rounded"
             />
             Minha responsabilidade
           </label>

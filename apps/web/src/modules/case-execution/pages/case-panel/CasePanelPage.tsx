@@ -138,7 +138,7 @@ function TabBar({ activeTab, onChange }: { activeTab: TabId; onChange: (t: TabId
             px-4 py-2 text-sm font-medium border-b-2 transition-colors
             ${
               activeTab === t.id
-                ? 'border-a1-accent text-a1-accent'
+                ? 'border-primary-600 text-primary-600'
                 : 'border-transparent text-a1-text-auxiliary hover:text-a1-text-secondary'
             }
           `}

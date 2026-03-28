@@ -1,7 +1,7 @@
 # DOC-UX-011 — Padrões de Application Shell e Navegação
 
 - **id:** DOC-UX-011
-- **version:** 1.5.0
+- **version:** 1.6.0
 - **status:** READY
 - **data_ultima_revisao:** 2026-03-26
 - **owner:** produto + arquitetura + UX
@@ -34,49 +34,55 @@ O layout base DEVE ser composto minimamente por:
 
 O Application Shell DEVE adotar a identidade visual A1 (Grupo A1), utilizando os tokens definidos em DOC-UX-013 §2.1 (bloco A1 Brand).
 
-#### Topbar (Header)
+#### Topbar (Header) — ref DOC-UX-011-M05
 
 | Propriedade | Valor |
 |-------------|-------|
-| Altura | `h-13` (52px) |
-| Fundo | `bg-a1-dark` (#111111) |
-| Layout | flex, três zonas: logo (w-[220px]) / breadcrumb (flex grow) / profile |
+| Altura | `h-16` (64px) |
+| Fundo | `bg-white` (#FFFFFF) |
+| Borda | `border-b border-neutral-200` |
+| Layout | flex, três zonas: logo (w-16) / breadcrumb (flex grow) / profile |
 
-**Zona esquerda (logo):** Largura fixa w-[220px] alinhada com sidebar, border-right 1px #1E1E1E. Logo: ícone 26x26px rounded-[5px] bg-a1-accent com SVG "A1". Texto: "Grupo A1" (branco bold 13px) + "Portal Interno" (#444 10px).
+**Zona esquerda (logo):** Largura fixa w-16 (64px, alinhada com sidebar colapsada). Logo: ícone 26x26px rounded-[5px] bg-primary-600 com SVG "A1" branco.
 
-**Zona central (breadcrumb):** Separador "/" em #333, segmentos inativos #555 text-xs, segmento ativo branco font-semibold.
+**Zona central (breadcrumb):** Separador "/" em neutral-400, segmentos inativos neutral-500 text-xs, segmento ativo neutral-800 font-semibold.
 
-**Zona direita (profile):** Nome branco font-medium text-xs, subtexto tenant #444 text-[10px], avatar circle 30px bg-a1-accent com iniciais branco bold 11px.
+**Zona direita (profile):** Nome neutral-800 font-medium text-xs, subtexto tenant neutral-500 text-[10px], avatar circle 30px bg-primary-600 com iniciais branco bold 11px.
 
-#### Sidebar
+#### Sidebar — ref DOC-UX-011-M05
 
 | Propriedade | Valor |
 |-------------|-------|
-| Largura | `w-[220px]` |
+| Largura | `w-16` colapsada → `w-56` (224px) on hover |
 | Fundo | `bg-white` |
-| Border | `border-r border-a1-border` (#E8E8E6) |
-| Padding | `py-4 px-2.5` |
+| Border | `border-r border-neutral-200` (#e2e8f0) |
+| Padding | `py-4 px-2` |
+| Transição | `transition-all duration-300` |
 
-**Section headers:** uppercase tracking-[1.4px] text-[9px] font-bold text-a1-text-placeholder (#CCC), mb-1.25 px-2.
+**Sidebar colapsada (w-16):** Exibe apenas ícones centralizados. Labels com opacity-0. Section headers ocultos.
 
-**Items inativos:** flex items-center rounded-md py-2 px-2.5 gap-2.25, texto text-[13px] text-a1-text-auxiliary (#888), ícones stroke #BBB 14px strokeWidth 1.5.
+**Sidebar expandida (hover → w-56):** Ícones + labels visíveis. Section headers com opacity-100.
 
-**Item ativo:** bg-a1-active-bg (#FFF5EC), border-left 2.5px solid a1-accent (#F58C32), texto a1-accent font-bold, ícone stroke #F58C32.
+**Section headers:** uppercase tracking-[1.4px] text-[9px] font-bold text-a1-text-placeholder (slate-300), opacity-0 → opacity-100 on group-hover.
 
-**Badges:** rounded-full bg-a1-dark text-white text-[9px].
+**Items inativos:** flex items-center rounded-md py-2 px-2.5 gap-2.5, texto text-[13px] text-neutral-500, ícones stroke-neutral-400 16px, hover:bg-primary-50.
+
+**Item ativo:** bg-primary-50 (#eff6ff), text-primary-600 font-semibold, ícone stroke-primary-600 (sem borda lateral).
+
+**Badges:** rounded-full bg-primary-600 text-white text-[9px].
 
 #### Content Area
 
 | Propriedade | Valor |
 |-------------|-------|
-| Fundo | `bg-a1-bg` (#F5F5F3) |
+| Fundo | `bg-neutral-50` (#f8fafc) |
 | Padding | `p-6` (mantido) |
 
-#### Skeleton States A1
+#### Skeleton States
 
-- SidebarSkeleton: w-[220px] bg-white border-r border-a1-border
-- HeaderSkeleton: h-13 bg-a1-dark
-- Skeleton bars: bg-a1-border com animate-pulse
+- SidebarSkeleton: w-16 bg-white border-r border-neutral-200
+- HeaderSkeleton: h-16 bg-white border-b border-neutral-200
+- Skeleton bars: bg-neutral-200 com animate-pulse
 
 ### 2.3 Estratégia de Roteamento SPA
 
@@ -352,6 +358,7 @@ export const Route = createRoute({
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.6.0 | 2026-03-27 | Amendment M05: Unificação visual ao stitch modelagem — topbar de dark (#111) para white com border-b h-16, sidebar de fixa 220px para colapsável (w-16 → w-56 hover), accent de laranja para azul (primary-600), backgrounds de warm beige para cool slate. Ref: DOC-UX-013-M06. |
 | 1.5.0 | 2026-03-26 | Amendment M04: nova §2.2 Identidade Visual A1 — topbar dark #111, sidebar branca w-220 accent laranja, content bg #F5F5F3, skeleton states A1. Ref: Ux-Paginas.md, DOC-UX-013-M01. |
 | 1.4.0 | 2026-03-25 | Amendment M03: nova §6.2 LogoutConfirmDialog obrigatório no Widget de Perfil — confirmação antes de logout, loading state, telemetria (DOC-UX-011-M03). |
 | 1.3.0 | 2026-03-25 | Amendment M01 (Coming Soon): nova §8 — Rotas Pendentes (ComingSoonPage pattern), novo CA-09 (toda rota do sidebar DEVE ter route file). |

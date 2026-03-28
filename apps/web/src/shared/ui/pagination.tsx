@@ -60,7 +60,7 @@ function Pagination({ currentPage, totalPages, onPageChange, className }: Pagina
             className={cn(
               'inline-flex size-8 items-center justify-center rounded-md text-sm font-medium transition-colors',
               page === currentPage
-                ? 'bg-a1-accent text-white'
+                ? 'bg-primary-600 text-white'
                 : 'text-a1-text-secondary hover:bg-a1-bg',
             )}
           >

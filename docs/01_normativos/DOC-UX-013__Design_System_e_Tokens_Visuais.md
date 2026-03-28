@@ -1,7 +1,7 @@
 # DOC-UX-013 — Design System e Tokens Visuais
 
 - **id:** DOC-UX-013
-- **version:** 1.6.0
+- **version:** 1.7.0
 - **status:** ACTIVE
 - **data_ultima_revisao:** 2026-03-27
 - **owner:** produto + arquitetura + UX
@@ -70,32 +70,41 @@ Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-
   --color-info-500: #06b6d4;
   --color-info-600: #0891b2;
 
-  /* A1 Brand */
+  /* Brand (logo only — ref DOC-UX-013-M06) */
   --color-a1-accent: #F58C32;
   --color-a1-dark: #111111;
-  --color-a1-bg: #F5F5F3;
-  --color-a1-bg-alt: #FAFAF8;
-  --color-a1-border: #E8E8E6;
-  --color-a1-border-light: #F0F0EE;
-  --color-a1-active-bg: #FFF5EC;
+  --color-a1-bg: #f8fafc;
+  --color-a1-bg-alt: #f8fafc;
+  --color-a1-border: #e2e8f0;
+  --color-a1-border-light: #f1f5f9;
+  --color-a1-active-bg: #eff6ff;
 
-  /* A1 Text Hierarchy */
-  --color-a1-text-primary: #111111;
-  --color-a1-text-secondary: #333333;
-  --color-a1-text-tertiary: #555555;
-  --color-a1-text-auxiliary: #888888;
-  --color-a1-text-hint: #AAAAAA;
-  --color-a1-text-placeholder: #CCCCCC;
-  --color-a1-text-muted-icon: #BBBBBB;
+  /* Text Hierarchy (cool slate — ref DOC-UX-013-M06) */
+  --color-a1-text-primary: #1e293b;
+  --color-a1-text-secondary: #334155;
+  --color-a1-text-tertiary: #475569;
+  --color-a1-text-auxiliary: #64748b;
+  --color-a1-text-hint: #94a3b8;
+  --color-a1-text-placeholder: #cbd5e1;
+  --color-a1-text-muted-icon: #94a3b8;
 
-  /* Accent Variants */
-  --color-accent-hover: #E07B28;
-  --color-accent-border: #F5C89A;
+  /* Accent Variants (blue — ref DOC-UX-013-M06) */
+  --color-accent-hover: #1d4ed8;
+  --color-accent-border: #bfdbfe;
 
   /* Semantic Context Aliases */
-  --color-bg-page: #F5F5F3;       /* alias --color-a1-bg */
+  --color-bg-page: #f8fafc;       /* slate-50 */
   --color-bg-sidebar: #FFFFFF;
   --color-bg-card: #FFFFFF;
+
+  /* Sidebar (ref DOC-UX-013-M06) */
+  --color-sidebar-active-bg: #eff6ff;
+  --color-sidebar-active-text: #2563eb;
+
+  /* Layout Dimensions (ref DOC-UX-013-M06) */
+  --topbar-height: 4rem;
+  --sidebar-collapsed: 4rem;
+  --sidebar-expanded: 14rem;
 
   /* Status Backgrounds (light variants para badges/alerts) */
   --color-status-success-bg: #DCFCE7;
@@ -105,19 +114,21 @@ Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-
   --color-status-neutral-bg: #F1F5F9;
   --color-status-purple-bg: #F3E8FF;
 
-  /* Topbar (dark header A1 — ref DOC-UX-011-M04) */
-  --color-topbar-bg: #111111;
-  --color-topbar-separator: #2A2A2A;
-  --color-topbar-text: #FFFFFF;
-  --color-topbar-text-muted: #999999;
-  --color-topbar-badge-bg: #F58C32;
-  --color-topbar-badge-border: #E07B28;
+  /* Topbar (light — ref DOC-UX-011-M05, DOC-UX-013-M06) */
+  --color-topbar-bg: #FFFFFF;
+  --color-topbar-separator: #e2e8f0;
+  --color-topbar-text: #1e293b;
+  --color-topbar-text-muted: #64748b;
+  --color-topbar-badge-bg: #2563eb;
+  --color-topbar-badge-border: #1d4ed8;
 }
 ```
 
 **Regra:** Módulos NÃO DEVEM definir cores adicionais fora do `@theme`. Se novas cores forem necessárias, devem ser adicionadas via amendment ao design system.
 
 **Regra:** Páginas que implementam o layout A1 DEVEM usar tokens de contexto (`bg-page`, `bg-sidebar`, etc.) ao invés de referenciar `a1-bg` diretamente. Isso permite futura troca de tema sem alterar páginas.
+
+**Regra (M06):** Os tokens `--color-a1-accent` (#F58C32) e `--color-a1-dark` (#111111) são **exclusivos** para o logo A1 e o painel de branding do login. Elementos interativos (botões, toggles, paginação, focus rings, sidebar active) DEVEM usar `--color-primary-600` (#2563eb).
 
 ### 2.2 Tipografia
 
@@ -504,6 +515,7 @@ O ThemeToggle DEVE:
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.7.0 | 2026-03-27 | Amendment M06: Unificação de tokens ao stitch modelagem — accent interativo de laranja (#F58C32) para azul (#2563eb), topbar de dark (#111) para white (#FFF), superfícies de warm beige para cool slate, texto de warm grays para cool grays. Laranja reservado para logo/branding. Novos tokens: sidebar-active-bg/text, topbar-height, sidebar-collapsed/expanded. |
 | 1.6.0 | 2026-03-27 | Amendments M03+M04+M05: 12 novos componentes shared/ui — Form (FormField, SearchBar, FilterBar, Select, Toggle), Data (StatusBadge, Pagination, EmptyState, Tag, IconButton), Feedback (ConfirmationModal, PageHeader). |
 | 1.3.0 | 2026-03-27 | Amendment M02: ~35 tokens semânticos — accent variants, context aliases (bg-page/sidebar/card), 6x status-bg, 6x topbar, 7x spacing semântico, 8x type scale, 3x radii extras. Ref: stitch HTMLs, DOC-UX-011-M04. |
 | 1.2.0 | 2026-03-26 | Amendment M01: tokens A1 (§2.1 cores brand + text hierarchy, §2.2 escala tipográfica A1 + regra font-display, §3.4 exceção SVG inline). Ref: Ux-Paginas.md (Paper). |

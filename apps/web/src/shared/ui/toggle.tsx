@@ -36,9 +36,9 @@ function Toggle({ checked, onChange, label, disabled, size = 'default', classNam
           }
         }}
         className={cn(
-          'relative inline-flex shrink-0 cursor-pointer rounded-full transition-colors duration-[var(--duration-fast)] outline-none focus-visible:ring-[3px] focus-visible:ring-a1-accent/20',
+          'relative inline-flex shrink-0 cursor-pointer rounded-full transition-colors duration-[var(--duration-fast)] outline-none focus-visible:ring-[3px] focus-visible:ring-primary-600/20',
           isSm ? 'h-4 w-7' : 'h-5 w-9',
-          checked ? 'bg-a1-accent' : 'bg-neutral-300',
+          checked ? 'bg-primary-600' : 'bg-neutral-300',
         )}
       >
         <span

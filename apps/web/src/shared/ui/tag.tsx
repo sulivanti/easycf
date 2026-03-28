@@ -10,7 +10,7 @@ const tagVariants = cva(
     variants: {
       variant: {
         default: 'bg-status-neutral-bg text-a1-text-secondary',
-        accent: 'bg-a1-active-bg text-a1-accent',
+        accent: 'bg-primary-50 text-primary-600',
       },
     },
     defaultVariants: {

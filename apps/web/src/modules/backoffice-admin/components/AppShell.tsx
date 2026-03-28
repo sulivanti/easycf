@@ -2,12 +2,12 @@
  * @contract FR-004, UX-SHELL-001, BR-005, BR-003, BR-004, DOC-UX-011 §2.2
  *
  * Application Shell — layout wrapper das rotas autenticadas.
- * - Sidebar + Header + Breadcrumb + ContentArea (children)
+ * - Sidebar colapsável + Header branco + Breadcrumb + ContentArea (children)
  * - Sidebar filtrada por auth_me.scopes (BR-005)
  * - Skeleton durante loading de auth_me
  * - 401 → redirect /login via router
  * - Empty state Sidebar quando scopes=[] (PENDENTE-002 Opção B)
- * - Visual A1: topbar dark, sidebar branca, accent laranja (DOC-UX-011-M04)
+ * - Visual: topbar branca, sidebar colapsável azul (DOC-UX-011-M05, DOC-UX-013-M06)
  */
 
 import { useEffect, type ReactNode } from 'react';
@@ -49,7 +49,7 @@ interface Props {
 
 function A1Logo() {
   return (
-    <div className="flex size-[26px] shrink-0 items-center justify-center rounded-[5px] bg-a1-accent">
+    <div className="flex size-[26px] shrink-0 items-center justify-center rounded-[5px] bg-primary-600">
       <svg
         width="16"
         height="12"
@@ -68,7 +68,7 @@ function A1Logo() {
           fill="#FFFFFF"
         >
           <tspan>A</tspan>
-          <tspan fill="#111111">1</tspan>
+          <tspan fill="#FFFFFF">1</tspan>
         </text>
       </svg>
     </div>
@@ -103,15 +103,15 @@ function IconFor({ name, className }: { name: string; className?: string }) {
 }
 
 // ---------------------------------------------------------------------------
-// Skeleton components (A1 theme)
+// Skeleton components
 // ---------------------------------------------------------------------------
 
 function SidebarSkeleton() {
   return (
-    <nav className="w-[220px] shrink-0 border-r border-a1-border bg-white p-4">
+    <nav className="w-16 shrink-0 border-r border-neutral-200 bg-white p-4">
       <div className="space-y-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-9 w-full bg-a1-border" />
+          <Skeleton key={i} className="mx-auto size-9 rounded-md bg-neutral-200" />
         ))}
       </div>
     </nav>
@@ -120,21 +120,21 @@ function SidebarSkeleton() {
 
 function HeaderSkeleton() {
   return (
-    <header className="flex h-13 shrink-0 items-center justify-between bg-a1-dark px-5">
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-neutral-200 bg-white px-5">
       <div className="flex items-center gap-2.5">
-        <Skeleton className="size-[26px] rounded-[5px] bg-white/10" />
-        <Skeleton className="h-4 w-24 bg-white/10" />
+        <Skeleton className="size-[26px] rounded-[5px] bg-neutral-200" />
+        <Skeleton className="h-4 w-24 bg-neutral-200" />
       </div>
       <div className="flex items-center gap-2">
-        <Skeleton className="h-3.5 w-20 bg-white/10" />
-        <Skeleton className="size-[30px] rounded-full bg-white/10" />
+        <Skeleton className="h-3.5 w-20 bg-neutral-200" />
+        <Skeleton className="size-[30px] rounded-full bg-neutral-200" />
       </div>
     </header>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Sidebar (A1 theme)
+// Sidebar (collapsible, blue accent)
 // ---------------------------------------------------------------------------
 
 function Sidebar({ scopes, currentPath }: { scopes: string[]; currentPath: string }) {
@@ -142,22 +142,24 @@ function Sidebar({ scopes, currentPath }: { scopes: string[]; currentPath: strin
 
   if (groups.length === 0) {
     return (
-      <nav className="w-[220px] shrink-0 border-r border-a1-border bg-white p-4">
+      <nav className="group w-16 shrink-0 overflow-hidden border-r border-neutral-200 bg-white p-4 transition-all duration-300 hover:w-56">
         <div className="flex items-center gap-2 rounded-md p-3 font-display text-[13px] text-a1-text-auxiliary">
           <Info className="size-4 shrink-0" />
-          <span>Nenhum módulo configurado para seu perfil.</span>
+          <span className="whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            Nenhum módulo configurado para seu perfil.
+          </span>
         </div>
       </nav>
     );
   }
 
   return (
-    <nav className="w-[220px] shrink-0 overflow-y-auto border-r border-a1-border bg-white px-2.5 py-4">
+    <nav className="group w-16 shrink-0 overflow-x-hidden overflow-y-auto border-r border-neutral-200 bg-white px-2 py-4 transition-all duration-300 hover:w-56">
       {groups.map((group: SidebarGroup, groupIdx: number) => (
         <div key={group.id}>
-          {groupIdx > 0 && <div className="mx-0 mb-3.5 mt-1 h-px bg-a1-border-light" />}
+          {groupIdx > 0 && <div className="mx-0 mb-3.5 mt-1 h-px bg-neutral-100" />}
           <div className="mb-5">
-            <div className="mb-1.5 px-2 font-display text-[9px] font-bold uppercase tracking-[1.4px] text-a1-text-placeholder">
+            <div className="mb-1.5 whitespace-nowrap px-2 font-display text-[9px] font-bold uppercase tracking-[1.4px] text-a1-text-placeholder opacity-0 transition-opacity duration-200 group-hover:opacity-100">
               {group.label}
             </div>
             <div className="flex flex-col gap-px">
@@ -169,15 +171,17 @@ function Sidebar({ scopes, currentPath }: { scopes: string[]; currentPath: strin
                     to={item.route}
                     className={`flex items-center gap-2.5 rounded-md px-2.5 py-2 font-display text-[13px] transition-colors ${
                       isActive
-                        ? 'border-l-[2.5px] border-l-a1-accent bg-a1-active-bg font-bold text-a1-accent'
-                        : 'border-l-[2.5px] border-l-transparent text-a1-text-auxiliary hover:bg-a1-bg'
+                        ? 'bg-primary-50 font-semibold text-primary-600'
+                        : 'text-neutral-500 hover:bg-primary-50'
                     }`}
                   >
                     <IconFor
                       name={item.icon}
-                      className={`size-3.5 ${isActive ? 'stroke-a1-accent' : 'stroke-a1-text-muted-icon'}`}
+                      className={`size-4 shrink-0 ${isActive ? 'stroke-primary-600' : 'stroke-neutral-400'}`}
                     />
-                    {item.label}
+                    <span className="whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      {item.label}
+                    </span>
                   </Link>
                 );
               })}
@@ -190,7 +194,7 @@ function Sidebar({ scopes, currentPath }: { scopes: string[]; currentPath: strin
 }
 
 // ---------------------------------------------------------------------------
-// Breadcrumb (A1 dark topbar variant)
+// Breadcrumb (light topbar variant)
 // ---------------------------------------------------------------------------
 
 const ROUTE_LABELS: Record<string, string> = {
@@ -234,13 +238,13 @@ function Breadcrumb({ currentPath }: { currentPath: string }) {
     <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 font-display text-xs">
       {crumbs.map((crumb) => (
         <span key={crumb.path} className="flex items-center gap-1.5">
-          <span className="text-a1-text-secondary">/</span>
+          <span className="text-neutral-400">/</span>
           {crumb.isLast ? (
-            <span className="font-semibold text-white">{crumb.label}</span>
+            <span className="font-semibold text-neutral-800">{crumb.label}</span>
           ) : (
             <Link
               to={crumb.path}
-              className="text-a1-text-tertiary transition-colors hover:text-white"
+              className="text-neutral-500 transition-colors hover:text-neutral-800"
             >
               {crumb.label}
             </Link>
@@ -282,7 +286,7 @@ export function AppShell({ children }: Props) {
         <HeaderSkeleton />
         <div className="flex flex-1">
           <SidebarSkeleton />
-          <main className="flex-1 overflow-auto bg-a1-bg p-6">{children}</main>
+          <main className="flex-1 overflow-auto bg-neutral-50 p-6">{children}</main>
         </div>
       </div>
     );
@@ -290,18 +294,12 @@ export function AppShell({ children }: Props) {
 
   return (
     <div className="flex h-screen flex-col font-display">
-      {/* Header — A1 dark topbar */}
-      <header className="sticky top-0 z-50 flex h-13 shrink-0 items-center bg-a1-dark">
-        {/* Logo zone */}
-        <div className="flex w-[220px] shrink-0 items-center gap-2.5 border-r border-r-[#1E1E1E] px-5">
-          <Link to="/dashboard" className="flex items-center gap-2.5">
+      {/* Header — white topbar with border-b */}
+      <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center border-b border-neutral-200 bg-white">
+        {/* Logo zone — aligned with collapsed sidebar */}
+        <div className="flex w-16 shrink-0 items-center justify-center">
+          <Link to="/dashboard" className="flex items-center">
             <A1Logo />
-            <div className="flex flex-col gap-px">
-              <span className="font-display text-[13px] font-bold tracking-[-0.2px] text-white">
-                Grupo A1
-              </span>
-              <span className="font-display text-[10px] text-[#444444]">Portal Interno</span>
-            </div>
           </Link>
         </div>
 
@@ -312,14 +310,14 @@ export function AppShell({ children }: Props) {
 
         {/* Profile zone */}
         <div className="flex items-center px-5">
-          <ProfileWidget user={user} isLoading={isLoading} variant="dark" />
+          <ProfileWidget user={user} isLoading={isLoading} variant="light" />
         </div>
       </header>
 
       {/* Body */}
       <div className="flex flex-1 overflow-hidden">
         <Sidebar scopes={user?.scopes ?? []} currentPath={currentPath} />
-        <main className="flex-1 overflow-auto bg-a1-bg p-6">{children}</main>
+        <main className="flex-1 overflow-auto bg-neutral-50 p-6">{children}</main>
       </div>
     </div>
   );

@@ -260,7 +260,7 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
             onClick={() => setActivePanel(panel.key)}
             className={`px-4 py-2 text-sm font-medium transition-colors -mb-px ${
               activePanel === panel.key
-                ? 'border-b-2 border-a1-accent text-a1-accent'
+                ? 'border-b-2 border-primary-600 text-primary-600'
                 : 'text-a1-text-auxiliary hover:text-a1-text-secondary'
             }`}
           >

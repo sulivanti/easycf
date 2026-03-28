@@ -108,8 +108,8 @@ function ModuleShortcuts({ cards }: { cards: ShortcutCard[] }) {
             className="group flex flex-col gap-3 rounded-[10px] border border-a1-border bg-white p-5 transition-all hover:shadow-md"
           >
             <div className="flex items-center justify-between">
-              <div className="flex size-9 items-center justify-center rounded-lg bg-a1-accent/10">
-                {Icon ? <Icon className="size-[18px] stroke-a1-accent" strokeWidth={1.8} /> : null}
+              <div className="flex size-9 items-center justify-center rounded-lg bg-primary-600/10">
+                {Icon ? <Icon className="size-[18px] stroke-primary-600" strokeWidth={1.8} /> : null}
               </div>
               <ChevronRight className="size-4 stroke-a1-text-placeholder transition-colors group-hover:stroke-a1-text-auxiliary" />
             </div>

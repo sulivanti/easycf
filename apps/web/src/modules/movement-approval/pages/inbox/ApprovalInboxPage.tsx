@@ -178,7 +178,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
             key={tab.key}
             className={`px-4 py-2.5 font-display text-[13px] font-medium transition-colors ${
               activeTab === tab.key
-                ? 'border-b-[2.5px] border-a1-accent text-a1-accent'
+                ? 'border-b-[2.5px] border-primary-600 text-primary-600'
                 : 'text-a1-text-auxiliary hover:text-a1-text-primary'
             }`}
             onClick={() => handleTabChange(tab.key)}

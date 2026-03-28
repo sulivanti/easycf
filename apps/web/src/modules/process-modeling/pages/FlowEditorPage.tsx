@@ -199,7 +199,7 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
                 ? 'bg-success-500/10 text-success-600'
                 : flow.cycle.status === 'DEPRECATED'
                   ? 'bg-danger-500/10 text-danger-600'
-                  : 'bg-a1-accent/10 text-a1-accent'
+                  : 'bg-primary-600/10 text-primary-600'
             }`}
           >
             {flow.cycle.status}

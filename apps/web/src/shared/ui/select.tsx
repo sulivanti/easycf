@@ -5,7 +5,7 @@ import { ChevronDownIcon } from 'lucide-react';
 import { cn } from '@shared/lib/utils';
 
 const selectVariants = cva(
-  'appearance-none rounded-md border border-a1-border bg-white pr-8 text-sm text-a1-text-primary outline-none transition-[color,box-shadow] focus-visible:border-a1-accent focus-visible:ring-[3px] focus-visible:ring-a1-accent/20 disabled:pointer-events-none disabled:opacity-50',
+  'appearance-none rounded-md border border-a1-border bg-white pr-8 text-sm text-a1-text-primary outline-none transition-[color,box-shadow] focus-visible:border-primary-600 focus-visible:ring-[3px] focus-visible:ring-primary-600/20 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       size: {

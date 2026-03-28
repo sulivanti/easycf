@@ -75,7 +75,7 @@ export function ProfileAvatar({
       className={cn(
         'flex items-center justify-center rounded-full font-bold text-white',
         sizeClass,
-        useA1Color ? 'bg-a1-accent' : getAvatarColor(name),
+        useA1Color ? 'bg-primary-600' : getAvatarColor(name),
         className,
       )}
     >

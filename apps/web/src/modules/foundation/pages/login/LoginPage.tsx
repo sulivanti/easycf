@@ -262,7 +262,7 @@ function StyledInput({
 }) {
   return (
     <div
-      className={`flex items-center h-12 rounded-lg px-3.5 gap-2.5 bg-a1-bg [border-width:1.5px] border-solid ${isFocused ? 'border-a1-accent' : 'border-a1-border'} transition-colors focus-within:border-a1-accent`}
+      className={`flex items-center h-12 rounded-lg px-3.5 gap-2.5 bg-a1-bg [border-width:1.5px] border-solid ${isFocused ? 'border-primary-600' : 'border-a1-border'} transition-colors focus-within:border-primary-600`}
     >
       {icon}
       <input
@@ -445,7 +445,7 @@ function LoginPanel({
           <button
             type="button"
             onClick={onForgotClick}
-            className="text-a1-accent font-display font-medium text-xs hover:underline"
+            className="text-primary-600 font-display font-medium text-xs hover:underline"
           >
             Esqueci a senha
           </button>
@@ -477,7 +477,7 @@ function LoginPanel({
           type="checkbox"
           checked={rememberMe}
           onChange={(e) => setRememberMe(e.target.checked)}
-          className="size-4 rounded border-a1-border accent-a1-accent"
+          className="size-4 rounded border-a1-border accent-primary-600"
         />
         <label htmlFor="remember-me" className="text-sm font-display text-a1-text-auxiliary">
           Manter conectado
@@ -487,7 +487,7 @@ function LoginPanel({
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-5 rounded-lg gap-2 bg-a1-accent hover:bg-accent-hover text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[52px] mb-5 rounded-lg gap-2 bg-primary-600 hover:bg-primary-700 text-white font-display font-bold text-[15px] tracking-[0.2px]"
       >
         Entrar
         {!loading && <ArrowRightIcon />}
@@ -552,7 +552,7 @@ function MfaPanel({ tempToken, onSuccess }: { tempToken: string; onSuccess: () =
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-5 rounded-lg gap-2 bg-a1-accent hover:bg-accent-hover text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[52px] mb-5 rounded-lg gap-2 bg-primary-600 hover:bg-primary-700 text-white font-display font-bold text-[15px] tracking-[0.2px]"
       >
         Verificar código
         {!loading && <ArrowRightIcon />}
@@ -626,7 +626,7 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-3 rounded-lg gap-2 bg-a1-accent hover:bg-accent-hover text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[52px] mb-3 rounded-lg gap-2 bg-primary-600 hover:bg-primary-700 text-white font-display font-bold text-[15px] tracking-[0.2px]"
       >
         Enviar link
         {!loading && <ArrowRightIcon />}
@@ -765,7 +765,7 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-5 rounded-lg gap-2 bg-a1-accent hover:bg-accent-hover text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[52px] mb-5 rounded-lg gap-2 bg-primary-600 hover:bg-primary-700 text-white font-display font-bold text-[15px] tracking-[0.2px]"
       >
         Redefinir senha
         {!loading && <ArrowRightIcon />}

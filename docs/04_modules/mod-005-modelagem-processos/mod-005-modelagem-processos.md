@@ -201,3 +201,9 @@ apps/web/src/modules/process-modeling/
 - [ADR-003](adr/ADR-003.md) — Fork Atômico via Transação Única com Remapeamento de UUIDs
 - [ADR-004](adr/ADR-004.md) — Optimistic Locking via `updated_at` para Edição Concorrente de Ciclos DRAFT
 <!-- end adr-index -->
+
+## 8. Amendments
+
+- [AMD-UX-PROC-001-001](amendments/ux/AMD-UX-PROC-001-001__action_update_stage_position.md) — Ação update_stage_position no editor visual
+- [FR-011-C01](amendments/fr/FR-011-C01.md) — Correção: flow handler sem mapeamento camelCase→snake_case (HTTP 500)
+- [FR-001-C01](amendments/fr/FR-001-C01.md) — Correção: deprecate envia nome:null + handlers usam timestamps fake

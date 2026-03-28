@@ -21,6 +21,13 @@
 
 import type { FastifyInstance } from 'fastify';
 import type { z } from 'zod';
+import type {
+  FlowMacroStageNode,
+  FlowStageNode,
+  FlowGateRow,
+  FlowRoleLinkRow,
+  FlowTransitionRow,
+} from '../../domain/domain-services/flow-graph.service.js';
 import {
   cyclesListQuery,
   cycleListItem,
@@ -95,19 +102,25 @@ export async function cyclesRoutes(app: FastifyInstance): Promise<void> {
         correlationId,
       });
 
-      return reply.status(201).send({
+      // FR-001-C01: Reload full cycle to get real timestamps
+      const cycle = await request.dipiContainer.getCycleUseCase.execute({
         id: result.id,
-        tenant_id: request.session.tenantId,
-        codigo: result.codigo,
-        nome: result.nome,
-        descricao: result.descricao,
-        version: result.version,
-        status: result.status,
-        parent_cycle_id: null,
-        published_at: null,
-        created_by: request.session.userId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        tenantId: request.session.tenantId,
+      });
+
+      return reply.status(201).send({
+        id: cycle.id,
+        tenant_id: cycle.tenantId,
+        codigo: cycle.codigo,
+        nome: cycle.nome,
+        descricao: cycle.descricao,
+        version: cycle.version,
+        status: cycle.status,
+        parent_cycle_id: cycle.parentCycleId,
+        published_at: cycle.publishedAt?.toISOString() ?? null,
+        created_by: cycle.createdBy,
+        created_at: cycle.createdAt.toISOString(),
+        updated_at: cycle.updatedAt.toISOString(),
       });
     },
   });
@@ -159,7 +172,7 @@ export async function cyclesRoutes(app: FastifyInstance): Promise<void> {
       handler: async (request, reply) => {
         const correlationId = (request.headers['x-correlation-id'] as string) ?? request.id;
 
-        const result = await request.dipiContainer.updateCycleUseCase.execute({
+        await request.dipiContainer.updateCycleUseCase.execute({
           id: request.params.id,
           tenantId: request.session.tenantId,
           nome: request.body.nome,
@@ -168,19 +181,25 @@ export async function cyclesRoutes(app: FastifyInstance): Promise<void> {
           correlationId,
         });
 
+        // FR-001-C01: Reload full cycle to get real data for response
+        const cycle = await request.dipiContainer.getCycleUseCase.execute({
+          id: request.params.id,
+          tenantId: request.session.tenantId,
+        });
+
         return reply.send({
-          id: result.id,
-          tenant_id: request.session.tenantId,
-          codigo: result.codigo,
-          nome: result.nome,
-          descricao: result.descricao,
-          version: result.version,
-          status: result.status,
-          parent_cycle_id: null,
-          published_at: null,
-          created_by: request.session.userId,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          id: cycle.id,
+          tenant_id: cycle.tenantId,
+          codigo: cycle.codigo,
+          nome: cycle.nome,
+          descricao: cycle.descricao,
+          version: cycle.version,
+          status: cycle.status,
+          parent_cycle_id: cycle.parentCycleId,
+          published_at: cycle.publishedAt?.toISOString() ?? null,
+          created_by: cycle.createdBy,
+          created_at: cycle.createdAt.toISOString(),
+          updated_at: cycle.updatedAt.toISOString(),
         });
       },
     },
@@ -221,26 +240,32 @@ export async function cyclesRoutes(app: FastifyInstance): Promise<void> {
     handler: async (request, reply) => {
       const correlationId = (request.headers['x-correlation-id'] as string) ?? request.id;
 
-      const result = await request.dipiContainer.publishCycleUseCase.execute({
+      await request.dipiContainer.publishCycleUseCase.execute({
         id: request.params.id,
         tenantId: request.session.tenantId,
         publishedBy: request.session.userId,
         correlationId,
       });
 
+      // FR-001-C01: Reload full cycle to get real data for response
+      const cycle = await request.dipiContainer.getCycleUseCase.execute({
+        id: request.params.id,
+        tenantId: request.session.tenantId,
+      });
+
       return reply.send({
-        id: result.id,
-        tenant_id: request.session.tenantId,
-        codigo: result.codigo,
-        nome: result.nome,
-        descricao: null,
-        version: result.version,
-        status: result.status,
-        parent_cycle_id: null,
-        published_at: result.publishedAt.toISOString(),
-        created_by: request.session.userId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        id: cycle.id,
+        tenant_id: cycle.tenantId,
+        codigo: cycle.codigo,
+        nome: cycle.nome,
+        descricao: cycle.descricao,
+        version: cycle.version,
+        status: cycle.status,
+        parent_cycle_id: cycle.parentCycleId,
+        published_at: cycle.publishedAt?.toISOString() ?? null,
+        created_by: cycle.createdBy,
+        created_at: cycle.createdAt.toISOString(),
+        updated_at: cycle.updatedAt.toISOString(),
       });
     },
   });
@@ -267,19 +292,25 @@ export async function cyclesRoutes(app: FastifyInstance): Promise<void> {
         idempotencyKey,
       });
 
-      return reply.status(201).send({
+      // FR-001-C01: Reload full cycle to get real data for response
+      const cycle = await request.dipiContainer.getCycleUseCase.execute({
         id: result.id,
-        tenant_id: request.session.tenantId,
-        codigo: result.codigo,
-        nome: result.nome,
-        descricao: null,
-        version: result.version,
-        status: result.status,
-        parent_cycle_id: result.parentCycleId,
-        published_at: null,
-        created_by: request.session.userId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        tenantId: request.session.tenantId,
+      });
+
+      return reply.status(201).send({
+        id: cycle.id,
+        tenant_id: cycle.tenantId,
+        codigo: cycle.codigo,
+        nome: cycle.nome,
+        descricao: cycle.descricao,
+        version: cycle.version,
+        status: cycle.status,
+        parent_cycle_id: cycle.parentCycleId,
+        published_at: cycle.publishedAt?.toISOString() ?? null,
+        created_by: cycle.createdBy,
+        created_at: cycle.createdAt.toISOString(),
+        updated_at: cycle.updatedAt.toISOString(),
       });
     },
   });
@@ -296,31 +327,38 @@ export async function cyclesRoutes(app: FastifyInstance): Promise<void> {
     handler: async (request, reply) => {
       const correlationId = (request.headers['x-correlation-id'] as string) ?? request.id;
 
-      const result = await request.dipiContainer.deprecateCycleUseCase.execute({
+      await request.dipiContainer.deprecateCycleUseCase.execute({
         id: request.params.id,
         tenantId: request.session.tenantId,
         deprecatedBy: request.session.userId,
         correlationId,
       });
 
+      // FR-001-C01: Reload full cycle to get real data for response
+      const cycle = await request.dipiContainer.getCycleUseCase.execute({
+        id: request.params.id,
+        tenantId: request.session.tenantId,
+      });
+
       return reply.send({
-        id: result.id,
-        tenant_id: request.session.tenantId,
-        codigo: result.codigo,
-        nome: null,
-        descricao: null,
-        version: result.version,
-        status: result.status,
-        parent_cycle_id: null,
-        published_at: null,
-        created_by: request.session.userId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        id: cycle.id,
+        tenant_id: cycle.tenantId,
+        codigo: cycle.codigo,
+        nome: cycle.nome,
+        descricao: cycle.descricao,
+        version: cycle.version,
+        status: cycle.status,
+        parent_cycle_id: cycle.parentCycleId,
+        published_at: cycle.publishedAt?.toISOString() ?? null,
+        created_by: cycle.createdBy,
+        created_at: cycle.createdAt.toISOString(),
+        updated_at: cycle.updatedAt.toISOString(),
       });
     },
   });
 
   // GET /admin/cycles/:id/flow — Full graph (FR-011, INT-005 §3)
+  // FR-011-C01: Map FlowGraph (camelCase domain) → flowResponse (snake_case DTO)
   app.get<{ Params: z.infer<typeof cycleIdParam> }>('/cycles/:id/flow', {
     onRequest: [app.verifySession, app.requireScope('process:cycle:read')],
     schema: {
@@ -330,11 +368,73 @@ export async function cyclesRoutes(app: FastifyInstance): Promise<void> {
       response: { 200: flowResponse },
     },
     handler: async (request, reply) => {
+      const cycle = await request.dipiContainer.getCycleUseCase.execute({
+        id: request.params.id,
+        tenantId: request.session.tenantId,
+      });
+
       const result = await request.dipiContainer.getCycleFlowUseCase.execute({
         cycleId: request.params.id,
       });
 
-      return reply.send(result);
+      // Build stage codigo lookup for to_stage_codigo in transitions
+      const stageCodigoMap = new Map<string, string>();
+      for (const ms of result.macroStages) {
+        for (const s of ms.stages) {
+          stageCodigoMap.set(s.id, s.codigo);
+        }
+      }
+
+      return reply.send({
+        cycle: {
+          id: cycle.id,
+          codigo: cycle.codigo,
+          nome: cycle.nome,
+          version: cycle.version,
+          status: cycle.status,
+        },
+        macro_stages: result.macroStages.map((ms: FlowMacroStageNode) => ({
+          id: ms.id,
+          codigo: ms.codigo,
+          nome: ms.nome,
+          ordem: ms.ordem,
+          stages: ms.stages.map((s: FlowStageNode) => ({
+            id: s.id,
+            codigo: s.codigo,
+            nome: s.nome,
+            ordem: s.ordem,
+            is_initial: s.isInitial,
+            is_terminal: s.isTerminal,
+            canvas_x: s.canvasX,
+            canvas_y: s.canvasY,
+            gates: s.gates.map((g: FlowGateRow) => ({
+              id: g.id,
+              stage_id: g.stageId,
+              nome: g.nome,
+              descricao: g.descricao,
+              gate_type: g.gateType,
+              required: g.required,
+              ordem: g.ordem,
+            })),
+            roles: s.roles.map((r: FlowRoleLinkRow) => ({
+              id: r.id,
+              stage_id: r.stageId,
+              role_id: r.roleId,
+              required: r.required,
+              max_assignees: r.maxAssignees,
+            })),
+            transitions_out: s.transitionsOut.map((t: FlowTransitionRow) => ({
+              id: t.id,
+              to_stage_id: t.toStageId,
+              to_stage_codigo: stageCodigoMap.get(t.toStageId) ?? '',
+              nome: t.nome,
+              gate_required: t.gateRequired,
+              evidence_required: t.evidenceRequired,
+              allowed_roles: t.allowedRoles,
+            })),
+          })),
+        })),
+      });
     },
   });
 

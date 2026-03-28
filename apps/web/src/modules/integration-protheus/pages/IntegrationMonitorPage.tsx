@@ -10,9 +10,7 @@ import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import {
   Button,
-  Badge,
   Skeleton,
-  Input,
   Label,
   Dialog,
   DialogContent,
@@ -28,10 +26,15 @@ import {
   TableRow,
 } from '@shared/ui';
 import { PageHeader } from '@shared/ui/page-header';
+import { SearchBar } from '@shared/ui/search-bar';
+import { FilterBar } from '@shared/ui/filter-bar';
+import { Select } from '@shared/ui/select';
+import { StatusBadge } from '@shared/ui/status-badge';
+import { EmptyState } from '@shared/ui/empty-state';
 import { useCallLogsList, useCallLogDetail, useReprocessCall } from '../hooks/use-call-logs.js';
 import { useCallLogMetrics } from '../hooks/use-metrics.js';
 import { canReadLogs, canReprocessDlq } from '../types/permissions.js';
-import { COPY, STATUS_BADGE, httpStatusClass, relativeTime } from '../types/view-model.js';
+import { COPY, httpStatusClass, relativeTime } from '../types/view-model.js';
 import { MonitorHeader } from '../components/MonitorHeader.js';
 import { LogDetailPanel } from '../components/LogDetailPanel.js';
 import type { CallLogStatus, CallLogListFilters } from '../types/integration-protheus.types.js';
@@ -44,6 +47,20 @@ const ALL_STATUSES: CallLogStatus[] = [
   'DLQ',
   'REPROCESSED',
 ];
+
+const STATUS_OPTIONS = [
+  { value: '', label: 'Todos os status' },
+  ...ALL_STATUSES.map((s) => ({ value: s, label: s })),
+];
+
+const LOG_STATUS_MAP: Record<CallLogStatus, 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'purple'> = {
+  QUEUED: 'info',
+  RUNNING: 'warning',
+  SUCCESS: 'success',
+  FAILED: 'error',
+  DLQ: 'error',
+  REPROCESSED: 'purple',
+};
 
 export interface IntegrationMonitorPageProps {
   userScopes: readonly string[];
@@ -135,23 +152,16 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
 
       {/* Filters (all tab) */}
       {activeTab === 'all' && (
-        <div className="mb-4 flex items-center gap-3">
-          <select
+        <FilterBar className="mb-4">
+          <Select
+            options={STATUS_OPTIONS}
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as CallLogStatus | '')}
-            className="rounded-md border border-input bg-background px-3 py-2 text-sm"
-          >
-            <option value="">Todos os status</option>
-            {ALL_STATUSES.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-          <Input
+          />
+          <SearchBar
             className="max-w-xs"
             value={correlationFilter}
-            onChange={(e) => setCorrelationFilter(e.target.value)}
+            onChange={setCorrelationFilter}
             placeholder="Correlation ID"
           />
           {(statusFilter || correlationFilter) && (
@@ -166,7 +176,7 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
               Limpar
             </Button>
           )}
-        </div>
+        </FilterBar>
       )}
 
       <div className="flex gap-4">
@@ -181,9 +191,9 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
           )}
 
           {!logsQuery.isLoading && logs.length === 0 && (
-            <p className="py-8 text-center text-sm text-a1-text-auxiliary">
-              {activeTab === 'dlq' ? COPY.empty_dlq : COPY.no_logs}
-            </p>
+            <EmptyState
+              title={activeTab === 'dlq' ? COPY.empty_dlq : COPY.no_logs}
+            />
           )}
 
           {logs.length > 0 && (
@@ -209,7 +219,7 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
                       onClick={() => setSelectedLogId(log.id)}
                     >
                       <TableCell>
-                        <Badge className={STATUS_BADGE[log.status]}>{log.status}</Badge>
+                        <StatusBadge status={LOG_STATUS_MAP[log.status]}>{log.status}</StatusBadge>
                       </TableCell>
                       <TableCell className="text-sm">
                         {log.routine_name ?? '—'}

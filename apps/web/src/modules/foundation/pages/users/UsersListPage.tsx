@@ -8,9 +8,10 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@shared/ui/button';
-import { Input } from '@shared/ui/input';
-import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
+import { StatusBadge } from '@shared/ui/status-badge';
+import { SearchBar } from '@shared/ui/search-bar';
+import type { StatusType } from '@shared/ui/status-badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
 import { PageHeader } from '@shared/ui/page-header';
 import { EmptyState } from '@shared/ui/empty-state';
@@ -27,11 +28,11 @@ function UsersSkeleton() {
   );
 }
 
-const statusVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  ACTIVE: 'default',
-  BLOCKED: 'destructive',
-  PENDING: 'outline',
-  INACTIVE: 'secondary',
+const statusToType: Record<string, StatusType> = {
+  ACTIVE: 'success',
+  BLOCKED: 'error',
+  PENDING: 'neutral',
+  INACTIVE: 'warning',
 };
 
 export function UsersListPage({
@@ -50,9 +51,10 @@ export function UsersListPage({
   const { deleteUser, loading: deleting } = useDeleteUser();
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
 
-  const handleSearch = useCallback(() => {
-    setAppliedSearch(searchTerm);
-  }, [searchTerm]);
+  const handleSearch = useCallback((value: string) => {
+    setSearchTerm(value);
+    setAppliedSearch(value);
+  }, []);
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -78,19 +80,12 @@ export function UsersListPage({
         }
       />
 
-      <div className="flex gap-2">
-        <Input
-          type="search"
-          placeholder="Pesquisar usuários..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          className="max-w-sm"
-        />
-        <Button variant="outline" size="sm" onClick={handleSearch}>
-          Pesquisar
-        </Button>
-      </div>
+      <SearchBar
+        value={searchTerm}
+        onChange={handleSearch}
+        placeholder="Pesquisar usuários..."
+        className="max-w-sm"
+      />
 
       {error && (
         <div
@@ -129,7 +124,7 @@ export function UsersListPage({
                     <TableCell className="font-medium">{user.full_name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
-                      <Badge variant={statusVariant[user.status] ?? 'outline'}>{user.status}</Badge>
+                      <StatusBadge status={statusToType[user.status] ?? 'neutral'}>{user.status}</StatusBadge>
                     </TableCell>
                     <TableCell>{new Date(user.created_at).toLocaleDateString('pt-BR')}</TableCell>
                     <TableCell className="text-right">

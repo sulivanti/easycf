@@ -10,7 +10,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import {
   Button,
-  Badge,
   Skeleton,
   Input,
   Label,
@@ -33,6 +32,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../../../../shared/ui/index.js';
+import { PageHeader } from '../../../../shared/ui/page-header.js';
+import { SearchBar } from '../../../../shared/ui/search-bar.js';
+import { FilterBar } from '../../../../shared/ui/filter-bar.js';
+import { Select } from '../../../../shared/ui/select.js';
+import { StatusBadge } from '../../../../shared/ui/status-badge.js';
+import { EmptyState } from '../../../../shared/ui/empty-state.js';
 import { useCaseList, useOpenCase } from '../../hooks/use-cases.js';
 import { CaseStatusBadge } from '../../components/CaseStatusBadge.js';
 import type {
@@ -102,36 +107,22 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
   return (
     <div className="-m-6">
       {/* Page Header — A1 */}
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <div className="flex items-center gap-3">
-            <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-              Casos
-            </h1>
-            {items.length > 0 && (
-              <span className="rounded-full bg-a1-dark px-2 py-0.5 font-display text-[9px] font-bold text-white">
-                {items.length}
-              </span>
-            )}
-          </div>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Acompanhamento de instâncias de processos em execução
-          </p>
-        </div>
-        <div className="flex gap-2">{canWrite && <NewCaseDrawer onCreated={onSelectCase} />}</div>
-      </div>
+      <PageHeader
+        title={`Casos${items.length > 0 ? ` (${items.length})` : ''}`}
+        description="Acompanhamento de instâncias de processos em execução"
+        actions={canWrite ? <NewCaseDrawer onCreated={onSelectCase} /> : undefined}
+      />
 
       <div className="p-6">
         {/* Filters */}
-        <div className="mb-4 flex flex-wrap items-center gap-3">
-          <Input
-            type="search"
-            placeholder="Buscar por código..."
+        <FilterBar className="mb-4">
+          <SearchBar
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            className="w-64 border-a1-border bg-white font-display text-[13px]"
+            onChange={setSearchInput}
+            placeholder="Buscar por código..."
+            className="w-64"
           />
-          <select
+          <Select
             value={filters.status ?? ''}
             onChange={(e) =>
               setFilters((f) => ({
@@ -140,14 +131,14 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
                 cursor: undefined,
               }))
             }
-            className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
-          >
-            <option value="">Todos os status</option>
-            <option value="OPEN">Aberto</option>
-            <option value="ON_HOLD">Suspenso</option>
-            <option value="COMPLETED">Concluído</option>
-            <option value="CANCELLED">Cancelado</option>
-          </select>
+            placeholder="Todos os status"
+            options={[
+              { value: 'OPEN', label: 'Aberto' },
+              { value: 'ON_HOLD', label: 'Suspenso' },
+              { value: 'COMPLETED', label: 'Concluído' },
+              { value: 'CANCELLED', label: 'Cancelado' },
+            ]}
+          />
           <label className="flex items-center gap-2 font-display text-[13px] text-a1-text-auxiliary">
             <input
               type="checkbox"
@@ -163,16 +154,14 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
             />
             Minha responsabilidade
           </label>
-        </div>
+        </FilterBar>
 
         {/* Table */}
         {items.length === 0 ? (
-          <div className="text-center py-12 text-a1-text-auxiliary">
-            <p>{searchInput ? COPY.empty_search(searchInput) : COPY.empty_cases}</p>
-            {canWrite && !searchInput && (
-              <p className="mt-2 text-sm">Abra o primeiro caso para começar.</p>
-            )}
-          </div>
+          <EmptyState
+            title={searchInput ? COPY.empty_search(searchInput) : COPY.empty_cases}
+            description={canWrite && !searchInput ? 'Abra o primeiro caso para começar.' : undefined}
+          />
         ) : (
           <TooltipProvider>
             <div className="rounded-lg border border-a1-border bg-white">
@@ -225,9 +214,9 @@ function CaseRow({ caseItem, onSelect }: { caseItem: CaseListItem; onSelect: () 
         {caseItem.pending_gates_count > 0 ? (
           <Tooltip>
             <TooltipTrigger asChild>
-              <Badge variant="destructive" className="cursor-pointer">
+              <StatusBadge status="error" className="cursor-pointer">
                 {caseItem.pending_gates_count}
-              </Badge>
+              </StatusBadge>
             </TooltipTrigger>
             <TooltipContent>Clique para ver gates pendentes</TooltipContent>
           </Tooltip>

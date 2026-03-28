@@ -11,6 +11,7 @@ import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
 import { Badge } from '@shared/ui/badge';
+import { StatusBadge } from '@shared/ui/status-badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
 import { PageHeader } from '@shared/ui/page-header';
@@ -128,7 +129,7 @@ function RoleForm({ roleId, onDone }: { roleId?: string | null; onDone: () => vo
 
   return (
     <form onSubmit={handleSubmit} className="max-w-lg space-y-4">
-      <h2 className="text-xl font-semibold">{isEdit ? 'Editar Role' : 'Criar Role'}</h2>
+      <PageHeader title={isEdit ? 'Editar Role' : 'Criar Role'} />
       {error && (
         <div
           role="alert"
@@ -262,7 +263,7 @@ export function RolesPage() {
                   <TableRow key={role.id}>
                     <TableCell className="font-medium">{role.name}</TableCell>
                     <TableCell>
-                      <Badge variant="secondary">{role.scopes_count}</Badge>
+                      <StatusBadge status="info">{role.scopes_count}</StatusBadge>
                     </TableCell>
                     <TableCell>{new Date(role.created_at).toLocaleDateString('pt-BR')}</TableCell>
                     <TableCell className="text-right">

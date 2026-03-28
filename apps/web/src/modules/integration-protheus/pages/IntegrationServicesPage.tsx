@@ -9,12 +9,14 @@ import { toast } from 'sonner';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
-import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import { EmptyState } from '@shared/ui/empty-state';
 import { StatusBadge } from '@shared/ui/status-badge';
+import { PageHeader } from '@shared/ui/page-header';
+import { FilterBar } from '@shared/ui/filter-bar';
+import { Select } from '@shared/ui/select';
 import { useServicesList, useCreateService, useUpdateService } from '../hooks/use-services.js';
 import type {
   AuthType,
@@ -23,19 +25,28 @@ import type {
   ServiceListFilters,
 } from '../types/integration-protheus.types.js';
 
-const STATUS_VARIANT: Record<ServiceStatus, 'default' | 'secondary'> = {
-  ACTIVE: 'default',
-  INACTIVE: 'secondary',
-};
-
-const ENV_VARIANT: Record<Environment, 'default' | 'secondary' | 'outline'> = {
-  PROD: 'default',
-  HML: 'secondary',
-  DEV: 'outline',
-};
-
 const AUTH_TYPES: AuthType[] = ['NONE', 'BASIC', 'BEARER', 'OAUTH2'];
 const ENVIRONMENTS: Environment[] = ['PROD', 'HML', 'DEV'];
+
+const STATUS_FILTER_OPTIONS = [
+  { value: '', label: 'Todos os status' },
+  { value: 'ACTIVE', label: 'Ativo' },
+  { value: 'INACTIVE', label: 'Inativo' },
+];
+
+const ENV_FILTER_OPTIONS = [
+  { value: '', label: 'Todos os ambientes' },
+  ...ENVIRONMENTS.map((env) => ({ value: env, label: env })),
+];
+
+const AUTH_TYPE_OPTIONS = AUTH_TYPES.map((t) => ({ value: t, label: t }));
+const ENV_OPTIONS = ENVIRONMENTS.map((env) => ({ value: env, label: env }));
+
+const ENV_STATUS_MAP: Record<Environment, 'error' | 'warning' | 'neutral'> = {
+  PROD: 'error',
+  HML: 'warning',
+  DEV: 'neutral',
+};
 
 export function IntegrationServicesPage() {
   const [filters, setFilters] = useState<ServiceListFilters>({});
@@ -58,23 +69,21 @@ export function IntegrationServicesPage() {
 
   return (
     <div className="-m-6">
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Serviços de Integração
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Catálogo de serviços externos configurados para integração Protheus
-          </p>
-        </div>
-        <Button size="sm" onClick={() => setShowCreate(true)}>
-          Novo serviço
-        </Button>
-      </div>
+      <PageHeader
+        title="Serviços de Integração"
+        description="Catálogo de serviços externos configurados para integração Protheus"
+        actions={
+          <Button size="sm" onClick={() => setShowCreate(true)}>
+            Novo serviço
+          </Button>
+        }
+        className="border-b border-a1-border bg-white px-6 py-4.5"
+      />
 
       {/* Filters */}
-      <div className="flex items-center gap-3 border-b border-border bg-white px-6 py-3">
-        <select
+      <FilterBar className="border-b border-border bg-white px-6 py-3">
+        <Select
+          options={STATUS_FILTER_OPTIONS}
           value={filters.status ?? ''}
           onChange={(e) =>
             setFilters((f) => ({
@@ -82,13 +91,9 @@ export function IntegrationServicesPage() {
               status: (e.target.value as ServiceStatus) || undefined,
             }))
           }
-          className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-        >
-          <option value="">Todos os status</option>
-          <option value="ACTIVE">Ativo</option>
-          <option value="INACTIVE">Inativo</option>
-        </select>
-        <select
+        />
+        <Select
+          options={ENV_FILTER_OPTIONS}
           value={filters.environment ?? ''}
           onChange={(e) =>
             setFilters((f) => ({
@@ -96,21 +101,13 @@ export function IntegrationServicesPage() {
               environment: (e.target.value as Environment) || undefined,
             }))
           }
-          className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-        >
-          <option value="">Todos os ambientes</option>
-          {ENVIRONMENTS.map((env) => (
-            <option key={env} value={env}>
-              {env}
-            </option>
-          ))}
-        </select>
+        />
         {(filters.status || filters.environment) && (
           <Button variant="ghost" size="sm" onClick={() => setFilters({})}>
             Limpar
           </Button>
         )}
-      </div>
+      </FilterBar>
 
       <div className="p-6 space-y-6">
         {isError && (
@@ -157,10 +154,10 @@ export function IntegrationServicesPage() {
                       {svc.base_url}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">{svc.auth_type}</Badge>
+                      <StatusBadge status="neutral">{svc.auth_type}</StatusBadge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={ENV_VARIANT[svc.environment]}>{svc.environment}</Badge>
+                      <StatusBadge status={ENV_STATUS_MAP[svc.environment]}>{svc.environment}</StatusBadge>
                     </TableCell>
                     <TableCell>
                       <StatusBadge status={svc.status === 'ACTIVE' ? 'success' : 'neutral'}>
@@ -295,33 +292,21 @@ function CreateServiceDialog({
           </div>
           <div className="space-y-2">
             <Label htmlFor="svc-auth">Autenticação</Label>
-            <select
+            <Select
               id="svc-auth"
+              options={AUTH_TYPE_OPTIONS}
               value={authType}
               onChange={(e) => setAuthType(e.target.value as AuthType)}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-            >
-              {AUTH_TYPES.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="svc-env">Ambiente</Label>
-            <select
+            <Select
               id="svc-env"
+              options={ENV_OPTIONS}
               value={environment}
               onChange={(e) => setEnvironment(e.target.value as Environment)}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-            >
-              {ENVIRONMENTS.map((env) => (
-                <option key={env} value={env}>
-                  {env}
-                </option>
-              ))}
-            </select>
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="svc-timeout">Timeout (ms)</Label>

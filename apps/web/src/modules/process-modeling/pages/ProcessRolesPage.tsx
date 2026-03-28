@@ -11,11 +11,12 @@ import { toast } from 'sonner';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
-import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import { EmptyState } from '@shared/ui/empty-state';
+import { PageHeader } from '@shared/ui/page-header';
+import { StatusBadge } from '@shared/ui/status-badge';
 import { useProcessRoles, useCreateProcessRole } from '../hooks/use-process-roles.js';
 
 export function ProcessRolesPage() {
@@ -55,19 +56,15 @@ export function ProcessRolesPage() {
 
   return (
     <div className="-m-6">
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Papéis de Processo
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Catálogo de papéis atribuíveis a etapas e gates de processos
-          </p>
-        </div>
-        <Button size="sm" onClick={() => setShowCreate(true)}>
-          Criar papel
-        </Button>
-      </div>
+      <PageHeader
+        title="Papéis de Processo"
+        description="Catálogo de papéis atribuíveis a etapas e gates de processos"
+        actions={
+          <Button size="sm" onClick={() => setShowCreate(true)}>
+            Criar papel
+          </Button>
+        }
+      />
 
       <div className="p-6 space-y-6">
         {isError && (
@@ -106,9 +103,9 @@ export function ProcessRolesPage() {
                     <TableCell className="font-medium font-mono text-xs">{role.codigo}</TableCell>
                     <TableCell>{role.nome}</TableCell>
                     <TableCell>
-                      <Badge variant={role.can_approve ? 'default' : 'secondary'}>
+                      <StatusBadge status={role.can_approve ? 'success' : 'neutral'}>
                         {role.can_approve ? 'Sim' : 'Não'}
-                      </Badge>
+                      </StatusBadge>
                     </TableCell>
                   </TableRow>
                 ))}

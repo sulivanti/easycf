@@ -12,7 +12,6 @@ import { useState, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import {
   Button,
-  Badge,
   Skeleton,
   Input,
   Label,
@@ -28,6 +27,9 @@ import {
   TooltipTrigger,
   PageHeader,
 } from '@shared/ui';
+import { Select } from '@shared/ui/select';
+import { StatusBadge } from '@shared/ui/status-badge';
+import { EmptyState } from '@shared/ui/empty-state';
 import {
   useRoutinesList,
   useRoutineDetail,
@@ -55,7 +57,7 @@ import {
   canForkRoutine,
   canEvaluateEngine,
 } from '../types/permissions.js';
-import { COPY, routineStatusClass, itemTypeBadgeClass } from '../types/view-model.js';
+import { COPY } from '../types/view-model.js';
 import { ItemTypeForm } from '../components/ItemTypeForm.js';
 import { DryRunPreview } from '../components/DryRunPreview.js';
 
@@ -291,7 +293,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
         />
 
         {/* Status filter */}
-        <select
+        <Select
           value={statusFilter}
           onChange={(e) => {
             setStatusFilter(e.target.value);
@@ -301,14 +303,15 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
                 : {},
             );
           }}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mb-3"
+          className="w-full mb-3"
           aria-label="Filtrar por status"
-        >
-          <option value="">Todos os status</option>
-          <option value="DRAFT">DRAFT</option>
-          <option value="PUBLISHED">PUBLISHED</option>
-          <option value="DEPRECATED">DEPRECATED</option>
-        </select>
+          placeholder="Todos os status"
+          options={[
+            { value: 'DRAFT', label: 'DRAFT' },
+            { value: 'PUBLISHED', label: 'PUBLISHED' },
+            { value: 'DEPRECATED', label: 'DEPRECATED' },
+          ]}
+        />
 
         {/* Create form */}
         {showCreateForm && (
@@ -347,7 +350,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
 
         {/* Empty state */}
         {routines.length === 0 && (
-          <p className="text-a1-text-auxiliary text-sm py-8 text-center">{COPY.empty_routines}</p>
+          <EmptyState title={COPY.empty_routines} />
         )}
 
         {/* List */}
@@ -368,7 +371,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
           >
             <div className="flex justify-between items-center">
               <span className="font-mono font-semibold text-sm">{r.codigo}</span>
-              <Badge className={`text-xs ${routineStatusClass(r.status)}`}>{r.status}</Badge>
+              <StatusBadge status={r.status === 'PUBLISHED' ? 'success' : r.status === 'DRAFT' ? 'info' : 'neutral'}>{r.status}</StatusBadge>
             </div>
             <div className="text-sm text-foreground">{r.nome}</div>
             <div className="text-xs text-a1-text-auxiliary">
@@ -382,9 +385,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
       {/* Right panel: Editor */}
       <div className="flex-1 overflow-y-auto pl-4">
         {!detail && !detailQuery.isLoading && (
-          <div className="text-a1-text-auxiliary text-center mt-10">
-            Selecione uma rotina para editar.
-          </div>
+          <EmptyState title="Selecione uma rotina para editar." className="mt-10" />
         )}
 
         {detailQuery.isLoading && (
@@ -406,9 +407,9 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
                     v{detail.version}
                   </span>
                 </h2>
-                <Badge className={`text-xs ${routineStatusClass(detail.status)}`}>
+                <StatusBadge status={detail.status === 'PUBLISHED' ? 'success' : detail.status === 'DRAFT' ? 'info' : 'neutral'}>
                   {detail.status}
-                </Badge>
+                </StatusBadge>
               </div>
 
               <div className="flex gap-2">
@@ -449,7 +450,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
 
             {/* Items list */}
             {sortedItems.length === 0 && (
-              <p className="text-a1-text-auxiliary text-sm py-4">{COPY.empty_items}</p>
+              <EmptyState title={COPY.empty_items} />
             )}
 
             {sortedItems.map((item, idx) => (
@@ -469,17 +470,17 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
                     <span className="cursor-grab text-a1-text-auxiliary select-none">&#9776;</span>
                   )}
                   <span className="font-bold text-sm w-6">{item.ordem}</span>
-                  <Badge className={`text-xs ${itemTypeBadgeClass(item.item_type as ItemType)}`}>
+                  <StatusBadge status="purple">
                     {item.item_type}
-                  </Badge>
+                  </StatusBadge>
                   <span className="text-sm">{item.action}</span>
                   {item.is_blocking && (
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
-                          <Badge variant="destructive" className="text-xs">
+                          <StatusBadge status="error">
                             Bloqueante
-                          </Badge>
+                          </StatusBadge>
                         </TooltipTrigger>
                         <TooltipContent>{COPY.tooltip_blocking}</TooltipContent>
                       </Tooltip>

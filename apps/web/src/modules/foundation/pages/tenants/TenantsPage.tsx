@@ -10,13 +10,14 @@ import { toast } from 'sonner';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
-import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import { PageHeader } from '@shared/ui/page-header';
 import { EmptyState } from '@shared/ui/empty-state';
 import { ConfirmationModal } from '@shared/ui/confirmation-modal';
+import { StatusBadge } from '@shared/ui/status-badge';
+import type { StatusType } from '@shared/ui/status-badge';
 import {
   useTenants,
   useCreateTenant,
@@ -26,10 +27,10 @@ import {
 } from '../../hooks/use-tenants.js';
 import type { TenantStatus } from '../../types/tenant.types.js';
 
-const statusVariant: Record<string, 'default' | 'destructive' | 'secondary'> = {
-  ACTIVE: 'default',
-  BLOCKED: 'destructive',
-  INACTIVE: 'secondary',
+const statusToType: Record<string, StatusType> = {
+  ACTIVE: 'success',
+  BLOCKED: 'error',
+  INACTIVE: 'warning',
 };
 
 // -- Tenant Form (Dialog) --
@@ -195,7 +196,7 @@ function TenantUsersPanel({ tenantId }: { tenantId: string }) {
                 <TableCell className="font-medium">{u.full_name}</TableCell>
                 <TableCell>{u.email}</TableCell>
                 <TableCell>
-                  <Badge variant="secondary">{u.role_name}</Badge>
+                  <StatusBadge status="info">{u.role_name}</StatusBadge>
                 </TableCell>
                 <TableCell className="text-right">
                   <Button
@@ -304,9 +305,9 @@ export function TenantsPage() {
                       <TableCell className="font-mono text-xs">{tenant.codigo}</TableCell>
                       <TableCell className="font-medium">{tenant.name}</TableCell>
                       <TableCell>
-                        <Badge variant={statusVariant[tenant.status] ?? 'secondary'}>
+                        <StatusBadge status={statusToType[tenant.status] ?? 'neutral'}>
                           {tenant.status}
-                        </Badge>
+                        </StatusBadge>
                       </TableCell>
                       <TableCell>
                         {new Date(tenant.created_at).toLocaleDateString('pt-BR')}

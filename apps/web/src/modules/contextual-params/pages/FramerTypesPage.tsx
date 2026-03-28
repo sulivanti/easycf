@@ -13,6 +13,7 @@ import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import { EmptyState } from '@shared/ui/empty-state';
+import { PageHeader } from '@shared/ui/page-header';
 import { useFramerTypes, useCreateFramerType } from '../hooks/use-framers.js';
 
 export function FramerTypesPage() {
@@ -49,19 +50,15 @@ export function FramerTypesPage() {
 
   return (
     <div className="-m-6">
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Tipos de Enquadrador
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Catálogo de referência para classificação de enquadradores
-          </p>
-        </div>
-        <Button size="sm" onClick={() => setShowCreate(true)}>
-          Criar tipo
-        </Button>
-      </div>
+      <PageHeader
+        title="Tipos de Enquadrador"
+        description="Catálogo de referência para classificação de enquadradores"
+        actions={
+          <Button size="sm" onClick={() => setShowCreate(true)}>
+            Criar tipo
+          </Button>
+        }
+      />
 
       <div className="p-6 space-y-6">
         {isError && (

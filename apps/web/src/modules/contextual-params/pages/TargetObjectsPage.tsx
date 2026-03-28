@@ -9,11 +9,13 @@ import { toast } from 'sonner';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
-import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import { EmptyState } from '@shared/ui/empty-state';
+import { PageHeader } from '@shared/ui/page-header';
+import { StatusBadge } from '@shared/ui/status-badge';
+import { Select } from '@shared/ui/select';
 import {
   useTargetObjects,
   useTargetFields,
@@ -31,16 +33,10 @@ export function TargetObjectsPage() {
 
   return (
     <div className="-m-6">
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Target Objects
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Objetos-alvo e seus campos para incidência de enquadradores
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Target Objects"
+        description="Objetos-alvo e seus campos para incidência de enquadradores"
+      />
 
       <div className="p-6 space-y-6">
         {isError && (
@@ -79,7 +75,7 @@ export function TargetObjectsPage() {
                     <TableCell>{item.nome}</TableCell>
                     <TableCell>
                       {item.modulo_ecf ? (
-                        <Badge variant="secondary">{item.modulo_ecf}</Badge>
+                        <StatusBadge status="info">{item.modulo_ecf}</StatusBadge>
                       ) : (
                         <span className="text-a1-text-auxiliary">—</span>
                       )}
@@ -169,7 +165,7 @@ function FieldsPanel({
               ))}
             </div>
           ) : fieldItems.length === 0 ? (
-            <p className="text-sm text-a1-text-auxiliary">Nenhum campo cadastrado.</p>
+            <EmptyState title="Nenhum campo cadastrado." />
           ) : (
             <Table>
               <TableHeader>
@@ -186,7 +182,7 @@ function FieldsPanel({
                     <TableCell className="font-mono text-xs">{f.field_key}</TableCell>
                     <TableCell>{f.field_label ?? '—'}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">{f.field_type}</Badge>
+                      <StatusBadge status="neutral">{f.field_type}</StatusBadge>
                     </TableCell>
                     <TableCell>{f.is_system ? 'Sim' : 'Não'}</TableCell>
                   </TableRow>
@@ -219,18 +215,12 @@ function FieldsPanel({
               </div>
               <div className="space-y-2">
                 <Label htmlFor="tf-type">Tipo</Label>
-                <select
+                <Select
                   id="tf-type"
                   value={fieldType}
                   onChange={(e) => setFieldType(e.target.value as FieldType)}
-                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-                >
-                  {FIELD_TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
+                  options={FIELD_TYPES.map((t) => ({ value: t, label: t }))}
+                />
               </div>
               <div className="flex gap-2">
                 <Button type="submit" size="sm" isLoading={createFieldMutation.isPending}>

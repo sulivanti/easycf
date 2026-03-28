@@ -14,7 +14,6 @@ import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import {
   Button,
-  Badge,
   Skeleton,
   Input,
   Label,
@@ -29,6 +28,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../../../../shared/ui/index.js';
+import { StatusBadge } from '../../../../shared/ui/status-badge.js';
+import { EmptyState } from '../../../../shared/ui/empty-state.js';
 import { useCaseDetail } from '../../hooks/use-cases.js';
 import {
   useTransitionStage,
@@ -61,7 +62,7 @@ export function CasePanelPage({ caseId, userScopes = [] }: CasePanelPageProps) {
 
   if (isLoading) return <PanelSkeleton />;
   if (error) return <ErrorState error={error} />;
-  if (!caseData) return <p className="p-6 text-a1-text-auxiliary">Caso não encontrado.</p>;
+  if (!caseData) return <EmptyState title="Caso não encontrado." className="p-6" />;
 
   const readonly = isReadonly(caseData.status);
 
@@ -222,7 +223,7 @@ function OverviewTab({
               Transições Disponíveis
             </h3>
             {transitions.length === 0 ? (
-              <p className="text-sm text-a1-text-auxiliary">Nenhuma transição disponível.</p>
+              <EmptyState title="Nenhuma transição disponível." />
             ) : (
               <div className="flex flex-wrap gap-2">
                 {transitions.map((t) => {
@@ -387,7 +388,7 @@ function GatesTab({ caseId, readonly }: { caseId: string; readonly: boolean }) {
   }
 
   if (!gates || gates.length === 0) {
-    return <p className="text-sm text-a1-text-auxiliary py-4">{COPY.empty_gates}</p>;
+    return <EmptyState title={COPY.empty_gates} className="py-4" />;
   }
 
   return (
@@ -450,7 +451,7 @@ function AssignmentsTab({
   return (
     <div className="flex flex-col gap-4">
       {!assignments || assignments.length === 0 ? (
-        <p className="text-sm text-a1-text-auxiliary py-4">{COPY.empty_assignments}</p>
+        <EmptyState title={COPY.empty_assignments} className="py-4" />
       ) : (
         <div className="flex flex-col gap-2">
           {assignments.map((a) => (
@@ -523,9 +524,9 @@ function AssignmentRow({ assignment }: { assignment: Assignment }) {
         {assignment.valid_until && (
           <span>até {new Date(assignment.valid_until).toLocaleDateString('pt-BR')}</span>
         )}
-        <Badge variant={assignment.is_active ? 'default' : 'secondary'}>
+        <StatusBadge status={assignment.is_active ? 'success' : 'warning'}>
           {assignment.is_active ? 'Ativo' : 'Inativo'}
-        </Badge>
+        </StatusBadge>
       </div>
     </div>
   );

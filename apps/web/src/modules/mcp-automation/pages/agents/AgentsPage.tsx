@@ -33,8 +33,11 @@ import {
   DrawerClose,
   Spinner,
 } from '@shared/ui';
+import { PageHeader } from '@shared/ui/page-header';
 import { EmptyState } from '@shared/ui/empty-state';
 import { StatusBadge } from '@shared/ui/status-badge';
+import { Select } from '@shared/ui/select';
+import { FilterBar } from '@shared/ui/filter-bar';
 import {
   useAgentList,
   useCreateAgent,
@@ -55,17 +58,6 @@ import type {
 
 type Tab = 'agents' | 'actions' | 'matrix';
 
-const POLICY_VARIANT: Record<ExecutionPolicy, 'default' | 'secondary' | 'outline'> = {
-  DIRECT: 'default',
-  CONTROLLED: 'secondary',
-  EVENT_ONLY: 'outline',
-};
-
-const STATUS_VARIANT: Record<AgentStatus, 'default' | 'secondary' | 'destructive'> = {
-  ACTIVE: 'default',
-  INACTIVE: 'secondary',
-  REVOKED: 'destructive',
-};
 
 const STATUS_LABEL: Record<AgentStatus, string> = {
   ACTIVE: 'Ativo',
@@ -79,29 +71,25 @@ export function AgentsPage() {
   return (
     <div className="-m-6">
       {/* Page Header — A1 */}
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            MCP — Agentes e Ações
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Gerencie agentes de automação, ações e permissões
-          </p>
-        </div>
-        <nav className="flex gap-1 rounded-[7px] border border-a1-border bg-a1-bg p-1">
-          {(['agents', 'actions', 'matrix'] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`rounded-md px-3 py-1.5 font-display text-[13px] font-medium transition-colors ${
-                tab === t ? 'bg-a1-dark text-white' : 'text-a1-text-auxiliary hover:bg-white'
-              }`}
-            >
-              {t === 'agents' ? 'Agentes' : t === 'actions' ? 'Catálogo de Ações' : 'Permissões'}
-            </button>
-          ))}
-        </nav>
-      </div>
+      <PageHeader
+        title="MCP — Agentes e Ações"
+        description="Gerencie agentes de automação, ações e permissões"
+        actions={
+          <nav className="flex gap-1 rounded-[7px] border border-a1-border bg-a1-bg p-1">
+            {(['agents', 'actions', 'matrix'] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`rounded-md px-3 py-1.5 font-display text-[13px] font-medium transition-colors ${
+                  tab === t ? 'bg-a1-dark text-white' : 'text-a1-text-auxiliary hover:bg-white'
+                }`}
+              >
+                {t === 'agents' ? 'Agentes' : t === 'actions' ? 'Catálogo de Ações' : 'Permissões'}
+              </button>
+            ))}
+          </nav>
+        }
+      />
 
       <div className="p-6">
         {tab === 'agents' && <AgentsTab />}
@@ -144,21 +132,22 @@ function AgentsTab() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3">
-        <select
+      <FilterBar>
+        <Select
           value={statusFilter ?? ''}
           onChange={(e) =>
             setStatusFilter((e.target.value || undefined) as AgentStatus | undefined)
           }
-          className="rounded-md border bg-background px-3 py-2 text-sm"
-        >
-          <option value="">Todos os status</option>
-          <option value="ACTIVE">Ativo</option>
-          <option value="INACTIVE">Inativo</option>
-          <option value="REVOKED">Revogado</option>
-        </select>
+          placeholder="Todos os status"
+          options={[
+            { value: '', label: 'Todos os status' },
+            { value: 'ACTIVE', label: 'Ativo' },
+            { value: 'INACTIVE', label: 'Inativo' },
+            { value: 'REVOKED', label: 'Revogado' },
+          ]}
+        />
         <Button onClick={() => setDrawerOpen(true)}>Novo Agente</Button>
-      </div>
+      </FilterBar>
 
       {error && <p className="text-sm text-danger-600">{(error as Error).message}</p>}
 
@@ -420,21 +409,22 @@ function ActionsTab() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3">
-        <select
+      <FilterBar>
+        <Select
           value={policyFilter ?? ''}
           onChange={(e) =>
             setPolicyFilter((e.target.value || undefined) as ExecutionPolicy | undefined)
           }
-          className="rounded-md border bg-background px-3 py-2 text-sm"
-        >
-          <option value="">Todas as politicas</option>
-          <option value="DIRECT">DIRECT</option>
-          <option value="CONTROLLED">CONTROLLED</option>
-          <option value="EVENT_ONLY">EVENT_ONLY</option>
-        </select>
+          placeholder="Todas as politicas"
+          options={[
+            { value: '', label: 'Todas as politicas' },
+            { value: 'DIRECT', label: 'DIRECT' },
+            { value: 'CONTROLLED', label: 'CONTROLLED' },
+            { value: 'EVENT_ONLY', label: 'EVENT_ONLY' },
+          ]}
+        />
         <Button onClick={() => setDrawerOpen(true)}>Nova Acao</Button>
-      </div>
+      </FilterBar>
 
       {error && <p className="text-sm text-danger-600">{(error as Error).message}</p>}
 
@@ -459,9 +449,17 @@ function ActionsTab() {
                   <TableCell className="font-mono text-sm">{action.codigo}</TableCell>
                   <TableCell>{action.nome}</TableCell>
                   <TableCell>
-                    <Badge variant={POLICY_VARIANT[action.execution_policy]}>
+                    <StatusBadge
+                      status={
+                        action.execution_policy === 'DIRECT'
+                          ? 'success'
+                          : action.execution_policy === 'CONTROLLED'
+                            ? 'warning'
+                            : 'neutral'
+                      }
+                    >
                       {action.execution_policy}
-                    </Badge>
+                    </StatusBadge>
                   </TableCell>
                   <TableCell>{action.target_object_type}</TableCell>
                   <TableCell>{action.status}</TableCell>
@@ -583,18 +581,19 @@ function CreateActionDrawer({
           </div>
           <div className="space-y-1">
             <Label htmlFor="act-policy">Politica de Execucao</Label>
-            <select
+            <Select
               id="act-policy"
               value={form.execution_policy}
               onChange={(e) =>
                 setForm((f) => ({ ...f, execution_policy: e.target.value as ExecutionPolicy }))
               }
-              className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-            >
-              <option value="DIRECT">DIRECT</option>
-              <option value="CONTROLLED">CONTROLLED</option>
-              <option value="EVENT_ONLY">EVENT_ONLY</option>
-            </select>
+              options={[
+                { value: 'DIRECT', label: 'DIRECT' },
+                { value: 'CONTROLLED', label: 'CONTROLLED' },
+                { value: 'EVENT_ONLY', label: 'EVENT_ONLY' },
+              ]}
+              className="w-full"
+            />
           </div>
           <div className="space-y-1">
             <Label htmlFor="act-target">Objeto Alvo</Label>
@@ -741,9 +740,18 @@ function MatrixTab() {
               <TableHead key={a.id} className="text-center">
                 <div className="flex flex-col items-center gap-1">
                   <span className="text-xs">{a.codigo}</span>
-                  <Badge variant={POLICY_VARIANT[a.execution_policy]} className="text-[10px]">
+                  <StatusBadge
+                    status={
+                      a.execution_policy === 'DIRECT'
+                        ? 'success'
+                        : a.execution_policy === 'CONTROLLED'
+                          ? 'warning'
+                          : 'neutral'
+                    }
+                    className="text-[10px]"
+                  >
                     {a.execution_policy}
-                  </Badge>
+                  </StatusBadge>
                 </div>
               </TableHead>
             ))}

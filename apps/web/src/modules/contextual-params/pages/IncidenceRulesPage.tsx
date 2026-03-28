@@ -14,6 +14,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import { StatusBadge } from '@shared/ui/status-badge';
 import { EmptyState } from '@shared/ui/empty-state';
+import { PageHeader } from '@shared/ui/page-header';
+import { Select } from '@shared/ui/select';
+import { FilterBar } from '@shared/ui/filter-bar';
 import {
   useIncidenceRules,
   useCreateIncidenceRule,
@@ -57,23 +60,19 @@ export function IncidenceRulesPage() {
 
   return (
     <div className="-m-6">
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Regras de Incidência
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Vínculo entre enquadradores e target objects
-          </p>
-        </div>
-        <Button size="sm" onClick={() => setShowCreate(true)}>
-          Nova regra
-        </Button>
-      </div>
+      <PageHeader
+        title="Regras de Incidência"
+        description="Vínculo entre enquadradores e target objects"
+        actions={
+          <Button size="sm" onClick={() => setShowCreate(true)}>
+            Nova regra
+          </Button>
+        }
+      />
 
       {/* ── Filters ─────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-3 border-b border-border bg-white px-6 py-3">
-        <select
+      <FilterBar>
+        <Select
           value={filters.status ?? ''}
           onChange={(e) =>
             setFilters((f) => ({
@@ -81,18 +80,18 @@ export function IncidenceRulesPage() {
               status: (e.target.value as FramerStatus) || undefined,
             }))
           }
-          className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-        >
-          <option value="">Todos os status</option>
-          <option value="ACTIVE">Ativo</option>
-          <option value="INACTIVE">Inativo</option>
-        </select>
+          placeholder="Todos os status"
+          options={[
+            { value: 'ACTIVE', label: 'Ativo' },
+            { value: 'INACTIVE', label: 'Inativo' },
+          ]}
+        />
         {(filters.status || filters.framer_id || filters.target_object_id) && (
           <Button variant="ghost" size="sm" onClick={() => setFilters({})}>
             Limpar filtros
           </Button>
         )}
-      </div>
+      </FilterBar>
 
       <div className="p-6 space-y-6">
         {isError && (
@@ -233,37 +232,25 @@ function CreateRuleDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="ir-framer">Enquadrador</Label>
-            <select
+            <Select
               id="ir-framer"
               required
               value={framerId}
               onChange={(e) => setFramerId(e.target.value)}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-            >
-              <option value="">Selecione...</option>
-              {framers.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.nome}
-                </option>
-              ))}
-            </select>
+              placeholder="Selecione..."
+              options={framers.map((f) => ({ value: f.id, label: f.nome }))}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="ir-target">Target Object</Label>
-            <select
+            <Select
               id="ir-target"
               required
               value={targetId}
               onChange={(e) => setTargetId(e.target.value)}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-            >
-              <option value="">Selecione...</option>
-              {targets.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.nome}
-                </option>
-              ))}
-            </select>
+              placeholder="Selecione..."
+              options={targets.map((t) => ({ value: t.id, label: t.nome }))}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="ir-from">Vigência início</Label>

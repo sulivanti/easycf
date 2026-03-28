@@ -13,7 +13,6 @@
 
 import { useState } from 'react';
 import {
-  Badge,
   Button,
   Skeleton,
   Table,
@@ -25,6 +24,10 @@ import {
 } from '@shared/ui';
 import { PageHeader } from '@shared/ui/page-header';
 import { EmptyState } from '@shared/ui/empty-state';
+import { StatusBadge } from '@shared/ui/status-badge';
+import { Select } from '@shared/ui/select';
+import { SearchBar } from '@shared/ui/search-bar';
+import { FilterBar } from '@shared/ui/filter-bar';
 import { useExecutionList, useExecutionDetail } from '../../hooks/use-executions.js';
 import { ExecutionDetailPanel } from '../../components/ExecutionDetailPanel.js';
 import type {
@@ -33,16 +36,16 @@ import type {
   ExecutionPolicy,
 } from '../../types/mcp-automation.types.js';
 
-const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  RECEIVED: 'secondary',
-  DISPATCHED: 'secondary',
-  DIRECT_SUCCESS: 'default',
-  DIRECT_FAILED: 'destructive',
-  CONTROLLED_PENDING: 'outline',
-  CONTROLLED_APPROVED: 'default',
-  CONTROLLED_REJECTED: 'destructive',
-  EVENT_EMITTED: 'secondary',
-  BLOCKED: 'destructive',
+const STATUS_BADGE_MAP: Record<string, 'success' | 'warning' | 'error' | 'info' | 'neutral'> = {
+  RECEIVED: 'info',
+  DISPATCHED: 'info',
+  DIRECT_SUCCESS: 'success',
+  DIRECT_FAILED: 'error',
+  CONTROLLED_PENDING: 'neutral',
+  CONTROLLED_APPROVED: 'success',
+  CONTROLLED_REJECTED: 'error',
+  EVENT_EMITTED: 'info',
+  BLOCKED: 'error',
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -155,22 +158,18 @@ export function ExecutionsPage() {
       </header>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <input
-          type="text"
-          placeholder="Agent ID"
+      <FilterBar>
+        <SearchBar
           value={filters.agent_id ?? ''}
-          onChange={(e) => setFilters((f) => ({ ...f, agent_id: e.target.value || undefined }))}
-          className="rounded-md border bg-background px-3 py-2 text-sm"
+          onChange={(v) => setFilters((f) => ({ ...f, agent_id: v || undefined }))}
+          placeholder="Agent ID"
         />
-        <input
-          type="text"
-          placeholder="Action ID"
+        <SearchBar
           value={filters.action_id ?? ''}
-          onChange={(e) => setFilters((f) => ({ ...f, action_id: e.target.value || undefined }))}
-          className="rounded-md border bg-background px-3 py-2 text-sm"
+          onChange={(v) => setFilters((f) => ({ ...f, action_id: v || undefined }))}
+          placeholder="Action ID"
         />
-        <select
+        <Select
           value={filters.status ?? ''}
           onChange={(e) =>
             setFilters((f) => ({
@@ -178,20 +177,21 @@ export function ExecutionsPage() {
               status: (e.target.value || undefined) as ExecutionStatus | undefined,
             }))
           }
-          className="rounded-md border bg-background px-3 py-2 text-sm"
-        >
-          <option value="">Todos os status</option>
-          <option value="RECEIVED">RECEIVED</option>
-          <option value="DISPATCHED">DISPATCHED</option>
-          <option value="DIRECT_SUCCESS">DIRECT_SUCCESS</option>
-          <option value="DIRECT_FAILED">DIRECT_FAILED</option>
-          <option value="CONTROLLED_PENDING">CONTROLLED_PENDING</option>
-          <option value="CONTROLLED_APPROVED">CONTROLLED_APPROVED</option>
-          <option value="CONTROLLED_REJECTED">CONTROLLED_REJECTED</option>
-          <option value="EVENT_EMITTED">EVENT_EMITTED</option>
-          <option value="BLOCKED">BLOCKED</option>
-        </select>
-        <select
+          placeholder="Todos os status"
+          options={[
+            { value: '', label: 'Todos os status' },
+            { value: 'RECEIVED', label: 'RECEIVED' },
+            { value: 'DISPATCHED', label: 'DISPATCHED' },
+            { value: 'DIRECT_SUCCESS', label: 'DIRECT_SUCCESS' },
+            { value: 'DIRECT_FAILED', label: 'DIRECT_FAILED' },
+            { value: 'CONTROLLED_PENDING', label: 'CONTROLLED_PENDING' },
+            { value: 'CONTROLLED_APPROVED', label: 'CONTROLLED_APPROVED' },
+            { value: 'CONTROLLED_REJECTED', label: 'CONTROLLED_REJECTED' },
+            { value: 'EVENT_EMITTED', label: 'EVENT_EMITTED' },
+            { value: 'BLOCKED', label: 'BLOCKED' },
+          ]}
+        />
+        <Select
           value={filters.policy_applied ?? ''}
           onChange={(e) =>
             setFilters((f) => ({
@@ -199,13 +199,14 @@ export function ExecutionsPage() {
               policy_applied: (e.target.value || undefined) as ExecutionPolicy | undefined,
             }))
           }
-          className="rounded-md border bg-background px-3 py-2 text-sm"
-        >
-          <option value="">Todas as politicas</option>
-          <option value="DIRECT">DIRECT</option>
-          <option value="CONTROLLED">CONTROLLED</option>
-          <option value="EVENT_ONLY">EVENT_ONLY</option>
-        </select>
+          placeholder="Todas as politicas"
+          options={[
+            { value: '', label: 'Todas as politicas' },
+            { value: 'DIRECT', label: 'DIRECT' },
+            { value: 'CONTROLLED', label: 'CONTROLLED' },
+            { value: 'EVENT_ONLY', label: 'EVENT_ONLY' },
+          ]}
+        />
         <input
           type="datetime-local"
           title="De"
@@ -233,7 +234,7 @@ export function ExecutionsPage() {
         <Button variant="outline" size="sm" onClick={() => setFilters({})}>
           Limpar filtros
         </Button>
-      </div>
+      </FilterBar>
 
       {error && <p className="text-sm text-danger-600">{(error as Error).message}</p>}
 
@@ -322,13 +323,13 @@ function ExecutionRow({
       <TableCell>{execution.policy_applied}</TableCell>
       <TableCell>
         <div className="flex items-center gap-1">
-          <Badge variant={STATUS_VARIANT[execution.status] ?? 'secondary'}>
+          <StatusBadge status={STATUS_BADGE_MAP[execution.status] ?? 'info'}>
             {STATUS_LABEL[execution.status] ?? execution.status}
-          </Badge>
+          </StatusBadge>
           {isEscalation && (
-            <Badge variant="destructive" className="text-[10px]">
+            <StatusBadge status="error" className="text-[10px]">
               Escalada
-            </Badge>
+            </StatusBadge>
           )}
         </div>
       </TableCell>

@@ -7,9 +7,9 @@
  * Toast via sonner for UX-008 feedback.
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
-import { Button, Input, Skeleton } from '@shared/ui';
+import { Button, Skeleton, PageHeader, SearchBar, Select, EmptyState } from '@shared/ui';
 import {
   useMovements,
   useMovementDetail,
@@ -60,6 +60,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [showOverride, setShowOverride] = useState(false);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const params: MovementListParams = {
     tab: activeTab,
@@ -79,8 +80,8 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchInput(value);
-    const timeout = setTimeout(() => setSearch(value), 400);
-    return () => clearTimeout(timeout);
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    searchTimeoutRef.current = setTimeout(() => setSearch(value), 400);
   }, []);
 
   const handleTabChange = (tab: TabKey) => {
@@ -156,17 +157,10 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
 
   return (
     <div className="-m-6 flex h-[calc(100vh-52px)] flex-col">
-      {/* Page Header — A1 */}
-      <header className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Aprovações
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Gerencie movimentos pendentes de aprovação
-          </p>
-        </div>
-      </header>
+      <PageHeader
+        title="Aprovações"
+        description="Gerencie movimentos pendentes de aprovação"
+      />
 
       {/* Tabs — A1 */}
       <nav
@@ -190,24 +184,17 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
 
       {/* Filters */}
       <div className="flex items-center gap-3 border-b border-a1-border bg-white px-6 py-3">
-        <Input
-          type="search"
-          placeholder="Buscar por código ou operação..."
+        <SearchBar
           value={searchInput}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          className="max-w-xs border-a1-border bg-white font-display text-[13px]"
+          onChange={handleSearchChange}
+          placeholder="Buscar por código ou operação..."
+          className="max-w-xs"
         />
-        <select
+        <Select
+          options={STATUS_OPTIONS}
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as MovementStatus | '')}
-          className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
-        >
-          {STATUS_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        />
         <Button
           variant="outline"
           size="sm"
@@ -260,29 +247,30 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <p className="text-sm text-a1-text-auxiliary">
-                {activeTab === 'inbox'
+            <EmptyState
+              title={
+                activeTab === 'inbox'
                   ? 'Nenhuma aprovação pendente.'
                   : activeTab === 'sent'
                     ? 'Você ainda não solicitou nenhum movimento controlado.'
-                    : 'Nenhum movimento encontrado.'}
-              </p>
-              {(statusFilter || search) && (
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="mt-2"
-                  onClick={() => {
-                    setStatusFilter('');
-                    setSearch('');
-                    setSearchInput('');
-                  }}
-                >
-                  Limpar filtros
-                </Button>
-              )}
-            </div>
+                    : 'Nenhum movimento encontrado.'
+              }
+              action={
+                (statusFilter || search) ? (
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={() => {
+                      setStatusFilter('');
+                      setSearch('');
+                      setSearchInput('');
+                    }}
+                  >
+                    Limpar filtros
+                  </Button>
+                ) : undefined
+              }
+            />
           )}
         </div>
 
@@ -329,9 +317,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
             </MovementDetailPanel>
           ) : (
             <div className="flex h-full items-center justify-center">
-              <p className="text-sm text-a1-text-auxiliary">
-                Selecione um movimento para ver os detalhes.
-              </p>
+              <EmptyState title="Selecione um movimento para ver os detalhes." />
             </div>
           )}
         </div>

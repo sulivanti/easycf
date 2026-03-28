@@ -7,8 +7,9 @@
  * When a backend becomes available, swap to useQuery.
  */
 
-import { Badge } from '@shared/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
+import { PageHeader } from '@shared/ui/page-header';
+import { StatusBadge } from '@shared/ui/status-badge';
 
 interface ActionTypeEntry {
   readonly id: string;
@@ -18,11 +19,11 @@ interface ActionTypeEntry {
   readonly category: 'DATA' | 'INTEGRATION' | 'WORKFLOW' | 'NOTIFICATION';
 }
 
-const CATEGORY_VARIANT: Record<ActionTypeEntry['category'], 'default' | 'secondary' | 'outline'> = {
-  DATA: 'default',
-  INTEGRATION: 'secondary',
-  WORKFLOW: 'outline',
-  NOTIFICATION: 'outline',
+const CATEGORY_STATUS: Record<ActionTypeEntry['category'], 'success' | 'info' | 'neutral' | 'purple'> = {
+  DATA: 'success',
+  INTEGRATION: 'info',
+  WORKFLOW: 'neutral',
+  NOTIFICATION: 'purple',
 };
 
 /**
@@ -70,16 +71,10 @@ const ACTION_TYPES: ActionTypeEntry[] = [
 export function McpActionTypesPage() {
   return (
     <div className="-m-6">
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Tipos de Ação MCP
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Catálogo de referência para classificação de ações de agentes
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Tipos de Ação MCP"
+        description="Catálogo de referência para classificação de ações de agentes"
+      />
 
       <div className="p-6">
         <div className="rounded-lg border border-a1-border bg-white">
@@ -98,7 +93,7 @@ export function McpActionTypesPage() {
                   <TableCell className="font-medium font-mono text-xs">{at.codigo}</TableCell>
                   <TableCell>{at.nome}</TableCell>
                   <TableCell>
-                    <Badge variant={CATEGORY_VARIANT[at.category]}>{at.category}</Badge>
+                    <StatusBadge status={CATEGORY_STATUS[at.category]}>{at.category}</StatusBadge>
                   </TableCell>
                   <TableCell className="text-sm text-a1-text-auxiliary">{at.descricao}</TableCell>
                 </TableRow>

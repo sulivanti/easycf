@@ -12,12 +12,14 @@ import { toast } from 'sonner';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
-import { Badge } from '@shared/ui/badge';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import { EmptyState } from '@shared/ui/empty-state';
 import { StatusBadge } from '@shared/ui/status-badge';
+import { PageHeader } from '@shared/ui/page-header';
+import { Select } from '@shared/ui/select';
+import { FilterBar } from '@shared/ui/filter-bar';
 import { useActionList, useCreateAction } from '../hooks/use-actions.js';
 import type {
   ExecutionPolicy,
@@ -25,16 +27,6 @@ import type {
   CreateActionPayload,
 } from '../types/mcp-automation.types.js';
 
-const POLICY_VARIANT: Record<ExecutionPolicy, 'default' | 'secondary' | 'outline'> = {
-  DIRECT: 'default',
-  CONTROLLED: 'secondary',
-  EVENT_ONLY: 'outline',
-};
-
-const STATUS_VARIANT: Record<ActionStatus, 'default' | 'secondary'> = {
-  ACTIVE: 'default',
-  INACTIVE: 'secondary',
-};
 
 const POLICIES: ExecutionPolicy[] = ['DIRECT', 'CONTROLLED', 'EVENT_ONLY'];
 
@@ -57,43 +49,37 @@ export function McpActionsPage() {
 
   return (
     <div className="-m-6">
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Catálogo de Ações MCP
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Ações disponíveis para agentes MCP executarem
-          </p>
-        </div>
-        <Button size="sm" onClick={() => setShowCreate(true)}>
-          Nova ação
-        </Button>
-      </div>
+      <PageHeader
+        title="Catálogo de Ações MCP"
+        description="Ações disponíveis para agentes MCP executarem"
+        actions={
+          <Button size="sm" onClick={() => setShowCreate(true)}>
+            Nova ação
+          </Button>
+        }
+      />
 
       {/* Filters */}
-      <div className="flex items-center gap-3 border-b border-border bg-white px-6 py-3">
-        <select
+      <FilterBar className="border-b border-border bg-white px-6 py-3">
+        <Select
           value={policyFilter ?? ''}
           onChange={(e) => setPolicyFilter((e.target.value as ExecutionPolicy) || undefined)}
-          className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-        >
-          <option value="">Todas as políticas</option>
-          {POLICIES.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
-        <select
+          placeholder="Todas as políticas"
+          options={[
+            { value: '', label: 'Todas as políticas' },
+            ...POLICIES.map((p) => ({ value: p, label: p })),
+          ]}
+        />
+        <Select
           value={statusFilter ?? ''}
           onChange={(e) => setStatusFilter((e.target.value as ActionStatus) || undefined)}
-          className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-        >
-          <option value="">Todos os status</option>
-          <option value="ACTIVE">Ativo</option>
-          <option value="INACTIVE">Inativo</option>
-        </select>
+          placeholder="Todos os status"
+          options={[
+            { value: '', label: 'Todos os status' },
+            { value: 'ACTIVE', label: 'Ativo' },
+            { value: 'INACTIVE', label: 'Inativo' },
+          ]}
+        />
         {(policyFilter || statusFilter) && (
           <Button
             variant="ghost"
@@ -106,7 +92,7 @@ export function McpActionsPage() {
             Limpar
           </Button>
         )}
-      </div>
+      </FilterBar>
 
       <div className="p-6 space-y-6">
         {isError && (
@@ -148,9 +134,17 @@ export function McpActionsPage() {
                     <TableCell className="font-medium font-mono text-xs">{action.codigo}</TableCell>
                     <TableCell>{action.nome}</TableCell>
                     <TableCell>
-                      <Badge variant={POLICY_VARIANT[action.execution_policy]}>
+                      <StatusBadge
+                        status={
+                          action.execution_policy === 'DIRECT'
+                            ? 'success'
+                            : action.execution_policy === 'CONTROLLED'
+                              ? 'warning'
+                              : 'neutral'
+                        }
+                      >
                         {action.execution_policy}
-                      </Badge>
+                      </StatusBadge>
                     </TableCell>
                     <TableCell className="text-xs">{action.target_object_type}</TableCell>
                     <TableCell>
@@ -269,18 +263,13 @@ function CreateActionDialog({
           </div>
           <div className="space-y-2">
             <Label htmlFor="act-policy">Política de Execução</Label>
-            <select
+            <Select
               id="act-policy"
               value={policy}
               onChange={(e) => setPolicy(e.target.value as ExecutionPolicy)}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-            >
-              {POLICIES.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
+              options={POLICIES.map((p) => ({ value: p, label: p }))}
+              className="w-full"
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="act-target">Objeto Alvo</Label>

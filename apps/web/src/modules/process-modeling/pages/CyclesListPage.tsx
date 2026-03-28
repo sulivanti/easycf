@@ -13,7 +13,6 @@
 import { useState, useCallback } from 'react';
 import {
   Button,
-  Badge,
   Skeleton,
   Dialog,
   DialogContent,
@@ -31,7 +30,11 @@ import {
   PageHeader,
   ConfirmationModal,
   FormField,
+  StatusBadge,
+  Select,
+  EmptyState,
 } from '../../../shared/ui/index.js';
+import type { StatusType } from '../../../shared/ui/status-badge.js';
 import { useCycles, useCreateCycle, useDeleteCycle } from '../hooks/use-cycles.js';
 import type {
   CycleStatus,
@@ -44,6 +47,21 @@ import {
   canWriteCycle,
   canShowDelete,
 } from '../types/process-modeling.types.js';
+
+/** Map legacy Badge variant → StatusBadge status */
+const VARIANT_TO_STATUS: Record<string, StatusType> = {
+  default: 'success',
+  secondary: 'info',
+  outline: 'neutral',
+  destructive: 'error',
+};
+
+const CYCLE_STATUS_OPTIONS: Array<{ value: string; label: string }> = [
+  { value: '', label: 'Todos' },
+  { value: 'DRAFT', label: 'Rascunho' },
+  { value: 'PUBLISHED', label: 'Publicado' },
+  { value: 'DEPRECATED', label: 'Depreciado' },
+];
 
 interface CyclesListPageProps {
   userScopes: readonly string[];
@@ -126,16 +144,11 @@ export function CyclesListPage({ userScopes }: CyclesListPageProps) {
         title="Ciclos de Processo"
         actions={
           <div className="flex gap-2">
-            <select
+            <Select
+              options={CYCLE_STATUS_OPTIONS}
               value={filters.status ?? ''}
               onChange={(e) => handleFilterChange(e.target.value as CycleStatus | '')}
-              className="rounded-[7px] border border-a1-border bg-white px-3 py-2 font-display text-[13px] text-a1-text-tertiary"
-            >
-              <option value="">Todos</option>
-              <option value="DRAFT">Rascunho</option>
-              <option value="PUBLISHED">Publicado</option>
-              <option value="DEPRECATED">Depreciado</option>
-            </select>
+            />
             {canWriteCycle(userScopes) && (
               <Button size="sm" onClick={() => setCreateOpen(true)}>
                 Novo ciclo
@@ -147,7 +160,7 @@ export function CyclesListPage({ userScopes }: CyclesListPageProps) {
 
       {/* Table */}
       {items.length === 0 ? (
-        <p className="text-a1-text-auxiliary">{COPY.empty_cycles}</p>
+        <EmptyState title={COPY.empty_cycles} />
       ) : (
         <div className="rounded-lg border border-a1-border bg-white">
           <Table>
@@ -170,7 +183,7 @@ export function CyclesListPage({ userScopes }: CyclesListPageProps) {
                     <TableCell>{cycle.nome}</TableCell>
                     <TableCell>v{cycle.version}</TableCell>
                     <TableCell>
-                      <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
+                      <StatusBadge status={VARIANT_TO_STATUS[statusInfo.variant] ?? 'neutral'}>{statusInfo.label}</StatusBadge>
                     </TableCell>
                     <TableCell className="text-a1-text-auxiliary">
                       {new Date(cycle.created_at).toLocaleDateString('pt-BR')}

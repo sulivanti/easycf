@@ -10,7 +10,6 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import {
   Button,
-  Badge,
   Skeleton,
   Input,
   Label,
@@ -22,6 +21,8 @@ import {
   DialogTitle,
 } from '@shared/ui';
 import { PageHeader } from '@shared/ui/page-header';
+import { StatusBadge } from '@shared/ui/status-badge';
+import { EmptyState } from '@shared/ui/empty-state';
 import {
   useIntegrationRoutines,
   usePublishRoutine,
@@ -29,13 +30,14 @@ import {
 } from '../hooks/use-routines.js';
 import { useServicesList } from '../hooks/use-services.js';
 import { canWriteRoutine, canShowFork, isRoutineEditable } from '../types/permissions.js';
-import { COPY, ROUTINE_STATUS_BADGE, ENVIRONMENT_BADGE } from '../types/view-model.js';
+import { COPY } from '../types/view-model.js';
 import { HttpConfigTab } from '../components/HttpConfigTab.js';
 import { FieldMappingsTab } from '../components/FieldMappingsTab.js';
 import { IntegrationParamsTab } from '../components/IntegrationParamsTab.js';
 import type {
   IntegrationRoutineListItemDTO,
   RoutineStatus,
+  Environment,
 } from '../types/integration-protheus.types.js';
 
 type EditorTab = 'http' | 'mappings' | 'params';
@@ -44,6 +46,18 @@ const TAB_LABELS: Record<EditorTab, string> = {
   http: 'Config. HTTP',
   mappings: 'Mapeamentos',
   params: 'Parâmetros',
+};
+
+const ROUTINE_STATUS_MAP: Record<RoutineStatus, 'success' | 'warning' | 'neutral'> = {
+  DRAFT: 'warning',
+  PUBLISHED: 'success',
+  DEPRECATED: 'neutral',
+};
+
+const ENV_STATUS_MAP: Record<Environment, 'error' | 'warning' | 'neutral'> = {
+  PROD: 'error',
+  HML: 'warning',
+  DEV: 'neutral',
 };
 
 export interface RoutineEditorPageProps {
@@ -112,7 +126,7 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
         )}
 
         {!routinesQuery.isLoading && routines.length === 0 && (
-          <p className="py-8 text-center text-sm text-a1-text-auxiliary">{COPY.empty_routines}</p>
+          <EmptyState title={COPY.empty_routines} />
         )}
 
         <div className="space-y-1">
@@ -127,7 +141,7 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">{r.nome}</span>
-                <Badge className={ROUTINE_STATUS_BADGE[r.status]}>{r.status}</Badge>
+                <StatusBadge status={ROUTINE_STATUS_MAP[r.status]}>{r.status}</StatusBadge>
               </div>
               <div className="mt-0.5 flex items-center gap-2 text-xs text-a1-text-auxiliary">
                 <span>v{r.version}</span>
@@ -136,9 +150,9 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
                     <span>·</span>
                     <span>{r.service_name}</span>
                     {r.service_environment && (
-                      <Badge className={`text-[10px] ${ENVIRONMENT_BADGE[r.service_environment]}`}>
+                      <StatusBadge status={ENV_STATUS_MAP[r.service_environment]} className="text-[10px]">
                         {r.service_environment}
-                      </Badge>
+                      </StatusBadge>
                     )}
                   </>
                 )}
@@ -153,9 +167,10 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
       {/* Right: Editor */}
       <div className="flex-1 overflow-y-auto p-6">
         {!selectedId ? (
-          <p className="mt-20 text-center text-sm text-a1-text-auxiliary">
-            Selecione uma rotina para editar.
-          </p>
+          <EmptyState
+            title="Selecione uma rotina para editar."
+            className="mt-20"
+          />
         ) : (
           <>
             {/* Readonly banner */}

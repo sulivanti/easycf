@@ -18,7 +18,10 @@ import {
   TableRow,
   ConfirmationModal,
   PageHeader,
+  StatusBadge,
+  EmptyState,
 } from '@shared/ui';
+import type { StatusType } from '@shared/ui/status-badge';
 import {
   useAccessShares,
   useMySharedAccesses,
@@ -39,6 +42,18 @@ import {
   type AccessShareFilters,
   type GrantStatus,
 } from '../types/identity-advanced.types.js';
+
+/** Map legacy Badge variant → StatusBadge status */
+const VARIANT_TO_STATUS: Record<string, StatusType> = {
+  default: 'success',
+  secondary: 'warning',
+  destructive: 'error',
+  outline: 'neutral',
+};
+
+function toStatus(variant: string): StatusType {
+  return VARIANT_TO_STATUS[variant] ?? 'neutral';
+}
 
 type TabId = 'shares' | 'delegations' | 'received';
 
@@ -135,19 +150,15 @@ export function SharesDelegationsPanelPage({
     const info = getExpirationInfo(validUntil, status);
     if (!info) return null;
     return (
-      <Badge variant={info.variant} aria-label={info.ariaLabel}>
+      <StatusBadge status={toStatus(info.variant)} aria-label={info.ariaLabel}>
         {info.label}
-      </Badge>
+      </StatusBadge>
     );
   }
 
   function renderSharesTable(data: AccessShareDTO[]) {
     if (data.length === 0) {
-      return (
-        <div className="flex items-center justify-center py-12">
-          <p className="text-sm text-a1-text-auxiliary">{COPY.label.emptyShares}</p>
-        </div>
-      );
+      return <EmptyState title={COPY.label.emptyShares} />;
     }
 
     return (
@@ -175,7 +186,7 @@ export function SharesDelegationsPanelPage({
                 <TableCell className="max-w-[200px] truncate">{share.reason}</TableCell>
                 <TableCell>{renderExpirationBadge(share.valid_until, share.status)}</TableCell>
                 <TableCell>
-                  <Badge variant={status.variant}>{status.label}</Badge>
+                  <StatusBadge status={toStatus(status.variant)}>{status.label}</StatusBadge>
                 </TableCell>
                 {hasShareRevoke && (
                   <TableCell>
@@ -209,7 +220,7 @@ export function SharesDelegationsPanelPage({
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-medium text-a1-text-auxiliary">{title}</h3>
         {items.length === 0 ? (
-          <p className="py-4 text-center text-sm text-a1-text-auxiliary">{emptyMessage}</p>
+          <EmptyState title={emptyMessage} />
         ) : (
           <Table>
             <TableHeader>
@@ -240,7 +251,7 @@ export function SharesDelegationsPanelPage({
                     </TableCell>
                     <TableCell>{renderExpirationBadge(d.valid_until, d.status)}</TableCell>
                     <TableCell>
-                      <Badge variant={status.variant}>{status.label}</Badge>
+                      <StatusBadge status={toStatus(status.variant)}>{status.label}</StatusBadge>
                     </TableCell>
                     {canRevoke && (
                       <TableCell>
@@ -407,9 +418,7 @@ export function SharesDelegationsPanelPage({
             {myShared.isLoading && renderLoadingSkeleton()}
             {myShared.isError && renderError(() => myShared.refetch())}
             {myShared.data && myShared.data.length === 0 && (
-              <p className="py-4 text-center text-sm text-a1-text-auxiliary">
-                {COPY.label.emptyReceived}
-              </p>
+              <EmptyState title={COPY.label.emptyReceived} />
             )}
             {myShared.data && myShared.data.length > 0 && (
               <Table>
@@ -482,7 +491,7 @@ export function SharesDelegationsPanelPage({
                         </TableCell>
                         <TableCell>{renderExpirationBadge(d.valid_until, d.status)}</TableCell>
                         <TableCell>
-                          <Badge variant={status.variant}>{status.label}</Badge>
+                          <StatusBadge status={toStatus(status.variant)}>{status.label}</StatusBadge>
                         </TableCell>
                       </TableRow>
                     );

@@ -11,7 +11,6 @@ import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import {
   Button,
-  Badge,
   Skeleton,
   Table,
   TableBody,
@@ -26,6 +25,10 @@ import {
   ConfirmationModal,
   PageHeader,
 } from '@shared/ui';
+import { Select } from '@shared/ui/select';
+import { StatusBadge } from '@shared/ui/status-badge';
+import { EmptyState } from '@shared/ui/empty-state';
+import { FilterBar } from '@shared/ui/filter-bar';
 import {
   useFramersList,
   useFramerTypes,
@@ -56,7 +59,7 @@ import {
   canDeactivateFramer,
   canEvaluateEngine,
 } from '../types/permissions.js';
-import { COPY, framerStatusClass, isExpiringSoon } from '../types/view-model.js';
+import { COPY, isExpiringSoon } from '../types/view-model.js';
 import { FramerDrawer } from '../components/FramerDrawer.js';
 import { IncidenceMatrix } from '../components/IncidenceMatrix.js';
 
@@ -272,8 +275,8 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
       {/* Panel: Enquadradores */}
       {activePanel === 'framers' && (
         <div>
-          <div className="mb-4">
-            <select
+          <FilterBar className="mb-4">
+            <Select
               value={statusFilter}
               onChange={(e) => {
                 const val = e.target.value as FramerStatus | '';
@@ -281,16 +284,16 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
                 setFramerFilters(val ? { status: val } : {});
               }}
               aria-label="Filtrar por status"
-              className="rounded-md border border-input bg-background px-3 py-2 text-sm"
-            >
-              <option value="">Todos os status</option>
-              <option value="ACTIVE">ACTIVE</option>
-              <option value="INACTIVE">INACTIVE</option>
-            </select>
-          </div>
+              placeholder="Todos os status"
+              options={[
+                { value: 'ACTIVE', label: 'ACTIVE' },
+                { value: 'INACTIVE', label: 'INACTIVE' },
+              ]}
+            />
+          </FilterBar>
 
           {framers.length === 0 ? (
-            <p className="text-a1-text-auxiliary text-sm py-8 text-center">{COPY.empty_framers}</p>
+            <EmptyState title={COPY.empty_framers} />
           ) : (
             <div className="rounded-lg border border-a1-border bg-white">
               <Table>
@@ -317,16 +320,16 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
                         <TableCell>{typeName}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1.5">
-                            <Badge className={`text-xs ${framerStatusClass(f.status)}`}>
+                            <StatusBadge status={f.status === 'ACTIVE' ? 'success' : 'neutral'}>
                               {f.status}
-                            </Badge>
+                            </StatusBadge>
                             {expiring && (
                               <TooltipProvider>
                                 <Tooltip>
                                   <TooltipTrigger>
-                                    <Badge className="text-xs bg-amber-500 text-white">
+                                    <StatusBadge status="warning">
                                       Expirando
-                                    </Badge>
+                                    </StatusBadge>
                                   </TooltipTrigger>
                                   <TooltipContent>{COPY.tooltip_expirando}</TooltipContent>
                                 </Tooltip>
@@ -383,9 +386,7 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
       {activePanel === 'objects' && (
         <div>
           {targetObjects.length === 0 ? (
-            <p className="text-a1-text-auxiliary text-sm py-8 text-center">
-              Nenhum objeto-alvo cadastrado.
-            </p>
+            <EmptyState title="Nenhum objeto-alvo cadastrado." />
           ) : (
             <div className="space-y-2">
               {targetObjects.map((obj) => (

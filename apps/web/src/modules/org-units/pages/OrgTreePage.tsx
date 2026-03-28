@@ -10,9 +10,11 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { Button } from '@shared/ui/button.js';
-import { Input } from '@shared/ui/input.js';
 import { Skeleton } from '@shared/ui/skeleton.js';
 import { ConfirmationModal } from '@shared/ui/confirmation-modal';
+import { PageHeader } from '@shared/ui/page-header';
+import { SearchBar } from '@shared/ui/search-bar';
+import { EmptyState } from '@shared/ui/empty-state';
 import { toast } from 'sonner';
 import { useOrgTree } from '../hooks/use-org-tree.js';
 import {
@@ -168,46 +170,43 @@ export function OrgTreePage({
   // -- Empty state --
   if (!tree || tree.length === 0) {
     return (
-      <div className="p-6 text-center">
-        <p className="text-a1-text-auxiliary mb-4">{COPY.label.emptyState}</p>
-        {canWriteOrgUnit(userScopes) && (
-          <Button onClick={() => onNavigateCreate()}>{COPY.label.createFirst}</Button>
-        )}
+      <div className="p-6">
+        <EmptyState
+          title={COPY.label.emptyState}
+          action={
+            canWriteOrgUnit(userScopes) ? (
+              <Button onClick={() => onNavigateCreate()}>{COPY.label.createFirst}</Button>
+            ) : undefined
+          }
+        />
       </div>
     );
   }
 
   return (
     <div className="-m-6">
-      {/* Page Header — A1 */}
-      <div className="flex items-center justify-between border-b border-a1-border bg-white px-6 py-4.5">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary">
-            Estrutura Organizacional
-          </h1>
-          <p className="font-display text-[11px] text-a1-text-hint">
-            Hierarquia N1 → N4 · Nível e parent_id imutáveis após criação
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Input
-            type="search"
-            placeholder="Buscar por nome ou código..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            aria-label="Buscar unidades organizacionais"
-            className="w-56 border-a1-border bg-white font-display text-[13px]"
-          />
-          {canWriteOrgUnit(userScopes) && (
-            <Button
-              onClick={() => onNavigateCreate()}
-              className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90"
-            >
-              + Nova Unidade
-            </Button>
-          )}
-        </div>
-      </div>
+      <PageHeader
+        title="Estrutura Organizacional"
+        description="Hierarquia N1 → N4 · Nível e parent_id imutáveis após criação"
+        actions={
+          <div className="flex items-center gap-2">
+            <SearchBar
+              value={searchTerm}
+              onChange={setSearchTerm}
+              placeholder="Buscar por nome ou código..."
+              className="w-56"
+            />
+            {canWriteOrgUnit(userScopes) && (
+              <Button
+                onClick={() => onNavigateCreate()}
+                className="bg-a1-dark font-display text-[13px] font-bold text-white hover:bg-a1-dark/90"
+              >
+                + Nova Unidade
+              </Button>
+            )}
+          </div>
+        }
+      />
 
       <div className="p-6">
         {/* Show inactive toggle */}
@@ -223,9 +222,7 @@ export function OrgTreePage({
 
         {/* Empty search */}
         {filteredTree.length === 0 && searchTerm.trim() !== '' && (
-          <p className="font-display text-[13px] text-a1-text-auxiliary">
-            {COPY.label.emptySearch}
-          </p>
+          <EmptyState title={COPY.label.emptySearch} />
         )}
 
         {/* Tree */}

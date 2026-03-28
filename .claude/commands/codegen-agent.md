@@ -82,6 +82,7 @@ Consulte `level_filter` no registro para validar. Se o agente solicitado **não*
    - `INT-*` → ler `requirements/int/` do módulo
    - `*` (AGN-COD-VAL) → ler todos os `requirements/` do módulo
 5. Código já existente nas `allowed_prefixes` (se houver, para incrementar ao invés de sobrescrever)
+6. **Para AGN-COD-WEB:** localizar e ler o screen manifest YAML de cada tela do módulo (`docs/05_manifests/screens/ux-{slug}-{NNN}.*.yaml`) + blueprint DOC-UX-014 correspondente ao `type` da tela
 
 **NÃO** leia documentos além dos listados acima. Economia de contexto é crítica.
 
@@ -120,6 +121,10 @@ Antes de apresentar ao usuário, valide a conformidade estrutural:
 - [ ] A estrutura de diretórios DEVE seguir **Pattern A**: `api/`, `components/`, `hooks/`, `pages/`, `types/`
 - [ ] DEVE existir pelo menos 1 arquivo em `hooks/` que use `@tanstack/react-query`
 - [ ] **NUNCA** usar Pattern B (`data/`, `domain/`, `ui/`) — se detectado, corrija antes de apresentar
+- [ ] Screen manifest encontrado e lido para cada página (de `docs/05_manifests/screens/`)
+- [ ] Todos `required_components` do blueprint DOC-UX-014 (conforme `type` da tela) presentes no plano
+- [ ] Todos `shared_ui_components` do manifest (se presentes) importados de `@shared/ui/`
+- [ ] Skeleton (loading), EmptyState (empty) e Toast (error) planejados para cada página
 
 Se qualquer check falhar, corrija o plano antes de apresentar ao usuário.
 
@@ -246,11 +251,15 @@ Verificando domain/errors/dependency-pending.error.ts...
 Resultado: 7 arquivos verificados, 3 corrigidos, 4 ok. ✅
 ```
 
-**AGN-COD-WEB — Structure & React Query Compliance:**
+**AGN-COD-WEB — Structure, React Query & Blueprint Compliance:**
 1. Verifique que a estrutura gerada segue **Pattern A** (`api/`, `components/`, `hooks/`, `pages/`, `types/`)
 2. Verifique que hooks em `hooks/` utilizam `useQuery`/`useMutation` de `@tanstack/react-query`
 3. Verifique que NÃO existe estrutura Pattern B (`data/`, `domain/`, `ui/`)
-4. Se qualquer check falhar → **CORRIJA** antes de prosseguir
+4. **Blueprint compliance (DOC-UX-014):** Verifique que todos os `required_components` do blueprint para o `type` da tela estão presentes nos arquivos gerados
+5. **Skeleton durante loading:** Verifique que cada página renderiza `Skeleton` (de `@shared/ui/skeleton`) enquanto dados carregam
+6. **EmptyState para dados vazios:** Verifique que páginas tipo `list`, `dashboard`, `monitor`, `inbox` renderizam `EmptyState` (de `@shared/ui/empty-state`) quando não há dados
+7. **Toast/error handling:** Verifique que erros de API disparam `Toast` com `correlationId` (via `sonner` de `@shared/ui/sonner`)
+8. Se qualquer check falhar → **CORRIJA** antes de prosseguir e registre no relatório
 
 **Exemplo — violação detectada e corrigida automaticamente:**
 

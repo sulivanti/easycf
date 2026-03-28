@@ -81,6 +81,7 @@ components:
       Cabeçalho com título "Novo Usuário" e botão "Voltar" (ícone + texto)
       que retorna à listagem /usuarios.
     actions_used: [cancel_form]
+    shared_ui_components: ["PageHeader"]
 
   - id: "user-form-fields"
     name: "UserFormFields"
@@ -95,6 +96,7 @@ components:
       Erros 422: inline por campo (mapeado via extensions.invalid_fields).
       Erros 409: inline no campo e-mail com mensagem de duplicidade.
     actions_used: [load_roles, create_user]
+    shared_ui_components: ["FormField", "Input", "Select", "Skeleton"]
 
   - id: "user-form-actions"
     name: "UserFormActions"
@@ -104,6 +106,7 @@ components:
         - Botão "Criar Usuário" (primary) — isLoading durante POST
       Idempotency-Key exibido em modo dev para debug.
     actions_used: [create_user, cancel_form]
+    shared_ui_components: ["Button"]
 
   - id: "user-form-toast"
     name: "UserFormToast"
@@ -113,6 +116,17 @@ components:
       Toast de erro RFC 9457 com correlationId no rodapé.
       Posição: top-right, auto-dismiss 6s.
     actions_used: []
+    shared_ui_components: ["Toast"]
+
+# ─── STATE COVERAGE (DOC-UX-014 §1.2 form) ──────────────────
+state_coverage:
+  loading:
+    strategy: skeleton
+  empty:
+    message: null
+    illustration: null
+  error:
+    strategy: inline
 
 # ─── NAVEGAÇÃO ───────────────────────────────────────────────
 navigation:
@@ -136,6 +150,10 @@ notes: |
   8. Endpoints consumidos de MOD-000-F05 e F06 — MOD-002 é UX-first, sem backend próprio.
 
 changelog:
+  - version: "2.1.0"
+    date: "2026-03-28"
+    author: "arquitetura"
+    description: "Backfill v1.1: shared_ui_components em todos os componentes, state_coverage top-level (DOC-UX-014 §1.2 form)."
   - version: "2.0.0"
     date: "2026-03-22"
     author: "arquitetura"

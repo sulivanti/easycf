@@ -1,8 +1,8 @@
 # PKG-COD-001 — Pacote 2: Agentes de Geração de Código (GNP + CEE + CHE) (6 agentes)
 
 **id:** PKG-COD-001
-**Versão:** 1.5.1
-**Data:** 2026-03-26
+**Versão:** 1.6.0
+**Data:** 2026-03-28
 **Base:** DOC-DEV-001 + DOC-ESC-001 + DOC-GNP-00 v2.0 + DOC-GPA-001 + EX-OAS-* + Events↔Permissions Pack + UX-010
 
 Este pacote define **6 agentes especialistas** para geração de código e validação, focando em atuar de forma isolada nas **Camadas da Arquitetura** do projeto.
@@ -219,7 +219,7 @@ updated_at: z.string().nullable()
 
 - **Allowed Prefixes:** `apps/web/src/modules/{slug}/`
 - **Protagonismo:** UI, estados Loading/Empty/Error conforme UX-xxx; consumo de API.
-- **Required Docs:** DOC-GNP-00, DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-UX-013
+- **Required Docs:** DOC-GNP-00, DOC-UX-010, DOC-UX-011, DOC-UX-012, DOC-UX-013, DOC-UX-014
 
 **Contratos Obrigatórios — Estrutura de Diretório (MUST)**
 
@@ -287,6 +287,18 @@ export function useItems(filters: ItemFilters) {
 - Nunca recrie guards de autenticação — use os Route Guards definidos em DOC-UX-011 §3.3.
 - Nunca recrie componentes de feedback (Toast, Spinner) — importe de `@shared/ui/`.
 
+**Regras de Ingestão de Screen Manifest (MUST) — PKG-COD-001-M01**
+
+1. **MUST** ler o screen manifest YAML para cada página gerada. O manifest está em `docs/05_manifests/screens/ux-{slug}-{NNN}.*.yaml` (ex: `ux-usr-001.users-list.yaml`).
+2. **MUST** aplicar o blueprint de DOC-UX-014 correspondente ao `type` da tela (list, form, detail, dashboard, config, monitor, inbox).
+3. **MUST** importar de `@shared/ui/` todos os componentes listados em `shared_ui_components` do manifest (se presente). Se ausente, usar os `required_components` do blueprint DOC-UX-014 como fallback.
+4. **MUST** implementar state coverage completa para cada página:
+   - **Loading:** `Skeleton` (de `@shared/ui/skeleton`) durante carregamento de dados
+   - **Empty:** `EmptyState` (de `@shared/ui/empty-state`) quando query retorna zero resultados
+   - **Error:** `Toast` (via `sonner` de `@shared/ui/sonner`) com `correlationId` RFC 9457
+   - **ErrorBoundary:** envolver a página para capturar erros React
+5. **SHOULD** consultar `penpot_design` do manifest (se presente) para decisões de layout e espaçamento.
+
 ---
 
 ## 4) Validador do Pacote (Tópico 0)
@@ -348,6 +360,7 @@ OpenAPI (quando AGN-COD-API):
 
 ## 6) Changelog
 
+- v1.6.0 (2026-03-28): Merge PKG-COD-001-M01: regras de ingestão de screen manifest e blueprint DOC-UX-014 em §3.5 AGN-COD-WEB. MUST ler manifest YAML, aplicar blueprint por tipo de tela, importar shared_ui_components, implementar state coverage (Skeleton/EmptyState/Toast/ErrorBoundary).
 - v1.5.1 (2026-03-26): Merge PKG-COD-001-C01: anti-pattern DTO datetime em §3.4 AGN-COD-API — MUST NOT usar `.datetime()` em Zod response DTOs. Ref: DOC-GNP-00 EX-DTO-001.
 - v1.5 (2026-03-24): Adição de **Contratos Obrigatórios** em §3.2 (DomainError, RFC 9457) e §3.5 (Pattern A, React Query hooks). Causa raiz: auditoria detectou 27 classes de erro com `extends Error` e 2 padrões web incompatíveis gerados por codegen sem enforcement.
 - v1.4 (2026-03-24): Expansão de §3.5 AGN-COD-WEB com regras MUST para Tailwind, shared components, TanStack Router, motion e React Query. Allowed prefixes refinados para `apps/web/src/modules/{slug}/`.

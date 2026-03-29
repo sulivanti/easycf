@@ -14,6 +14,8 @@ route: "/organizacao/novo"
 auth_required: true
 pre_auth: false
 layout: shell
+visual_spec: "docs/03_especificacoes/ux/11-org-form-spec.md"
+visual_ref: "docs/03_especificacoes/ux/11-org-form-ref.html"
 
 linked_stories:
   - "US-MOD-003"

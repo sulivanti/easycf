@@ -51,25 +51,22 @@ O Application Shell DEVE adotar a identidade visual A1 (Grupo A1), utilizando os
 
 #### Sidebar — ref DOC-UX-011-M05
 
-| Propriedade | Valor |
-|-------------|-------|
-| Largura | `w-16` colapsada → `w-56` (224px) on hover |
+> **Layout do shell definido em [`SPEC-THEME-001`](../03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md) (seção 4. Layout Shell).** Os valores abaixo são regras estruturais; dimensões e cores reais vêm do SPEC-THEME-001.
+
+| Propriedade | Regra Estrutural |
+|-------------|-----------------|
+| Largura | Definida em SPEC-THEME-001 §4.1 |
 | Fundo | `bg-white` |
-| Border | `border-r border-neutral-200` (#e2e8f0) |
-| Padding | `py-4 px-2` |
-| Transição | `transition-all duration-300` |
+| Border | `border-r` com cor de borda do tema |
+| Labels | Visibilidade conforme SPEC-THEME-001 |
 
-**Sidebar colapsada (w-16):** Exibe apenas ícones centralizados. Labels com opacity-0. Section headers ocultos.
+**Section headers:** uppercase tracking font-bold.
 
-**Sidebar expandida (hover → w-56):** Ícones + labels visíveis. Section headers com opacity-100.
+**Items inativos:** flex items-center rounded-md, texto e ícones em cores auxiliares do tema.
 
-**Section headers:** uppercase tracking-[1.4px] text-[9px] font-bold text-a1-text-placeholder (slate-300), opacity-0 → opacity-100 on group-hover.
+**Item ativo:** fundo e texto em cores primárias conforme SPEC-THEME-001 §4.1.
 
-**Items inativos:** flex items-center rounded-md py-2 px-2.5 gap-2.5, texto text-[13px] text-neutral-500, ícones stroke-neutral-400 16px, hover:bg-primary-50.
-
-**Item ativo:** bg-primary-50 (#eff6ff), text-primary-600 font-semibold, ícone stroke-primary-600 (sem borda lateral).
-
-**Badges:** rounded-full bg-primary-600 text-white text-[9px].
+**Badges:** rounded-full bg primário text-white.
 
 #### Content Area
 
@@ -358,6 +355,7 @@ export const Route = createRoute({
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.7.0 | 2026-03-29 | Refatoração: sidebar parametrizada — valores concretos (largura, cores) movidos para SPEC-THEME-001 §4. DOC-UX-011 mantém apenas regras estruturais. |
 | 1.6.0 | 2026-03-27 | Amendment M05: Unificação visual ao stitch modelagem — topbar de dark (#111) para white com border-b h-16, sidebar de fixa 220px para colapsável (w-16 → w-56 hover), accent de laranja para azul (primary-600), backgrounds de warm beige para cool slate. Ref: DOC-UX-013-M06. |
 | 1.5.0 | 2026-03-26 | Amendment M04: nova §2.2 Identidade Visual A1 — topbar dark #111, sidebar branca w-220 accent laranja, content bg #F5F5F3, skeleton states A1. Ref: Ux-Paginas.md, DOC-UX-013-M01. |
 | 1.4.0 | 2026-03-25 | Amendment M03: nova §6.2 LogoutConfirmDialog obrigatório no Widget de Perfil — confirmação antes de logout, loading state, telemetria (DOC-UX-011-M03). |

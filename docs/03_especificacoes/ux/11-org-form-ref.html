@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>11-OrgForm — Versão Final (3 frames)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --blue:#2E86C1;--blue-lt:#E3F2FD;
+  --bg:#F5F5F3;--white:#FFF;--border:#E8E8E6;--border-lt:#F0F0EE;--ro-bg:#F8F8F6;
+  --t1:#111;--t2:#333;--t3:#555;--t4:#888;--t5:#AAA;--t6:#CCC;
+  --err:#E74C3C;--warn:#E67E22;--success:#27AE60;
+  --success-bg:#E8F8EF;--success-bd:#B5E8C9;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#777;display:flex;flex-direction:column;align-items:center;gap:80px;padding:60px 40px}
+.tag{font-size:11px;font-weight:700;color:#ddd;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.frame{width:1440px;height:900px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.3);flex-shrink:0;background:var(--bg);position:relative;border-radius:8px}
+
+/* ═══════════════════ TOPBAR ═══════════════════ */
+.topbar{height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tb-n{font-weight:800;font-size:14px;color:var(--t1)}.tb-s{font-weight:600;font-size:10px;color:var(--t4);letter-spacing:1.2px;text-transform:uppercase}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 8px}
+.bc{display:flex;align-items:center;gap:6px;font-size:13px}.bc-m{color:var(--t4)}.bc-x{color:var(--t6)}.bc-a{color:var(--t1);font-weight:700}
+.tb-r{display:flex;align-items:center;gap:12px}
+.tb-un{font-size:12px;font-weight:700;color:var(--t1);text-align:right}
+.tb-ue{font-size:10px;color:var(--t4);text-align:right}
+.tb-av{width:40px;height:40px;border-radius:50%;background:#F0F0EE;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--t3)}
+.lay{display:flex;flex:1;overflow:hidden}
+
+/* ═══════════════════ SIDEBAR ═══════════════════ */
+.sb{width:240px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-sec{padding:24px 16px 0}.sb-sec+.sb-sec{padding-top:20px}
+.sb-cat{font-weight:700;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--t5);margin-bottom:8px;padding:0 12px}
+.sb-items{display:flex;flex-direction:column;gap:2px}
+.sb-i{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;text-decoration:none}
+.sb-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sb-i.on{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.sb-foot{margin-top:auto;padding:16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0}
+.sb-ft{font-size:12px;color:var(--t4)}
+
+/* ═══════════════════ SPLIT LAYOUT ═══════════════════ */
+.split{display:flex;flex:1;overflow:hidden}
+
+/* ═══════════════════ FORM PANEL (substitui a árvore) ═══════════════════ */
+.form-panel{width:480px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.fp-header{height:64px;display:flex;align-items:center;padding:0 20px;border-bottom:1px solid var(--border);flex-shrink:0;gap:12px}
+.fp-back{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.fp-back:hover{background:#F8F8F6}
+.fp-back svg{width:18px;height:18px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fp-title{font-weight:700;font-size:18px;color:var(--t1);flex:1}
+.fp-close{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.fp-close:hover{background:#F8F8F6}
+.fp-close svg{width:18px;height:18px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fp-body{flex:1;padding:24px;overflow-y:auto}
+.fp-footer{height:72px;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:0 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--white)}
+
+/* ═══════════════════ DETAIL PANEL (completo, sempre visível) ═══════════════════ */
+.detail{flex:1;padding:24px;overflow-y:auto}
+
+/* Detail Header */
+.dh{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:20px 24px;display:flex;align-items:center;justify-content:space-between}
+.dh-left{display:flex;align-items:center;gap:16px}
+.dh-icon{width:48px;height:48px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dh-icon svg{width:24px;height:24px;stroke:var(--t4);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.dh-name{font-weight:800;font-size:24px;color:var(--t1);line-height:1.2}
+.dh-meta{display:flex;align-items:center;gap:8px;margin-top:4px}
+.badge-a{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:#1E7A42;background:var(--success-bg);border:1px solid var(--success-bd)}
+.dh-code{font-size:12px;color:var(--t4)}
+.dh-right{display:flex;gap:12px;flex-shrink:0}
+
+/* Detail Cards */
+.card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;margin-top:20px}
+.card-label{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--t4)}
+
+/* ReadOnly Fields (detail) */
+.ro-row{display:flex;gap:16px;margin-top:16px}
+.ro-field{flex:1;min-width:0}
+.ro-lbl{font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--t4);margin-bottom:6px}
+.ro-val{padding:10px 14px;border-radius:8px;background:var(--ro-bg);border:1px solid var(--border-lt);font-size:14px;font-weight:500;color:var(--t1);min-height:42px;display:flex;align-items:center}
+
+/* Tags */
+.tags-header{display:flex;justify-content:space-between;align-items:center}
+.tags-link{font-size:12px;font-weight:600;color:var(--blue);cursor:pointer}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tag{padding:8px 16px;border-radius:6px;border:1px solid var(--border);font-size:13px;font-weight:500;color:var(--t2);cursor:pointer}
+.tag:hover{background:#FAFAF8}
+.tag-add{padding:8px 16px;border-radius:6px;border:1px dashed var(--t6);font-size:13px;color:var(--t4);cursor:pointer}
+.tag-add:hover{border-color:var(--blue);color:var(--blue)}
+
+/* Metric Cards */
+.metrics-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.mc-blue{background:var(--blue);border-radius:16px;padding:24px;position:relative;overflow:hidden;min-height:130px}
+.mc-blue .card-label{color:rgba(255,255,255,0.8)}
+.mc-blue-val{font-weight:800;font-size:36px;color:#fff;margin-top:8px}
+.mc-blue-sub{font-size:11px;color:rgba(255,255,255,0.6);margin-top:8px}
+.mc-blue-deco{position:absolute;right:-10px;bottom:-15px;opacity:0.08}
+.mc-blue-deco circle{fill:#fff}
+.mc-white{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:24px}
+.mc-white-val{font-weight:800;font-size:36px;color:var(--t1);margin-top:8px}
+.progress-wrap{margin-top:12px}
+.progress-bar{width:100%;height:6px;border-radius:3px;background:var(--border)}
+.progress-fill{height:100%;border-radius:3px;background:var(--blue)}
+.progress-label{display:flex;justify-content:flex-end;margin-top:4px;font-size:11px;color:var(--t4)}
+
+/* ═══════════════════ FORM ELEMENTS ═══════════════════ */
+.f-label{font-weight:700;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--t2);margin-bottom:8px}
+.f-input{width:100%;height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--border);font-family:inherit;font-size:14px;color:var(--t1);background:var(--white);outline:none;transition:border-color .15s}
+.f-input:focus{border-color:var(--blue)}
+.f-input::placeholder{color:var(--t6)}
+.f-group{margin-top:20px}.f-group:first-child{margin-top:0}
+
+/* ReadOnly with lock */
+.ro{width:100%;min-height:42px;padding:10px 38px 10px 14px;border-radius:8px;background:var(--ro-bg);border:1px solid var(--border-lt);font-size:14px;font-weight:500;color:var(--t1);position:relative;display:flex;align-items:center}
+.ro-lock{position:absolute;right:12px;top:50%;transform:translateY(-50%)}
+.ro-lock svg{width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;gap:10px;margin-top:12px}
+.toggle-track{width:40px;height:22px;border-radius:11px;background:var(--blue);position:relative;cursor:pointer;flex-shrink:0}
+.toggle-track.off{background:var(--border)}
+.toggle-thumb{width:18px;height:18px;border-radius:50%;background:var(--white);position:absolute;top:2px;right:2px;box-shadow:0 1px 3px rgba(0,0,0,0.15);transition:right .15s}
+.toggle-track.off .toggle-thumb{right:auto;left:2px}
+.toggle-label{font-size:13px;font-weight:500;color:var(--t2)}
+
+/* Separator + Section */
+.sep{width:100%;height:1px;background:var(--border);margin-top:24px}
+.sec-label{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-top:24px}
+.sec-opt{font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--t5)}
+
+/* Info box */
+.info-box{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;background:#F0F8FF;border-radius:8px}
+.info-box svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:1px}
+.info-box span{font-size:13px;color:var(--blue);line-height:1.5}
+.info-box strong{font-weight:700}
+
+/* Row */
+.f-row{display:flex;gap:12px;margin-top:16px}.f-row .f-group{flex:1;margin-top:0}
+
+/* Buttons */
+.btn-c{display:inline-flex;align-items:center;justify-content:center;padding:0 20px;height:44px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+.btn-c:hover{background:#FAFAF8}
+.btn-p{display:inline-flex;align-items:center;justify-content:center;padding:0 24px;height:44px;border-radius:8px;border:none;background:var(--blue);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.btn-p:hover{background:#256FA0}
+.btn-sec{display:inline-flex;align-items:center;gap:6px;padding:0 16px;height:40px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+.btn-sec svg{width:16px;height:16px;stroke:var(--t3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.btn-pri{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;border:none;background:var(--blue);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.btn-d{display:inline-flex;align-items:center;justify-content:center;padding:0 24px;height:44px;border-radius:8px;border:none;background:var(--err);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer;min-width:180px}
+.btn-d:hover{background:#C0392B}
+.btn-disabled{opacity:.4;pointer-events:none}
+
+/* ═══════════════════ MODAL ═══════════════════ */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.4);z-index:50;display:flex;align-items:center;justify-content:center}
+.modal{width:480px;background:var(--white);border-radius:16px;padding:32px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+.modal-icon{width:48px;height:48px;border-radius:50%;background:#FFEBEE;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.modal-icon svg{width:24px;height:24px;stroke:var(--err);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.modal-title{font-weight:700;font-size:20px;color:var(--t1);margin-top:16px}
+.modal-desc{font-size:14px;color:var(--t3);margin-top:8px;line-height:1.6;max-width:380px;margin-left:auto;margin-right:auto}
+.modal-desc strong{font-weight:700;color:var(--t1)}
+.warn-box{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#FFF3E0;border-radius:8px;margin-top:20px;text-align:left}
+.warn-box svg{width:16px;height:16px;stroke:var(--warn);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.warn-box span{font-size:13px;color:#B8860B;line-height:1.4}
+.warn-box strong{font-weight:700}
+.modal-btns{display:flex;justify-content:center;gap:12px;margin-top:24px}
+
+/* ═══════════════════ TREE PANEL (para frame 3) ═══════════════════ */
+.tree-panel{width:380px;background:var(--white);border-right:1px solid var(--border);padding:20px;overflow-y:auto;flex-shrink:0}
+.tp-title{font-weight:800;font-size:16px;color:var(--t1)}
+.tp-desc{font-size:12px;color:var(--t4);margin-top:4px}
+.tp-search{position:relative;margin-top:16px}
+.tp-search input{width:100%;height:40px;padding:0 14px 0 38px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:13px;color:var(--t1);outline:none}
+.tp-search input::placeholder{color:var(--t6)}
+.tp-search svg{position:absolute;left:12px;top:12px;width:16px;height:16px;stroke:var(--t6);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tree{margin-top:16px}
+.tree-root{display:flex;align-items:center;gap:8px;padding:4px 0}
+.tree-root svg{width:16px;height:16px;stroke:var(--t4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tree-root-name{font-size:14px;font-weight:700;color:var(--t1)}
+.tree-children{margin-left:24px;margin-top:4px}
+.tree-node{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;cursor:pointer;margin-top:2px}
+.tree-node.selected{background:var(--blue-lt)}
+.tree-node svg{width:16px;height:16px;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tree-node.selected svg{stroke:var(--blue)}
+.tree-node.selected .tn-name{color:var(--blue);font-weight:700}
+.tn-name{font-size:13px;font-weight:500;color:var(--t3)}
+.tn-chevron{width:12px;height:12px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tree-node.selected .tn-chevron{stroke:var(--blue)}
+.tree-leaf{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 44px;margin-top:2px}
+.tree-leaf-dot{width:8px;height:8px;border-radius:50%;background:var(--t4);flex-shrink:0}
+.tree-leaf-name{font-size:13px;color:var(--t3)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     FRAME 1 — EDITAR DADOS
+     Árvore OCULTA ▸ FormPanel no lugar ▸ Detalhe completo visível ao lado
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div class="tag">Frame 1 — 11-OrgForm-Edit · "Editar Dados" aberto</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Estrutura Organizacional</span></nav></div>
+    <div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg>Modelagem</a>
+      </div></div>
+      <div class="sb-foot"><div class="sb-dot"></div><span class="sb-ft">Servidor Online</span></div>
+    </aside>
+
+    <div class="split">
+      <!-- ═══ FORM PANEL: Editar (ocupa espaço da árvore) ═══ -->
+      <div class="form-panel">
+        <div class="fp-header">
+          <div class="fp-back"><svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg></div>
+          <span class="fp-title">Editar Unidade</span>
+          <div class="fp-close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></div>
+        </div>
+        <div class="fp-body">
+          <!-- Campos imutáveis -->
+          <div class="f-group"><div class="f-label">Código</div><div class="ro">UN-0012<div class="ro-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div></div>
+
+          <div class="f-group"><div class="f-label">Nome da unidade</div><input class="f-input" value="A1 Engenharia"/></div>
+
+          <div class="f-group"><div class="f-label">Nível</div><div class="ro">N2 — Regional<div class="ro-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div></div>
+
+          <div class="f-group"><div class="f-label">Unidade pai</div><div class="ro">Grupo A1<div class="ro-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div></div>
+
+          <div class="sep"></div>
+          <div class="sec-label">Dados cadastrais</div>
+
+          <div class="f-group" style="margin-top:16px"><div class="f-label">CNPJ</div><input class="f-input" value="12.345.678/0001-90"/></div>
+          <div class="f-group" style="margin-top:16px"><div class="f-label">Razão Social</div><input class="f-input" value="A1 Engenharia e Construções Civis Ltda"/></div>
+          <div class="f-row">
+            <div class="f-group"><div class="f-label">Filial</div><input class="f-input" value="São Paulo - SP"/></div>
+            <div class="f-group"><div class="f-label">Responsável</div><input class="f-input" value="Marcos Silva"/></div>
+          </div>
+          <div class="f-group" style="margin-top:16px"><div class="f-label">Telefone</div><input class="f-input" value="(11) 3456-7890"/></div>
+          <div class="f-group" style="margin-top:16px"><div class="f-label">E-mail de contato</div><input class="f-input" value="contato@a1engenharia.com.br"/></div>
+
+          <div class="sep"></div>
+          <div class="sec-label">Status</div>
+          <div class="toggle-row">
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            <span class="toggle-label">Ativo</span>
+          </div>
+        </div>
+        <div class="fp-footer">
+          <button class="btn-c">Cancelar</button>
+          <button class="btn-p">Salvar Alterações</button>
+        </div>
+      </div>
+
+      <!-- ═══ DETALHE COMPLETO (visível normalmente, sem overlay) ═══ -->
+      <div class="detail">
+        <!-- Header -->
+        <div class="dh">
+          <div class="dh-left">
+            <div class="dh-icon"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg></div>
+            <div><div class="dh-name">A1 Engenharia</div><div class="dh-meta"><span class="badge-a">ATIVO</span><span class="dh-code">Cód: UN-0012</span></div></div>
+          </div>
+          <div class="dh-right">
+            <button class="btn-sec btn-disabled"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Editar Dados</button>
+            <button class="btn-pri">+ Nova Subdivisão</button>
+          </div>
+        </div>
+        <!-- Dados Cadastrais -->
+        <div class="card">
+          <div class="card-label">Dados cadastrais</div>
+          <div class="ro-row"><div class="ro-field"><div class="ro-lbl">CNPJ</div><div class="ro-val">12.345.678/0001-90</div></div><div class="ro-field"><div class="ro-lbl">Razão Social</div><div class="ro-val">A1 Engenharia e Construções Civis Ltda</div></div></div>
+          <div class="ro-row"><div class="ro-field"><div class="ro-lbl">Filial</div><div class="ro-val">São Paulo - SP</div></div><div class="ro-field"><div class="ro-lbl">Responsável</div><div class="ro-val">Marcos Silva</div></div><div class="ro-field"><div class="ro-lbl">Telefone</div><div class="ro-val">(11) 3456-7890</div></div></div>
+          <div class="ro-row"><div class="ro-field"><div class="ro-lbl">E-mail de contato</div><div class="ro-val">contato@a1engenharia.com.br</div></div></div>
+        </div>
+        <!-- Departamentos -->
+        <div class="card">
+          <div class="tags-header"><div class="card-label">Departamentos vinculados</div><a class="tags-link">Ver todos (12)</a></div>
+          <div class="tags-wrap"><span class="tag">Diretoria</span><span class="tag">Engenharia Civil</span><span class="tag">Projetos Especiais</span><span class="tag">Recursos Humanos</span><span class="tag">Jurídico</span><span class="tag-add">+ Novo Departamento</span></div>
+        </div>
+        <!-- Metric Cards -->
+        <div class="metrics-row">
+          <div class="mc-blue"><div class="card-label">Colaboradores totais</div><div class="mc-blue-val">156</div><div class="mc-blue-sub">14 novos nos últimos 30 dias</div><svg class="mc-blue-deco" viewBox="0 0 120 120" width="100" height="100"><circle cx="40" cy="60" r="35"/><circle cx="80" cy="60" r="35"/></svg></div>
+          <div class="mc-white"><div class="card-label">Projetos em execução</div><div class="mc-white-val">28</div><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div><div class="progress-label">70% Meta</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     FRAME 2 — NOVA SUBDIVISÃO
+     Árvore OCULTA ▸ FormPanel no lugar ▸ Detalhe completo visível ao lado
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div class="tag">Frame 2 — 11-OrgForm-Create · "Nova Subdivisão" aberto</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Estrutura Organizacional</span></nav></div>
+    <div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg>Modelagem</a>
+      </div></div>
+      <div class="sb-foot"><div class="sb-dot"></div><span class="sb-ft">Servidor Online</span></div>
+    </aside>
+
+    <div class="split">
+      <!-- ═══ FORM PANEL: Nova Subdivisão ═══ -->
+      <div class="form-panel">
+        <div class="fp-header">
+          <div class="fp-back"><svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg></div>
+          <span class="fp-title">Nova Subdivisão</span>
+          <div class="fp-close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></div>
+        </div>
+        <div class="fp-body">
+          <div class="info-box">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <span>A nova subdivisão será criada como filha de <strong>A1 Engenharia</strong> (N2).</span>
+          </div>
+
+          <div class="f-group" style="margin-top:20px"><div class="f-label">Unidade pai</div><div class="ro">A1 Engenharia<div class="ro-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div></div>
+
+          <div class="f-group"><div class="f-label">Nível</div><div class="ro">N3 — Unidade<div class="ro-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div></div>
+
+          <div class="f-group"><div class="f-label">Nome da subdivisão</div><input class="f-input" placeholder="Nome da nova unidade"/></div>
+
+          <div class="sep"></div>
+          <div class="sec-label">Dados cadastrais <span class="sec-opt">(opcional)</span></div>
+
+          <div class="f-group" style="margin-top:16px"><div class="f-label">CNPJ</div><input class="f-input" placeholder="00.000.000/0000-00"/></div>
+          <div class="f-group" style="margin-top:16px"><div class="f-label">Razão Social</div><input class="f-input" placeholder="Razão social da unidade"/></div>
+          <div class="f-group" style="margin-top:16px"><div class="f-label">Responsável</div><input class="f-input" placeholder="Nome do responsável"/></div>
+        </div>
+        <div class="fp-footer">
+          <button class="btn-c">Cancelar</button>
+          <button class="btn-p">Criar Subdivisão</button>
+        </div>
+      </div>
+
+      <!-- ═══ DETALHE COMPLETO ═══ -->
+      <div class="detail">
+        <div class="dh">
+          <div class="dh-left">
+            <div class="dh-icon"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg></div>
+            <div><div class="dh-name">A1 Engenharia</div><div class="dh-meta"><span class="badge-a">ATIVO</span><span class="dh-code">Cód: UN-0012</span></div></div>
+          </div>
+          <div class="dh-right">
+            <button class="btn-sec"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Editar Dados</button>
+            <button class="btn-pri btn-disabled">+ Nova Subdivisão</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Dados cadastrais</div>
+          <div class="ro-row"><div class="ro-field"><div class="ro-lbl">CNPJ</div><div class="ro-val">12.345.678/0001-90</div></div><div class="ro-field"><div class="ro-lbl">Razão Social</div><div class="ro-val">A1 Engenharia e Construções Civis Ltda</div></div></div>
+          <div class="ro-row"><div class="ro-field"><div class="ro-lbl">Filial</div><div class="ro-val">São Paulo - SP</div></div><div class="ro-field"><div class="ro-lbl">Responsável</div><div class="ro-val">Marcos Silva</div></div><div class="ro-field"><div class="ro-lbl">Telefone</div><div class="ro-val">(11) 3456-7890</div></div></div>
+          <div class="ro-row"><div class="ro-field"><div class="ro-lbl">E-mail de contato</div><div class="ro-val">contato@a1engenharia.com.br</div></div></div>
+        </div>
+        <div class="card">
+          <div class="tags-header"><div class="card-label">Departamentos vinculados</div><a class="tags-link">Ver todos (12)</a></div>
+          <div class="tags-wrap"><span class="tag">Diretoria</span><span class="tag">Engenharia Civil</span><span class="tag">Projetos Especiais</span><span class="tag">Recursos Humanos</span><span class="tag">Jurídico</span><span class="tag-add">+ Novo Departamento</span></div>
+        </div>
+        <div class="metrics-row">
+          <div class="mc-blue"><div class="card-label">Colaboradores totais</div><div class="mc-blue-val">156</div><div class="mc-blue-sub">14 novos nos últimos 30 dias</div><svg class="mc-blue-deco" viewBox="0 0 120 120" width="100" height="100"><circle cx="40" cy="60" r="35"/><circle cx="80" cy="60" r="35"/></svg></div>
+          <div class="mc-white"><div class="card-label">Projetos em execução</div><div class="mc-white-val">28</div><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div><div class="progress-label">70% Meta</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     FRAME 3 — DESATIVAR (Modal)
+     Árvore + Detalhe visíveis por trás · Modal centrado com overlay
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div class="tag">Frame 3 — 11-OrgForm-Deactivate · Modal "Desativar Unidade?"</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Estrutura Organizacional</span></nav></div>
+    <div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg>Modelagem</a>
+      </div></div>
+      <div class="sb-foot"><div class="sb-dot"></div><span class="sb-ft">Servidor Online</span></div>
+    </aside>
+
+    <div class="split" style="position:relative">
+      <!-- ═══ ÁRVORE (visível por trás) ═══ -->
+      <div class="tree-panel">
+        <div class="tp-title">Estrutura de Unidades</div>
+        <div class="tp-desc">Navegue pela hierarquia do grupo</div>
+        <div class="tp-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="Buscar unidade ou depto..."/></div>
+        <div class="tree">
+          <div class="tree-root">
+            <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--t4);fill:none;stroke-width:2"><path d="M15 18l-6-6 6-6"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+            <span class="tree-root-name">Grupo A1</span>
+          </div>
+          <div class="tree-children">
+            <div class="tree-node selected">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+              <span class="tn-name">A1 Engenharia</span>
+            </div>
+            <div class="tree-leaf"><div class="tree-leaf-dot"></div><span class="tree-leaf-name">Diretoria</span></div>
+            <div class="tree-leaf"><div class="tree-leaf-dot"></div><span class="tree-leaf-name">Engenharia Civil</span></div>
+            <div class="tree-leaf"><div class="tree-leaf-dot"></div><span class="tree-leaf-name">Projetos Especiais</span></div>
+            <div class="tree-node" style="margin-top:8px">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+              <span class="tn-name">A1 Industrial</span>
+            </div>
+            <div class="tree-node" style="margin-top:2px">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+              <span class="tn-name">A1 Energia</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ DETALHE (visível por trás) ═══ -->
+      <div class="detail">
+        <div class="dh">
+          <div class="dh-left">
+            <div class="dh-icon"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg></div>
+            <div><div class="dh-name">A1 Engenharia</div><div class="dh-meta"><span class="badge-a">ATIVO</span><span class="dh-code">Cód: UN-0012</span></div></div>
+          </div>
+          <div class="dh-right">
+            <button class="btn-sec"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Editar Dados</button>
+            <button class="btn-pri">+ Nova Subdivisão</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Dados cadastrais</div>
+          <div class="ro-row"><div class="ro-field"><div class="ro-lbl">CNPJ</div><div class="ro-val">12.345.678/0001-90</div></div><div class="ro-field"><div class="ro-lbl">Razão Social</div><div class="ro-val">A1 Engenharia e Construções Civis Ltda</div></div></div>
+        </div>
+      </div>
+
+      <!-- ═══ MODAL CENTRADO ═══ -->
+      <div class="modal-overlay">
+        <div class="modal">
+          <div class="modal-icon"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+          <div class="modal-title">Desativar unidade?</div>
+          <div class="modal-desc">A unidade <strong>A1 Engenharia</strong> será desativada. Todas as subdivisões vinculadas também serão afetadas. Você poderá restaurá-la posteriormente.</div>
+          <div class="warn-box"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span><strong>3 subdivisões</strong> e <strong>156 colaboradores</strong> serão impactados.</span></div>
+          <div class="modal-btns">
+            <button class="btn-c" style="min-width:180px">Cancelar</button>
+            <button class="btn-d">Desativar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -13,6 +13,8 @@ route: "/aprovacoes"
 auth_required: true
 pre_auth: false
 layout: shell
+visual_spec: "docs/03_especificacoes/ux/30-movements-spec.md"
+visual_ref: "docs/03_especificacoes/ux/30-movements-ref.html"
 
 linked_stories:
   - "US-MOD-009"

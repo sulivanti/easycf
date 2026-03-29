@@ -18,6 +18,8 @@ module: "MOD-002"
 route: "/usuarios/novo"
 auth_required: true
 layout: shell
+visual_spec: "docs/03_especificacoes/ux/06-user-form-spec.md"
+visual_ref: "docs/03_especificacoes/ux/06-user-form-ref.html"
 
 linked_stories:
   - "US-MOD-002"

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>01-Login — Referência Visual v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --blue: #2E86C1;
+  --blue-hover: #256FA0;
+  --accent: #F58C32;
+  --accent-grad: #F5A04E;
+  --black: #111111;
+  --bg-page: #F5F5F3;
+  --bg-card: #FFFFFF;
+  --border: #E8E8E6;
+  --t1: #111111;
+  --t2: #333333;
+  --t3: #555555;
+  --t4: #888888;
+  --t5: #AAAAAA;
+  --t6: #CCCCCC;
+  --error: #E74C3C;
+  --success: #27AE60;
+  --success-bg: #E8F8EF;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: #888;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 80px; padding: 60px 40px;
+}
+.tag { font-size:11px; font-weight:700; color:#444; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:12px; text-align:center; }
+
+/* ═══ FRAME ═══ */
+.frame { width:1440px; height:900px; display:flex; overflow:hidden; box-shadow:0 12px 60px rgba(0,0,0,0.25); flex-shrink:0; }
+
+/* ─── BRANDING ─── */
+.br { width:604px; height:900px; flex-shrink:0; background:linear-gradient(175deg,#1a2318 0%,#151a14 40%,var(--black) 100%); display:flex; flex-direction:column; padding:40px 56px; position:relative; }
+.br::before { content:''; position:absolute; top:-100px; right:-100px; width:360px; height:360px; background:radial-gradient(circle,rgba(245,140,50,0.05) 0%,transparent 70%); pointer-events:none; }
+.logo { display:flex; align-items:center; gap:12px; }
+.logo-i { width:44px; height:44px; background:linear-gradient(135deg,var(--accent-grad),var(--accent)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-style:italic; font-weight:800; font-size:18px; color:#fff; box-shadow:0 4px 16px rgba(245,140,50,0.25); }
+.logo-t .n { font-weight:700; font-size:15px; line-height:18px; color:#fff; }
+.logo-t .s { font-weight:500; font-size:10px; line-height:12px; color:rgba(255,255,255,0.35); letter-spacing:1.6px; text-transform:uppercase; }
+.tl-block { margin:auto 0; }
+.tl { font-weight:800; font-size:42px; line-height:47px; letter-spacing:-1.2px; font-style:italic; color:#fff; }
+.tl-desc { margin-top:20px; font-weight:400; font-size:14px; line-height:23px; color:rgba(255,255,255,0.45); max-width:380px; }
+.acc-bar { margin-top:28px; width:56px; height:4px; background:var(--accent); border-radius:2px; }
+.br-foot { margin-top:auto; }
+.u-label { font-weight:700; font-size:9px; line-height:12px; letter-spacing:1.4px; text-transform:uppercase; color:rgba(255,255,255,0.25); margin-bottom:12px; }
+.pills { display:flex; gap:8px; margin-bottom:18px; }
+.pill { padding:6px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.12); font-size:12px; font-weight:500; color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.03); }
+.copy { font-size:11px; line-height:14px; color:rgba(255,255,255,0.2); }
+
+/* ─── FORM PANEL ─── */
+.fp { flex:1; background:var(--bg-page); display:flex; align-items:center; justify-content:center; }
+
+/* ─── CARD ─── */
+.card { width:420px; background:var(--bg-card); border-radius:16px; border:1px solid var(--border); padding:44px 40px 36px; }
+.c-title { font-weight:800; font-size:24px; line-height:30px; letter-spacing:-0.5px; color:var(--t1); }
+.c-sub { font-weight:400; font-size:14px; line-height:20px; color:var(--t4); margin-top:6px; }
+
+/* Fields */
+.fld { margin-top:28px; }
+.fld+.fld { margin-top:20px; }
+.fld-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.fld-lbl { font-weight:700; font-size:11px; line-height:14px; letter-spacing:0.8px; text-transform:uppercase; color:var(--t2); }
+.fld-link { font-size:12px; font-weight:600; line-height:16px; color:var(--accent); text-decoration:none; }
+.iw { position:relative; display:flex; align-items:center; }
+.iw .il { position:absolute; left:14px; width:18px; height:18px; stroke:var(--t6); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; pointer-events:none; }
+.iw .ir { position:absolute; right:14px; width:18px; height:18px; stroke:var(--t5); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; cursor:pointer; }
+.inp { width:100%; height:48px; padding:0 14px 0 44px; border-radius:10px; border:1px solid var(--border); font-family:inherit; font-size:14px; font-weight:400; color:var(--t1); background:var(--bg-card); outline:none; }
+.inp::placeholder { color:var(--t6); }
+.inp.pr { padding-right:44px; }
+
+/* Checkbox */
+.chk { display:flex; align-items:center; gap:8px; margin-top:16px; cursor:pointer; }
+.chk-box { width:16px; height:16px; border-radius:3px; border:1.5px solid var(--border); background:var(--bg-card); flex-shrink:0; }
+.chk-txt { font-size:13px; font-weight:400; color:var(--t3); }
+
+/* Botão Entrar — AZUL */
+.btn-enter { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:50px; margin-top:20px; border:none; border-radius:10px; cursor:pointer; background:var(--blue); color:#fff; font-family:inherit; font-weight:700; font-size:15px; }
+.btn-enter:hover { background:var(--blue-hover); }
+.btn-enter svg { width:18px; height:18px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* Divider */
+.div { display:flex; align-items:center; gap:16px; margin-top:24px; }
+.div-ln { flex:1; height:1px; background:var(--border); }
+.div-tx { font-size:11px; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:var(--t5); white-space:nowrap; }
+
+/* Microsoft */
+.btn-ms { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; height:48px; margin-top:24px; border:1px solid var(--border); border-radius:10px; background:var(--bg-card); cursor:pointer; font-family:inherit; font-weight:600; font-size:14px; color:var(--t2); }
+.ms-logo { display:grid; grid-template-columns:8px 8px; gap:2px; width:18px; height:18px; }
+.ms-logo span { display:block; }
+.mr { background:#F25022; } .mg { background:#7FBA00; } .mb { background:#00A4EF; } .my { background:#FFB900; }
+
+/* First access */
+.fa { text-align:center; margin-top:20px; font-size:13px; color:var(--t4); }
+.fa strong { font-weight:700; color:var(--t2); }
+
+/* Footer */
+.cf { display:flex; justify-content:space-between; margin-top:28px; padding-top:20px; border-top:1px solid var(--border); }
+.fl { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:var(--t5); text-decoration:none; }
+.fl svg { width:14px; height:14px; stroke:var(--t5); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+
+/* Forgot/Reset */
+.back { display:inline-flex; align-items:center; gap:4px; font-size:13px; font-weight:600; color:var(--t4); text-decoration:none; margin-bottom:20px; }
+.back svg { width:16px; height:16px; stroke:var(--t4); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.btn-blue { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:50px; margin-top:20px; border:none; border-radius:10px; cursor:pointer; background:var(--blue); color:#fff; font-family:inherit; font-weight:700; font-size:15px; }
+.btn-blue svg { width:18px; height:18px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.suc { margin-top:16px; padding:14px 16px; background:var(--success-bg); border:1px solid #B5E8C9; border-radius:8px; font-size:13px; line-height:1.5; color:#1E7A42; }
+.str-bars { display:flex; gap:4px; margin-top:10px; }
+.sb { flex:1; height:3px; border-radius:2px; background:var(--border); }
+.sb.w { background:var(--error); } .sb.m { background:#E67E22; }
+.str-lbl { font-size:11px; margin-top:6px; color:var(--t5); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     FRAME 1: 01-Login
+     ═══════════════════════════════════════════ -->
+<div class="tag">01-Login — Estado Principal (1440×900)</div>
+<div class="frame">
+  <aside class="br">
+    <div class="logo"><div class="logo-i">A1</div><div class="logo-t"><div class="n">Grupo A1</div><div class="s">PORTAL INTERNO</div></div></div>
+    <div class="tl-block">
+      <div class="tl">Soluções<br>para a<br>indústria.</div>
+      <p class="tl-desc">Plataforma de gestão de processos, aprovações e integração com Protheus — desenvolvida para o Grupo A1.</p>
+      <div class="acc-bar"></div>
+    </div>
+    <div class="br-foot">
+      <div class="u-label">UNIDADES DO GRUPO</div>
+      <div class="pills"><span class="pill">Engenharia</span><span class="pill">Industrial</span><span class="pill">Energia</span><span class="pill">Agro</span></div>
+      <div class="copy">© 2026 Grupo A1 · Todos os direitos reservados</div>
+    </div>
+  </aside>
+  <main class="fp">
+    <div class="card">
+      <h2 class="c-title">Bem-vindo de volta</h2>
+      <p class="c-sub">Acesse o portal do Grupo A1</p>
+
+      <div class="fld">
+        <div class="fld-row"><label class="fld-lbl">E-mail corporativo</label></div>
+        <div class="iw">
+          <svg class="il" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+          <input class="inp" placeholder="seu@grupoa1.com.br"/>
+        </div>
+      </div>
+
+      <div class="fld">
+        <div class="fld-row">
+          <label class="fld-lbl">Senha</label>
+          <a href="#" class="fld-link">Esqueci minha senha</a>
+        </div>
+        <div class="iw">
+          <svg class="il" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input class="inp pr" type="password" placeholder="Digite sua senha"/>
+          <svg class="ir" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+      </div>
+
+      <label class="chk">
+        <div class="chk-box"></div>
+        <span class="chk-txt">Manter conectado</span>
+      </label>
+
+      <button class="btn-enter">
+        <span>Entrar</span>
+        <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+
+      <div class="div">
+        <div class="div-ln"></div>
+        <span class="div-tx">ou continue com</span>
+        <div class="div-ln"></div>
+      </div>
+
+      <button class="btn-ms">
+        <div class="ms-logo"><span class="mr"></span><span class="mg"></span><span class="mb"></span><span class="my"></span></div>
+        <span>Entrar com Microsoft</span>
+      </button>
+
+      <p class="fa">Primeiro acesso? <strong>Solicite ao administrador</strong></p>
+
+      <div class="cf">
+        <a href="#" class="fl"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Conexão segura (TLS)</a>
+        <a href="#" class="fl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>Suporte</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FRAME 2: 01-Login-Forgot
+     ═══════════════════════════════════════════ -->
+<div class="tag">01-Login-Forgot (1440×900)</div>
+<div class="frame">
+  <aside class="br">
+    <div class="logo"><div class="logo-i">A1</div><div class="logo-t"><div class="n">Grupo A1</div><div class="s">PORTAL INTERNO</div></div></div>
+    <div class="tl-block"><div class="tl">Soluções<br>para a<br>indústria.</div><p class="tl-desc">Plataforma de gestão de processos, aprovações e integração com Protheus — desenvolvida para o Grupo A1.</p><div class="acc-bar"></div></div>
+    <div class="br-foot"><div class="u-label">UNIDADES DO GRUPO</div><div class="pills"><span class="pill">Engenharia</span><span class="pill">Industrial</span><span class="pill">Energia</span><span class="pill">Agro</span></div><div class="copy">© 2026 Grupo A1 · Todos os direitos reservados</div></div>
+  </aside>
+  <main class="fp">
+    <div class="card">
+      <a href="#" class="back"><svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Voltar ao login</a>
+      <h2 class="c-title">Esqueceu a senha?</h2>
+      <p class="c-sub">Informe seu e-mail corporativo e enviaremos um link para redefinição.</p>
+      <div class="fld">
+        <div class="fld-row"><label class="fld-lbl">E-mail corporativo</label></div>
+        <div class="iw">
+          <svg class="il" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+          <input class="inp" placeholder="seu@grupoa1.com.br"/>
+        </div>
+      </div>
+      <button class="btn-blue"><span>Enviar link</span><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+      <div class="suc">Se o e-mail estiver cadastrado, você receberá um link de redefinição em instantes. Verifique sua caixa de entrada e spam.</div>
+      <div class="cf">
+        <a href="#" class="fl"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Conexão segura (TLS)</a>
+        <a href="#" class="fl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>Suporte</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FRAME 3: 01-Login-Reset
+     ═══════════════════════════════════════════ -->
+<div class="tag">01-Login-Reset (1440×900)</div>
+<div class="frame">
+  <aside class="br">
+    <div class="logo"><div class="logo-i">A1</div><div class="logo-t"><div class="n">Grupo A1</div><div class="s">PORTAL INTERNO</div></div></div>
+    <div class="tl-block"><div class="tl">Soluções<br>para a<br>indústria.</div><p class="tl-desc">Plataforma de gestão de processos, aprovações e integração com Protheus — desenvolvida para o Grupo A1.</p><div class="acc-bar"></div></div>
+    <div class="br-foot"><div class="u-label">UNIDADES DO GRUPO</div><div class="pills"><span class="pill">Engenharia</span><span class="pill">Industrial</span><span class="pill">Energia</span><span class="pill">Agro</span></div><div class="copy">© 2026 Grupo A1 · Todos os direitos reservados</div></div>
+  </aside>
+  <main class="fp">
+    <div class="card">
+      <a href="#" class="back"><svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Voltar ao login</a>
+      <h2 class="c-title">Redefinir senha</h2>
+      <p class="c-sub">Crie uma nova senha segura para sua conta.</p>
+      <div class="fld">
+        <div class="fld-row"><label class="fld-lbl">Nova senha</label></div>
+        <div class="iw">
+          <svg class="il" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input class="inp pr" type="password" placeholder="Mínimo 8 caracteres"/>
+          <svg class="ir" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div class="str-bars"><div class="sb w"></div><div class="sb m"></div><div class="sb m"></div><div class="sb"></div></div>
+        <div class="str-lbl">Razoável</div>
+      </div>
+      <div class="fld">
+        <div class="fld-row"><label class="fld-lbl">Confirmar senha</label></div>
+        <div class="iw">
+          <svg class="il" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input class="inp" type="password" placeholder="Repita a nova senha"/>
+        </div>
+      </div>
+      <button class="btn-blue"><span>Redefinir</span><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+      <div class="cf">
+        <a href="#" class="fl"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Conexão segura (TLS)</a>
+        <a href="#" class="fl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>Suporte</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

@@ -18,6 +18,8 @@ module: "MOD-002"
 route: "/usuarios"
 auth_required: true
 layout: shell
+visual_spec: "docs/03_especificacoes/ux/05-users-list-spec.md"
+visual_ref: "docs/03_especificacoes/ux/05-users-list-ref.html"
 
 linked_stories:
   - "US-MOD-002"

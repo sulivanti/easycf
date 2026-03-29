@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ECF — MOD-009 Aprovação (Referência Completa — 8 Views)</title>
+
+<style>
+  body { background:#f8fafc; color:#1e293b; }
+  .tabular-nums { font-variant-numeric: tabular-nums; }
+  .custom-scroll::-webkit-scrollbar { height:6px; width:6px; }
+  .custom-scroll::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:10px; }
+  [data-view] { display:none; }
+  [data-view].active { display:block; }
+  .fade-in { animation: fadeIn .2s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+  .timeline-dot { position:relative; }
+  .timeline-dot::before { content:''; position:absolute; left:15px; top:32px; bottom:-8px; width:2px; background:#e2e8f0; }
+  .timeline-dot:last-child::before { display:none; }
+  .chain-level:not(:last-child)::after { content:''; display:block; width:2px; height:20px; background:#e2e8f0; margin:0 auto; }
+  .expand-row { display:none; }
+  .expand-row.open { display:table-row; }
+</style>
+<style>
+
+/* ═══ RESET & BASE ═══ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;tab-size:4}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;line-height:1.5;background:#f8fafc;color:#1e293b;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+button,input,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none}
+a{color:inherit;text-decoration:none}
+table{border-collapse:collapse;border-spacing:0}
+img,svg{display:block;max-width:100%}
+hr{border:none;border-top:1px solid #E8E8E6}
+input[type="checkbox"]{accent-color:#2E86C1;width:16px;height:16px;border-radius:4px}
+
+/* ═══ DESIGN TOKENS ═══ */
+:root{
+  --ecf-primary:#2E86C1;--ecf-primary-hover:#2574A9;--ecf-dark:#111111;
+  --ecf-success:#16a34a;--ecf-success-bg:#f0fdf4;--ecf-danger:#dc2626;--ecf-danger-bg:#fef2f2;
+  --ecf-warning:#ca8a04;--ecf-warning-bg:#fefce8;--ecf-info:#2563eb;--ecf-info-bg:#eff6ff;
+  --ecf-bg:#f8fafc;--ecf-border:#E8E8E6;--ecf-text:#1e293b;--ecf-text-aux:#64748b;--ecf-active-bg:#E3F2FD;
+}
+
+/* ═══ LAYOUT ═══ */
+.flex{display:flex}.flex-1{flex:1 1 0%}.flex-col{flex-direction:column}
+.inline-flex{display:inline-flex}.grid{display:grid}.block{display:block}.hidden{display:none}
+.items-center{align-items:center}.items-start{align-items:flex-start}.items-end{align-items:flex-end}
+.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}
+.shrink-0{flex-shrink:0}.min-h-screen{min-height:100vh}.overflow-hidden{overflow:hidden}
+.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}
+.relative{position:relative}.absolute{position:absolute}.fixed{position:fixed}.sticky{position:sticky}
+.top-0{top:0}.top-20{top:5rem}.top-1\/2{top:50%}.left-3{left:0.75rem}.right-4{right:1rem}.bottom-4{bottom:1rem}
+.-translate-y-1\/2{transform:translateY(-50%)}
+.z-50{z-index:50}.z-\[100\]{z-index:100}
+.w-3{width:0.75rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}
+.w-7{width:1.75rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-10{width:2.5rem}
+.w-36{width:9rem}.w-40{width:10rem}.w-60{width:15rem}.w-64{width:16rem}.w-full{width:100%}
+.h-3{height:0.75rem}.h-3\.5{height:0.875rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}
+.h-7{height:1.75rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-10{height:2.5rem}.h-14{height:3.5rem}
+.max-w-xs{max-width:20rem}.max-w-\[200px\]{max-width:200px}
+
+/* ═══ GRID ═══ */
+.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* ═══ GAPS ═══ */
+.gap-0\.5{gap:0.125rem}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}
+
+/* ═══ SPACING ═══ */
+.p-1{padding:0.25rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}
+.px-0\.5{padding-left:0.125rem;padding-right:0.125rem}
+.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}
+.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}
+.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}
+.px-6{padding-left:1.5rem;padding-right:1.5rem}
+.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}
+.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}
+.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}
+.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}
+.pl-10{padding-left:2.5rem}.pr-4{padding-right:1rem}.pt-3{padding-top:0.75rem}.pt-4{padding-top:1rem}.pb-6{padding-bottom:1.5rem}
+.m-0{margin:0}.mb-1{margin-bottom:0.25rem}.mb-1\.5{margin-bottom:0.375rem}.mb-2{margin-bottom:0.5rem}
+.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}
+.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}
+.ml-6{margin-left:1.5rem}.mx-auto{margin-left:auto;margin-right:auto}.my-4{margin-top:1rem;margin-bottom:1rem}
+
+/* ═══ SPACE-Y ═══ */
+.space-y-0>*+*{margin-top:0}.space-y-1>*+*{margin-top:0.25rem}.space-y-3>*+*{margin-top:0.75rem}
+.space-y-4>*+*{margin-top:1rem}.space-y-6>*+*{margin-top:1.5rem}
+
+/* ═══ DIVIDE ═══ */
+.divide-y>*+*{border-top:1px solid var(--ecf-border)}
+.divide-ecf-border>*+*{border-color:var(--ecf-border)}
+
+/* ═══ TYPOGRAPHY ═══ */
+.text-\[9px\]{font-size:9px}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}
+.text-xs{font-size:0.75rem;line-height:1rem}.text-sm{font-size:0.875rem;line-height:1.25rem}
+.text-xl{font-size:1.25rem;line-height:1.75rem}.text-2xl{font-size:1.5rem;line-height:2rem}
+.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.font-extrabold{font-weight:800}
+.italic{font-style:italic}.uppercase{text-transform:uppercase}
+.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}
+.leading-tight{line-height:1.25}.leading-relaxed{line-height:1.625}
+.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}
+.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tabular-nums{font-variant-numeric:tabular-nums}
+
+/* ═══ COLORS ═══ */
+.text-white{color:#fff}.text-ecf-text{color:#1e293b}.text-ecf-text-aux{color:#64748b}
+.text-ecf-primary{color:#2E86C1}.text-ecf-border{color:#E8E8E6}
+.text-ecf-success{color:#16a34a}.text-ecf-danger{color:#dc2626}.text-ecf-warning{color:#ca8a04}.text-ecf-info{color:#2563eb}
+.text-slate-400{color:#94a3b8}.text-slate-500{color:#64748b}
+.text-amber-600{color:#d97706}.text-amber-700{color:#b45309}.text-amber-800{color:#92400e}
+.text-emerald-600{color:#059669}.text-emerald-700{color:#047857}.text-emerald-800{color:#065f46}
+.text-blue-700{color:#1d4ed8}.text-blue-800{color:#1e40af}
+.text-red-700{color:#b91c1c}.text-purple-700{color:#7e22ce}
+
+.bg-white{background:#fff}.bg-ecf-primary{background:#2E86C1}.bg-ecf-dark{background:#111}
+.bg-ecf-success{background:#16a34a}.bg-ecf-success-bg{background:#f0fdf4}
+.bg-ecf-danger{background:#dc2626}.bg-ecf-danger-bg{background:#fef2f2}
+.bg-ecf-warning{background:#ca8a04}.bg-ecf-warning-bg{background:#fefce8}
+.bg-ecf-info-bg{background:#eff6ff}.bg-ecf-active-bg{background:#E3F2FD}
+.bg-slate-50{background:#f8fafc}.bg-slate-50\/50{background:rgba(248,250,252,.5)}
+.bg-slate-100{background:#f1f5f9}.bg-slate-200{background:#e2e8f0}.bg-slate-300{background:#cbd5e1}.bg-slate-400{background:#94a3b8}
+.bg-amber-50{background:#fffbeb}.bg-amber-100{background:#fef3c7}.bg-amber-500{background:#f59e0b}
+.bg-emerald-100{background:#d1fae5}.bg-emerald-500{background:#10b981}
+.bg-blue-100{background:#dbeafe}.bg-blue-500{background:#3b82f6}
+.bg-red-100{background:#fee2e2}.bg-red-500{background:#ef4444}
+.bg-purple-100{background:#f3e8ff}
+.bg-yellow-200{background:#fef08a}.bg-yellow-50\/30{background:rgba(254,252,232,.3)}
+
+/* ═══ BORDERS ═══ */
+.border{border:1px solid var(--ecf-border)}.border-2{border:2px solid var(--ecf-border)}
+.border-ecf-border{border-color:#E8E8E6}.border-ecf-primary{border-color:#2E86C1}
+.border-ecf-success{border-color:#16a34a}.border-ecf-danger{border-color:#dc2626}
+.border-b{border-bottom:1px solid var(--ecf-border)}.border-b-2{border-bottom:2px solid}
+.border-r{border-right:1px solid var(--ecf-border)}.border-t{border-top:1px solid var(--ecf-border)}
+.border-transparent{border-color:transparent}.border-dashed{border-style:dashed}
+.border-amber-200{border-color:#fde68a}.border-blue-200{border-color:#bfdbfe}
+.border-emerald-200{border-color:#a7f3d0}.border-slate-200{border-color:#e2e8f0}
+.border-collapse{border-collapse:collapse}
+.rounded{border-radius:0.25rem}.rounded-md{border-radius:0.375rem}.rounded-lg{border-radius:0.5rem}.rounded-full{border-radius:9999px}
+
+/* ═══ RINGS ═══ */
+.ring-1{box-shadow:0 0 0 1px var(--tw-ring-color,rgba(0,0,0,.1))}
+.ring-2{box-shadow:0 0 0 2px var(--tw-ring-color,rgba(0,0,0,.1))}
+.ring-offset-2{--tw-ring-offset-width:2px}
+.ring-transparent{--tw-ring-color:transparent}
+.ring-amber-200{--tw-ring-color:#fde68a}.ring-amber-300{--tw-ring-color:#fcd34d}
+.ring-emerald-200{--tw-ring-color:#a7f3d0}.ring-emerald-300{--tw-ring-color:#6ee7b7}
+.ring-blue-200{--tw-ring-color:#bfdbfe}.ring-red-200{--tw-ring-color:#fecaca}
+.ring-purple-200{--tw-ring-color:#e9d5ff}.ring-slate-200{--tw-ring-color:#e2e8f0}
+.ring-1,.ring-2{box-shadow:0 0 0 var(--tw-ring-offset-width,0) #fff, 0 0 0 calc(var(--tw-ring-width,1px) + var(--tw-ring-offset-width,0)) var(--tw-ring-color,rgba(0,0,0,.1))}
+.ring-1{--tw-ring-width:1px}.ring-2{--tw-ring-width:2px}
+
+/* ═══ SHADOWS ═══ */
+.shadow-sm{box-shadow:0 1px 2px rgba(0,0,0,.05)}.shadow-2xl{box-shadow:0 25px 50px -12px rgba(0,0,0,.25)}
+
+/* ═══ OPACITY ═══ */
+.opacity-20{opacity:.2}.opacity-30{opacity:.3}.opacity-40{opacity:.4}.opacity-60{opacity:.6}.opacity-70{opacity:.7}
+
+/* ═══ TRANSITIONS ═══ */
+.transition-colors{transition:color .15s,background-color .15s,border-color .15s}
+.transition-all{transition:all .15s}.transition-transform{transition:transform .15s}
+.cursor-pointer{cursor:pointer}.resize-none{resize:none}.outline-none{outline:none}
+.antialiased{-webkit-font-smoothing:antialiased}
+
+/* ═══ HOVER ═══ */
+.hover\:bg-slate-50:hover{background:#f8fafc}.hover\:bg-blue-50:hover{background:#eff6ff}
+.hover\:bg-green-50:hover{background:#f0fdf4}.hover\:bg-red-50:hover{background:#fef2f2}
+.hover\:bg-ecf-primary-hover:hover{background:#2574A9}
+.hover\:bg-green-700:hover{background:#15803d}.hover\:bg-red-700:hover{background:#b91c1c}
+.hover\:bg-yellow-700:hover{background:#a16207}
+.hover\:bg-white\/10:hover{background:rgba(255,255,255,.1)}
+.hover\:border-ecf-primary\/40:hover{border-color:rgba(46,134,193,.4)}
+.hover\:text-ecf-primary:hover{color:#2E86C1}.hover\:text-ecf-text:hover{color:#1e293b}.hover\:text-white:hover{color:#fff}
+.hover\:underline:hover{text-decoration:underline}
+.hover\:ring-ecf-primary:hover{--tw-ring-color:#2E86C1}
+
+/* ═══ DISABLED ═══ */
+.disabled\:opacity-50:disabled{opacity:.5}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}
+
+/* ═══ FOCUS ═══ */
+.focus\:ring-2:focus{box-shadow:0 0 0 2px rgba(46,134,193,.2)}
+.focus\:ring-ecf-primary\/20:focus{--tw-ring-color:rgba(46,134,193,.2)}
+.focus\:ring-ecf-primary:focus{--tw-ring-color:#2E86C1}
+.focus\:border-ecf-primary:focus{border-color:#2E86C1}
+
+/* ═══ ANIMATION ═══ */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}
+
+/* ═══ RESPONSIVE ═══ */
+@media(min-width:640px){.sm\:flex{display:flex}.sm\:block{display:block}}
+@media(min-width:768px){.md\:block{display:block}.md\:p-8{padding:2rem}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.lg\:flex{display:flex}}
+@media(min-width:1280px){.xl\:flex-row{flex-direction:row}.xl\:items-center{align-items:center}.xl\:items-end{align-items:flex-end}.xl\:border-none{border:none}.xl\:col-span-1{grid-column:span 1/span 1}.xl\:col-span-2{grid-column:span 2/span 2}.xl\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.xl\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* ═══ CUSTOM (from original) ═══ */
+[data-view]{display:none}[data-view].active{display:block}
+.fade-in{animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.timeline-dot{position:relative}
+.timeline-dot::before{content:'';position:absolute;left:15px;top:32px;bottom:-8px;width:2px;background:#e2e8f0}
+.timeline-dot:last-child::before{display:none}
+.chain-level:not(:last-child)::after{content:'';display:block;width:2px;height:20px;background:#e2e8f0;margin:0 auto}
+.expand-row{display:none}.expand-row.open{display:table-row}
+.custom-scroll::-webkit-scrollbar{height:6px;width:6px}
+.custom-scroll::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+
+/* Form elements */
+select,input[type="text"],input[type="number"],input[type="date"],textarea{
+  border:1px solid #E8E8E6;border-radius:0.375rem;padding:0.5rem 0.75rem;font-size:0.875rem;
+  background:#fff;outline:none;width:100%;
+}
+select:focus,input:focus,textarea:focus{border-color:#2E86C1;box-shadow:0 0 0 2px rgba(46,134,193,.2)}
+
+mark{background:#fef08a;border-radius:2px;padding:0 2px}
+
+</style>
+</head>
+<body class="font-sans antialiased">
+
+<!-- ═══ DEV NAV PANEL ═══ -->
+<div class="fixed bottom-4 right-4 z-[100] bg-ecf-dark text-white rounded-lg shadow-2xl p-3 text-xs max-w-xs" id="devNav">
+  <p class="font-bold mb-2 text-[10px] uppercase tracking-widest text-slate-400">Navegação (8 Views)</p>
+  <div class="flex flex-col gap-0.5">
+    <button onclick="showView('movements-list')" class="text-left px-2 py-1 rounded hover:bg-white/10 transition-colors">① Movimentos — Lista</button>
+    <button onclick="showView('movement-detail')" class="text-left px-2 py-1 rounded hover:bg-white/10 transition-colors">② Movimento — Detalhe</button>
+    <button onclick="showView('movement-create')" class="text-left px-2 py-1 rounded hover:bg-white/10 transition-colors">③ Movimento — Cadastro ★</button>
+    <button onclick="showView('rules-list')" class="text-left px-2 py-1 rounded hover:bg-white/10 transition-colors">④ Regras — Lista</button>
+    <button onclick="showView('rules-search')" class="text-left px-2 py-1 rounded hover:bg-white/10 transition-colors">⑤ Regras — Busca Avançada ★</button>
+    <button onclick="showView('rule-create')" class="text-left px-2 py-1 rounded hover:bg-white/10 transition-colors">⑥ Regra — Criar</button>
+    <button onclick="showView('rule-edit')" class="text-left px-2 py-1 rounded hover:bg-white/10 transition-colors">⑦ Regra — Editar</button>
+    <button onclick="showView('history')" class="text-left px-2 py-1 rounded hover:bg-white/10 transition-colors">⑧ Histórico ★</button>
+  </div>
+  <button onclick="this.parentElement.classList.toggle('opacity-20')" class="mt-2 text-[10px] text-slate-500 hover:text-white">minimizar</button>
+</div>
+
+<!-- ═══ APP SHELL ═══ -->
+<div class="flex flex-col min-h-screen">
+
+  <!-- TOPBAR -->
+  <header class="h-14 bg-white border-b border-ecf-border flex items-center justify-between px-4 sticky top-0 z-50">
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-ecf-primary rounded flex items-center justify-center text-white font-extrabold italic text-sm">A1</div>
+        <div class="hidden md:block">
+          <h1 class="text-sm font-bold leading-tight">Grupo A1</h1>
+          <p class="text-[10px] text-ecf-text-aux uppercase tracking-wider font-semibold">Portal Interno</p>
+        </div>
+      </div>
+      <nav class="hidden sm:flex items-center text-sm gap-2">
+        <span class="text-ecf-text-aux">Aprovação</span>
+        <span class="text-ecf-border">/</span>
+        <span class="font-semibold text-ecf-text" id="breadcrumb-current">Movimentos Controlados</span>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="text-right hidden sm:block">
+        <p class="text-xs font-bold">Admin ECF</p>
+        <p class="text-[10px] text-ecf-text-aux">A1 Engenharia</p>
+      </div>
+      <div class="w-9 h-9 bg-ecf-primary text-white rounded-full flex items-center justify-center font-bold text-xs ring-2 ring-offset-2 ring-transparent hover:ring-ecf-primary transition-all cursor-pointer">AE</div>
+    </div>
+  </header>
+
+  <div class="flex flex-1">
+
+    <!-- SIDEBAR 240px -->
+    <aside class="w-60 border-r border-ecf-border bg-white hidden lg:flex flex-col shrink-0">
+      <div class="p-4 flex flex-col gap-1">
+        <p class="text-[10px] font-extrabold text-ecf-text-aux uppercase tracking-widest mb-2 px-2">Processos</p>
+        <p class="text-[9px] font-bold text-slate-400 uppercase px-2 mt-2">Aprovação</p>
+
+        <a onclick="showView('movements-list')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer text-sm transition-colors" data-sidebar="movements" href="javascript:void(0)">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+          <span>Movimentos Controlados</span>
+        </a>
+        <a onclick="showView('rules-list')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer text-sm transition-colors" data-sidebar="rules" href="javascript:void(0)">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+          <span>Regras de Aprovação</span>
+        </a>
+        <a onclick="showView('history')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer text-sm transition-colors" data-sidebar="history" href="javascript:void(0)">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+          <span>Histórico</span>
+        </a>
+
+        <hr class="my-4 border-ecf-border"/>
+        <p class="text-[9px] font-bold text-slate-400 uppercase px-2">Integração</p>
+        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-ecf-text-aux hover:bg-slate-50 hover:text-ecf-text font-medium text-sm transition-colors cursor-pointer" href="javascript:void(0)">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+          <span>Protheus Sync</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-ecf-text-aux hover:bg-slate-50 hover:text-ecf-text font-medium text-sm transition-colors cursor-pointer" href="javascript:void(0)">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+          <span>Logs</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- ═══ MAIN CONTENT AREA ═══ -->
+    <main class="flex-1 overflow-y-auto">
+
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║ VIEW 1: MOVIMENTOS — LISTA            ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div data-view="movements-list" class="active fade-in p-4 md:p-8">
+  <header class="mb-8 flex items-start justify-between">
+    <div>
+      <h2 class="text-2xl font-extrabold text-ecf-text tracking-tight">Movimentos Controlados</h2>
+      <p class="text-ecf-text-aux text-sm mt-1">Gerencie e aprove as solicitações pendentes no sistema.</p>
+    </div>
+    <button onclick="showView('movement-create')" class="px-4 py-2.5 bg-ecf-primary text-white font-bold text-sm rounded-md hover:bg-ecf-primary-hover transition-colors inline-flex items-center gap-2 shrink-0">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+      Novo Movimento
+    </button>
+  </header>
+
+  <!-- Tabs + Search -->
+  <section class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-6">
+    <div class="flex items-center border-b xl:border-none border-ecf-border">
+      <button class="px-4 py-2 text-sm font-bold text-ecf-primary border-b-2 border-ecf-primary flex items-center gap-2">Pendentes <span class="bg-ecf-primary text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">8</span></button>
+      <button class="px-4 py-2 text-sm font-semibold text-ecf-text-aux hover:text-ecf-text transition-colors border-b-2 border-transparent">Aprovados</button>
+      <button class="px-4 py-2 text-sm font-semibold text-ecf-text-aux hover:text-ecf-text transition-colors border-b-2 border-transparent">Rejeitados</button>
+      <button class="px-4 py-2 text-sm font-semibold text-ecf-text-aux hover:text-ecf-text transition-colors border-b-2 border-transparent">Todos</button>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="relative">
+        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ecf-text-aux" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+        <input type="text" placeholder="Buscar por número ou solicitante..." class="pl-10 pr-4 py-2 border border-ecf-border rounded-md text-sm w-64 focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white"/>
+      </div>
+      <button class="text-ecf-primary font-semibold text-sm hover:underline">Busca Avançada</button>
+    </div>
+  </section>
+
+  <!-- Batch Actions -->
+  <div class="mb-4">
+    <button class="px-4 py-2 text-sm font-semibold text-ecf-text border border-ecf-border rounded-md hover:bg-slate-50 transition-colors inline-flex items-center gap-2">
+      Ações em Lote <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+    </button>
+  </div>
+
+  <!-- Data Table -->
+  <div class="bg-white rounded-lg border border-ecf-border shadow-sm overflow-hidden">
+    <div class="overflow-x-auto custom-scroll">
+      <table class="w-full text-left text-sm border-collapse">
+        <thead>
+          <tr class="bg-slate-50 border-b border-ecf-border">
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Status</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Tipo</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Número</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Solicitante</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider text-right">Valor R$</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Data</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Empresa</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-ecf-border">
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-700 ring-1 ring-amber-200">Pendente</span></td>
+            <td class="px-4 py-3 text-ecf-text font-medium">Pedido Compra</td>
+            <td class="px-4 py-3"><a onclick="showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer">PED-2026-00421</a></td>
+            <td class="px-4 py-3 text-ecf-text-aux">Ana Oliveira</td>
+            <td class="px-4 py-3 text-right tabular-nums font-bold text-ecf-text">45.000,00</td>
+            <td class="px-4 py-3 text-ecf-text-aux">27/03/2026</td>
+            <td class="px-4 py-3 text-ecf-text">A1 Engenharia</td>
+            <td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1 text-[11px] font-bold text-ecf-success border border-ecf-success rounded hover:bg-green-50 transition-colors">Aprovar</button><button class="px-3 py-1 text-[11px] font-bold text-ecf-danger border border-ecf-danger rounded hover:bg-red-50 transition-colors">Rejeitar</button></div></td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-700 ring-1 ring-amber-200">Pendente</span></td>
+            <td class="px-4 py-3 text-ecf-text font-medium">Nota Fiscal</td>
+            <td class="px-4 py-3"><a onclick="showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer">NF-2026-01234</a></td>
+            <td class="px-4 py-3 text-ecf-text-aux">Carlos Santos</td>
+            <td class="px-4 py-3 text-right tabular-nums font-bold text-ecf-text">128.500,00</td>
+            <td class="px-4 py-3 text-ecf-text-aux">26/03/2026</td>
+            <td class="px-4 py-3 text-ecf-text">A1 Energia</td>
+            <td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1 text-[11px] font-bold text-ecf-success border border-ecf-success rounded hover:bg-green-50 transition-colors">Aprovar</button><button class="px-3 py-1 text-[11px] font-bold text-ecf-danger border border-ecf-danger rounded hover:bg-red-50 transition-colors">Rejeitar</button></div></td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-700 ring-1 ring-amber-200">Pendente</span></td>
+            <td class="px-4 py-3 text-ecf-text font-medium">Ordem Serviço</td>
+            <td class="px-4 py-3"><a onclick="showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer">OS-2026-00089</a></td>
+            <td class="px-4 py-3 text-ecf-text-aux">Roberto Costa</td>
+            <td class="px-4 py-3 text-right tabular-nums font-bold text-ecf-text">22.000,00</td>
+            <td class="px-4 py-3 text-ecf-text-aux">26/03/2026</td>
+            <td class="px-4 py-3 text-ecf-text">A1 Industrial</td>
+            <td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1 text-[11px] font-bold text-ecf-success border border-ecf-success rounded hover:bg-green-50 transition-colors">Aprovar</button><button class="px-3 py-1 text-[11px] font-bold text-ecf-danger border border-ecf-danger rounded hover:bg-red-50 transition-colors">Rejeitar</button></div></td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-700 ring-1 ring-amber-200">Pendente</span></td>
+            <td class="px-4 py-3 text-ecf-text font-medium">Contrato</td>
+            <td class="px-4 py-3"><a onclick="showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer">CTR-2026-00015</a></td>
+            <td class="px-4 py-3 text-ecf-text-aux">Julia Lima</td>
+            <td class="px-4 py-3 text-right tabular-nums font-bold text-ecf-text">350.000,00</td>
+            <td class="px-4 py-3 text-ecf-text-aux">25/03/2026</td>
+            <td class="px-4 py-3 text-ecf-text">A1 Agro</td>
+            <td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1 text-[11px] font-bold text-ecf-success border border-ecf-success rounded hover:bg-green-50 transition-colors">Aprovar</button><button class="px-3 py-1 text-[11px] font-bold text-ecf-danger border border-ecf-danger rounded hover:bg-red-50 transition-colors">Rejeitar</button></div></td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors opacity-70">
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Aprovado</span></td>
+            <td class="px-4 py-3 text-ecf-text font-medium">Pedido Compra</td>
+            <td class="px-4 py-3"><a onclick="showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer">PED-2026-00420</a></td>
+            <td class="px-4 py-3 text-ecf-text-aux">Marcos Silva</td>
+            <td class="px-4 py-3 text-right tabular-nums font-bold text-ecf-text">18.000,00</td>
+            <td class="px-4 py-3 text-ecf-text-aux">24/03/2026</td>
+            <td class="px-4 py-3 text-ecf-text">A1 Engenharia</td>
+            <td class="px-4 py-3 text-center"><span class="text-[10px] text-ecf-text-aux italic">Aprovado por AE</span></td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors opacity-70">
+            <td class="px-4 py-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-700 ring-1 ring-blue-200">⚡ Auto</span></td>
+            <td class="px-4 py-3 text-ecf-text font-medium">Pedido Compra</td>
+            <td class="px-4 py-3"><a onclick="showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer">PED-2026-00419</a></td>
+            <td class="px-4 py-3 text-ecf-text-aux">Fernanda Reis</td>
+            <td class="px-4 py-3 text-right tabular-nums font-bold text-ecf-text">4.500,00</td>
+            <td class="px-4 py-3 text-ecf-text-aux">24/03/2026</td>
+            <td class="px-4 py-3 text-ecf-text">A1 Engenharia</td>
+            <td class="px-4 py-3 text-center"><span class="text-[10px] text-ecf-text-aux italic">Auto-aprovado (Regra #3)</span></td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors opacity-70">
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-red-100 text-red-700 ring-1 ring-red-200">Rejeitado</span></td>
+            <td class="px-4 py-3 text-ecf-text font-medium">Nota Fiscal</td>
+            <td class="px-4 py-3"><a onclick="showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer">NF-2026-01200</a></td>
+            <td class="px-4 py-3 text-ecf-text-aux">Paulo Mendes</td>
+            <td class="px-4 py-3 text-right tabular-nums font-bold text-ecf-text">67.200,00</td>
+            <td class="px-4 py-3 text-ecf-text-aux">23/03/2026</td>
+            <td class="px-4 py-3 text-ecf-text">A1 Energia</td>
+            <td class="px-4 py-3 text-center"><span class="text-[10px] text-ecf-text-aux italic">Rejeitado por MG</span></td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors opacity-70">
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 text-purple-700 ring-1 ring-purple-200">Override</span></td>
+            <td class="px-4 py-3 text-ecf-text font-medium">Contrato</td>
+            <td class="px-4 py-3"><a onclick="showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer">CTR-2026-00012</a></td>
+            <td class="px-4 py-3 text-ecf-text-aux">Amanda Torres</td>
+            <td class="px-4 py-3 text-right tabular-nums font-bold text-ecf-text">520.000,00</td>
+            <td class="px-4 py-3 text-ecf-text-aux">22/03/2026</td>
+            <td class="px-4 py-3 text-ecf-text">A1 Industrial</td>
+            <td class="px-4 py-3 text-center"><span class="text-[10px] text-ecf-text-aux italic">Override por AE</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="px-4 py-3 bg-white border-t border-ecf-border flex items-center justify-between">
+      <p class="text-xs text-ecf-text-aux">Exibindo <span class="font-bold">8</span> de <span class="font-bold">8</span> movimentos</p>
+      <div class="flex items-center gap-2">
+        <button class="p-1 border border-ecf-border rounded hover:bg-slate-50 disabled:opacity-50" disabled><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></button>
+        <span class="text-xs text-ecf-text-aux font-medium">1 / 1</span>
+        <button class="p-1 border border-ecf-border rounded hover:bg-slate-50 disabled:opacity-50" disabled><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║ VIEW 2: MOVEMENT DETAIL               ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div data-view="movement-detail" class="fade-in p-4 md:p-8">
+  <button onclick="showView('movements-list')" class="flex items-center gap-2 text-sm text-ecf-text-aux hover:text-ecf-primary mb-6 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Voltar para Movimentos</button>
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <div class="xl:col-span-2 space-y-6">
+      <!-- Header Card -->
+      <div class="bg-white rounded-lg border border-ecf-border p-6">
+        <div class="flex items-start justify-between mb-4">
+          <div>
+            <div class="flex items-center gap-3 mb-1"><h2 class="text-xl font-extrabold text-ecf-text">PED-2026-00421</h2><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-700 ring-1 ring-amber-200">Pendente</span></div>
+            <p class="text-ecf-text-aux text-sm">Pedido de Compra — Materiais Elétricos</p>
+          </div>
+          <div class="text-right"><p class="text-2xl font-extrabold text-ecf-text tabular-nums">R$ 45.000,00</p><p class="text-xs text-ecf-text-aux">27/03/2026</p></div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-ecf-border">
+          <div><p class="text-[10px] text-ecf-text-aux uppercase tracking-wider font-bold mb-1">Solicitante</p><div class="flex items-center gap-2"><div class="w-6 h-6 bg-blue-100 text-ecf-primary rounded-full flex items-center justify-center text-[10px] font-bold">AO</div><span class="text-sm font-medium">Ana Oliveira</span></div></div>
+          <div><p class="text-[10px] text-ecf-text-aux uppercase tracking-wider font-bold mb-1">Empresa</p><span class="text-sm font-medium">A1 Engenharia</span></div>
+          <div><p class="text-[10px] text-ecf-text-aux uppercase tracking-wider font-bold mb-1">Tipo</p><span class="text-sm font-medium">Pedido Compra</span></div>
+          <div><p class="text-[10px] text-ecf-text-aux uppercase tracking-wider font-bold mb-1">Regra Aplicada</p><span class="text-sm font-medium text-ecf-primary">#1 — Compras &gt; R$10k</span></div>
+        </div>
+      </div>
+      <!-- Approval Chain -->
+      <div class="bg-white rounded-lg border border-ecf-border p-6">
+        <h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider mb-4">Cadeia de Aprovação</h3>
+        <div class="chain-level">
+          <div class="flex items-center gap-4 p-3 rounded-lg bg-ecf-success-bg border border-emerald-200">
+            <div class="w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></div>
+            <div class="flex-1"><p class="text-sm font-bold text-ecf-text">Nível 1 — Gerente de Área</p><p class="text-xs text-ecf-text-aux">Tipo: ROLE · Timeout: 48h</p></div>
+            <div class="flex items-center gap-2"><div class="w-7 h-7 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-[10px] font-bold ring-2 ring-emerald-300">MG</div><div class="text-right"><p class="text-xs font-bold text-emerald-700">Aprovado</p><p class="text-[10px] text-ecf-text-aux">26/03 14:30</p></div></div>
+          </div>
+        </div>
+        <div class="chain-level">
+          <div class="flex items-center gap-4 p-3 rounded-lg bg-amber-50 border border-amber-200">
+            <div class="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></div>
+            <div class="flex-1"><p class="text-sm font-bold text-ecf-text">Nível 2 — Diretoria</p><p class="text-xs text-ecf-text-aux">Tipo: USER · Timeout: 72h · Expira: 28/03</p></div>
+            <div class="flex items-center gap-2"><div class="w-7 h-7 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center text-[10px] font-bold ring-2 ring-amber-300 animate-pulse">AE</div><div class="text-right"><p class="text-xs font-bold text-amber-700">Aguardando</p><p class="text-[10px] text-ecf-text-aux">Seu turno</p></div></div>
+          </div>
+        </div>
+        <div class="chain-level">
+          <div class="flex items-center gap-4 p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <div class="w-8 h-8 bg-slate-300 text-white rounded-full flex items-center justify-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></div>
+            <div class="flex-1"><p class="text-sm font-bold text-ecf-text-aux">Nível 3 — Financeiro</p><p class="text-xs text-ecf-text-aux">Tipo: ROLE · Timeout: 24h</p></div>
+            <div class="flex items-center gap-2"><div class="w-7 h-7 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center text-[10px] font-bold ring-2 ring-slate-200">?</div><div class="text-right"><p class="text-xs font-medium text-ecf-text-aux">Bloqueado</p></div></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 mt-6 pt-4 border-t border-ecf-border">
+          <button class="px-6 py-2.5 bg-ecf-success text-white font-bold text-sm rounded-md hover:bg-green-700 transition-colors inline-flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Aprovar</button>
+          <button class="px-6 py-2.5 bg-ecf-danger text-white font-bold text-sm rounded-md hover:bg-red-700 transition-colors inline-flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Rejeitar</button>
+        </div>
+      </div>
+      <!-- Override Panel -->
+      <div class="bg-white rounded-lg border border-ecf-border p-6">
+        <div class="flex items-center gap-2 mb-4"><svg class="w-5 h-5 text-ecf-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg><h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider">Override Administrativo</h3></div>
+        <div class="bg-amber-50 border border-amber-200 rounded-md p-3 mb-4 text-xs text-amber-800"><strong>Atenção:</strong> Esta ação será registrada no log de auditoria. Preencha a justificativa com no mínimo 20 caracteres.</div>
+        <div class="space-y-3">
+          <div><label class="block text-xs font-bold text-ecf-text mb-1">Justificativa *</label><textarea id="overrideText" oninput="updateCounter()" rows="3" placeholder="Descreva o motivo do override administrativo..." class="w-full border border-ecf-border rounded-md p-3 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none resize-none"></textarea><p class="text-[10px] text-ecf-text-aux mt-1"><span id="charCount">0</span>/20 caracteres mínimos</p></div>
+          <button id="overrideBtn" disabled class="px-4 py-2 bg-ecf-warning text-white font-bold text-sm rounded-md hover:bg-yellow-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Aplicar Override</button>
+        </div>
+      </div>
+    </div>
+    <!-- Timeline -->
+    <div class="xl:col-span-1">
+      <div class="bg-white rounded-lg border border-ecf-border p-6 sticky top-20">
+        <h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider mb-6">Timeline</h3>
+        <div class="space-y-0">
+          <div class="timeline-dot flex gap-3 pb-6"><div class="w-8 h-8 bg-blue-100 text-ecf-primary rounded-full flex items-center justify-center shrink-0"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></div><div><p class="text-xs font-bold text-ecf-text">Movimento criado</p><p class="text-[10px] text-ecf-text-aux">25/03/2026 09:15 · Ana Oliveira</p></div></div>
+          <div class="timeline-dot flex gap-3 pb-6"><div class="w-8 h-8 bg-blue-100 text-ecf-primary rounded-full flex items-center justify-center shrink-0"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></div><div><p class="text-xs font-bold text-ecf-text">Motor avaliou</p><p class="text-[10px] text-ecf-text-aux">25/03/2026 09:15 · Sistema</p><p class="text-[10px] text-ecf-text-aux mt-1">Regra #1 acionada — Cadeia 3 níveis</p></div></div>
+          <div class="timeline-dot flex gap-3 pb-6"><div class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shrink-0"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></div><div><p class="text-xs font-bold text-emerald-700">Nível 1 aprovado</p><p class="text-[10px] text-ecf-text-aux">26/03/2026 14:30 · Marcos Gonçalves</p></div></div>
+          <div class="timeline-dot flex gap-3 pb-6"><div class="w-8 h-8 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center shrink-0 animate-pulse"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></div><div><p class="text-xs font-bold text-amber-700">Nível 2 pendente</p><p class="text-[10px] text-ecf-text-aux">Aguardando desde 26/03 14:30</p></div></div>
+          <div class="timeline-dot flex gap-3"><div class="w-8 h-8 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center shrink-0"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></div><div><p class="text-xs font-medium text-ecf-text-aux">Nível 3 — Bloqueado</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║ VIEW 3: CADASTRO DE MOVIMENTO  ★ NEW  ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div data-view="movement-create" class="fade-in p-4 md:p-8">
+  <button onclick="showView('movements-list')" class="flex items-center gap-2 text-sm text-ecf-text-aux hover:text-ecf-primary mb-6 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Voltar para Movimentos</button>
+
+  <header class="mb-8">
+    <h2 class="text-2xl font-extrabold text-ecf-text tracking-tight">Novo Movimento Controlado</h2>
+    <p class="text-ecf-text-aux text-sm mt-1">Registre um novo movimento para avaliação pelo motor de regras de aprovação.</p>
+  </header>
+
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <!-- Left: Form -->
+    <div class="xl:col-span-2 space-y-6">
+      <div class="bg-white rounded-lg border border-ecf-border p-6">
+        <h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider mb-5">Dados do Movimento</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-ecf-text mb-1.5">Tipo de Objeto *</label>
+            <select id="mvType" onchange="updatePreview()" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white">
+              <option value="">Selecione o tipo...</option>
+              <option value="pedido">Pedido Compra</option>
+              <option value="nf">Nota Fiscal</option>
+              <option value="os">Ordem Serviço</option>
+              <option value="contrato">Contrato</option>
+              <option value="requisicao">Requisição</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-ecf-text mb-1.5">Operação *</label>
+            <select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white">
+              <option selected>CREATE</option>
+              <option>UPDATE</option>
+              <option>DELETE</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-ecf-text mb-1.5">Número do Documento *</label>
+            <input type="text" placeholder="Ex: PED-2026-00422" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-ecf-text mb-1.5">Valor R$ *</label>
+            <input type="text" id="mvValue" oninput="updatePreview()" placeholder="0,00" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none tabular-nums"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-ecf-text mb-1.5">Empresa *</label>
+            <select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white">
+              <option value="">Selecione a empresa...</option>
+              <option>A1 Engenharia</option>
+              <option>A1 Energia</option>
+              <option>A1 Industrial</option>
+              <option>A1 Agro</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-ecf-text mb-1.5">Solicitante *</label>
+            <div class="relative">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ecf-text-aux" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+              <input type="text" placeholder="Buscar usuário..." class="w-full pl-10 pr-4 border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none"/>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-ecf-text mb-1.5">Origem</label>
+            <select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white">
+              <option>PORTAL</option>
+              <option>PROTHEUS</option>
+              <option>API</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-ecf-text mb-1.5">Data</label>
+            <input type="date" value="2026-03-29" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none"/>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="block text-xs font-bold text-ecf-text mb-1.5">Descrição / Objeto</label>
+          <input type="text" placeholder="Ex: Materiais Elétricos para Obra BR-101 Trecho Norte" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none"/>
+        </div>
+
+        <div class="mt-4">
+          <label class="block text-xs font-bold text-ecf-text mb-1.5">Observações</label>
+          <textarea rows="3" placeholder="Informações adicionais para o aprovador..." class="w-full border border-ecf-border rounded-md p-3 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none resize-none"></textarea>
+        </div>
+
+        <div class="mt-4">
+          <label class="block text-xs font-bold text-ecf-text mb-1.5">Anexos</label>
+          <div class="border-2 border-dashed border-ecf-border rounded-lg p-6 text-center hover:border-ecf-primary/40 transition-colors cursor-pointer">
+            <svg class="w-8 h-8 text-ecf-text-aux mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+            <p class="text-sm text-ecf-text-aux">Arraste arquivos ou <span class="text-ecf-primary font-semibold">clique para selecionar</span></p>
+            <p class="text-[10px] text-ecf-text-aux mt-1">PDF, XLSX, JPG, PNG — máx. 10MB por arquivo</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-3">
+        <button onclick="showView('movements-list')" class="px-4 py-2.5 border border-ecf-border text-ecf-text font-semibold text-sm rounded-md hover:bg-slate-50 transition-colors">Cancelar</button>
+        <button class="px-6 py-2.5 bg-ecf-primary text-white font-bold text-sm rounded-md hover:bg-ecf-primary-hover transition-colors inline-flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+          Registrar Movimento
+        </button>
+      </div>
+    </div>
+
+    <!-- Right: Preview Panel -->
+    <div class="xl:col-span-1 space-y-6">
+      <!-- Rule Match Preview -->
+      <div class="bg-white rounded-lg border border-ecf-border p-6 sticky top-20">
+        <h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider mb-4">Preview — Motor de Regras</h3>
+        <div id="rulePreview" class="space-y-4">
+          <div class="bg-slate-50 rounded-lg p-4 text-center">
+            <svg class="w-10 h-10 text-ecf-text-aux mx-auto mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+            <p class="text-xs text-ecf-text-aux">Preencha <strong>Tipo de Objeto</strong> e <strong>Valor</strong> para simular qual regra será acionada.</p>
+          </div>
+        </div>
+
+        <!-- Simulated match (hidden by default, shown by JS) -->
+        <div id="ruleMatch" class="hidden space-y-4">
+          <div class="bg-ecf-info-bg border border-blue-200 rounded-lg p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-4 h-4 text-ecf-info" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+              <p class="text-xs font-bold text-ecf-info">Regra #1 será acionada</p>
+            </div>
+            <p class="text-xs text-blue-800 mb-2">Pedido Compra · CREATE · Threshold R$ 10.000</p>
+            <div class="text-[10px] text-blue-700 space-y-1">
+              <p>→ Cadeia com <strong>3 níveis</strong> de aprovação</p>
+              <p>→ Nível 1: Gerente de Área (ROLE)</p>
+              <p>→ Nível 2: Diretoria (USER)</p>
+              <p>→ Nível 3: Financeiro (ROLE)</p>
+            </div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">
+            <strong>Tempo estimado:</strong> até 144h (6 dias) para conclusão de toda a cadeia.
+          </div>
+        </div>
+
+        <!-- Auto-approval match -->
+        <div id="ruleAutoMatch" class="hidden space-y-4">
+          <div class="bg-ecf-success-bg border border-emerald-200 rounded-lg p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-sm">⚡</span>
+              <p class="text-xs font-bold text-ecf-success">Auto-Aprovação</p>
+            </div>
+            <p class="text-xs text-emerald-800 mb-2">Pedido Compra · CREATE · Threshold R$ 5.000</p>
+            <p class="text-[10px] text-emerald-700">Este movimento será <strong>aprovado automaticamente</strong> pela Regra #3 sem cadeia de aprovação.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║ VIEW 4: REGRAS DE APROVAÇÃO — LISTA   ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div data-view="rules-list" class="fade-in p-4 md:p-8">
+  <header class="mb-8 flex items-start justify-between">
+    <div>
+      <h2 class="text-2xl font-extrabold text-ecf-text tracking-tight">Regras de Aprovação</h2>
+      <p class="text-ecf-text-aux text-sm mt-1">Configure as regras de controle e cadeias de aprovação multinível.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="showView('rules-search')" class="px-4 py-2.5 border border-ecf-border text-ecf-text font-semibold text-sm rounded-md hover:bg-slate-50 transition-colors inline-flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+        Busca Avançada
+      </button>
+      <button onclick="showView('rule-create')" class="px-4 py-2.5 bg-ecf-primary text-white font-bold text-sm rounded-md hover:bg-ecf-primary-hover transition-colors inline-flex items-center gap-2 shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+        Nova Regra
+      </button>
+    </div>
+  </header>
+
+  <div class="bg-white rounded-lg border border-ecf-border shadow-sm overflow-hidden">
+    <div class="overflow-x-auto custom-scroll">
+      <table class="w-full text-left text-sm border-collapse">
+        <thead>
+          <tr class="bg-slate-50 border-b border-ecf-border">
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Status</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Objeto</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Operação</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider text-right">Threshold R$</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Origens</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider text-center">Níveis</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-ecf-border">
+          <tr class="hover:bg-slate-50 transition-colors"><td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Ativa</span></td><td class="px-4 py-3 font-medium text-ecf-text">Pedido Compra</td><td class="px-4 py-3 text-ecf-text-aux">CREATE</td><td class="px-4 py-3 text-right tabular-nums font-bold">10.000,00</td><td class="px-4 py-3"><div class="flex gap-1"><span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-ecf-text-aux">PROTHEUS</span><span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-ecf-text-aux">PORTAL</span></div></td><td class="px-4 py-3 text-center"><span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-ecf-primary text-white text-[10px] font-bold">3</span></td><td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button onclick="showView('rule-edit')" class="px-3 py-1 text-[11px] font-bold text-ecf-primary border border-ecf-primary rounded hover:bg-blue-50 transition-colors">Editar</button><button class="px-3 py-1 text-[11px] font-bold text-ecf-danger border border-ecf-danger rounded hover:bg-red-50 transition-colors">Desativar</button></div></td></tr>
+          <tr class="hover:bg-slate-50 transition-colors"><td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Ativa</span></td><td class="px-4 py-3 font-medium text-ecf-text">Nota Fiscal</td><td class="px-4 py-3 text-ecf-text-aux">CREATE</td><td class="px-4 py-3 text-right tabular-nums font-bold">50.000,00</td><td class="px-4 py-3"><span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-ecf-text-aux">PROTHEUS</span></td><td class="px-4 py-3 text-center"><span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-ecf-primary text-white text-[10px] font-bold">2</span></td><td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button onclick="showView('rule-edit')" class="px-3 py-1 text-[11px] font-bold text-ecf-primary border border-ecf-primary rounded hover:bg-blue-50 transition-colors">Editar</button><button class="px-3 py-1 text-[11px] font-bold text-ecf-danger border border-ecf-danger rounded hover:bg-red-50 transition-colors">Desativar</button></div></td></tr>
+          <tr class="hover:bg-slate-50 transition-colors"><td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Ativa</span></td><td class="px-4 py-3 font-medium text-ecf-text">Pedido Compra</td><td class="px-4 py-3 text-ecf-text-aux">CREATE</td><td class="px-4 py-3 text-right tabular-nums font-bold">5.000,00</td><td class="px-4 py-3"><span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-700">⚡ AUTO</span></td><td class="px-4 py-3 text-center"><span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 text-ecf-text-aux text-[10px] font-bold">0</span></td><td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button onclick="showView('rule-edit')" class="px-3 py-1 text-[11px] font-bold text-ecf-primary border border-ecf-primary rounded hover:bg-blue-50 transition-colors">Editar</button><button class="px-3 py-1 text-[11px] font-bold text-ecf-danger border border-ecf-danger rounded hover:bg-red-50 transition-colors">Desativar</button></div></td></tr>
+          <tr class="hover:bg-slate-50 transition-colors"><td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Ativa</span></td><td class="px-4 py-3 font-medium text-ecf-text">Contrato</td><td class="px-4 py-3 text-ecf-text-aux">CREATE</td><td class="px-4 py-3 text-right tabular-nums font-bold">100.000,00</td><td class="px-4 py-3"><span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-ecf-text-aux">PORTAL</span></td><td class="px-4 py-3 text-center"><span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-ecf-primary text-white text-[10px] font-bold">4</span></td><td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button onclick="showView('rule-edit')" class="px-3 py-1 text-[11px] font-bold text-ecf-primary border border-ecf-primary rounded hover:bg-blue-50 transition-colors">Editar</button><button class="px-3 py-1 text-[11px] font-bold text-ecf-danger border border-ecf-danger rounded hover:bg-red-50 transition-colors">Desativar</button></div></td></tr>
+          <tr class="hover:bg-slate-50 transition-colors opacity-60"><td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-500 ring-1 ring-slate-200">Inativa</span></td><td class="px-4 py-3 font-medium text-ecf-text">Ordem Serviço</td><td class="px-4 py-3 text-ecf-text-aux">UPDATE</td><td class="px-4 py-3 text-right tabular-nums font-bold">25.000,00</td><td class="px-4 py-3"><span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-ecf-text-aux">PROTHEUS</span></td><td class="px-4 py-3 text-center"><span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 text-ecf-text-aux text-[10px] font-bold">2</span></td><td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button onclick="showView('rule-edit')" class="px-3 py-1 text-[11px] font-bold text-ecf-primary border border-ecf-primary rounded hover:bg-blue-50 transition-colors">Editar</button><button class="px-3 py-1 text-[11px] font-bold text-ecf-success border border-ecf-success rounded hover:bg-green-50 transition-colors">Ativar</button></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="px-4 py-3 bg-white border-t border-ecf-border flex items-center justify-between">
+      <p class="text-xs text-ecf-text-aux">Exibindo <span class="font-bold">5</span> regras</p>
+      <div class="flex items-center gap-2"><button class="p-1 border border-ecf-border rounded hover:bg-slate-50 disabled:opacity-50" disabled><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></button><span class="text-xs text-ecf-text-aux font-medium">1 / 1</span><button class="p-1 border border-ecf-border rounded hover:bg-slate-50 disabled:opacity-50" disabled><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></button></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║ VIEW 5: BUSCA AVANÇADA — REGRAS ★ NEW ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div data-view="rules-search" class="fade-in p-4 md:p-8">
+  <button onclick="showView('rules-list')" class="flex items-center gap-2 text-sm text-ecf-text-aux hover:text-ecf-primary mb-6 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Voltar para Regras</button>
+
+  <header class="mb-8">
+    <h2 class="text-2xl font-extrabold text-ecf-text tracking-tight">Busca Avançada — Regras de Aprovação</h2>
+    <p class="text-ecf-text-aux text-sm mt-1">Filtre regras por múltiplos critérios combinados.</p>
+  </header>
+
+  <!-- Filter Panel -->
+  <div class="bg-white rounded-lg border border-ecf-border p-6 mb-6">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider">Filtros</h3>
+      <button class="text-xs text-ecf-primary font-semibold hover:underline">Limpar Filtros</button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Tipo de Objeto</label>
+        <select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white">
+          <option value="">Todos</option>
+          <option>Pedido Compra</option>
+          <option>Nota Fiscal</option>
+          <option>Ordem Serviço</option>
+          <option>Contrato</option>
+          <option>Requisição</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Tipo de Operação</label>
+        <select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white">
+          <option value="">Todas</option>
+          <option>CREATE</option>
+          <option>UPDATE</option>
+          <option>DELETE</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Status</label>
+        <select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white">
+          <option value="">Todos</option>
+          <option>Ativa</option>
+          <option>Inativa</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Origem</label>
+        <select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white">
+          <option value="">Todas</option>
+          <option>PROTHEUS</option>
+          <option>PORTAL</option>
+          <option>API</option>
+          <option>⚡ AUTO</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Threshold Mínimo R$</label>
+        <input type="text" placeholder="0,00" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none tabular-nums"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Threshold Máximo R$</label>
+        <input type="text" placeholder="999.999,99" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none tabular-nums"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Nº Níveis (mín)</label>
+        <input type="number" placeholder="0" min="0" max="10" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Tipo Aprovador (cadeia)</label>
+        <select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none bg-white">
+          <option value="">Qualquer</option>
+          <option>ROLE</option>
+          <option>USER</option>
+          <option>ORG_LEVEL</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-ecf-border">
+      <button class="px-6 py-2.5 bg-ecf-primary text-white font-bold text-sm rounded-md hover:bg-ecf-primary-hover transition-colors inline-flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+        Pesquisar
+      </button>
+    </div>
+  </div>
+
+  <!-- Search Results -->
+  <div class="bg-white rounded-lg border border-ecf-border shadow-sm overflow-hidden">
+    <div class="px-4 py-3 bg-slate-50 border-b border-ecf-border flex items-center gap-2">
+      <svg class="w-4 h-4 text-ecf-text-aux" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+      <span class="text-xs font-bold text-ecf-text">Resultados: 3 regras encontradas</span>
+      <span class="text-[10px] text-ecf-text-aux">— Filtro: Tipo Objeto = "Pedido Compra", Status = "Ativa"</span>
+    </div>
+    <div class="overflow-x-auto custom-scroll">
+      <table class="w-full text-left text-sm border-collapse">
+        <thead>
+          <tr class="bg-slate-50 border-b border-ecf-border">
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Status</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Objeto</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Operação</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider text-right">Threshold R$</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Origens</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider text-center">Níveis</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-ecf-border">
+          <tr class="hover:bg-slate-50 transition-colors bg-yellow-50/30"><td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Ativa</span></td><td class="px-4 py-3 font-medium text-ecf-text"><mark class="bg-yellow-200 rounded px-0.5">Pedido Compra</mark></td><td class="px-4 py-3 text-ecf-text-aux">CREATE</td><td class="px-4 py-3 text-right tabular-nums font-bold">10.000,00</td><td class="px-4 py-3"><div class="flex gap-1"><span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-ecf-text-aux">PROTHEUS</span><span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-ecf-text-aux">PORTAL</span></div></td><td class="px-4 py-3 text-center"><span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-ecf-primary text-white text-[10px] font-bold">3</span></td><td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button onclick="showView('rule-edit')" class="px-3 py-1 text-[11px] font-bold text-ecf-primary border border-ecf-primary rounded hover:bg-blue-50">Editar</button></div></td></tr>
+          <tr class="hover:bg-slate-50 transition-colors bg-yellow-50/30"><td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Ativa</span></td><td class="px-4 py-3 font-medium text-ecf-text"><mark class="bg-yellow-200 rounded px-0.5">Pedido Compra</mark></td><td class="px-4 py-3 text-ecf-text-aux">CREATE</td><td class="px-4 py-3 text-right tabular-nums font-bold">5.000,00</td><td class="px-4 py-3"><span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-700">⚡ AUTO</span></td><td class="px-4 py-3 text-center"><span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 text-ecf-text-aux text-[10px] font-bold">0</span></td><td class="px-4 py-3"><div class="flex items-center justify-center gap-2"><button onclick="showView('rule-edit')" class="px-3 py-1 text-[11px] font-bold text-ecf-primary border border-ecf-primary rounded hover:bg-blue-50">Editar</button></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║ VIEW 6: NOVA REGRA (CREATE)           ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div data-view="rule-create" class="fade-in p-4 md:p-8">
+  <button onclick="showView('rules-list')" class="flex items-center gap-2 text-sm text-ecf-text-aux hover:text-ecf-primary mb-6 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Voltar para Regras</button>
+  <header class="mb-8"><h2 class="text-2xl font-extrabold text-ecf-text tracking-tight">Nova Regra de Aprovação</h2><p class="text-ecf-text-aux text-sm mt-1">Configure os parâmetros de controle e a cadeia de aprovação multinível.</p></header>
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+    <div class="space-y-6">
+      <div class="bg-white rounded-lg border border-ecf-border p-6">
+        <h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider mb-5">Configuração da Regra</h3>
+        <div class="space-y-4">
+          <div><label class="block text-xs font-bold text-ecf-text mb-1.5">Tipo de Objeto *</label><select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm bg-white"><option value="">Selecione...</option><option>Pedido Compra</option><option>Nota Fiscal</option><option>Ordem Serviço</option><option>Contrato</option></select></div>
+          <div><label class="block text-xs font-bold text-ecf-text mb-1.5">Tipo de Operação *</label><select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm bg-white"><option value="">Selecione...</option><option>CREATE</option><option>UPDATE</option><option>DELETE</option></select></div>
+          <div><label class="block text-xs font-bold text-ecf-text mb-1.5">Threshold R$ *</label><input type="text" placeholder="0,00" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm tabular-nums"/><p class="text-[10px] text-ecf-text-aux mt-1">Valor a partir do qual a aprovação é acionada.</p></div>
+          <div><label class="block text-xs font-bold text-ecf-text mb-1.5">Origens Aceitas *</label><div class="flex gap-3"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" class="rounded border-ecf-border text-ecf-primary focus:ring-ecf-primary"/>PROTHEUS</label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" class="rounded border-ecf-border text-ecf-primary focus:ring-ecf-primary"/>PORTAL</label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" class="rounded border-ecf-border text-ecf-primary focus:ring-ecf-primary"/>API</label></div></div>
+          <div><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" class="rounded border-ecf-border text-ecf-primary focus:ring-ecf-primary"/><span class="font-medium">Requer Aprovação</span></label><p class="text-[10px] text-ecf-text-aux mt-1 ml-6">Se desativado, o movimento será auto-aprovado.</p></div>
+        </div>
+      </div>
+      <div class="bg-ecf-info-bg rounded-lg border border-blue-200 p-4"><div class="flex items-center gap-2 mb-2"><svg class="w-4 h-4 text-ecf-info" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg><p class="text-xs font-bold text-ecf-info">Preview de Impacto</p></div><p class="text-xs text-blue-800">Configure os campos acima para ver a estimativa de movimentos afetados.</p></div>
+    </div>
+    <div class="space-y-6">
+      <div class="bg-white rounded-lg border border-ecf-border p-6">
+        <div class="flex items-center justify-between mb-5"><h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider">Cadeia de Aprovação</h3><button class="text-xs font-bold text-ecf-primary hover:underline inline-flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Adicionar Nível</button></div>
+        <div class="border border-ecf-border rounded-lg p-4 mb-3 bg-slate-50/50"><div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-ecf-primary bg-ecf-active-bg px-2 py-0.5 rounded">Nível 1</span></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Tipo</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option>ROLE</option><option>USER</option><option>ORG_LEVEL</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Entidade</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option value="">Selecione...</option><option>Gerente de Área</option><option>Supervisor</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Critério</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option>ALL</option><option>ANY</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Timeout (h)</label><input type="number" value="48" class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs"/></div></div></div>
+        <div class="border-2 border-dashed border-ecf-border rounded-lg p-4 text-center"><p class="text-xs text-ecf-text-aux">Clique em "Adicionar Nível" para inserir mais etapas.</p></div>
+      </div>
+      <div class="flex items-center justify-end gap-3"><button onclick="showView('rules-list')" class="px-4 py-2.5 border border-ecf-border text-ecf-text font-semibold text-sm rounded-md hover:bg-slate-50">Cancelar</button><button class="px-6 py-2.5 bg-ecf-primary text-white font-bold text-sm rounded-md hover:bg-ecf-primary-hover">Salvar Regra</button></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║ VIEW 7: EDITAR REGRA (EDIT)           ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div data-view="rule-edit" class="fade-in p-4 md:p-8">
+  <button onclick="showView('rules-list')" class="flex items-center gap-2 text-sm text-ecf-text-aux hover:text-ecf-primary mb-6 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Voltar para Regras</button>
+  <header class="mb-8 flex items-start justify-between">
+    <div><div class="flex items-center gap-3 mb-1"><h2 class="text-2xl font-extrabold text-ecf-text tracking-tight">Editar Regra #1</h2><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Ativa</span></div><p class="text-ecf-text-aux text-sm">Pedido Compra · CREATE · Threshold R$ 10.000,00</p></div>
+    <button class="px-4 py-2 text-ecf-danger border border-ecf-danger font-bold text-sm rounded-md hover:bg-red-50 inline-flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Desativar</button>
+  </header>
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+    <div class="space-y-6">
+      <div class="bg-white rounded-lg border border-ecf-border p-6">
+        <h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider mb-5">Configuração</h3>
+        <div class="space-y-4">
+          <div><label class="block text-xs font-bold text-ecf-text mb-1.5">Tipo de Objeto *</label><select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm bg-white"><option selected>Pedido Compra</option><option>Nota Fiscal</option><option>Ordem Serviço</option><option>Contrato</option></select></div>
+          <div><label class="block text-xs font-bold text-ecf-text mb-1.5">Tipo de Operação *</label><select class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm bg-white"><option selected>CREATE</option><option>UPDATE</option><option>DELETE</option></select></div>
+          <div><label class="block text-xs font-bold text-ecf-text mb-1.5">Threshold R$ *</label><input type="text" value="10.000,00" class="w-full border border-ecf-border rounded-md px-3 py-2 text-sm tabular-nums"/></div>
+          <div><label class="block text-xs font-bold text-ecf-text mb-1.5">Origens *</label><div class="flex gap-3"><label class="flex items-center gap-2 text-sm"><input type="checkbox" checked class="rounded border-ecf-border text-ecf-primary"/>PROTHEUS</label><label class="flex items-center gap-2 text-sm"><input type="checkbox" checked class="rounded border-ecf-border text-ecf-primary"/>PORTAL</label><label class="flex items-center gap-2 text-sm"><input type="checkbox" class="rounded border-ecf-border text-ecf-primary"/>API</label></div></div>
+          <div><label class="flex items-center gap-2 text-sm"><input type="checkbox" checked class="rounded border-ecf-border text-ecf-primary"/><span class="font-medium">Requer Aprovação</span></label></div>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg border border-ecf-border p-6">
+        <h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider mb-4">Estatísticas</h3>
+        <div class="grid grid-cols-3 gap-4"><div class="text-center p-3 bg-slate-50 rounded-lg"><p class="text-2xl font-extrabold text-ecf-text">42</p><p class="text-[10px] text-ecf-text-aux uppercase font-bold mt-1">Acionamentos</p></div><div class="text-center p-3 bg-ecf-success-bg rounded-lg"><p class="text-2xl font-extrabold text-ecf-success">38</p><p class="text-[10px] text-ecf-success uppercase font-bold mt-1">Aprovados</p></div><div class="text-center p-3 bg-ecf-danger-bg rounded-lg"><p class="text-2xl font-extrabold text-ecf-danger">4</p><p class="text-[10px] text-ecf-danger uppercase font-bold mt-1">Rejeitados</p></div></div>
+        <p class="text-[10px] text-ecf-text-aux mt-3">Criada 01/01/2026 · Modificada 15/03/2026</p>
+      </div>
+    </div>
+    <div class="space-y-6">
+      <div class="bg-white rounded-lg border border-ecf-border p-6">
+        <div class="flex items-center justify-between mb-5"><h3 class="text-sm font-bold text-ecf-text uppercase tracking-wider">Cadeia (3 Níveis)</h3><button class="text-xs font-bold text-ecf-primary hover:underline inline-flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>Adicionar</button></div>
+        <div class="border border-ecf-border rounded-lg p-4 mb-3 bg-slate-50/50"><div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-ecf-primary bg-ecf-active-bg px-2 py-0.5 rounded">Nível 1</span></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Tipo</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option selected>ROLE</option><option>USER</option><option>ORG_LEVEL</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Entidade</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option selected>Gerente de Área</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Critério</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option selected>ALL</option><option>ANY</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Timeout (h)</label><input type="number" value="48" class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs"/></div></div></div>
+        <div class="border border-ecf-border rounded-lg p-4 mb-3 bg-slate-50/50"><div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-ecf-primary bg-ecf-active-bg px-2 py-0.5 rounded">Nível 2</span></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Tipo</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option>ROLE</option><option selected>USER</option><option>ORG_LEVEL</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Entidade</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option selected>Diretor Geral</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Critério</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option>ALL</option><option selected>ANY</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Timeout (h)</label><input type="number" value="72" class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs"/></div></div></div>
+        <div class="border border-ecf-border rounded-lg p-4 mb-3 bg-slate-50/50"><div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-ecf-primary bg-ecf-active-bg px-2 py-0.5 rounded">Nível 3</span></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Tipo</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option selected>ROLE</option><option>USER</option><option>ORG_LEVEL</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Entidade</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option selected>Financeiro</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Critério</label><select class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs bg-white"><option selected>ALL</option><option>ANY</option></select></div><div><label class="block text-[10px] font-bold text-ecf-text-aux uppercase mb-1">Timeout (h)</label><input type="number" value="24" class="w-full border border-ecf-border rounded px-2 py-1.5 text-xs"/></div></div></div>
+      </div>
+      <div class="flex items-center justify-end gap-3"><button onclick="showView('rules-list')" class="px-4 py-2.5 border border-ecf-border text-ecf-text font-semibold text-sm rounded-md hover:bg-slate-50">Cancelar</button><button class="px-6 py-2.5 bg-ecf-primary text-white font-bold text-sm rounded-md hover:bg-ecf-primary-hover">Salvar Alterações</button></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║ VIEW 8: HISTÓRICO               ★ NEW ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div data-view="history" class="fade-in p-4 md:p-8">
+  <header class="mb-8">
+    <h2 class="text-2xl font-extrabold text-ecf-text tracking-tight">Histórico de Aprovações</h2>
+    <p class="text-ecf-text-aux text-sm mt-1">Registro completo de todas as ações de aprovação, rejeição, override e auto-aprovação.</p>
+  </header>
+
+  <!-- Search + Filters -->
+  <div class="bg-white rounded-lg border border-ecf-border p-5 mb-6">
+    <div class="flex flex-col xl:flex-row xl:items-end gap-4">
+      <div class="flex-1">
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Buscar nos detalhes</label>
+        <div class="relative">
+          <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ecf-text-aux" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+          <input type="text" placeholder="Buscar por código, justificativa, usuário..." class="w-full pl-10 pr-4 py-2 border border-ecf-border rounded-md text-sm focus:ring-2 focus:ring-ecf-primary/20 focus:border-ecf-primary outline-none"/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Ação</label>
+        <select class="border border-ecf-border rounded-md px-3 py-2 text-sm bg-white w-40">
+          <option value="">Todas</option>
+          <option>Aprovação</option>
+          <option>Rejeição</option>
+          <option>Override</option>
+          <option>Auto-Aprovação</option>
+          <option>Criação</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Usuário</label>
+        <select class="border border-ecf-border rounded-md px-3 py-2 text-sm bg-white w-40">
+          <option value="">Todos</option>
+          <option>Admin ECF (AE)</option>
+          <option>Marcos Gonçalves (MG)</option>
+          <option>Sistema</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-ecf-text mb-1.5">Período</label>
+        <div class="flex items-center gap-2">
+          <input type="date" value="2026-03-01" class="border border-ecf-border rounded-md px-2 py-2 text-sm w-36"/>
+          <span class="text-ecf-text-aux text-xs">até</span>
+          <input type="date" value="2026-03-29" class="border border-ecf-border rounded-md px-2 py-2 text-sm w-36"/>
+        </div>
+      </div>
+      <button class="px-4 py-2 bg-ecf-primary text-white font-bold text-sm rounded-md hover:bg-ecf-primary-hover shrink-0 inline-flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+        Filtrar
+      </button>
+    </div>
+  </div>
+
+  <!-- History Table -->
+  <div class="bg-white rounded-lg border border-ecf-border shadow-sm overflow-hidden">
+    <div class="overflow-x-auto custom-scroll">
+      <table class="w-full text-left text-sm border-collapse">
+        <thead>
+          <tr class="bg-slate-50 border-b border-ecf-border">
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider w-8"></th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Data/Hora</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Usuário</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Movimento</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Ação</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Nível</th>
+            <th class="px-4 py-3 font-bold text-ecf-text uppercase text-[11px] tracking-wider">Detalhes</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-ecf-border">
+          <!-- Row 1 -->
+          <tr class="hover:bg-slate-50 transition-colors cursor-pointer" onclick="this.nextElementSibling.classList.toggle('open')">
+            <td class="px-4 py-3"><svg class="w-3 h-3 text-ecf-text-aux transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></td>
+            <td class="px-4 py-3 text-ecf-text-aux tabular-nums text-xs">27/03/2026 10:45</td>
+            <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 bg-ecf-primary text-white rounded-full flex items-center justify-center text-[9px] font-bold">AE</div><span class="text-sm font-medium">Admin ECF</span></div></td>
+            <td class="px-4 py-3"><a onclick="event.stopPropagation();showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer text-xs">CTR-2026-00012</a></td>
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 text-purple-700 ring-1 ring-purple-200">Override</span></td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">—</td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs truncate max-w-[200px]">Urgência comercial: contrato precisa ser assinado...</td>
+          </tr>
+          <tr class="expand-row"><td colspan="7" class="px-4 py-4 bg-slate-50/50"><div class="bg-white border border-ecf-border rounded-lg p-4 text-xs"><p class="font-bold text-ecf-text mb-2">Justificativa completa:</p><p class="text-ecf-text-aux leading-relaxed">"Urgência comercial: contrato precisa ser assinado até 28/03 para não perder a licitação BR-101 Trecho Norte. Aprovação via override autorizada pela diretoria em reunião presencial."</p><div class="mt-3 pt-3 border-t border-ecf-border grid grid-cols-3 gap-4"><div><p class="font-bold text-ecf-text-aux">Movimento</p><p>CTR-2026-00012 · Contrato · R$ 520.000,00</p></div><div><p class="font-bold text-ecf-text-aux">Empresa</p><p>A1 Industrial</p></div><div><p class="font-bold text-ecf-text-aux">Regra Original</p><p>Regra #4 — Contrato &gt; R$ 100k (4 níveis)</p></div></div></div></td></tr>
+          <!-- Row 2 -->
+          <tr class="hover:bg-slate-50 transition-colors cursor-pointer" onclick="this.nextElementSibling.classList.toggle('open')">
+            <td class="px-4 py-3"><svg class="w-3 h-3 text-ecf-text-aux" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></td>
+            <td class="px-4 py-3 text-ecf-text-aux tabular-nums text-xs">26/03/2026 14:30</td>
+            <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold">MG</div><span class="text-sm font-medium">Marcos Gonçalves</span></div></td>
+            <td class="px-4 py-3"><a onclick="event.stopPropagation();showView('movement-detail')" class="font-bold text-ecf-primary hover:underline cursor-pointer text-xs">PED-2026-00421</a></td>
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Aprovação</span></td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">Nível 1</td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">Gerente de Área aprovou</td>
+          </tr>
+          <tr class="expand-row"><td colspan="7" class="px-4 py-4 bg-slate-50/50"><div class="bg-white border border-ecf-border rounded-lg p-4 text-xs"><div class="grid grid-cols-3 gap-4"><div><p class="font-bold text-ecf-text-aux">Movimento</p><p>PED-2026-00421 · Pedido Compra · R$ 45.000,00</p></div><div><p class="font-bold text-ecf-text-aux">Próximo nível</p><p>Nível 2 — Diretoria (USER: Admin ECF)</p></div><div><p class="font-bold text-ecf-text-aux">Tempo de resposta</p><p>29h 15min (de 48h permitidas)</p></div></div></div></td></tr>
+          <!-- Row 3 -->
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3"></td>
+            <td class="px-4 py-3 text-ecf-text-aux tabular-nums text-xs">26/03/2026 11:20</td>
+            <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold">MG</div><span class="text-sm font-medium">Marcos Gonçalves</span></div></td>
+            <td class="px-4 py-3"><a class="font-bold text-ecf-primary hover:underline cursor-pointer text-xs">NF-2026-01200</a></td>
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-red-100 text-red-700 ring-1 ring-red-200">Rejeição</span></td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">Nível 1</td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">Valores divergentes do contrato</td>
+          </tr>
+          <!-- Row 4 -->
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3"></td>
+            <td class="px-4 py-3 text-ecf-text-aux tabular-nums text-xs">24/03/2026 09:15</td>
+            <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 bg-slate-400 text-white rounded-full flex items-center justify-center text-[9px] font-bold">⚡</div><span class="text-sm font-medium">Sistema</span></div></td>
+            <td class="px-4 py-3"><a class="font-bold text-ecf-primary hover:underline cursor-pointer text-xs">PED-2026-00419</a></td>
+            <td class="px-4 py-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-700 ring-1 ring-blue-200">⚡ Auto</span></td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">—</td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">Regra #3 (Compras &lt; R$5k)</td>
+          </tr>
+          <!-- Row 5 -->
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3"></td>
+            <td class="px-4 py-3 text-ecf-text-aux tabular-nums text-xs">24/03/2026 08:00</td>
+            <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 bg-ecf-primary text-white rounded-full flex items-center justify-center text-[9px] font-bold">AE</div><span class="text-sm font-medium">Admin ECF</span></div></td>
+            <td class="px-4 py-3"><a class="font-bold text-ecf-primary hover:underline cursor-pointer text-xs">PED-2026-00420</a></td>
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Aprovação</span></td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">Nível 2</td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">Diretoria aprovou</td>
+          </tr>
+          <!-- Row 6 -->
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3"></td>
+            <td class="px-4 py-3 text-ecf-text-aux tabular-nums text-xs">25/03/2026 09:15</td>
+            <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold">AO</div><span class="text-sm font-medium">Ana Oliveira</span></div></td>
+            <td class="px-4 py-3"><a class="font-bold text-ecf-primary hover:underline cursor-pointer text-xs">PED-2026-00421</a></td>
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-700 ring-1 ring-blue-200">Criação</span></td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">—</td>
+            <td class="px-4 py-3 text-ecf-text-aux text-xs">Novo movimento registrado via PORTAL</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="px-4 py-3 bg-white border-t border-ecf-border flex items-center justify-between">
+      <p class="text-xs text-ecf-text-aux">Exibindo <span class="font-bold">6</span> de <span class="font-bold">127</span> registros</p>
+      <div class="flex items-center gap-2">
+        <button class="p-1 border border-ecf-border rounded hover:bg-slate-50 disabled:opacity-50" disabled><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></button>
+        <span class="text-xs text-ecf-text-aux font-medium">1 / 22</span>
+        <button class="p-1 border border-ecf-border rounded hover:bg-slate-50"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    </main>
+  </div>
+</div>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+const breadcrumbMap = {
+  'movements-list': 'Movimentos Controlados',
+  'movement-detail': 'Movimentos / PED-2026-00421',
+  'movement-create': 'Movimentos / Novo Movimento',
+  'rules-list': 'Regras de Aprovação',
+  'rules-search': 'Regras / Busca Avançada',
+  'rule-create': 'Regras / Nova Regra',
+  'rule-edit': 'Regras / Editar Regra #1',
+  'history': 'Histórico',
+};
+const sidebarMap = {
+  'movements-list': 'movements', 'movement-detail': 'movements', 'movement-create': 'movements',
+  'rules-list': 'rules', 'rules-search': 'rules', 'rule-create': 'rules', 'rule-edit': 'rules',
+  'history': 'history',
+};
+
+function showView(viewId) {
+  document.querySelectorAll('[data-view]').forEach(v => v.classList.remove('active'));
+  const target = document.querySelector(`[data-view="${viewId}"]`);
+  if (target) { target.classList.add('active'); target.classList.remove('fade-in'); void target.offsetWidth; target.classList.add('fade-in'); }
+  const bc = document.getElementById('breadcrumb-current');
+  if (bc && breadcrumbMap[viewId]) bc.textContent = breadcrumbMap[viewId];
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    const g = link.getAttribute('data-sidebar');
+    link.className = g === sidebarMap[viewId]
+      ? 'sidebar-link flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer text-sm transition-colors bg-[#E3F2FD] text-[#2E86C1] font-bold'
+      : 'sidebar-link flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer text-sm transition-colors text-ecf-text-aux hover:bg-slate-50 hover:text-ecf-text font-medium';
+  });
+  window.scrollTo(0, 0);
+}
+
+function updateCounter() {
+  const t = document.getElementById('overrideText'), c = document.getElementById('charCount'), b = document.getElementById('overrideBtn');
+  if (t && c && b) { const l = t.value.length; c.textContent = l; c.style.color = l >= 20 ? '#16a34a' : '#ca8a04'; b.disabled = l < 20; }
+}
+
+function updatePreview() {
+  const type = document.getElementById('mvType')?.value;
+  const val = document.getElementById('mvValue')?.value?.replace(/\./g,'').replace(',','.');
+  const numVal = parseFloat(val) || 0;
+  const preview = document.getElementById('rulePreview');
+  const match = document.getElementById('ruleMatch');
+  const autoMatch = document.getElementById('ruleAutoMatch');
+  if (!type || numVal <= 0) { preview.classList.remove('hidden'); match.classList.add('hidden'); autoMatch.classList.add('hidden'); return; }
+  preview.classList.add('hidden');
+  if (type === 'pedido' && numVal <= 5000) { autoMatch.classList.remove('hidden'); match.classList.add('hidden'); }
+  else if (type === 'pedido' && numVal > 10000) { match.classList.remove('hidden'); autoMatch.classList.add('hidden'); }
+  else { match.classList.remove('hidden'); autoMatch.classList.add('hidden'); }
+}
+
+showView('movements-list');
+</script>
+</body>
+</html>

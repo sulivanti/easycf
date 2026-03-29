@@ -86,6 +86,18 @@ Consulte `level_filter` no registro para validar. Se o agente solicitado **não*
 
 **NÃO** leia documentos além dos listados acima. Economia de contexto é crítica.
 
+## PASSO 4.5: Ingerir Tema e Spec Visual (AGN-COD-WEB only)
+
+Se o agente é **AGN-COD-WEB**, execute antes de gerar código:
+
+1. Ler `docs/03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md` → paleta, fontes, layout shell, marca, status badges
+2. Localizar spec de tela em `docs/03_especificacoes/ux/` via campo `visual_spec` do screen manifest YAML
+3. Ler spec de tela → colunas, larguras, textos, dropdowns, checklist de validação
+4. Ler ref HTML (campo `visual_ref` do manifest) → modelo visual de referência
+5. **Hierarquia de prevalência:** Spec de tela > SPEC-THEME-001 > DOC-UX-013
+
+Se a spec de tela **não** existir, o agente deve usar SPEC-THEME-001 + DOC-UX-013 como fallback e registrar em `missing_info`.
+
 ## PASSO 4: Assumir Persona do Agente
 
 Adote o **system prompt** definido em PKG-COD-001 §5 para este agente. Internalize:
@@ -292,6 +304,27 @@ Resultado: estrutura corrigida para Pattern A, React Query verificado. ✅
 1. Verifique que NENHUM arquivo em `presentation/dtos/` ou `presentation/routes/` contenha `.datetime()`
 2. Se encontrado → CORRIJA substituindo `.datetime().nullable()` por `.nullable()` e `.datetime()` por nada (remover)
 3. Registre no relatório: `"✅ EX-DTO-001: {N} ocorrências .datetime() corrigidas em response DTOs"` ou `"✅ EX-DTO-001: nenhum .datetime() encontrado"`
+
+### 7.X Gate de Conformidade Visual (MUST — apenas AGN-COD-WEB)
+
+Se o agente é **AGN-COD-WEB** e a spec de tela possui seção "Checklist" (tipicamente a última seção):
+
+1. Para cada item do checklist, verificar se o código gerado atende o critério
+2. Reportar score: `"✅ Conformidade visual: {N}/{total} itens do checklist atendidos"`
+3. Para itens não atendidos, registrar em `missing_info` com justificativa
+
+**Exemplo:**
+```
+🔍 Gate 7.X — Conformidade Visual (05-users-list-spec)
+
+Checklist: 20/24 itens conformes
+  ✅ 7 colunas na ordem correta
+  ✅ StatusBadge uppercase com cores por status
+  ✅ Nome como link azul #2E86C1
+  ❌ Dropdown contextual por status — não implementado (missing: DropdownMenu per-row)
+  ❌ Paginação com texto "Exibindo X de Y" — texto faltante
+  ...
+```
 
 ### 7.3 Build Gate — Compilação TypeScript (MUST — todos os agentes exceto AGN-COD-VAL)
 

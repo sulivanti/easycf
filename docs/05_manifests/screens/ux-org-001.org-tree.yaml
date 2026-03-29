@@ -14,6 +14,8 @@ route: "/organizacao"
 auth_required: true
 pre_auth: false
 layout: shell
+visual_spec: "docs/03_especificacoes/ux/10-org-tree-spec.md"
+visual_ref: "docs/03_especificacoes/ux/10-org-tree-ref.html"
 
 linked_stories:
   - "US-MOD-003"

@@ -4,16 +4,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@shared/lib/utils';
 
 const statusBadgeVariants = cva(
-  'inline-flex w-fit shrink-0 items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-[length:var(--type-caption)] font-medium whitespace-nowrap',
+  'inline-flex w-fit shrink-0 items-center justify-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.3px] whitespace-nowrap',
   {
     variants: {
       status: {
-        success: 'bg-status-success-bg text-success-600',
-        warning: 'bg-status-warning-bg text-warning-600',
-        error: 'bg-status-error-bg text-danger-600',
-        info: 'bg-status-info-bg text-primary-600',
-        neutral: 'bg-status-neutral-bg text-neutral-600',
-        purple: 'bg-status-purple-bg text-purple-600',
+        success: 'border-status-success-border bg-status-success-bg text-success-600',
+        warning: 'border-status-pending-border bg-status-warning-bg text-warning-600',
+        error: 'border-status-error-border bg-status-error-bg text-danger-600',
+        info: 'border-accent-border bg-status-info-bg text-primary-600',
+        neutral: 'border-status-neutral-border bg-status-neutral-bg text-status-neutral-text',
+        purple: 'border-purple-200 bg-status-purple-bg text-purple-600',
       },
     },
     defaultVariants: {

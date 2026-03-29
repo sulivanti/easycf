@@ -33,94 +33,24 @@ Os design tokens são variáveis CSS definidas no bloco `@theme` do Tailwind CSS
 
 ### 2.1 Cores Semânticas
 
-Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-{shade}`:
+Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-{shade}`.
+
+> **Valores reais do projeto:** Os hex codes específicos (cores primárias, hierarquia de texto, status badges, bordas) estão definidos em [`SPEC-THEME-001`](../03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md). Este documento define apenas a **estrutura de tokens** e as **regras de naming**.
+
+**Estrutura obrigatória de tokens:**
 
 ```css
 @theme {
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
-  --color-primary-950: #172554;
-
-  --color-neutral-50: #f8fafc;
-  --color-neutral-100: #f1f5f9;
-  --color-neutral-200: #e2e8f0;
-  --color-neutral-300: #cbd5e1;
-  --color-neutral-400: #94a3b8;
-  --color-neutral-500: #64748b;
-  --color-neutral-600: #475569;
-  --color-neutral-700: #334155;
-  --color-neutral-800: #1e293b;
-  --color-neutral-900: #0f172a;
-  --color-neutral-950: #020617;
-
-  --color-success-500: #22c55e;
-  --color-success-600: #16a34a;
-  --color-warning-500: #f59e0b;
-  --color-warning-600: #d97706;
-  --color-danger-500: #ef4444;
-  --color-danger-600: #dc2626;
-  --color-info-500: #06b6d4;
-  --color-info-600: #0891b2;
-
-  /* Brand (logo only — ref DOC-UX-013-M06) */
-  --color-a1-accent: #F58C32;
-  --color-a1-dark: #111111;
-  --color-a1-bg: #f8fafc;
-  --color-a1-bg-alt: #f8fafc;
-  --color-a1-border: #e2e8f0;
-  --color-a1-border-light: #f1f5f9;
-  --color-a1-active-bg: #eff6ff;
-
-  /* Text Hierarchy (cool slate — ref DOC-UX-013-M06) */
-  --color-a1-text-primary: #1e293b;
-  --color-a1-text-secondary: #334155;
-  --color-a1-text-tertiary: #475569;
-  --color-a1-text-auxiliary: #64748b;
-  --color-a1-text-hint: #94a3b8;
-  --color-a1-text-placeholder: #cbd5e1;
-  --color-a1-text-muted-icon: #94a3b8;
-
-  /* Accent Variants (blue — ref DOC-UX-013-M06) */
-  --color-accent-hover: #1d4ed8;
-  --color-accent-border: #bfdbfe;
-
-  /* Semantic Context Aliases */
-  --color-bg-page: #f8fafc;       /* slate-50 */
-  --color-bg-sidebar: #FFFFFF;
-  --color-bg-card: #FFFFFF;
-
-  /* Sidebar (ref DOC-UX-013-M06) */
-  --color-sidebar-active-bg: #eff6ff;
-  --color-sidebar-active-text: #2563eb;
-
-  /* Layout Dimensions (ref DOC-UX-013-M06) */
-  --topbar-height: 4rem;
-  --sidebar-collapsed: 4rem;
-  --sidebar-expanded: 14rem;
-
-  /* Status Backgrounds (light variants para badges/alerts) */
-  --color-status-success-bg: #DCFCE7;
-  --color-status-warning-bg: #FEF3C7;
-  --color-status-error-bg: #FEE2E2;
-  --color-status-info-bg: #DBEAFE;
-  --color-status-neutral-bg: #F1F5F9;
-  --color-status-purple-bg: #F3E8FF;
-
-  /* Topbar (light — ref DOC-UX-011-M05, DOC-UX-013-M06) */
-  --color-topbar-bg: #FFFFFF;
-  --color-topbar-separator: #e2e8f0;
-  --color-topbar-text: #1e293b;
-  --color-topbar-text-muted: #64748b;
-  --color-topbar-badge-bg: #2563eb;
-  --color-topbar-badge-border: #1d4ed8;
+  /* Primary scale: --color-primary-{50..950} */
+  /* Neutral scale: --color-neutral-{50..950} */
+  /* Semantic: --color-success-{500,600}, --color-warning-{500,600}, --color-danger-{500,600}, --color-info-{500,600} */
+  /* Brand: --color-a1-accent (logo only), --color-a1-dark */
+  /* Text Hierarchy: --color-a1-text-{primary,secondary,tertiary,auxiliary,hint,placeholder} */
+  /* Context Aliases: --color-bg-page, --color-bg-sidebar, --color-bg-card */
+  /* Sidebar: --color-sidebar-active-bg, --color-sidebar-active-text */
+  /* Layout: --topbar-height, --sidebar-expanded */
+  /* Status Backgrounds: --color-status-{success,warning,error,info,neutral,purple}-bg */
+  /* Topbar: --color-topbar-bg, --color-topbar-separator, --color-topbar-text, --color-topbar-text-muted, --color-topbar-badge-bg */
 }
 ```
 
@@ -128,7 +58,7 @@ Cores definidas como CSS custom properties com nomenclatura `--color-{semantic}-
 
 **Regra:** Páginas que implementam o layout A1 DEVEM usar tokens de contexto (`bg-page`, `bg-sidebar`, etc.) ao invés de referenciar `a1-bg` diretamente. Isso permite futura troca de tema sem alterar páginas.
 
-**Regra (M06):** Os tokens `--color-a1-accent` (#F58C32) e `--color-a1-dark` (#111111) são **exclusivos** para o logo A1 e o painel de branding do login. Elementos interativos (botões, toggles, paginação, focus rings, sidebar active) DEVEM usar `--color-primary-600` (#2563eb).
+**Regra:** Os tokens `--color-a1-accent` e `--color-a1-dark` são **exclusivos** para o logo A1 e o painel de branding do login. Elementos interativos (botões, toggles, paginação, focus rings, sidebar active) DEVEM usar `--color-primary-600`. Valores concretos em SPEC-THEME-001.
 
 ### 2.2 Tipografia
 
@@ -515,6 +445,7 @@ O ThemeToggle DEVE:
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.8.0 | 2026-03-29 | Refatoração: valores hardcoded removidos da §2.1 — agora referencia SPEC-THEME-001 para valores concretos. DOC-UX-013 mantém apenas regras estruturais e naming conventions. |
 | 1.7.0 | 2026-03-27 | Amendment M06: Unificação de tokens ao stitch modelagem — accent interativo de laranja (#F58C32) para azul (#2563eb), topbar de dark (#111) para white (#FFF), superfícies de warm beige para cool slate, texto de warm grays para cool grays. Laranja reservado para logo/branding. Novos tokens: sidebar-active-bg/text, topbar-height, sidebar-collapsed/expanded. |
 | 1.6.0 | 2026-03-27 | Amendments M03+M04+M05: 12 novos componentes shared/ui — Form (FormField, SearchBar, FilterBar, Select, Toggle), Data (StatusBadge, Pagination, EmptyState, Tag, IconButton), Feedback (ConfirmationModal, PageHeader). |
 | 1.3.0 | 2026-03-27 | Amendment M02: ~35 tokens semânticos — accent variants, context aliases (bg-page/sidebar/card), 6x status-bg, 6x topbar, 7x spacing semântico, 8x type scale, 3x radii extras. Ref: stitch HTMLs, DOC-UX-011-M04. |

@@ -147,7 +147,10 @@
         { "id": "DOC-GNP-00", "sections": "*", "reason": "Regras consolidadas MUST/SHOULD para geração de código" },
         { "id": "DOC-FND-000", "sections": ["§2", "§3"], "reason": "Anti-patterns Foundation e SEC-002 canônico" },
         { "id": "DOC-ESC-001", "sections": ["§4", "§6"], "reason": "Scoring de nível e matriz MUST/SHOULD por camada" },
-        { "id": "DOC-UX-013", "sections": "*", "reason": "Design System, tokens, Tailwind v4, shared components e anti-patterns visuais" },
+        { "id": "SPEC-THEME-001", "path": "docs/03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md", "sections": "*", "reason": "Tema visual do projeto — prevalece sobre DOC-UX-013 para valores concretos" },
+        { "id": "SCREEN-SPEC", "path": "docs/03_especificacoes/ux/{screen}-spec.md", "sections": "*", "reason": "Spec pixel-perfect da tela" },
+        { "id": "SCREEN-REF", "path": "docs/03_especificacoes/ux/{screen}-ref.html", "sections": "*", "reason": "HTML de referência visual" },
+        { "id": "DOC-UX-013", "sections": "*", "reason": "Design System, tokens, Tailwind v4, shared components e anti-patterns visuais (regras estruturais — fallback)" },
         { "id": "DOC-UX-014", "sections": "*", "reason": "Page layout blueprints per screen type" }
       ]
     },
@@ -163,6 +166,7 @@
         { "id": "DOC-PADRAO-001", "sections": "*", "reason": "Stack tecnológico do projeto" },
         { "id": "DOC-PADRAO-002", "sections": "*", "reason": "Dependências NodeJS autorizadas" },
         { "id": "DOC-GNP-00", "sections": ["§3"], "reason": "Estrutura de diretórios do monorepo" },
+        { "id": "SPEC-THEME-001", "path": "docs/03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md", "sections": "*", "reason": "Tema visual do projeto — cores, fontes, tokens para index.css correto" },
         { "id": "DOC-UX-013", "sections": "*", "reason": "Design System, tokens visuais, shared components e Tailwind v4 config para scaffold web" }
       ]
     },
@@ -193,6 +197,12 @@
       "docs": [
         { "id": "DOC-UX-013", "sections": "*", "reason": "Design System — tokens, cores, tipografia, shared components" },
         { "id": "DOC-UX-011", "sections": ["§3", "§4"], "reason": "Application Shell — layout e componentes globais" }
+      ]
+    },
+    "ux-sandbox-create": {
+      "docs": [
+        { "id": "SPEC-THEME-001", "path": "docs/03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md", "sections": "*", "reason": "Tema visual — cores, fontes, layout shell para frames Penpot" },
+        { "id": "DOC-UX-013", "sections": "*", "reason": "Design System — regras estruturais" }
       ]
     }
   }

@@ -24,11 +24,11 @@ flowchart TD
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E5  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E6  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
 ```
 
-*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
+*O módulo está na **Etapa 6 — Adendos Futuros (Amendments). Amendments UX-001-M01, DATA-001-M01, FR-001-M01 em DRAFT.**
 
 ---
 
@@ -36,6 +36,10 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.5.0 | 2026-03-29 | codegen | Codegen parcial: AGN-COD-WEB + AGN-COD-VAL (2 agentes, 13 arquivos). Camadas: web, validation. Split-panel layout, DetailPanel, FormPanel inline 480px, DeactivateModal customizado, OrgTreeNode com Lucide icons, ReadOnlyField, campos cadastrais FR-006. VAL: 10/10 checks PASS. |
+| 1.4.0 | 2026-03-29 | merge-amendment | Merge UX-001-M01: split-panel layout, DetailPanel, FormPanel inline, modal desativacao, TreeNode visual, ReadOnlyField. Base UX-001 bumped v0.3.0. |
+| 1.3.1 | 2026-03-29 | merge-amendment | Merge DATA-001-M01: 6 campos cadastrais (cnpj, razao_social, filial, responsavel, telefone, email_contato). Base DATA-001 bumped v0.3.0. |
+| 1.3.0 | 2026-03-29 | merge-amendment | Merge FR-001-M01 + create-amendment batch: FR-006 campos cadastrais nos endpoints CRUD. Base FR-001 bumped v0.4.0. 3 pendencias criadas (PENDENTE-008/009/010). Ref: specs Penpot 10-OrgTree, 11-OrgForm. |
 | 1.2.2 | 2026-03-25 | merge-amendment | Merge FR-001-C03: fix 500 schema mismatch em GET list, GET detail, PATCH update — handlers devem mapear camelCase→snake_case + Date→ISO string. Base FR-001 bumped para v0.3.2. Ref: spec-fix-org-units-response-schema-mismatch. |
 | 1.2.1 | 2026-03-25 | merge-amendment | Merge FR-001-C02: fix createOrgUnitEvent() tenantId — SYSTEM_TENANT_ID para CRUD events (cross-tenant ADR-003), tenantId explícito em link/unlink. Base FR-001 bumped para v0.3.1. Ref: spec-fix-domain-events-tenant-id v2.0. |
 | 1.2.0 | 2026-03-25 | codegen | Codegen re-run: 6 agentes executados, 4 arquivos atualizados/criados. Correções: FKs cross-module em org-units.ts (createdBy→users.id, parentId self-ref), infrastructure/schema.ts criado, barrel export desambiguado, OpenAPI spec mod-003-org-units.yaml gerado (9 paths). VAL: 0 checks_failed. |

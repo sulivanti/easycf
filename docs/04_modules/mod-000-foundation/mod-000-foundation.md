@@ -147,11 +147,14 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [FR-000-C04](amendments/fr/FR-000-C04.md) — Correção: mapeamento camelCase→snake_case nas rotas de auth (login, refresh, /me) + refreshResponse separado (DEF-001/DEF-002)
 - [INT-000-C01](amendments/int/INT-000-C01.md) — Correção: OpenAPI v1.yaml referencia LoginResponse (com user) para /auth/refresh — trocar por RefreshResponse (derivado de FR-000-C04)
 - [FR-000-C03](amendments/fr/FR-000-C03.md) — Correção: entry point desconectado dos módulos — rewrite do index.ts para registrar todos os 9 módulos (30 route plugins)
+- [UX-000-M01](amendments/ux/UX-000-M01.md) — Design visual definitivo 06-UserForm em UX-004: FormCard 680px, campos Nome/Email/Perfil/Empresa, modo edição toggle status + resetar senha (PEN-06-UserForm)
 - [FR-000-C05](amendments/fr/FR-000-C05.md) — Correção: LoginUseCase gera JWT sem tenant/scopes — resolve via TenantUserRepository + RoleRepository antes do generatePair
 - [SEC-000-M01](amendments/sec/SEC-000-M01.md) — Melhoria: regra anti-escalação via role_id na criação de usuários
 - [FR-000-C06](amendments/fr/FR-000-C06.md) — Correção: sessão expirada causa redirect loop — AppShell não limpa localStorage antes de navegar para /login. Solução: forceLogout (limpa tokens + cache + full reload)
 - [UX-000-C01](amendments/ux/UX-000-C01.md) — Correção: tabela de erros UX-000 não detalha comportamento do 401 (limpeza tokens, full reload). Adição jornada "Sessão Expirada por Timeout"
 - [FR-000-C07](amendments/fr/FR-000-C07.md) — Correção: 5 use cases pós-auth passam tenantId vazio → fallback mascara perda de rastreabilidade. Fix: propagar request.session.tenantId em change-password, logout, update-profile, create-role, update-role
+- [UX-000-C02](amendments/ux/UX-000-C02.md) — Correção: LoginPage.tsx diverge da spec v3 / Penpot validado (PEN-01). Alinhamento visual completo: gradiente branding, SSO Microsoft, "Primeiro acesso", PasswordStrength, labels UPPER, cores spec
+- [UX-000-M02](amendments/ux/UX-000-M02.md) — Melhoria: Dashboard executivo com MetricCards, DonutChart e ActivityList. Alinhamento com design Penpot 02-Dashboard validado (99 objetos, 19/19 conformidades)
 <!-- end amendments-index -->
 
 > **Nota:** 8 amendments de documentos normativos foram migrados para `docs/01_normativos/amendments/{DOC-ID}/` em 2026-03-25. Normativos são transversais e não pertencem a nenhum módulo específico. Ver: DOC-PADRAO-001-C01, DOC-PADRAO-001-M01, DOC-PADRAO-004-M01, DOC-PADRAO-005-C01, DOC-UX-011-M01, DOC-UX-011-M02, DOC-UX-012-M02, DOC-GNP-00-M01.

@@ -160,7 +160,9 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
         {items.length === 0 ? (
           <EmptyState
             title={searchInput ? COPY.empty_search(searchInput) : COPY.empty_cases}
-            description={canWrite && !searchInput ? 'Abra o primeiro caso para começar.' : undefined}
+            description={
+              canWrite && !searchInput ? 'Abra o primeiro caso para começar.' : undefined
+            }
           />
         ) : (
           <TooltipProvider>

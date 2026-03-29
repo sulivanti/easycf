@@ -183,7 +183,9 @@ export function CyclesListPage({ userScopes }: CyclesListPageProps) {
                     <TableCell>{cycle.nome}</TableCell>
                     <TableCell>v{cycle.version}</TableCell>
                     <TableCell>
-                      <StatusBadge status={VARIANT_TO_STATUS[statusInfo.variant] ?? 'neutral'}>{statusInfo.label}</StatusBadge>
+                      <StatusBadge status={VARIANT_TO_STATUS[statusInfo.variant] ?? 'neutral'}>
+                        {statusInfo.label}
+                      </StatusBadge>
                     </TableCell>
                     <TableCell className="text-a1-text-auxiliary">
                       {new Date(cycle.created_at).toLocaleDateString('pt-BR')}

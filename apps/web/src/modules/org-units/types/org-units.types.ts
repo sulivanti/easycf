@@ -1,5 +1,6 @@
 /**
- * @contract DATA-001, FR-001, FR-002, FR-003, FR-004, FR-005, UX-001, UX-002, SEC-001, BR-001..012
+ * @contract DATA-001, DATA-001-M01, FR-001, FR-001-M01, FR-002, FR-003, FR-004, FR-005, FR-006,
+ *           UX-001, UX-001-M01, UX-002, SEC-001, BR-001..012
  * MOD-003 types: DTOs, view-models, permissions, copy constants, status badges, formatters.
  * Consolidates all domain logic into a single types module (Pattern A).
  */
@@ -38,9 +39,20 @@ export interface OrgUnitListItemDTO {
   created_at: string;
 }
 
+// ── Cadastral fields (FR-006 / DATA-001-M01) ────────────────
+
+export interface CadastralFields {
+  cnpj: string | null;
+  razao_social: string | null;
+  filial: string | null;
+  responsavel: string | null;
+  telefone: string | null;
+  email_contato: string | null;
+}
+
 // ── Detail (GET /org-units/:id) ─────────────────────────────
 
-export interface OrgUnitDetailDTO {
+export interface OrgUnitDetailDTO extends CadastralFields {
   id: string;
   codigo: string;
   nome: string;
@@ -80,11 +92,14 @@ export interface CreateOrgUnitRequest {
   nome: string;
   descricao?: string | null;
   parent_id?: string | null;
+  cnpj?: string;
+  razao_social?: string;
+  responsavel?: string;
 }
 
 // ── Create/Update response ──────────────────────────────────
 
-export interface OrgUnitResponseDTO {
+export interface OrgUnitResponseDTO extends CadastralFields {
   id: string;
   codigo: string;
   nome: string;
@@ -99,6 +114,12 @@ export interface OrgUnitResponseDTO {
 export interface UpdateOrgUnitRequest {
   nome?: string;
   descricao?: string | null;
+  cnpj?: string | null;
+  razao_social?: string | null;
+  filial?: string | null;
+  responsavel?: string | null;
+  telefone?: string | null;
+  email_contato?: string | null;
 }
 
 // ── Link tenant (POST /org-units/:id/tenants) ───────────────
@@ -215,9 +236,27 @@ export interface OrgUnitTreeNodeVM {
   canExpand: boolean;
 }
 
+// ── Detail ViewModel (UX-ORG-001 — DetailPanel) ─────────────
+
+export interface OrgUnitDetailVM extends CadastralFields {
+  id: string;
+  codigo: string;
+  nome: string;
+  descricao: string | null;
+  nivel: OrgUnitNivel;
+  parentId: string | null;
+  status: OrgUnitStatus;
+  statusBadge: StatusBadge;
+  levelInfo: LevelInfo;
+  createdAtFormatted: string;
+  updatedAtFormatted: string;
+  breadcrumb: { id: string; codigo: string; nome: string; nivel: OrgUnitNivel }[];
+  tenants: { tenantId: string; codigo: string; name: string }[];
+}
+
 // ── Form ViewModel (UX-ORG-002) ────────────────────────────
 
-export interface OrgUnitFormVM {
+export interface OrgUnitFormVM extends CadastralFields {
   id: string;
   codigo: string;
   nome: string;
@@ -257,6 +296,39 @@ export function toTreeNodeVM(dto: OrgUnitTreeNodeDTO): OrgUnitTreeNodeVM {
   };
 }
 
+export function toDetailVM(dto: OrgUnitDetailDTO): OrgUnitDetailVM {
+  return {
+    id: dto.id,
+    codigo: dto.codigo,
+    nome: dto.nome,
+    descricao: dto.descricao,
+    nivel: dto.nivel,
+    parentId: dto.parent_id,
+    status: dto.status,
+    statusBadge: getStatusBadge(dto.status),
+    levelInfo: getLevelInfo(dto.nivel),
+    createdAtFormatted: formatDatePtBr(dto.created_at),
+    updatedAtFormatted: formatDatePtBr(dto.updated_at),
+    cnpj: dto.cnpj,
+    razao_social: dto.razao_social,
+    filial: dto.filial,
+    responsavel: dto.responsavel,
+    telefone: dto.telefone,
+    email_contato: dto.email_contato,
+    breadcrumb: dto.ancestors.map((a) => ({
+      id: a.id,
+      codigo: a.codigo,
+      nome: a.nome,
+      nivel: a.nivel,
+    })),
+    tenants: dto.tenants.map((t) => ({
+      tenantId: t.tenant_id,
+      codigo: t.codigo,
+      name: t.name,
+    })),
+  };
+}
+
 export function toFormVM(dto: OrgUnitDetailDTO): OrgUnitFormVM {
   return {
     id: dto.id,
@@ -270,6 +342,12 @@ export function toFormVM(dto: OrgUnitDetailDTO): OrgUnitFormVM {
     levelInfo: getLevelInfo(dto.nivel),
     createdAtFormatted: formatDatePtBr(dto.created_at),
     updatedAtFormatted: formatDatePtBr(dto.updated_at),
+    cnpj: dto.cnpj,
+    razao_social: dto.razao_social,
+    filial: dto.filial,
+    responsavel: dto.responsavel,
+    telefone: dto.telefone,
+    email_contato: dto.email_contato,
     breadcrumb: dto.ancestors.map((a) => ({
       id: a.id,
       codigo: a.codigo,

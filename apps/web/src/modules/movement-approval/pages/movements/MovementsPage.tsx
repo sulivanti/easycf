@@ -1,13 +1,19 @@
 /**
- * @contract UX-009 §30
+ * @contract UX-009 §30, UX-009-M01 D3
  *
- * UX-APPROV-003: Movimentos Controlados.
- * Table: listagem paginada com filtros por tipo/status/período, click navega para detalhe.
- * Route: /approvals/movements
+ * View ① — Movimentos Lista (/approvals/movements)
+ * DataTable com 4 tabs, StatusBadges inline, botões Aprovar/Rejeitar, searchbar, paginação.
  */
 
-import { useState, useMemo } from 'react';
-import { useNavigate } from '@tanstack/react-router';
+import React, { useState, useCallback, useRef } from 'react';
+import { useNavigate, Link } from '@tanstack/react-router';
+import { toast } from 'sonner';
+import {
+  PlusIcon,
+  SearchIcon,
+  ChevronDownIcon,
+  ZapIcon,
+} from 'lucide-react';
 import {
   Button,
   Skeleton,
@@ -19,218 +25,422 @@ import {
   TableRow,
 } from '@shared/ui';
 import { PageHeader } from '@shared/ui/page-header';
-import { FilterBar } from '@shared/ui/filter-bar';
-import { Select } from '@shared/ui/select';
 import { StatusBadge, type StatusType } from '@shared/ui/status-badge';
 import { Pagination } from '@shared/ui/pagination';
 import { EmptyState } from '@shared/ui/empty-state';
-import { FileTextIcon } from 'lucide-react';
-import { httpClient } from '@modules/foundation/api/http-client.js';
+import { useMovements } from '../../hooks/use-movements.js';
+import { useApproveMovement, useRejectMovement } from '../../hooks/use-approvals.js';
+import type { MovementStatus } from '../../types/movement-approval.types.js';
 
-// ── Types ────────────────────────────────────────────────────
+// ── Tab definitions ──────────────────────────────────────────────────────────
 
-type MovementStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'OVERRIDDEN' | 'AUTO_APPROVED';
+type TabKey = 'pending' | 'approved' | 'rejected' | 'all';
 
-interface MovementListItem {
-  id: string;
-  codigo: string;
-  tipo: string;
-  objeto: string;
-  valor: string;
-  status: MovementStatus;
-  solicitante: string;
-  created_at: string;
+interface TabDef {
+  key: TabKey;
+  label: string;
+  statusFilter?: MovementStatus;
 }
 
-interface MovementsResponse {
-  data: MovementListItem[];
-  total: number;
-  page: number;
-  page_size: number;
-}
+const TABS: TabDef[] = [
+  { key: 'pending', label: 'Pendentes', statusFilter: 'PENDING_APPROVAL' },
+  { key: 'approved', label: 'Aprovados', statusFilter: 'APPROVED' },
+  { key: 'rejected', label: 'Rejeitados', statusFilter: 'REJECTED' },
+  { key: 'all', label: 'Todos' },
+];
 
-const STATUS_MAP: Record<MovementStatus, { label: string; variant: StatusType }> = {
+// ── Status map ───────────────────────────────────────────────────────────────
+
+const STATUS_MAP: Record<MovementStatus, { label: string; variant: StatusType; auto?: boolean }> = {
   PENDING_APPROVAL: { label: 'Pendente', variant: 'warning' },
   APPROVED: { label: 'Aprovado', variant: 'success' },
+  AUTO_APPROVED: { label: 'Auto', variant: 'info', auto: true },
   REJECTED: { label: 'Rejeitado', variant: 'error' },
+  CANCELLED: { label: 'Cancelado', variant: 'error' },
   OVERRIDDEN: { label: 'Override', variant: 'purple' },
-  AUTO_APPROVED: { label: 'Auto-aprovado', variant: 'info' },
+  EXECUTED: { label: 'Executado', variant: 'success' },
+  FAILED: { label: 'Falhou', variant: 'error' },
 };
 
-const STATUS_OPTIONS = [
-  { value: '', label: 'Todos os status' },
-  { value: 'PENDING_APPROVAL', label: 'Pendente' },
-  { value: 'APPROVED', label: 'Aprovado' },
-  { value: 'REJECTED', label: 'Rejeitado' },
-  { value: 'OVERRIDDEN', label: 'Override' },
-  { value: 'AUTO_APPROVED', label: 'Auto-aprovado' },
-];
-
-const TIPO_OPTIONS = [
-  { value: '', label: 'Todos os tipos' },
-  { value: 'INCLUSAO', label: 'Inclusão' },
-  { value: 'ALTERACAO', label: 'Alteração' },
-  { value: 'EXCLUSAO', label: 'Exclusão' },
-];
-
-// ── Hook ─────────────────────────────────────────────────────
-
-function useMovements(filters: { status: string; tipo: string; page: number }) {
-  const [data, setData] = useState<MovementsResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchData = useMemo(() => {
-    let cancelled = false;
-    async function load() {
-      setIsLoading(true);
-      try {
-        const params = new URLSearchParams();
-        if (filters.status) params.set('status', filters.status);
-        if (filters.tipo) params.set('tipo', filters.tipo);
-        params.set('page', String(filters.page));
-        params.set('page_size', '20');
-        const qs = params.toString();
-        const res = await httpClient.get<MovementsResponse>(
-          `/approvals/movements${qs ? `?${qs}` : ''}`,
-        );
-        if (!cancelled) setData(res);
-      } catch {
-        if (!cancelled) setData({ data: [], total: 0, page: 1, page_size: 20 });
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
-    }
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [filters.status, filters.tipo, filters.page]);
-
-  void fetchData;
-
-  return { data, isLoading };
-}
-
-// ── Component ────────────────────────────────────────────────
+// ── Component ────────────────────────────────────────────────────────────────
 
 export function MovementsPage() {
   const navigate = useNavigate();
-  const [statusFilter, setStatusFilter] = useState('');
-  const [tipoFilter, setTipoFilter] = useState('');
+  const [activeTab, setActiveTab] = useState<TabKey>('pending');
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [page, setPage] = useState(1);
+  const [inlineOpinions, setInlineOpinions] = useState<Record<string, string>>({});
+  const [showOpinionFor, setShowOpinionFor] = useState<string | null>(null);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { data, isLoading } = useMovements({ status: statusFilter, tipo: tipoFilter, page });
-  const items = data?.data ?? [];
-  const totalPages = data ? Math.ceil(data.total / data.page_size) : 0;
+  const activeTabDef = TABS.find((t) => t.key === activeTab)!;
+
+  const params = {
+    status: activeTabDef.statusFilter,
+    search: search || undefined,
+    limit: 30,
+  };
+
+  const movementsQuery = useMovements(params);
+  const approveMut = useApproveMovement();
+  const rejectMut = useRejectMovement();
+
+  const movements = movementsQuery.data?.data ?? [];
+  const hasMore = movementsQuery.data?.has_more ?? false;
+
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearchInput(value);
+      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+      searchTimeoutRef.current = setTimeout(() => {
+        setSearch(value);
+        setPage(1);
+      }, 400);
+    },
+    [],
+  );
+
+  const handleTabChange = (tab: TabKey) => {
+    setActiveTab(tab);
+    setPage(1);
+    setSearch('');
+    setSearchInput('');
+    setShowOpinionFor(null);
+  };
+
+  function handleApprove(movementId: string) {
+    const opinion = inlineOpinions[movementId] ?? '';
+    if (opinion.trim().length < 10) {
+      toast.error('Parecer deve ter pelo menos 10 caracteres.');
+      return;
+    }
+    approveMut.mutate(
+      { movementId, data: { opinion: opinion.trim() } },
+      {
+        onSuccess: () => {
+          toast.success('Movimento aprovado.');
+          setShowOpinionFor(null);
+          setInlineOpinions((p) => ({ ...p, [movementId]: '' }));
+        },
+        onError: (err) => toast.error(err instanceof Error ? err.message : 'Erro ao aprovar.'),
+      },
+    );
+  }
+
+  function handleReject(movementId: string) {
+    const opinion = inlineOpinions[movementId] ?? '';
+    if (opinion.trim().length < 10) {
+      toast.error('Parecer deve ter pelo menos 10 caracteres.');
+      return;
+    }
+    rejectMut.mutate(
+      { movementId, data: { opinion: opinion.trim() } },
+      {
+        onSuccess: () => {
+          toast.success('Movimento rejeitado.');
+          setShowOpinionFor(null);
+          setInlineOpinions((p) => ({ ...p, [movementId]: '' }));
+        },
+        onError: (err) => toast.error(err instanceof Error ? err.message : 'Erro ao rejeitar.'),
+      },
+    );
+  }
 
   function formatDate(iso: string) {
-    return new Date(iso).toLocaleString('pt-BR', {
+    return new Date(iso).toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
-      year: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
+      year: 'numeric',
     });
   }
+
+  function formatValue(value: number | null) {
+    if (value === null) return '—';
+    return value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  const isProcessed = (status: MovementStatus) =>
+    status === 'APPROVED' ||
+    status === 'AUTO_APPROVED' ||
+    status === 'REJECTED' ||
+    status === 'OVERRIDDEN' ||
+    status === 'CANCELLED' ||
+    status === 'EXECUTED';
 
   return (
     <div className="space-y-[var(--space-lg)]">
       <PageHeader
         title="Movimentos Controlados"
-        description="Acompanhe os movimentos submetidos ao motor de aprovação."
-        breadcrumbs={[{ label: 'Aprovação', href: '/approvals/inbox' }, { label: 'Movimentos' }]}
+        description="Gerencie e aprove as solicitações pendentes no sistema."
+        breadcrumbs={[{ label: 'Aprovação' }, { label: 'Movimentos Controlados' }]}
+        actions={
+          <Button
+            onClick={() => navigate({ to: '/approvals/movements/new' })}
+            className="bg-[#2E86C1] text-white hover:bg-[#2573a7]"
+          >
+            <PlusIcon className="size-4" />
+            Novo Movimento
+          </Button>
+        }
       />
 
-      <FilterBar>
-        <Select
-          options={TIPO_OPTIONS}
-          value={tipoFilter}
-          onChange={(e) => {
-            setTipoFilter(e.target.value);
-            setPage(1);
-          }}
-        />
-        <Select
-          options={STATUS_OPTIONS}
-          value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setPage(1);
-          }}
-        />
-      </FilterBar>
+      {/* Tab Bar */}
+      <div className="border-b border-[#E8E8E6]">
+        <nav className="flex gap-0" aria-label="Filtros por status">
+          {TABS.map((tab) => (
+            <button
+              key={tab.key}
+              type="button"
+              onClick={() => handleTabChange(tab.key)}
+              className={[
+                'relative flex items-center gap-2 px-4 py-2.5 font-display text-[13px] transition-colors',
+                activeTab === tab.key
+                  ? 'border-b-2 border-[#2E86C1] font-semibold text-[#2E86C1]'
+                  : 'font-medium text-[#888888] hover:text-[#111111]',
+              ].join(' ')}
+            >
+              {tab.label}
+              {tab.key === 'pending' && (
+                <span className="flex size-5 items-center justify-center rounded-full bg-[#2E86C1] text-[10px] font-bold text-white">
+                  {movementsQuery.data?.data.length ?? 0}
+                </span>
+              )}
+            </button>
+          ))}
+        </nav>
+      </div>
 
-      {isLoading ? (
+      {/* Search Row */}
+      <div className="flex items-center gap-3">
+        <div className="relative w-64">
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#CCCCCC]" />
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Buscar por número ou solicitante..."
+            className="h-9 w-full rounded-md border border-[#E8E8E6] bg-white pl-9 pr-3 text-[13px] text-[#111111] outline-none placeholder:text-[#CCCCCC] focus:border-[#2E86C1] focus:ring-[3px] focus:ring-[#2E86C1]/20"
+          />
+        </div>
+        <Link
+          to="/approvals/rules/search"
+          className="text-[12px] font-semibold text-[#2E86C1] hover:underline"
+        >
+          Busca Avançada
+        </Link>
+        <div className="ml-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-[#E8E8E6] text-[#111111]"
+          >
+            Ações em Lote
+            <ChevronDownIcon className="ml-1 size-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Table / States */}
+      {movementsQuery.isLoading ? (
         <div className="space-y-2">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-12 w-full rounded-md" />
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-11 w-full rounded-md" />
           ))}
         </div>
-      ) : items.length === 0 ? (
+      ) : movements.length === 0 ? (
         <EmptyState
-          icon={<FileTextIcon className="size-12" />}
           title="Nenhum movimento encontrado"
-          description="Não há movimentos registrados com os filtros selecionados."
+          description="Não há movimentos com os filtros selecionados."
           action={
-            statusFilter || tipoFilter ? (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setStatusFilter('');
-                  setTipoFilter('');
-                }}
-              >
-                Limpar filtros
+            search ? (
+              <Button variant="outline" size="sm" onClick={() => handleSearchChange('')}>
+                Limpar busca
               </Button>
             ) : undefined
           }
         />
       ) : (
         <>
-          <div className="rounded-lg border border-a1-border">
+          <div className="overflow-hidden rounded-lg border border-[#E8E8E6] bg-white">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Código</TableHead>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead>Objeto</TableHead>
-                  <TableHead>Valor</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Solicitante</TableHead>
-                  <TableHead>Data</TableHead>
+                <TableRow className="bg-[#F5F5F3]">
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                    Status
+                  </TableHead>
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                    Tipo
+                  </TableHead>
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                    Número
+                  </TableHead>
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                    Solicitante
+                  </TableHead>
+                  <TableHead className="text-right text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                    Valor R$
+                  </TableHead>
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                    Data
+                  </TableHead>
+                  <TableHead className="text-center text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                    Ações
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {items.map((item) => {
+                {movements.map((item) => {
                   const st = STATUS_MAP[item.status];
+                  const processed = isProcessed(item.status);
+                  const isExpanded = showOpinionFor === item.id;
                   return (
-                    <TableRow
-                      key={item.id}
-                      className="cursor-pointer hover:bg-a1-bg"
-                      onClick={() =>
-                        navigate({ to: '/approvals/movements/$id', params: { id: item.id } })
-                      }
-                    >
-                      <TableCell className="font-medium">{item.codigo}</TableCell>
-                      <TableCell>{item.tipo}</TableCell>
-                      <TableCell>{item.objeto}</TableCell>
-                      <TableCell>{item.valor}</TableCell>
-                      <TableCell>
-                        <StatusBadge status={st.variant}>{st.label}</StatusBadge>
-                      </TableCell>
-                      <TableCell className="text-a1-text-auxiliary">{item.solicitante}</TableCell>
-                      <TableCell className="text-a1-text-auxiliary">
-                        {formatDate(item.created_at)}
-                      </TableCell>
-                    </TableRow>
+                    <React.Fragment key={item.id}>
+                      <TableRow
+                        className={[
+                          'h-11 border-b border-[#E8E8E6] bg-white',
+                          processed ? 'opacity-70' : '',
+                        ].join(' ')}
+                      >
+                        <TableCell>
+                          <StatusBadge status={st.variant}>
+                            {st.auto && <ZapIcon className="size-2.5" />}
+                            {st.label}
+                          </StatusBadge>
+                        </TableCell>
+                        <TableCell className="text-[13px] font-medium text-[#111111]">
+                          {item.entity_type}
+                        </TableCell>
+                        <TableCell>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              navigate({
+                                to: '/approvals/movements/$id',
+                                params: { id: item.id },
+                              })
+                            }
+                            className="text-[13px] font-bold text-[#2E86C1] hover:underline"
+                          >
+                            {item.codigo}
+                          </button>
+                        </TableCell>
+                        <TableCell className="text-[13px] text-[#888888]">
+                          {item.requester_name}
+                        </TableCell>
+                        <TableCell className="text-right font-mono text-[13px] font-bold tabular-nums text-[#111111]">
+                          {formatValue(item.value)}
+                        </TableCell>
+                        <TableCell className="text-[11px] text-[#888888]">
+                          {formatDate(item.created_at)}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {processed ? (
+                            <span className="text-[11px] italic text-[#888888]">
+                              {st.label}
+                            </span>
+                          ) : (
+                            <div className="flex items-center justify-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setShowOpinionFor((prev) =>
+                                    prev === item.id ? null : item.id,
+                                  )
+                                }
+                                className="rounded-md border border-[#16a34a] px-3 py-1 text-[12px] font-medium text-[#16a34a] hover:bg-[#d1fae5] transition-colors"
+                              >
+                                Aprovar
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setShowOpinionFor((prev) =>
+                                    prev === `reject-${item.id}`
+                                      ? null
+                                      : `reject-${item.id}`,
+                                  )
+                                }
+                                className="rounded-md border border-[#dc2626] px-3 py-1 text-[12px] font-medium text-[#dc2626] hover:bg-[#fee2e2] transition-colors"
+                              >
+                                Rejeitar
+                              </button>
+                            </div>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                      {/* Inline opinion row */}
+                      {(isExpanded || showOpinionFor === `reject-${item.id}`) && (
+                        <TableRow key={`${item.id}-opinion`} className="bg-[#F5F5F3]">
+                          <TableCell colSpan={7} className="px-4 py-3">
+                            <div className="flex items-start gap-3">
+                              <textarea
+                                rows={2}
+                                value={inlineOpinions[item.id] ?? ''}
+                                onChange={(e) =>
+                                  setInlineOpinions((p) => ({
+                                    ...p,
+                                    [item.id]: e.target.value,
+                                  }))
+                                }
+                                placeholder="Parecer (mínimo 10 caracteres)..."
+                                className="flex-1 rounded-md border border-[#E8E8E6] bg-white px-3 py-2 text-[13px] text-[#111111] outline-none placeholder:text-[#CCCCCC] focus:border-[#2E86C1] resize-none"
+                              />
+                              <div className="flex gap-2 pt-1">
+                                {isExpanded ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleApprove(item.id)}
+                                    disabled={approveMut.isPending}
+                                    className="rounded-md bg-[#16a34a] px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-[#15803d] disabled:opacity-50"
+                                  >
+                                    Confirmar Aprovação
+                                  </button>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleReject(item.id)}
+                                    disabled={rejectMut.isPending}
+                                    className="rounded-md bg-[#dc2626] px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-[#b91c1c] disabled:opacity-50"
+                                  >
+                                    Confirmar Rejeição
+                                  </button>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => setShowOpinionFor(null)}
+                                  className="rounded-md border border-[#E8E8E6] px-3 py-1.5 text-[12px] text-[#888888] hover:text-[#111111]"
+                                >
+                                  Cancelar
+                                </button>
+                              </div>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </React.Fragment>
                   );
                 })}
               </TableBody>
             </Table>
           </div>
 
-          <div className="flex justify-center">
-            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+          {/* Footer */}
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] text-[#888888]">
+              Exibindo {movements.length} movimentos
+            </span>
+            {hasMore && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => p + 1)}
+                disabled={movementsQuery.isFetching}
+                className="border-[#E8E8E6] text-[#888888]"
+              >
+                {movementsQuery.isFetching ? 'Carregando...' : 'Carregar mais'}
+              </Button>
+            )}
           </div>
         </>
       )}

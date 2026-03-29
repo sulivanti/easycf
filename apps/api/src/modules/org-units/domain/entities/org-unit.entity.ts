@@ -1,5 +1,5 @@
 /**
- * @contract BR-001, BR-002, BR-003, BR-004, BR-005, BR-008, BR-009, BR-010, BR-011, DATA-001
+ * @contract BR-001, BR-002, BR-003, BR-004, BR-005, BR-008, BR-009, BR-010, BR-011, DATA-001, DATA-001-M01
  *
  * Entity: OrgUnit
  * Represents a node (N1–N4) in the 5-level organizational hierarchy.
@@ -35,6 +35,13 @@ export interface OrgUnitProps {
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly deletedAt: Date | null;
+  // Campos cadastrais (DATA-001-M01)
+  readonly cnpj: string | null;
+  readonly razaoSocial: string | null;
+  readonly filial: string | null;
+  readonly responsavel: string | null;
+  readonly telefone: string | null;
+  readonly emailContato: string | null;
 }
 
 export interface CreateOrgUnitInput {
@@ -45,6 +52,13 @@ export interface CreateOrgUnitInput {
   readonly parentId: string | null;
   readonly parentNivel: OrgUnitNivel | null;
   readonly createdBy: string | null;
+  // Campos cadastrais opcionais (DATA-001-M01)
+  readonly cnpj?: string | null;
+  readonly razaoSocial?: string | null;
+  readonly filial?: string | null;
+  readonly responsavel?: string | null;
+  readonly telefone?: string | null;
+  readonly emailContato?: string | null;
 }
 
 const MAX_NIVEL: OrgUnitNivel = 4;
@@ -97,6 +111,12 @@ export class OrgUnit {
       createdAt: now,
       updatedAt: now,
       deletedAt: null,
+      cnpj: input.cnpj?.trim() ?? null,
+      razaoSocial: input.razaoSocial?.trim() ?? null,
+      filial: input.filial?.trim() ?? null,
+      responsavel: input.responsavel?.trim() ?? null,
+      telefone: input.telefone?.trim() ?? null,
+      emailContato: input.emailContato?.trim() ?? null,
     });
   }
 
@@ -139,6 +159,24 @@ export class OrgUnit {
   get deletedAt(): Date | null {
     return this._props.deletedAt;
   }
+  get cnpj(): string | null {
+    return this._props.cnpj;
+  }
+  get razaoSocial(): string | null {
+    return this._props.razaoSocial;
+  }
+  get filial(): string | null {
+    return this._props.filial;
+  }
+  get responsavel(): string | null {
+    return this._props.responsavel;
+  }
+  get telefone(): string | null {
+    return this._props.telefone;
+  }
+  get emailContato(): string | null {
+    return this._props.emailContato;
+  }
 
   // -- Invariants ------------------------------------------------------------
 
@@ -171,6 +209,12 @@ export class OrgUnit {
     descricao?: string | null;
     codigo?: string;
     parentId?: string;
+    cnpj?: string | null;
+    razaoSocial?: string | null;
+    filial?: string | null;
+    responsavel?: string | null;
+    telefone?: string | null;
+    emailContato?: string | null;
   }): OrgUnit {
     // BR-003: codigo is immutable
     if (data.codigo !== undefined && data.codigo !== this._props.codigo) {
@@ -198,6 +242,22 @@ export class OrgUnit {
       nome,
       descricao:
         data.descricao !== undefined ? (data.descricao?.trim() ?? null) : this._props.descricao,
+      cnpj: data.cnpj !== undefined ? (data.cnpj?.trim() ?? null) : this._props.cnpj,
+      razaoSocial:
+        data.razaoSocial !== undefined
+          ? (data.razaoSocial?.trim() ?? null)
+          : this._props.razaoSocial,
+      filial: data.filial !== undefined ? (data.filial?.trim() ?? null) : this._props.filial,
+      responsavel:
+        data.responsavel !== undefined
+          ? (data.responsavel?.trim() ?? null)
+          : this._props.responsavel,
+      telefone:
+        data.telefone !== undefined ? (data.telefone?.trim() ?? null) : this._props.telefone,
+      emailContato:
+        data.emailContato !== undefined
+          ? (data.emailContato?.trim() ?? null)
+          : this._props.emailContato,
       updatedAt: new Date(),
     });
   }

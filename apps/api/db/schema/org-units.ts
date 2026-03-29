@@ -1,5 +1,5 @@
 /**
- * @contract DATA-001, DOC-GNP-00, EX-DB-001, EX-NAME-001
+ * @contract DATA-001, DATA-001-M01, DOC-GNP-00, EX-DB-001, EX-NAME-001
  *
  * Drizzle ORM schema definitions for the Organizational Structure module (MOD-003).
  * 2 tables: org_units (N1–N4 hierarchy), org_unit_tenant_links (N4→N5 tenant binding).
@@ -42,6 +42,14 @@ export const orgUnits = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
+
+    // Campos cadastrais (DATA-001-M01) — todos nullable, sem constraints de unicidade
+    cnpj: varchar('cnpj', { length: 18 }),
+    razaoSocial: varchar('razao_social', { length: 300 }),
+    filial: varchar('filial', { length: 100 }),
+    responsavel: varchar('responsavel', { length: 200 }),
+    telefone: varchar('telefone', { length: 20 }),
+    emailContato: varchar('email_contato', { length: 254 }),
   },
   (table) => [
     // CHECK: nivel must be 1–4 (DATA-001: N1=Corporate Group, N2=Unit, N3=Macro-area, N4=Sub-unit)

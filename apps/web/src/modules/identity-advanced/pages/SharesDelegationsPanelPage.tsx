@@ -491,7 +491,9 @@ export function SharesDelegationsPanelPage({
                         </TableCell>
                         <TableCell>{renderExpirationBadge(d.valid_until, d.status)}</TableCell>
                         <TableCell>
-                          <StatusBadge status={toStatus(status.variant)}>{status.label}</StatusBadge>
+                          <StatusBadge status={toStatus(status.variant)}>
+                            {status.label}
+                          </StatusBadge>
                         </TableCell>
                       </TableRow>
                     );

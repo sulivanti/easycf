@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.2.2 | 2026-03-29 | merge-amendment | UX-001-C02: Corrige rota /usuarios/form — route wrapper importa UserFormPage do MOD-002 (users) com onNavigateToList. Alinha com UX-001 Jornada 2 e 06-user-form-spec. |
+| 1.2.1 | 2026-03-29 | merge-amendment | UX-001-C01: Corrige rota /usuarios — route wrapper importa UsersListPage do MOD-002 (users) com useAuthMe + userScopes. Alinha com UX-001 Jornada 1 e 05-users-list-spec. |
 | 1.2.0 | 2026-03-25 | codegen | Codegen MOD-002: correção workarounds FR-000-M01 — mappers agora usam role_id/role_name/invite_token_expired da API real (eram hardcoded). 14 arquivos existentes, 2 corrigidos (users.api.ts mappers), 1 removido (user.types.ts duplicado). AGN-COD-WEB: done. AGN-COD-VAL: done (0 workarounds restantes). |
 | 1.1.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — Lint: PASS (0 errors). QA: PASS. Manifests: 3/3. OpenAPI: N/A. Drizzle: N/A. Endpoints: N/A. Arquitetura: PASS (Pattern A, React Query). Pronto para promoção. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Épico + features já READY. Ciclo de estabilidade avança para Etapa 5. |

@@ -53,7 +53,10 @@ const STATUS_OPTIONS = [
   ...ALL_STATUSES.map((s) => ({ value: s, label: s })),
 ];
 
-const LOG_STATUS_MAP: Record<CallLogStatus, 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'purple'> = {
+const LOG_STATUS_MAP: Record<
+  CallLogStatus,
+  'success' | 'warning' | 'error' | 'info' | 'neutral' | 'purple'
+> = {
   QUEUED: 'info',
   RUNNING: 'warning',
   SUCCESS: 'success',
@@ -191,9 +194,7 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
           )}
 
           {!logsQuery.isLoading && logs.length === 0 && (
-            <EmptyState
-              title={activeTab === 'dlq' ? COPY.empty_dlq : COPY.no_logs}
-            />
+            <EmptyState title={activeTab === 'dlq' ? COPY.empty_dlq : COPY.no_logs} />
           )}
 
           {logs.length > 0 && (

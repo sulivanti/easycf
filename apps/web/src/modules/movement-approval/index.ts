@@ -57,3 +57,11 @@ export {
 // Pages
 export { ApprovalInboxPage } from './pages/inbox/ApprovalInboxPage.js';
 export { RulesConfigPage } from './pages/config/RulesConfigPage.js';
+export { MovementsPage } from './pages/movements/MovementsPage.js';
+export { MovementDetailPage } from './pages/movements/MovementDetailPage.js';
+export { MovementCreatePage } from './pages/movements/MovementCreatePage.js';
+export { RulesListPage } from './pages/rules/RulesListPage.js';
+export { RulesSearchPage } from './pages/rules/RulesSearchPage.js';
+export { RuleCreatePage } from './pages/rules/RuleCreatePage.js';
+export { RuleEditPage } from './pages/rules/RuleEditPage.js';
+export { HistoryPage } from './pages/history/HistoryPage.js';

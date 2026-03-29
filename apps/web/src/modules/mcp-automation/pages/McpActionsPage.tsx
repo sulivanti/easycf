@@ -27,7 +27,6 @@ import type {
   CreateActionPayload,
 } from '../types/mcp-automation.types.js';
 
-
 const POLICIES: ExecutionPolicy[] = ['DIRECT', 'CONTROLLED', 'EVENT_ONLY'];
 
 export function McpActionsPage() {

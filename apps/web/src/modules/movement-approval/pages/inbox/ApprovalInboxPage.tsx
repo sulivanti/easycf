@@ -157,10 +157,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
 
   return (
     <div className="-m-6 flex h-[calc(100vh-52px)] flex-col">
-      <PageHeader
-        title="Aprovações"
-        description="Gerencie movimentos pendentes de aprovação"
-      />
+      <PageHeader title="Aprovações" description="Gerencie movimentos pendentes de aprovação" />
 
       {/* Tabs — A1 */}
       <nav
@@ -256,7 +253,7 @@ export function ApprovalInboxPage({ currentUserId, isAdmin }: ApprovalInboxPageP
                     : 'Nenhum movimento encontrado.'
               }
               action={
-                (statusFilter || search) ? (
+                statusFilter || search ? (
                   <Button
                     variant="link"
                     size="sm"

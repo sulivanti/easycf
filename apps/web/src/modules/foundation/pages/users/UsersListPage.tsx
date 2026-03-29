@@ -124,7 +124,9 @@ export function UsersListPage({
                     <TableCell className="font-medium">{user.full_name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
-                      <StatusBadge status={statusToType[user.status] ?? 'neutral'}>{user.status}</StatusBadge>
+                      <StatusBadge status={statusToType[user.status] ?? 'neutral'}>
+                        {user.status}
+                      </StatusBadge>
                     </TableCell>
                     <TableCell>{new Date(user.created_at).toLocaleDateString('pt-BR')}</TableCell>
                     <TableCell className="text-right">

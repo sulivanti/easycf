@@ -1,6 +1,7 @@
 import { createRoute, useNavigate } from '@tanstack/react-router';
 import { Route as authRoute } from './_auth';
-import { UsersListPage } from '@modules/foundation/pages/users/UsersListPage';
+import { UsersListPage } from '@modules/users/pages/UsersListPage';
+import { useAuthMe } from '@modules/backoffice-admin/hooks/use-auth-me';
 
 export const Route = createRoute({
   path: '/usuarios',
@@ -10,11 +11,16 @@ export const Route = createRoute({
 
 function UsuariosWrapper() {
   const navigate = useNavigate();
+  const { data: me } = useAuthMe();
+  const userScopes = me?.scopes ?? [];
 
   return (
     <UsersListPage
-      onCreateClick={() => navigate({ to: '/usuarios/form', search: {} })}
-      onEditClick={(id) => navigate({ to: '/usuarios/form', search: { id } })}
+      userScopes={userScopes}
+      onNavigateToCreate={() => navigate({ to: '/usuarios/form', search: {} })}
+      onNavigateToInvite={(userId) =>
+        navigate({ to: '/usuarios/$userId/convite', params: { userId } })
+      }
     />
   );
 }

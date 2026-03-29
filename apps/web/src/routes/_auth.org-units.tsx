@@ -17,13 +17,7 @@ function OrgUnitsWrapper() {
   return (
     <OrgTreePage
       userScopes={user.scopes}
-      onNavigateCreate={(parentId) =>
-        navigate({ to: '/org-units/form', search: { mode: 'create' as const, parentId } })
-      }
-      onNavigateEdit={(id) =>
-        navigate({ to: '/org-units/form', search: { mode: 'edit' as const, editId: id } })
-      }
-      onNavigateHistory={(id) =>
+      onNavigateHistory={(id: string) =>
         navigate({ to: '/org-units/form', search: { mode: 'edit' as const, editId: id } })
       }
     />

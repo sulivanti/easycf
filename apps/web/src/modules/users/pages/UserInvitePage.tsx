@@ -138,7 +138,9 @@ export function UserInvitePage({ userId, userScopes, onNavigateBack }: UserInvit
       <div className="rounded-lg border border-a1-border bg-white p-6 space-y-4">
         <div className="flex items-center gap-3">
           <h2 className="text-lg font-medium">{viewModel.displayName}</h2>
-          <StatusBadge status={viewModel.statusBadge.status}>{viewModel.statusBadge.label}</StatusBadge>
+          <StatusBadge status={viewModel.statusBadge.status}>
+            {viewModel.statusBadge.label}
+          </StatusBadge>
         </div>
 
         {/* Status-specific content */}

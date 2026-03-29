@@ -1,5 +1,5 @@
 /**
- * @contract DATA-001, DOC-FND-000, DOC-GNP-00
+ * @contract DATA-001, DATA-001-M01, DOC-FND-000, DOC-GNP-00
  *
  * Module-level re-export of Org-Units Drizzle tables with inferred
  * TypeScript types and Zod validation schemas for use in domain/application layers.

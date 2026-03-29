@@ -157,7 +157,9 @@ export function IntegrationServicesPage() {
                       <StatusBadge status="neutral">{svc.auth_type}</StatusBadge>
                     </TableCell>
                     <TableCell>
-                      <StatusBadge status={ENV_STATUS_MAP[svc.environment]}>{svc.environment}</StatusBadge>
+                      <StatusBadge status={ENV_STATUS_MAP[svc.environment]}>
+                        {svc.environment}
+                      </StatusBadge>
                     </TableCell>
                     <TableCell>
                       <StatusBadge status={svc.status === 'ACTIVE' ? 'success' : 'neutral'}>

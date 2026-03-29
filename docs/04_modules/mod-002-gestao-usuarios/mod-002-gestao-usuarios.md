@@ -206,6 +206,11 @@ apps/web/src/modules/users/
 - [PEN-002](requirements/pen-002-pendente.md) — Questões Abertas do MOD-002 (Gestão de Usuários)
 <!-- end index -->
 
+## 8.1 Amendments
+
+- [UX-001-C01](amendments/ux/UX-001-C01.md) — Corrige rota /usuarios: importar UsersListPage do MOD-002 com useAuthMe + userScopes
+- [UX-001-C02](amendments/ux/UX-001-C02.md) — Corrige rota /usuarios/form: importar UserFormPage do MOD-002 com onNavigateToList
+
 ## 9. ADR (Decisões Arquiteturais)
 
 <!-- start adr-index -->

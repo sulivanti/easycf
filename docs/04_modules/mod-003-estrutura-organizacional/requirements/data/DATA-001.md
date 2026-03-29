@@ -5,6 +5,7 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 0.3.0  | 2026-03-29 | merge-amendment | Merge DATA-001-M01: 6 campos cadastrais na tabela org_units (cnpj, razao_social, filial, responsavel, telefone, email_contato). Ref: specs Penpot 10-OrgTree/11-OrgForm. |
 > | 0.2.0  | 2026-03-17 | AGN-DEV-04  | Enriquecimento: migração, validações BR-010/BR-011/BR-012, idempotência, Drizzle hints |
 > | 0.1.0  | 2026-03-16 | arquitetura | Baseline Inicial (forge-module) |
 
@@ -32,6 +33,12 @@
 | `created_at` | timestamptz | NOT NULL | now() | — | Data de criação |
 | `updated_at` | timestamptz | NOT NULL | now() | — | Última atualização |
 | `deleted_at` | timestamptz | NULL | — | — | Soft delete |
+| `cnpj` | varchar(18) | NULL | — | — | CNPJ formatado (xx.xxx.xxx/xxxx-xx). Opcional — nem toda unidade tem CNPJ próprio. (DATA-001-M01) |
+| `razao_social` | varchar(300) | NULL | — | — | Razão social completa da entidade jurídica (DATA-001-M01) |
+| `filial` | varchar(100) | NULL | — | — | Localização/filial (ex: "São Paulo - SP") (DATA-001-M01) |
+| `responsavel` | varchar(200) | NULL | — | — | Nome do responsável pela unidade (DATA-001-M01) |
+| `telefone` | varchar(20) | NULL | — | — | Telefone de contato formatado (DATA-001-M01) |
+| `email_contato` | varchar(254) | NULL | — | — | E-mail de contato da unidade (RFC 5321) (DATA-001-M01) |
 
 ### Índices
 
@@ -110,6 +117,7 @@
 - **Índices parciais:** usar `.where(isNull(schema.deletedAt))` para filtro `WHERE deleted_at IS NULL`
 - **FK self-referencing:** `parent_id` referencia `org_units.id` com `onDelete: 'restrict'`
 - **CHECK constraint nivel:** `check('nivel_check', sql\`nivel BETWEEN 1 AND 4\`)`
+- **Campos cadastrais (DATA-001-M01):** `cnpj`, `razao_social`, `filial`, `responsavel`, `telefone`, `email_contato` — todos nullable, sem constraints de unicidade
 - **Seed:** Não requerido para produção. Para dev/test: árvore mínima N1→N2→N3→N4 + 1 tenant vinculado
 
 ---
@@ -136,7 +144,7 @@ erDiagram
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-003, US-MOD-003-F01, US-MOD-003-F04, FR-001, FR-004, FR-005, BR-001, BR-002, BR-003, BR-005, BR-006, BR-008, BR-009, BR-010, BR-011, BR-012, DATA-003, SEC-001, SEC-002, ADR-003, INT-001
+- **data_ultima_revisao:** 2026-03-29
+- **rastreia_para:** US-MOD-003, US-MOD-003-F01, US-MOD-003-F04, FR-001, FR-001-M01, FR-004, FR-005, BR-001, BR-002, BR-003, BR-005, BR-006, BR-008, BR-009, BR-010, BR-011, BR-012, DATA-001-M01, DATA-003, SEC-001, SEC-002, ADR-003, INT-001, UX-001-M01
 - **referencias_exemplos:** EX-CI-005, EX-CI-007, EX-CI-006
 - **evidencias:** N/A

@@ -30,6 +30,12 @@ export interface GetOrgUnitOutput {
   readonly createdAt: string;
   readonly updatedAt: string;
   readonly deletedAt: string | null;
+  readonly cnpj: string | null;
+  readonly razaoSocial: string | null;
+  readonly filial: string | null;
+  readonly responsavel: string | null;
+  readonly telefone: string | null;
+  readonly emailContato: string | null;
   readonly ancestors: readonly AncestorNode[];
   readonly tenants: readonly { tenantId: string; codigo: string; name: string }[];
 }
@@ -77,6 +83,12 @@ export class GetOrgUnitUseCase {
       createdAt: orgUnit.createdAt.toISOString(),
       updatedAt: orgUnit.updatedAt.toISOString(),
       deletedAt: orgUnit.deletedAt?.toISOString() ?? null,
+      cnpj: orgUnit.cnpj,
+      razaoSocial: orgUnit.razaoSocial,
+      filial: orgUnit.filial,
+      responsavel: orgUnit.responsavel,
+      telefone: orgUnit.telefone,
+      emailContato: orgUnit.emailContato,
       ancestors,
       tenants,
     };

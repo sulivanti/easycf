@@ -62,6 +62,12 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
         createdBy: request.session.userId,
         correlationId,
         idempotencyKey,
+        cnpj: request.body.cnpj,
+        razaoSocial: request.body.razao_social,
+        filial: request.body.filial,
+        responsavel: request.body.responsavel,
+        telefone: request.body.telefone,
+        emailContato: request.body.email_contato,
       });
 
       // FR-001: Soft limit warning header
@@ -77,6 +83,12 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
         nivel: result.nivel,
         parent_id: result.parentId,
         status: result.status,
+        cnpj: result.cnpj,
+        razao_social: result.razaoSocial,
+        filial: result.filial,
+        responsavel: result.responsavel,
+        telefone: result.telefone,
+        email_contato: result.emailContato,
       });
     },
   });
@@ -165,6 +177,12 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
             ? result.deletedAt.toISOString()
             : result.deletedAt
           : null,
+        cnpj: result.cnpj ?? null,
+        razao_social: result.razaoSocial ?? null,
+        filial: result.filial ?? null,
+        responsavel: result.responsavel ?? null,
+        telefone: result.telefone ?? null,
+        email_contato: result.emailContato ?? null,
         ancestors: result.ancestors,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tenants: result.tenants.map((t: Record<string, any>) => ({
@@ -197,6 +215,12 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
           descricao: request.body.descricao,
           codigo: request.body.codigo,
           parentId: request.body.parent_id,
+          cnpj: request.body.cnpj,
+          razaoSocial: request.body.razao_social,
+          filial: request.body.filial,
+          responsavel: request.body.responsavel,
+          telefone: request.body.telefone,
+          emailContato: request.body.email_contato,
           correlationId,
           updatedBy: request.session.userId,
         });
@@ -208,6 +232,12 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
           descricao: result.descricao ?? null,
           nivel: result.nivel,
           status: result.status,
+          cnpj: result.cnpj ?? null,
+          razao_social: result.razaoSocial ?? null,
+          filial: result.filial ?? null,
+          responsavel: result.responsavel ?? null,
+          telefone: result.telefone ?? null,
+          email_contato: result.emailContato ?? null,
         });
       },
     },

@@ -1,0 +1,35 @@
+{
+  "module_id": "MOD-009",
+  "module_path": "docs/04_modules/mod-009-movimentos-aprovacao/",
+  "last_updated": "2026-03-29T18:00:00Z",
+  "codegen": {
+    "started_at": "2026-03-29T17:30:00Z",
+    "completed_at": "2026-03-29T18:00:00Z",
+    "agents": {
+      "AGN-COD-DB":   { "status": "skipped", "files_generated": 0, "files": [], "reason": "Already implemented, no DATA impact from UX-009-M01" },
+      "AGN-COD-CORE": { "status": "skipped", "files_generated": 0, "files": [], "reason": "Already implemented, no domain impact" },
+      "AGN-COD-APP":  { "status": "skipped", "files_generated": 0, "files": [], "reason": "Already implemented, no application impact" },
+      "AGN-COD-API":  { "status": "skipped", "files_generated": 0, "files": [], "reason": "Already implemented, no API impact" },
+      "AGN-COD-WEB":  { "status": "done", "completed_at": "2026-03-29T17:55:00Z", "files_generated": 17, "files": [
+        "apps/web/src/modules/movement-approval/pages/movements/MovementsPage.tsx",
+        "apps/web/src/modules/movement-approval/pages/movements/MovementDetailPage.tsx",
+        "apps/web/src/modules/movement-approval/pages/movements/MovementCreatePage.tsx",
+        "apps/web/src/modules/movement-approval/pages/rules/RulesListPage.tsx",
+        "apps/web/src/modules/movement-approval/pages/rules/RulesSearchPage.tsx",
+        "apps/web/src/modules/movement-approval/pages/rules/RuleCreatePage.tsx",
+        "apps/web/src/modules/movement-approval/pages/rules/RuleEditPage.tsx",
+        "apps/web/src/modules/movement-approval/pages/history/HistoryPage.tsx",
+        "apps/web/src/modules/movement-approval/pages/index.ts",
+        "apps/web/src/modules/movement-approval/index.ts",
+        "apps/web/src/routes/_auth.approvals.movements.new.tsx",
+        "apps/web/src/routes/_auth.approvals.rules.tsx",
+        "apps/web/src/routes/_auth.approvals.rules.search.tsx",
+        "apps/web/src/routes/_auth.approvals.rules.new.tsx",
+        "apps/web/src/routes/_auth.approvals.rules.$id.tsx",
+        "apps/web/src/routes/_auth.approvals.history.tsx",
+        "apps/web/src/routeTree.ts"
+      ]},
+      "AGN-COD-VAL":  { "status": "skipped", "files_generated": 0, "files": [], "reason": "Deferred - run /validate-all MOD-009 separately" }
+    }
+  }
+}

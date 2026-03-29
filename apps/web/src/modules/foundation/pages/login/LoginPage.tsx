@@ -1,9 +1,9 @@
 /**
- * @contract UX-001, FR-001, FR-004, FR-015
+ * @contract UX-001, UX-000-C02, FR-001, FR-004, FR-015
  * Unified login page — 4 panels on single /login route:
  * login, mfa, forgot-password, reset-password.
  * States: Loading (spinner on button via isLoading), Error (inline + toast RFC 9457).
- * Design: Paper split-screen layout with Grupo A1 branding.
+ * Design: Split-screen 604/836 layout per 01-login-spec-v3.md + Penpot PEN-01.
  */
 
 import { useState, type FormEvent } from 'react';
@@ -20,86 +20,82 @@ import { isMfaRequired } from '../../types/auth.types.js';
 
 type Panel = 'login' | 'mfa' | 'forgot-password' | 'reset-password';
 
-// -- SVG Icons --
+// ══════════════════════════════════════
+// SVG Icons (spec v3 §7)
+// ══════════════════════════════════════
 
-function EnvelopeIcon({ className = 'shrink-0' }: { className?: string }) {
+function EnvelopeIcon() {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
       fill="none"
-      stroke="#AAAAAA"
-      strokeWidth="1.5"
+      stroke="#CCCCCC"
+      strokeWidth="1.6"
       strokeLinecap="round"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      strokeLinejoin="round"
+      className="shrink-0"
     >
-      <rect x="2" y="3" width="12" height="10" rx="2" />
-      <path d="M2 5.5l6 3.5 6-3.5" />
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m2 7 10 6 10-6" />
     </svg>
   );
 }
 
-function LockIcon({
-  color = '#AAAAAA',
-  className = 'shrink-0',
-}: {
-  color?: string;
-  className?: string;
-}) {
+function LockIcon() {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
       fill="none"
-      stroke={color}
-      strokeWidth="1.5"
+      stroke="#CCCCCC"
+      strokeWidth="1.6"
       strokeLinecap="round"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      strokeLinejoin="round"
+      className="shrink-0"
     >
-      <rect x="3" y="7" width="10" height="7" rx="2" />
-      <path d="M5 7V5a3 3 0 0 1 6 0v2" />
+      <rect x="3" y="11" width="18" height="11" rx="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
     </svg>
   );
 }
 
-function EyeIcon({ className = 'shrink-0' }: { className?: string }) {
+function EyeIcon() {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
       fill="none"
       stroke="#AAAAAA"
-      strokeWidth="1.5"
+      strokeWidth="1.6"
       strokeLinecap="round"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      strokeLinejoin="round"
+      className="shrink-0"
     >
-      <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" />
-      <circle cx="8" cy="8" r="2" />
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
     </svg>
   );
 }
 
-function EyeOffIcon({ className = 'shrink-0' }: { className?: string }) {
+function EyeOffIcon() {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
       fill="none"
       stroke="#AAAAAA"
-      strokeWidth="1.5"
+      strokeWidth="1.6"
       strokeLinecap="round"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      strokeLinejoin="round"
+      className="shrink-0"
     >
-      <path d="M1 8s2.5-5 7-5c1.4 0 2.6.4 3.6 1M15 8s-2.5 5-7 5c-1.4 0-2.6-.4-3.6-1" />
-      <path d="M2 2l12 12" />
+      <path d="M1 12s4-8 11-8c2.5 0 4.6.7 6.3 1.8M23 12s-4 8-11 8c-2.5 0-4.6-.7-6.3-1.8" />
+      <path d="M2 2l20 20" />
     </svg>
   );
 }
@@ -107,17 +103,37 @@ function EyeOffIcon({ className = 'shrink-0' }: { className?: string }) {
 function ArrowRightIcon() {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
       fill="none"
       stroke="#FFFFFF"
       strokeWidth="2"
       strokeLinecap="round"
-      xmlns="http://www.w3.org/2000/svg"
+      strokeLinejoin="round"
       className="shrink-0"
     >
-      <path d="M3 8h10M9 4l4 4-4 4" />
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  );
+}
+
+function ArrowLeftIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#888888"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="shrink-0"
+    >
+      <path d="M19 12H5" />
+      <path d="m12 19-7-7 7-7" />
     </svg>
   );
 }
@@ -125,109 +141,111 @@ function ArrowRightIcon() {
 function ShieldIcon() {
   return (
     <svg
-      width="13"
-      height="13"
-      viewBox="0 0 14 14"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
       fill="none"
       stroke="#AAAAAA"
-      strokeWidth="1.4"
+      strokeWidth="1.6"
       strokeLinecap="round"
-      xmlns="http://www.w3.org/2000/svg"
+      strokeLinejoin="round"
       className="shrink-0"
     >
-      <path d="M7 1L2 3.5v4C2 10 4.5 12.5 7 13c2.5-.5 5-3 5-5.5v-4L7 1z" />
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
     </svg>
   );
 }
 
-function HelpIcon() {
+function InfoIcon() {
   return (
     <svg
-      width="13"
-      height="13"
-      viewBox="0 0 14 14"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
       fill="none"
       stroke="#AAAAAA"
-      strokeWidth="1.4"
+      strokeWidth="1.6"
       strokeLinecap="round"
-      xmlns="http://www.w3.org/2000/svg"
+      strokeLinejoin="round"
       className="shrink-0"
     >
-      <circle cx="7" cy="7" r="5" />
-      <path d="M7 5.5a1.5 1.5 0 0 1 0 3M7 10h.01" />
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4" />
+      <path d="M12 8h.01" />
     </svg>
   );
 }
 
-function ShieldCodeIcon({ className = 'shrink-0' }: { className?: string }) {
+function ShieldCodeIcon() {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
       fill="none"
-      stroke="#AAAAAA"
-      strokeWidth="1.5"
+      stroke="#CCCCCC"
+      strokeWidth="1.6"
       strokeLinecap="round"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      strokeLinejoin="round"
+      className="shrink-0"
     >
-      <path d="M8 1L3 3.5v4C3 10 5.5 13 8 14c2.5-1 5-4 5-6.5v-4L8 1z" />
-      <path d="M6.5 7l1.5 1.5L11 6" />
+      <path d="M12 2L4 5.5v5.5c0 5.5 3.5 10 8 11.5 4.5-1.5 8-6 8-11.5V5.5L12 2z" />
+      <path d="M9 12l2 2 4-4" />
     </svg>
   );
 }
 
-function KeyIcon({ className = 'shrink-0' }: { className?: string }) {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="#AAAAAA"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <circle cx="5.5" cy="10.5" r="3" />
-      <path d="M8 8l5-5M11 3l2 2" />
-    </svg>
-  );
-}
+// ══════════════════════════════════════
+// Microsoft Logo (4 colored squares)
+// ══════════════════════════════════════
 
-// -- A1 Logo --
-
-function A1Logo() {
+function MicrosoftLogo() {
   return (
-    <div className="flex items-center justify-center shrink-0 rounded-[7px] bg-a1-accent size-9">
-      <svg
-        width="22"
-        height="16"
-        viewBox="0 0 22 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="shrink-0"
-      >
-        <text
-          x="0"
-          y="15"
-          fontFamily="Arial"
-          fontSize="16"
-          fontWeight="900"
-          fontStyle="italic"
-          fill="#FFFFFF"
-        >
-          <tspan>A</tspan>
-          <tspan fill="#111111">1</tspan>
-        </text>
-      </svg>
+    <div className="grid grid-cols-2 gap-[2px] shrink-0" style={{ width: 18, height: 18 }}>
+      <div style={{ background: '#F25022' }} />
+      <div style={{ background: '#7FBA00' }} />
+      <div style={{ background: '#00A4EF' }} />
+      <div style={{ background: '#FFB900' }} />
     </div>
   );
 }
 
-// -- Styled Input wrapper --
+// ══════════════════════════════════════
+// A1 Logo (gradient icon + text)
+// ══════════════════════════════════════
+
+function A1Logo() {
+  return (
+    <div className="flex items-center gap-3">
+      <div
+        className="flex items-center justify-center shrink-0 rounded-lg"
+        style={{
+          width: 44,
+          height: 44,
+          background: 'linear-gradient(135deg, #F5A04E, #F58C32)',
+          boxShadow: '0 4px 16px rgba(245,140,50,0.25)',
+        }}
+      >
+        <span className="font-display font-extrabold italic text-lg text-white">A1</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="font-display font-bold text-[15px] leading-[18px] text-white">
+          Grupo A1
+        </span>
+        <span
+          className="font-display font-medium text-[10px] leading-3 uppercase tracking-[1.6px]"
+          style={{ color: 'rgba(255,255,255,0.35)' }}
+        >
+          PORTAL INTERNO
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════
+// Styled Input (spec v3: 340×48, r:10, border #E8E8E6)
+// ══════════════════════════════════════
 
 function StyledInput({
   id,
@@ -242,7 +260,6 @@ function StyledInput({
   maxLength,
   inputMode,
   pattern,
-  isFocused,
   rightElement,
 }: {
   id: string;
@@ -257,13 +274,10 @@ function StyledInput({
   maxLength?: number;
   inputMode?: 'numeric' | 'text';
   pattern?: string;
-  isFocused?: boolean;
   rightElement?: React.ReactNode;
 }) {
   return (
-    <div
-      className={`flex items-center h-12 rounded-lg px-3.5 gap-2.5 bg-a1-bg [border-width:1.5px] border-solid ${isFocused ? 'border-primary-600' : 'border-a1-border'} transition-colors focus-within:border-primary-600`}
-    >
+    <div className="flex items-center h-12 rounded-[10px] px-3.5 gap-2.5 bg-white border border-[#E8E8E6] transition-colors focus-within:border-[#2E86C1]">
       {icon}
       <input
         id={id}
@@ -277,27 +291,31 @@ function StyledInput({
         maxLength={maxLength}
         inputMode={inputMode}
         pattern={pattern}
-        className="flex-1 bg-transparent font-display text-sm text-a1-text-primary placeholder:text-a1-text-placeholder outline-none"
+        className="flex-1 bg-transparent font-display text-sm text-[#111111] placeholder:text-[#CCCCCC] outline-none"
       />
       {rightElement}
     </div>
   );
 }
 
-// -- Styled Label --
+// ══════════════════════════════════════
+// Styled Label (spec v3: 11px w700 UPPER ls:0.8 #333)
+// ══════════════════════════════════════
 
 function StyledLabel({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
   return (
     <label
       htmlFor={htmlFor}
-      className="uppercase tracking-[0.6px] text-a1-text-secondary font-display font-semibold text-xs"
+      className="font-display font-bold text-[11px] leading-[14px] uppercase tracking-[0.8px] text-[#333333]"
     >
       {children}
     </label>
   );
 }
 
-// -- Error Alert (Paper design) --
+// ══════════════════════════════════════
+// Error Alert
+// ══════════════════════════════════════
 
 function ErrorAlert({ error }: { error: Error | null }) {
   if (!error) return null;
@@ -309,31 +327,16 @@ function ErrorAlert({ error }: { error: Error | null }) {
   return (
     <div
       role="alert"
-      className="flex items-start rounded-[7px] py-3 px-3.5 gap-2.5 bg-a1-bg border border-solid border-a1-border"
+      className="flex items-start rounded-lg py-3 px-3.5 gap-2.5 bg-[#FEE2E2] border border-[#E74C3C]/20"
     >
-      <div className="w-[18px] h-[18px] flex items-center justify-center shrink-0 mt-px rounded-full bg-a1-dark">
-        <svg
-          width="10"
-          height="10"
-          viewBox="0 0 10 10"
-          fill="none"
-          stroke="#FFFFFF"
-          strokeWidth="2"
-          strokeLinecap="round"
-          xmlns="http://www.w3.org/2000/svg"
-          className="shrink-0"
-        >
-          <path d="M5 2v3M5 7.5h.01" />
-        </svg>
-      </div>
       <div className="flex flex-col gap-0.5">
-        <div className="text-a1-text-primary font-display font-semibold text-[13px] leading-4">
+        <div className="text-[#111111] font-display font-semibold text-[13px] leading-4">
           {error.message}
         </div>
         {correlationId && (
           <button
             type="button"
-            className="text-a1-text-auxiliary font-display text-xs leading-4 text-left hover:underline"
+            className="text-[#888888] font-display text-xs leading-4 text-left hover:underline"
             onClick={() => {
               navigator.clipboard.writeText(correlationId);
               toast.info('Correlation ID copiado');
@@ -347,35 +350,115 @@ function ErrorAlert({ error }: { error: Error | null }) {
   );
 }
 
-// -- Divider + Footer --
+// ══════════════════════════════════════
+// Auth Divider ("OU CONTINUE COM")
+// ══════════════════════════════════════
 
-function CardFooter() {
+function AuthDivider() {
   return (
-    <>
-      <div className="flex items-center gap-3 mt-7 mb-5">
-        <div className="flex-1 h-px bg-a1-border" />
-        <span className="text-a1-text-muted-icon font-display text-xs">acesso restrito</span>
-        <div className="flex-1 h-px bg-a1-border" />
-      </div>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <ShieldIcon />
-          <span className="text-a1-text-hint font-display text-[11px] leading-[14px]">
-            Conexão segura (TLS)
-          </span>
-        </div>
-        <div className="flex items-center gap-[5px]">
-          <HelpIcon />
-          <span className="text-a1-text-auxiliary font-display font-medium text-[11px] leading-[14px]">
-            Suporte
-          </span>
-        </div>
-      </div>
-    </>
+    <div className="flex items-center gap-4 my-6">
+      <div className="flex-1 h-px bg-[#E8E8E6]" />
+      <span className="font-display font-semibold text-[11px] leading-[14px] uppercase tracking-[0.8px] text-[#AAAAAA] whitespace-nowrap">
+        OU CONTINUE COM
+      </span>
+      <div className="flex-1 h-px bg-[#E8E8E6]" />
+    </div>
   );
 }
 
-// -- Login Panel --
+// ══════════════════════════════════════
+// Microsoft SSO Button
+// ══════════════════════════════════════
+
+function MicrosoftSSOButton() {
+  return (
+    <button
+      type="button"
+      className="flex items-center justify-center gap-2.5 w-full h-12 rounded-[10px] bg-white border border-[#E8E8E6] font-display font-semibold text-sm text-[#333333] hover:bg-[#FAFAFA] transition-colors"
+    >
+      <MicrosoftLogo />
+      <span>Entrar com Microsoft</span>
+    </button>
+  );
+}
+
+// ══════════════════════════════════════
+// Password Strength (spec v3 §9)
+// ══════════════════════════════════════
+
+function PasswordStrength({ password }: { password: string }) {
+  let strength = 0;
+  if (password.length >= 8) strength++;
+  if (/[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
+  if (/\d/.test(password)) strength++;
+  if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+  const labels = ['', 'Fraca', 'Razoável', 'Boa', 'Forte'];
+  const colors = ['#E8E8E6', '#E74C3C', '#E67E22', '#27AE60', '#27AE60'];
+
+  return (
+    <div className="mt-2.5">
+      <div className="flex gap-1">
+        {[0, 1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="flex-1 h-[3px] rounded-sm transition-colors"
+            style={{ background: i < strength ? colors[strength] : '#E8E8E6' }}
+          />
+        ))}
+      </div>
+      {password.length > 0 && (
+        <span className="font-display text-[11px] text-[#AAAAAA] mt-1.5 block">
+          {labels[strength]}
+        </span>
+      )}
+    </div>
+  );
+}
+
+// ══════════════════════════════════════
+// Card Footer (spec v3: border-top + TLS + Suporte)
+// ══════════════════════════════════════
+
+function CardFooter() {
+  return (
+    <div className="mt-7 pt-5 border-t border-[#E8E8E6]">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <ShieldIcon />
+          <span className="font-display font-medium text-xs text-[#AAAAAA]">
+            Conexão segura (TLS)
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <InfoIcon />
+          <span className="font-display font-medium text-xs text-[#AAAAAA]">Suporte</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════
+// Back Link ("← Voltar ao login")
+// ══════════════════════════════════════
+
+function BackToLogin({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex items-center gap-1 mb-5 font-display font-semibold text-[13px] text-[#888888] hover:text-[#555555] transition-colors"
+    >
+      <ArrowLeftIcon />
+      Voltar ao login
+    </button>
+  );
+}
+
+// ══════════════════════════════════════
+// Login Panel (spec v3 §6: 01-Login)
+// ══════════════════════════════════════
 
 function LoginPanel({
   onMfaRequired,
@@ -409,14 +492,13 @@ function LoginPanel({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
-      <div className="flex flex-col mb-9 gap-1.5">
-        <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
-          Bem-vindo de volta
-        </h1>
-        <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
-          Insira suas credenciais para acessar o portal.
-        </p>
-      </div>
+      {/* Title + Subtitle */}
+      <h1 className="font-display font-extrabold text-2xl leading-[30px] tracking-[-0.5px] text-[#111111]">
+        Bem-vindo de volta
+      </h1>
+      <p className="font-display text-sm leading-5 text-[#888888] mt-1.5 mb-7">
+        Acesse o portal do Grupo A1
+      </p>
 
       {error && (
         <div className="mb-4">
@@ -424,8 +506,9 @@ function LoginPanel({
         </div>
       )}
 
-      <div className="flex flex-col mb-4 gap-[7px]">
-        <StyledLabel htmlFor="login-email">E-mail</StyledLabel>
+      {/* Email field */}
+      <div className="flex flex-col gap-2 mb-5">
+        <StyledLabel htmlFor="login-email">E-MAIL CORPORATIVO</StyledLabel>
         <StyledInput
           id="login-email"
           type="email"
@@ -439,21 +522,23 @@ function LoginPanel({
         />
       </div>
 
-      <div className="flex flex-col mb-4 gap-[7px]">
+      {/* Password field */}
+      <div className="flex flex-col gap-2 mb-4">
         <div className="flex items-center justify-between">
-          <StyledLabel htmlFor="login-password">Senha</StyledLabel>
+          <StyledLabel htmlFor="login-password">SENHA</StyledLabel>
           <button
             type="button"
             onClick={onForgotClick}
-            className="text-primary-600 font-display font-medium text-xs hover:underline"
+            className="font-display font-semibold text-xs leading-4 text-[#F58C32] hover:underline"
           >
-            Esqueci a senha
+            Esqueci minha senha
           </button>
         </div>
         <StyledInput
           id="login-password"
           type={showPassword ? 'text' : 'password'}
           icon={<LockIcon />}
+          placeholder="Digite sua senha"
           value={password}
           onChange={setPassword}
           autoComplete="current-password"
@@ -471,34 +556,67 @@ function LoginPanel({
         />
       </div>
 
-      <div className="flex items-center gap-2 mb-7">
+      {/* Checkbox */}
+      <label className="flex items-center gap-2 mb-5 cursor-pointer">
+        <span
+          className="flex items-center justify-center shrink-0 rounded-[3px] border-[1.5px] border-[#E8E8E6] bg-white transition-colors"
+          style={{ width: 16, height: 16 }}
+        >
+          {rememberMe && (
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 10 10"
+              fill="none"
+              stroke="#2E86C1"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M2 5l2.5 2.5L8 3" />
+            </svg>
+          )}
+        </span>
         <input
-          id="remember-me"
           type="checkbox"
           checked={rememberMe}
           onChange={(e) => setRememberMe(e.target.checked)}
-          className="size-4 rounded border-a1-border accent-primary-600"
+          className="sr-only"
         />
-        <label htmlFor="remember-me" className="text-sm font-display text-a1-text-auxiliary">
+        <span className="font-display text-[13px] leading-[18px] text-[#555555]">
           Manter conectado
-        </label>
-      </div>
+        </span>
+      </label>
 
+      {/* Button Entrar */}
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-5 rounded-lg gap-2 bg-primary-600 hover:bg-primary-700 text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[50px] rounded-[10px] gap-2 text-white font-display font-bold text-[15px] leading-5"
+        style={{ background: '#2E86C1' }}
       >
         Entrar
         {!loading && <ArrowRightIcon />}
       </Button>
+
+      {/* SSO Divider + Microsoft */}
+      <AuthDivider />
+      <MicrosoftSSOButton />
+
+      {/* First access */}
+      <p className="text-center mt-5 font-display text-[13px] leading-[18px]">
+        <span className="text-[#888888]">Primeiro acesso? </span>
+        <span className="font-bold text-[#333333]">Solicite ao administrador</span>
+      </p>
 
       <CardFooter />
     </form>
   );
 }
 
-// -- MFA Panel --
+// ══════════════════════════════════════
+// MFA Panel
+// ══════════════════════════════════════
 
 function MfaPanel({ tempToken, onSuccess }: { tempToken: string; onSuccess: () => void }) {
   const { verify, loading, error } = useMfaVerify();
@@ -517,14 +635,12 @@ function MfaPanel({ tempToken, onSuccess }: { tempToken: string; onSuccess: () =
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
-      <div className="flex flex-col mb-9 gap-1.5">
-        <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
-          Verificar código
-        </h1>
-        <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
-          Digite o código do seu autenticador.
-        </p>
-      </div>
+      <h1 className="font-display font-extrabold text-2xl leading-[30px] tracking-[-0.5px] text-[#111111]">
+        Verificar código
+      </h1>
+      <p className="font-display text-sm leading-5 text-[#888888] mt-1.5 mb-7">
+        Digite o código do seu autenticador.
+      </p>
 
       {error && (
         <div className="mb-4">
@@ -532,8 +648,8 @@ function MfaPanel({ tempToken, onSuccess }: { tempToken: string; onSuccess: () =
         </div>
       )}
 
-      <div className="flex flex-col mb-7 gap-[7px]">
-        <StyledLabel htmlFor="mfa-code">Código TOTP</StyledLabel>
+      <div className="flex flex-col gap-2 mb-7">
+        <StyledLabel htmlFor="mfa-code">CÓDIGO TOTP</StyledLabel>
         <StyledInput
           id="mfa-code"
           type="text"
@@ -552,7 +668,8 @@ function MfaPanel({ tempToken, onSuccess }: { tempToken: string; onSuccess: () =
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-5 rounded-lg gap-2 bg-primary-600 hover:bg-primary-700 text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[50px] rounded-[10px] gap-2 text-white font-display font-bold text-[15px] leading-5"
+        style={{ background: '#2E86C1' }}
       >
         Verificar código
         {!loading && <ArrowRightIcon />}
@@ -563,7 +680,9 @@ function MfaPanel({ tempToken, onSuccess }: { tempToken: string; onSuccess: () =
   );
 }
 
-// -- Forgot Password Panel --
+// ══════════════════════════════════════
+// Forgot Password Panel (spec v3 §9: 01-Login-Forgot)
+// ══════════════════════════════════════
 
 function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
   const { forgotPassword, loading, submitted } = useForgotPassword();
@@ -574,42 +693,19 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
     await forgotPassword({ email });
   }
 
-  if (submitted) {
-    return (
-      <div className="flex flex-col items-center text-center">
-        <div className="flex flex-col mb-9 gap-1.5">
-          <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
-            E-mail enviado
-          </h1>
-          <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
-            Se o e-mail estiver cadastrado, você receberá um link em breve.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={onBack}
-          className="h-[52px] w-full mb-5 rounded-lg border border-a1-border bg-white text-a1-text-primary font-display font-bold text-[15px] tracking-[0.2px] hover:bg-a1-bg transition-colors"
-        >
-          Voltar ao login
-        </button>
-        <CardFooter />
-      </div>
-    );
-  }
-
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
-      <div className="flex flex-col mb-9 gap-1.5">
-        <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
-          Recuperar senha
-        </h1>
-        <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
-          Informe seu e-mail para receber o link de redefinição.
-        </p>
-      </div>
+      <BackToLogin onClick={onBack} />
 
-      <div className="flex flex-col mb-7 gap-[7px]">
-        <StyledLabel htmlFor="forgot-email">E-mail</StyledLabel>
+      <h1 className="font-display font-extrabold text-2xl leading-[30px] tracking-[-0.5px] text-[#111111]">
+        Esqueceu a senha?
+      </h1>
+      <p className="font-display text-sm leading-5 text-[#888888] mt-1.5 mb-7">
+        Informe seu e-mail corporativo e enviaremos um link para redefinição.
+      </p>
+
+      <div className="flex flex-col gap-2 mb-5">
+        <StyledLabel htmlFor="forgot-email">E-MAIL CORPORATIVO</StyledLabel>
         <StyledInput
           id="forgot-email"
           type="email"
@@ -626,26 +722,32 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-3 rounded-lg gap-2 bg-primary-600 hover:bg-primary-700 text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[50px] rounded-[10px] gap-2 text-white font-display font-bold text-[15px] leading-5"
+        style={{ background: '#2E86C1' }}
       >
         Enviar link
         {!loading && <ArrowRightIcon />}
       </Button>
 
-      <button
-        type="button"
-        onClick={onBack}
-        className="h-[44px] w-full mb-2 rounded-lg text-a1-text-auxiliary font-display font-medium text-sm hover:text-a1-text-primary transition-colors"
-      >
-        Voltar ao login
-      </button>
+      {/* Success message inline (spec v3) */}
+      {submitted && (
+        <div
+          className="mt-4 rounded-lg p-3.5 font-display text-[13px] leading-[1.5]"
+          style={{ background: '#E8F8EF', border: '1px solid #B5E8C9', color: '#1E7A42' }}
+        >
+          Se o e-mail estiver cadastrado, você receberá um link de redefinição em instantes.
+          Verifique sua caixa de entrada e spam.
+        </div>
+      )}
 
       <CardFooter />
     </form>
   );
 }
 
-// -- Reset Password Panel --
+// ══════════════════════════════════════
+// Reset Password Panel (spec v3 §9: 01-Login-Reset)
+// ══════════════════════════════════════
 
 function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => void }) {
   const { resetPassword, loading, error, success } = useResetPassword();
@@ -673,18 +775,16 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
   if (success) {
     return (
       <div className="flex flex-col items-center text-center">
-        <div className="flex flex-col mb-9 gap-1.5">
-          <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
-            Senha redefinida
-          </h1>
-          <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
-            Senha redefinida com sucesso. Faça login.
-          </p>
-        </div>
+        <h1 className="font-display font-extrabold text-2xl leading-[30px] tracking-[-0.5px] text-[#111111]">
+          Senha redefinida
+        </h1>
+        <p className="font-display text-sm leading-5 text-[#888888] mt-1.5 mb-7">
+          Senha redefinida com sucesso. Faça login.
+        </p>
         <button
           type="button"
           onClick={onBack}
-          className="h-[52px] w-full mb-5 rounded-lg border border-a1-border bg-white text-a1-text-primary font-display font-bold text-[15px] tracking-[0.2px] hover:bg-a1-bg transition-colors"
+          className="h-[50px] w-full rounded-[10px] border border-[#E8E8E6] bg-white font-display font-bold text-[15px] text-[#111111] hover:bg-[#F5F5F3] transition-colors"
         >
           Ir para login
         </button>
@@ -697,14 +797,14 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
-      <div className="flex flex-col mb-9 gap-1.5">
-        <h1 className="tracking-[-0.5px] text-a1-text-primary font-display font-extrabold text-2xl leading-[30px]">
-          Redefinir senha
-        </h1>
-        <p className="text-sm text-a1-text-auxiliary font-display leading-[round(up,150%,1px)]">
-          Escolha uma nova senha para sua conta.
-        </p>
-      </div>
+      <BackToLogin onClick={onBack} />
+
+      <h1 className="font-display font-extrabold text-2xl leading-[30px] tracking-[-0.5px] text-[#111111]">
+        Redefinir senha
+      </h1>
+      <p className="font-display text-sm leading-5 text-[#888888] mt-1.5 mb-7">
+        Crie uma nova senha segura para sua conta.
+      </p>
 
       {(error || validationErr) && (
         <div className="mb-4">
@@ -712,12 +812,14 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
         </div>
       )}
 
-      <div className="flex flex-col mb-4 gap-[7px]">
-        <StyledLabel htmlFor="reset-password">Nova senha</StyledLabel>
+      {/* New password */}
+      <div className="flex flex-col gap-2 mb-4">
+        <StyledLabel htmlFor="reset-password">NOVA SENHA</StyledLabel>
         <StyledInput
           id="reset-password"
           type={showNew ? 'text' : 'password'}
-          icon={<KeyIcon />}
+          icon={<LockIcon />}
+          placeholder="Mínimo 8 caracteres"
           value={newPassword}
           onChange={setNewPassword}
           autoComplete="new-password"
@@ -735,14 +837,17 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
             </button>
           }
         />
+        <PasswordStrength password={newPassword} />
       </div>
 
-      <div className="flex flex-col mb-7 gap-[7px]">
-        <StyledLabel htmlFor="reset-confirm">Confirmar senha</StyledLabel>
+      {/* Confirm password */}
+      <div className="flex flex-col gap-2 mb-7">
+        <StyledLabel htmlFor="reset-confirm">CONFIRMAR SENHA</StyledLabel>
         <StyledInput
           id="reset-confirm"
           type={showConfirm ? 'text' : 'password'}
           icon={<LockIcon />}
+          placeholder="Repita a nova senha"
           value={confirmPassword}
           onChange={setConfirmPassword}
           autoComplete="new-password"
@@ -765,9 +870,10 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[52px] mb-5 rounded-lg gap-2 bg-primary-600 hover:bg-primary-700 text-white font-display font-bold text-[15px] tracking-[0.2px]"
+        className="h-[50px] rounded-[10px] gap-2 text-white font-display font-bold text-[15px] leading-5"
+        style={{ background: '#2E86C1' }}
       >
-        Redefinir senha
+        Redefinir
         {!loading && <ArrowRightIcon />}
       </Button>
 
@@ -776,62 +882,92 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
   );
 }
 
-// -- Branding Panel (left side) --
+// ══════════════════════════════════════
+// Branding Panel (spec v3 §6: left 604px)
+// ══════════════════════════════════════
 
 function BrandingPanel() {
   return (
-    <aside className="hidden lg:flex w-[580px] shrink-0 flex-col justify-between py-16 px-[72px] bg-a1-dark">
+    <aside
+      className="hidden lg:flex w-[604px] shrink-0 flex-col justify-between"
+      style={{
+        background: 'linear-gradient(175deg, #1a2318 0%, #151a14 40%, #111111 100%)',
+        padding: '40px 56px',
+      }}
+    >
       {/* Logo */}
-      <div className="flex items-center gap-3">
-        <A1Logo />
-        <div className="flex flex-col gap-px">
-          <div className="tracking-[-0.3px] text-white font-display font-extrabold text-base leading-5">
-            Grupo A1
-          </div>
-          <div className="tracking-[0.2px] text-a1-text-auxiliary/60 font-display text-[11px] leading-[14px]">
-            Portal Interno
-          </div>
-        </div>
-      </div>
+      <A1Logo />
 
-      {/* Hero */}
+      {/* Tagline block */}
       <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-3">
-          <h2 className="text-[44px] leading-[round(up,110%,1px)] tracking-[-1.5px] text-white font-display font-extrabold">
+        <div className="flex flex-col gap-5">
+          <h2
+            className="font-display font-extrabold italic text-white"
+            style={{ fontSize: 42, lineHeight: '47px', letterSpacing: '-1.2px' }}
+          >
             Soluções
             <br />
-            para a<br />
+            para a
+            <br />
             indústria.
           </h2>
-          <p className="text-[15px] leading-[round(up,170%,1px)] max-w-[360px] text-a1-text-tertiary font-display">
+          <p
+            className="font-display max-w-[380px]"
+            style={{ fontSize: 14, lineHeight: '23px', color: 'rgba(255,255,255,0.45)' }}
+          >
             Plataforma de gestão de processos, aprovações e integração com Protheus — desenvolvida
             para o Grupo A1.
           </p>
         </div>
-        <div className="w-12 h-[3px] rounded-sm bg-a1-accent" />
+        <div className="rounded-sm" style={{ width: 56, height: 4, background: '#F58C32' }} />
       </div>
 
-      {/* Bottom: units + copyright */}
+      {/* Footer: units + copyright */}
       <div className="flex flex-col gap-3">
-        <div className="uppercase tracking-[1.4px] text-a1-text-secondary font-display font-semibold text-[10px] leading-3">
-          Unidades do Grupo
-        </div>
+        <span
+          className="font-display font-bold uppercase"
+          style={{
+            fontSize: 9,
+            lineHeight: '12px',
+            letterSpacing: '1.4px',
+            color: 'rgba(255,255,255,0.25)',
+          }}
+        >
+          UNIDADES DO GRUPO
+        </span>
         <div className="flex flex-wrap gap-2">
           {['Engenharia', 'Industrial', 'Energia', 'Agro'].map((unit) => (
-            <div key={unit} className="rounded-[20px] py-1.5 px-3.5 border border-topbar-separator">
-              <span className="text-white font-sans text-base leading-5">{unit}</span>
+            <div
+              key={unit}
+              className="rounded-[20px] py-1.5 px-4"
+              style={{
+                border: '1px solid rgba(255,255,255,0.12)',
+                background: 'rgba(255,255,255,0.03)',
+              }}
+            >
+              <span
+                className="font-display font-medium text-xs leading-4"
+                style={{ color: 'rgba(255,255,255,0.50)' }}
+              >
+                {unit}
+              </span>
             </div>
           ))}
         </div>
-        <div className="text-topbar-separator font-display text-[11px] leading-[14px]">
+        <span
+          className="font-display text-[11px] leading-[14px]"
+          style={{ color: 'rgba(255,255,255,0.20)' }}
+        >
           © 2026 Grupo A1 · Todos os direitos reservados
-        </div>
+        </span>
       </div>
     </aside>
   );
 }
 
-// -- Main LoginPage --
+// ══════════════════════════════════════
+// Main LoginPage
+// ══════════════════════════════════════
 
 export function LoginPage() {
   const search = useSearch({ strict: false }) as { token?: string };
@@ -841,18 +977,23 @@ export function LoginPage() {
   const [mfaTempToken, setMfaTempToken] = useState('');
 
   function handleLoginSuccess() {
-    // Full reload to re-read auth tokens from localStorage into router context
     window.location.href = '/';
   }
 
   return (
     <div className="flex min-h-screen font-display">
-      {/* Left branding panel — hidden on mobile */}
+      {/* Left branding panel */}
       <BrandingPanel />
 
-      {/* Right panel — form */}
-      <main className="flex-1 flex items-center justify-center bg-white p-4">
-        <div className="w-full max-w-[420px] flex flex-col rounded-2xl py-[52px] px-12 bg-white border border-a1-border lg:border-transparent lg:shadow-none">
+      {/* Right panel — form on #F5F5F3 bg */}
+      <main
+        className="flex-1 flex items-center justify-center p-4"
+        style={{ background: '#F5F5F3' }}
+      >
+        <div
+          className="w-full max-w-[420px] flex flex-col rounded-2xl bg-white border border-[#E8E8E6]"
+          style={{ padding: '44px 40px 36px' }}
+        >
           {panel === 'login' && (
             <LoginPanel
               onMfaRequired={(token) => {

@@ -1,163 +1,297 @@
 /**
- * @contract UX-009 §31
+ * @contract UX-009 §31, UX-009-M01 D4
  *
- * UX-APPROV-004: Detalhe do Movimento.
- * Two-column: info + cadeia de aprovação à esquerda, timeline à direita.
- * Override com justificativa ≥20 chars.
- * Route: /approvals/movements/:id
+ * View ② — Movimento Detalhe (/approvals/movements/:id)
+ * Two-column: HeaderCard + ApprovalChain + ActionButtons + OverridePanel (2/3) | Timeline sticky (1/3)
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import {
   ArrowLeftIcon,
-  CheckCircleIcon,
-  XCircleIcon,
+  CheckIcon,
+  XIcon,
   ShieldAlertIcon,
   ZapIcon,
+  ClockIcon,
+  LockIcon,
   UserIcon,
+  AlertTriangleIcon,
 } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
 import { Button, Skeleton } from '@shared/ui';
-import { PageHeader } from '@shared/ui/page-header';
 import { StatusBadge, type StatusType } from '@shared/ui/status-badge';
-import { FormField } from '@shared/ui/form-field';
-import { httpClient } from '@modules/foundation/api/http-client.js';
+import { useMovementDetail, useOverrideMovement } from '../../hooks/use-movements.js';
+import { useApproveMovement, useRejectMovement } from '../../hooks/use-approvals.js';
+import type { MovementStatus, ApprovalInstance } from '../../types/movement-approval.types.js';
 
-// ── Types ────────────────────────────────────────────────────
+// ── Status map ───────────────────────────────────────────────────────────────
 
-type MovementStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'OVERRIDDEN' | 'AUTO_APPROVED';
-
-interface ApprovalLevel {
-  level: number;
-  approvers: Array<{
-    id: string;
-    name: string;
-    avatar_url?: string;
-    status: 'PENDING' | 'APPROVED' | 'REJECTED';
-    decided_at?: string;
-  }>;
-}
-
-interface MovementDetail {
-  id: string;
-  codigo: string;
-  tipo: string;
-  objeto: string;
-  valor: string;
-  status: MovementStatus;
-  solicitante: string;
-  created_at: string;
-  approval_chain: ApprovalLevel[];
-  can_override: boolean;
-}
-
-interface TimelineEvent {
-  id: string;
-  type: 'ENGINE_EVAL' | 'APPROVAL' | 'REJECTION' | 'OVERRIDE' | 'EXECUTION' | 'AUTO_APPROVE';
-  actor: string;
-  description: string;
-  timestamp: string;
-}
-
-const STATUS_MAP: Record<MovementStatus, { label: string; variant: StatusType }> = {
+const STATUS_MAP: Record<MovementStatus, { label: string; variant: StatusType; auto?: boolean }> = {
   PENDING_APPROVAL: { label: 'Pendente', variant: 'warning' },
   APPROVED: { label: 'Aprovado', variant: 'success' },
+  AUTO_APPROVED: { label: 'Auto', variant: 'info', auto: true },
   REJECTED: { label: 'Rejeitado', variant: 'error' },
+  CANCELLED: { label: 'Cancelado', variant: 'error' },
   OVERRIDDEN: { label: 'Override', variant: 'purple' },
-  AUTO_APPROVED: { label: 'Auto-aprovado', variant: 'info' },
+  EXECUTED: { label: 'Executado', variant: 'success' },
+  FAILED: { label: 'Falhou', variant: 'error' },
 };
 
-const TIMELINE_ICONS: Record<TimelineEvent['type'], typeof CheckCircleIcon> = {
-  ENGINE_EVAL: ZapIcon,
-  APPROVAL: CheckCircleIcon,
-  REJECTION: XCircleIcon,
-  OVERRIDE: ShieldAlertIcon,
-  EXECUTION: CheckCircleIcon,
-  AUTO_APPROVE: ZapIcon,
-};
-
-// ── Props ────────────────────────────────────────────────────
+// ── Props ────────────────────────────────────────────────────────────────────
 
 export interface MovementDetailPageProps {
   movementId: string;
 }
 
-// ── Component ────────────────────────────────────────────────
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+function formatValue(value: number | null) {
+  if (value === null) return '—';
+  return value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// ── Approval Chain Level ─────────────────────────────────────────────────────
+
+type LevelState = 'approved' | 'waiting' | 'blocked';
+
+function getLevelState(instance: ApprovalInstance): LevelState {
+  if (instance.decision === 'APPROVED') return 'approved';
+  if (instance.decision === null && instance.approver_id) return 'waiting';
+  return 'blocked';
+}
+
+function ApprovalLevelCard({ instance, index }: { instance: ApprovalInstance; index: number }) {
+  const state = getLevelState(instance);
+
+  const stateConfig = {
+    approved: {
+      bg: 'bg-[#f0fdf4]',
+      border: 'border-[#bbf7d0]',
+      circleBg: 'bg-[#16a34a]',
+      icon: <CheckIcon className="size-3 text-white" />,
+      label: 'Aprovado',
+    },
+    waiting: {
+      bg: 'bg-[#fefce8]',
+      border: 'border-amber-200',
+      circleBg: 'bg-[#ca8a04]',
+      icon: <ClockIcon className="size-3 text-white" />,
+      label: 'Aguardando',
+    },
+    blocked: {
+      bg: 'bg-[#F5F5F3]',
+      border: 'border-slate-200',
+      circleBg: 'bg-[#888888]',
+      icon: <LockIcon className="size-3 text-white" />,
+      label: 'Bloqueado',
+    },
+  }[state];
+
+  return (
+    <div className={`rounded-lg border ${stateConfig.border} ${stateConfig.bg} p-4`}>
+      <div className="flex items-start gap-3">
+        <div
+          className={`flex size-6 shrink-0 items-center justify-center rounded-full ${stateConfig.circleBg} ${state === 'waiting' ? 'animate-pulse' : ''}`}
+        >
+          {stateConfig.icon}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[13px] font-bold text-[#111111]">
+            Nível {index + 1}
+            <span className="ml-2 text-[11px] font-normal text-[#888888]">
+              {stateConfig.label}
+            </span>
+          </p>
+          {instance.approver_name && (
+            <p className="mt-1 flex items-center gap-1.5 text-[11px] text-[#888888]">
+              <UserIcon className="size-3" />
+              {instance.approver_name}
+              {instance.decided_at && ` · ${formatDate(instance.decided_at)}`}
+            </p>
+          )}
+          {instance.opinion && (
+            <p className="mt-1.5 rounded-md bg-white/60 px-2 py-1 text-[12px] italic text-[#888888]">
+              "{instance.opinion}"
+            </p>
+          )}
+          {state === 'waiting' && instance.sla_deadline && (
+            <p className="mt-1 text-[11px] text-[#ca8a04]">
+              SLA: {formatDate(instance.sla_deadline)}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Timeline ─────────────────────────────────────────────────────────────────
+
+type TimelineDotVariant = 'info' | 'success' | 'warning' | 'neutral';
+
+interface TimelineEvent {
+  id: string;
+  variant: TimelineDotVariant;
+  title: string;
+  detail: string;
+  timestamp?: string;
+}
+
+function TimelineDot({ variant }: { variant: TimelineDotVariant }) {
+  const colors: Record<TimelineDotVariant, string> = {
+    info: 'bg-[#E3F2FD]',
+    success: 'bg-[#f0fdf4]',
+    warning: 'bg-[#fefce8]',
+    neutral: 'bg-[#F5F5F3]',
+  };
+  const innerColors: Record<TimelineDotVariant, string> = {
+    info: 'bg-[#2E86C1]',
+    success: 'bg-[#16a34a]',
+    warning: 'bg-[#ca8a04]',
+    neutral: 'bg-[#888888]',
+  };
+  return (
+    <div
+      className={`flex size-5 shrink-0 items-center justify-center rounded-full ${colors[variant]}`}
+    >
+      <div className={`size-2 rounded-full ${innerColors[variant]}`} />
+    </div>
+  );
+}
+
+function buildTimeline(instances: ApprovalInstance[]): TimelineEvent[] {
+  const events: TimelineEvent[] = [
+    {
+      id: 'created',
+      variant: 'info',
+      title: 'Movimento criado',
+      detail: 'Motor de regras avaliou',
+    },
+  ];
+  for (const inst of instances) {
+    if (inst.decision === 'APPROVED') {
+      events.push({
+        id: `inst-${inst.id}`,
+        variant: 'success',
+        title: `Nível ${inst.level} aprovado`,
+        detail: inst.approver_name ?? 'Aprovador',
+        timestamp: inst.decided_at ?? undefined,
+      });
+    } else if (inst.decision === 'REJECTED') {
+      events.push({
+        id: `inst-${inst.id}`,
+        variant: 'warning',
+        title: `Nível ${inst.level} rejeitado`,
+        detail: inst.approver_name ?? 'Aprovador',
+        timestamp: inst.decided_at ?? undefined,
+      });
+    } else if (inst.approver_id) {
+      events.push({
+        id: `inst-${inst.id}`,
+        variant: 'warning',
+        title: `Nível ${inst.level} pendente`,
+        detail: 'Aguardando decisão',
+        timestamp: inst.created_at,
+      });
+    } else {
+      events.push({
+        id: `inst-${inst.id}`,
+        variant: 'neutral',
+        title: `Nível ${inst.level} bloqueado`,
+        detail: 'Aguardando níveis anteriores',
+      });
+    }
+  }
+  return events;
+}
+
+// ── Main Component ────────────────────────────────────────────────────────────
 
 export function MovementDetailPage({ movementId }: MovementDetailPageProps) {
-  const [detail, setDetail] = useState<MovementDetail | null>(null);
-  const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [justification, setJustification] = useState('');
-  const [overrideLoading, setOverrideLoading] = useState(false);
+  const [approveOpinion, setApproveOpinion] = useState('');
+  const [rejectOpinion, setRejectOpinion] = useState('');
+  const [showActions, setShowActions] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
+  const detailQuery = useMovementDetail(movementId);
+  const approveMut = useApproveMovement();
+  const rejectMut = useRejectMovement();
+  const overrideMut = useOverrideMovement();
 
-    async function load() {
-      setIsLoading(true);
-      try {
-        const [d, t] = await Promise.all([
-          httpClient.get<MovementDetail>(`/approvals/movements/${movementId}`),
-          httpClient.get<TimelineEvent[]>(`/approvals/movements/${movementId}/timeline`),
-        ]);
-        if (!cancelled) {
-          setDetail(d);
-          setTimeline(t);
-        }
-      } catch {
-        if (!cancelled) toast.error('Erro ao carregar detalhes do movimento.');
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
+  const detail = detailQuery.data ?? null;
+
+  function handleApprove() {
+    if (approveOpinion.trim().length < 10) {
+      toast.error('Parecer deve ter pelo menos 10 caracteres.');
+      return;
     }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [movementId]);
-
-  async function handleOverride() {
-    if (justification.length < 20) return;
-    setOverrideLoading(true);
-    try {
-      await httpClient.post(`/approvals/movements/${movementId}/override`, {
-        justification,
-      });
-      toast.success('Override realizado com sucesso.');
-      // Reload detail
-      const d = await httpClient.get<MovementDetail>(`/approvals/movements/${movementId}`);
-      setDetail(d);
-      setJustification('');
-    } catch {
-      toast.error('Erro ao realizar override.');
-    } finally {
-      setOverrideLoading(false);
-    }
+    approveMut.mutate(
+      { movementId, data: { opinion: approveOpinion.trim() } },
+      {
+        onSuccess: () => {
+          toast.success('Movimento aprovado.');
+          setApproveOpinion('');
+          setShowActions(false);
+        },
+        onError: (err) => toast.error(err instanceof Error ? err.message : 'Erro ao aprovar.'),
+      },
+    );
   }
 
-  function formatDate(iso: string) {
-    return new Date(iso).toLocaleString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  function handleReject() {
+    if (rejectOpinion.trim().length < 10) {
+      toast.error('Parecer deve ter pelo menos 10 caracteres.');
+      return;
+    }
+    rejectMut.mutate(
+      { movementId, data: { opinion: rejectOpinion.trim() } },
+      {
+        onSuccess: () => {
+          toast.success('Movimento rejeitado.');
+          setRejectOpinion('');
+          setShowActions(false);
+        },
+        onError: (err) => toast.error(err instanceof Error ? err.message : 'Erro ao rejeitar.'),
+      },
+    );
   }
 
-  if (isLoading) {
+  function handleOverride() {
+    if (justification.trim().length < 20) return;
+    overrideMut.mutate(
+      { id: movementId, data: { justification: justification.trim(), confirmation: true } },
+      {
+        onSuccess: () => {
+          toast.success('Override realizado.');
+          setJustification('');
+        },
+        onError: (err) => toast.error(err instanceof Error ? err.message : 'Erro no override.'),
+      },
+    );
+  }
+
+  if (detailQuery.isLoading) {
     return (
       <div className="space-y-[var(--space-lg)]">
-        <Skeleton className="h-8 w-64 rounded-md" />
-        <div className="grid grid-cols-1 gap-[var(--space-lg)] lg:grid-cols-3">
-          <div className="lg:col-span-2 space-y-4">
-            <Skeleton className="h-32 w-full rounded-lg" />
+        <Skeleton className="h-8 w-48 rounded-md" />
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="space-y-4 lg:col-span-2">
+            <Skeleton className="h-36 w-full rounded-lg" />
             <Skeleton className="h-48 w-full rounded-lg" />
+            <Skeleton className="h-32 w-full rounded-lg" />
           </div>
-          <Skeleton className="h-64 w-full rounded-lg" />
+          <Skeleton className="h-80 w-full rounded-lg" />
         </div>
       </div>
     );
@@ -165,203 +299,273 @@ export function MovementDetailPage({ movementId }: MovementDetailPageProps) {
 
   if (!detail) {
     return (
-      <div className="py-12 text-center text-a1-text-auxiliary">Movimento não encontrado.</div>
+      <div className="py-16 text-center text-[13px] text-[#888888]">
+        Movimento não encontrado.
+      </div>
     );
   }
 
   const st = STATUS_MAP[detail.status];
+  const isPending = detail.status === 'PENDING_APPROVAL';
+  const instances = detail.approval_instances ?? [];
+  const timeline = buildTimeline(instances);
+  const justLen = justification.trim().length;
 
   return (
     <div className="space-y-[var(--space-lg)]">
-      <PageHeader
-        title={`Movimento ${detail.codigo}`}
-        breadcrumbs={[
-          { label: 'Aprovação', href: '/approvals/inbox' },
-          { label: 'Movimentos', href: '/approvals/movements' },
-          { label: detail.codigo },
-        ]}
-        actions={
-          <Link to="/approvals/movements">
-            <Button variant="outline" size="sm">
-              <ArrowLeftIcon className="mr-1.5 size-4" />
-              Voltar
-            </Button>
+      {/* Breadcrumb + Back */}
+      <div className="flex items-center justify-between">
+        <nav className="flex items-center gap-1 text-[11px] text-[#888888]">
+          <span>Aprovação</span>
+          <span className="text-[#E8E8E6]">/</span>
+          <Link to="/approvals/movements" className="hover:text-[#111111]">
+            Movimentos
           </Link>
-        }
-      />
+          <span className="text-[#E8E8E6]">/</span>
+          <span className="font-semibold text-[#111111]">{detail.codigo}</span>
+        </nav>
+        <Link to="/approvals/movements">
+          <Button variant="outline" size="sm" className="border-[#E8E8E6]">
+            <ArrowLeftIcon className="size-4" />
+            Voltar
+          </Button>
+        </Link>
+      </div>
 
-      <div className="grid grid-cols-1 gap-[var(--space-lg)] lg:grid-cols-3">
-        {/* Left Column — Detail + Approval Chain */}
-        <div className="space-y-[var(--space-lg)] lg:col-span-2">
-          {/* Movement Info Card */}
-          <div className="rounded-lg border border-a1-border bg-white p-[var(--space-lg)]">
-            <div className="mb-[var(--space-md)] flex items-center gap-[var(--space-sm)]">
-              <h2 className="font-display text-lg font-bold text-a1-text-primary">
-                {detail.codigo}
-              </h2>
-              <StatusBadge status={st.variant}>{st.label}</StatusBadge>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* ── Left Column ── */}
+        <div className="space-y-4 lg:col-span-2">
+          {/* Header Card */}
+          <div className="rounded-[10px] border border-[#E8E8E6] bg-white p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <h1 className="text-[20px] font-extrabold text-[#111111]">{detail.codigo}</h1>
+                <StatusBadge status={st.variant}>
+                  {st.auto && <ZapIcon className="size-2.5" />}
+                  {st.label}
+                </StatusBadge>
+              </div>
+              <span className="font-mono text-[24px] font-extrabold tabular-nums text-[#111111]">
+                R$ {formatValue(detail.value)}
+              </span>
             </div>
-            <dl className="grid grid-cols-2 gap-x-[var(--space-lg)] gap-y-[var(--space-sm)] text-sm">
+            <p className="mb-4 text-[13px] text-[#888888]">
+              {detail.entity_type} · {detail.operation}
+            </p>
+            <div className="grid grid-cols-2 gap-4 border-t border-[#E8E8E6] pt-4 lg:grid-cols-4">
               <div>
-                <dt className="font-display text-[length:var(--type-label)] font-semibold uppercase tracking-wide text-a1-text-tertiary">
-                  Tipo
-                </dt>
-                <dd className="text-a1-text-primary">{detail.tipo}</dd>
-              </div>
-              <div>
-                <dt className="font-display text-[length:var(--type-label)] font-semibold uppercase tracking-wide text-a1-text-tertiary">
-                  Objeto
-                </dt>
-                <dd className="text-a1-text-primary">{detail.objeto}</dd>
-              </div>
-              <div>
-                <dt className="font-display text-[length:var(--type-label)] font-semibold uppercase tracking-wide text-a1-text-tertiary">
-                  Valor
-                </dt>
-                <dd className="text-a1-text-primary">{detail.valor}</dd>
-              </div>
-              <div>
-                <dt className="font-display text-[length:var(--type-label)] font-semibold uppercase tracking-wide text-a1-text-tertiary">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.8px] text-[#888888]">
                   Solicitante
-                </dt>
-                <dd className="text-a1-text-primary">{detail.solicitante}</dd>
+                </p>
+                <div className="mt-1 flex items-center gap-1.5">
+                  <div className="flex size-6 items-center justify-center rounded-full bg-[#E3F2FD]">
+                    <UserIcon className="size-3 text-[#2E86C1]" />
+                  </div>
+                  <p className="text-[13px] font-medium text-[#111111]">
+                    {detail.requester_name}
+                  </p>
+                </div>
               </div>
               <div>
-                <dt className="font-display text-[length:var(--type-label)] font-semibold uppercase tracking-wide text-a1-text-tertiary">
-                  Data
-                </dt>
-                <dd className="text-a1-text-auxiliary">{formatDate(detail.created_at)}</dd>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.8px] text-[#888888]">
+                  Tipo
+                </p>
+                <p className="mt-1 text-[13px] text-[#111111]">{detail.entity_type}</p>
               </div>
-            </dl>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.8px] text-[#888888]">
+                  Origem
+                </p>
+                <p className="mt-1 text-[13px] text-[#111111]">{detail.origin}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.8px] text-[#888888]">
+                  Regra Aplicada
+                </p>
+                <p className="mt-1 text-[13px] font-semibold text-[#2E86C1]">
+                  {detail.control_rule_id ?? '—'}
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Approval Chain */}
-          <div className="rounded-lg border border-a1-border bg-white p-[var(--space-lg)]">
-            <h3 className="mb-[var(--space-md)] font-display text-base font-bold text-a1-text-primary">
-              Cadeia de Aprovação
-            </h3>
-            {detail.approval_chain.length === 0 ? (
-              <p className="text-sm text-a1-text-auxiliary">
-                Nenhuma cadeia de aprovação definida.
-              </p>
+          <div className="rounded-[10px] border border-[#E8E8E6] bg-white p-6">
+            <h2 className="mb-4 text-[14px] font-bold text-[#111111]">Cadeia de Aprovação</h2>
+            {instances.length === 0 ? (
+              <p className="text-[13px] text-[#888888]">Nenhuma cadeia definida.</p>
             ) : (
-              <div className="space-y-[var(--space-md)]">
-                {detail.approval_chain.map((level) => (
-                  <div
-                    key={level.level}
-                    className="rounded-md border border-a1-border p-[var(--space-sm)]"
-                  >
-                    <p className="mb-[var(--space-xs)] text-[length:var(--type-caption)] font-semibold uppercase tracking-wide text-a1-text-tertiary">
-                      Nível {level.level}
-                    </p>
-                    <div className="flex flex-wrap gap-[var(--space-sm)]">
-                      {level.approvers.map((approver) => {
-                        const approverVariant: StatusType =
-                          approver.status === 'APPROVED'
-                            ? 'success'
-                            : approver.status === 'REJECTED'
-                              ? 'error'
-                              : 'neutral';
-                        return (
-                          <div
-                            key={approver.id}
-                            className="flex items-center gap-2 rounded-md bg-a1-bg px-3 py-1.5"
-                          >
-                            <div className="flex size-6 items-center justify-center rounded-full bg-primary-600/10 text-primary-600">
-                              <UserIcon className="size-3.5" />
-                            </div>
-                            <span className="text-sm text-a1-text-primary">{approver.name}</span>
-                            <StatusBadge status={approverVariant}>
-                              {approver.status === 'APPROVED'
-                                ? 'Aprovado'
-                                : approver.status === 'REJECTED'
-                                  ? 'Rejeitado'
-                                  : 'Pendente'}
-                            </StatusBadge>
-                          </div>
-                        );
-                      })}
-                    </div>
+              <div className="space-y-2">
+                {instances.map((inst, i) => (
+                  <div key={inst.id}>
+                    <ApprovalLevelCard instance={inst} index={i} />
+                    {i < instances.length - 1 && (
+                      <div className="ml-3 h-4 w-0.5 bg-[#E8E8E6]" />
+                    )}
                   </div>
                 ))}
               </div>
             )}
           </div>
 
+          {/* Action Buttons — only for pending */}
+          {isPending && (
+            <div className="rounded-[10px] border border-[#E8E8E6] bg-white p-6">
+              <h2 className="mb-4 text-[14px] font-bold text-[#111111]">Decisão</h2>
+              {!showActions ? (
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowActions(true)}
+                    className="flex h-11 w-36 items-center justify-center gap-2 rounded-md bg-[#16a34a] text-[13px] font-semibold text-white hover:bg-[#15803d] transition-colors"
+                  >
+                    <CheckIcon className="size-4" />
+                    Aprovar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowActions(true)}
+                    className="flex h-11 w-36 items-center justify-center gap-2 rounded-md bg-[#dc2626] text-[13px] font-semibold text-white hover:bg-[#b91c1c] transition-colors"
+                  >
+                    <XIcon className="size-4" />
+                    Rejeitar
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Approve */}
+                  <div className="rounded-lg border border-[#bbf7d0] bg-[#f0fdf4] p-4">
+                    <p className="mb-2 text-[12px] font-semibold text-[#16a34a]">Aprovar</p>
+                    <textarea
+                      rows={2}
+                      value={approveOpinion}
+                      onChange={(e) => setApproveOpinion(e.target.value)}
+                      placeholder="Parecer de aprovação (mínimo 10 caracteres)..."
+                      className="w-full resize-none rounded-md border border-[#E8E8E6] bg-white px-3 py-2 text-[13px] outline-none placeholder:text-[#CCCCCC] focus:border-[#16a34a]"
+                    />
+                    <div className="mt-2 flex items-center justify-between">
+                      <span className="text-[11px] text-[#888888]">
+                        {approveOpinion.trim().length}/10 caracteres mínimos
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleApprove}
+                        disabled={approveMut.isPending || approveOpinion.trim().length < 10}
+                        className="rounded-md bg-[#16a34a] px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-[#15803d] disabled:opacity-50"
+                      >
+                        Confirmar Aprovação
+                      </button>
+                    </div>
+                  </div>
+                  {/* Reject */}
+                  <div className="rounded-lg border border-[#fecaca] bg-[#fee2e2] p-4">
+                    <p className="mb-2 text-[12px] font-semibold text-[#dc2626]">Rejeitar</p>
+                    <textarea
+                      rows={2}
+                      value={rejectOpinion}
+                      onChange={(e) => setRejectOpinion(e.target.value)}
+                      placeholder="Motivo da rejeição (mínimo 10 caracteres)..."
+                      className="w-full resize-none rounded-md border border-[#E8E8E6] bg-white px-3 py-2 text-[13px] outline-none placeholder:text-[#CCCCCC] focus:border-[#dc2626]"
+                    />
+                    <div className="mt-2 flex items-center justify-between">
+                      <span className="text-[11px] text-[#888888]">
+                        {rejectOpinion.trim().length}/10 caracteres mínimos
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleReject}
+                        disabled={rejectMut.isPending || rejectOpinion.trim().length < 10}
+                        className="rounded-md bg-[#dc2626] px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-[#b91c1c] disabled:opacity-50"
+                      >
+                        Confirmar Rejeição
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowActions(false)}
+                    className="text-[12px] text-[#888888] hover:text-[#111111]"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Override Panel */}
-          {detail.can_override && detail.status === 'PENDING_APPROVAL' && (
-            <div className="rounded-lg border border-status-warning-bg bg-white p-[var(--space-lg)]">
-              <h3 className="mb-[var(--space-md)] font-display text-base font-bold text-a1-text-primary">
-                Override
-              </h3>
-              <FormField
-                label="Justificativa"
-                name="override-justification"
-                required
-                hint={`${justification.length}/20 caracteres mínimos`}
-                error={
-                  justification.length > 0 && justification.length < 20
-                    ? 'Justificativa deve ter pelo menos 20 caracteres.'
-                    : undefined
-                }
-              >
-                <textarea
-                  value={justification}
-                  onChange={(e) => setJustification(e.target.value)}
-                  rows={3}
-                  className="w-full rounded-md border border-a1-border bg-white px-3 py-2 text-sm text-a1-text-primary outline-none placeholder:text-a1-text-placeholder focus-visible:border-primary-600 focus-visible:ring-[3px] focus-visible:ring-primary-600/20"
-                  placeholder="Descreva o motivo do override..."
-                />
-              </FormField>
-              <div className="mt-[var(--space-sm)] flex justify-end">
-                <Button
-                  variant="destructive"
-                  onClick={handleOverride}
-                  disabled={justification.length < 20}
-                  isLoading={overrideLoading}
+          {isPending && (
+            <div className="rounded-[10px] border border-[#E8E8E6] bg-white p-6">
+              <div className="mb-3 flex items-center gap-2">
+                <ShieldAlertIcon className="size-4 text-[#ca8a04]" />
+                <h2 className="text-[14px] font-bold text-[#111111]">Override Administrativo</h2>
+              </div>
+              <div className="mb-4 flex items-start gap-2 rounded-lg border border-[#fde68a] bg-[#fefce8] px-4 py-3">
+                <AlertTriangleIcon className="mt-0.5 size-4 shrink-0 text-[#ca8a04]" />
+                <p className="text-[12px] text-[#92400e]">
+                  Esta ação será registrada no log de auditoria e não pode ser desfeita.
+                </p>
+              </div>
+              <textarea
+                rows={3}
+                value={justification}
+                onChange={(e) => setJustification(e.target.value)}
+                placeholder="Descreva o motivo do override administrativo..."
+                className="w-full resize-none rounded-md border border-[#E8E8E6] bg-white px-3 py-2 text-[13px] outline-none placeholder:text-[#CCCCCC] focus:border-[#ca8a04]"
+              />
+              <div className="mt-2 flex items-center justify-between">
+                <span
+                  className={[
+                    'text-[11px] font-medium',
+                    justLen < 20 ? 'text-[#ca8a04]' : 'text-[#16a34a]',
+                  ].join(' ')}
                 >
-                  <ShieldAlertIcon className="mr-1.5 size-4" />
-                  Override
-                </Button>
+                  {justLen}/20 caracteres mínimos
+                </span>
+                <button
+                  type="button"
+                  onClick={handleOverride}
+                  disabled={justLen < 20 || overrideMut.isPending}
+                  className={[
+                    'rounded-md px-4 py-2 text-[13px] font-semibold text-white transition-opacity',
+                    justLen < 20 ? 'bg-[#ca8a04] opacity-50 cursor-not-allowed' : 'bg-[#ca8a04] hover:bg-[#b45309]',
+                  ].join(' ')}
+                >
+                  Aplicar Override
+                </button>
               </div>
             </div>
           )}
         </div>
 
-        {/* Right Column — Timeline */}
-        <div className="rounded-lg border border-a1-border bg-white p-[var(--space-lg)]">
-          <h3 className="mb-[var(--space-md)] font-display text-base font-bold text-a1-text-primary">
-            Timeline
-          </h3>
-          {timeline.length === 0 ? (
-            <p className="text-sm text-a1-text-auxiliary">Nenhum evento registrado.</p>
-          ) : (
-            <div className="relative space-y-0">
-              {timeline.map((event, i) => {
-                const Icon = TIMELINE_ICONS[event.type];
-                const isLast = i === timeline.length - 1;
-                return (
-                  <div key={event.id} className="relative flex gap-3 pb-[var(--space-md)]">
-                    {/* Vertical line */}
-                    {!isLast && (
-                      <div className="absolute left-[11px] top-6 h-full w-px bg-a1-border" />
-                    )}
-                    <div className="relative z-10 flex size-6 shrink-0 items-center justify-center rounded-full bg-a1-bg">
-                      <Icon className="size-3.5 text-a1-text-auxiliary" />
+        {/* ── Right Column — Timeline ── */}
+        <div className="lg:sticky lg:top-5 lg:self-start">
+          <div className="rounded-[10px] border border-[#E8E8E6] bg-white p-6">
+            <h2 className="mb-4 text-[14px] font-extrabold text-[#111111]">Timeline</h2>
+            {timeline.length === 0 ? (
+              <p className="text-[13px] text-[#888888]">Nenhum evento registrado.</p>
+            ) : (
+              <div className="space-y-0">
+                {timeline.map((event, i) => (
+                  <div key={event.id} className="flex gap-3">
+                    <div className="flex flex-col items-center">
+                      <TimelineDot variant={event.variant} />
+                      {i < timeline.length - 1 && (
+                        <div className="my-1 w-0.5 flex-1 bg-[#E8E8E6]" style={{ minHeight: 16 }} />
+                      )}
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-a1-text-primary">
-                        {event.description}
-                      </p>
-                      <p className="text-[length:var(--type-caption)] text-a1-text-hint">
-                        {event.actor} · {formatDate(event.timestamp)}
+                    <div className="pb-4">
+                      <p className="text-[12px] font-semibold text-[#111111]">{event.title}</p>
+                      <p className="text-[11px] text-[#888888]">
+                        {event.detail}
+                        {event.timestamp && ` · ${formatDate(event.timestamp)}`}
                       </p>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

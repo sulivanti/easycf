@@ -150,7 +150,10 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
                     <span>·</span>
                     <span>{r.service_name}</span>
                     {r.service_environment && (
-                      <StatusBadge status={ENV_STATUS_MAP[r.service_environment]} className="text-[10px]">
+                      <StatusBadge
+                        status={ENV_STATUS_MAP[r.service_environment]}
+                        className="text-[10px]"
+                      >
                         {r.service_environment}
                       </StatusBadge>
                     )}
@@ -167,10 +170,7 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
       {/* Right: Editor */}
       <div className="flex-1 overflow-y-auto p-6">
         {!selectedId ? (
-          <EmptyState
-            title="Selecione uma rotina para editar."
-            className="mt-20"
-          />
+          <EmptyState title="Selecione uma rotina para editar." className="mt-20" />
         ) : (
           <>
             {/* Readonly banner */}

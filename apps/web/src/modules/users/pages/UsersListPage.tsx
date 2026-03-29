@@ -155,16 +155,8 @@ export function UsersListPage({
             placeholder="Buscar por nome ou e-mail..."
             className="w-64"
           />
-          <Select
-            value={statusFilter}
-            onChange={handleStatusChange}
-            options={STATUS_OPTIONS}
-          />
-          <Select
-            value={roleFilter}
-            onChange={handleRoleChange}
-            options={roleOptions}
-          />
+          <Select value={statusFilter} onChange={handleStatusChange} options={STATUS_OPTIONS} />
+          <Select value={roleFilter} onChange={handleRoleChange} options={roleOptions} />
           {hasFilters && (
             <Button
               variant="link"

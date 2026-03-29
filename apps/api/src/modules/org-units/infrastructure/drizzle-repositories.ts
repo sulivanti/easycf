@@ -214,6 +214,12 @@ export class DrizzleOrgUnitRepository implements OrgUnitRepository {
         parentId: orgUnit.parentId,
         status: orgUnit.status,
         createdBy: orgUnit.createdBy!,
+        cnpj: orgUnit.cnpj,
+        razaoSocial: orgUnit.razaoSocial,
+        filial: orgUnit.filial,
+        responsavel: orgUnit.responsavel,
+        telefone: orgUnit.telefone,
+        emailContato: orgUnit.emailContato,
       })
       .returning();
     return this.toDomain(created!);
@@ -229,6 +235,12 @@ export class DrizzleOrgUnitRepository implements OrgUnitRepository {
         status: orgUnit.status,
         updatedAt: new Date(),
         deletedAt: orgUnit.deletedAt,
+        cnpj: orgUnit.cnpj,
+        razaoSocial: orgUnit.razaoSocial,
+        filial: orgUnit.filial,
+        responsavel: orgUnit.responsavel,
+        telefone: orgUnit.telefone,
+        emailContato: orgUnit.emailContato,
       })
       .where(eq(orgUnits.id, orgUnit.id))
       .returning();
@@ -248,6 +260,12 @@ export class DrizzleOrgUnitRepository implements OrgUnitRepository {
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
       deletedAt: row.deletedAt,
+      cnpj: row.cnpj,
+      razaoSocial: row.razaoSocial,
+      filial: row.filial,
+      responsavel: row.responsavel,
+      telefone: row.telefone,
+      emailContato: row.emailContato,
     };
   }
 }

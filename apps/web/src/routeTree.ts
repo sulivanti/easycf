@@ -47,7 +47,13 @@ import { Route as authIntegrationReprocessRoute } from './routes/_auth.integrati
 import { Route as authApprovalsInboxRoute } from './routes/_auth.approvals.inbox';
 import { Route as authApprovalsConfigRoute } from './routes/_auth.approvals.config';
 import { Route as authApprovalsMovementsRoute } from './routes/_auth.approvals.movements';
+import { Route as authApprovalsMovementsNewRoute } from './routes/_auth.approvals.movements.new';
 import { Route as authApprovalsMovementDetailRoute } from './routes/_auth.approvals.movements.$id';
+import { Route as authApprovalsRulesRoute } from './routes/_auth.approvals.rules';
+import { Route as authApprovalsRulesSearchRoute } from './routes/_auth.approvals.rules.search';
+import { Route as authApprovalsRulesNewRoute } from './routes/_auth.approvals.rules.new';
+import { Route as authApprovalsRulesEditRoute } from './routes/_auth.approvals.rules.$id';
+import { Route as authApprovalsHistoryRoute } from './routes/_auth.approvals.history';
 
 // MCP Automation (MOD-010)
 import { Route as authMcpAgentsRoute } from './routes/_auth.mcp.agents';
@@ -94,7 +100,13 @@ const authRouteChildren = authRoute.addChildren([
   authApprovalsInboxRoute,
   authApprovalsConfigRoute,
   authApprovalsMovementsRoute,
+  authApprovalsMovementsNewRoute,
   authApprovalsMovementDetailRoute,
+  authApprovalsRulesRoute,
+  authApprovalsRulesSearchRoute,
+  authApprovalsRulesNewRoute,
+  authApprovalsRulesEditRoute,
+  authApprovalsHistoryRoute,
   authMcpAgentsRoute,
   authMcpExecutionsRoute,
   authMcpActionsRoute,

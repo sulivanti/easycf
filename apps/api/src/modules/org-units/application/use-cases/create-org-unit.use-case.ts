@@ -34,6 +34,13 @@ export interface CreateOrgUnitInput {
   readonly createdBy: string | null;
   readonly correlationId: string;
   readonly idempotencyKey?: string;
+  // Campos cadastrais (FR-001-M01 / DATA-001-M01)
+  readonly cnpj?: string;
+  readonly razaoSocial?: string;
+  readonly filial?: string;
+  readonly responsavel?: string;
+  readonly telefone?: string;
+  readonly emailContato?: string;
 }
 
 export interface CreateOrgUnitOutput {
@@ -44,6 +51,12 @@ export interface CreateOrgUnitOutput {
   readonly nivel: OrgUnitNivel;
   readonly parentId: string | null;
   readonly status: string;
+  readonly cnpj: string | null;
+  readonly razaoSocial: string | null;
+  readonly filial: string | null;
+  readonly responsavel: string | null;
+  readonly telefone: string | null;
+  readonly emailContato: string | null;
   /** Soft limit warning message, if applicable */
   readonly limitWarning: string | null;
 }
@@ -99,6 +112,12 @@ export class CreateOrgUnitUseCase {
       parentId,
       parentNivel,
       createdBy: input.createdBy,
+      cnpj: input.cnpj,
+      razaoSocial: input.razaoSocial,
+      filial: input.filial,
+      responsavel: input.responsavel,
+      telefone: input.telefone,
+      emailContato: input.emailContato,
     });
 
     // FR-001: Soft limit warning
@@ -145,6 +164,12 @@ export class CreateOrgUnitUseCase {
       nivel: orgUnit.nivel,
       parentId: orgUnit.parentId,
       status: orgUnit.status,
+      cnpj: orgUnit.cnpj,
+      razaoSocial: orgUnit.razaoSocial,
+      filial: orgUnit.filial,
+      responsavel: orgUnit.responsavel,
+      telefone: orgUnit.telefone,
+      emailContato: orgUnit.emailContato,
       limitWarning,
     };
 

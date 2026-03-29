@@ -21,6 +21,12 @@ export interface UpdateOrgUnitInput {
   readonly descricao?: string | null;
   readonly codigo?: string;
   readonly parentId?: string;
+  readonly cnpj?: string | null;
+  readonly razaoSocial?: string | null;
+  readonly filial?: string | null;
+  readonly responsavel?: string | null;
+  readonly telefone?: string | null;
+  readonly emailContato?: string | null;
   readonly correlationId: string;
   readonly updatedBy: string | null;
 }
@@ -32,6 +38,12 @@ export interface UpdateOrgUnitOutput {
   readonly descricao: string | null;
   readonly nivel: number;
   readonly status: string;
+  readonly cnpj: string | null;
+  readonly razaoSocial: string | null;
+  readonly filial: string | null;
+  readonly responsavel: string | null;
+  readonly telefone: string | null;
+  readonly emailContato: string | null;
 }
 
 export class UpdateOrgUnitUseCase {
@@ -55,6 +67,12 @@ export class UpdateOrgUnitUseCase {
       descricao: input.descricao,
       codigo: input.codigo,
       parentId: input.parentId,
+      cnpj: input.cnpj,
+      razaoSocial: input.razaoSocial,
+      filial: input.filial,
+      responsavel: input.responsavel,
+      telefone: input.telefone,
+      emailContato: input.emailContato,
     });
 
     await this.uow.transaction(async (tx) => {
@@ -85,6 +103,12 @@ export class UpdateOrgUnitUseCase {
       descricao: updated.descricao,
       nivel: updated.nivel,
       status: updated.status,
+      cnpj: updated.cnpj,
+      razaoSocial: updated.razaoSocial,
+      filial: updated.filial,
+      responsavel: updated.responsavel,
+      telefone: updated.telefone,
+      emailContato: updated.emailContato,
     };
   }
 }

@@ -405,9 +405,109 @@ Opção A — Correção incremental em 3 fases, consistente com a decisão já 
 
 ---
 
+## PENDENTE-008 — Departamentos Vinculados (Tags no DetailPanel)
+
+- **status:** ABERTA
+- **severidade:** MEDIA
+- **dominio:** UX/DATA
+- **tipo:** LACUNA
+- **origem:** PENPOT-REVIEW
+- **criado_em:** 2026-03-29
+- **criado_por:** Marcos Sulivan
+- **modulo:** MOD-003
+- **rastreia_para:** UX-001-M01, 10-org-tree-spec.md
+- **tags:** departamentos, tags, detail-panel
+- **sla_data:** ---
+- **dependencias:** [UX-001-M01]
+
+### Questao
+
+A spec 10-OrgTree define um CardDepartamentos no DetailPanel com tags (Diretoria, Engenharia Civil, etc.) e link "+ Novo Departamento". Esta funcionalidade requer uma entidade/relacao de departamentos vinculados a unidades organizacionais que nao existe no modelo de dados atual.
+
+### Impacto
+
+Sem esta funcionalidade, o CardDepartamentos no DetailPanel tera dados mockados ou ficara oculto. A feature pode ser implementada como modulo separado ou extensao do MOD-003.
+
+### Recomendacao
+
+Adiar para fase posterior. Implementar CardDepartamentos com estado empty/placeholder no DetailPanel. Criar feature dedicada quando o modelo de departamentos for definido.
+
+---
+
+## PENDENTE-009 — Metricas no DetailPanel (Colaboradores + Projetos)
+
+- **status:** ABERTA
+- **severidade:** BAIXA
+- **dominio:** FR/INT
+- **tipo:** LACUNA
+- **origem:** PENPOT-REVIEW
+- **criado_em:** 2026-03-29
+- **criado_por:** Marcos Sulivan
+- **modulo:** MOD-003
+- **rastreia_para:** UX-001-M01, 10-org-tree-spec.md
+- **tags:** metricas, colaboradores, projetos, dashboard
+- **sla_data:** ---
+- **dependencias:** [UX-001-M01, MOD-002, MOD-005]
+
+### Questao
+
+A spec 10-OrgTree define dois MetricCards no DetailPanel: "Colaboradores Totais" (156) e "Projetos em Execucao" (28 com progress bar 70%). Estes dados dependem de modulos ainda nao integrados (MOD-002 gestao usuarios para colaboradores, MOD-005 modelagem processos para projetos).
+
+### Impacto
+
+Sem endpoints de agregacao cross-module, os MetricCards ficam sem dados reais. Podem ser renderizados com dados mockados ou ocultos.
+
+### Recomendacao
+
+Adiar para fase de integracao cross-module. Implementar MetricCards com dados mockados/placeholder no DetailPanel. Criar endpoints de agregacao quando MOD-002 e MOD-005 estiverem integrados.
+
+---
+
+## PENDENTE-010 — Toggle Status (Ativo/Inativo) vs Soft Delete
+
+- **status:** ABERTA
+- **severidade:** MEDIA
+- **dominio:** BIZ/FR
+- **tipo:** DEC-TEC
+- **origem:** PENPOT-REVIEW
+- **criado_em:** 2026-03-29
+- **criado_por:** Marcos Sulivan
+- **modulo:** MOD-003
+- **rastreia_para:** UX-001-M01, 11-org-form-spec.md, BR-005
+- **tags:** status, toggle, soft-delete, desativacao
+- **sla_data:** ---
+- **dependencias:** [UX-001-M01]
+
+### Questao
+
+A spec 11-OrgForm-Edit define um Toggle de status (Ativo/Inativo) no formulario de edicao. O modelo atual usa soft delete (DELETE endpoint que seta deleted_at + status=INACTIVE). O toggle implica que status pode ser alterado via PATCH (sem soft delete), o que muda o modelo de negocio.
+
+### Opcoes
+
+**Opcao A — Toggle via PATCH (campo status editavel):**
+Permitir `PATCH /org-units/:id { status: "INACTIVE" }` para desativar. Simplifica UX.
+- Pros: UX intuitiva; alinhado com design Penpot
+- Contras: Muda semantica de desativacao; precisa validar filhos ativos
+
+**Opcao B — Manter soft delete, toggle visual apenas:**
+Toggle no form dispara o mesmo fluxo DELETE (com modal de confirmacao). Visual de toggle, semantica de soft delete.
+- Pros: Sem mudanca de modelo; compativel com restore existente
+- Contras: Toggle que dispara modal pode confundir usuario
+
+**Opcao C — Hibrido:**
+Toggle para INACTIVE via PATCH, DELETE reservado para exclusao definitiva futura.
+- Pros: Separacao clara entre desativar e excluir
+- Contras: Mais complexo; dois caminhos para inativacao
+
+### Recomendacao
+
+Opcao B — manter soft delete com modal de confirmacao. O toggle visual serve como trigger do fluxo existente, sem mudar o modelo de dados. Decisao do PO necessaria.
+
+---
+
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-24
-- **rastreia_para:** US-MOD-003, FR-001, FR-004, BR-008, BR-009, DATA-001, NFR-001, UX-001, ADR-003, ADR-004, SEC-002, DATA-003, INT-001, DOC-PADRAO-002
+- **data_ultima_revisao:** 2026-03-29
+- **rastreia_para:** US-MOD-003, FR-001, FR-004, BR-008, BR-009, DATA-001, NFR-001, UX-001, ADR-003, ADR-004, SEC-002, DATA-003, INT-001, DOC-PADRAO-002, UX-001-M01
 - **referencias_exemplos:** EX-CI-007
-- **evidencias:** 7 pendentes total: 3 RESOLVIDA (001, 003, 005, 007) + 3 IMPLEMENTADA (002, 004, 006) + 0 ABERTA. Lint 0 erros (re-validado 2026-03-24).
+- **evidencias:** 10 pendentes total: 3 RESOLVIDA (001, 003, 005, 007) + 4 IMPLEMENTADA (002, 004, 006) + 3 ABERTA (008, 009, 010).

@@ -58,7 +58,6 @@ import type {
 
 type Tab = 'agents' | 'actions' | 'matrix';
 
-
 const STATUS_LABEL: Record<AgentStatus, string> = {
   ACTIVE: 'Ativo',
   INACTIVE: 'Inativo',

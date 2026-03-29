@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-003",
   "module_path": "docs/04_modules/mod-003-estrutura-organizacional/",
-  "last_updated": "2026-03-25T06:34:31.000Z",
+  "last_updated": "2026-03-29T17:44:50.000Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -10,7 +10,7 @@
   },
   "codegen": {
     "started_at": "2026-03-23T22:30:00.000Z",
-    "completed_at": "2026-03-25T06:34:31.000Z",
+    "completed_at": "2026-03-29T17:44:50.000Z",
     "agents": {
       "AGN-COD-DB": {
         "status": "done",
@@ -68,8 +68,8 @@
       },
       "AGN-COD-WEB": {
         "status": "done",
-        "completed_at": "2026-03-25T06:32:00.000Z",
-        "files_generated": 10,
+        "completed_at": "2026-03-29T17:40:00.000Z",
+        "files_generated": 13,
         "files": [
           "apps/web/src/modules/org-units/types/org-units.types.ts",
           "apps/web/src/modules/org-units/api/org-units.api.ts",
@@ -79,13 +79,16 @@
           "apps/web/src/modules/org-units/hooks/use-create-org-unit.ts",
           "apps/web/src/modules/org-units/hooks/use-org-unit-actions.ts",
           "apps/web/src/modules/org-units/components/OrgTreeNode.tsx",
+          "apps/web/src/modules/org-units/components/ReadOnlyField.tsx",
+          "apps/web/src/modules/org-units/components/DetailPanel.tsx",
+          "apps/web/src/modules/org-units/components/DeactivateModal.tsx",
           "apps/web/src/modules/org-units/pages/OrgTreePage.tsx",
           "apps/web/src/modules/org-units/pages/OrgFormPage.tsx"
         ]
       },
       "AGN-COD-VAL": {
         "status": "done",
-        "completed_at": "2026-03-25T06:34:31.000Z",
+        "completed_at": "2026-03-29T17:44:50.000Z",
         "files_generated": 0,
         "files": []
       }
@@ -136,6 +139,23 @@
       },
       "pendentes_resolved": ["PENDENTE-007"],
       "new_violations": 0
+    },
+    "codegen_val_web_batch2": {
+      "executed_at": "2026-03-29T17:44:50.000Z",
+      "executed_by": "AGN-COD-VAL",
+      "verdict": "APPROVED",
+      "results": {
+        "domain_errors": { "status": "PASS", "count": 7 },
+        "dto_datetime": { "status": "PASS", "violations": 0 },
+        "barrel_export": { "status": "PASS" },
+        "openapi_spec": { "status": "PASS", "file": "mod-003-org-units.yaml" },
+        "fk_cross_module": { "status": "PASS" },
+        "build_api": { "status": "WARN", "note": "1 pre-existing error in movement-approval (out of scope)" },
+        "build_web": { "status": "PASS", "errors": 0 },
+        "web_pattern_a": { "status": "PASS" },
+        "idempotency": { "status": "PASS" },
+        "correlation_id": { "status": "PASS" }
+      }
     }
   }
 }

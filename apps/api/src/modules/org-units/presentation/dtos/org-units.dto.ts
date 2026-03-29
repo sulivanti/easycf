@@ -1,5 +1,5 @@
 /**
- * @contract FR-001, FR-002, FR-003, FR-004, FR-005, EX-OAS-001
+ * @contract FR-001, FR-001-M01, FR-002, FR-003, FR-004, FR-005, FR-006, EX-OAS-001
  *
  * Zod schemas for org-units endpoints (MOD-003).
  */
@@ -14,6 +14,13 @@ export const createOrgUnitBody = z.object({
   nome: z.string().min(1).max(200),
   descricao: z.string().max(2000).nullable().optional(),
   parent_id: z.string().uuid().nullable().optional(),
+  // Campos cadastrais opcionais (FR-006 / DATA-001-M01)
+  cnpj: z.string().max(18).optional(),
+  razao_social: z.string().max(300).optional(),
+  filial: z.string().max(100).optional(),
+  responsavel: z.string().max(200).optional(),
+  telefone: z.string().max(20).optional(),
+  email_contato: z.string().max(254).optional(),
 });
 
 export const createOrgUnitResponse = z.object({
@@ -24,6 +31,12 @@ export const createOrgUnitResponse = z.object({
   nivel: z.number().int().min(1).max(4),
   parent_id: z.string().uuid().nullable(),
   status: z.string(),
+  cnpj: z.string().nullable(),
+  razao_social: z.string().nullable(),
+  filial: z.string().nullable(),
+  responsavel: z.string().nullable(),
+  telefone: z.string().nullable(),
+  email_contato: z.string().nullable(),
 });
 
 // ---------------------------------------------------------------------------
@@ -36,6 +49,13 @@ export const updateOrgUnitBody = z.object({
   codigo: z.string().optional(),
   /** @contract BR-010 — Will be rejected by use case if different from current */
   parent_id: z.string().uuid().optional(),
+  // Campos cadastrais (FR-006 / DATA-001-M01)
+  cnpj: z.string().max(18).nullable().optional(),
+  razao_social: z.string().max(300).nullable().optional(),
+  filial: z.string().max(100).nullable().optional(),
+  responsavel: z.string().max(200).nullable().optional(),
+  telefone: z.string().max(20).nullable().optional(),
+  email_contato: z.string().max(254).nullable().optional(),
 });
 
 export const updateOrgUnitResponse = z.object({
@@ -45,6 +65,12 @@ export const updateOrgUnitResponse = z.object({
   descricao: z.string().nullable(),
   nivel: z.number().int(),
   status: z.string(),
+  cnpj: z.string().nullable(),
+  razao_social: z.string().nullable(),
+  filial: z.string().nullable(),
+  responsavel: z.string().nullable(),
+  telefone: z.string().nullable(),
+  email_contato: z.string().nullable(),
 });
 
 // ---------------------------------------------------------------------------
@@ -75,6 +101,12 @@ export const orgUnitDetailResponse = z.object({
   created_at: z.string(),
   updated_at: z.string(),
   deleted_at: z.string().nullable(),
+  cnpj: z.string().nullable(),
+  razao_social: z.string().nullable(),
+  filial: z.string().nullable(),
+  responsavel: z.string().nullable(),
+  telefone: z.string().nullable(),
+  email_contato: z.string().nullable(),
   ancestors: z.array(orgUnitAncestor),
   tenants: z.array(orgUnitTenantSummary),
 });

@@ -1,3 +1,4 @@
 [
-  "[Erro] Referência de arquivo quebrada: '../01_normativos/DOC-ARC-003__Rastreabilidade_Observabilidade.md' em D:\\Dev\\EasyCodeFramework\\docs\\03_especificacoes\\spec-auth-ui-components.md:380"
+  "[Erro] Referência de arquivo quebrada: '../../requirements/fr/FR-001.md' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\mod-005-modelagem-processos\\amendments\\fr\\FR-001-C01.md:7",
+  "[Erro] Referência de arquivo quebrada: '../../requirements/fr/FR-011.md' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\mod-005-modelagem-processos\\amendments\\fr\\FR-011-C01.md:7"
 ]

@@ -36,6 +36,9 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.5.0 | 2026-03-29 | codegen | Codegen parcial (WEB only): AGN-COD-WEB executado — 17 arquivos (8 pages, 6 routes, 2 barrel exports, 1 routeTree). Views alinhadas com designs Penpot 30-movements-spec. DB/CORE/APP/API skipped (sem impacto UX-009-M01). VAL deferred. |
+| 1.4.0 | 2026-03-29 | merge-amendment | Merge UX-009-M01: Design visual validado Penpot (8 views, score 97%) incorporado ao UX-009. AppShell sidebar contextual, StatusBadges 6 variantes, 8 views detalhadas, tipografia consolidada, mapeamento rotas-sidebar. Base bumped para v0.5.0. |
+| 1.3.0 | 2026-03-29 | ux-apply-layout | Amendment UX-009-M01 criado — alinhamento visual com 8 designs Penpot (30-movements-spec.md, score 97%). AppShell com sidebar contextual, StatusBadges 6 variantes, DataTable com acoes inline, ApprovalChain multinivel, Timeline lateral, formulario com preview motor de regras, busca avancada, historico expansivel. 12 detalhamentos (D1-D12). Sem impacto em DATA/FR/BR/SEC. |
 | 1.2.0 | 2026-03-24 | validate-all | Revalidação completa: Lint PASS (0 ESLint errors, 10 Prettier warnings tracked in PENDENTE-001). Architecture PASS (DomainError+type+statusHint, Pattern A react-query, clean arch). QA PASS. Manifests 2/2 PASS. OpenAPI PASS (14 ops). Drizzle PASS (7 tabelas, 7 relations). Endpoints PASS (14/14, 4 route files). 0 bloqueadores, 0 violações críticas, 10 warnings. |
 | 1.1.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. QA: PASS. Manifests: 2/2 PASS. OpenAPI: PASS (14 ops). Drizzle: PASS (7 tabelas). Endpoints: PASS (14/14). 0 bloqueadores, 0 violações críticas, 32 warnings LOW. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |

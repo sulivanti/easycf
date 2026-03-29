@@ -129,3 +129,6 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 - [US-MOD-003-F01-M01](amendments/us/US-MOD-003-F01-M01.md) — Adição do domain event org.unit_restored à tabela de F01
 - [FR-001-C02](amendments/fr/FR-001-C02.md) — Correção: createOrgUnitEvent() extrai tenantId do payload (inexistente em CRUD) → string vazia causa crash no INSERT domain_events. Fix: SYSTEM_TENANT_ID fallback + tenantId explícito em link/unlink
 - [FR-001-C03](amendments/fr/FR-001-C03.md) — Correção: 3 endpoints retornam 500 "Response doesn't match schema" — handlers enviam camelCase/Date raw em vez de snake_case/ISO string
+- [UX-001-M01](amendments/ux/UX-001-M01.md) — Melhoria: split-panel layout, DetailPanel completo, FormPanel inline, modal desativação, TreeNode visual, ReadOnlyField. Ref: specs Penpot 10-OrgTree/11-OrgForm
+- [DATA-001-M01](amendments/data/DATA-001-M01.md) — Melhoria: 6 campos cadastrais na tabela org_units (cnpj, razao_social, filial, responsavel, telefone, email_contato)
+- [FR-001-M01](amendments/fr/FR-001-M01.md) — Melhoria: endpoints CRUD estendidos para aceitar/retornar campos cadastrais

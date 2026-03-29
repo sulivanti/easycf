@@ -36,6 +36,12 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.11.1 | 2026-03-29 | merge-amendment | Merge UX-000-M02: nova jornada UX-009 (Dashboard Executivo) em UX-000. MetricCards, DonutChart, ActivityList. Base UX-000 bumped para v0.5.0. Ref: 02-dashboard-spec, PEN-02-Dashboard. |
+| 1.11.0 | 2026-03-29 | create-amendment | Amendment UX-000-M02: Dashboard executivo com MetricCards (4), DonutChart (status), ActivityList (recentes). Substitui WelcomeWidget+ModuleShortcuts. Ref: 02-dashboard-spec, Penpot 02-Dashboard. |
+| 1.10.1 | 2026-03-29 | merge-amendment | Merge UX-000-M01: design visual 06-UserForm aplicado em UX-004. Base UX-000 bumped para v0.4.0. Jornada passo 3/4 reescrita com FormCard, tokens visuais e tipografia. |
+| 1.10.0 | 2026-03-29 | create-amendment | Amendment UX-000-M01: design visual definitivo 06-UserForm aplicado em UX-004. FormCard 680px, campos Nome/Email/Perfil/Empresa, modo edição com toggle status + resetar senha. Ref: 06-user-form-spec, PEN-06-UserForm. |
+| 1.9.1 | 2026-03-28 | merge-amendment | Merge UX-000-C02: referência visual spec v3 + Penpot PEN-01 adicionada em UX-001 (layout, cores, componentes SSO/PasswordStrength, branding gradiente). Base UX-000 bumped para v0.3.2. |
+| 1.9.0 | 2026-03-28 | create-amendment | Amendment UX-000-C02: LoginPage.tsx diverge da spec v3 / Penpot validado (PEN-01). Delta completo: gradiente branding 604px, SSO Microsoft + divider "OU CONTINUE COM", "Primeiro acesso?", PasswordStrength bars, labels UPPER, cores #2E86C1/#F58C32, fundo #F5F5F3, card border, opacidades branding. Ref: 01-login-spec-v3, PEN-01. |
 | 1.8.2 | 2026-03-25 | merge-amendment | Merge FR-000-C07: 5 use cases pós-auth propagam request.session.tenantId em domain events (change-password, logout, update-profile, create-role, update-role). Base FR-000 bumped para v0.9.7. Ref: spec-fix-domain-events-tenant-id v2.0. |
 | 1.8.1 | 2026-03-25 | merge-amendment | Merge batch MOD-000: DATA-000-C02 (SYSTEM_TENANT_ID §8), FR-000-C02 (/auth/me shape), FR-000-C03 (entry point rewrite), FR-000-C05 (JWT tenant/scopes), FR-000-C06 (forceLogout redirect loop), UX-000-C01 (tabela erros 401). Todos MERGED. |
 | 1.8.0 | 2026-03-25 | create-amendment | Amendment UX-000-C01: tabela de erros UX-000 detalhada para 401 (limpeza tokens + full reload). Nova jornada "Sessão Expirada por Timeout" em UX-001. Ref: spec-fix-session-timeout-redirect-loop. |

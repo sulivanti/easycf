@@ -327,9 +327,7 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
                               <TooltipProvider>
                                 <Tooltip>
                                   <TooltipTrigger>
-                                    <StatusBadge status="warning">
-                                      Expirando
-                                    </StatusBadge>
+                                    <StatusBadge status="warning">Expirando</StatusBadge>
                                   </TooltipTrigger>
                                   <TooltipContent>{COPY.tooltip_expirando}</TooltipContent>
                                 </Tooltip>

@@ -19,7 +19,10 @@ interface ActionTypeEntry {
   readonly category: 'DATA' | 'INTEGRATION' | 'WORKFLOW' | 'NOTIFICATION';
 }
 
-const CATEGORY_STATUS: Record<ActionTypeEntry['category'], 'success' | 'info' | 'neutral' | 'purple'> = {
+const CATEGORY_STATUS: Record<
+  ActionTypeEntry['category'],
+  'success' | 'info' | 'neutral' | 'purple'
+> = {
   DATA: 'success',
   INTEGRATION: 'info',
   WORKFLOW: 'neutral',

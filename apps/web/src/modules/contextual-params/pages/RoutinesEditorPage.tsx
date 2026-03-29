@@ -349,9 +349,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
         )}
 
         {/* Empty state */}
-        {routines.length === 0 && (
-          <EmptyState title={COPY.empty_routines} />
-        )}
+        {routines.length === 0 && <EmptyState title={COPY.empty_routines} />}
 
         {/* List */}
         {routines.map((r) => (
@@ -371,7 +369,13 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
           >
             <div className="flex justify-between items-center">
               <span className="font-mono font-semibold text-sm">{r.codigo}</span>
-              <StatusBadge status={r.status === 'PUBLISHED' ? 'success' : r.status === 'DRAFT' ? 'info' : 'neutral'}>{r.status}</StatusBadge>
+              <StatusBadge
+                status={
+                  r.status === 'PUBLISHED' ? 'success' : r.status === 'DRAFT' ? 'info' : 'neutral'
+                }
+              >
+                {r.status}
+              </StatusBadge>
             </div>
             <div className="text-sm text-foreground">{r.nome}</div>
             <div className="text-xs text-a1-text-auxiliary">
@@ -407,7 +411,15 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
                     v{detail.version}
                   </span>
                 </h2>
-                <StatusBadge status={detail.status === 'PUBLISHED' ? 'success' : detail.status === 'DRAFT' ? 'info' : 'neutral'}>
+                <StatusBadge
+                  status={
+                    detail.status === 'PUBLISHED'
+                      ? 'success'
+                      : detail.status === 'DRAFT'
+                        ? 'info'
+                        : 'neutral'
+                  }
+                >
                   {detail.status}
                 </StatusBadge>
               </div>
@@ -449,9 +461,7 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
             )}
 
             {/* Items list */}
-            {sortedItems.length === 0 && (
-              <EmptyState title={COPY.empty_items} />
-            )}
+            {sortedItems.length === 0 && <EmptyState title={COPY.empty_items} />}
 
             {sortedItems.map((item, idx) => (
               <div
@@ -470,17 +480,13 @@ export function RoutinesEditorPage({ userScopes }: RoutinesEditorPageProps) {
                     <span className="cursor-grab text-a1-text-auxiliary select-none">&#9776;</span>
                   )}
                   <span className="font-bold text-sm w-6">{item.ordem}</span>
-                  <StatusBadge status="purple">
-                    {item.item_type}
-                  </StatusBadge>
+                  <StatusBadge status="purple">{item.item_type}</StatusBadge>
                   <span className="text-sm">{item.action}</span>
                   {item.is_blocking && (
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
-                          <StatusBadge status="error">
-                            Bloqueante
-                          </StatusBadge>
+                          <StatusBadge status="error">Bloqueante</StatusBadge>
                         </TooltipTrigger>
                         <TooltipContent>{COPY.tooltip_blocking}</TooltipContent>
                       </Tooltip>

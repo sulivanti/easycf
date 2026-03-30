@@ -1354,7 +1354,6 @@ async function diPluginImpl(app: FastifyInstance): Promise<void> {
     listExecutionsUseCase,
     getExecutionUseCase,
     executeMcpUseCase,
-    dashboardQueryRepo,
   };
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -1362,6 +1361,7 @@ async function diPluginImpl(app: FastifyInstance): Promise<void> {
   // ─────────────────────────────────────────────────────────────────────────
 
   const dashboardQueryRepo = new DashboardQueryRepository(db);
+  (container as Record<string, unknown>).dashboardQueryRepo = dashboardQueryRepo;
 
   // ─────────────────────────────────────────────────────────────────────────
   // 13. Decorate Fastify

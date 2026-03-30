@@ -8,12 +8,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import {
-  PlusIcon,
-  ChevronUpIcon,
-  ChevronDownIcon,
-  TrashIcon,
-} from 'lucide-react';
+import { PlusIcon, ChevronUpIcon, ChevronDownIcon, TrashIcon } from 'lucide-react';
 import { Button, Skeleton } from '@shared/ui';
 import { StatusBadge } from '@shared/ui/status-badge';
 import {
@@ -144,9 +139,7 @@ export function RuleEditPage({ ruleId }: RuleEditPageProps) {
   }
 
   function updateLevel(id: string, field: keyof ChainLevel, value: string) {
-    setLevels((prev) =>
-      prev.map((l) => (l.id === id ? { ...l, [field]: value } : l)),
-    );
+    setLevels((prev) => prev.map((l) => (l.id === id ? { ...l, [field]: value } : l)));
   }
 
   function handleToggleActive() {
@@ -189,8 +182,7 @@ export function RuleEditPage({ ruleId }: RuleEditPageProps) {
               sla_hours: parseInt(lv.timeout, 10) || 24,
               role_id: lv.approverType === 'ROLE' ? lv.entity || undefined : undefined,
               user_id: lv.approverType === 'USER' ? lv.entity || undefined : undefined,
-              org_unit_id:
-                lv.approverType === 'ORG_LEVEL' ? lv.entity || undefined : undefined,
+              org_unit_id: lv.approverType === 'ORG_LEVEL' ? lv.entity || undefined : undefined,
             };
             await addLevelMut.mutateAsync({ controlRuleId: ruleId, data });
           }
@@ -222,9 +214,7 @@ export function RuleEditPage({ ruleId }: RuleEditPageProps) {
 
   if (!rule) {
     return (
-      <div className="py-16 text-center text-[13px] text-[#888888]">
-        Regra não encontrada.
-      </div>
+      <div className="py-16 text-center text-[13px] text-[#888888]">Regra não encontrada.</div>
     );
   }
 
@@ -274,10 +264,7 @@ export function RuleEditPage({ ruleId }: RuleEditPageProps) {
       {/* Stat Cards */}
       <div className="grid grid-cols-3 gap-4">
         {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-lg border border-[#E8E8E6] bg-white p-4"
-          >
+          <div key={stat.label} className="rounded-lg border border-[#E8E8E6] bg-white p-4">
             <p className="text-[10px] font-semibold uppercase tracking-[0.8px] text-[#888888]">
               {stat.label}
             </p>
@@ -327,9 +314,7 @@ export function RuleEditPage({ ruleId }: RuleEditPageProps) {
               <input
                 type="checkbox"
                 checked={config.allowSelfApprove}
-                onChange={(e) =>
-                  setConfig((p) => ({ ...p, allowSelfApprove: e.target.checked }))
-                }
+                onChange={(e) => setConfig((p) => ({ ...p, allowSelfApprove: e.target.checked }))}
                 className="size-4 rounded border-[#E8E8E6] accent-[#2E86C1]"
               />
               <span className="text-[13px] text-[#111111]">Permitir auto-aprovação</span>
@@ -339,7 +324,9 @@ export function RuleEditPage({ ruleId }: RuleEditPageProps) {
             <div className="flex items-center justify-between rounded-md border border-[#E8E8E6] px-4 py-3">
               <div>
                 <p className="text-[13px] font-medium text-[#111111]">Requer Aprovação</p>
-                <p className="text-[11px] text-[#888888]">Ativo: movimentos precisam de aprovação</p>
+                <p className="text-[11px] text-[#888888]">
+                  Ativo: movimentos precisam de aprovação
+                </p>
               </div>
               <button
                 type="button"
@@ -375,8 +362,7 @@ export function RuleEditPage({ ruleId }: RuleEditPageProps) {
 
             {/* Criação */}
             <div className="rounded-md bg-[#F5F5F3] px-3 py-2 text-[12px] text-[#888888]">
-              Criado em:{' '}
-              {new Date(rule.created_at).toLocaleDateString('pt-BR')}
+              Criado em: {new Date(rule.created_at).toLocaleDateString('pt-BR')}
             </div>
           </div>
 

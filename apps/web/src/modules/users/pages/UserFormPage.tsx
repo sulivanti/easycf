@@ -193,7 +193,12 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
 
           {/* Full Name */}
           <div className="space-y-2">
-            <Label htmlFor="fullName" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">NOME COMPLETO</Label>
+            <Label
+              htmlFor="fullName"
+              className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary"
+            >
+              NOME COMPLETO
+            </Label>
             <Input
               ref={fieldErrors.has('fullName') ? firstErrorRef : undefined}
               id="fullName"
@@ -211,7 +216,12 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
 
           {/* Email */}
           <div className="space-y-2">
-            <Label htmlFor="email" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">E-MAIL CORPORATIVO</Label>
+            <Label
+              htmlFor="email"
+              className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary"
+            >
+              E-MAIL CORPORATIVO
+            </Label>
             <Input
               ref={
                 fieldErrors.has('email') && !fieldErrors.has('fullName') ? firstErrorRef : undefined
@@ -232,7 +242,12 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
 
           {/* Role select */}
           <div className="space-y-2">
-            <Label htmlFor="roleId" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">PERFIL</Label>
+            <Label
+              htmlFor="roleId"
+              className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary"
+            >
+              PERFIL
+            </Label>
             {rolesLoading ? (
               <Skeleton className="h-10 w-full" />
             ) : rolesError ? (
@@ -268,7 +283,12 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
 
           {/* Empresa */}
           <div className="space-y-2">
-            <Label htmlFor="tenantId" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">EMPRESA</Label>
+            <Label
+              htmlFor="tenantId"
+              className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary"
+            >
+              EMPRESA
+            </Label>
             {tenantsLoading ? (
               <Skeleton className="h-10 w-full" />
             ) : (
@@ -287,7 +307,12 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
           {mode === 'password' && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="password" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">SENHA TEMPORÁRIA</Label>
+                <Label
+                  htmlFor="password"
+                  className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary"
+                >
+                  SENHA TEMPORÁRIA
+                </Label>
                 <Input
                   id="password"
                   type="password"
@@ -322,7 +347,12 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="passwordConfirm" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">CONFIRMAR SENHA</Label>
+                <Label
+                  htmlFor="passwordConfirm"
+                  className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary"
+                >
+                  CONFIRMAR SENHA
+                </Label>
                 <Input
                   id="passwordConfirm"
                   type="password"

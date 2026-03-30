@@ -305,6 +305,8 @@ apps/web/src/modules/movement-approval/
 - [SEC-009](requirements/sec/SEC-009.md) — Segurança e Compliance de Movimentos sob Aprovação
 - [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos de Movimentos sob Aprovação
 - [UX-009](requirements/ux/UX-009.md) — Jornadas e Fluxos de Movimentos sob Aprovação
+- [UX-009-C01](amendments/ux/UX-009-C01.md) — Correção: hex hardcoded → tokens semânticos no MovementsPage
+- [INT-009-C01](amendments/int/INT-009-C01.md) — Correção: 13 endpoints enviam camelCase sem mapear para snake_case dos schemas Zod
 - [NFR-009](requirements/nfr/NFR-009.md) — Requisitos Não Funcionais de Movimentos sob Aprovação
 - [PEN-009](requirements/pen-009-pendente.md) — Questões Abertas de Movimentos sob Aprovação
 <!-- end index -->

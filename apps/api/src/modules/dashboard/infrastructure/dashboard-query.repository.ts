@@ -100,10 +100,7 @@ export class DashboardQueryRepository {
         .select({ count: sql<number>`count(*)::int` })
         .from(approvalInstances)
         .where(
-          and(
-            eq(approvalInstances.tenantId, tenantId),
-            eq(approvalInstances.status, 'PENDING'),
-          ),
+          and(eq(approvalInstances.tenantId, tenantId), eq(approvalInstances.status, 'PENDING')),
         ),
 
       // Active users
@@ -122,9 +119,7 @@ export class DashboardQueryRepository {
       this.db
         .select({ count: sql<number>`count(*)::int` })
         .from(mcpAgents)
-        .where(
-          and(eq(mcpAgents.tenantId, tenantId), eq(mcpAgents.status, 'ACTIVE')),
-        ),
+        .where(and(eq(mcpAgents.tenantId, tenantId), eq(mcpAgents.status, 'ACTIVE'))),
     ]);
 
     return {
@@ -159,10 +154,7 @@ export class DashboardQueryRepository {
     return { data, total };
   }
 
-  async listRecentActivities(
-    tenantId: string,
-    limit = 10,
-  ): Promise<ActivityItem[]> {
+  async listRecentActivities(tenantId: string, limit = 10): Promise<ActivityItem[]> {
     const rows = await this.db
       .select({
         id: domainEvents.id,
@@ -175,12 +167,7 @@ export class DashboardQueryRepository {
       })
       .from(domainEvents)
       .leftJoin(contentUsers, eq(domainEvents.createdBy, contentUsers.userId))
-      .where(
-        and(
-          eq(domainEvents.tenantId, tenantId),
-          lte(domainEvents.sensitivityLevel, 1),
-        ),
-      )
+      .where(and(eq(domainEvents.tenantId, tenantId), lte(domainEvents.sensitivityLevel, 1)))
       .orderBy(desc(domainEvents.createdAt))
       .limit(limit);
 

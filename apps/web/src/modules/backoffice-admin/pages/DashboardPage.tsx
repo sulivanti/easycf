@@ -27,9 +27,26 @@ import {
 
 const METRIC_CONFIG = [
   { key: 'active_cases', label: 'Processos Ativos', dotColor: '#2E86C1', indicator: 'Em execução' },
-  { key: 'pending_approvals', label: 'Aprovações Pendentes', valueColor: '#E67E22', dotColor: '#E67E22', indicator: 'Aguardando revisão' },
-  { key: 'active_users', label: 'Usuários Ativos', dotColor: '#27AE60', indicator: 'Base cadastrada' },
-  { key: 'active_agents', label: 'Agentes MCP', valueColor: '#27AE60', dotColor: '#27AE60', indicator: 'Online e operando' },
+  {
+    key: 'pending_approvals',
+    label: 'Aprovações Pendentes',
+    valueColor: '#E67E22',
+    dotColor: '#E67E22',
+    indicator: 'Aguardando revisão',
+  },
+  {
+    key: 'active_users',
+    label: 'Usuários Ativos',
+    dotColor: '#27AE60',
+    indicator: 'Base cadastrada',
+  },
+  {
+    key: 'active_agents',
+    label: 'Agentes MCP',
+    valueColor: '#27AE60',
+    dotColor: '#27AE60',
+    indicator: 'Online e operando',
+  },
 ] as const;
 
 // ── Relative timestamp formatter ──
@@ -78,7 +95,15 @@ function ChartsSkeleton() {
 
 // ── ErrorBanner ──
 
-function ErrorBanner({ message, onRetry, isRetrying }: { message: string; onRetry: () => void; isRetrying: boolean }) {
+function ErrorBanner({
+  message,
+  onRetry,
+  isRetrying,
+}: {
+  message: string;
+  onRetry: () => void;
+  isRetrying: boolean;
+}) {
   return (
     <div className="flex items-center justify-between rounded-lg border border-a1-border bg-status-error-bg px-4 py-3">
       <span className="font-display text-[13px] text-danger-600">{message}</span>
@@ -154,7 +179,9 @@ export function DashboardPage() {
       ) : null}
 
       {/* Charts row */}
-      {(distribution.isLoading || activities.isLoading) && !distribution.data && !activities.data ? (
+      {(distribution.isLoading || activities.isLoading) &&
+      !distribution.data &&
+      !activities.data ? (
         <ChartsSkeleton />
       ) : (
         <div className="grid grid-cols-[5fr_7fr] gap-5">
@@ -182,7 +209,9 @@ export function DashboardPage() {
             <ActivityList
               title="Atividades Recentes"
               items={activityItems}
-              onViewAll={() => {/* TODO: navigate to full activity log */}}
+              onViewAll={() => {
+                /* TODO: navigate to full activity log */
+              }}
             />
           )}
         </div>

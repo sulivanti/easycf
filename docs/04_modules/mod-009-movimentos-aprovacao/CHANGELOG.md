@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.5.2 | 2026-03-30 | merge-amendment | Merge INT-009-C01: 13 handlers mapeamento camelCase→snake_case em approvals, movements e rules. Seção §10 adicionada ao INT-009. Base bumped para v0.6.1. |
+| 1.5.1 | 2026-03-30 | merge-amendment | Merge UX-009-C01: MovementsPage.tsx — ~25 cores hex hardcoded em className substituídas por tokens semânticos do design system (a1-text-primary, a1-border, success-500, danger-500, primary-600, neutral-50, status-success-bg, status-error-bg). Base UX-009 bumped para v0.5.1. |
 | 1.5.0 | 2026-03-29 | codegen | Codegen parcial (WEB only): AGN-COD-WEB executado — 17 arquivos (8 pages, 6 routes, 2 barrel exports, 1 routeTree). Views alinhadas com designs Penpot 30-movements-spec. DB/CORE/APP/API skipped (sem impacto UX-009-M01). VAL deferred. |
 | 1.4.0 | 2026-03-29 | merge-amendment | Merge UX-009-M01: Design visual validado Penpot (8 views, score 97%) incorporado ao UX-009. AppShell sidebar contextual, StatusBadges 6 variantes, 8 views detalhadas, tipografia consolidada, mapeamento rotas-sidebar. Base bumped para v0.5.0. |
 | 1.3.0 | 2026-03-29 | ux-apply-layout | Amendment UX-009-M01 criado — alinhamento visual com 8 designs Penpot (30-movements-spec.md, score 97%). AppShell com sidebar contextual, StatusBadges 6 variantes, DataTable com acoes inline, ApprovalChain multinivel, Timeline lateral, formulario com preview motor de regras, busca avancada, historico expansivel. 12 detalhamentos (D1-D12). Sem impacto em DATA/FR/BR/SEC. |

@@ -16,12 +16,7 @@ interface MetricCardProps {
 
 function MetricCard({ label, value, valueColor, dotColor, indicator, className }: MetricCardProps) {
   return (
-    <div
-      className={cn(
-        'rounded-2xl border border-a1-border bg-white p-6',
-        className,
-      )}
-    >
+    <div className={cn('rounded-2xl border border-a1-border bg-white p-6', className)}>
       <p className="text-[10px] font-bold uppercase tracking-[1px] text-a1-text-auxiliary">
         {label}
       </p>

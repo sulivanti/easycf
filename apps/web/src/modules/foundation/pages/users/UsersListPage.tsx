@@ -355,7 +355,10 @@ export function UsersListPage({
               </TableHeader>
               <TableBody>
                 {users.map((user: UserRow) => (
-                  <TableRow key={user.id} className="border-b border-a1-border-light hover:bg-[#F9F9F7]">
+                  <TableRow
+                    key={user.id}
+                    className="border-b border-a1-border-light hover:bg-[#F9F9F7]"
+                  >
                     <TableCell>
                       <StatusBadge status={statusToType[user.status] ?? 'neutral'}>
                         {user.status}

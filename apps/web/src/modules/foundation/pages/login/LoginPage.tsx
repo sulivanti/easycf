@@ -227,9 +227,7 @@ function A1Logo() {
         <span className="font-display font-bold text-[15px] leading-[18px] text-white">
           Grupo A1
         </span>
-        <span
-          className="font-display font-medium text-[10px] leading-3 uppercase tracking-[1.6px] text-white/35"
-        >
+        <span className="font-display font-medium text-[10px] leading-3 uppercase tracking-[1.6px] text-white/35">
           PORTAL INTERNO
         </span>
       </div>
@@ -552,9 +550,7 @@ function LoginPanel({
 
       {/* Checkbox */}
       <label className="flex items-center gap-2 mb-5 cursor-pointer">
-        <span
-          className="flex size-4 items-center justify-center shrink-0 rounded-[3px] border-[1.5px] border-[#E8E8E6] bg-white transition-colors"
-        >
+        <span className="flex size-4 items-center justify-center shrink-0 rounded-[3px] border-[1.5px] border-[#E8E8E6] bg-white transition-colors">
           {rememberMe && (
             <svg
               width="10"
@@ -721,9 +717,7 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
 
       {/* Success message inline (spec v3) */}
       {submitted && (
-        <div
-          className="mt-4 rounded-lg border border-status-success-border bg-status-success-bg p-3.5 font-display text-[13px] leading-[1.5] text-status-success-text"
-        >
+        <div className="mt-4 rounded-lg border border-status-success-border bg-status-success-bg p-3.5 font-display text-[13px] leading-[1.5] text-status-success-text">
           Se o e-mail estiver cadastrado, você receberá um link de redefinição em instantes.
           Verifique sua caixa de entrada e spam.
         </div>
@@ -886,18 +880,14 @@ function BrandingPanel() {
       {/* Tagline block */}
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-5">
-          <h2
-            className="font-display font-extrabold italic text-white text-[42px] leading-[47px] tracking-[-1.2px]"
-          >
+          <h2 className="font-display font-extrabold italic text-white text-[42px] leading-[47px] tracking-[-1.2px]">
             Soluções
             <br />
             para a
             <br />
             indústria.
           </h2>
-          <p
-            className="font-display max-w-[380px] text-[14px] leading-[23px] text-white/45"
-          >
+          <p className="font-display max-w-[380px] text-[14px] leading-[23px] text-white/45">
             Plataforma de gestão de processos, aprovações e integração com Protheus — desenvolvida
             para o Grupo A1.
           </p>
@@ -907,9 +897,7 @@ function BrandingPanel() {
 
       {/* Footer: units + copyright */}
       <div className="flex flex-col gap-3">
-        <span
-          className="font-display font-bold uppercase text-[9px] leading-3 tracking-[1.4px] text-white/25"
-        >
+        <span className="font-display font-bold uppercase text-[9px] leading-3 tracking-[1.4px] text-white/25">
           UNIDADES DO GRUPO
         </span>
         <div className="flex flex-wrap gap-2">
@@ -918,17 +906,13 @@ function BrandingPanel() {
               key={unit}
               className="rounded-[20px] border border-white/12 bg-white/[0.03] py-1.5 px-4"
             >
-              <span
-                className="font-display font-medium text-xs leading-4 text-white/50"
-              >
+              <span className="font-display font-medium text-xs leading-4 text-white/50">
                 {unit}
               </span>
             </div>
           ))}
         </div>
-        <span
-          className="font-display text-[11px] leading-[14px] text-white/20"
-        >
+        <span className="font-display text-[11px] leading-[14px] text-white/20">
           © 2026 Grupo A1 · Todos os direitos reservados
         </span>
       </div>
@@ -957,12 +941,8 @@ export function LoginPage() {
       <BrandingPanel />
 
       {/* Right panel — form on #F5F5F3 bg */}
-      <main
-        className="flex-1 flex items-center justify-center bg-bg-page p-4"
-      >
-        <div
-          className="w-full max-w-[420px] flex flex-col rounded-2xl bg-white border border-a1-border px-10 pt-11 pb-9"
-        >
+      <main className="flex-1 flex items-center justify-center bg-bg-page p-4">
+        <div className="w-full max-w-[420px] flex flex-col rounded-2xl bg-white border border-a1-border px-10 pt-11 pb-9">
           {panel === 'login' && (
             <LoginPanel
               onMfaRequired={(token) => {

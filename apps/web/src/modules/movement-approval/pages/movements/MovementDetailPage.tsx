@@ -109,9 +109,7 @@ function ApprovalLevelCard({ instance, index }: { instance: ApprovalInstance; in
         <div className="flex-1 min-w-0">
           <p className="text-[13px] font-bold text-[#111111]">
             Nível {index + 1}
-            <span className="ml-2 text-[11px] font-normal text-[#888888]">
-              {stateConfig.label}
-            </span>
+            <span className="ml-2 text-[11px] font-normal text-[#888888]">{stateConfig.label}</span>
           </p>
           {instance.approver_name && (
             <p className="mt-1 flex items-center gap-1.5 text-[11px] text-[#888888]">
@@ -299,9 +297,7 @@ export function MovementDetailPage({ movementId }: MovementDetailPageProps) {
 
   if (!detail) {
     return (
-      <div className="py-16 text-center text-[13px] text-[#888888]">
-        Movimento não encontrado.
-      </div>
+      <div className="py-16 text-center text-[13px] text-[#888888]">Movimento não encontrado.</div>
     );
   }
 
@@ -361,9 +357,7 @@ export function MovementDetailPage({ movementId }: MovementDetailPageProps) {
                   <div className="flex size-6 items-center justify-center rounded-full bg-[#E3F2FD]">
                     <UserIcon className="size-3 text-[#2E86C1]" />
                   </div>
-                  <p className="text-[13px] font-medium text-[#111111]">
-                    {detail.requester_name}
-                  </p>
+                  <p className="text-[13px] font-medium text-[#111111]">{detail.requester_name}</p>
                 </div>
               </div>
               <div>
@@ -399,9 +393,7 @@ export function MovementDetailPage({ movementId }: MovementDetailPageProps) {
                 {instances.map((inst, i) => (
                   <div key={inst.id}>
                     <ApprovalLevelCard instance={inst} index={i} />
-                    {i < instances.length - 1 && (
-                      <div className="ml-3 h-4 w-0.5 bg-[#E8E8E6]" />
-                    )}
+                    {i < instances.length - 1 && <div className="ml-3 h-4 w-0.5 bg-[#E8E8E6]" />}
                   </div>
                 ))}
               </div>
@@ -528,7 +520,9 @@ export function MovementDetailPage({ movementId }: MovementDetailPageProps) {
                   disabled={justLen < 20 || overrideMut.isPending}
                   className={[
                     'rounded-md px-4 py-2 text-[13px] font-semibold text-white transition-opacity',
-                    justLen < 20 ? 'bg-[#ca8a04] opacity-50 cursor-not-allowed' : 'bg-[#ca8a04] hover:bg-[#b45309]',
+                    justLen < 20
+                      ? 'bg-[#ca8a04] opacity-50 cursor-not-allowed'
+                      : 'bg-[#ca8a04] hover:bg-[#b45309]',
                   ].join(' ')}
                 >
                   Aplicar Override

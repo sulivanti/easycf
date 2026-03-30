@@ -81,9 +81,7 @@ export function RuleCreatePage() {
   function setConfigField(field: keyof ConfigState) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const val =
-        e.target.type === 'checkbox'
-          ? (e.target as HTMLInputElement).checked
-          : e.target.value;
+        e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value;
       setConfig((prev) => ({ ...prev, [field]: val }));
     };
   }
@@ -111,9 +109,7 @@ export function RuleCreatePage() {
   }
 
   function updateLevel(id: string, field: keyof ChainLevel, value: string) {
-    setLevels((prev) =>
-      prev.map((l) => (l.id === id ? { ...l, [field]: value } : l)),
-    );
+    setLevels((prev) => prev.map((l) => (l.id === id ? { ...l, [field]: value } : l)));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -149,8 +145,7 @@ export function RuleCreatePage() {
         toast.success('Regra criada com sucesso.');
         navigate({ to: '/approvals/rules' });
       },
-      onError: (err) =>
-        toast.error(err instanceof Error ? err.message : 'Erro ao criar regra.'),
+      onError: (err) => toast.error(err instanceof Error ? err.message : 'Erro ao criar regra.'),
     });
   }
 
@@ -228,12 +223,14 @@ export function RuleCreatePage() {
                 Origens
               </label>
               <div className="flex flex-wrap gap-3">
-                {([
-                  { field: 'originProtheus' as const, label: 'PROTHEUS' },
-                  { field: 'originPortal' as const, label: 'PORTAL' },
-                  { field: 'originApi' as const, label: 'API' },
-                  { field: 'originAuto' as const, label: 'AUTO' },
-                ] as const).map(({ field, label }) => (
+                {(
+                  [
+                    { field: 'originProtheus' as const, label: 'PROTHEUS' },
+                    { field: 'originPortal' as const, label: 'PORTAL' },
+                    { field: 'originApi' as const, label: 'API' },
+                    { field: 'originAuto' as const, label: 'AUTO' },
+                  ] as const
+                ).map(({ field, label }) => (
                   <label key={field} className="flex cursor-pointer items-center gap-2">
                     <input
                       type="checkbox"
@@ -378,9 +375,7 @@ export function RuleCreatePage() {
                         </label>
                         <select
                           value={level.approverType}
-                          onChange={(e) =>
-                            updateLevel(level.id, 'approverType', e.target.value)
-                          }
+                          onChange={(e) => updateLevel(level.id, 'approverType', e.target.value)}
                           className="h-8 w-full rounded-md border border-[#E8E8E6] bg-white px-2 text-[12px] text-[#111111] outline-none focus:border-[#2E86C1]"
                         >
                           <option value="ROLE">ROLE</option>

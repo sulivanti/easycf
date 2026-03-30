@@ -48,7 +48,31 @@ export async function movementsRoutes(app: FastifyInstance): Promise<void> {
         requesterId: query.requester_id,
       });
 
-      return reply.send(result);
+      const r = result.result;
+      return reply.send({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: r.data.map((m: Record<string, any>) => ({
+          id: m.id,
+          tenant_id: m.tenantId,
+          control_rule_id: m.controlRuleId,
+          codigo: m.codigo,
+          requester_id: m.requesterId,
+          requester_origin: m.requesterOrigin,
+          object_type: m.objectType,
+          object_id: m.objectId ?? null,
+          operation_type: m.operationType,
+          case_id: m.caseId ?? null,
+          current_level: m.currentLevel,
+          total_levels: m.totalLevels,
+          status: m.status,
+          created_at: m.createdAt instanceof Date ? m.createdAt.toISOString() : m.createdAt,
+          updated_at: m.updatedAt instanceof Date ? m.updatedAt.toISOString() : m.updatedAt,
+        })),
+        page: r.page,
+        page_size: r.pageSize,
+        total: r.total,
+        total_pages: Math.ceil(r.total / r.pageSize),
+      });
     },
   );
 
@@ -70,11 +94,52 @@ export async function movementsRoutes(app: FastifyInstance): Promise<void> {
 
       const { getMovementDetailsUseCase } = app.movementApproval;
       const result = await getMovementDetailsUseCase.execute({
-        movementId: id,
+        id,
         tenantId: user.tenantId,
       });
 
-      return reply.send(result);
+      const m = result.movement;
+      return reply.send({
+        id: m.id,
+        tenant_id: m.tenantId,
+        control_rule_id: m.controlRuleId,
+        codigo: m.codigo,
+        requester_id: m.requesterId,
+        requester_origin: m.requesterOrigin,
+        object_type: m.objectType,
+        object_id: m.objectId ?? null,
+        operation_type: m.operationType,
+        operation_payload: m.operationPayload ?? null,
+        case_id: m.caseId ?? null,
+        current_level: m.currentLevel,
+        total_levels: m.totalLevels,
+        status: m.status,
+        idempotency_key: m.idempotencyKey ?? null,
+        created_at: m.createdAt instanceof Date ? m.createdAt.toISOString() : m.createdAt,
+        updated_at: m.updatedAt instanceof Date ? m.updatedAt.toISOString() : m.updatedAt,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        approval_instances: result.approvalInstances.map((a: Record<string, any>) => ({
+          id: a.id,
+          level: a.level,
+          approver_id: a.approverId ?? null,
+          status: a.status,
+          opinion: a.opinion ?? null,
+          decided_at:
+            a.decidedAt instanceof Date ? a.decidedAt.toISOString() : (a.decidedAt ?? null),
+          timeout_at:
+            a.timeoutAt instanceof Date ? a.timeoutAt.toISOString() : (a.timeoutAt ?? null),
+          created_at: a.createdAt instanceof Date ? a.createdAt.toISOString() : a.createdAt,
+        })),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        history: result.history.map((h: Record<string, any>) => ({
+          id: h.id,
+          event_type: h.action,
+          actor_id: h.actorId ?? null,
+          payload: h.detail ?? null,
+          correlation_id: h.correlationId ?? null,
+          created_at: h.createdAt instanceof Date ? h.createdAt.toISOString() : h.createdAt,
+        })),
+      });
     },
   );
 
@@ -107,8 +172,13 @@ export async function movementsRoutes(app: FastifyInstance): Promise<void> {
         correlationId,
       });
 
+      const m = result.movement;
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send({
+        id: m.id,
+        status: m.status,
+        updated_at: m.updatedAt instanceof Date ? m.updatedAt.toISOString() : m.updatedAt,
+      });
     },
   );
 
@@ -144,8 +214,13 @@ export async function movementsRoutes(app: FastifyInstance): Promise<void> {
         correlationId,
       });
 
+      const m = result.movement;
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send({
+        id: m.id,
+        status: m.status,
+        updated_at: m.updatedAt instanceof Date ? m.updatedAt.toISOString() : m.updatedAt,
+      });
     },
   );
 
@@ -178,8 +253,13 @@ export async function movementsRoutes(app: FastifyInstance): Promise<void> {
         correlationId,
       });
 
+      const m = result.movement;
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send({
+        id: m.id,
+        status: m.status,
+        updated_at: m.updatedAt instanceof Date ? m.updatedAt.toISOString() : m.updatedAt,
+      });
     },
   );
 }

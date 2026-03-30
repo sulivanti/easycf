@@ -92,9 +92,15 @@ export function RulesSearchPage() {
 
   // Client-side filter on returned data
   const filtered = rules.filter((r) => {
-    if (appliedFilters.objectType && !r.entity_type.toLowerCase().includes(appliedFilters.objectType.toLowerCase()))
+    if (
+      appliedFilters.objectType &&
+      !r.entity_type.toLowerCase().includes(appliedFilters.objectType.toLowerCase())
+    )
       return false;
-    if (appliedFilters.operationType && !r.operation.toLowerCase().includes(appliedFilters.operationType.toLowerCase()))
+    if (
+      appliedFilters.operationType &&
+      !r.operation.toLowerCase().includes(appliedFilters.operationType.toLowerCase())
+    )
       return false;
     if (appliedFilters.numLevels && r.approval_rules_count < parseInt(appliedFilters.numLevels, 10))
       return false;
@@ -119,8 +125,9 @@ export function RulesSearchPage() {
   }
 
   const hasApplied = Object.values(appliedFilters).some(Boolean);
-  const searchTerm =
-    [appliedFilters.objectType, appliedFilters.operationType].filter(Boolean).join(' ');
+  const searchTerm = [appliedFilters.objectType, appliedFilters.operationType]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className="space-y-[var(--space-lg)]">
@@ -272,10 +279,7 @@ export function RulesSearchPage() {
             Limpar Filtros
           </button>
           <div className="ml-auto">
-            <Button
-              onClick={handleSearch}
-              className="bg-[#2E86C1] text-white hover:bg-[#2573a7]"
-            >
+            <Button onClick={handleSearch} className="bg-[#2E86C1] text-white hover:bg-[#2573a7]">
               Pesquisar
             </Button>
           </div>
@@ -323,16 +327,14 @@ export function RulesSearchPage() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-[#F5F5F3]">
-                    {['Status', 'Objeto', 'Operação', 'Níveis', 'Auto-Aprov.', 'Ações'].map(
-                      (h) => (
-                        <TableHead
-                          key={h}
-                          className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]"
-                        >
-                          {h}
-                        </TableHead>
-                      ),
-                    )}
+                    {['Status', 'Objeto', 'Operação', 'Níveis', 'Auto-Aprov.', 'Ações'].map((h) => (
+                      <TableHead
+                        key={h}
+                        className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]"
+                      >
+                        {h}
+                      </TableHead>
+                    ))}
                   </TableRow>
                 </TableHeader>
                 <TableBody>

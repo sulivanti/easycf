@@ -27,8 +27,7 @@ function ActivityItem({ dotColor, actor, description, badge, timestamp }: Activi
       />
       <div className="min-w-0 flex-1">
         <p className="text-[13px] leading-snug text-a1-text-tertiary">
-          <strong className="font-bold text-a1-text-primary">{actor}</strong>{' '}
-          {description}
+          <strong className="font-bold text-a1-text-primary">{actor}</strong> {description}
           {badge && (
             <span
               className={cn(

@@ -8,13 +8,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import {
-  UserIcon,
-  ClipboardIcon,
-  ZapIcon,
-  ClockIcon,
-  UploadCloudIcon,
-} from 'lucide-react';
+import { UserIcon, ClipboardIcon, ZapIcon, ClockIcon, UploadCloudIcon } from 'lucide-react';
 import { Button } from '@shared/ui';
 import { useEvaluate } from '../../hooks/use-engine.js';
 
@@ -346,9 +340,7 @@ export function MovementCreatePage() {
             onDrop={handleDropZone}
             className={[
               'flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed px-4 py-6 text-center transition-colors',
-              isDragging
-                ? 'border-[#2E86C1] bg-[#E3F2FD]'
-                : 'border-[#E8E8E6] bg-[#F5F5F3]',
+              isDragging ? 'border-[#2E86C1] bg-[#E3F2FD]' : 'border-[#E8E8E6] bg-[#F5F5F3]',
             ].join(' ')}
           >
             <UploadCloudIcon className="size-8 text-[#CCCCCC]" />
@@ -399,9 +391,7 @@ export function MovementCreatePage() {
         {/* ── Preview Column ── */}
         <div className="lg:sticky lg:top-5 lg:self-start">
           <div className="rounded-[10px] border border-[#E8E8E6] bg-white p-6">
-            <h2 className="mb-4 text-[14px] font-bold text-[#111111]">
-              Simulação Motor de Regras
-            </h2>
+            <h2 className="mb-4 text-[14px] font-bold text-[#111111]">Simulação Motor de Regras</h2>
 
             {!hasPreview && (
               <div className="flex flex-col items-center gap-3 py-8 text-center">

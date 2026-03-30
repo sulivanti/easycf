@@ -8,12 +8,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useNavigate, Link } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import {
-  PlusIcon,
-  SearchIcon,
-  ChevronDownIcon,
-  ZapIcon,
-} from 'lucide-react';
+import { PlusIcon, SearchIcon, ChevronDownIcon, ZapIcon } from 'lucide-react';
 import {
   Button,
   Skeleton,
@@ -89,17 +84,14 @@ export function MovementsPage() {
   const movements = movementsQuery.data?.data ?? [];
   const hasMore = movementsQuery.data?.has_more ?? false;
 
-  const handleSearchChange = useCallback(
-    (value: string) => {
-      setSearchInput(value);
-      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-      searchTimeoutRef.current = setTimeout(() => {
-        setSearch(value);
-        setPage(1);
-      }, 400);
-    },
-    [],
-  );
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchInput(value);
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    searchTimeoutRef.current = setTimeout(() => {
+      setSearch(value);
+      setPage(1);
+    }, 400);
+  }, []);
 
   const handleTabChange = (tab: TabKey) => {
     setActiveTab(tab);
@@ -230,11 +222,7 @@ export function MovementsPage() {
           Busca Avançada
         </Link>
         <div className="ml-auto">
-          <Button
-            variant="outline"
-            size="sm"
-            className="border-a1-border text-a1-text-primary"
-          >
+          <Button variant="outline" size="sm" className="border-a1-border text-a1-text-primary">
             Ações em Lote
             <ChevronDownIcon className="ml-1 size-4" />
           </Button>
@@ -262,29 +250,29 @@ export function MovementsPage() {
         />
       ) : (
         <>
-          <div className="overflow-hidden rounded-lg border border-[#E8E8E6] bg-white">
+          <div className="overflow-hidden rounded-lg border border-a1-border bg-white">
             <Table>
               <TableHeader>
-                <TableRow className="bg-[#F5F5F3]">
-                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                <TableRow className="bg-neutral-50">
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-a1-text-primary">
                     Status
                   </TableHead>
-                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-a1-text-primary">
                     Tipo
                   </TableHead>
-                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-a1-text-primary">
                     Número
                   </TableHead>
-                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-a1-text-primary">
                     Solicitante
                   </TableHead>
-                  <TableHead className="text-right text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                  <TableHead className="text-right text-[11px] font-semibold uppercase tracking-[0.8px] text-a1-text-primary">
                     Valor R$
                   </TableHead>
-                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                  <TableHead className="text-[11px] font-semibold uppercase tracking-[0.8px] text-a1-text-primary">
                     Data
                   </TableHead>
-                  <TableHead className="text-center text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]">
+                  <TableHead className="text-center text-[11px] font-semibold uppercase tracking-[0.8px] text-a1-text-primary">
                     Ações
                   </TableHead>
                 </TableRow>
@@ -298,7 +286,7 @@ export function MovementsPage() {
                     <React.Fragment key={item.id}>
                       <TableRow
                         className={[
-                          'h-11 border-b border-[#E8E8E6] bg-white',
+                          'h-11 border-b border-a1-border bg-white',
                           processed ? 'opacity-70' : '',
                         ].join(' ')}
                       >
@@ -308,7 +296,7 @@ export function MovementsPage() {
                             {st.label}
                           </StatusBadge>
                         </TableCell>
-                        <TableCell className="text-[13px] font-medium text-[#111111]">
+                        <TableCell className="text-[13px] font-medium text-a1-text-primary">
                           {item.entity_type}
                         </TableCell>
                         <TableCell>
@@ -320,23 +308,23 @@ export function MovementsPage() {
                                 params: { id: item.id },
                               })
                             }
-                            className="text-[13px] font-bold text-[#2E86C1] hover:underline"
+                            className="text-[13px] font-bold text-primary-600 hover:underline"
                           >
                             {item.codigo}
                           </button>
                         </TableCell>
-                        <TableCell className="text-[13px] text-[#888888]">
+                        <TableCell className="text-[13px] text-a1-text-auxiliary">
                           {item.requester_name}
                         </TableCell>
-                        <TableCell className="text-right font-mono text-[13px] font-bold tabular-nums text-[#111111]">
+                        <TableCell className="text-right font-mono text-[13px] font-bold tabular-nums text-a1-text-primary">
                           {formatValue(item.value)}
                         </TableCell>
-                        <TableCell className="text-[11px] text-[#888888]">
+                        <TableCell className="text-[11px] text-a1-text-auxiliary">
                           {formatDate(item.created_at)}
                         </TableCell>
                         <TableCell className="text-center">
                           {processed ? (
-                            <span className="text-[11px] italic text-[#888888]">
+                            <span className="text-[11px] italic text-a1-text-auxiliary">
                               {st.label}
                             </span>
                           ) : (
@@ -344,11 +332,9 @@ export function MovementsPage() {
                               <button
                                 type="button"
                                 onClick={() =>
-                                  setShowOpinionFor((prev) =>
-                                    prev === item.id ? null : item.id,
-                                  )
+                                  setShowOpinionFor((prev) => (prev === item.id ? null : item.id))
                                 }
-                                className="rounded-md border border-[#16a34a] px-3 py-1 text-[12px] font-medium text-[#16a34a] hover:bg-[#d1fae5] transition-colors"
+                                className="rounded-md border border-success-500 px-3 py-1 text-[12px] font-medium text-success-500 hover:bg-status-success-bg transition-colors"
                               >
                                 Aprovar
                               </button>
@@ -356,12 +342,10 @@ export function MovementsPage() {
                                 type="button"
                                 onClick={() =>
                                   setShowOpinionFor((prev) =>
-                                    prev === `reject-${item.id}`
-                                      ? null
-                                      : `reject-${item.id}`,
+                                    prev === `reject-${item.id}` ? null : `reject-${item.id}`,
                                   )
                                 }
-                                className="rounded-md border border-[#dc2626] px-3 py-1 text-[12px] font-medium text-[#dc2626] hover:bg-[#fee2e2] transition-colors"
+                                className="rounded-md border border-danger-500 px-3 py-1 text-[12px] font-medium text-danger-500 hover:bg-status-error-bg transition-colors"
                               >
                                 Rejeitar
                               </button>
@@ -371,7 +355,7 @@ export function MovementsPage() {
                       </TableRow>
                       {/* Inline opinion row */}
                       {(isExpanded || showOpinionFor === `reject-${item.id}`) && (
-                        <TableRow key={`${item.id}-opinion`} className="bg-[#F5F5F3]">
+                        <TableRow key={`${item.id}-opinion`} className="bg-neutral-50">
                           <TableCell colSpan={7} className="px-4 py-3">
                             <div className="flex items-start gap-3">
                               <textarea
@@ -384,7 +368,7 @@ export function MovementsPage() {
                                   }))
                                 }
                                 placeholder="Parecer (mínimo 10 caracteres)..."
-                                className="flex-1 rounded-md border border-[#E8E8E6] bg-white px-3 py-2 text-[13px] text-[#111111] outline-none placeholder:text-[#CCCCCC] focus:border-[#2E86C1] resize-none"
+                                className="flex-1 rounded-md border border-a1-border bg-white px-3 py-2 text-[13px] text-a1-text-primary outline-none placeholder:text-a1-text-placeholder focus:border-primary-600 resize-none"
                               />
                               <div className="flex gap-2 pt-1">
                                 {isExpanded ? (
@@ -392,7 +376,7 @@ export function MovementsPage() {
                                     type="button"
                                     onClick={() => handleApprove(item.id)}
                                     disabled={approveMut.isPending}
-                                    className="rounded-md bg-[#16a34a] px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-[#15803d] disabled:opacity-50"
+                                    className="rounded-md bg-success-500 px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-success-600 disabled:opacity-50"
                                   >
                                     Confirmar Aprovação
                                   </button>
@@ -401,7 +385,7 @@ export function MovementsPage() {
                                     type="button"
                                     onClick={() => handleReject(item.id)}
                                     disabled={rejectMut.isPending}
-                                    className="rounded-md bg-[#dc2626] px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-[#b91c1c] disabled:opacity-50"
+                                    className="rounded-md bg-danger-500 px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-danger-600 disabled:opacity-50"
                                   >
                                     Confirmar Rejeição
                                   </button>
@@ -409,7 +393,7 @@ export function MovementsPage() {
                                 <button
                                   type="button"
                                   onClick={() => setShowOpinionFor(null)}
-                                  className="rounded-md border border-[#E8E8E6] px-3 py-1.5 text-[12px] text-[#888888] hover:text-[#111111]"
+                                  className="rounded-md border border-a1-border px-3 py-1.5 text-[12px] text-a1-text-auxiliary hover:text-a1-text-primary"
                                 >
                                   Cancelar
                                 </button>
@@ -427,7 +411,7 @@ export function MovementsPage() {
 
           {/* Footer */}
           <div className="flex items-center justify-between">
-            <span className="text-[11px] text-[#888888]">
+            <span className="text-[11px] text-a1-text-auxiliary">
               Exibindo {movements.length} movimentos
             </span>
             {hasMore && (
@@ -436,7 +420,7 @@ export function MovementsPage() {
                 size="sm"
                 onClick={() => setPage((p) => p + 1)}
                 disabled={movementsQuery.isFetching}
-                className="border-[#E8E8E6] text-[#888888]"
+                className="border-a1-border text-a1-text-auxiliary"
               >
                 {movementsQuery.isFetching ? 'Carregando...' : 'Carregar mais'}
               </Button>

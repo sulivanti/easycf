@@ -1,4 +1,11 @@
 [
-  "[Erro] Referência de arquivo quebrada: '../../requirements/fr/FR-001.md' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\mod-005-modelagem-processos\\amendments\\fr\\FR-001-C01.md:7",
-  "[Erro] Referência de arquivo quebrada: '../../requirements/fr/FR-011.md' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\mod-005-modelagem-processos\\amendments\\fr\\FR-011-C01.md:7"
+  "[Erro] context-map.json: skill 'codegen-agent' referencia doc 'SPEC-THEME-001' que não existe em normativos/ ou pacotes_agentes/",
+  "[Erro] context-map.json: skill 'codegen-agent' referencia doc 'SCREEN-SPEC' que não existe em normativos/ ou pacotes_agentes/",
+  "[Erro] context-map.json: skill 'codegen-agent' → doc 'SCREEN-SPEC' aponta para path inexistente: 'docs/03_especificacoes/ux/{screen}-spec.md'",
+  "[Erro] context-map.json: skill 'codegen-agent' referencia doc 'SCREEN-REF' que não existe em normativos/ ou pacotes_agentes/",
+  "[Erro] context-map.json: skill 'codegen-agent' → doc 'SCREEN-REF' aponta para path inexistente: 'docs/03_especificacoes/ux/{screen}-ref.html'",
+  "[Erro] context-map.json: skill 'app-scaffold' referencia doc 'SPEC-THEME-001' que não existe em normativos/ ou pacotes_agentes/",
+  "[Erro] context-map.json: skill 'ux-sandbox-create' referencia doc 'SPEC-THEME-001' que não existe em normativos/ ou pacotes_agentes/",
+  "[Erro] context-map.json: skill 'ux-sandbox-fix' referencia doc 'SPEC-THEME-001' que não existe em normativos/ ou pacotes_agentes/",
+  "[Erro] context-map.json: skill 'ux-apply-layout' referencia doc 'SPEC-THEME-001' que não existe em normativos/ ou pacotes_agentes/"
 ]

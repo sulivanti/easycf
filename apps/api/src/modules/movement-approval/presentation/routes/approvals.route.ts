@@ -38,11 +38,33 @@ export async function approvalsRoutes(app: FastifyInstance): Promise<void> {
       const { listMyApprovalsUseCase } = app.movementApproval;
       const result = await listMyApprovalsUseCase.execute({
         tenantId: user.tenantId,
-        userId: user.id,
+        actorId: user.id,
         status: query.status,
       });
 
-      return reply.send(result);
+      return reply.send({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: result.approvals.map((a: Record<string, any>) => ({
+          id: a.id,
+          movement_id: a.movementId,
+          level: a.level,
+          status: a.status,
+          timeout_at:
+            a.timeoutAt instanceof Date ? a.timeoutAt.toISOString() : (a.timeoutAt ?? null),
+          created_at: a.createdAt instanceof Date ? a.createdAt.toISOString() : a.createdAt,
+          movement: a.movement
+            ? {
+                id: a.movement.id,
+                codigo: a.movement.codigo,
+                requester_id: a.movement.requesterId,
+                requester_origin: a.movement.requesterOrigin,
+                object_type: a.movement.objectType,
+                operation_type: a.movement.operationType,
+                status: a.movement.status,
+              }
+            : undefined,
+        })),
+      });
     },
   );
 
@@ -74,12 +96,19 @@ export async function approvalsRoutes(app: FastifyInstance): Promise<void> {
         movementId: id,
         opinion: body.opinion,
         tenantId: user.tenantId,
-        userId: user.id,
+        actorId: user.id,
         correlationId,
       });
 
+      const m = result.movement;
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send({
+        id: m.id,
+        status: m.status,
+        current_level: m.currentLevel,
+        total_levels: m.totalLevels,
+        updated_at: m.updatedAt instanceof Date ? m.updatedAt.toISOString() : m.updatedAt,
+      });
     },
   );
 
@@ -111,12 +140,17 @@ export async function approvalsRoutes(app: FastifyInstance): Promise<void> {
         movementId: id,
         opinion: body.opinion,
         tenantId: user.tenantId,
-        userId: user.id,
+        actorId: user.id,
         correlationId,
       });
 
+      const m = result.movement;
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send({
+        id: m.id,
+        status: m.status,
+        updated_at: m.updatedAt instanceof Date ? m.updatedAt.toISOString() : m.updatedAt,
+      });
     },
   );
 }

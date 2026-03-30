@@ -141,7 +141,27 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
     handler: async (request, reply) => {
       const result = await request.dipiContainer.getOrgUnitTreeUseCase.execute();
 
-      return reply.status(200).send(result);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      function mapTreeNode(node: Record<string, any>): Record<string, any> {
+        return {
+          id: node.id,
+          codigo: node.codigo,
+          nome: node.nome,
+          descricao: node.descricao,
+          nivel: node.nivel,
+          status: node.status,
+          tenants: node.tenants.map((t: Record<string, any>) => ({
+            tenant_id: t.tenantId,
+            codigo: t.codigo,
+            name: t.name,
+          })),
+          children: node.children.map(mapTreeNode),
+        };
+      }
+
+      return reply.status(200).send({
+        tree: result.tree.map(mapTreeNode),
+      });
     },
   });
 

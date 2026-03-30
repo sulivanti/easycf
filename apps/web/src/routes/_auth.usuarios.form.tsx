@@ -11,9 +11,5 @@ export const Route = createRoute({
 function UserFormWrapper() {
   const navigate = useNavigate();
 
-  return (
-    <UserFormPage
-      onNavigateToList={() => navigate({ to: '/usuarios' })}
-    />
-  );
+  return <UserFormPage onNavigateToList={() => navigate({ to: '/usuarios' })} />;
 }

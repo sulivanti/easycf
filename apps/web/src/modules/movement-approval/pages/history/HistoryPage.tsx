@@ -249,14 +249,7 @@ export function HistoryPage() {
               <TableHeader>
                 <TableRow className="bg-[#F5F5F3]">
                   <TableHead className="w-8" />
-                  {[
-                    'Data/Hora',
-                    'Usuário',
-                    'Movimento',
-                    'Ação',
-                    'Nível',
-                    'Detalhes',
-                  ].map((h) => (
+                  {['Data/Hora', 'Usuário', 'Movimento', 'Ação', 'Nível', 'Detalhes'].map((h) => (
                     <TableHead
                       key={h}
                       className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#111111]"
@@ -303,9 +296,7 @@ export function HistoryPage() {
                         </TableCell>
 
                         {/* Movimento */}
-                        <TableCell
-                          onClick={(e) => e.stopPropagation()}
-                        >
+                        <TableCell onClick={(e) => e.stopPropagation()}>
                           <Link
                             to="/approvals/movements/$id"
                             params={{ id: movement.id }}
@@ -325,9 +316,7 @@ export function HistoryPage() {
 
                         {/* Nível */}
                         <TableCell className="text-[12px] text-[#888888]">
-                          {movement.current_level > 0
-                            ? `Nível ${movement.current_level}`
-                            : '—'}
+                          {movement.current_level > 0 ? `Nível ${movement.current_level}` : '—'}
                         </TableCell>
 
                         {/* Detalhes truncados */}

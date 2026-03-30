@@ -24,7 +24,7 @@ function DonutChart({ title, segments, total }: DonutChartProps) {
     Array<DonutSegment & { dashArray: number; dashOffset: number; pct: number }>
   >((acc, seg) => {
     const prev = acc.length > 0 ? acc[acc.length - 1] : null;
-    const prevEnd = prev ? (prev.dashOffset / -CIRCUMFERENCE + prev.pct) : 0;
+    const prevEnd = prev ? prev.dashOffset / -CIRCUMFERENCE + prev.pct : 0;
     const pct = seg.value / total;
     const dashArray = pct * CIRCUMFERENCE;
     const dashOffset = -prevEnd * CIRCUMFERENCE;
@@ -41,7 +41,9 @@ function DonutChart({ title, segments, total }: DonutChartProps) {
           <svg viewBox="0 0 100 100" className="size-full -rotate-90">
             {/* Background track */}
             <circle
-              cx="50" cy="50" r={RADIUS}
+              cx="50"
+              cy="50"
+              r={RADIUS}
               fill="transparent"
               stroke="#F0F0EE"
               strokeWidth="14"
@@ -50,7 +52,9 @@ function DonutChart({ title, segments, total }: DonutChartProps) {
             {arcs.map((arc) => (
               <circle
                 key={arc.label}
-                cx="50" cy="50" r={RADIUS}
+                cx="50"
+                cy="50"
+                r={RADIUS}
                 fill="transparent"
                 stroke={arc.color}
                 strokeWidth="14"

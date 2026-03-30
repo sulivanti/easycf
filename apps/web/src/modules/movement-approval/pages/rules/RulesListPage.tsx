@@ -8,11 +8,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import {
-  PlusIcon,
-  SearchIcon,
-  ZapIcon,
-} from 'lucide-react';
+import { PlusIcon, SearchIcon, ZapIcon } from 'lucide-react';
 import {
   Button,
   Skeleton,
@@ -37,9 +33,7 @@ function OriginPill({ origin }: { origin: string }) {
     <span
       className={[
         'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold',
-        isAuto
-          ? 'bg-[#dbeafe] text-[#1d4ed8]'
-          : 'bg-[#F5F5F3] text-[#888888]',
+        isAuto ? 'bg-[#dbeafe] text-[#1d4ed8]' : 'bg-[#F5F5F3] text-[#888888]',
       ].join(' ')}
     >
       {isAuto && <ZapIcon className="size-2.5" />}
@@ -75,8 +69,7 @@ export function RulesListPage() {
     updateMut.mutate(
       { id: rule.id, data: { is_active: !rule.is_active } },
       {
-        onSuccess: () =>
-          toast.success(rule.is_active ? 'Regra desativada.' : 'Regra ativada.'),
+        onSuccess: () => toast.success(rule.is_active ? 'Regra desativada.' : 'Regra ativada.'),
         onError: (err) =>
           toast.error(err instanceof Error ? err.message : 'Erro ao atualizar regra.'),
       },
@@ -243,9 +236,7 @@ export function RulesListPage() {
       {/* Footer */}
       {rules.length > 0 && (
         <div className="flex items-center justify-between">
-          <span className="text-[11px] text-[#888888]">
-            Exibindo {rules.length} regras
-          </span>
+          <span className="text-[11px] text-[#888888]">Exibindo {rules.length} regras</span>
         </div>
       )}
     </div>

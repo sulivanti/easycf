@@ -235,10 +235,10 @@ export async function caseExecutionRoutes(app: FastifyInstance): Promise<void> {
       const body = request.body as typeof transitionBody._type;
       const user = request.user;
 
-      const { transitionStageUseCase } = app.caseExecution;
+      const { transitionStageUseCase, caseRepo } = app.caseExecution;
       const result = await transitionStageUseCase.execute({
         caseId: id,
-        transitionId: body.transition_id,
+        targetStageId: body.transition_id,
         tenantId: user.tenantId,
         userId: user.id,
         userRoleCodigos: user.roleCodigos ?? [],
@@ -247,8 +247,22 @@ export async function caseExecutionRoutes(app: FastifyInstance): Promise<void> {
         correlationId,
       });
 
+      // Reload case to get updated fields for response
+      const updatedCase = await caseRepo.findById(id, user.tenantId);
+
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send({
+        id,
+        codigo: updatedCase?.codigo ?? '',
+        current_stage_id: result.toStageId,
+        status: result.caseCompleted ? 'COMPLETED' : 'OPEN',
+        stage_history_entry: {
+          id: result.transitionId,
+          from_stage_id: result.fromStageId,
+          to_stage_id: result.toStageId,
+        },
+        new_gate_instances: [],
+      });
     },
   );
 
@@ -435,7 +449,11 @@ export async function caseExecutionRoutes(app: FastifyInstance): Promise<void> {
       const body = request.body as typeof resolveGateBody._type;
       const user = request.user;
 
-      const { resolveGateUseCase } = app.caseExecution;
+      const { resolveGateUseCase, gateInstanceRepo } = app.caseExecution;
+
+      // Load gate instance to get gate_id (blueprint ID)
+      const gateInstance = await gateInstanceRepo.findById(params.gateId);
+
       const result = await resolveGateUseCase.execute({
         gateInstanceId: params.gateId,
         caseId: params.id,
@@ -450,7 +468,14 @@ export async function caseExecutionRoutes(app: FastifyInstance): Promise<void> {
       });
 
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send({
+        id: result.gateInstanceId,
+        gate_id: gateInstance?.gateId ?? params.gateId,
+        status: result.status,
+        decision: result.decision ?? null,
+        resolved_by: user.id,
+        resolved_at: new Date().toISOString(),
+      });
     },
   );
 
@@ -477,7 +502,11 @@ export async function caseExecutionRoutes(app: FastifyInstance): Promise<void> {
       const body = request.body as typeof waiveGateBody._type;
       const user = request.user;
 
-      const { waiveGateUseCase } = app.caseExecution;
+      const { waiveGateUseCase, gateInstanceRepo } = app.caseExecution;
+
+      // Load gate instance to get gate_id (blueprint ID)
+      const gateInstance = await gateInstanceRepo.findById(params.gateId);
+
       const result = await waiveGateUseCase.execute({
         gateInstanceId: params.gateId,
         caseId: params.id,
@@ -488,7 +517,13 @@ export async function caseExecutionRoutes(app: FastifyInstance): Promise<void> {
       });
 
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send({
+        id: result.gateInstanceId,
+        gate_id: gateInstance?.gateId ?? params.gateId,
+        status: result.status,
+        resolved_by: user.id,
+        resolved_at: new Date().toISOString(),
+      });
     },
   );
 
@@ -617,8 +652,20 @@ export async function caseExecutionRoutes(app: FastifyInstance): Promise<void> {
         substitutionReason: body.substitution_reason,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const a = result as Record<string, any>;
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send({
+        id: a.id ?? params.aid,
+        case_id: a.caseId ?? params.id,
+        stage_id: a.stageId,
+        process_role_id: a.processRoleId,
+        user_id: a.userId,
+        is_active: a.isActive,
+        assigned_at: a.assignedAt instanceof Date ? a.assignedAt.toISOString() : a.assignedAt,
+        valid_until:
+          a.validUntil instanceof Date ? a.validUntil.toISOString() : (a.validUntil ?? null),
+      });
     },
   );
 

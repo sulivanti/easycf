@@ -24,6 +24,46 @@ import {
   updateApprovalRuleResponse,
 } from '../dtos/rules.dto.js';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapControlRule(r: Record<string, any>): Record<string, any> {
+  return {
+    id: r.id,
+    tenant_id: r.tenantId,
+    codigo: r.codigo,
+    nome: r.nome,
+    descricao: r.descricao ?? null,
+    object_type: r.objectType,
+    operation_type: r.operationType,
+    origin_types: r.originTypes,
+    criteria_type: r.criteriaType,
+    value_threshold: r.valueThreshold != null ? String(r.valueThreshold) : null,
+    priority: r.priority,
+    status: r.status,
+    valid_from: r.validFrom instanceof Date ? r.validFrom.toISOString() : (r.validFrom ?? null),
+    valid_until: r.validUntil instanceof Date ? r.validUntil.toISOString() : (r.validUntil ?? null),
+    created_at: r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt,
+    updated_at: r.updatedAt instanceof Date ? r.updatedAt.toISOString() : r.updatedAt,
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapApprovalRule(r: Record<string, any>): Record<string, any> {
+  return {
+    id: r.id,
+    tenant_id: r.tenantId,
+    control_rule_id: r.controlRuleId,
+    level: r.level,
+    approver_type: r.approverType,
+    approver_value: r.approverValue,
+    required_scope: r.requiredScope ?? null,
+    allow_self_approve: r.allowSelfApprove,
+    timeout_minutes: r.timeoutMinutes,
+    escalation_rule_id: r.escalationRuleId ?? null,
+    created_at: r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt,
+    updated_at: r.updatedAt instanceof Date ? r.updatedAt.toISOString() : r.updatedAt,
+  };
+}
+
 export async function rulesRoutes(app: FastifyInstance): Promise<void> {
   const prefix = '/api/v1/control-rules';
 
@@ -52,7 +92,14 @@ export async function rulesRoutes(app: FastifyInstance): Promise<void> {
         objectType: query.object_type,
       });
 
-      return reply.send(result);
+      const r = result.result;
+      return reply.send({
+        data: r.data.map(mapControlRule),
+        page: r.page,
+        page_size: r.pageSize,
+        total: r.total,
+        total_pages: Math.ceil(r.total / r.pageSize),
+      });
     },
   );
 
@@ -89,7 +136,7 @@ export async function rulesRoutes(app: FastifyInstance): Promise<void> {
       });
 
       reply.header('x-correlation-id', correlationId);
-      return reply.status(201).send(result);
+      return reply.status(201).send(mapControlRule(result.controlRule));
     },
   );
 
@@ -126,7 +173,7 @@ export async function rulesRoutes(app: FastifyInstance): Promise<void> {
       });
 
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send(mapControlRule(result.controlRule));
     },
   );
 
@@ -166,7 +213,7 @@ export async function rulesRoutes(app: FastifyInstance): Promise<void> {
       });
 
       reply.header('x-correlation-id', correlationId);
-      return reply.status(201).send(result);
+      return reply.status(201).send(mapApprovalRule(result.approvalRule));
     },
   );
 
@@ -203,7 +250,7 @@ export async function rulesRoutes(app: FastifyInstance): Promise<void> {
       });
 
       reply.header('x-correlation-id', correlationId);
-      return reply.send(result);
+      return reply.send(mapApprovalRule(result.approvalRule));
     },
   );
 }

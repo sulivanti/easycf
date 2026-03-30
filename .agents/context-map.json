@@ -204,6 +204,20 @@
         { "id": "SPEC-THEME-001", "path": "docs/03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md", "sections": "*", "reason": "Tema visual — cores, fontes, layout shell para frames Penpot" },
         { "id": "DOC-UX-013", "sections": "*", "reason": "Design System — regras estruturais" }
       ]
+    },
+    "ux-sandbox-fix": {
+      "docs": [
+        { "id": "SPEC-THEME-001", "path": "docs/03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md", "sections": "*", "reason": "Tema visual — cores, fontes, tolerâncias para diff spec vs sandbox" },
+        { "id": "DOC-UX-013", "sections": "*", "reason": "Design System — regras estruturais" },
+        { "id": "DOC-UX-014", "sections": "*", "reason": "Page layout blueprints para validação de estrutura" }
+      ]
+    },
+    "ux-apply-layout": {
+      "docs": [
+        { "id": "SPEC-THEME-001", "path": "docs/03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md", "sections": "*", "reason": "Tema visual — tokens para gerar amendment com valores exatos" },
+        { "id": "DOC-UX-013", "sections": "*", "reason": "Design System — regras estruturais e anti-patterns" },
+        { "id": "DOC-UX-014", "sections": "*", "reason": "Page layout blueprints per screen type" }
+      ]
     }
   }
 }

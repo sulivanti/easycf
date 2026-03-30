@@ -86,7 +86,7 @@ export interface SidebarItem {
   label: string;
   icon: string;
   route: string;
-  requiredScope: string;
+  requiredScope?: string;
   activeMatch: string;
 }
 

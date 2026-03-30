@@ -24,3 +24,4 @@
 | [DOC-UX-013-M04](DOC-UX-013/DOC-UX-013-M04.md) | DOC-UX-013 | M | MERGED | 2026-03-27 | Componentes Data: StatusBadge, Pagination, EmptyState, Tag, IconButton |
 | [DOC-UX-013-M05](DOC-UX-013/DOC-UX-013-M05.md) | DOC-UX-013 | M | MERGED | 2026-03-27 | Componentes Feedback: ConfirmationModal, PageHeader |
 | [PKG-COD-001-M01](PKG-COD-001/PKG-COD-001-M01.md) | PKG-COD-001 | M | MERGED | 2026-03-28 | Ingestão de screen manifest e blueprint DOC-UX-014 em §3.5 AGN-COD-WEB |
+| [DOC-UX-013-M07](DOC-UX-013/DOC-UX-013-M07.md) | DOC-UX-013 | M | MERGED | 2026-03-29 | Nova §3.4 tokens semânticos shadcn/ui + PASSO 4A no app-scaffold |

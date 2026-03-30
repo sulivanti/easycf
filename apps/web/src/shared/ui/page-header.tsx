@@ -42,7 +42,7 @@ function PageHeader({ title, description, breadcrumbs, actions, className }: Pag
             ))}
           </nav>
         )}
-        <h1 className="font-display text-[length:var(--type-title)] font-bold text-a1-text-primary">
+        <h1 className="font-display text-[length:var(--type-display)] font-extrabold text-a1-text-primary">
           {title}
         </h1>
         {description && (

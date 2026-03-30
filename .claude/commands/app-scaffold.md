@@ -279,9 +279,30 @@ export default defineConfig({
 
 > **Nota:** Tailwind v4 usa Vite plugin nativo — **sem** `postcss.config.js` nem `tailwind.config.js`. Ver DOC-UX-013 §3.2.
 
+### PASSO 4A: Tokens shadcn/ui no `index.css` (OBRIGATÓRIO)
+
+O `@theme` block do `index.css` DEVE incluir, além dos tokens A1 (DOC-UX-013 §2), os **17 tokens semânticos shadcn/ui**. Sem eles, todos os componentes de `shared/ui/` (Button, Input, Dialog, Table, etc.) renderizam com cores transparentes/invisíveis porque classes como `bg-primary`, `text-muted-foreground`, `bg-popover` dependem dessas variáveis CSS.
+
+**IMPORTANTE:** Os valores concretos de todos os tokens (shadcn, cores, tipografia, line-height, letter-spacing, layout) estão em **SPEC-THEME-001** (`docs/03_especificacoes/ux/SPEC-THEME-001__Tema_Visual_Projeto.md`). Leia esse documento e extraia os valores de lá — NÃO hardcode hex literais nesta skill. O `index.css` já existente no repo (`apps/web/src/index.css`) é a referência de implementação atualizada.
+
+O bloco `@theme` deve conter:
+1. **17 tokens semânticos shadcn/ui** (background, foreground, primary, secondary, destructive, muted, accent, popover, border, input, ring) — valores de SPEC-THEME-001 §2
+2. **Escala de cores** (primary-50 a primary-950, neutral-50 a neutral-950) — SPEC-THEME-001 §2.1/§2.2
+3. **Cores semânticas** (success, warning, danger, info) — SPEC-THEME-001 §2.4
+4. **Hierarquia de texto** (a1-text-primary a a1-text-placeholder) — SPEC-THEME-001 §2.3
+5. **Type Scale** (display a micro) — SPEC-THEME-001 §3.2
+6. **Line-height** (leading-display a leading-micro) — SPEC-THEME-001 §3.2
+7. **Letter-spacing** (tracking-display, tracking-label, tracking-section) — SPEC-THEME-001 §3.2
+8. **Layout dimensions** (topbar-height, sidebar-width) — SPEC-THEME-001 §4
+9. **Status badges** — SPEC-THEME-001 §2.5
+
+> **Por quê:** O Tailwind v4 vanilla não define essas variáveis — elas são convenção do shadcn/ui. Se omitidas, `bg-primary` resolve para `transparent` e toda a UI fica invisível.
+
+> **Anti-pattern:** NÃO hardcodar valores hex nesta skill. Se o tema mudar, valores literais ficam desatualizados. Sempre leia SPEC-THEME-001 como fonte de verdade.
+
 ### PASSO 4B: Inicialização shadcn/ui e Componentes
 
-Após criar o `package.json`, `index.css` (com `@import "tailwindcss"` + `@theme`) e `vite.config.ts`, execute a inicialização shadcn:
+Após criar o `package.json`, `index.css` (com `@import "tailwindcss"` + `@theme` incluindo tokens A1 **e** tokens shadcn semânticos do PASSO 4A) e `vite.config.ts`, execute a inicialização shadcn:
 
 **1. Crie `src/shared/lib/utils.ts`** com o helper `cn()`:
 

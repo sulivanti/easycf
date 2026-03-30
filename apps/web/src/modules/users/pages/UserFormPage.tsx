@@ -8,6 +8,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
+import { Info } from 'lucide-react';
 import { Button } from '@shared/ui';
 import { Input } from '@shared/ui';
 import { Label } from '@shared/ui';
@@ -16,6 +17,7 @@ import { PageHeader } from '@shared/ui/page-header';
 import { Select } from '@shared/ui/select';
 import { useRoleOptions } from '../hooks/use-role-options.js';
 import { useCreateUser } from '../hooks/use-create-user.js';
+import { useTenants } from '../../foundation/hooks/use-tenants.js';
 import {
   COPY,
   extractFieldErrors,
@@ -45,12 +47,14 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
     isError: rolesError,
     refetch: rolesRetry,
   } = useRoleOptions();
+  const { tenants, loading: tenantsLoading } = useTenants();
   const { mutateAsync: createUser, isPending: submitLoading, regenerateKey } = useCreateUser();
 
   const [mode, setMode] = useState<CreationMode>('invite');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [roleId, setRoleId] = useState('');
+  const [tenantId, setTenantId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Map<string, string>>(new Map());
@@ -62,6 +66,7 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
     setFullName('');
     setEmail('');
     setRoleId('');
+    setTenantId('');
     setPassword('');
     setPasswordConfirm('');
     setFieldErrors(new Map());
@@ -178,9 +183,17 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
             </button>
           </div>
 
+          {/* Info banner — invite mode */}
+          {mode === 'invite' && (
+            <div className="flex items-center gap-2.5 rounded-lg border border-primary-100 bg-primary-50 px-3.5 py-3 font-display text-[13px] text-primary-700">
+              <Info className="size-4 shrink-0" />
+              Um convite será enviado por e-mail para ativação da conta.
+            </div>
+          )}
+
           {/* Full Name */}
           <div className="space-y-2">
-            <Label htmlFor="fullName">Nome completo</Label>
+            <Label htmlFor="fullName" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">NOME COMPLETO</Label>
             <Input
               ref={fieldErrors.has('fullName') ? firstErrorRef : undefined}
               id="fullName"
@@ -198,7 +211,7 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
 
           {/* Email */}
           <div className="space-y-2">
-            <Label htmlFor="email">E-mail</Label>
+            <Label htmlFor="email" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">E-MAIL CORPORATIVO</Label>
             <Input
               ref={
                 fieldErrors.has('email') && !fieldErrors.has('fullName') ? firstErrorRef : undefined
@@ -219,7 +232,7 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
 
           {/* Role select */}
           <div className="space-y-2">
-            <Label htmlFor="roleId">Perfil de acesso</Label>
+            <Label htmlFor="roleId" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">PERFIL</Label>
             {rolesLoading ? (
               <Skeleton className="h-10 w-full" />
             ) : rolesError ? (
@@ -253,11 +266,28 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
             )}
           </div>
 
+          {/* Empresa */}
+          <div className="space-y-2">
+            <Label htmlFor="tenantId" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">EMPRESA</Label>
+            {tenantsLoading ? (
+              <Skeleton className="h-10 w-full" />
+            ) : (
+              <Select
+                id="tenantId"
+                value={tenantId}
+                onChange={(e) => setTenantId(e.target.value)}
+                options={tenants.map((t) => ({ value: t.id, label: t.name }))}
+                placeholder="Selecione uma empresa"
+                className="w-full"
+              />
+            )}
+          </div>
+
           {/* Password fields (only in password mode) */}
           {mode === 'password' && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="password">Senha temporária</Label>
+                <Label htmlFor="password" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">SENHA TEMPORÁRIA</Label>
                 <Input
                   id="password"
                   type="password"
@@ -292,7 +322,7 @@ export function UserFormPage({ onNavigateToList }: UserFormPageProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="passwordConfirm">Confirmar senha</Label>
+                <Label htmlFor="passwordConfirm" className="font-display text-[11px] font-bold uppercase tracking-[0.8px] text-a1-text-secondary">CONFIRMAR SENHA</Label>
                 <Input
                   id="passwordConfirm"
                   type="password"

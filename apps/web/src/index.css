@@ -63,6 +63,7 @@
 
   /* Brand (logo only — SPEC-THEME-001 §5) */
   --color-a1-accent: #F58C32;
+  --color-a1-accent-grad: #F5A04E;
   --color-a1-dark: #111111;
   --color-a1-bg: #F5F5F3;
   --color-a1-bg-alt: #F5F5F3;
@@ -95,7 +96,6 @@
   /* Layout Dimensions — SPEC-THEME-001 §4 */
   --topbar-height: 4rem;
   --sidebar-width: 15rem;
-  --sidebar-expanded: 15rem;
 
   /* Status Badges — SPEC-THEME-001 §2.5 (Penpot validated) */
   --color-status-success-bg: #E8F8EF;
@@ -135,12 +135,27 @@
   /* Type Scale A1 — SPEC-THEME-001 §3.2 */
   --type-display: 1.75rem;
   --type-title: 1.25rem;
-  --type-subtitle: 1rem;
+  --type-subtitle: 0.875rem;
   --type-body: 0.8125rem;
   --type-label: 0.6875rem;
   --type-caption: 0.6875rem;
   --type-section: 0.5625rem;
   --type-micro: 0.625rem;
+
+  /* Line-height Scale — SPEC-THEME-001 §3.2 */
+  --leading-display: 2.125rem;
+  --leading-title: 1.5rem;
+  --leading-subtitle: 1.25rem;
+  --leading-body: 1rem;
+  --leading-label: 0.875rem;
+  --leading-section: 0.75rem;
+  --leading-caption: 0.875rem;
+  --leading-micro: 0.75rem;
+
+  /* Letter-spacing — SPEC-THEME-001 §3.2 */
+  --tracking-display: -1px;
+  --tracking-label: 0.5px;
+  --tracking-section: 1.4px;
 
   /* Border Radius */
   --radius-xs: 0.125rem;

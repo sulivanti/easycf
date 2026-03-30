@@ -12,6 +12,8 @@ Documentos normativos não pertencem a módulos — este CHANGELOG substitui o P
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 0.27.0 | 2026-03-29 | merge-amendment | Merge DOC-UX-013-M07: nova §3.4 tokens semânticos shadcn/ui (17 variáveis CSS) + PASSO 4A no app-scaffold. DOC-UX-013 v1.9.0. |
+| 0.26.0 | 2026-03-29 | create-amendment | Criação DOC-UX-013-M07: nova §3.4 tokens semânticos shadcn/ui (17 variáveis CSS obrigatórias) + PASSO 4A no app-scaffold. Fix: componentes shared/ui invisíveis sem esses tokens. |
 | 0.25.0 | 2026-03-27 | merge-amendment | Merge batch DOC-UX-013-M03+M04+M05: 12 componentes customizados ECF em §4.2/§4.4. DOC-UX-013 v1.6.0. Form(5), Data(5), Feedback(2). |
 | 0.24.0 | 2026-03-27 | create-amendment | Criacao DOC-UX-013-M05: 2 componentes Feedback/Layout — ConfirmationModal (dialog confirmacao destrutiva) e PageHeader (cabecalho padrao de pagina com breadcrumb + acoes). |
 | 0.23.0 | 2026-03-27 | create-amendment | Criacao DOC-UX-013-M04: 5 componentes Data — StatusBadge (badge semantico cva), Pagination, EmptyState, Tag (removivel), IconButton (icone + tooltip). |

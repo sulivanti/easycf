@@ -186,7 +186,7 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
         aria-busy="true"
         aria-label="Carregando estrutura organizacional"
       >
-        <div className="w-[380px] shrink-0 space-y-3 border-r border-a1-border bg-white p-5">
+        <div className="w-[340px] shrink-0 space-y-3 border-r border-a1-border bg-white p-5">
           <Skeleton className="h-5 w-48" />
           <Skeleton className="h-3 w-36" />
           <Skeleton className="h-10 w-full rounded-lg" />
@@ -248,7 +248,7 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
           onCancel={handleFormClose}
         />
       ) : (
-        <div className="flex w-[380px] shrink-0 flex-col border-r border-a1-border bg-white">
+        <div className="flex w-[340px] shrink-0 flex-col border-r border-a1-border bg-white">
           {/* Tree header */}
           <div className="shrink-0 p-5 pb-3">
             <h2 className="text-base font-extrabold text-a1-text-primary">Estrutura de Unidades</h2>

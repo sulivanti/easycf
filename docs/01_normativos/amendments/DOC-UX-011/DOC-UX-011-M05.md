@@ -3,10 +3,10 @@
 - **amendment_id:** DOC-UX-011-M05
 - **parent_doc:** DOC-UX-011
 - **type:** ALTER
-- **status:** APPROVED
+- **status:** MERGED
 - **data:** 2026-03-27
 - **autor:** produto + UX
-- **motivacao:** Alinhar o AppShell ao stitch `modelagem_de_processos_corrigido` (referência canônica). Topbar passa de dark (#111) para branca com border-b. Sidebar passa de fixa 220px para colapsável (64px → 224px). Accent interativo passa de laranja para azul.
+- **motivacao:** Alinhar o AppShell ao stitch `modelagem_de_processos_corrigido` (referência canônica). Topbar passa de dark (#111) para branca com border-b. Sidebar passa de 220px para 240px fixa (SPEC-THEME-001 §4.1). Accent interativo passa de laranja para azul.
 
 ---
 
@@ -31,14 +31,11 @@
 
 | Propriedade | Valor Anterior | Novo Valor |
 |-------------|---------------|------------|
-| Largura | `w-[220px]` fixa | `w-16` colapsada → `w-56` (224px) on hover |
+| Largura | `w-[220px]` fixa | `w-60` (240px) fixa (SPEC-THEME-001 §4.1) |
 | Fundo | `bg-white` | `bg-white` (mantido) |
 | Border | `border-r border-a1-border` | `border-r border-neutral-200` |
-| Transição | nenhuma | `transition-all duration-300 ease-default` |
 
-**Sidebar colapsada (w-16):** Exibe apenas ícones centralizados (18px). Labels de texto com `opacity-0`. Section headers ocultos.
-
-**Sidebar expandida (hover → w-56):** Exibe ícones + labels. Section headers visíveis. Texto com `opacity-100` via transição.
+**Sidebar 240px fixa:** Exibe ícones + labels + section headers. Sem comportamento collapsible (Penpot confirma sidebar fixa em todas as telas).
 
 **Item ativo:** `bg-primary-50 text-primary-600 font-semibold` (sem borda lateral laranja). Ícone `stroke-primary-600`.
 

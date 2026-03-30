@@ -177,7 +177,7 @@ export function MovementsPage() {
         actions={
           <Button
             onClick={() => navigate({ to: '/approvals/movements/new' })}
-            className="bg-[#2E86C1] text-white hover:bg-[#2573a7]"
+            className="bg-primary-600 text-white hover:bg-primary-700"
           >
             <PlusIcon className="size-4" />
             Novo Movimento
@@ -186,7 +186,7 @@ export function MovementsPage() {
       />
 
       {/* Tab Bar */}
-      <div className="border-b border-[#E8E8E6]">
+      <div className="border-b border-a1-border">
         <nav className="flex gap-0" aria-label="Filtros por status">
           {TABS.map((tab) => (
             <button
@@ -196,13 +196,13 @@ export function MovementsPage() {
               className={[
                 'relative flex items-center gap-2 px-4 py-2.5 font-display text-[13px] transition-colors',
                 activeTab === tab.key
-                  ? 'border-b-2 border-[#2E86C1] font-semibold text-[#2E86C1]'
-                  : 'font-medium text-[#888888] hover:text-[#111111]',
+                  ? 'border-b-2 border-primary-600 font-semibold text-primary-600'
+                  : 'font-medium text-a1-text-auxiliary hover:text-a1-text-primary',
               ].join(' ')}
             >
               {tab.label}
               {tab.key === 'pending' && (
-                <span className="flex size-5 items-center justify-center rounded-full bg-[#2E86C1] text-[10px] font-bold text-white">
+                <span className="flex size-5 items-center justify-center rounded-full bg-primary-600 text-[10px] font-bold text-white">
                   {movementsQuery.data?.data.length ?? 0}
                 </span>
               )}
@@ -214,18 +214,18 @@ export function MovementsPage() {
       {/* Search Row */}
       <div className="flex items-center gap-3">
         <div className="relative w-64">
-          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#CCCCCC]" />
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-a1-text-placeholder" />
           <input
             type="text"
             value={searchInput}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Buscar por número ou solicitante..."
-            className="h-9 w-full rounded-md border border-[#E8E8E6] bg-white pl-9 pr-3 text-[13px] text-[#111111] outline-none placeholder:text-[#CCCCCC] focus:border-[#2E86C1] focus:ring-[3px] focus:ring-[#2E86C1]/20"
+            className="h-9 w-full rounded-md border border-a1-border bg-white pl-9 pr-3 text-[13px] text-a1-text-primary outline-none placeholder:text-a1-text-placeholder focus:border-primary-600 focus:ring-[3px] focus:ring-primary-600/20"
           />
         </div>
         <Link
           to="/approvals/rules/search"
-          className="text-[12px] font-semibold text-[#2E86C1] hover:underline"
+          className="text-[12px] font-semibold text-primary-600 hover:underline"
         >
           Busca Avançada
         </Link>
@@ -233,7 +233,7 @@ export function MovementsPage() {
           <Button
             variant="outline"
             size="sm"
-            className="border-[#E8E8E6] text-[#111111]"
+            className="border-a1-border text-a1-text-primary"
           >
             Ações em Lote
             <ChevronDownIcon className="ml-1 size-4" />

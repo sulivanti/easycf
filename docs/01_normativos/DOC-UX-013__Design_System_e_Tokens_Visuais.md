@@ -1,9 +1,9 @@
 # DOC-UX-013 — Design System e Tokens Visuais
 
 - **id:** DOC-UX-013
-- **version:** 1.7.0
+- **version:** 1.9.0
 - **status:** ACTIVE
-- **data_ultima_revisao:** 2026-03-27
+- **data_ultima_revisao:** 2026-03-29
 - **owner:** produto + arquitetura + UX
 - **scope:** global (design system, tokens visuais, styling)
 
@@ -216,7 +216,39 @@ O arquivo `src/index.css` DEVE conter:
 }
 ```
 
-### 3.4 Proibição de Inline Styles
+### 3.4 Tokens Semânticos shadcn/ui
+
+Os componentes shadcn/ui (Button, Input, Table, Dialog, Badge, etc.) usam classes Tailwind como `bg-primary`, `text-muted-foreground`, `bg-popover` que dependem de variáveis CSS semânticas (`--color-primary`, `--color-muted-foreground`, `--color-popover`). Essas variáveis **não existem no Tailwind v4 padrão** — são convenção do shadcn/ui e DEVEM ser declaradas no bloco `@theme` do `index.css`.
+
+**Mapeamento shadcn → Design System A1:**
+
+| Token shadcn | Variável CSS | Valor A1 | Uso |
+|---|---|---|---|
+| `background` | `--color-background` | `#FFFFFF` | Fundo da página |
+| `foreground` | `--color-foreground` | `#111111` | Texto principal |
+| `primary` | `--color-primary` | `#2E86C1` | Botões primários, links, focus ring |
+| `primary-foreground` | `--color-primary-foreground` | `#FFFFFF` | Texto sobre primary |
+| `secondary` | `--color-secondary` | `#F5F5F3` | Botões secundários, backgrounds alternativos |
+| `secondary-foreground` | `--color-secondary-foreground` | `#111111` | Texto sobre secondary |
+| `destructive` | `--color-destructive` | `#E74C3C` | Ações destrutivas (delete, revoke) |
+| `destructive-foreground` | `--color-destructive-foreground` | `#FFFFFF` | Texto sobre destructive |
+| `muted` | `--color-muted` | `#F0F0EE` | Backgrounds suaves, disabled states |
+| `muted-foreground` | `--color-muted-foreground` | `#888888` | Texto secundário, placeholders |
+| `accent` | `--color-accent` | `#F5F5F3` | Hover states, seleção |
+| `accent-foreground` | `--color-accent-foreground` | `#111111` | Texto sobre accent |
+| `popover` | `--color-popover` | `#FFFFFF` | Fundo de popovers, dropdowns |
+| `popover-foreground` | `--color-popover-foreground` | `#111111` | Texto em popovers |
+| `border` | `--color-border` | `#E8E8E6` | Bordas de inputs, cards, separadores |
+| `input` | `--color-input` | `#E8E8E6` | Borda de inputs (focus state usa ring) |
+| `ring` | `--color-ring` | `#2E86C1` | Focus ring (acessibilidade) |
+
+**Regra:** Esses 17 tokens são **obrigatórios** no `@theme` do `index.css`. Sem eles, todos os componentes de `shared/ui/` renderizam com cores transparentes/invisíveis.
+
+**Anti-pattern:** Omitir os tokens shadcn ao customizar o `@theme`. O `/app-scaffold` DEVE incluí-los (PASSO 4A).
+
+> **Referência:** Os valores hex acima derivam do design system A1 definido em SPEC-THEME-001. Se os tokens A1 forem atualizados, os tokens shadcn DEVEM ser atualizados em conjunto para manter consistência visual.
+
+### 3.5 Proibição de Inline Styles
 
 **MUST NOT** usar `style={{}}` para:
 - Layout (margin, padding, display, flex, grid)
@@ -445,6 +477,7 @@ O ThemeToggle DEVE:
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| 1.9.0 | 2026-03-29 | Nova §3.4 "Tokens Semânticos shadcn/ui": documenta os 17 tokens obrigatórios (background, foreground, primary, secondary, destructive, muted, accent, popover, border, input, ring) com mapeamento para design system A1. §3.4 anterior renumerada para §3.5. |
 | 1.8.0 | 2026-03-29 | Refatoração: valores hardcoded removidos da §2.1 — agora referencia SPEC-THEME-001 para valores concretos. DOC-UX-013 mantém apenas regras estruturais e naming conventions. |
 | 1.7.0 | 2026-03-27 | Amendment M06: Unificação de tokens ao stitch modelagem — accent interativo de laranja (#F58C32) para azul (#2563eb), topbar de dark (#111) para white (#FFF), superfícies de warm beige para cool slate, texto de warm grays para cool grays. Laranja reservado para logo/branding. Novos tokens: sidebar-active-bg/text, topbar-height, sidebar-collapsed/expanded. |
 | 1.6.0 | 2026-03-27 | Amendments M03+M04+M05: 12 novos componentes shared/ui — Form (FormField, SearchBar, FilterBar, Select, Toggle), Data (StatusBadge, Pagination, EmptyState, Tag, IconButton), Feedback (ConfirmationModal, PageHeader). |

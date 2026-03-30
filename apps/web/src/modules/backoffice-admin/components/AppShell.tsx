@@ -18,6 +18,7 @@ import {
   Users,
   Shield,
   Building,
+  LayoutDashboard,
   Activity,
   Settings,
   Cpu,
@@ -81,6 +82,7 @@ function A1Logo() {
 // ---------------------------------------------------------------------------
 
 const ICONS: Record<string, React.ElementType> = {
+  'layout-dashboard': LayoutDashboard,
   users: Users,
   shield: Shield,
   building: Building,
@@ -192,10 +194,10 @@ function Sidebar({
                     <Link
                       key={item.id}
                       to={item.route}
-                      className={`flex items-center gap-2.5 rounded-md px-3 py-2.5 font-display text-[13px] transition-colors ${
+                      className={`flex items-center gap-2.5 rounded-md border-l-[3px] px-3 py-2.5 font-display text-[13px] transition-colors ${
                         isActive
-                          ? 'bg-primary-50 font-bold text-primary-600'
-                          : 'text-a1-text-auxiliary hover:bg-neutral-50'
+                          ? 'border-primary-600 bg-primary-50 font-bold text-primary-600'
+                          : 'border-transparent text-a1-text-auxiliary hover:bg-neutral-50'
                       }`}
                     >
                       <IconFor
@@ -371,7 +373,7 @@ export function AppShell({ children }: Props) {
 
           {/* Company */}
           <span className="font-display text-[12px] font-medium text-a1-text-tertiary">
-            Empresa: A1 Engenharia
+            {user?.tenant?.name ? `Empresa: ${user.tenant.name}` : ''}
           </span>
 
           {/* Profile widget */}

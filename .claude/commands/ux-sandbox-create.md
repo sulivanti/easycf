@@ -8,7 +8,7 @@ Recebe uma spec UX (`*-spec.md` + `*-ref.html`) e cria frames no Penpot sandbox.
 
 ## Argumento
 
-$ARGUMENTS deve conter o **numero da spec** (ex: `10`) ou **path completo** (ex: `docs/04_modules/ux/10-org-tree-spec.md`).
+$ARGUMENTS deve conter o **numero da spec** (ex: `10`) ou **path completo** (ex: `docs/03_especificacoes/ux/10-org-tree-spec.md`).
 
 Flags opcionais:
 - `--dry-run` — mostra operacoes planejadas sem executar no Penpot
@@ -113,10 +113,16 @@ Se houver divergencias, WARN no chat mas nao bloqueie — a spec tem prioridade.
 Buscar screen manifest correspondente em `docs/05_manifests/screens/`:
 
 ```text
-Glob: docs/05_manifests/screens/*{spec_number}*.yaml ou *.md
+1. Ler header da spec → campo "Manifest" (ex: "ux-org-001.org-tree.yaml")
+2. Se encontrado → Glob: docs/05_manifests/screens/{manifest_name}
+3. Se nao encontrado no header → Glob por nome semantico da tela:
+   docs/05_manifests/screens/*{nome_tela_sem_numero}*.yaml
+   (ex: spec "10-org-tree" → glob "*org-tree*")
 ├── Encontrado → Ler e listar componentes declarados. Informacional.
 └── Nao encontrado → INFO: "Manifest nao encontrado. Nao bloqueante."
 ```
+
+> **Nota:** Manifests usam IDs semanticos (ex: `ux-org-001.org-tree.yaml`), NAO numeros de spec. Nunca usar `*{spec_number}*` como glob.
 
 ---
 

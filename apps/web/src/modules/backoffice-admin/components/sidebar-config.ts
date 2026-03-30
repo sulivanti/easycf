@@ -14,6 +14,13 @@ const SIDEBAR_GROUPS: SidebarGroup[] = [
     icon: 'settings',
     items: [
       {
+        id: 'nav-dashboard',
+        label: 'Dashboard',
+        icon: 'layout-dashboard',
+        route: '/dashboard',
+        activeMatch: '/dashboard',
+      },
+      {
         id: 'nav-users',
         label: 'Usuários',
         icon: 'users',
@@ -23,7 +30,7 @@ const SIDEBAR_GROUPS: SidebarGroup[] = [
       },
       {
         id: 'nav-roles',
-        label: 'Perfis e Permissões',
+        label: 'Perfis',
         icon: 'shield',
         route: '/perfis',
         requiredScope: 'users:role:read',
@@ -270,6 +277,6 @@ export function filterSidebarByScopes(scopes: string[]): SidebarGroup[] {
 
   return SIDEBAR_GROUPS.map((group) => ({
     ...group,
-    items: group.items.filter((item) => scopeSet.has(item.requiredScope)),
+    items: group.items.filter((item) => !item.requiredScope || scopeSet.has(item.requiredScope)),
   })).filter((group) => group.items.length > 0);
 }

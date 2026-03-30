@@ -201,11 +201,11 @@ function ShieldCodeIcon() {
 
 function MicrosoftLogo() {
   return (
-    <div className="grid grid-cols-2 gap-[2px] shrink-0" style={{ width: 18, height: 18 }}>
-      <div style={{ background: '#F25022' }} />
-      <div style={{ background: '#7FBA00' }} />
-      <div style={{ background: '#00A4EF' }} />
-      <div style={{ background: '#FFB900' }} />
+    <div className="grid size-[18px] grid-cols-2 gap-[2px] shrink-0">
+      <div className="bg-[#F25022]" />
+      <div className="bg-[#7FBA00]" />
+      <div className="bg-[#00A4EF]" />
+      <div className="bg-[#FFB900]" />
     </div>
   );
 }
@@ -218,13 +218,8 @@ function A1Logo() {
   return (
     <div className="flex items-center gap-3">
       <div
-        className="flex items-center justify-center shrink-0 rounded-lg"
-        style={{
-          width: 44,
-          height: 44,
-          background: 'linear-gradient(135deg, #F5A04E, #F58C32)',
-          boxShadow: '0 4px 16px rgba(245,140,50,0.25)',
-        }}
+        className="flex size-11 items-center justify-center shrink-0 rounded-lg shadow-[0_4px_16px_rgba(245,140,50,0.25)]"
+        style={{ background: 'linear-gradient(135deg, #F5A04E, #F58C32)' }}
       >
         <span className="font-display font-extrabold italic text-lg text-white">A1</span>
       </div>
@@ -233,8 +228,7 @@ function A1Logo() {
           Grupo A1
         </span>
         <span
-          className="font-display font-medium text-[10px] leading-3 uppercase tracking-[1.6px]"
-          style={{ color: 'rgba(255,255,255,0.35)' }}
+          className="font-display font-medium text-[10px] leading-3 uppercase tracking-[1.6px] text-white/35"
         >
           PORTAL INTERNO
         </span>
@@ -559,8 +553,7 @@ function LoginPanel({
       {/* Checkbox */}
       <label className="flex items-center gap-2 mb-5 cursor-pointer">
         <span
-          className="flex items-center justify-center shrink-0 rounded-[3px] border-[1.5px] border-[#E8E8E6] bg-white transition-colors"
-          style={{ width: 16, height: 16 }}
+          className="flex size-4 items-center justify-center shrink-0 rounded-[3px] border-[1.5px] border-[#E8E8E6] bg-white transition-colors"
         >
           {rememberMe && (
             <svg
@@ -592,8 +585,7 @@ function LoginPanel({
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[50px] rounded-[10px] gap-2 text-white font-display font-bold text-[15px] leading-5"
-        style={{ background: '#2E86C1' }}
+        className="h-[50px] rounded-[10px] gap-2 bg-primary-600 text-white font-display font-bold text-[15px] leading-5"
       >
         Entrar
         {!loading && <ArrowRightIcon />}
@@ -668,8 +660,7 @@ function MfaPanel({ tempToken, onSuccess }: { tempToken: string; onSuccess: () =
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[50px] rounded-[10px] gap-2 text-white font-display font-bold text-[15px] leading-5"
-        style={{ background: '#2E86C1' }}
+        className="h-[50px] rounded-[10px] gap-2 bg-primary-600 text-white font-display font-bold text-[15px] leading-5"
       >
         Verificar código
         {!loading && <ArrowRightIcon />}
@@ -722,8 +713,7 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[50px] rounded-[10px] gap-2 text-white font-display font-bold text-[15px] leading-5"
-        style={{ background: '#2E86C1' }}
+        className="h-[50px] rounded-[10px] gap-2 bg-primary-600 text-white font-display font-bold text-[15px] leading-5"
       >
         Enviar link
         {!loading && <ArrowRightIcon />}
@@ -732,8 +722,7 @@ function ForgotPasswordPanel({ onBack }: { onBack: () => void }) {
       {/* Success message inline (spec v3) */}
       {submitted && (
         <div
-          className="mt-4 rounded-lg p-3.5 font-display text-[13px] leading-[1.5]"
-          style={{ background: '#E8F8EF', border: '1px solid #B5E8C9', color: '#1E7A42' }}
+          className="mt-4 rounded-lg border border-status-success-border bg-status-success-bg p-3.5 font-display text-[13px] leading-[1.5] text-status-success-text"
         >
           Se o e-mail estiver cadastrado, você receberá um link de redefinição em instantes.
           Verifique sua caixa de entrada e spam.
@@ -870,8 +859,7 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
       <Button
         type="submit"
         isLoading={loading}
-        className="h-[50px] rounded-[10px] gap-2 text-white font-display font-bold text-[15px] leading-5"
-        style={{ background: '#2E86C1' }}
+        className="h-[50px] rounded-[10px] gap-2 bg-primary-600 text-white font-display font-bold text-[15px] leading-5"
       >
         Redefinir
         {!loading && <ArrowRightIcon />}
@@ -889,11 +877,8 @@ function ResetPasswordPanel({ token, onBack }: { token: string; onBack: () => vo
 function BrandingPanel() {
   return (
     <aside
-      className="hidden lg:flex w-[604px] shrink-0 flex-col justify-between"
-      style={{
-        background: 'linear-gradient(175deg, #1a2318 0%, #151a14 40%, #111111 100%)',
-        padding: '40px 56px',
-      }}
+      className="hidden lg:flex w-[604px] shrink-0 flex-col justify-between px-14 py-10"
+      style={{ background: 'linear-gradient(175deg, #1a2318 0%, #151a14 40%, #111111 100%)' }}
     >
       {/* Logo */}
       <A1Logo />
@@ -902,8 +887,7 @@ function BrandingPanel() {
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-5">
           <h2
-            className="font-display font-extrabold italic text-white"
-            style={{ fontSize: 42, lineHeight: '47px', letterSpacing: '-1.2px' }}
+            className="font-display font-extrabold italic text-white text-[42px] leading-[47px] tracking-[-1.2px]"
           >
             Soluções
             <br />
@@ -912,26 +896,19 @@ function BrandingPanel() {
             indústria.
           </h2>
           <p
-            className="font-display max-w-[380px]"
-            style={{ fontSize: 14, lineHeight: '23px', color: 'rgba(255,255,255,0.45)' }}
+            className="font-display max-w-[380px] text-[14px] leading-[23px] text-white/45"
           >
             Plataforma de gestão de processos, aprovações e integração com Protheus — desenvolvida
             para o Grupo A1.
           </p>
         </div>
-        <div className="rounded-sm" style={{ width: 56, height: 4, background: '#F58C32' }} />
+        <div className="h-1 w-14 rounded-sm bg-a1-accent" />
       </div>
 
       {/* Footer: units + copyright */}
       <div className="flex flex-col gap-3">
         <span
-          className="font-display font-bold uppercase"
-          style={{
-            fontSize: 9,
-            lineHeight: '12px',
-            letterSpacing: '1.4px',
-            color: 'rgba(255,255,255,0.25)',
-          }}
+          className="font-display font-bold uppercase text-[9px] leading-3 tracking-[1.4px] text-white/25"
         >
           UNIDADES DO GRUPO
         </span>
@@ -939,15 +916,10 @@ function BrandingPanel() {
           {['Engenharia', 'Industrial', 'Energia', 'Agro'].map((unit) => (
             <div
               key={unit}
-              className="rounded-[20px] py-1.5 px-4"
-              style={{
-                border: '1px solid rgba(255,255,255,0.12)',
-                background: 'rgba(255,255,255,0.03)',
-              }}
+              className="rounded-[20px] border border-white/12 bg-white/[0.03] py-1.5 px-4"
             >
               <span
-                className="font-display font-medium text-xs leading-4"
-                style={{ color: 'rgba(255,255,255,0.50)' }}
+                className="font-display font-medium text-xs leading-4 text-white/50"
               >
                 {unit}
               </span>
@@ -955,8 +927,7 @@ function BrandingPanel() {
           ))}
         </div>
         <span
-          className="font-display text-[11px] leading-[14px]"
-          style={{ color: 'rgba(255,255,255,0.20)' }}
+          className="font-display text-[11px] leading-[14px] text-white/20"
         >
           © 2026 Grupo A1 · Todos os direitos reservados
         </span>
@@ -987,12 +958,10 @@ export function LoginPage() {
 
       {/* Right panel — form on #F5F5F3 bg */}
       <main
-        className="flex-1 flex items-center justify-center p-4"
-        style={{ background: '#F5F5F3' }}
+        className="flex-1 flex items-center justify-center bg-bg-page p-4"
       >
         <div
-          className="w-full max-w-[420px] flex flex-col rounded-2xl bg-white border border-[#E8E8E6]"
-          style={{ padding: '44px 40px 36px' }}
+          className="w-full max-w-[420px] flex flex-col rounded-2xl bg-white border border-a1-border px-10 pt-11 pb-9"
         >
           {panel === 'login' && (
             <LoginPanel

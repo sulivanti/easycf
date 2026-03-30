@@ -44,6 +44,8 @@ export interface UserListItemDTO {
 export interface UserDetailDTO {
   id: string;
   fullName: string;
+  email: string;
+  roleId: string;
   status: UserStatus;
   inviteTokenExpired: boolean;
   createdAt: string;
@@ -223,6 +225,7 @@ export const COPY = {
     passwordReset: 'Senha resetada com sucesso.',
     inviteCancelled: 'Convite cancelado com sucesso.',
     inviteResent: 'Convite reenviado com sucesso.',
+    userUpdated: 'Usuário atualizado com sucesso.',
   },
   error: {
     createUserFailed: 'Não foi possível criar o usuário.',
@@ -236,6 +239,7 @@ export const COPY = {
     loadUserFailed: 'Não foi possível carregar os dados do usuário.',
     loadRolesFailed: 'Não foi possível carregar os perfis de acesso.',
     resendInviteFailed: 'Não foi possível reenviar o convite.',
+    updateUserFailed: 'Não foi possível atualizar o usuário.',
     userStatusChanged: 'Status do usuário foi alterado. Recarregando...',
     noPermission: 'Sem permissão para acessar esta seção.',
     noPermissionCreate: 'Sem permissão para criar usuários.',
@@ -273,6 +277,9 @@ export const COPY = {
     userActive: 'O usuário ativou a conta com sucesso.',
     userBlocked: 'Desbloqueie o usuário antes de reenviar o convite.',
     userInactive: 'Usuário inativo.',
+    editUser: 'Editar Usuário',
+    saveChanges: 'Salvar Alterações',
+    emailReadonly: 'O e-mail não pode ser alterado.',
   },
   strength: {
     weak: 'Fraca',

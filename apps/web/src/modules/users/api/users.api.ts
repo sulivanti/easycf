@@ -43,10 +43,12 @@ function mapUserListItem(item: UserListItem): UserListItemDTO {
   };
 }
 
-function mapUserDetail(detail: UserDetail): UserDetailDTO {
+function mapUserDetail(detail: UserDetail & { role_id?: string }): UserDetailDTO {
   return {
     id: detail.id,
     fullName: detail.full_name,
+    email: detail.email,
+    roleId: detail.role_id ?? '',
     status: (detail.status as UserDetailDTO['status']) ?? 'ACTIVE',
     inviteTokenExpired: detail.invite_token_expired ?? false,
     createdAt: detail.created_at,
@@ -87,6 +89,14 @@ export async function createUser(
   idempotencyKey: string,
 ): Promise<{ id: string }> {
   return httpClient.post<{ id: string }>('/users', data, { idempotencyKey });
+}
+
+/** @contract FR-002-EDIT — PATCH /users/:id (edit form) */
+export async function updateUser(
+  userId: string,
+  data: { fullName?: string; roleId?: string; status?: string },
+): Promise<void> {
+  await httpClient.patch(`/users/${userId}`, data);
 }
 
 /** @contract FR-001 — DELETE /users/:id */

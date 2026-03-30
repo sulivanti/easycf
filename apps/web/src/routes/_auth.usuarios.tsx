@@ -21,6 +21,7 @@ function UsuariosWrapper() {
       onNavigateToInvite={(userId) =>
         navigate({ to: '/usuarios/$userId/convite', params: { userId } })
       }
+      onNavigateToEdit={(userId) => navigate({ to: '/usuarios/$userId', params: { userId } })}
     />
   );
 }

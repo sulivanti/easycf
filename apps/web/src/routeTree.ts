@@ -9,6 +9,7 @@ import { Route as authProfileRoute } from './routes/_auth.profile';
 import { Route as authSessoesRoute } from './routes/_auth.sessoes';
 import { Route as authUsuariosRoute } from './routes/_auth.usuarios';
 import { Route as authUsuariosFormRoute } from './routes/_auth.usuarios.form';
+import { Route as authUsuariosEditRoute } from './routes/_auth.usuarios.$userId';
 import { Route as authUsuariosConviteRoute } from './routes/_auth.usuarios.$userId.convite';
 import { Route as authPerfisRoute } from './routes/_auth.perfis';
 import { Route as authFiliaisRoute } from './routes/_auth.filiais';
@@ -76,6 +77,7 @@ const authRouteChildren = authRoute.addChildren([
   authSessoesRoute,
   authUsuariosRoute,
   authUsuariosFormRoute,
+  authUsuariosEditRoute,
   authUsuariosConviteRoute,
   authPerfisRoute,
   authFiliaisRoute,

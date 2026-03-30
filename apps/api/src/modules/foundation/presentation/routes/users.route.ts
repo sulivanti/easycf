@@ -149,6 +149,96 @@ export async function usersRoutes(app: FastifyInstance): Promise<void> {
     },
   });
 
+  // POST /users/:id/reset-password — admin-initiated password reset (requires users:user:write)
+  /**
+   * @contract FR-017, BR-013
+   *
+   * Triggers a password reset flow for the specified user.
+   * Delegates to forgotPasswordUseCase which generates a token and sends email.
+   */
+  app.post<{ Params: z.infer<typeof uuidParam> }>('/:id/reset-password', {
+    onRequest: [app.verifySession, app.requireScope('users:user:write')],
+    schema: {
+      params: uuidParam,
+      tags: ['users'],
+      operationId: 'users_reset_password',
+      response: {
+        200: { type: 'object', properties: { message: { type: 'string' } } },
+      },
+    },
+    handler: async (request, reply) => {
+      const user = await request.dipiContainer.userRepo.findById(request.params.id);
+      if (!user) {
+        throw new EntityNotFoundError('User', request.params.id);
+      }
+
+      const correlationId = (request.headers['x-correlation-id'] as string) ?? request.id;
+
+      await request.dipiContainer.forgotPasswordUseCase.execute({
+        email: user.email.value,
+        correlationId,
+      });
+
+      return reply.status(200).send({ message: 'Link de redefinição de senha enviado.' });
+    },
+  });
+
+  // DELETE /users/:id/invite — cancel pending invite (requires users:user:delete)
+  /**
+   * @contract FR-006, BR-004
+   *
+   * Cancels a pending user invite by transitioning status to INACTIVE.
+   * Only allowed when user status is PENDING (returns 409 otherwise).
+   */
+  app.delete<{ Params: z.infer<typeof uuidParam> }>('/:id/invite', {
+    onRequest: [app.verifySession, app.requireScope('users:user:delete')],
+    schema: {
+      params: uuidParam,
+      tags: ['users'],
+      operationId: 'users_cancel_invite',
+      response: { 200: userDetailResponse },
+    },
+    handler: async (request, reply) => {
+      const user = await request.dipiContainer.userRepo.findById(request.params.id);
+      if (!user) {
+        throw new EntityNotFoundError('User', request.params.id);
+      }
+
+      if (user.status !== 'PENDING') {
+        return reply.status(409).send({
+          type: '/problems/invalid-status-transition',
+          title: 'Conflict',
+          status: 409,
+          detail: `Convite só pode ser cancelado quando status é PENDING. Status atual: ${user.status}`,
+        });
+      }
+
+      // Transition status to INACTIVE
+      const updated = {
+        ...user,
+        status: 'INACTIVE' as const,
+        updatedAt: new Date(),
+      };
+
+      await request.dipiContainer.userRepo.update(updated);
+
+      return reply.status(200).send({
+        id: updated.id,
+        codigo: updated.codigo,
+        email: user.email.value,
+        full_name: user.profile?.fullName ?? '',
+        cpf_cnpj: user.profile?.cpfCnpj ?? null,
+        avatar_url: user.profile?.avatarUrl ?? null,
+        status: updated.status,
+        created_at: user.createdAt instanceof Date ? user.createdAt.toISOString() : user.createdAt,
+        updated_at:
+          updated.updatedAt instanceof Date
+            ? updated.updatedAt.toISOString()
+            : (updated.updatedAt as string),
+      });
+    },
+  });
+
   // DELETE /users/:id — soft delete (requires users:user:delete)
   app.delete<{ Params: z.infer<typeof uuidParam> }>('/:id', {
     onRequest: [app.verifySession, app.requireScope('users:user:delete')],

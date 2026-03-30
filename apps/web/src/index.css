@@ -1,6 +1,25 @@
 @import "tailwindcss";
 
 @theme {
+  /* shadcn/ui semantic tokens — mapeados para design system A1 / Penpot */
+  --color-background: #FFFFFF;
+  --color-foreground: #111111;
+  --color-primary: #2E86C1;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #F5F5F3;
+  --color-secondary-foreground: #111111;
+  --color-destructive: #E74C3C;
+  --color-destructive-foreground: #FFFFFF;
+  --color-muted: #F0F0EE;
+  --color-muted-foreground: #888888;
+  --color-accent: #F5F5F3;
+  --color-accent-foreground: #111111;
+  --color-popover: #FFFFFF;
+  --color-popover-foreground: #111111;
+  --color-border: #E8E8E6;
+  --color-input: #E8E8E6;
+  --color-ring: #2E86C1;
+
   /* Typography — SPEC-THEME-001 §3 */
   --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;

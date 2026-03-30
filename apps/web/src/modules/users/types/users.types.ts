@@ -1,5 +1,5 @@
 /**
- * @contract DATA-001, FR-001, FR-002, FR-003, BR-001, BR-002, BR-003, BR-006, ADR-002
+ * @contract DATA-001, FR-001, FR-001-M01, FR-002, FR-003, BR-001, BR-001-M01, BR-002, BR-003, BR-006, ADR-002, UX-001-C03
  * MOD-002 types: DTOs, view-models, permissions, copy constants, status badges.
  * Consolidates all domain logic previously spread across data/types, domain/view-model,
  * domain/permissions, and domain/copy into a single types module.
@@ -127,8 +127,14 @@ export interface UserViewModel {
   status: UserStatus;
   roleName: string;
   createdAtFormatted: string;
+  canEdit: boolean;
   canDeactivate: boolean;
+  canBlock: boolean;
+  canUnblock: boolean;
+  canReactivate: boolean;
+  canResetPassword: boolean;
   canResendInvite: boolean;
+  canCancelInvite: boolean;
 }
 
 export interface UserInviteViewModel {
@@ -171,6 +177,39 @@ export function canResendInvite(scopes: readonly string[], status: UserStatus): 
   return hasScope(scopes, SCOPES.USER_WRITE) && status === 'PENDING';
 }
 
+/** @contract BR-001-M01 — Editar visível para todos os status com scope read */
+export function canEditUser(scopes: readonly string[]): boolean {
+  return hasScope(scopes, SCOPES.USER_READ);
+}
+
+/** @contract BR-001-M01 — Bloquear: scope write + status ACTIVE/INACTIVE/PENDING */
+export function canBlockUser(scopes: readonly string[], status: UserStatus): boolean {
+  return (
+    hasScope(scopes, SCOPES.USER_WRITE) &&
+    (status === 'ACTIVE' || status === 'INACTIVE' || status === 'PENDING')
+  );
+}
+
+/** @contract BR-001-M01 — Desbloquear: scope write + status BLOCKED */
+export function canUnblockUser(scopes: readonly string[], status: UserStatus): boolean {
+  return hasScope(scopes, SCOPES.USER_WRITE) && status === 'BLOCKED';
+}
+
+/** @contract BR-001-M01 — Reativar: scope write + status INACTIVE */
+export function canReactivateUser(scopes: readonly string[], status: UserStatus): boolean {
+  return hasScope(scopes, SCOPES.USER_WRITE) && status === 'INACTIVE';
+}
+
+/** @contract BR-001-M01 — Resetar senha: scope write + status ACTIVE */
+export function canResetPassword(scopes: readonly string[], status: UserStatus): boolean {
+  return hasScope(scopes, SCOPES.USER_WRITE) && status === 'ACTIVE';
+}
+
+/** @contract BR-001-M01 — Cancelar convite: scope delete + status PENDING */
+export function canCancelInvite(scopes: readonly string[], status: UserStatus): boolean {
+  return hasScope(scopes, SCOPES.USER_DELETE) && status === 'PENDING';
+}
+
 // ── Copy constants (@contract ADR-002 — PII-Safe) ───────────
 
 export const COPY = {
@@ -178,11 +217,21 @@ export const COPY = {
     userCreated: 'Usuário criado com sucesso.',
     userCreatedInvite: 'Usuário criado com sucesso. Convite enviado.',
     userDeactivated: 'Usuário desativado com sucesso.',
+    userBlocked: 'Usuário bloqueado com sucesso.',
+    userUnblocked: 'Usuário desbloqueado com sucesso.',
+    userReactivated: 'Usuário reativado com sucesso.',
+    passwordReset: 'Senha resetada com sucesso.',
+    inviteCancelled: 'Convite cancelado com sucesso.',
     inviteResent: 'Convite reenviado com sucesso.',
   },
   error: {
     createUserFailed: 'Não foi possível criar o usuário.',
     deactivateUserFailed: 'Não foi possível desativar o usuário.',
+    blockUserFailed: 'Não foi possível bloquear o usuário.',
+    unblockUserFailed: 'Não foi possível desbloquear o usuário.',
+    reactivateUserFailed: 'Não foi possível reativar o usuário.',
+    resetPasswordFailed: 'Não foi possível resetar a senha.',
+    cancelInviteFailed: 'Não foi possível cancelar o convite.',
     loadUsersFailed: 'Não foi possível carregar a lista de usuários.',
     loadUserFailed: 'Não foi possível carregar os dados do usuário.',
     loadRolesFailed: 'Não foi possível carregar os perfis de acesso.',
@@ -196,6 +245,13 @@ export const COPY = {
     deactivateBody: (fullName: string) => `O usuário ${fullName} perderá acesso imediatamente.`,
     deactivateConfirm: 'Desativar',
     deactivateCancel: 'Cancelar',
+    blockTitle: 'Bloquear usuário?',
+    blockBody: (fullName: string) => `O usuário ${fullName} perderá acesso imediatamente.`,
+    blockConfirm: 'Bloquear',
+    cancelInviteTitle: 'Cancelar convite?',
+    cancelInviteBody: (fullName: string) => `O convite pendente de ${fullName} será invalidado.`,
+    cancelInviteConfirm: 'Cancelar convite',
+    cancel: 'Cancelar',
   },
   validation: {
     emailRequired: 'E-mail é obrigatório.',
@@ -239,8 +295,14 @@ export function toUserViewModel(
     status: dto.status,
     roleName: dto.roleName,
     createdAtFormatted: formatDatePtBr(dto.createdAt),
+    canEdit: canEditUser(userScopes),
     canDeactivate: canDeactivateUser(userScopes, dto.status),
+    canBlock: canBlockUser(userScopes, dto.status),
+    canUnblock: canUnblockUser(userScopes, dto.status),
+    canReactivate: canReactivateUser(userScopes, dto.status),
+    canResetPassword: canResetPassword(userScopes, dto.status),
     canResendInvite: canResendInvite(userScopes, dto.status),
+    canCancelInvite: canCancelInvite(userScopes, dto.status),
   };
 }
 

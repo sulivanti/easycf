@@ -1,5 +1,5 @@
 /**
- * @contract FR-001, FR-002, FR-003, INT-001, BR-005
+ * @contract FR-001, FR-001-M01, FR-002, FR-003, INT-001, INT-001-M01, BR-005
  * MOD-002 API client — typed fetch wrappers over Foundation HTTP client.
  * Delegates to foundation usersApi / rolesApi where possible,
  * adds MOD-002-specific request shaping (filters, idempotency-key).
@@ -97,4 +97,30 @@ export async function deactivateUser(id: string): Promise<void> {
 /** @contract FR-003, BR-005 — POST /users/:id/invite/resend */
 export async function resendInvite(userId: string): Promise<void> {
   await usersApi.resendInvite(userId);
+}
+
+/** @contract FR-001-M01, INT-001-M01 — PATCH /users/:id (status field) */
+export async function updateUserStatus(
+  userId: string,
+  status: 'ACTIVE' | 'BLOCKED' | 'INACTIVE',
+): Promise<void> {
+  await httpClient.patch(`/users/${userId}`, { status });
+}
+
+/**
+ * @contract FR-001-M01, INT-001-M01 — POST /users/:id/reset-password
+ * NOTE: Endpoint não existe ainda no MOD-000-F05 — requer amendment.
+ * Enquanto não existir, a ação "Resetar senha" falhará com 404.
+ */
+export async function resetUserPassword(userId: string): Promise<void> {
+  await httpClient.post(`/users/${userId}/reset-password`, {});
+}
+
+/**
+ * @contract FR-001-M01, INT-001-M01 — DELETE /users/:id/invite
+ * NOTE: Endpoint não existe ainda no MOD-000-F05 — requer amendment.
+ * Enquanto não existir, a ação "Cancelar convite" falhará com 404.
+ */
+export async function cancelUserInvite(userId: string): Promise<void> {
+  await httpClient.delete(`/users/${userId}/invite`);
 }

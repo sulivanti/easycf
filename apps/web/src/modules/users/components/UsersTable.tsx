@@ -1,6 +1,6 @@
 /**
- * @contract FR-001, UX-001, BR-001, BR-002
- * Users table with shared UI components, skeleton loading, empty state, row actions.
+ * @contract FR-001, FR-001-M01, UX-001, UX-001-C03, BR-001, BR-001-M01, BR-002
+ * Users table with 4-variant dropdown per status, skeleton loading, empty state.
  * LGPD: email shown in table column only — never in toasts or modals.
  */
 
@@ -11,10 +11,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@shared/ui';
 import { StatusBadge } from '@shared/ui/status-badge';
 import { EmptyState } from '@shared/ui/empty-state';
+import {
+  Pencil,
+  KeyRound,
+  UserMinus,
+  ShieldBan,
+  UserCheck,
+  ShieldCheck,
+  Send,
+  MailX,
+} from 'lucide-react';
 import type { UserViewModel } from '../types/users.types.js';
 import { COPY } from '../types/users.types.js';
 
@@ -26,19 +37,22 @@ function SkeletonRows({ count = 5 }: { count?: number }) {
       {Array.from({ length: count }, (_, i) => (
         <TableRow key={`skel-${i}`}>
           <TableCell>
+            <Skeleton className="h-5 w-20" />
+          </TableCell>
+          <TableCell>
             <Skeleton className="h-4 w-32" />
           </TableCell>
           <TableCell>
             <Skeleton className="h-4 w-48" />
           </TableCell>
           <TableCell>
-            <Skeleton className="h-4 w-20" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="h-5 w-28" />
+            <Skeleton className="h-4 w-24" />
           </TableCell>
           <TableCell>
             <Skeleton className="h-4 w-24" />
+          </TableCell>
+          <TableCell>
+            <Skeleton className="h-4 w-20" />
           </TableCell>
           <TableCell>
             <Skeleton className="h-4 w-8" />
@@ -46,6 +60,185 @@ function SkeletonRows({ count = 5 }: { count?: number }) {
         </TableRow>
       ))}
     </>
+  );
+}
+
+// ── Row Actions Dropdown ─────────────────────────────────────
+
+interface RowActionsProps {
+  user: UserViewModel;
+  onEdit: (userId: string) => void;
+  onResetPassword: (userId: string, userName: string) => void;
+  onDeactivate: (userId: string, userName: string) => void;
+  onBlock: (userId: string, userName: string) => void;
+  onUnblock: (userId: string) => void;
+  onReactivate: (userId: string) => void;
+  onResendInvite: (userId: string) => void;
+  onCancelInvite: (userId: string, userName: string) => void;
+}
+
+function RowActions({
+  user,
+  onEdit,
+  onResetPassword,
+  onDeactivate,
+  onBlock,
+  onUnblock,
+  onReactivate,
+  onResendInvite,
+  onCancelInvite,
+}: RowActionsProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="sm" aria-label="Ações">
+          ···
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-[180px]">
+        {/* ── ATIVO ── */}
+        {user.status === 'ACTIVE' && (
+          <>
+            {user.canEdit && (
+              <DropdownMenuItem
+                className="font-semibold text-a1-dark bg-a1-light"
+                onClick={() => onEdit(user.id)}
+              >
+                <Pencil className="mr-2 h-4 w-4" />
+                Editar
+              </DropdownMenuItem>
+            )}
+            {user.canResetPassword && (
+              <DropdownMenuItem onClick={() => onResetPassword(user.id, user.displayName)}>
+                <KeyRound className="mr-2 h-4 w-4" />
+                Resetar senha
+              </DropdownMenuItem>
+            )}
+            {(user.canDeactivate || user.canBlock) && <DropdownMenuSeparator />}
+            {user.canDeactivate && (
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={() => onDeactivate(user.id, user.displayName)}
+              >
+                <UserMinus className="mr-2 h-4 w-4" />
+                Desativar
+              </DropdownMenuItem>
+            )}
+            {user.canBlock && (
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={() => onBlock(user.id, user.displayName)}
+              >
+                <ShieldBan className="mr-2 h-4 w-4" />
+                Bloquear
+              </DropdownMenuItem>
+            )}
+          </>
+        )}
+
+        {/* ── INATIVO ── */}
+        {user.status === 'INACTIVE' && (
+          <>
+            {user.canReactivate && (
+              <DropdownMenuItem
+                className="font-semibold text-emerald-700 bg-emerald-50"
+                onClick={() => onReactivate(user.id)}
+              >
+                <UserCheck className="mr-2 h-4 w-4" />
+                Reativar
+              </DropdownMenuItem>
+            )}
+            {user.canEdit && (
+              <DropdownMenuItem onClick={() => onEdit(user.id)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Editar
+              </DropdownMenuItem>
+            )}
+            {user.canBlock && <DropdownMenuSeparator />}
+            {user.canBlock && (
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={() => onBlock(user.id, user.displayName)}
+              >
+                <ShieldBan className="mr-2 h-4 w-4" />
+                Bloquear
+              </DropdownMenuItem>
+            )}
+          </>
+        )}
+
+        {/* ── BLOQUEADO ── */}
+        {user.status === 'BLOCKED' && (
+          <>
+            {user.canUnblock && (
+              <DropdownMenuItem
+                className="font-semibold text-emerald-700 bg-emerald-50"
+                onClick={() => onUnblock(user.id)}
+              >
+                <ShieldCheck className="mr-2 h-4 w-4" />
+                Desbloquear
+              </DropdownMenuItem>
+            )}
+            {user.canEdit && (
+              <DropdownMenuItem onClick={() => onEdit(user.id)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Editar
+              </DropdownMenuItem>
+            )}
+            {user.canDeactivate && <DropdownMenuSeparator />}
+            {user.canDeactivate && (
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={() => onDeactivate(user.id, user.displayName)}
+              >
+                <UserMinus className="mr-2 h-4 w-4" />
+                Desativar
+              </DropdownMenuItem>
+            )}
+          </>
+        )}
+
+        {/* ── PENDENTE ── */}
+        {user.status === 'PENDING' && (
+          <>
+            {user.canResendInvite && (
+              <DropdownMenuItem
+                className="font-semibold text-a1-dark bg-a1-light"
+                onClick={() => onResendInvite(user.id)}
+              >
+                <Send className="mr-2 h-4 w-4" />
+                Reenviar convite
+              </DropdownMenuItem>
+            )}
+            {user.canEdit && (
+              <DropdownMenuItem onClick={() => onEdit(user.id)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Editar
+              </DropdownMenuItem>
+            )}
+            {(user.canCancelInvite || user.canBlock) && <DropdownMenuSeparator />}
+            {user.canCancelInvite && (
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={() => onCancelInvite(user.id, user.displayName)}
+              >
+                <MailX className="mr-2 h-4 w-4" />
+                Cancelar convite
+              </DropdownMenuItem>
+            )}
+            {user.canBlock && (
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={() => onBlock(user.id, user.displayName)}
+              >
+                <ShieldBan className="mr-2 h-4 w-4" />
+                Bloquear
+              </DropdownMenuItem>
+            )}
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -59,8 +252,14 @@ interface UsersTableProps {
   loadingMore: boolean;
   onLoadMore: () => void;
   onCreateClick?: () => void;
+  onEditClick: (userId: string) => void;
   onDeactivateClick: (userId: string, userName: string) => void;
+  onBlockClick: (userId: string, userName: string) => void;
+  onUnblockClick: (userId: string) => void;
+  onReactivateClick: (userId: string) => void;
+  onResetPasswordClick: (userId: string, userName: string) => void;
   onInviteClick: (userId: string) => void;
+  onCancelInviteClick: (userId: string, userName: string) => void;
 }
 
 export function UsersTable({
@@ -71,8 +270,14 @@ export function UsersTable({
   loadingMore,
   onLoadMore,
   onCreateClick,
+  onEditClick,
   onDeactivateClick,
+  onBlockClick,
+  onUnblockClick,
+  onReactivateClick,
+  onResetPasswordClick,
   onInviteClick,
+  onCancelInviteClick,
 }: UsersTableProps) {
   if (!loading && users.length === 0) {
     return (
@@ -95,10 +300,10 @@ export function UsersTable({
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Status</TableHead>
             <TableHead>Nome</TableHead>
             <TableHead>E-mail</TableHead>
             <TableHead>Perfil</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead>Criado em</TableHead>
             <TableHead className="w-12" />
           </TableRow>
@@ -109,40 +314,27 @@ export function UsersTable({
           ) : (
             users.map((user) => (
               <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.displayName}</TableCell>
-                <TableCell className="text-muted-foreground">{user.email}</TableCell>
-                <TableCell className="text-muted-foreground">{user.roleName}</TableCell>
                 <TableCell>
                   <StatusBadge status={user.statusBadge.status}>
                     {user.statusBadge.label}
                   </StatusBadge>
                 </TableCell>
+                <TableCell className="font-medium">{user.displayName}</TableCell>
+                <TableCell className="text-muted-foreground">{user.email}</TableCell>
+                <TableCell className="text-muted-foreground">{user.roleName}</TableCell>
                 <TableCell className="text-muted-foreground">{user.createdAtFormatted}</TableCell>
                 <TableCell>
-                  {(user.canResendInvite || user.canDeactivate) && (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" aria-label="Ações">
-                          ···
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        {user.canResendInvite && (
-                          <DropdownMenuItem onClick={() => onInviteClick(user.id)}>
-                            Ver convite
-                          </DropdownMenuItem>
-                        )}
-                        {user.canDeactivate && (
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => onDeactivateClick(user.id, user.displayName)}
-                          >
-                            Desativar
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
+                  <RowActions
+                    user={user}
+                    onEdit={onEditClick}
+                    onResetPassword={onResetPasswordClick}
+                    onDeactivate={onDeactivateClick}
+                    onBlock={onBlockClick}
+                    onUnblock={onUnblockClick}
+                    onReactivate={onReactivateClick}
+                    onResendInvite={onInviteClick}
+                    onCancelInvite={onCancelInviteClick}
+                  />
                 </TableCell>
               </TableRow>
             ))

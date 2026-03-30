@@ -210,6 +210,12 @@ apps/web/src/modules/users/
 
 - [UX-001-C01](amendments/ux/UX-001-C01.md) — Corrige rota /usuarios: importar UsersListPage do MOD-002 com useAuthMe + userScopes
 - [UX-001-C02](amendments/ux/UX-001-C02.md) — Corrige rota /usuarios/form: importar UserFormPage do MOD-002 com onNavigateToList
+- [UX-001-C03](amendments/ux/UX-001-C03.md) — Corrige dropdown de ações: implementar 4 variantes por status conforme layout 05-users-list-spec §7
+- [FR-001-M01](amendments/fr/FR-001-M01.md) — Adiciona ações contextuais completas ao done criteria (derivado de UX-001-C03)
+- [INT-001-M01](amendments/int/INT-001-M01.md) — Documenta novos endpoints consumidos: PATCH status, POST reset-password, DELETE invite (derivado de UX-001-C03)
+- [DATA-003-M01](amendments/data/DATA-003-M01.md) — Adiciona domain events: user.blocked, user.unblocked, user.reactivated, user.password_reset, user.invite_cancelled (derivado de UX-001-C03)
+- [SEC-001-M01](amendments/sec/SEC-001-M01.md) — Mapeia scopes para novas ações do dropdown (derivado de UX-001-C03)
+- [BR-001-M01](amendments/br/BR-001-M01.md) — Adiciona regras de visibilidade RBAC para novas ações do dropdown (derivado de UX-001-C03)
 
 ## 9. ADR (Decisões Arquiteturais)
 

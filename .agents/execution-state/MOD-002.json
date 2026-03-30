@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-002",
   "module_path": "docs/04_modules/mod-002-gestao-usuarios/",
-  "last_updated": "2026-03-24T18:00:00Z",
+  "last_updated": "2026-03-30T16:59:36.000Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -18,8 +18,8 @@
       "AGN-COD-API": { "status": "skipped", "completed_at": "2026-03-23T23:00:00.000Z", "files_generated": 0, "files": [], "skip_reason": "UX-First module — no own endpoints (manifest §2: 'não cria endpoints novos')" },
       "AGN-COD-WEB": {
         "status": "done",
-        "completed_at": "2026-03-24T15:30:00Z",
-        "files_generated": 13,
+        "completed_at": "2026-03-30T16:59:36.000Z",
+        "files_generated": 17,
         "files": [
           "apps/web/src/modules/users/types/users.types.ts",
           "apps/web/src/modules/users/api/users.api.ts",
@@ -29,26 +29,31 @@
           "apps/web/src/modules/users/hooks/use-create-user.ts",
           "apps/web/src/modules/users/hooks/use-deactivate-user.ts",
           "apps/web/src/modules/users/hooks/use-resend-invite.ts",
+          "apps/web/src/modules/users/hooks/use-update-status.ts",
+          "apps/web/src/modules/users/hooks/use-reset-password.ts",
+          "apps/web/src/modules/users/hooks/use-cancel-invite.ts",
           "apps/web/src/modules/users/components/UsersTable.tsx",
           "apps/web/src/modules/users/components/DeactivateModal.tsx",
+          "apps/web/src/modules/users/components/ConfirmActionModal.tsx",
           "apps/web/src/modules/users/pages/UsersListPage.tsx",
           "apps/web/src/modules/users/pages/UserFormPage.tsx",
           "apps/web/src/modules/users/pages/UserInvitePage.tsx"
         ],
-        "notes": "Re-codegen: migrated from Pattern B (data/domain/ui) to Pattern A (api/components/hooks/pages/types). All hooks now use @tanstack/react-query. Shared UI components imported from @shared/ui.",
+        "notes": "Codegen UX-001-C03: dropdown 4 variantes por status (ATIVO/INATIVO/BLOQUEADO/PENDENTE), 3 novos hooks (use-update-status, use-reset-password, use-cancel-invite), ConfirmActionModal genérico, 3 novas API functions. Build: 0 erros TS.",
         "missing_info": [
+          "Endpoints PATCH /users/:id/status, POST /users/:id/reset-password, DELETE /users/:id/invite precisam existir no MOD-000-F05",
+          "Rota /usuarios/:id (edição) não existe — onNavigateToEdit é opcional até MOD-002-F04",
           "Foundation UserListItem lacks roleId/roleName — amendment needed on MOD-000-F05",
-          "Foundation UserDetail lacks inviteTokenExpired — amendment needed on MOD-000-F05",
-          "Foundation CreateUserRequest lacks mode/roleId — MOD-002 uses httpClient directly as workaround"
+          "Foundation UserDetail lacks inviteTokenExpired — amendment needed on MOD-000-F05"
         ]
       },
       "AGN-COD-VAL": {
         "status": "done",
-        "completed_at": "2026-03-23T23:55:00.000Z",
+        "completed_at": "2026-03-30T17:01:36.000Z",
         "files_generated": 0,
         "files": [],
         "validation": {
-          "summary": { "errors": 1, "warnings": 2, "notes": 1 },
+          "summary": { "errors": 1, "warnings": 2, "notes": 2 },
           "checks": {
             "problem_details_rfc9457": true,
             "correlation_id": true,
@@ -56,32 +61,46 @@
             "layering_clean_arch": "ok",
             "tests_present": "missing",
             "openapi_present_and_linted": "n/a",
-            "x_permissions_documented": "n/a"
+            "x_permissions_documented": "ok",
+            "web_pattern_a": true,
+            "react_query_all_hooks": true,
+            "lgpd_pii_safe": true,
+            "xss_no_dangerouslySetInnerHTML": true,
+            "skeleton_loading": true,
+            "empty_state": true,
+            "toast_correlation_id": true,
+            "dropdown_4_variants": true
           },
           "findings": [
             {
               "severity": "error",
               "location": "apps/web/src/modules/users/",
               "message": "No test files found. NFR-001 §9 requires ≥80% line coverage, ≥70% branches.",
-              "fix_suggestion": "Create __tests__/ with unit tests for domain/view-model.ts, domain/permissions.ts, data/mappers.ts, ui/forms/UserCreateForm.tsx, ui/components/CooldownButton.tsx"
+              "fix_suggestion": "Create __tests__/ with unit tests for types/users.types.ts (permissions, mappers), components/UsersTable.tsx, hooks/"
             },
             {
               "severity": "warning",
-              "location": "data/types.ts, data/mappers.ts",
-              "message": "Foundation UserListItem lacks roleId/roleName; UserDetail lacks inviteTokenExpired. Defaults applied.",
-              "fix_suggestion": "Amendment MOD-000-F05 to add missing fields"
+              "location": "api/users.api.ts",
+              "message": "3 novos endpoints (PATCH status, POST reset-password, DELETE invite) assumem existência no MOD-000-F05 — não verificado.",
+              "fix_suggestion": "Verificar OpenAPI do MOD-000 e criar amendment se endpoints não existirem"
             },
             {
               "severity": "warning",
-              "location": "domain/",
-              "message": "domain/copy.ts (centralized PII-safe strings) documented in PEN-003/ADR-002 but not created. Strings are inline.",
-              "fix_suggestion": "Create domain/copy.ts with type-safe string map"
+              "location": "pages/UsersListPage.tsx",
+              "message": "onNavigateToEdit é opcional (rota /usuarios/:id não existe). Ação 'Editar' no dropdown navega para noop.",
+              "fix_suggestion": "Implementar MOD-002-F04 (edição) e criar rota /usuarios/:id"
             },
             {
               "severity": "note",
-              "location": "ui/screens/, data/queries.ts",
-              "message": "UX telemetry (ux.action.requested/succeeded/failed) specified in UX-001 §7 not implemented. Depends on Foundation telemetry SDK.",
-              "fix_suggestion": "Implement useTelemetry hook when Foundation exposes SDK"
+              "location": "hooks/",
+              "message": "UX telemetry (ux.action.requested/succeeded/failed) para novas ações não implementada. Depende de Foundation telemetry SDK.",
+              "fix_suggestion": "Implementar useTelemetry hook quando Foundation expuser SDK"
+            },
+            {
+              "severity": "note",
+              "location": "components/UsersTable.tsx",
+              "message": "Colunas EMPRESA e ÚLTIMO ACESSO do layout 05-users-list-spec não implementadas — DTO UserListItemDTO não possui esses campos.",
+              "fix_suggestion": "Amendment DATA-001 para adicionar company e lastAccessAt ao DTO"
             }
           ],
           "post_validations": {

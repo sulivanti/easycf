@@ -217,6 +217,7 @@ apps/web/src/modules/users/
 - [SEC-001-M01](amendments/sec/SEC-001-M01.md) — Mapeia scopes para novas ações do dropdown (derivado de UX-001-C03)
 - [BR-001-M01](amendments/br/BR-001-M01.md) — Adiciona regras de visibilidade RBAC para novas ações do dropdown (derivado de UX-001-C03)
 - [UX-001-C04](amendments/ux/UX-001-C04.md) — Jornada 4: Edição de Usuário (MOD-002-F04) — formulário de edição, toggle de status, PATCH /users/:id
+- [FR-002-M01](amendments/fr/FR-002-M01.md) — Done criteria de edição de usuário: campos editáveis, PATCH /users/:id, toggle status, Gherkin (derivado de UX-001-C04)
 
 ## 9. ADR (Decisões Arquiteturais)
 

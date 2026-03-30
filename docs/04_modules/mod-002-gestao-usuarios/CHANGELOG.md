@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.5.1 | 2026-03-30 | cascade-amendment | FR-002-M01: Done criteria de edição de usuário (derivado de UX-001-C04). Campos editáveis, PATCH /users/:id, toggle status, Gherkin. |
 | 1.5.0 | 2026-03-30 | create-amendment | UX-001-C04: Jornada 4 — Edição de Usuário (MOD-002-F04). Formulário de edição, toggle de status, PATCH /users/:id. Ref: spec-mod002-next-steps.md. |
 | 1.4.2 | 2026-03-30 | codegen | AGN-COD-VAL: Validação cruzada — 12 checks passaram, 1 erro (testes ausentes), 2 warnings (endpoints MOD-000, rota edição), 2 notes (telemetria, colunas DTO). |
 | 1.4.1 | 2026-03-30 | codegen | Codegen AGN-COD-WEB: 8 arquivos (3 criados, 5 atualizados). Dropdown 4 variantes por status, 3 novos hooks, ConfirmActionModal genérico, 3 novas API functions. Build: 0 erros TS. |

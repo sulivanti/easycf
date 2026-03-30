@@ -155,6 +155,8 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [FR-000-C07](amendments/fr/FR-000-C07.md) — Correção: 5 use cases pós-auth passam tenantId vazio → fallback mascara perda de rastreabilidade. Fix: propagar request.session.tenantId em change-password, logout, update-profile, create-role, update-role
 - [UX-000-C02](amendments/ux/UX-000-C02.md) — Correção: LoginPage.tsx diverge da spec v3 / Penpot validado (PEN-01). Alinhamento visual completo: gradiente branding, SSO Microsoft, "Primeiro acesso", PasswordStrength, labels UPPER, cores spec
 - [UX-000-M02](amendments/ux/UX-000-M02.md) — Melhoria: Dashboard executivo com MetricCards, DonutChart e ActivityList. Alinhamento com design Penpot 02-Dashboard validado (99 objetos, 19/19 conformidades)
+- [INT-000-M03](amendments/int/INT-000-M03.md) — OpenAPI paths/schemas para 2 novos endpoints Users API: POST /users/:id/reset-password, DELETE /users/:id/invite (derivado de FR-000-M02)
+- [DATA-003-M01](amendments/data/DATA-003-M01.md) — 2 novos domain events no catálogo: user.password_reset, user.invite_cancelled (derivado de FR-000-M02)
 <!-- end amendments-index -->
 
 > **Nota:** 8 amendments de documentos normativos foram migrados para `docs/01_normativos/amendments/{DOC-ID}/` em 2026-03-25. Normativos são transversais e não pertencem a nenhum módulo específico. Ver: DOC-PADRAO-001-C01, DOC-PADRAO-001-M01, DOC-PADRAO-004-M01, DOC-PADRAO-005-C01, DOC-UX-011-M01, DOC-UX-011-M02, DOC-UX-012-M02, DOC-GNP-00-M01.

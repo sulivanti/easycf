@@ -1348,7 +1348,15 @@ async function diPluginImpl(app: FastifyInstance): Promise<void> {
     listExecutionsUseCase,
     getExecutionUseCase,
     executeMcpUseCase,
+    dashboardQueryRepo,
   };
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Dashboard (read-only query repo — no use cases needed)
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const { DashboardQueryRepository } = await import('../modules/dashboard/index.js');
+  const dashboardQueryRepo = new DashboardQueryRepository(db);
 
   // ─────────────────────────────────────────────────────────────────────────
   // 13. Decorate Fastify

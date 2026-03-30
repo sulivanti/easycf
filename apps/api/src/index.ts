@@ -72,6 +72,9 @@ import {
   approvalsRoutes,
 } from './modules/movement-approval/index.js';
 
+// — Route plugins: Dashboard (read-only aggregations) —
+import { dashboardRoutes } from './modules/dashboard/index.js';
+
 // — Route plugins: MOD-010 MCP —
 import {
   agentsRoutes,
@@ -159,6 +162,9 @@ await app.register(rulesRoutes);
 await app.register(movementEngineRoutes);
 await app.register(movementsRoutes);
 await app.register(approvalsRoutes);
+
+// Dashboard — relative paths
+await app.register(dashboardRoutes, { prefix: '/api/v1/dashboard' });
 
 // MOD-010 MCP — absolute paths (no prefix, debt técnico)
 await app.register(agentsRoutes);

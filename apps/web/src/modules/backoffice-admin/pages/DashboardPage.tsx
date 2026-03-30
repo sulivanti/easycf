@@ -1,16 +1,15 @@
 /**
- * @contract FR-005, UX-DASH-001, UX-000-M02, BR-008, BR-009, BR-010, DOC-UX-011 §2.2
+ * @contract FR-005, UX-DASH-001, DOC-UX-011 §2.2
  *
  * Dashboard executivo pós-login.
  * - MetricCards (4 KPIs), DonutChart (distribuição), ActivityList (recentes)
- * - Skeleton com timeout 3s → estado de erro + retry (BR-009)
+ * - Dados reais via API /dashboard/* (sem mock data)
+ * - Skeleton por seção — falha parcial não bloqueia as demais
  * - Erro 5xx NÃO desconecta (BR-010)
- * - Dados mock nesta fase; integração com endpoints de contadores em FR futuro
  */
 
-import { useState, useEffect, useRef, startTransition } from 'react';
+import { useMemo } from 'react';
 import { RefreshCw } from 'lucide-react';
-import { toast } from 'sonner';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Button } from '@shared/ui/button';
 import { PageHeader } from '@shared/ui/page-header';
@@ -18,89 +17,73 @@ import { MetricCard } from '../components/dashboard/MetricCard';
 import { DonutChart, type DonutSegment } from '../components/dashboard/DonutChart';
 import { ActivityList } from '../components/dashboard/ActivityList';
 import type { ActivityItemProps } from '../components/dashboard/ActivityItem';
-import { useAuthMe } from '../hooks/use-auth-me';
-import { ApiError, generateCorrelationId } from '../api/api-client';
+import {
+  useDashboardMetrics,
+  useDashboardDistribution,
+  useDashboardActivities,
+} from '../hooks/use-dashboard';
 
-const SKELETON_TIMEOUT_MS = 3_000;
+// ── Metric card configuration (labels + colors are static, values come from API) ──
 
-// ── Mock Data (UX-000-M02: valores estáticos nesta fase) ──
-
-const METRICS = [
-  { label: 'Processos Ativos', value: '12', dotColor: '#2E86C1', indicator: 'Em execução' },
-  { label: 'Aprovações Pendentes', value: '08', valueColor: '#E67E22', dotColor: '#E67E22', indicator: 'Aguardando revisão' },
-  { label: 'Usuários Ativos', value: '47', dotColor: '#27AE60', indicator: 'Base cadastrada' },
-  { label: 'Agentes MCP', value: '05', valueColor: '#27AE60', dotColor: '#27AE60', indicator: 'Online e operando' },
+const METRIC_CONFIG = [
+  { key: 'active_cases', label: 'Processos Ativos', dotColor: '#2E86C1', indicator: 'Em execução' },
+  { key: 'pending_approvals', label: 'Aprovações Pendentes', valueColor: '#E67E22', dotColor: '#E67E22', indicator: 'Aguardando revisão' },
+  { key: 'active_users', label: 'Usuários Ativos', dotColor: '#27AE60', indicator: 'Base cadastrada' },
+  { key: 'active_agents', label: 'Agentes MCP', valueColor: '#27AE60', dotColor: '#27AE60', indicator: 'Online e operando' },
 ] as const;
 
-const DONUT_SEGMENTS: DonutSegment[] = [
-  { label: 'Concluído', value: 29, color: '#27AE60' },
-  { label: 'Andamento', value: 18, color: '#E67E22' },
-  { label: 'Atrasado', value: 14, color: '#E74C3C' },
-  { label: 'Planejado', value: 11, color: '#2E86C1' },
-];
+// ── Relative timestamp formatter ──
 
-const ACTIVITIES: ActivityItemProps[] = [
-  {
-    dotColor: '#27AE60',
-    actor: 'Carlos Silva',
-    description: 'aprovou o processo',
-    badge: { code: 'PR-0042' },
-    timestamp: 'Hoje, 14:32',
-  },
-  {
-    dotColor: '#2E86C1',
-    actor: 'Ana Martins',
-    description: 'criou nova modelagem',
-    badge: { code: 'MOD-018' },
-    timestamp: 'Hoje, 11:15',
-  },
-  {
-    dotColor: '#E67E22',
-    actor: 'Agente DocParser',
-    description: 'processou 24 documentos em lote',
-    timestamp: 'Hoje, 09:48',
-  },
-  {
-    dotColor: '#E74C3C',
-    actor: 'Sistema',
-    description: 'detectou falha crítica no agente',
-    badge: { code: 'MCP-003', variant: 'danger' },
-    timestamp: 'Ontem, 18:20',
-  },
-];
+function formatRelativeTime(isoString: string): string {
+  const date = new Date(isoString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMin = Math.floor(diffMs / 60_000);
+  const diffHr = Math.floor(diffMin / 60);
 
-// ── Skeleton ──
+  const isToday = date.toDateString() === now.toDateString();
+  const yesterday = new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const isYesterday = date.toDateString() === yesterday.toDateString();
 
-function DashboardSkeleton() {
+  const time = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+  if (diffMin < 1) return 'Agora';
+  if (diffMin < 60) return `Há ${diffMin} min`;
+  if (isToday) return `Hoje, ${time}`;
+  if (isYesterday) return `Ontem, ${time}`;
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + `, ${time}`;
+}
+
+// ── Skeleton sections ──
+
+function MetricsSkeleton() {
   return (
-    <div className="space-y-6">
-      <div>
-        <Skeleton className="h-8 w-48 bg-a1-border" />
-        <Skeleton className="mt-2 h-4 w-80 bg-a1-border" />
-      </div>
-      <div className="grid grid-cols-4 gap-5">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-32 rounded-2xl bg-a1-border" />
-        ))}
-      </div>
-      <div className="grid grid-cols-[5fr_7fr] gap-5">
-        <Skeleton className="h-64 rounded-2xl bg-a1-border" />
-        <Skeleton className="h-64 rounded-2xl bg-a1-border" />
-      </div>
+    <div className="grid grid-cols-4 gap-5">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <Skeleton key={i} className="h-32 rounded-2xl bg-a1-border" />
+      ))}
     </div>
   );
 }
 
-// ── ErrorState ──
-
-function ErrorState({ onRetry, isRetrying }: { onRetry: () => void; isRetrying: boolean }) {
+function ChartsSkeleton() {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <p className="mb-4 font-display text-[13px] text-a1-text-auxiliary">
-        Erro ao carregar dados. Tente novamente.
-      </p>
-      <Button onClick={onRetry} isLoading={isRetrying}>
-        <RefreshCw className="size-4" />
+    <div className="grid grid-cols-[5fr_7fr] gap-5">
+      <Skeleton className="h-64 rounded-2xl bg-a1-border" />
+      <Skeleton className="h-64 rounded-2xl bg-a1-border" />
+    </div>
+  );
+}
+
+// ── ErrorBanner ──
+
+function ErrorBanner({ message, onRetry, isRetrying }: { message: string; onRetry: () => void; isRetrying: boolean }) {
+  return (
+    <div className="flex items-center justify-between rounded-lg border border-a1-border bg-status-error-bg px-4 py-3">
+      <span className="font-display text-[13px] text-danger-600">{message}</span>
+      <Button variant="outline" size="sm" onClick={onRetry} isLoading={isRetrying}>
+        <RefreshCw className="mr-1 size-3.5" />
         Tentar novamente
       </Button>
     </div>
@@ -110,84 +93,100 @@ function ErrorState({ onRetry, isRetrying }: { onRetry: () => void; isRetrying: 
 // ── DashboardPage ──
 
 export function DashboardPage() {
-  const { data: user, isLoading, error, refetch, isRefetching } = useAuthMe('UX-DASH-001');
-  const [timedOut, setTimedOut] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const metrics = useDashboardMetrics();
+  const distribution = useDashboardDistribution();
+  const activities = useDashboardActivities();
 
-  // BR-009 — skeleton timeout 3s
-  useEffect(() => {
-    if (isLoading) {
-      timerRef.current = setTimeout(() => {
-        startTransition(() => setTimedOut(true));
-        toast.error('Erro ao carregar dados. Tente novamente.', {
-          description: `ID: ${generateCorrelationId()}`,
-        });
-      }, SKELETON_TIMEOUT_MS);
-    } else {
-      startTransition(() => setTimedOut(false));
-      if (timerRef.current) clearTimeout(timerRef.current);
-    }
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [isLoading]);
+  // Map API response → MetricCard props
+  const metricCards = useMemo(() => {
+    if (!metrics.data) return null;
+    const data = metrics.data;
+    return METRIC_CONFIG.map((cfg) => ({
+      label: cfg.label,
+      value: String(data[cfg.key as keyof typeof data] ?? 0).padStart(2, '0'),
+      valueColor: 'valueColor' in cfg ? cfg.valueColor : undefined,
+      dotColor: cfg.dotColor,
+      indicator: cfg.indicator,
+    }));
+  }, [metrics.data]);
 
-  // BR-010 — 5xx NÃO desconecta
-  useEffect(() => {
-    if (error instanceof ApiError && error.status !== 401) {
-      toast.error('Erro ao processar. Tente novamente.', {
-        description: `ID: ${error.correlationId}`,
-      });
-    }
-  }, [error]);
+  // Map API response → DonutSegment[]
+  const donutSegments: DonutSegment[] = distribution.data?.data ?? [];
+  const donutTotal = distribution.data?.total ?? 0;
 
-  function handleRetry() {
-    setTimedOut(false);
-    refetch();
-  }
-
-  if (isLoading && !timedOut) return <DashboardSkeleton />;
-
-  if (timedOut || (error && !(error instanceof ApiError && error.status === 401))) {
-    return <ErrorState onRetry={handleRetry} isRetrying={isRefetching} />;
-  }
-
-  if (!user) return null;
-
-  const donutTotal = DONUT_SEGMENTS.reduce((sum, s) => sum + s.value, 0);
+  // Map API response → ActivityItemProps[]
+  const activityItems: ActivityItemProps[] = useMemo(() => {
+    if (!activities.data) return [];
+    return activities.data.data.map((a) => ({
+      dotColor: a.dot_color,
+      actor: a.actor,
+      description: a.description,
+      badge: a.badge
+        ? { code: a.badge.code, variant: (a.badge.variant as 'normal' | 'danger') ?? undefined }
+        : undefined,
+      timestamp: formatRelativeTime(a.timestamp),
+    }));
+  }, [activities.data]);
 
   return (
     <div className="space-y-6">
-      {/* Page header */}
       <PageHeader
         title="Dashboard"
         description="Visão geral em tempo real dos processos e agentes do sistema."
-        breadcrumbs={[
-          { label: 'Início', href: '/' },
-          { label: 'Dashboard' },
-        ]}
       />
 
-      {/* Metric cards — 4 columns */}
-      <div className="grid grid-cols-4 gap-5">
-        {METRICS.map((m) => (
-          <MetricCard key={m.label} {...m} />
-        ))}
-      </div>
+      {/* Metric cards */}
+      {metrics.isError && (
+        <ErrorBanner
+          message="Erro ao carregar métricas."
+          onRetry={() => metrics.refetch()}
+          isRetrying={metrics.isRefetching}
+        />
+      )}
+      {metrics.isLoading ? (
+        <MetricsSkeleton />
+      ) : metricCards ? (
+        <div className="grid grid-cols-4 gap-5">
+          {metricCards.map((m) => (
+            <MetricCard key={m.label} {...m} />
+          ))}
+        </div>
+      ) : null}
 
-      {/* Second row — Donut (5fr) + Activities (7fr) */}
-      <div className="grid grid-cols-[5fr_7fr] gap-5">
-        <DonutChart
-          title="Distribuição por Status"
-          segments={DONUT_SEGMENTS}
-          total={donutTotal}
-        />
-        <ActivityList
-          title="Atividades Recentes"
-          items={ACTIVITIES}
-          onViewAll={() => {/* TODO: navigate to full activity log */}}
-        />
-      </div>
+      {/* Charts row */}
+      {(distribution.isLoading || activities.isLoading) && !distribution.data && !activities.data ? (
+        <ChartsSkeleton />
+      ) : (
+        <div className="grid grid-cols-[5fr_7fr] gap-5">
+          {distribution.isError ? (
+            <ErrorBanner
+              message="Erro ao carregar distribuição."
+              onRetry={() => distribution.refetch()}
+              isRetrying={distribution.isRefetching}
+            />
+          ) : (
+            <DonutChart
+              title="Distribuição por Status"
+              segments={donutSegments}
+              total={donutTotal}
+            />
+          )}
+
+          {activities.isError ? (
+            <ErrorBanner
+              message="Erro ao carregar atividades."
+              onRetry={() => activities.refetch()}
+              isRetrying={activities.isRefetching}
+            />
+          ) : (
+            <ActivityList
+              title="Atividades Recentes"
+              items={activityItems}
+              onViewAll={() => {/* TODO: navigate to full activity log */}}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }

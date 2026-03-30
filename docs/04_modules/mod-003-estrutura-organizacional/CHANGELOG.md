@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.6.0 | 2026-03-30 | merge-amendment | Merge UX-001-C01: fix error handling silencioso no OrgFormPage — erros 5xx/400/403/rede devem mostrar feedback, extractFieldErrors RFC 9457 obrigatório em 422, networkError no COPY, paridade CreateOrgUnitRequest com API. Base UX-001 bumped v0.3.1. Ref: spec-fix-org-unit-create-silent-failure v2.0. |
+| 1.5.2 | 2026-03-30 | create-amendment | Amendment UX-001-C01: fix error handling silencioso no OrgFormPage — erros 5xx/400/403 não mostravam feedback, extractFieldErrors não chamada, campos faltando no CreateOrgUnitRequest. Ref: spec-fix-org-unit-create-silent-failure v2.0. |
 | 1.5.1 | 2026-03-30 | merge-amendment | Merge INT-001-C01: handler GET /tree mapeamento camelCase→snake_case (tenantId→tenant_id). Seção §8 adicionada ao INT-001. Base bumped para v0.3.1. |
 | 1.5.0 | 2026-03-29 | codegen | Codegen parcial: AGN-COD-WEB + AGN-COD-VAL (2 agentes, 13 arquivos). Camadas: web, validation. Split-panel layout, DetailPanel, FormPanel inline 480px, DeactivateModal customizado, OrgTreeNode com Lucide icons, ReadOnlyField, campos cadastrais FR-006. VAL: 10/10 checks PASS. |
 | 1.4.0 | 2026-03-29 | merge-amendment | Merge UX-001-M01: split-panel layout, DetailPanel, FormPanel inline, modal desativacao, TreeNode visual, ReadOnlyField. Base UX-001 bumped v0.3.0. |

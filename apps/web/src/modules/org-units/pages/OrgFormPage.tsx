@@ -20,7 +20,7 @@ import { useOrgUnitDetail } from '../hooks/use-org-unit-detail.js';
 import { useOrgUnitsList } from '../hooks/use-org-units-list.js';
 import { useCreateOrgUnit } from '../hooks/use-create-org-unit.js';
 import { useUpdateOrgUnit } from '../hooks/use-org-unit-actions.js';
-import { getLevelInfo, toFormVM, COPY } from '../types/org-units.types.js';
+import { getLevelInfo, toFormVM, COPY, extractFieldErrors } from '../types/org-units.types.js';
 import { ApiError } from '../../foundation/api/http-client.js';
 import { ReadOnlyField } from '../components/ReadOnlyField.js';
 import type {
@@ -114,12 +114,24 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
   useEffect(() => {
     if (activeError instanceof ApiError) {
       const errors: Record<string, string> = {};
+
       if (activeError.status === 409) {
         errors.codigo = COPY.validation.codigoDuplicate;
       } else if (activeError.status === 422) {
+        const fieldMap = extractFieldErrors(activeError.problem.extensions);
+        for (const [field, msg] of fieldMap) {
+          errors[field] = msg;
+        }
+        if (fieldMap.size === 0) {
+          errors._form = activeError.message;
+        }
+      } else {
         errors._form = activeError.message;
       }
+
       startTransition(() => setFieldErrors(errors));
+    } else if (activeError) {
+      startTransition(() => setFieldErrors({ _form: COPY.error.networkError }));
     } else {
       startTransition(() => setFieldErrors({}));
     }
@@ -138,15 +150,21 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
           parent_id: isRoot ? null : selectedParentId,
           ...(cnpj.trim() && { cnpj: cnpj.trim() }),
           ...(razaoSocial.trim() && { razao_social: razaoSocial.trim() }),
+          ...(filial.trim() && { filial: filial.trim() }),
           ...(responsavel.trim() && { responsavel: responsavel.trim() }),
+          ...(telefone.trim() && { telefone: telefone.trim() }),
+          ...(emailContato.trim() && { email_contato: emailContato.trim() }),
         };
         createMutation.mutate(data, {
           onSuccess: (result) => {
             toast.success(COPY.toast.createSuccess(result.codigo, result.nome));
             onSuccess(result.id);
           },
-          onError: () => {
-            /* fieldErrors handled via useEffect */
+          onError: (error) => {
+            const message = error instanceof ApiError
+              ? error.message
+              : COPY.error.networkError;
+            toast.error(message);
           },
         });
       } else if (mode === 'edit' && editId) {
@@ -167,8 +185,11 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
               toast.success(COPY.toast.updateSuccess(result.codigo, result.nome));
               onSuccess(editId);
             },
-            onError: () => {
-              /* fieldErrors handled via useEffect */
+            onError: (error) => {
+              const message = error instanceof ApiError
+                ? error.message
+                : COPY.error.networkError;
+              toast.error(message);
             },
           },
         );

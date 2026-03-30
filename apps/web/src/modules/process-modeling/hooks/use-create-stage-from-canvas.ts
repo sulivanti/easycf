@@ -1,18 +1,19 @@
 /**
- * @contract UX-005 §2.7, spec-cycle-editor-empty-canvas-first-stage
+ * @contract UX-005 §2.7, UX-005-C01, spec-fix-cycle-editor-empty-canvas-feedback
  *
  * Hook for creating stages via double-click on the React Flow canvas.
  * Handles auto-creation of a default macro-stage when none exist.
  *
  * Guards: readonly, missing write scope, pending mutation.
+ * Exposes canCreate/blockReason/error for UI feedback on blocked actions.
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useReactFlow } from 'reactflow';
 import { createMacroStage, createStage } from '../api/process-modeling.api.js';
 import { FLOW_KEY } from './use-flow.js';
-import { canWriteCycle } from '../types/process-modeling.types.js';
+import { canWriteCycle, COPY } from '../types/process-modeling.types.js';
 import type { FlowResponseDTO } from '../types/process-modeling.types.js';
 
 interface UseCreateStageFromCanvasOptions {
@@ -26,6 +27,9 @@ interface UseCreateStageFromCanvasResult {
   handleCanvasDoubleClick: (event: React.MouseEvent) => void;
   isPending: boolean;
   lastCreatedStageId: string | null;
+  error: string | null;
+  canCreate: boolean;
+  blockReason: string | null;
 }
 
 /** Default macro-stage created when cycle has none */
@@ -58,6 +62,20 @@ export function useCreateStageFromCanvas({
   const qc = useQueryClient();
   const reactFlowInstance = useReactFlow();
   const [lastCreatedStageId, setLastCreatedStageId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const { canCreate, blockReason } = useMemo(() => {
+    if (readonly) {
+      return { canCreate: false, blockReason: COPY.empty_canvas_readonly };
+    }
+    if (!canWriteCycle(userScopes)) {
+      return { canCreate: false, blockReason: COPY.empty_canvas_no_permission };
+    }
+    if (!flow) {
+      return { canCreate: false, blockReason: null };
+    }
+    return { canCreate: true, blockReason: null };
+  }, [readonly, userScopes, flow]);
 
   const mutation = useMutation({
     mutationFn: async (screenPosition: { x: number; y: number }) => {
@@ -86,19 +104,35 @@ export function useCreateStageFromCanvas({
 
       return stage;
     },
-    onSuccess: (stage) => {
-      qc.invalidateQueries({ queryKey: [...FLOW_KEY, cycleId] });
+    onSuccess: async (stage) => {
+      setError(null);
+      await qc.invalidateQueries({ queryKey: [...FLOW_KEY, cycleId] });
       setLastCreatedStageId(stage.id);
+    },
+    onError: (err: unknown) => {
+      setError(err instanceof Error ? err.message : COPY.error_create_stage);
     },
   });
 
   const handleCanvasDoubleClick = useCallback(
     (event: React.MouseEvent) => {
-      // Guards
-      if (readonly) return;
-      if (!canWriteCycle(userScopes)) return;
-      if (mutation.isPending) return;
-      if (!flow) return;
+      // Guards with logging for debugging
+      if (readonly) {
+        console.warn('[useCreateStageFromCanvas] Blocked: cycle is readonly');
+        return;
+      }
+      if (!canWriteCycle(userScopes)) {
+        console.warn('[useCreateStageFromCanvas] Blocked: missing scope process:cycle:write');
+        return;
+      }
+      if (mutation.isPending) {
+        console.warn('[useCreateStageFromCanvas] Blocked: mutation already pending');
+        return;
+      }
+      if (!flow) {
+        console.warn('[useCreateStageFromCanvas] Blocked: flow data not loaded');
+        return;
+      }
 
       // Prevent trigger when double-clicking on a node (event target check)
       const target = event.target as HTMLElement;
@@ -113,5 +147,8 @@ export function useCreateStageFromCanvas({
     handleCanvasDoubleClick,
     isPending: mutation.isPending,
     lastCreatedStageId,
+    error,
+    canCreate,
+    blockReason,
   };
 }

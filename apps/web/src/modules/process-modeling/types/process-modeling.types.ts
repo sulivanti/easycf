@@ -302,6 +302,10 @@ export const COPY = {
   error_active_instances: (count: number) =>
     `Este estágio possui ${count} instância(s) ativa(s) em andamento.`,
   empty_canvas: 'Dê duplo clique para criar o primeiro estágio.',
+  empty_canvas_readonly: 'Ciclo publicado — somente leitura.',
+  empty_canvas_no_permission: 'Sem permissão de edição neste ciclo.',
+  error_create_stage: 'Erro ao criar estágio. Tente novamente.',
+  error_no_write_permission: 'Você não tem permissão para editar este ciclo.',
   readonly_banner: "Ciclo publicado — use 'Nova versão' para editar.",
   deprecated_banner: 'Ciclo depreciado — novas instâncias bloqueadas.',
   history_empty: 'Nenhum evento registrado para este ciclo.',

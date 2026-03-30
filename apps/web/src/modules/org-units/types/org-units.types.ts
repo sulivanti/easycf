@@ -94,7 +94,10 @@ export interface CreateOrgUnitRequest {
   parent_id?: string | null;
   cnpj?: string;
   razao_social?: string;
+  filial?: string;
   responsavel?: string;
+  telefone?: string;
+  email_contato?: string;
 }
 
 // ── Create/Update response ──────────────────────────────────
@@ -453,6 +456,7 @@ export const COPY = {
     loadFailed: 'Erro ao carregar estrutura. Tente novamente.',
     noPermission: 'Sem permissão para acessar esta seção.',
     unexpected: 'Erro inesperado. Tente novamente.',
+    networkError: 'Não foi possível conectar ao servidor. Verifique sua conexão.',
   },
   label: {
     emptyState: 'Nenhuma estrutura organizacional cadastrada.',

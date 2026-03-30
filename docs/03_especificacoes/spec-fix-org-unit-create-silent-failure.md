@@ -1,10 +1,10 @@
 ---
 title: "Fix: Criação de Unidade Organizacional falha silenciosamente"
-version: 1.0
+version: 2.0
 date_created: 2026-03-25
-last_updated: 2026-03-25
+last_updated: 2026-03-30
 owner: Frontend Team
-tags: [bugfix, org-units, MOD-003, UX-ORG-002, error-handling]
+tags: [bugfix, org-units, MOD-003, UX-ORG-002, error-handling, form-fields]
 ---
 
 # Introduction
@@ -235,9 +235,103 @@ Se o usuário navega para outra rota enquanto a requisição está in-flight, o 
 3. Nenhum cenário de submit resulta em ausência total de feedback (silent failure)
 4. Console do browser não mostra erros uncaught durante o fluxo
 
+## v2.0 — Novos defeitos identificados (2026-03-30)
+
+### DEF-005: `extractFieldErrors` (RFC 9457) existe mas nunca é chamada
+
+- **Localização:** Definida em `org-units.types.ts:490`, nunca importada em `OrgFormPage.tsx`
+- **Impacto:** Erros 422 com `extensions.invalid_fields` nunca são mapeados para campos específicos
+- **Fix:** Importar e chamar no error handler para erros 422:
+  ```typescript
+  import { extractFieldErrors } from '../types/org-units.types.js';
+
+  // No useEffect de activeError:
+  } else if (activeError.status === 422) {
+    const fieldMap = extractFieldErrors(activeError.problem.extensions);
+    for (const [field, msg] of fieldMap) {
+      errors[field] = msg;
+    }
+    if (fieldMap.size === 0) {
+      errors._form = activeError.message;
+    }
+  }
+  ```
+
+### DEF-006: `CreateOrgUnitRequest` faltando 3 campos cadastrais
+
+- **Localização:** `org-units.types.ts:90-98`
+- **Campos faltando:** `filial`, `telefone`, `email_contato`
+- **Fix:** Adicionar ao interface:
+  ```typescript
+  export interface CreateOrgUnitRequest {
+    codigo: string;
+    nome: string;
+    descricao?: string | null;
+    parent_id?: string | null;
+    cnpj?: string;
+    razao_social?: string;
+    filial?: string;         // ← NOVO
+    responsavel?: string;
+    telefone?: string;       // ← NOVO
+    email_contato?: string;  // ← NOVO
+  }
+  ```
+
+### DEF-007: Formulário create mode não renderiza campos cadastrais completos
+
+- **Localização:** `OrgFormPage.tsx:417-427`
+- **Impacto:** Em create mode, apenas `responsavel` é renderizado; `filial`, `telefone`, `email_contato` ficam ocultos — mas edit mode tem todos
+- **Fix:** Renderizar os mesmos campos cadastrais do edit mode no create mode
+
+### DEF-008: `handleSubmit` create mode não envia campos cadastrais completos
+
+- **Localização:** `OrgFormPage.tsx:134-142`
+- **Impacto:** Mesmo se os campos forem renderizados, o payload não inclui `filial`, `telefone`, `email_contato`
+- **Fix:**
+  ```typescript
+  const data: CreateOrgUnitRequest = {
+    // ... campos existentes ...
+    ...(filial.trim() && { filial: filial.trim() }),
+    ...(telefone.trim() && { telefone: telefone.trim() }),
+    ...(emailContato.trim() && { email_contato: emailContato.trim() }),
+  };
+  ```
+
+### Requisitos adicionais (v2.0)
+
+- **REQ-007:** Para erros 422, o handler DEVE chamar `extractFieldErrors` e mapear os field errors para os campos correspondentes.
+- **REQ-008:** A interface `CreateOrgUnitRequest` DEVE incluir `filial`, `telefone` e `email_contato` como campos opcionais.
+- **REQ-009:** O formulário em create mode DEVE renderizar `filial`, `telefone`, `email_contato` (mesmos do edit mode).
+- **REQ-010:** O `handleSubmit` create mode DEVE incluir os 3 campos no payload quando preenchidos.
+
+### Acceptance Criteria adicionais (v2.0)
+
+- **AC-011:** Given erro 422 com `invalid_fields: [{field: "cnpj", message: "CNPJ inválido"}]`, When o handler processa, Then o campo cnpj exibe "CNPJ inválido" inline.
+- **AC-012:** Given o formulário em create mode, When renderizado, Then os campos `filial`, `telefone`, `email_contato` estão visíveis.
+- **AC-013:** Given o formulário em create mode com `filial=ABC`, When submetido, Then o payload contém `filial: "ABC"`.
+
+---
+
+### Appendix A: Plano de Execução (v2.0 atualizado)
+
+| # | Arquivo | Ação | Descrição |
+|---|---------|------|-----------|
+| 1 | `apps/web/src/modules/org-units/types/org-units.types.ts` | Editar | Adicionar `filial`, `telefone`, `email_contato` ao `CreateOrgUnitRequest` |
+| 2 | `apps/web/src/modules/org-units/pages/OrgFormPage.tsx` | Editar | (a) Importar `extractFieldErrors`; (b) reescrever error handler com extractFieldErrors + fallback genérico + toast; (c) renderizar campos cadastrais em create mode; (d) adicionar campos ao handleSubmit; (e) regenerar idempotency key |
+
+| Step | Descrição | Paralelo? |
+|------|-----------|-----------|
+| 1 | Adicionar campos ao `CreateOrgUnitRequest` | Sim (com 2a) |
+| 2a | Importar `extractFieldErrors` no OrgFormPage | Sim (com 1) |
+| 2b | Reescrever error handler completo (useEffect + onError) | Após 2a |
+| 2c | Renderizar campos cadastrais em create mode | Após 2b |
+| 2d | Adicionar campos ao handleSubmit create | Após 2c |
+| 3 | Build web para validar compilação | Após 1-2d |
+
 ## 11. Related Specifications / Further Reading
 
 - [spec-auth-ui-components.md](./spec-auth-ui-components.md) — Auth UI components (ProfileAvatar, LogoutConfirmDialog)
 - [spec-fix-session-timeout-redirect-loop.md](./spec-fix-session-timeout-redirect-loop.md) — Fix 401 redirect loop
+- [spec-fix-org-tree-first-use-bootstrap.md](./spec-fix-org-tree-first-use-bootstrap.md) — Fix seed org unit N1 + error logging handler
 - `docs/04_modules/mod-003-org-units/mod-003-org-units.md` — Especificação executável MOD-003
 - `apps/api/src/modules/org-units/presentation/routes/org-units.route.ts` — Backend route handler

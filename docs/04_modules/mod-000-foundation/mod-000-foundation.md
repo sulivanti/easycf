@@ -157,6 +157,8 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [UX-000-M02](amendments/ux/UX-000-M02.md) — Melhoria: Dashboard executivo com MetricCards, DonutChart e ActivityList. Alinhamento com design Penpot 02-Dashboard validado (99 objetos, 19/19 conformidades)
 - [INT-000-M03](amendments/int/INT-000-M03.md) — OpenAPI paths/schemas para 2 novos endpoints Users API: POST /users/:id/reset-password, DELETE /users/:id/invite (derivado de FR-000-M02)
 - [DATA-003-M01](amendments/data/DATA-003-M01.md) — 2 novos domain events no catálogo: user.password_reset, user.invite_cancelled (derivado de FR-000-M02)
+- [FR-000-M03](amendments/fr/FR-000-M03.md) — Melhoria: novo FR-020 (Smart Session Keep-Alive) — refresh proativo por atividade, interceptor 401 com retry/mutex, idle timeout 30min. Ref: spec-smart-session-keepalive
+- [UX-000-M03](amendments/ux/UX-000-M03.md) — Melhoria: nova jornada UX-010 (Sessão Mantida por Atividade) — keep-alive transparente, cenários retorno pós-inatividade. Ref: spec-smart-session-keepalive, FR-000-M03
 <!-- end amendments-index -->
 
 > **Nota:** 8 amendments de documentos normativos foram migrados para `docs/01_normativos/amendments/{DOC-ID}/` em 2026-03-25. Normativos são transversais e não pertencem a nenhum módulo específico. Ver: DOC-PADRAO-001-C01, DOC-PADRAO-001-M01, DOC-PADRAO-004-M01, DOC-PADRAO-005-C01, DOC-UX-011-M01, DOC-UX-011-M02, DOC-UX-012-M02, DOC-GNP-00-M01.

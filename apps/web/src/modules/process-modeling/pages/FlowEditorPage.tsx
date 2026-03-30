@@ -1,11 +1,12 @@
 /**
- * @contract UX-005 §2 (UX-PROC-001), FR-011, FR-012, FR-013
+ * @contract UX-005 §2 (UX-PROC-001), UX-005-C01, FR-011, FR-012, FR-013
  * @contract spec-cycle-editor-empty-canvas-first-stage
+ * @contract spec-fix-cycle-editor-empty-canvas-feedback
  *
  * Flow Editor Page — visual canvas for process cycle blueprints.
  * Route: /processos/ciclos/:id/editor
  *
- * States: loading, loaded, empty, error, readonly (PUBLISHED/DEPRECATED).
+ * States: loading, loaded, empty (3 variants), error, readonly (PUBLISHED/DEPRECATED).
  * Uses React Flow for canvas rendering.
  * Double-click on canvas creates a new stage (auto-creating default macro-stage if needed).
  *
@@ -13,6 +14,7 @@
  */
 
 import { useState, useCallback, useMemo, useEffect, startTransition } from 'react';
+import { toast } from 'sonner';
 import ReactFlow, {
   ReactFlowProvider,
   Background,
@@ -114,11 +116,14 @@ function FlowEditorPageInner({ cycleId, userScopes }: FlowEditorPageProps) {
 
   const readonly = flow ? !isCycleEditable(flow.cycle.status) : true;
 
-  // Double-click to create stage (spec-cycle-editor-empty-canvas-first-stage)
+  // Double-click to create stage (spec-cycle-editor-empty-canvas-first-stage, UX-005-C01)
   const {
     handleCanvasDoubleClick,
     isPending: creatingStage,
     lastCreatedStageId,
+    error: stageCreateError,
+    canCreate,
+    blockReason,
   } = useCreateStageFromCanvas({ cycleId, flow, readonly, userScopes });
 
   // Auto-open config panel when a new stage is created
@@ -127,6 +132,13 @@ function FlowEditorPageInner({ cycleId, userScopes }: FlowEditorPageProps) {
       setSelectedStageId(lastCreatedStageId);
     }
   }, [lastCreatedStageId]);
+
+  // Show toast on stage creation error (UX-005-C01)
+  useEffect(() => {
+    if (stageCreateError) {
+      toast.error(stageCreateError);
+    }
+  }, [stageCreateError]);
 
   // Build React Flow nodes and edges from flow data
   const { nodes: initialNodes, edges: initialEdges } = useMemo(() => {
@@ -277,8 +289,8 @@ function FlowEditorPageInner({ cycleId, userScopes }: FlowEditorPageProps) {
       <div className="flex-1 relative">
         {isEmpty ? (
           <div
-            className="flex flex-col items-center justify-center gap-3 h-full text-a1-text-auxiliary cursor-pointer"
-            onDoubleClick={handleCanvasDoubleClick}
+            className={`flex flex-col items-center justify-center gap-3 h-full text-a1-text-auxiliary ${canCreate ? 'cursor-pointer' : 'cursor-default'}`}
+            onDoubleClick={canCreate ? handleCanvasDoubleClick : undefined}
           >
             {creatingStage ? (
               <Spinner />
@@ -302,7 +314,9 @@ function FlowEditorPageInner({ cycleId, userScopes }: FlowEditorPageProps) {
                   <line x1="10" y1="6.5" x2="14" y2="6.5" />
                   <line x1="6.5" y1="10" x2="6.5" y2="14" />
                 </svg>
-                <span className="text-sm">{COPY.empty_canvas}</span>
+                <span className="text-sm">
+                  {canCreate ? COPY.empty_canvas : (blockReason ?? COPY.empty_canvas)}
+                </span>
               </>
             )}
           </div>

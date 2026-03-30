@@ -133,3 +133,4 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 - [DATA-001-M01](amendments/data/DATA-001-M01.md) — Melhoria: 6 campos cadastrais na tabela org_units (cnpj, razao_social, filial, responsavel, telefone, email_contato)
 - [FR-001-M01](amendments/fr/FR-001-M01.md) — Melhoria: endpoints CRUD estendidos para aceitar/retornar campos cadastrais
 - [INT-001-C01](amendments/int/INT-001-C01.md) — Correção: GET /tree envia camelCase sem mapear para snake_case do schema Zod
+- [UX-001-C01](amendments/ux/UX-001-C01.md) — Correção: error handling silencioso no OrgFormPage — erros 5xx/400/403 não mostravam feedback, extractFieldErrors não chamada, campos faltando no CreateOrgUnitRequest

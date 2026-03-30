@@ -31,6 +31,7 @@ function persistTokens(tokens: LoginResponse): void {
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token,
       expires_in: tokens.expires_in,
+      _stored_at: Date.now(),
     }),
   );
 }

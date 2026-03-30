@@ -209,3 +209,4 @@ apps/web/src/modules/process-modeling/
 - [FR-001-C01](amendments/fr/FR-001-C01.md) — Correção: deprecate envia nome:null + handlers usam timestamps fake
 - [UX-005-M01](amendments/ux/UX-005-M01.md) — Melhoria: duplo clique no canvas vazio cria macroetapa padrão + primeiro estágio
 - [FR-008-C01](amendments/fr/FR-008-C01.md) — Correção: frontend ProcessRolesPage sem funcionalidade de edição (PATCH)
+- [UX-005-C01](amendments/ux/UX-005-C01.md) — Correção: falha silenciosa no double-click do canvas vazio (guards sem feedback + mutation sem onError)

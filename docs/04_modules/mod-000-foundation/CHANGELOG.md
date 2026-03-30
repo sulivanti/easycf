@@ -36,6 +36,9 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.17.0 | 2026-03-30 | merge-amendment | Merge batch: FR-000-M03 (novo FR-023 Smart Session Keep-Alive + anotação consumo automático FR-003, FR-000 v0.10.0), UX-000-M03 (nova jornada UX-010 Sessão Mantida por Atividade, UX-000 v0.6.0). Ambos selados MERGED. Ref: spec-smart-session-keepalive. |
+| 1.16.0 | 2026-03-30 | create-amendment | Amendment UX-000-M03: nova jornada UX-010 (Sessão Mantida por Atividade). Documenta experiência keep-alive transparente, cenários de retorno pós-inatividade e relação com UX-000-C01. Ref: spec-smart-session-keepalive, FR-000-M03. |
+| 1.15.0 | 2026-03-30 | create-amendment | Amendment FR-000-M03: novo FR-020 (Smart Session Keep-Alive) — refresh proativo por atividade, interceptor 401 com retry/mutex, idle timeout 30min configurável. 2 novos hooks (useActivityTracker, useSessionKeepAlive) + modificação dos 2 HTTP clients. Zero alterações backend. Ref: spec-smart-session-keepalive. |
 | 1.14.0 | 2026-03-30 | merge-amendment | Merge batch: FR-000-M02 (2 novos endpoints Users API — reset-password + cancel-invite, FR-000 v0.9.8), INT-000-M03 (OpenAPI paths/schemas para os 2 endpoints, INT-000 v0.5.0), DATA-003-M01 (2 domain events user.password_reset + user.invite_cancelled, DATA-003 v0.9.0). Todos selados MERGED. |
 | 1.13.0 | 2026-03-30 | cascade-amendment | Cascade de FR-000-M02: 2 amendments derivados criados — INT-000-M03 (OpenAPI paths/schemas para 2 novos endpoints), DATA-003-M01 (2 domain events: user.password_reset, user.invite_cancelled). SEC-000 confirmado INFORMACIONAL (scopes já existem). |
 | 1.12.0 | 2026-03-30 | create-amendment | FR-000-M02: 2 novos endpoints Users API — POST /users/:id/reset-password + DELETE /users/:id/invite. Ref: spec-mod002-next-steps.md, UX-001-C03. |

@@ -35,6 +35,7 @@ import {
 import { toast } from 'sonner';
 import { Skeleton } from '@shared/ui/skeleton';
 import { useAuthMe } from '../hooks/use-auth-me';
+import { useSessionKeepAlive } from '@modules/foundation/hooks/useSessionKeepAlive';
 import { filterSidebarByScopes } from './sidebar-config';
 import { ProfileWidget } from './ProfileWidget';
 import { ApiError } from '../api/api-client';
@@ -308,6 +309,9 @@ export function AppShell({ children }: Props) {
   const queryClient = useQueryClient();
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+
+  // FR-023: Smart Session Keep-Alive — proactive refresh based on activity
+  useSessionKeepAlive();
 
   useEffect(() => {
     if (error instanceof ApiError && error.status === 401) {

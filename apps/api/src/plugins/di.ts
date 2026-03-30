@@ -283,6 +283,12 @@ import {
 import { ExecuteMcpUseCase } from '../modules/mcp/application/use-cases/gateway/execute-mcp.use-case.js';
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// Dashboard — Read-only Query Repository
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import { DashboardQueryRepository } from '../modules/dashboard/infrastructure/dashboard-query.repository.js';
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // MOD-008 Integration-Protheus — Infrastructure + Use Cases
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -1355,7 +1361,6 @@ async function diPluginImpl(app: FastifyInstance): Promise<void> {
   // Dashboard (read-only query repo — no use cases needed)
   // ─────────────────────────────────────────────────────────────────────────
 
-  const { DashboardQueryRepository } = await import('../modules/dashboard/index.js');
   const dashboardQueryRepo = new DashboardQueryRepository(db);
 
   // ─────────────────────────────────────────────────────────────────────────

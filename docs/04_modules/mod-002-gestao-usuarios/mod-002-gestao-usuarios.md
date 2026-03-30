@@ -216,6 +216,7 @@ apps/web/src/modules/users/
 - [DATA-003-M01](amendments/data/DATA-003-M01.md) — Adiciona domain events: user.blocked, user.unblocked, user.reactivated, user.password_reset, user.invite_cancelled (derivado de UX-001-C03)
 - [SEC-001-M01](amendments/sec/SEC-001-M01.md) — Mapeia scopes para novas ações do dropdown (derivado de UX-001-C03)
 - [BR-001-M01](amendments/br/BR-001-M01.md) — Adiciona regras de visibilidade RBAC para novas ações do dropdown (derivado de UX-001-C03)
+- [UX-001-C04](amendments/ux/UX-001-C04.md) — Jornada 4: Edição de Usuário (MOD-002-F04) — formulário de edição, toggle de status, PATCH /users/:id
 
 ## 9. ADR (Decisões Arquiteturais)
 

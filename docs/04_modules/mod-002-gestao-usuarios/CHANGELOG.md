@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.5.0 | 2026-03-30 | create-amendment | UX-001-C04: Jornada 4 — Edição de Usuário (MOD-002-F04). Formulário de edição, toggle de status, PATCH /users/:id. Ref: spec-mod002-next-steps.md. |
 | 1.4.2 | 2026-03-30 | codegen | AGN-COD-VAL: Validação cruzada — 12 checks passaram, 1 erro (testes ausentes), 2 warnings (endpoints MOD-000, rota edição), 2 notes (telemetria, colunas DTO). |
 | 1.4.1 | 2026-03-30 | codegen | Codegen AGN-COD-WEB: 8 arquivos (3 criados, 5 atualizados). Dropdown 4 variantes por status, 3 novos hooks, ConfirmActionModal genérico, 3 novas API functions. Build: 0 erros TS. |
 | 1.4.0 | 2026-03-30 | merge-amendment | Merge 6 amendments: UX-001-C03 (v0.4.0), FR-001-M01 (v0.4.0), INT-001-M01 (v0.4.0), DATA-003-M01 (v0.4.0), SEC-001-M01 (v0.4.0), BR-001-M01 (v0.4.0). Dropdown 4 variantes, 6 ações, 3 endpoints, 5 events, RBAC expandido. |

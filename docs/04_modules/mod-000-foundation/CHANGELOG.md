@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.12.0 | 2026-03-30 | create-amendment | FR-000-M02: 2 novos endpoints Users API — POST /users/:id/reset-password + DELETE /users/:id/invite. Ref: spec-mod002-next-steps.md, UX-001-C03. |
 | 1.11.1 | 2026-03-29 | merge-amendment | Merge UX-000-M02: nova jornada UX-009 (Dashboard Executivo) em UX-000. MetricCards, DonutChart, ActivityList. Base UX-000 bumped para v0.5.0. Ref: 02-dashboard-spec, PEN-02-Dashboard. |
 | 1.11.0 | 2026-03-29 | create-amendment | Amendment UX-000-M02: Dashboard executivo com MetricCards (4), DonutChart (status), ActivityList (recentes). Substitui WelcomeWidget+ModuleShortcuts. Ref: 02-dashboard-spec, Penpot 02-Dashboard. |
 | 1.10.1 | 2026-03-29 | merge-amendment | Merge UX-000-M01: design visual 06-UserForm aplicado em UX-004. Base UX-000 bumped para v0.4.0. Jornada passo 3/4 reescrita com FormCard, tokens visuais e tipografia. |

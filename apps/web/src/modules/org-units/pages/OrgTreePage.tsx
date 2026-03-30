@@ -73,7 +73,7 @@ const CONFIRM_INITIAL: ConfirmState = {
 };
 
 export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps) {
-  const { data: tree, isLoading, isError, refetch } = useOrgTree();
+  const { data: tree, isLoading, isError, error, refetch } = useOrgTree();
   const deleteMutation = useDeleteOrgUnit();
   const restoreMutation = useRestoreOrgUnit();
   const unlinkMutation = useUnlinkTenant();
@@ -205,6 +205,7 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
   // ── Error state ───────────────────────────────────────────
 
   if (isError) {
+    console.error('[OrgTreePage] Falha ao carregar árvore:', error);
     return (
       <div className="flex h-full items-center justify-center" role="alert">
         <div className="text-center">

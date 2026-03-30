@@ -5,8 +5,15 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchProcessRoles, createProcessRole } from '../api/process-modeling.api.js';
-import type { CreateProcessRoleRequest } from '../types/process-modeling.types.js';
+import {
+  fetchProcessRoles,
+  createProcessRole,
+  updateProcessRole,
+} from '../api/process-modeling.api.js';
+import type {
+  CreateProcessRoleRequest,
+  UpdateProcessRoleRequest,
+} from '../types/process-modeling.types.js';
 
 export const PROCESS_ROLES_KEY = ['process-modeling', 'roles'] as const;
 
@@ -25,6 +32,19 @@ export function useCreateProcessRole() {
 
   return useMutation({
     mutationFn: (data: CreateProcessRoleRequest) => createProcessRole(data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: PROCESS_ROLES_KEY });
+    },
+  });
+}
+
+/** @contract FR-008 — PATCH /admin/process-roles/:id */
+export function useUpdateProcessRole() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, ...data }: UpdateProcessRoleRequest & { id: string }) =>
+      updateProcessRole(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: PROCESS_ROLES_KEY });
     },

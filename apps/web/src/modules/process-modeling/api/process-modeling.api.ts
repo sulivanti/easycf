@@ -22,7 +22,9 @@ import type {
   CreateGateRequest,
   UpdateGateRequest,
   ProcessRoleListItemDTO,
+  ProcessRoleDTO,
   CreateProcessRoleRequest,
+  UpdateProcessRoleRequest,
   StageRoleLinkDTO,
   LinkStageRoleRequest,
   TransitionDTO,
@@ -167,6 +169,14 @@ export async function createProcessRole(
   data: CreateProcessRoleRequest,
 ): Promise<ProcessRoleListItemDTO> {
   return httpClient.post<ProcessRoleListItemDTO>('/admin/process-roles', data);
+}
+
+/** @contract FR-008 — PATCH /admin/process-roles/:id */
+export async function updateProcessRole(
+  id: string,
+  data: UpdateProcessRoleRequest,
+): Promise<ProcessRoleDTO> {
+  return httpClient.patch<ProcessRoleDTO>(`/admin/process-roles/${id}`, data);
 }
 
 // ── Stage-Role links (FR-009) ───────────────────────────────

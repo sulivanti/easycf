@@ -207,3 +207,5 @@ apps/web/src/modules/process-modeling/
 - [AMD-UX-PROC-001-001](amendments/ux/AMD-UX-PROC-001-001__action_update_stage_position.md) — Ação update_stage_position no editor visual
 - [FR-011-C01](amendments/fr/FR-011-C01.md) — Correção: flow handler sem mapeamento camelCase→snake_case (HTTP 500)
 - [FR-001-C01](amendments/fr/FR-001-C01.md) — Correção: deprecate envia nome:null + handlers usam timestamps fake
+- [UX-005-M01](amendments/ux/UX-005-M01.md) — Melhoria: duplo clique no canvas vazio cria macroetapa padrão + primeiro estágio
+- [FR-008-C01](amendments/fr/FR-008-C01.md) — Correção: frontend ProcessRolesPage sem funcionalidade de edição (PATCH)

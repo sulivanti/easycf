@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-005",
   "module_path": "docs/04_modules/mod-005-modelagem-processos/",
-  "last_updated": "2026-03-24T22:30:00Z",
+  "last_updated": "2026-03-30T12:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -76,8 +76,8 @@
       },
       "AGN-COD-WEB": {
         "status": "done",
-        "completed_at": "2026-03-24T18:30:00Z",
-        "files_generated": 11,
+        "completed_at": "2026-03-30T12:00:00Z",
+        "files_generated": 12,
         "files": [
           "apps/web/src/modules/process-modeling/types/process-modeling.types.ts",
           "apps/web/src/modules/process-modeling/api/process-modeling.api.ts",
@@ -86,11 +86,23 @@
           "apps/web/src/modules/process-modeling/hooks/use-flow.ts",
           "apps/web/src/modules/process-modeling/hooks/use-stage-config.ts",
           "apps/web/src/modules/process-modeling/hooks/use-process-roles.ts",
+          "apps/web/src/modules/process-modeling/hooks/use-create-stage-from-canvas.ts",
           "apps/web/src/modules/process-modeling/components/StageNode.tsx",
           "apps/web/src/modules/process-modeling/components/StageConfigPanel.tsx",
           "apps/web/src/modules/process-modeling/pages/CyclesListPage.tsx",
           "apps/web/src/modules/process-modeling/pages/FlowEditorPage.tsx"
-        ]
+        ],
+        "last_incremental": {
+          "date": "2026-03-30",
+          "ref": "spec-process-roles-edit",
+          "files_created": [],
+          "files_modified": [
+            "apps/web/src/modules/process-modeling/types/process-modeling.types.ts",
+            "apps/web/src/modules/process-modeling/api/process-modeling.api.ts",
+            "apps/web/src/modules/process-modeling/hooks/use-process-roles.ts",
+            "apps/web/src/modules/process-modeling/pages/ProcessRolesPage.tsx"
+          ]
+        }
       },
       "AGN-COD-VAL": {
         "status": "done",

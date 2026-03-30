@@ -163,6 +163,12 @@ export interface CreateProcessRoleRequest {
   can_approve?: boolean;
 }
 
+export interface UpdateProcessRoleRequest {
+  nome?: string;
+  descricao?: string | null;
+  can_approve?: boolean;
+}
+
 // ---------------------------------------------------------------------------
 // Stage-Role link
 // ---------------------------------------------------------------------------

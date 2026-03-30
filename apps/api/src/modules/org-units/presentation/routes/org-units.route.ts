@@ -139,29 +139,34 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
       response: { 200: orgUnitTreeResponse },
     },
     handler: async (request, reply) => {
-      const result = await request.dipiContainer.getOrgUnitTreeUseCase.execute();
+      try {
+        const result = await request.dipiContainer.getOrgUnitTreeUseCase.execute();
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      function mapTreeNode(node: Record<string, any>): Record<string, any> {
-        return {
-          id: node.id,
-          codigo: node.codigo,
-          nome: node.nome,
-          descricao: node.descricao,
-          nivel: node.nivel,
-          status: node.status,
-          tenants: node.tenants.map((t: Record<string, any>) => ({
-            tenant_id: t.tenantId,
-            codigo: t.codigo,
-            name: t.name,
-          })),
-          children: node.children.map(mapTreeNode),
-        };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        function mapTreeNode(node: Record<string, any>): Record<string, any> {
+          return {
+            id: node.id,
+            codigo: node.codigo,
+            nome: node.nome,
+            descricao: node.descricao,
+            nivel: node.nivel,
+            status: node.status,
+            tenants: node.tenants.map((t: Record<string, any>) => ({
+              tenant_id: t.tenantId,
+              codigo: t.codigo,
+              name: t.name,
+            })),
+            children: node.children.map(mapTreeNode),
+          };
+        }
+
+        return reply.status(200).send({
+          tree: result.tree.map(mapTreeNode),
+        });
+      } catch (err) {
+        request.log.error({ err, stack: (err as Error).stack }, 'GET /org-units/tree failed');
+        throw err;
       }
-
-      return reply.status(200).send({
-        tree: result.tree.map(mapTreeNode),
-      });
     },
   });
 

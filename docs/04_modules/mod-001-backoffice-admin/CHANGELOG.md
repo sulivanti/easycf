@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.5.1 | 2026-03-30 | merge-amendment | Merge UX-001-C03: sidebar-config.ts label 'Perfis' → 'Perfis e Permissões' conforme spec UX-001 §4. Base UX-001 bumped para v0.8.1. |
 | 1.5.0 | 2026-03-25 | merge-amendment | Merge batch: UX-001-C01 (AppShell wiring), UX-001-C02 (DashboardPage wiring), UX-001-M01 (ComingSoonPage CA-09), AMD-SEC-001-001 (interceptor 401 global), AMD-INT-005-001 (timeout configurável). Todos já implementados — selo MERGED. UX-001 v0.8.0, SEC-001 v0.6.0, INT-001 v0.6.0. |
 | 1.4.0 | 2026-03-25 | cascade-amendment | Cascade de UX-001-M02: 2 amendments derivados criados — FR-001-M01 (requisitos 20 rotas, 9 grupos sidebar, shortcuts, ProfileWidget, breadcrumbs), SEC-001-M01 (catálogo scopes consumidos 4→17). Alinha FR-001/SEC-001 com navegação implementada. |
 | 1.3.0 | 2026-03-25 | codegen | Codegen UX-001-C01 + C02 + M01 + M02: _auth.tsx→AppShell+Outlet, _auth.dashboard.tsx→DashboardPage real, ComingSoonPage shared, 20 route files (12 módulos), sidebar 9 grupos, ICONS+ROUTE_LABELS expandidos, ProfileWidget links (perfil/sessões), shortcuts 8 itens, index redirect inteligente, routeTree 24 rotas. Fix: login.tsx validateSearch token tipado como opcional. Deps normativas: DOC-UX-011-M01 (CA-09), DOC-UX-011-M02 (CA-07/CA-08). |

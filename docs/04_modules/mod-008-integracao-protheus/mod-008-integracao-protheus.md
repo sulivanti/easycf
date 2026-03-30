@@ -182,6 +182,7 @@ Módulo com domínio rico: Outbox Pattern garantindo atomicidade entre transaç�
 - [DATA-008](requirements/data/DATA-008.md) — Modelo de Dados (6 tabelas)
 - [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events
 - [INT-008](requirements/int/INT-008.md) — Integrações
+  - [INT-008-C01](amendments/int/INT-008-C01.md) — Correção prefixo registro rotas servicesRoutes/routinesRoutes
 - [SEC-008](requirements/sec/SEC-008.md) — Segurança e Compliance
 - [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos
 - [UX-008](requirements/ux/UX-008.md) — Experiência do Usuário

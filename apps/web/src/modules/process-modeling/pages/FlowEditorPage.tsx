@@ -1,17 +1,20 @@
 /**
  * @contract UX-005 §2 (UX-PROC-001), FR-011, FR-012, FR-013
+ * @contract spec-cycle-editor-empty-canvas-first-stage
  *
  * Flow Editor Page — visual canvas for process cycle blueprints.
  * Route: /processos/ciclos/:id/editor
  *
  * States: loading, loaded, empty, error, readonly (PUBLISHED/DEPRECATED).
  * Uses React Flow for canvas rendering.
+ * Double-click on canvas creates a new stage (auto-creating default macro-stage if needed).
  *
  * Tailwind CSS v4 + shared UI components + Dialog for confirmations.
  */
 
 import { useState, useCallback, useMemo, useEffect, startTransition } from 'react';
 import ReactFlow, {
+  ReactFlowProvider,
   Background,
   Controls,
   MiniMap,
@@ -43,6 +46,7 @@ import {
 } from '../../../shared/ui/index.js';
 import { useFlow } from '../hooks/use-flow.js';
 import { usePublishCycle, useForkCycle, useDeprecateCycle } from '../hooks/use-cycle-actions.js';
+import { useCreateStageFromCanvas } from '../hooks/use-create-stage-from-canvas.js';
 import { StageNode } from '../components/StageNode.js';
 import { StageConfigPanel } from '../components/StageConfigPanel.js';
 import type { FlowResponseDTO, FlowStageItem } from '../types/process-modeling.types.js';
@@ -84,7 +88,19 @@ interface FlowEditorPageProps {
   userScopes: readonly string[];
 }
 
-export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
+/**
+ * Wrapper that provides ReactFlowProvider context.
+ * Required for useReactFlow() inside useCreateStageFromCanvas.
+ */
+export function FlowEditorPage(props: FlowEditorPageProps) {
+  return (
+    <ReactFlowProvider>
+      <FlowEditorPageInner {...props} />
+    </ReactFlowProvider>
+  );
+}
+
+function FlowEditorPageInner({ cycleId, userScopes }: FlowEditorPageProps) {
   const { data: flow, isLoading, error, refetch } = useFlow(cycleId);
   const publishMutation = usePublishCycle();
   const { mutateAsync: forkAsync, regenerateKey, isPending: forking } = useForkCycle();
@@ -97,6 +113,20 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
   const [deprecateOpen, setDeprecateOpen] = useState(false);
 
   const readonly = flow ? !isCycleEditable(flow.cycle.status) : true;
+
+  // Double-click to create stage (spec-cycle-editor-empty-canvas-first-stage)
+  const {
+    handleCanvasDoubleClick,
+    isPending: creatingStage,
+    lastCreatedStageId,
+  } = useCreateStageFromCanvas({ cycleId, flow, readonly, userScopes });
+
+  // Auto-open config panel when a new stage is created
+  useEffect(() => {
+    if (lastCreatedStageId) {
+      setSelectedStageId(lastCreatedStageId);
+    }
+  }, [lastCreatedStageId]);
 
   // Build React Flow nodes and edges from flow data
   const { nodes: initialNodes, edges: initialEdges } = useMemo(() => {
@@ -246,8 +276,35 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
       {/* Canvas */}
       <div className="flex-1 relative">
         {isEmpty ? (
-          <div className="flex items-center justify-center h-full text-a1-text-auxiliary">
-            {COPY.empty_canvas}
+          <div
+            className="flex flex-col items-center justify-center gap-3 h-full text-a1-text-auxiliary cursor-pointer"
+            onDoubleClick={handleCanvasDoubleClick}
+          >
+            {creatingStage ? (
+              <Spinner />
+            ) : (
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="opacity-40"
+                >
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <line x1="10" y1="6.5" x2="14" y2="6.5" />
+                  <line x1="6.5" y1="10" x2="6.5" y2="14" />
+                </svg>
+                <span className="text-sm">{COPY.empty_canvas}</span>
+              </>
+            )}
           </div>
         ) : (
           <ReactFlow
@@ -255,6 +312,7 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
+            onDoubleClick={handleCanvasDoubleClick}
             nodeTypes={nodeTypes}
             nodesDraggable={!readonly}
             nodesConnectable={!readonly}
@@ -265,6 +323,15 @@ export function FlowEditorPage({ cycleId, userScopes }: FlowEditorPageProps) {
             <Controls />
             {totalNodes > 15 && <MiniMap />}
           </ReactFlow>
+        )}
+
+        {/* Ghost node — visual feedback during stage creation */}
+        {creatingStage && !isEmpty && (
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            <div className="rounded-lg border-2 border-dashed border-primary-400 bg-primary-50/50 px-4 py-3 animate-pulse">
+              <Spinner />
+            </div>
+          </div>
         )}
 
         {/* Stage config panel */}

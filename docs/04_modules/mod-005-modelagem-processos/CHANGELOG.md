@@ -24,11 +24,11 @@ flowchart TD
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E5  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E6  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
 ```
 
-*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
+*O módulo está na **Etapa 6 — Adendos Futuros (Amendments). Alterações via `create-amendment`.**
 
 ---
 
@@ -36,6 +36,12 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.3.1 | 2026-03-30 | codegen | Codegen AGN-COD-WEB: edição de papéis de processo (4 arquivos). Type UpdateProcessRoleRequest, API updateProcessRole(), hook useUpdateProcessRole, dialog de edição na ProcessRolesPage. Ref: spec-process-roles-edit |
+| 1.3.0 | 2026-03-30 | codegen | Codegen parcial: AGN-COD-WEB (1 agente, 2 arquivos). Hook use-create-stage-from-canvas.ts + FlowEditorPage.tsx atualizado. Ref: spec-cycle-editor-empty-canvas-first-stage |
+| 1.2.1 | 2026-03-30 | merge-amendment | Merge FR-008-C01 em FR-005.md (v0.3.2): 3 cenários Gherkin de edição (PATCH) de papéis de processo adicionados ao FR-008 |
+| 1.2.0 | 2026-03-30 | merge-amendment | Merge UX-005-M01 em UX-005.md (v0.4.0): jornada alternativa primeiro estágio, estado empty com affordance, ação auto-criar macroetapa, 6 cenários erros, GhostNode, §2.7 Hooks Frontend |
+| 1.1.1 | 2026-03-30 | create-amendment | Correção: FR-008-C01 — frontend da ProcessRolesPage omitiu edição (PATCH). Adiciona cenários Gherkin de update + contrato de implementação (type, API client, hook, dialog UI). Ref: spec-process-roles-edit |
+| 1.1.0 | 2026-03-30 | create-amendment | Melhoria: UX-005-M01 — duplo clique no canvas vazio cria macroetapa padrão + primeiro estágio. Hook useCreateStageFromCanvas, GhostNode, abertura automática do painel. Ref: spec-cycle-editor-empty-canvas-first-stage |
 | 1.0.5 | 2026-03-28 | merge-amendment | Merge FR-011-C01 + FR-001-C01 em FR-005.md (v0.3.1): notas de implementação para handler /flow (mapeamento camelCase→snake_case) e handlers CRUD (dados reais no response) |
 | 1.0.4 | 2026-03-28 | create-amendment | Correção: FR-011-C01 (flow handler sem mapeamento camelCase→snake_case, HTTP 500) + FR-001-C01 (deprecate envia nome:null, handlers usam timestamps fake). Ref: spec-fix-cycle-response-schema-mismatch |
 | 1.0.3 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. Lint: PASS. QA: WARN (infra-level). Manifests: PASS (2/2, V-M01 resolvido). OpenAPI: WARN (deprecate falta no OAS). Drizzle: PASS (7/7). Endpoints: PASS (todas 5 violações anteriores resolvidas). Arquitetural: PASS (DomainError OK, Pattern A OK). 0 bloqueadores, 0 críticas, 5 avisos. |

@@ -30,7 +30,7 @@ const SIDEBAR_GROUPS: SidebarGroup[] = [
       },
       {
         id: 'nav-roles',
-        label: 'Perfis',
+        label: 'Perfis e Permissões',
         icon: 'shield',
         route: '/perfis',
         requiredScope: 'users:role:read',

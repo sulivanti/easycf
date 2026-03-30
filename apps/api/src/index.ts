@@ -153,8 +153,8 @@ await app.register(caseExecutionRoutes);
 await app.register(contextualParamsPlugin, { prefix: '/api/v1' });
 
 // MOD-008 Integration Protheus — relative paths
-await app.register(servicesRoutes, { prefix: '/api/v1' });
-await app.register(routinesRoutes, { prefix: '/api/v1' });
+await app.register(servicesRoutes, { prefix: '/api/v1/admin' });
+await app.register(routinesRoutes, { prefix: '/api/v1/admin' });
 await app.register(integrationEngineRoutes, { prefix: '/api/v1' });
 
 // MOD-009 Movement Approval — absolute paths (no prefix, debt técnico)

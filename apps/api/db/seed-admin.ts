@@ -24,6 +24,8 @@ import {
   roles,
   rolePermissions,
   tenantUsers,
+  orgUnits,
+  orgUnitTenantLinks,
 } from './schema/index.js';
 
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -181,6 +183,27 @@ async function seed() {
     status: 'ACTIVE',
   });
 
+  console.log('Criando org unit N1 raiz...');
+  const orgUnitId = randomUUID();
+  await db.insert(orgUnits).values({
+    id: orgUnitId,
+    codigo: 'GRUPO-A1',
+    nome: 'Grupo A1',
+    descricao: 'Unidade organizacional raiz',
+    nivel: 1,
+    parentId: null,
+    status: 'ACTIVE',
+    createdBy: adminId,
+  });
+
+  console.log('Vinculando tenant à org unit N1...');
+  await db.insert(orgUnitTenantLinks).values({
+    id: randomUUID(),
+    orgUnitId,
+    tenantId,
+    createdBy: adminId,
+  });
+
   await sql.end();
 
   console.log('');
@@ -191,6 +214,7 @@ async function seed() {
   console.log(`  Senha:    ${ADMIN_PASSWORD}`);
   console.log(`  Tenant:   Tenant Padrão (tenant-default)`);
   console.log(`  Role:     Super Administrador (super-admin)`);
+  console.log(`  Org Unit: Grupo A1 (GRUPO-A1) — N1 raiz`);
   console.log('═══════════════════════════════════════════');
   console.log('');
   console.log('⚠  Troque a senha após o primeiro login!');

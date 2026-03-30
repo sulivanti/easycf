@@ -119,6 +119,7 @@ Módulo UX-First sem lógica de domínio própria. Consome endpoints do MOD-000 
 - [UX-001-C02](amendments/ux/UX-001-C02.md) — _auth.dashboard.tsx deve importar DashboardPage real em vez de componente inline (CA-07)
 - [UX-001-M01](amendments/ux/UX-001-M01.md) — Rotas Coming Soon para /usuarios, /perfis, /filiais, /auditoria (CA-09)
 - [UX-001-M02](amendments/ux/UX-001-M02.md) — Navegação completa: sidebar 9 grupos, 20 route files, breadcrumbs, ProfileWidget links, shortcuts expandidos
+- [UX-001-C03](amendments/ux/UX-001-C03.md) — Correção: sidebar label 'Perfis' → 'Perfis e Permissões' conforme spec UX-001
 - [AMD-INT-005-001](amendments/int/AMD-INT-005-001__timeout_configuravel.md) — Timeout configurável por endpoint
 - [AMD-SEC-001-001](amendments/sec/AMD-SEC-001-001__interceptor_401_global.md) — Interceptor 401 global no api-client
 <!-- end amendments-index -->

@@ -1,6 +1,6 @@
 /**
- * @contract FR-008, UX-005 §3.3
- * Page: Catálogo de Papéis de Processo — tabela CRUD.
+ * @contract FR-008, FR-008-C01, UX-005 §3.3
+ * Page: Catálogo de Papéis de Processo — tabela CRUD com edição.
  * Route: /processos/papeis
  *
  * Reuses exact pattern from RolesPage (MOD-000).
@@ -17,12 +17,19 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 import { EmptyState } from '@shared/ui/empty-state';
 import { PageHeader } from '@shared/ui/page-header';
 import { StatusBadge } from '@shared/ui/status-badge';
-import { useProcessRoles, useCreateProcessRole } from '../hooks/use-process-roles.js';
+import {
+  useProcessRoles,
+  useCreateProcessRole,
+  useUpdateProcessRole,
+} from '../hooks/use-process-roles.js';
+import type { ProcessRoleListItemDTO } from '../types/process-modeling.types.js';
 
 export function ProcessRolesPage() {
   const { data: roles, isLoading, isError, error } = useProcessRoles();
   const createMutation = useCreateProcessRole();
+  const updateMutation = useUpdateProcessRole();
   const [showCreate, setShowCreate] = useState(false);
+  const [editingRole, setEditingRole] = useState<ProcessRoleListItemDTO | null>(null);
   const [codigo, setCodigo] = useState('');
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -36,6 +43,14 @@ export function ProcessRolesPage() {
     setDescricao('');
     setCanApprove(false);
     setShowCreate(false);
+    setEditingRole(null);
+  }
+
+  function openEdit(role: ProcessRoleListItemDTO) {
+    setEditingRole(role);
+    setNome(role.nome);
+    setDescricao('');
+    setCanApprove(role.can_approve);
   }
 
   async function handleCreate(e: FormEvent) {
@@ -51,6 +66,23 @@ export function ProcessRolesPage() {
       resetForm();
     } catch {
       toast.error('Erro ao criar papel de processo.');
+    }
+  }
+
+  async function handleEdit(e: FormEvent) {
+    e.preventDefault();
+    if (!editingRole) return;
+    try {
+      await updateMutation.mutateAsync({
+        id: editingRole.id,
+        nome: nome.trim(),
+        descricao: descricao.trim() || null,
+        can_approve: canApprove,
+      });
+      toast.success('Papel de processo atualizado com sucesso.');
+      resetForm();
+    } catch {
+      toast.error('Erro ao atualizar papel de processo.');
     }
   }
 
@@ -95,6 +127,7 @@ export function ProcessRolesPage() {
                   <TableHead>Código</TableHead>
                   <TableHead>Nome</TableHead>
                   <TableHead>Pode Aprovar</TableHead>
+                  <TableHead className="w-24">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -106,6 +139,11 @@ export function ProcessRolesPage() {
                       <StatusBadge status={role.can_approve ? 'success' : 'neutral'}>
                         {role.can_approve ? 'Sim' : 'Não'}
                       </StatusBadge>
+                    </TableCell>
+                    <TableCell>
+                      <Button variant="ghost" size="xs" onClick={() => openEdit(role)}>
+                        Editar
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -167,6 +205,57 @@ export function ProcessRolesPage() {
               </Button>
               <Button type="submit" isLoading={createMutation.isPending}>
                 Criar
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={!!editingRole} onOpenChange={(open) => !open && resetForm()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Papel de Processo</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleEdit} className="space-y-4">
+            <div className="space-y-2">
+              <Label>Código</Label>
+              <Input value={editingRole?.codigo ?? ''} disabled />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="pr-edit-nome">Nome</Label>
+              <Input
+                id="pr-edit-nome"
+                required
+                maxLength={255}
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="pr-edit-desc">Descrição</Label>
+              <Input
+                id="pr-edit-desc"
+                maxLength={1000}
+                value={descricao}
+                onChange={(e) => setDescricao(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                id="pr-edit-approve"
+                type="checkbox"
+                checked={canApprove}
+                onChange={(e) => setCanApprove(e.target.checked)}
+              />
+              <Label htmlFor="pr-edit-approve">Pode aprovar movimentos</Label>
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="ghost" onClick={resetForm}>
+                Cancelar
+              </Button>
+              <Button type="submit" isLoading={updateMutation.isPending}>
+                Salvar
               </Button>
             </DialogFooter>
           </form>

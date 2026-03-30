@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-001",
   "module_path": "docs/04_modules/mod-001-backoffice-admin/",
-  "last_updated": "2026-03-24T21:00:00Z",
+  "last_updated": "2026-03-30T18:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00Z",
@@ -40,7 +40,15 @@
           "apps/web/src/modules/backoffice-admin/pages/LoginPage.tsx",
           "apps/web/src/modules/backoffice-admin/pages/DashboardPage.tsx"
         ],
-        "notes": "Pattern B (data/domain/ui/__tests__) removed — 25 old files deleted. Custom Toast replaced by sonner. Inline styles replaced by Tailwind CSS. Custom UI replaced by @shared/ui (Button, Input, Dialog, DropdownMenu, Skeleton, Label). Navigation via @tanstack/react-router."
+        "notes": "Pattern B (data/domain/ui/__tests__) removed — 25 old files deleted. Custom Toast replaced by sonner. Inline styles replaced by Tailwind CSS. Custom UI replaced by @shared/ui (Button, Input, Dialog, DropdownMenu, Skeleton, Label). Navigation via @tanstack/react-router.",
+        "patches": [
+          {
+            "date": "2026-03-30",
+            "ref": "FR-001-C01",
+            "description": "use-logout.ts: substituído navigate() + queryClient.clear() por forceLogout(queryClient) do Foundation. Corrige regressão logout (tokens não limpos no localStorage).",
+            "files_modified": ["apps/web/src/modules/backoffice-admin/hooks/use-logout.ts"]
+          }
+        ]
       },
       "AGN-COD-VAL": {
         "status": "done",

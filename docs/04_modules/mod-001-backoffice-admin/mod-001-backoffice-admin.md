@@ -122,4 +122,5 @@ Módulo UX-First sem lógica de domínio própria. Consome endpoints do MOD-000 
 - [UX-001-C03](amendments/ux/UX-001-C03.md) — Correção: sidebar label 'Perfis' → 'Perfis e Permissões' conforme spec UX-001
 - [AMD-INT-005-001](amendments/int/AMD-INT-005-001__timeout_configuravel.md) — Timeout configurável por endpoint
 - [AMD-SEC-001-001](amendments/sec/AMD-SEC-001-001__interceptor_401_global.md) — Interceptor 401 global no api-client
+- [FR-001-C01](amendments/fr/FR-001-C01.md) — Regressão logout: useLogout não limpa localStorage nem usa forceLogout (ref FR-000-C06)
 <!-- end amendments-index -->

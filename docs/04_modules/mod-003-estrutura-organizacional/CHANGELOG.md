@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.8.0 | 2026-03-30 | merge-amendment | Merge UX-001-M02: Inline Edit no DetailPanel substitui FormPanel para edição. InlineEditCard (novo), HierarchyCard (novo), FormPanel restrito a criação. Base UX-001 bumped v0.4.0. Ref: 10-org-detail-inline-edit-spec.md. |
+| 1.7.0 | 2026-03-30 | create-amendment | Amendment UX-001-M02: Inline Edit no DetailPanel substitui FormPanel para edição de dados cadastrais. Novos componentes InlineEditCard e HierarchyCard. Árvore permanece visível durante edição. Ref: 10-org-detail-inline-edit-spec.md. |
 | 1.6.0 | 2026-03-30 | merge-amendment | Merge UX-001-C01: fix error handling silencioso no OrgFormPage — erros 5xx/400/403/rede devem mostrar feedback, extractFieldErrors RFC 9457 obrigatório em 422, networkError no COPY, paridade CreateOrgUnitRequest com API. Base UX-001 bumped v0.3.1. Ref: spec-fix-org-unit-create-silent-failure v2.0. |
 | 1.5.2 | 2026-03-30 | create-amendment | Amendment UX-001-C01: fix error handling silencioso no OrgFormPage — erros 5xx/400/403 não mostravam feedback, extractFieldErrors não chamada, campos faltando no CreateOrgUnitRequest. Ref: spec-fix-org-unit-create-silent-failure v2.0. |
 | 1.5.1 | 2026-03-30 | merge-amendment | Merge INT-001-C01: handler GET /tree mapeamento camelCase→snake_case (tenantId→tenant_id). Seção §8 adicionada ao INT-001. Base bumped para v0.3.1. |

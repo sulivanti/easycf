@@ -53,8 +53,7 @@ interface ConfirmState {
 
 type FormPanelState =
   | { open: false }
-  | { open: true; mode: 'create'; parentId?: string }
-  | { open: true; mode: 'edit'; editId: string };
+  | { open: true; mode: 'create'; parentId?: string };
 
 const DEACTIVATE_INITIAL: DeactivateState = {
   open: false,
@@ -82,6 +81,7 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
   const [showInactive, setShowInactive] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [formPanel, setFormPanel] = useState<FormPanelState>({ open: false });
+  const [requestEdit, setRequestEdit] = useState(false);
   const [deactivate, setDeactivate] = useState<DeactivateState>(DEACTIVATE_INITIAL);
   const [confirm, setConfirm] = useState<ConfirmState>(CONFIRM_INITIAL);
 
@@ -104,8 +104,15 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
     setFormPanel({ open: true, mode: 'create', parentId });
   }, []);
 
+  // UX-001-M02: edit is now inline in DetailPanel, not FormPanel
   const handleOpenEdit = useCallback((id: string) => {
-    setFormPanel({ open: true, mode: 'edit', editId: id });
+    setSelectedId(id);
+    setFormPanel({ open: false });
+    setRequestEdit(true);
+  }, []);
+
+  const handleEditHandled = useCallback(() => {
+    setRequestEdit(false);
   }, []);
 
   const handleFormClose = useCallback(() => {
@@ -239,12 +246,11 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
 
   return (
     <div className="flex h-full -m-6">
-      {/* Left panel: tree or form */}
+      {/* Left panel: tree or form (UX-001-M02: FormPanel only for create) */}
       {formPanel.open ? (
         <OrgFormPage
-          mode={formPanel.mode}
-          editId={formPanel.mode === 'edit' ? formPanel.editId : undefined}
-          parentId={formPanel.mode === 'create' ? formPanel.parentId : undefined}
+          mode="create"
+          parentId={formPanel.parentId}
           onSuccess={handleFormSuccess}
           onCancel={handleFormClose}
         />
@@ -325,7 +331,8 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
           detail={detailVM}
           isLoading={detailLoading && !!selectedId}
           userScopes={userScopes}
-          onEdit={handleOpenEdit}
+          requestEdit={requestEdit}
+          onEditHandled={handleEditHandled}
           onCreateChild={handleOpenCreate}
         />
       </div>

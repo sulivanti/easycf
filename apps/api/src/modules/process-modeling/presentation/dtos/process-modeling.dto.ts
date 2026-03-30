@@ -17,6 +17,7 @@ export const gateTypeEnum = z.enum(['APPROVAL', 'DOCUMENT', 'CHECKLIST', 'INFORM
 // Param schemas
 // ---------------------------------------------------------------------------
 export const cycleIdParam = z.object({ id: z.string().uuid() });
+export const cidParam = z.object({ cid: z.string().uuid() });
 export const macroStageIdParam = z.object({ mid: z.string().uuid() });
 export const stageIdParam = z.object({ sid: z.string().uuid() });
 export const gateIdParam = z.object({ id: z.string().uuid() });

@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.3.5 | 2026-03-30 | merge-amendment | Merge INT-005-C01 em INT-005.md (v0.4.1): nota de implementação POST macro-stages — param :cid deve usar Zod schema (cidParam) |
+| 1.3.4 | 2026-03-30 | create-amendment | Correção: INT-005-C01 — POST /cycles/:cid/macro-stages retorna 400 por params schema JSON literal em vez de Zod. Ref: spec-fix-macro-stages-params-schema-mismatch |
 | 1.3.3 | 2026-03-30 | merge-amendment | Merge UX-005-C01 em UX-005.md (v0.4.1): 3 variantes empty no §2.2, 3 cenários de erro no §2.4, 4 COPY no §2.6, canCreate/blockReason/error + onError + await invalidate no §2.7 |
 | 1.3.2 | 2026-03-30 | create-amendment | Correção: UX-005-C01 — falha silenciosa no double-click do canvas vazio. Guards sem feedback visual, mutation sem onError. Adiciona canCreate/blockReason/error ao hook, 3 variantes de canvas vazio, toast de erro. Ref: spec-fix-cycle-editor-empty-canvas-feedback |
 | 1.3.1 | 2026-03-30 | codegen | Codegen AGN-COD-WEB: edição de papéis de processo (4 arquivos). Type UpdateProcessRoleRequest, API updateProcessRole(), hook useUpdateProcessRole, dialog de edição na ProcessRolesPage. Ref: spec-process-roles-edit |

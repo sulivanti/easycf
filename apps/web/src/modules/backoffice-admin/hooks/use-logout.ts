@@ -1,21 +1,22 @@
 /**
- * @contract FR-004, INT-002, BR-003
+ * @contract FR-004, FR-001-C01, INT-002, BR-003
  *
  * Mutation para POST /auth/logout.
- * - Após resposta (sucesso OU erro de rede) → redirect /login via router
+ * - Após resposta (sucesso OU erro de rede) → forceLogout (limpa tokens + hard redirect)
  * - Limpa estado local independente do resultado
+ * - Usa forceLogout do Foundation (FR-000-C06 / FR-022) para garantir que
+ *   localStorage é limpo e router context é resetado via full page reload
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
 import { apiRequest, ApiError, generateCorrelationId } from '../api/api-client';
 import { emitRequested, emitSucceeded, emitFailed } from '../api/telemetry';
+import { forceLogout } from '@modules/foundation/utils/force-logout';
 import { AUTH_ME_QUERY_KEY } from './use-auth-me';
 import type { AuthMeResponse } from '../types/backoffice-admin.types';
 
 export function useLogout() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   return useMutation<{ data: { message: string }; correlationId: string }, ApiError, void>({
     mutationFn: async () => {
@@ -51,8 +52,7 @@ export function useLogout() {
       }
     },
     onSettled: () => {
-      queryClient.clear();
-      navigate({ to: '/login' });
+      forceLogout(queryClient);
     },
   });
 }

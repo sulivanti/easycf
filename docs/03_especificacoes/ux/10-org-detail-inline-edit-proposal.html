@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>10-OrgTree — Proposta: Inline Edit (Dados Cadastrais)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --blue:#2E86C1;--blue-lt:#E3F2FD;--blue-hover:#256FA0;
+  --black:#111;--bg:#F5F5F3;--white:#FFF;
+  --border:#E8E8E6;--border-lt:#F0F0EE;--ro-bg:#F8F8F6;
+  --t1:#111;--t2:#333;--t3:#555;--t4:#888;--t5:#AAA;--t6:#CCC;
+  --err:#E74C3C;--danger:#C0392B;
+  --success:#27AE60;--success-bg:#E8F8EF;--success-bd:#B5E8C9;
+  --warn:#E67E22;--warn-bg:#FFF3E0;--warn-bd:#FFE0B2;
+  --green:#1E7A42;--green-lt:#E8F8EF;
+  --ba-t:#1E7A42;--ba-bg:#E8F8EF;--ba-bd:#B5E8C9;
+  --bi-t:#6C757D;--bi-bg:#F4F4F2;--bi-bd:#E0E0DE;
+  --bb-t:#C0392B;--bb-bg:#FFEBEE;--bb-bd:#F5C6CB;
+  --bp-t:#B8860B;--bp-bg:#FFF3E0;--bp-bd:#FFE0B2
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#888;display:flex;flex-direction:column;align-items:center;gap:80px;padding:60px 40px}
+.label-tag{font-size:11px;font-weight:700;color:#444;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.frame{width:1440px;height:900px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.25);flex-shrink:0;background:var(--bg)}
+
+/* Topbar */
+.topbar{height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tb-n{font-weight:800;font-size:14px;color:var(--t1)}
+.tb-s{font-weight:600;font-size:10px;color:var(--t4);letter-spacing:1.2px;text-transform:uppercase}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 8px}
+.bc{display:flex;align-items:center;gap:6px;font-size:13px}
+.bc-m{color:var(--t4)}
+.bc-x{color:var(--t6)}
+.bc-a{color:var(--t1);font-weight:700}
+.tb-r{display:flex;align-items:center;gap:16px}
+.tb-un{font-size:12px;font-weight:700;color:var(--t1);text-align:right}
+.tb-ue{font-size:10px;color:var(--t4);text-align:right}
+.tb-av{width:40px;height:40px;border-radius:50%;background:#F0F0EE;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--t3)}
+
+/* Sidebar */
+.sb{width:240px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-sec{padding:24px 16px 0}
+.sb-sec+.sb-sec{padding-top:20px}
+.sb-cat{font-weight:700;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--t5);margin-bottom:8px;padding:0 12px}
+.sb-items{display:flex;flex-direction:column;gap:2px}
+.sb-i{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;text-decoration:none}
+.sb-i:hover{background:#f8f8f6}
+.sb-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sb-i.on{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.sb-foot{margin-top:auto;padding:16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0}
+.sb-ft{font-size:12px;color:var(--t4)}
+
+/* Layout */
+.lay{display:flex;flex:1;overflow:hidden}
+
+/* Split panel */
+.tree-panel{width:380px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;padding:24px}
+.detail-panel{flex:1;background:var(--bg);padding:24px;overflow-y:auto}
+
+/* Tree mini */
+.tree-title{font-weight:800;font-size:18px;color:var(--t1)}
+.tree-sub{font-size:13px;color:var(--t4);margin-top:4px}
+.tree-search{margin-top:16px;width:100%;height:40px;padding:0 14px 0 38px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:13px;color:var(--t1);background:var(--white);outline:none}
+.tree-search::placeholder{color:var(--t6)}
+.tree-nodes{margin-top:20px}
+.tn{padding:8px 12px;border-radius:6px;font-size:13px;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:8px}
+.tn.sel{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.tn-icon{width:16px;height:16px;flex-shrink:0}
+.tn-child{padding-left:24px}
+.tn-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* Detail header */
+.dh{display:flex;align-items:flex-start;gap:16px;padding:20px 24px;background:var(--white);border-radius:12px;border:1px solid var(--border)}
+.dh-icon{width:48px;height:48px;background:var(--ro-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dh-icon svg{width:24px;height:24px;stroke:var(--t4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.dh-info{flex:1}
+.dh-name{font-weight:800;font-size:22px;color:var(--t1)}
+.dh-meta{font-size:12px;color:var(--t4);margin-top:4px;display:flex;align-items:center;gap:8px}
+.dh-actions{display:flex;gap:10px;flex-shrink:0}
+
+/* Badges */
+.bd{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.bd-a{color:var(--ba-t);background:var(--ba-bg);border:1px solid var(--ba-bd)}
+
+/* Buttons */
+.btn-p{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;background:var(--blue);border:none;color:#fff;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0}
+.btn-sec{display:inline-flex;align-items:center;gap:6px;padding:0 16px;height:40px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+.btn-sec svg{width:16px;height:16px;stroke:var(--t3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.btn-c{display:inline-flex;align-items:center;justify-content:center;padding:0 20px;height:40px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+
+/* Cards */
+.card{background:var(--white);border-radius:12px;border:1px solid var(--border);margin-top:20px;overflow:hidden}
+.card-header{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid var(--border-lt);background:var(--ro-bg)}
+.card-label{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--t4)}
+.card-body{padding:20px 24px}
+
+/* ReadOnly fields */
+.ro-row{display:flex;gap:16px;margin-top:16px}
+.ro-row:first-child{margin-top:0}
+.ro-field{flex:1;min-width:0}
+.ro-lbl{font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--t4);margin-bottom:6px}
+.ro-val{padding:10px 14px;border-radius:8px;background:var(--ro-bg);border:1px solid var(--border-lt);font-size:14px;font-weight:500;color:var(--t1);min-height:42px;display:flex;align-items:center}
+.ro-empty{color:var(--t6)}
+
+/* Editable fields (inline edit mode) */
+.ed-val{padding:0 14px;border-radius:8px;background:var(--white);border:2px solid var(--blue);font-size:14px;font-weight:500;color:var(--t1);min-height:42px;display:flex;align-items:center;font-family:inherit;width:100%;outline:none}
+.ed-val::placeholder{color:var(--t6)}
+
+/* Tags */
+.tags-header{display:flex;justify-content:space-between;align-items:center}
+.tags-link{font-size:12px;font-weight:600;color:var(--blue);cursor:pointer}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tag-item{padding:8px 16px;border-radius:6px;border:1px solid var(--border);font-size:13px;font-weight:500;color:var(--t2);cursor:pointer}
+.tag-add{padding:8px 16px;border-radius:6px;border:1px dashed var(--t6);font-size:13px;color:var(--t4);cursor:pointer}
+
+/* Metric cards */
+.metric-row{display:flex;gap:16px;margin-top:20px}
+.metric-card{flex:1;border-radius:12px;border:1px solid var(--border);padding:20px 24px;background:var(--white)}
+.metric-card.blue{background:var(--blue);border:none;color:#fff}
+.metric-label{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.metric-card.blue .metric-label{color:rgba(255,255,255,0.7)}
+.metric-card:not(.blue) .metric-label{color:var(--t4)}
+.metric-val{font-weight:800;font-size:36px;margin-top:4px}
+.metric-card.blue .metric-val{color:#fff}
+.metric-card:not(.blue) .metric-val{color:var(--t1)}
+.metric-sub{font-size:11px;margin-top:4px}
+.metric-card.blue .metric-sub{color:rgba(255,255,255,0.6)}
+.metric-card:not(.blue) .metric-sub{color:var(--t4)}
+
+/* FormPanel (for Frame 1 — current state) */
+.form-panel{width:480px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.fp-header{height:64px;display:flex;align-items:center;padding:0 20px;border-bottom:1px solid var(--border);flex-shrink:0;gap:12px}
+.fp-back{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.fp-back svg{width:18px;height:18px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fp-title{font-weight:700;font-size:18px;color:var(--t1);flex:1}
+.fp-close{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.fp-close svg{width:18px;height:18px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fp-body{flex:1;padding:24px;overflow-y:auto}
+.fp-footer{height:72px;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:0 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--white)}
+
+/* Form fields */
+.f-label{font-weight:700;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--t2);margin-bottom:8px}
+.f-input{width:100%;height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--border);font-family:inherit;font-size:14px;color:var(--t1);background:var(--white);outline:none}
+.f-input::placeholder{color:var(--t6)}
+.f-group{margin-top:20px}
+.f-group:first-child{margin-top:0}
+.f-row{display:flex;gap:12px;margin-top:16px}
+.f-row .f-group{flex:1;margin-top:0}
+.ro{width:100%;min-height:42px;padding:10px 38px 10px 14px;border-radius:8px;background:var(--ro-bg);border:1px solid var(--border-lt);font-size:14px;font-weight:500;color:var(--t1);position:relative;display:flex;align-items:center}
+.ro-lock{position:absolute;right:12px;top:50%;transform:translateY(-50%)}
+.ro-lock svg{width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.sec-label{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-top:24px}
+
+/* Edit mode card header */
+.card-header-edit{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid var(--blue);background:var(--blue-lt)}
+.card-label-edit{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--blue)}
+
+/* Inline edit footer */
+.card-footer-edit{display:flex;justify-content:flex-end;gap:12px;padding:16px 24px;border-top:1px solid var(--border-lt);background:var(--ro-bg)}
+
+/* Annotation callout */
+.callout{position:absolute;background:#FFF3E0;border:2px solid var(--warn);border-radius:10px;padding:12px 16px;font-size:12px;font-weight:600;color:#7A5500;line-height:1.4;max-width:220px;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.callout::before{content:'';position:absolute;width:0;height:0}
+
+/* Problem highlight */
+.problem-zone{position:relative}
+.problem-border{border:3px dashed var(--err);border-radius:14px;position:absolute;inset:-4px;z-index:5;pointer-events:none}
+.problem-label{position:absolute;top:-14px;left:16px;background:var(--err);color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;z-index:6}
+
+/* Solution highlight */
+.solution-border{border:3px solid var(--success);border-radius:14px;position:absolute;inset:-4px;z-index:5;pointer-events:none}
+.solution-label{position:absolute;top:-14px;left:16px;background:var(--success);color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;z-index:6}
+
+/* Dimmed overlay for problem frame */
+.dim-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.03);z-index:0}
+</style>
+</head>
+<body>
+
+<!-- ===================== FRAME 1: ESTADO ATUAL (PROBLEMA) ===================== -->
+<div class="label-tag">① Estado Atual — Dados duplicados quando o FormPanel abre</div>
+<div class="frame" style="position:relative">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc">
+        <span class="bc-m">Organização</span>
+        <span class="bc-x">›</span>
+        <span class="bc-a">Estrutura Organizacional</span>
+      </nav>
+    </div>
+    <div class="tb-r">
+      <div><div class="tb-un">Marcos</div><div class="tb-ue">Tenant Padrão</div></div>
+      <div class="tb-av">M</div>
+    </div>
+  </header>
+
+  <div class="lay">
+    <!-- Sidebar -->
+    <aside class="sb">
+      <div class="sb-sec">
+        <div class="sb-cat">Administração</div>
+        <div class="sb-items">
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Dashboard</a>
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Perfis e Permissões</a>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-cat">Organização</div>
+        <div class="sb-items">
+          <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-cat">Processos</div>
+        <div class="sb-items">
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg>Modelagem</a>
+        </div>
+      </div>
+      <div class="sb-foot"><div class="sb-dot"></div><span class="sb-ft">Servidor Online</span></div>
+    </aside>
+
+    <!-- FormPanel (edit drawer — LEFT) -->
+    <div class="form-panel" style="position:relative">
+      <div class="problem-border" style="border-color:var(--blue);inset:-2px"></div>
+      <div class="problem-label" style="background:var(--blue);top:-12px;left:20px">Bloco A — Form</div>
+      <div class="fp-header">
+        <div class="fp-back"><svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg></div>
+        <div class="fp-title">Editar Unidade</div>
+        <div class="fp-close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></div>
+      </div>
+      <div class="fp-body">
+        <div class="f-group">
+          <div class="f-label">Unidade Pai</div>
+          <div class="ro">(raiz)<span class="ro-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span></div>
+        </div>
+        <div class="f-group">
+          <div class="f-label">Nome da Subdivisão <span style="color:var(--err)">*</span></div>
+          <input class="f-input" value="Grupo Martineli"/>
+        </div>
+        <div class="sec-label" style="margin-top:28px;margin-bottom:16px;color:var(--blue);font-weight:800;font-size:11px">DADOS CADASTRAIS</div>
+        <div class="f-group" style="margin-top:0">
+          <div class="f-label">CNPJ</div>
+          <input class="f-input" placeholder="00.000.000/0000-00"/>
+        </div>
+        <div class="f-group">
+          <div class="f-label">Razão Social</div>
+          <input class="f-input" value="N1 — Grupo Corporativo"/>
+        </div>
+        <div class="f-row">
+          <div class="f-group">
+            <div class="f-label">Filial</div>
+            <input class="f-input" placeholder=""/>
+          </div>
+          <div class="f-group">
+            <div class="f-label">Responsável</div>
+            <input class="f-input" value="Irvig"/>
+          </div>
+        </div>
+        <div class="f-group">
+          <div class="f-label">Telefone</div>
+          <input class="f-input" placeholder="(00) 00000-0000"/>
+        </div>
+        <div class="f-group">
+          <div class="f-label">E-mail</div>
+          <input class="f-input" placeholder="contato@empresa.com"/>
+        </div>
+      </div>
+      <div class="fp-footer">
+        <button class="btn-c">Cancelar</button>
+        <button class="btn-p" style="height:44px;padding:0 24px">Salvar Alterações</button>
+      </div>
+    </div>
+
+    <!-- Detail Panel (RIGHT — showing same data read-only) -->
+    <div class="detail-panel" style="position:relative">
+      <!-- Header -->
+      <div class="dh">
+        <div class="dh-icon"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg></div>
+        <div class="dh-info">
+          <div class="dh-name">Grupo Martineli</div>
+          <div class="dh-meta"><span class="bd bd-a">Ativo</span>Cód: MA · N1 — Grupo Corporativo</div>
+        </div>
+        <div class="dh-actions">
+          <button class="btn-sec" style="opacity:0.5"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Editar Dados</button>
+          <button class="btn-p"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>Nova Subdivisão</button>
+        </div>
+      </div>
+
+      <!-- Dados Cadastrais — DUPLICATED (problem) -->
+      <div class="card" style="position:relative">
+        <div class="problem-border" style="border-color:var(--err)"></div>
+        <div class="problem-label" style="background:var(--err)">Bloco B — Mesmos dados, read-only</div>
+        <div class="card-header">
+          <span class="card-label">Dados Cadastrais</span>
+        </div>
+        <div class="card-body">
+          <div class="ro-row">
+            <div class="ro-field"><div class="ro-lbl">CNPJ</div><div class="ro-val"><span class="ro-empty">—</span></div></div>
+            <div class="ro-field" style="flex:2"><div class="ro-lbl">Razão Social</div><div class="ro-val">N1 — Grupo Corporativo</div></div>
+          </div>
+          <div class="ro-row">
+            <div class="ro-field"><div class="ro-lbl">Filial</div><div class="ro-val"><span class="ro-empty">—</span></div></div>
+            <div class="ro-field"><div class="ro-lbl">Responsável</div><div class="ro-val">Irvig</div></div>
+          </div>
+          <div class="ro-row">
+            <div class="ro-field"><div class="ro-lbl">Telefone</div><div class="ro-val"><span class="ro-empty">—</span></div></div>
+            <div class="ro-field"><div class="ro-lbl">E-mail</div><div class="ro-val"><span class="ro-empty">—</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Annotation -->
+      <div class="callout" style="position:absolute;bottom:80px;left:50%;transform:translateX(-50%);max-width:340px;text-align:center">
+        ⚠️ Dois blocos "Dados Cadastrais" visíveis ao mesmo tempo.<br/>Mesmos campos, formatos diferentes → confusão.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================== FRAME 2: PROPOSTA — VISUALIZAÇÃO (read-only) ===================== -->
+<div class="label-tag">② Proposta — Estado de Visualização (read-only, sem FormPanel)</div>
+<div class="frame">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc">
+        <span class="bc-m">Organização</span>
+        <span class="bc-x">›</span>
+        <span class="bc-a">Estrutura Organizacional</span>
+      </nav>
+    </div>
+    <div class="tb-r">
+      <div><div class="tb-un">Marcos</div><div class="tb-ue">Tenant Padrão</div></div>
+      <div class="tb-av">M</div>
+    </div>
+  </header>
+
+  <div class="lay">
+    <!-- Sidebar -->
+    <aside class="sb">
+      <div class="sb-sec">
+        <div class="sb-cat">Administração</div>
+        <div class="sb-items">
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Dashboard</a>
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Perfis e Permissões</a>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-cat">Organização</div>
+        <div class="sb-items">
+          <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-cat">Processos</div>
+        <div class="sb-items">
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg>Modelagem</a>
+        </div>
+      </div>
+      <div class="sb-foot"><div class="sb-dot"></div><span class="sb-ft">Servidor Online</span></div>
+    </aside>
+
+    <!-- Tree Panel (visible — no form panel) -->
+    <div class="tree-panel">
+      <div class="tree-title">Estrutura de Unidades</div>
+      <div class="tree-sub">Navegue pela hierarquia do grupo</div>
+      <div style="position:relative;margin-top:16px">
+        <svg viewBox="0 0 24 24" style="position:absolute;left:12px;top:11px;width:16px;height:16px;stroke:var(--t6);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input class="tree-search" placeholder="Buscar unidade ou depto..."/>
+      </div>
+      <div class="tree-nodes">
+        <div class="tn" style="font-weight:600;color:var(--t2)"><svg viewBox="0 0 24 24" class="tn-icon" style="stroke:var(--t3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Grupo A1</div>
+        <div class="tn tn-child sel"><svg viewBox="0 0 24 24" class="tn-icon" style="stroke:var(--blue);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Grupo Martineli</div>
+        <div class="tn tn-child" style="padding-left:48px"><div class="tn-dot" style="background:var(--success)"></div>A1 Engenharia</div>
+        <div class="tn tn-child" style="padding-left:48px"><div class="tn-dot" style="background:var(--warn)"></div>A1 Industrial</div>
+        <div class="tn tn-child" style="padding-left:48px"><div class="tn-dot" style="background:#7C3AED"></div>A1 Energia</div>
+      </div>
+    </div>
+
+    <!-- Detail Panel — read-only state -->
+    <div class="detail-panel">
+      <div class="dh">
+        <div class="dh-icon"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg></div>
+        <div class="dh-info">
+          <div class="dh-name">Grupo Martineli</div>
+          <div class="dh-meta"><span class="bd bd-a">Ativo</span>Cód: MA · N1 — Grupo Corporativo</div>
+        </div>
+        <div class="dh-actions">
+          <button class="btn-sec"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Editar Dados</button>
+          <button class="btn-p"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>Nova Subdivisão</button>
+        </div>
+      </div>
+
+      <!-- Dados Cadastrais — read-only (unique, no duplication) -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-label">Dados Cadastrais</span>
+        </div>
+        <div class="card-body">
+          <div class="ro-row">
+            <div class="ro-field"><div class="ro-lbl">CNPJ</div><div class="ro-val"><span class="ro-empty">—</span></div></div>
+            <div class="ro-field" style="flex:2"><div class="ro-lbl">Razão Social</div><div class="ro-val">N1 — Grupo Corporativo</div></div>
+          </div>
+          <div class="ro-row">
+            <div class="ro-field"><div class="ro-lbl">Filial</div><div class="ro-val"><span class="ro-empty">—</span></div></div>
+            <div class="ro-field"><div class="ro-lbl">Responsável</div><div class="ro-val">Irvig</div></div>
+          </div>
+          <div class="ro-row">
+            <div class="ro-field"><div class="ro-lbl">Telefone</div><div class="ro-val"><span class="ro-empty">—</span></div></div>
+            <div class="ro-field"><div class="ro-lbl">E-mail</div><div class="ro-val"><span class="ro-empty">—</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Departamentos -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-label">Departamentos Vinculados</span>
+          <span class="tags-link">Ver todos (12)</span>
+        </div>
+        <div class="card-body">
+          <div class="tags-wrap">
+            <span class="tag-item">Diretoria</span>
+            <span class="tag-item">Engenharia Civil</span>
+            <span class="tag-item">Projetos Especiais</span>
+            <span class="tag-item">Recursos Humanos</span>
+            <span class="tag-add">+ Novo Departamento</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="metric-row">
+        <div class="metric-card blue">
+          <div class="metric-label">Colaboradores Totais</div>
+          <div class="metric-val">156</div>
+          <div class="metric-sub">14 novos nos últimos 30 dias</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Projetos em Execução</div>
+          <div class="metric-val">28</div>
+          <div class="metric-sub" style="display:flex;align-items:center;gap:8px;margin-top:8px">
+            <div style="flex:1;height:6px;border-radius:3px;background:var(--border)"><div style="width:70%;height:100%;border-radius:3px;background:var(--blue)"></div></div>
+            70% Meta
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================== FRAME 3: PROPOSTA — INLINE EDIT (campos editáveis) ===================== -->
+<div class="label-tag">③ Proposta — Ao clicar "Editar Dados", campos viram editáveis in-place</div>
+<div class="frame">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc">
+        <span class="bc-m">Organização</span>
+        <span class="bc-x">›</span>
+        <span class="bc-a">Estrutura Organizacional</span>
+      </nav>
+    </div>
+    <div class="tb-r">
+      <div><div class="tb-un">Marcos</div><div class="tb-ue">Tenant Padrão</div></div>
+      <div class="tb-av">M</div>
+    </div>
+  </header>
+
+  <div class="lay">
+    <!-- Sidebar -->
+    <aside class="sb">
+      <div class="sb-sec">
+        <div class="sb-cat">Administração</div>
+        <div class="sb-items">
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Dashboard</a>
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Perfis e Permissões</a>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-cat">Organização</div>
+        <div class="sb-items">
+          <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-cat">Processos</div>
+        <div class="sb-items">
+          <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg>Modelagem</a>
+        </div>
+      </div>
+      <div class="sb-foot"><div class="sb-dot"></div><span class="sb-ft">Servidor Online</span></div>
+    </aside>
+
+    <!-- Tree Panel (stays visible during inline edit!) -->
+    <div class="tree-panel">
+      <div class="tree-title">Estrutura de Unidades</div>
+      <div class="tree-sub">Navegue pela hierarquia do grupo</div>
+      <div style="position:relative;margin-top:16px">
+        <svg viewBox="0 0 24 24" style="position:absolute;left:12px;top:11px;width:16px;height:16px;stroke:var(--t6);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input class="tree-search" placeholder="Buscar unidade ou depto..."/>
+      </div>
+      <div class="tree-nodes">
+        <div class="tn" style="font-weight:600;color:var(--t2)"><svg viewBox="0 0 24 24" class="tn-icon" style="stroke:var(--t3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Grupo A1</div>
+        <div class="tn tn-child sel"><svg viewBox="0 0 24 24" class="tn-icon" style="stroke:var(--blue);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Grupo Martineli</div>
+        <div class="tn tn-child" style="padding-left:48px"><div class="tn-dot" style="background:var(--success)"></div>A1 Engenharia</div>
+        <div class="tn tn-child" style="padding-left:48px"><div class="tn-dot" style="background:var(--warn)"></div>A1 Industrial</div>
+        <div class="tn tn-child" style="padding-left:48px"><div class="tn-dot" style="background:#7C3AED"></div>A1 Energia</div>
+      </div>
+    </div>
+
+    <!-- Detail Panel — INLINE EDIT state -->
+    <div class="detail-panel">
+      <!-- Header — buttons change during edit -->
+      <div class="dh">
+        <div class="dh-icon"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg></div>
+        <div class="dh-info">
+          <div class="dh-name">Grupo Martineli</div>
+          <div class="dh-meta"><span class="bd bd-a">Ativo</span>Cód: MA · N1 — Grupo Corporativo</div>
+        </div>
+        <div class="dh-actions">
+          <button class="btn-c">Cancelar</button>
+          <button class="btn-p" style="height:40px"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"/></svg>Salvar Alterações</button>
+        </div>
+      </div>
+
+      <!-- Dados Cadastrais — INLINE EDIT mode -->
+      <div class="card" style="position:relative">
+        <div class="solution-border"></div>
+        <div class="solution-label">Inline Edit — campos editáveis in-place</div>
+        <div class="card-header-edit">
+          <span class="card-label-edit">
+            <span style="display:inline-flex;align-items:center;gap:6px">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+              Dados Cadastrais — Editando
+            </span>
+          </span>
+        </div>
+        <div class="card-body">
+          <!-- Nome da Subdivisão -->
+          <div class="ro-row">
+            <div class="ro-field" style="flex:1">
+              <div class="ro-lbl">Nome da Subdivisão <span style="color:var(--err)">*</span></div>
+              <input class="ed-val" value="Grupo Martineli"/>
+            </div>
+          </div>
+          <div class="ro-row">
+            <div class="ro-field"><div class="ro-lbl">CNPJ</div><input class="ed-val" placeholder="00.000.000/0000-00"/></div>
+            <div class="ro-field" style="flex:2"><div class="ro-lbl">Razão Social</div><input class="ed-val" value="N1 — Grupo Corporativo"/></div>
+          </div>
+          <div class="ro-row">
+            <div class="ro-field"><div class="ro-lbl">Filial</div><input class="ed-val" placeholder="—"/></div>
+            <div class="ro-field"><div class="ro-lbl">Responsável</div><input class="ed-val" value="Irvig"/></div>
+          </div>
+          <div class="ro-row">
+            <div class="ro-field"><div class="ro-lbl">Telefone</div><input class="ed-val" placeholder="(00) 00000-0000"/></div>
+            <div class="ro-field"><div class="ro-lbl">E-mail</div><input class="ed-val" placeholder="contato@empresa.com"/></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unidade Pai — read-only always -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-label">Hierarquia</span>
+        </div>
+        <div class="card-body">
+          <div class="ro-row">
+            <div class="ro-field">
+              <div class="ro-lbl">Unidade Pai</div>
+              <div class="ro-val" style="position:relative">(raiz)<span class="ro-lock" style="position:absolute;right:12px;top:50%;transform:translateY(-50%)"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span></div>
+            </div>
+            <div class="ro-field">
+              <div class="ro-lbl">Nível</div>
+              <div class="ro-val" style="position:relative">N1 — Grupo Corporativo<span class="ro-lock" style="position:absolute;right:12px;top:50%;transform:translateY(-50%)"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Departamentos — still visible during edit -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-label">Departamentos Vinculados</span>
+          <span class="tags-link">Ver todos (12)</span>
+        </div>
+        <div class="card-body">
+          <div class="tags-wrap">
+            <span class="tag-item">Diretoria</span>
+            <span class="tag-item">Engenharia Civil</span>
+            <span class="tag-item">Projetos Especiais</span>
+            <span class="tag-item">Recursos Humanos</span>
+            <span class="tag-add">+ Novo Departamento</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

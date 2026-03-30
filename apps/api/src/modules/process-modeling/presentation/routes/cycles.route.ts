@@ -35,6 +35,7 @@ import {
   cycleResponse,
   updateCycleBody,
   cycleIdParam,
+  cidParam,
   createMacroStageBody,
   macroStageResponse,
   updateMacroStageBody,
@@ -441,16 +442,12 @@ export async function cyclesRoutes(app: FastifyInstance): Promise<void> {
   // ---- Macro-stages -------------------------------------------------------
 
   // POST /admin/cycles/:cid/macro-stages — Create (FR-005)
-  app.post<{ Params: { cid: string }; Body: z.infer<typeof createMacroStageBody> }>(
+  app.post<{ Params: z.infer<typeof cidParam>; Body: z.infer<typeof createMacroStageBody> }>(
     '/cycles/:cid/macro-stages',
     {
       onRequest: [app.verifySession, app.requireScope('process:cycle:write')],
       schema: {
-        params: {
-          type: 'object' as const,
-          properties: { cid: { type: 'string' as const, format: 'uuid' } },
-          required: ['cid'],
-        },
+        params: cidParam,
         body: createMacroStageBody,
         tags: ['process-modeling'],
         operationId: 'admin_macro_stages_create',

@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.5.3 | 2026-03-30 | codegen | Codegen FR-001-C01: use-logout.ts corrigido — `forceLogout(queryClient)` substitui `navigate() + queryClient.clear()`. 1 agente (AGN-COD-WEB), 1 arquivo modificado. Ref: spec-fix-logout-redirect-regression. |
+| 1.5.2 | 2026-03-30 | merge-amendment | Merge FR-001-C01: logout usa forceLogout() — limpa localStorage + hard redirect. Base FR-001 bumped para v0.8.1. Ref: spec-fix-logout-redirect-regression. |
 | 1.5.1 | 2026-03-30 | merge-amendment | Merge UX-001-C03: sidebar-config.ts label 'Perfis' → 'Perfis e Permissões' conforme spec UX-001 §4. Base UX-001 bumped para v0.8.1. |
 | 1.5.0 | 2026-03-25 | merge-amendment | Merge batch: UX-001-C01 (AppShell wiring), UX-001-C02 (DashboardPage wiring), UX-001-M01 (ComingSoonPage CA-09), AMD-SEC-001-001 (interceptor 401 global), AMD-INT-005-001 (timeout configurável). Todos já implementados — selo MERGED. UX-001 v0.8.0, SEC-001 v0.6.0, INT-001 v0.6.0. |
 | 1.4.0 | 2026-03-25 | cascade-amendment | Cascade de UX-001-M02: 2 amendments derivados criados — FR-001-M01 (requisitos 20 rotas, 9 grupos sidebar, shortcuts, ProfileWidget, breadcrumbs), SEC-001-M01 (catálogo scopes consumidos 4→17). Alinha FR-001/SEC-001 com navegação implementada. |

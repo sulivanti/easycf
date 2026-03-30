@@ -210,3 +210,4 @@ apps/web/src/modules/process-modeling/
 - [UX-005-M01](amendments/ux/UX-005-M01.md) — Melhoria: duplo clique no canvas vazio cria macroetapa padrão + primeiro estágio
 - [FR-008-C01](amendments/fr/FR-008-C01.md) — Correção: frontend ProcessRolesPage sem funcionalidade de edição (PATCH)
 - [UX-005-C01](amendments/ux/UX-005-C01.md) — Correção: falha silenciosa no double-click do canvas vazio (guards sem feedback + mutation sem onError)
+- [INT-005-C01](amendments/int/INT-005-C01.md) — Correção: POST /cycles/:cid/macro-stages retorna 400 (params schema JSON literal vs Zod)

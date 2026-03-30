@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.14.0 | 2026-03-30 | merge-amendment | Merge batch: FR-000-M02 (2 novos endpoints Users API — reset-password + cancel-invite, FR-000 v0.9.8), INT-000-M03 (OpenAPI paths/schemas para os 2 endpoints, INT-000 v0.5.0), DATA-003-M01 (2 domain events user.password_reset + user.invite_cancelled, DATA-003 v0.9.0). Todos selados MERGED. |
 | 1.13.0 | 2026-03-30 | cascade-amendment | Cascade de FR-000-M02: 2 amendments derivados criados — INT-000-M03 (OpenAPI paths/schemas para 2 novos endpoints), DATA-003-M01 (2 domain events: user.password_reset, user.invite_cancelled). SEC-000 confirmado INFORMACIONAL (scopes já existem). |
 | 1.12.0 | 2026-03-30 | create-amendment | FR-000-M02: 2 novos endpoints Users API — POST /users/:id/reset-password + DELETE /users/:id/invite. Ref: spec-mod002-next-steps.md, UX-001-C03. |
 | 1.11.1 | 2026-03-29 | merge-amendment | Merge UX-000-M02: nova jornada UX-009 (Dashboard Executivo) em UX-000. MetricCards, DonutChart, ActivityList. Base UX-000 bumped para v0.5.0. Ref: 02-dashboard-spec, PEN-02-Dashboard. |

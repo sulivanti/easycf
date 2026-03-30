@@ -7,6 +7,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-15 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-15 | AGN-DEV-04  | Enriquecimento DATA-003 (enrich-agent) |
+> | 0.9.0  | 2026-03-30 | merge-amendment | Merge DATA-003-M01: 2 novos domain events — user.password_reset (admin reset senha) e user.invite_cancelled (cancelar convite). Total: 38 events. Derivado de FR-000-M02. |
 > | 0.8.0  | 2026-03-18 | AGN-DEV-06  | Adição evento auth.token_reuse_detected (PENDENTE-002, refresh token rotation). Total: 36 events |
 > | 0.7.0  | 2026-03-18 | usuário     | Adição evento auth.sso_linked (ADR-004, FR-016). Total: 35 events |
 > | 0.6.0  | 2026-03-18 | usuário     | Adição 3 eventos scope.* (FR-010): scope.created/updated/deleted. Total: 34 events |
@@ -89,6 +90,8 @@
 | `user.deleted` | Usuário soft-deleted | `users:delete` | user | `users:user:delete` | auditor/admin | admin + user | 1 | — |
 | `user.profile_updated` | Perfil editado pelo próprio usuário | `auth:me_update` | user | próprio usuário | `canRead(user)` + tenant | — | 0 | — |
 | `user.invite_resent` | Convite de ativação reenviado | `users:invite_resend` | user | `users:user:write` | `canRead(user)` + tenant | admin | 1 | — |
+| `user.password_reset` | Admin iniciou reset de senha | `users:reset_password` | user | `users:user:write` | `canRead(user)` + tenant | user + admin | 1 | — |
+| `user.invite_cancelled` | Admin cancelou convite pendente | `users:cancel_invite` | user | `users:user:delete` | `canRead(user)` + tenant | admin | 0 | — |
 
 ### Roles (F06, F12)
 
@@ -152,7 +155,7 @@
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-23
+- **data_ultima_revisao:** 2026-03-30
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F02, US-MOD-000-F03, US-MOD-000-F04, US-MOD-000-F05, US-MOD-000-F06, US-MOD-000-F07, US-MOD-000-F09, US-MOD-000-F10, US-MOD-000-F16, US-MOD-000-F17, DOC-ARC-003, DOC-FND-000, FR-000, SEC-000, SEC-002
 - **referencias_exemplos:** DOC-ARC-003 §1-§4 (6 dogmas, UIActionEnvelope, timeline), DOC-FND-000 §1.2 (session events), §2.1-§2.2 (scopes canônicos 3 seg.), §3 (SEC-002)
 - **evidencias:** Extraído de US-MOD-000-F01 §4.5/§4.9, F05 §4.6, F06 §4.6, F07 §4.4/§4.5, F09 §4.4. emit_permission alinhado com DOC-FND-000 v1.2.0. auth.sso_linked adicionado (ADR-004). Total: 35 events

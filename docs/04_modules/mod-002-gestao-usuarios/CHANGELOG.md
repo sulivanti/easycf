@@ -36,6 +36,7 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.6.0 | 2026-03-30 | merge-amendment | Merge UX-001-C04 + FR-002-M01: Jornada 4 — Edição de Usuário integrada ao UX-001 (v0.5.0) e done criteria/Gherkin de edição integrados ao FR-002 (v0.3.0). Formulário de edição, campos editáveis, toggle de status, PATCH /users/:id. |
 | 1.5.1 | 2026-03-30 | cascade-amendment | FR-002-M01: Done criteria de edição de usuário (derivado de UX-001-C04). Campos editáveis, PATCH /users/:id, toggle status, Gherkin. |
 | 1.5.0 | 2026-03-30 | create-amendment | UX-001-C04: Jornada 4 — Edição de Usuário (MOD-002-F04). Formulário de edição, toggle de status, PATCH /users/:id. Ref: spec-mod002-next-steps.md. |
 | 1.4.2 | 2026-03-30 | codegen | AGN-COD-VAL: Validação cruzada — 12 checks passaram, 1 erro (testes ausentes), 2 warnings (endpoints MOD-000, rota edição), 2 notes (telemetria, colunas DTO). |

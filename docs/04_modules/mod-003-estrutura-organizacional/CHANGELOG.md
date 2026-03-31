@@ -36,6 +36,9 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.14.3 | 2026-03-31 | codegen | Codegen UX-001-C04: 1 agente (AGN-COD-WEB), 5 arquivos (3 novos + 2 editados). LinkTenantModal.tsx, use-available-tenants.ts, use-link-tenant-modal.ts criados. OrgTreePage.tsx e DetailPanel.tsx corrigidos. TS: 0 erros novos. |
+| 1.14.2 | 2026-03-31 | merge-amendment | Merge UX-001-C04: fix "Vincular tenant" em N4 → LinkTenantModal (novo), handler onLinkTenant corrigido, seção "Estabelecimentos Vinculados" renomeada, DetailPanel prop onLinkTenant. Base UX-001 bumped v0.4.3. Ref: spec-fix-org-n4-link-tenant-edit-redirect. |
+| 1.14.1 | 2026-03-31 | create-amendment | Amendment UX-001-C04: fix "Vincular tenant" em N4 redireciona para edição inline. Implementar LinkTenantModal (busca + seleção de tenant), corrigir handler onLinkTenant no OrgTreePage, corrigir botão "+ Novo Departamento" no DetailPanel. Ref: spec-fix-org-n4-link-tenant-edit-redirect. |
 | 1.14.0 | 2026-03-31 | codegen | Codegen F05 (departamentos): 6 agentes, 28 arquivos. Camadas: DB (3), CORE (4), APP (8), API (4), WEB (9). Schema Drizzle, entity DDD, 6 use cases, 6 endpoints Fastify, React page + hooks + components. TS: 0 erros. |
 | 1.13.0 | 2026-03-31 | arquitetura | User Story US-MOD-003-F05 (CRUD Departamentos) criada em READY. Épico US-MOD-003 atualizado v1.2.0 com F04 e F05. DoR completo — pronto para codegen. |
 | 1.12.0 | 2026-03-31 | merge-amendment | Merge SEC-001-M01 + SEC-002-M01 + UX-001-C03: escopos org:dept:* no SEC-001 (v0.3.0), 4 events departamentos no SEC-002 (v0.3.0), toggle→badge+botão no UX-001 (v0.4.2). Todos os 3 amendments MERGED. |

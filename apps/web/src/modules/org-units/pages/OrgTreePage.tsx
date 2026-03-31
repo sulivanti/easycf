@@ -29,6 +29,7 @@ import { OrgTreeNode } from '../components/OrgTreeNode.js';
 import { DetailPanel } from '../components/DetailPanel.js';
 import { DeactivateModal } from '../components/DeactivateModal.js';
 import { OrgFormPage } from './OrgFormPage.js';
+import { LinkTenantModal } from '../components/LinkTenantModal.js';
 import { ConfirmationModal } from '@shared/ui/confirmation-modal';
 
 export interface OrgTreePageProps {
@@ -53,6 +54,21 @@ interface ConfirmState {
 }
 
 type FormPanelState = { open: false } | { open: true; mode: 'create'; parentId?: string };
+
+/** UX-001-C04: state for LinkTenantModal */
+interface LinkTenantState {
+  open: boolean;
+  orgUnitId: string;
+  orgUnitNome: string;
+  linkedTenantIds: string[];
+}
+
+const LINK_TENANT_INITIAL: LinkTenantState = {
+  open: false,
+  orgUnitId: '',
+  orgUnitNome: '',
+  linkedTenantIds: [],
+};
 
 /** UX-001-C02: edit guard state */
 interface EditGuardState {
@@ -91,6 +107,7 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
   const [requestEdit, setRequestEdit] = useState(false);
   const [deactivate, setDeactivate] = useState<DeactivateState>(DEACTIVATE_INITIAL);
   const [confirm, setConfirm] = useState<ConfirmState>(CONFIRM_INITIAL);
+  const [linkTenant, setLinkTenant] = useState<LinkTenantState>(LINK_TENANT_INITIAL);
 
   // UX-001-C02: elevated editing state from DetailPanel
   const [isEditing, setIsEditing] = useState(false);
@@ -203,6 +220,40 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
       });
     },
     [restoreMutation, closeConfirm],
+  );
+
+  // UX-001-C04: open LinkTenantModal for N4 node
+  const handleLinkTenant = useCallback(
+    (id: string) => {
+      guardedAction(() => {
+        setIsEditing(false);
+        setSelectedId(id);
+
+        // Find node in tree to get nome and linked tenants
+        function findNode(
+          nodes: readonly import('../types/org-units.types.js').OrgUnitTreeNodeVM[],
+        ): import('../types/org-units.types.js').OrgUnitTreeNodeVM | null {
+          for (const n of nodes) {
+            if (n.id === id) return n;
+            const found = findNode(n.children);
+            if (found) return found;
+          }
+          return null;
+        }
+
+        const treeNode = tree ? findNode(tree) : null;
+        setLinkTenant({
+          open: true,
+          orgUnitId: id,
+          orgUnitNome: treeNode?.nome ?? detailVM?.nome ?? '',
+          linkedTenantIds:
+            detailVM && detailVM.id === id
+              ? detailVM.tenants.map((t) => t.tenantId)
+              : (treeNode?.tenants.map((t) => t.tenantId) ?? []),
+        });
+      });
+    },
+    [guardedAction, tree, detailVM],
   );
 
   const handleUnlinkTenant = useCallback(
@@ -359,7 +410,7 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
                     onEdit={handleOpenEdit}
                     onDelete={handleDelete}
                     onRestore={handleRestore}
-                    onLinkTenant={(id) => handleOpenEdit(id)}
+                    onLinkTenant={handleLinkTenant}
                     onUnlinkTenant={handleUnlinkTenant}
                     onViewHistory={onNavigateHistory}
                   />
@@ -379,6 +430,7 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
           requestEdit={requestEdit}
           onEditHandled={handleEditHandled}
           onCreateChild={handleOpenCreate}
+          onLinkTenant={handleLinkTenant}
           isEditing={isEditing}
           onEditingChange={setIsEditing}
           onDirtyChange={setIsDirty}
@@ -406,6 +458,16 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
         confirmLabel={confirm.confirmLabel}
         cancelLabel={COPY.modal.cancel}
         onConfirm={confirm.onConfirm}
+      />
+
+      {/* UX-001-C04: Link tenant modal */}
+      <LinkTenantModal
+        open={linkTenant.open}
+        onOpenChange={(open) => !open && setLinkTenant(LINK_TENANT_INITIAL)}
+        orgUnitId={linkTenant.orgUnitId}
+        orgUnitNome={linkTenant.orgUnitNome}
+        linkedTenantIds={linkTenant.linkedTenantIds}
+        onSuccess={() => setLinkTenant(LINK_TENANT_INITIAL)}
       />
 
       {/* UX-001-C02: Edit guard confirmation modal */}

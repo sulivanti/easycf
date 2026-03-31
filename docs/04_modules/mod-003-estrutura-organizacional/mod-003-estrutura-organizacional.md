@@ -144,3 +144,4 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 - [UX-001-C03](amendments/ux/UX-001-C03.md) — Correção: Toggle status → ReadOnlyBadge + BtnDesativar (fluxo DELETE com modal). Resolve PENDENTE-010
 - [SEC-001-M01](amendments/sec/SEC-001-M01.md) — Melhoria: Escopos RBAC para departamentos (org:dept:read, org:dept:write, org:dept:delete)
 - [SEC-002-M01](amendments/sec/SEC-002-M01.md) — Melhoria: Matriz de autorização de eventos para departamentos (4 domain events)
+- [UX-001-C04](amendments/ux/UX-001-C04.md) — Correção: "Vincular tenant" em N4 redireciona para edição inline em vez de abrir LinkTenantModal. Implementa modal de vinculação conforme UX-ORG-001

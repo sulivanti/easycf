@@ -35,6 +35,7 @@ export const updateRoleBody = z.object({
   name: z.string().min(1).max(255).optional(),
   description: z.string().max(1000).nullable().optional(),
   scopes: z.array(scopeString).min(1),
+  status: z.enum(['ACTIVE', 'INACTIVE']).optional(),
 });
 
 // ---------------------------------------------------------------------------

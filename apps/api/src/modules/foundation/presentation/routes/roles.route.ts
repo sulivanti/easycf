@@ -119,6 +119,7 @@ export async function rolesRoutes(app: FastifyInstance): Promise<void> {
         name: request.body.name,
         description: request.body.description,
         scopes: request.body.scopes,
+        status: request.body.status,
         updatedBy: request.session.userId,
         tenantId: request.session.tenantId,
         correlationId,

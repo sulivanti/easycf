@@ -1973,6 +1973,10 @@ components:
           items:
             type: string
             pattern: "^[a-z][a-z0-9_]*(:[a-z][a-z0-9_]*){1,2}$"
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+          description: "Status do role. Se omitido, mantém o valor atual."
 
     CreateTenantRequest:
       type: object

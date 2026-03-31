@@ -22,6 +22,7 @@ export interface UpdateRoleInput {
   readonly name?: string;
   readonly description?: string | null;
   readonly scopes: readonly string[];
+  readonly status?: 'ACTIVE' | 'INACTIVE';
   readonly updatedBy: string;
   readonly tenantId: string;
   readonly correlationId: string;
@@ -45,9 +46,19 @@ export class UpdateRoleUseCase {
 
     // Validate new scopes (BR-005)
     const newScopes = input.scopes.map((s) => Scope.create(s));
-    const updated = role
+    let updated = role
       .replaceScopes(newScopes)
       .update({ name: input.name, description: input.description });
+
+    // FR-000-M05: optional status change
+    const statusChanged = input.status && input.status !== role.status;
+    if (input.status && statusChanged) {
+      updated = Role.fromPersistence({
+        ...updated.toProps(),
+        status: input.status,
+        updatedAt: new Date(),
+      });
+    }
 
     await this.uow.transaction(async (tx) => {
       await this.roleRepo.update(updated.toProps(), tx);
@@ -67,6 +78,22 @@ export class UpdateRoleUseCase {
         }),
         tx,
       );
+
+      // FR-000-M05: emit status_changed event if status changed
+      if (statusChanged) {
+        await this.eventRepo.create(
+          createFoundationEvent({
+            tenantId: input.tenantId,
+            entityType: 'role',
+            entityId: input.roleId,
+            eventType: 'role.status_changed',
+            payload: { from: role.status, to: input.status },
+            correlationId: input.correlationId,
+            createdBy: input.updatedBy,
+          }),
+          tx,
+        );
+      }
     });
 
     // BR-011: Invalidate Redis cache (fail silently)

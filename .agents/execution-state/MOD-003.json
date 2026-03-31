@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-003",
   "module_path": "docs/04_modules/mod-003-estrutura-organizacional/",
-  "last_updated": "2026-03-29T17:44:50.000Z",
+  "last_updated": "2026-03-31T12:00:00.000Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -84,6 +84,19 @@
           "apps/web/src/modules/org-units/components/DeactivateModal.tsx",
           "apps/web/src/modules/org-units/pages/OrgTreePage.tsx",
           "apps/web/src/modules/org-units/pages/OrgFormPage.tsx"
+        ]
+      },
+      "AGN-COD-WEB-C04": {
+        "status": "done",
+        "completed_at": "2026-03-31T12:00:00.000Z",
+        "files_generated": 5,
+        "context": "UX-001-C04 fix: LinkTenantModal",
+        "files": [
+          "apps/web/src/modules/org-units/components/LinkTenantModal.tsx",
+          "apps/web/src/modules/org-units/hooks/use-available-tenants.ts",
+          "apps/web/src/modules/org-units/hooks/use-link-tenant-modal.ts",
+          "apps/web/src/modules/org-units/pages/OrgTreePage.tsx",
+          "apps/web/src/modules/org-units/components/DetailPanel.tsx"
         ]
       },
       "AGN-COD-VAL": {

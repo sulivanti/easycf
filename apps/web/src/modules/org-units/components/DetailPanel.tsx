@@ -29,6 +29,8 @@ export interface DetailPanelProps {
   requestEdit?: boolean;
   onEditHandled?: () => void;
   onCreateChild: (parentId: string) => void;
+  /** UX-001-C04: open LinkTenantModal */
+  onLinkTenant: (orgUnitId: string) => void;
   /** UX-001-C02: elevated editing state */
   isEditing: boolean;
   onEditingChange: (editing: boolean) => void;
@@ -64,6 +66,7 @@ export function DetailPanel({
   requestEdit,
   onEditHandled,
   onCreateChild,
+  onLinkTenant,
   isEditing,
   onEditingChange,
   onDirtyChange,
@@ -344,29 +347,29 @@ export function DetailPanel({
       {/* Hierarquia card — visible only in edit mode (UX-001-M02) */}
       {isEditing && <HierarchyCard parentName={parentName} levelLabel={levelLabel} />}
 
-      {/* Departamentos placeholder — PENDENTE-008 */}
+      {/* Estabelecimentos vinculados (tenants N5) — UX-001-C04 */}
       <div className="rounded-xl border border-a1-border bg-white p-6">
         <div className="flex items-center justify-between">
           <h3 className="text-[10px] font-bold uppercase tracking-widest text-a1-text-hint">
-            Departamentos Vinculados
+            Estabelecimentos Vinculados
           </h3>
-          <span className="text-xs text-primary-600">Ver todos</span>
+          {detail.tenants.length > 0 && <span className="text-xs text-primary-600">Ver todos</span>}
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {detail.tenants.map((t) => (
             <Tag key={t.tenantId}>{t.codigo}</Tag>
           ))}
-          {hasWrite && !isEditing && (
+          {hasWrite && !isEditing && detail.nivel === 4 && (
             <button
               type="button"
               className="inline-flex items-center rounded-md border border-dashed border-a1-border px-4 py-2 text-xs text-a1-text-hint hover:border-a1-text-auxiliary"
-              onClick={() => onCreateChild(detail.id)}
+              onClick={() => onLinkTenant(detail.id)}
             >
-              + Novo Departamento
+              + Vincular Estabelecimento
             </button>
           )}
           {detail.tenants.length === 0 && !hasWrite && (
-            <p className="text-xs text-a1-text-hint">Nenhum departamento vinculado.</p>
+            <p className="text-xs text-a1-text-hint">Nenhum estabelecimento vinculado.</p>
           )}
         </div>
       </div>

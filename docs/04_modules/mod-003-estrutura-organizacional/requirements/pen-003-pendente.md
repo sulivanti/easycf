@@ -5,6 +5,8 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 1.2.0  | 2026-03-31 | manage-pendentes | PENDENTE-010 → IMPLEMENTADA — Opção B (manter soft delete, toggle visual dispara DELETE com modal). Artefato: UX-001-C03. |
+> | 1.1.0  | 2026-03-31 | manage-pendentes | PENDENTE-010 → DECIDIDA — Opção B (manter soft delete com modal de confirmação, toggle visual apenas) |
 > | 1.0.0  | 2026-03-24 | validate-all  | Re-validação pós-codegen: PENDENTE-007 → RESOLVIDA (lint agora passa), 0 violações novas |
 > | 0.9.0  | 2026-03-24 | validate-all  | Adição PENDENTE-007 — erros lint codegen (12 ocorrências) |
 > | 0.8.0  | 2026-03-18 | Marcos Sulivan | PENDENTE-004 → IMPLEMENTADA — Opção A (NFR-001 v0.3.0 §7.1, FR-001 v0.3.0) |
@@ -405,18 +407,22 @@ Opção A — Correção incremental em 3 fases, consistente com a decisão já 
 
 ---
 
-## PENDENTE-008 — Departamentos Vinculados (Tags no DetailPanel)
+## ~~PENDENTE-008~~ — ✅ DECIDIDA: Departamentos Vinculados (Tags no DetailPanel)
 
-- **status:** ABERTA
+- **status:** DECIDIDA
 - **severidade:** MEDIA
 - **dominio:** UX/DATA
 - **tipo:** LACUNA
 - **origem:** PENPOT-REVIEW
 - **criado_em:** 2026-03-29
 - **criado_por:** Marcos Sulivan
+- **decidido_em:** 2026-03-30
+- **decidido_por:** arquitetura
+- **opcao_escolhida:** Entidade independente primeiro (Fase 1 CRUD puro)
+- **justificativa_decisao:** Departamentos são criados como entidade independente (flat, por tenant) com CRUD completo. A vinculação com org_units via tabela associativa `org_unit_departments` é adiada para fase posterior.
 - **modulo:** MOD-003
-- **rastreia_para:** UX-001-M01, 10-org-tree-spec.md
-- **tags:** departamentos, tags, detail-panel
+- **rastreia_para:** UX-001-M01, 10-org-tree-spec.md, FR-002, DATA-002, BR-002, SEC-001-M01, SEC-002-M01, UX-002
+- **tags:** departamentos, tags, detail-panel, crud
 - **sla_data:** ---
 - **dependencias:** [UX-001-M01]
 
@@ -428,9 +434,31 @@ A spec 10-OrgTree define um CardDepartamentos no DetailPanel com tags (Diretoria
 
 Sem esta funcionalidade, o CardDepartamentos no DetailPanel tera dados mockados ou ficara oculto. A feature pode ser implementada como modulo separado ou extensao do MOD-003.
 
+### Opcoes
+
+**Opcao A — Entidade independente primeiro (Fase 1):**
+CRUD de departamentos como entidade flat por tenant, sem tabela associativa. CardDepartamentos no DetailPanel com estado empty/placeholder até fase posterior.
+
+- Pros: Entidade pronta para uso imediato; CRUD completo; desacoplado de org_units
+- Contras: CardDepartamentos no DetailPanel ainda sem dados vinculados
+
+**Opcao B — CRUD + vinculação simultânea:**
+Criar departamentos + tabela associativa `org_unit_departments` + endpoints de vinculação.
+
+- Pros: Funcionalidade completa de uma vez
+- Contras: Escopo muito grande; atrasa entrega; acoplamento prematuro
+
 ### Recomendacao
 
-Adiar para fase posterior. Implementar CardDepartamentos com estado empty/placeholder no DetailPanel. Criar feature dedicada quando o modelo de departamentos for definido.
+Opcao A — entidade independente primeiro. CRUD de departamentos é útil por si só e a vinculação pode ser adicionada depois via amendment.
+
+### Resolução
+
+> **Decisão:** Opção A — Entidade independente primeiro (Fase 1 CRUD puro)
+> **Decidido por:** arquitetura em 2026-03-30
+> **Justificativa:** Departamentos como entidade flat por tenant com CRUD completo. Vinculação com org_units via tabela associativa `org_unit_departments` adiada para fase posterior (MOD-003 v2 ou amendment dedicado).
+> **Artefato de saída:** FR-002, DATA-002, BR-002, SEC-001-M01, SEC-002-M01, UX-002, 12-departments-spec.md
+> **Implementado em:** 2026-03-30 (especificação normativa completa)
 
 ---
 
@@ -463,17 +491,21 @@ Adiar para fase de integracao cross-module. Implementar MetricCards com dados mo
 
 ---
 
-## PENDENTE-010 — Toggle Status (Ativo/Inativo) vs Soft Delete
+## ~~PENDENTE-010~~ — ✅ IMPLEMENTADA: Toggle Status (Ativo/Inativo) vs Soft Delete
 
-- **status:** ABERTA
+- **status:** IMPLEMENTADA
 - **severidade:** MEDIA
 - **dominio:** BIZ/FR
 - **tipo:** DEC-TEC
 - **origem:** PENPOT-REVIEW
 - **criado_em:** 2026-03-29
 - **criado_por:** Marcos Sulivan
+- **decidido_em:** 2026-03-31
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** B
+- **justificativa_decisao:** Manter soft delete com modal de confirmação preserva o modelo de dados existente (BR-005) e a compatibilidade com restore (BR-009). O toggle visual serve como trigger do fluxo DELETE existente, sem introduzir novo caminho de desativação. Sem mudança no backend.
 - **modulo:** MOD-003
-- **rastreia_para:** UX-001-M01, 11-org-form-spec.md, BR-005
+- **rastreia_para:** UX-001-M01, UX-001-C03, 11-org-form-spec.md, BR-005
 - **tags:** status, toggle, soft-delete, desativacao
 - **sla_data:** ---
 - **dependencias:** [UX-001-M01]
@@ -501,13 +533,21 @@ Toggle para INACTIVE via PATCH, DELETE reservado para exclusao definitiva futura
 
 ### Recomendacao
 
-Opcao B — manter soft delete com modal de confirmacao. O toggle visual serve como trigger do fluxo existente, sem mudar o modelo de dados. Decisao do PO necessaria.
+Opcao B — manter soft delete com modal de confirmacao. O toggle visual serve como trigger do fluxo existente, sem mudar o modelo de dados.
+
+### Resolução
+
+> **Decisão:** Opção B — Manter soft delete, toggle visual apenas
+> **Decidido por:** Marcos Sulivan em 2026-03-31
+> **Justificativa:** Preserva o modelo de dados existente (BR-005, BR-009). O toggle visual no DetailPanel/InlineEdit serve como trigger do fluxo DELETE com modal de confirmação, sem introduzir novo endpoint ou semântica de desativação. Zero mudança no backend.
+> **Artefato de saída:** UX-001-C03 (amendment: toggle visual → DELETE com modal)
+> **Implementado em:** 2026-03-31
 
 ---
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-29
-- **rastreia_para:** US-MOD-003, FR-001, FR-004, BR-008, BR-009, DATA-001, NFR-001, UX-001, ADR-003, ADR-004, SEC-002, DATA-003, INT-001, DOC-PADRAO-002, UX-001-M01
+- **data_ultima_revisao:** 2026-03-31
+- **rastreia_para:** US-MOD-003, FR-001, FR-002, FR-004, BR-008, BR-009, DATA-001, DATA-002, BR-002, NFR-001, UX-001, UX-002, ADR-003, ADR-004, SEC-002, SEC-001-M01, SEC-002-M01, DATA-003, INT-001, DOC-PADRAO-002, UX-001-M01
 - **referencias_exemplos:** EX-CI-007
-- **evidencias:** 10 pendentes total: 3 RESOLVIDA (001, 003, 005, 007) + 4 IMPLEMENTADA (002, 004, 006) + 3 ABERTA (008, 009, 010).
+- **evidencias:** 10 pendentes total: 1 RESOLVIDA (007) + 7 IMPLEMENTADA (001, 002, 003, 004, 005, 006, 010) + 1 DECIDIDA (008) + 1 ABERTA (009).

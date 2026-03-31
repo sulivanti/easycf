@@ -34,6 +34,10 @@ export {
 export { orgUnits, orgUnitTenantLinks } from './org-units.js';
 export { orgUnitsRelations, orgUnitTenantLinksRelations } from './org-units.relations.js';
 
+// MOD-003 F05 — Departments
+export { departments } from './departments.js';
+export { departmentsRelations } from './departments.relations.js';
+
 // MOD-004 — Identity Advanced
 export { userOrgScopes, accessShares, accessDelegations } from './identity-advanced.js';
 export {

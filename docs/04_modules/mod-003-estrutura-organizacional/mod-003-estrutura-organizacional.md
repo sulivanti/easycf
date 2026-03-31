@@ -97,6 +97,7 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 | [US-MOD-003-F02](../user-stories/features/US-MOD-003-F02.md) | Árvore Organizacional (UX-ORG-001) | **UX** | `READY` |
 | [US-MOD-003-F03](../user-stories/features/US-MOD-003-F03.md) | Formulário de Nó Organizacional (UX-ORG-002) | **UX** | `READY` |
 | [US-MOD-003-F04](../user-stories/features/US-MOD-003-F04.md) | Restore de Unidade Organizacional | **Backend + UX** | `READY` |
+| [US-MOD-003-F05](../user-stories/features/US-MOD-003-F05.md) | CRUD de Departamentos (Fase 1) | **Full-Stack** | `READY` |
 
 ## 6. Itens Base (Canônicos) e Links
 
@@ -109,6 +110,10 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 - [SEC-001](requirements/sec/SEC-001.md) — Segurança e Compliance da Estrutura Organizacional
 - [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos da Estrutura Organizacional
 - [UX-001](requirements/ux/UX-001.md) — Jornadas e Fluxos da Estrutura Organizacional
+- [FR-002](requirements/fr/FR-002.md) — Requisitos Funcionais de Departamentos (FR-007 — CRUD)
+- [DATA-002](requirements/data/DATA-002.md) — Modelo de Dados de Departamentos
+- [BR-002](requirements/br/BR-002.md) — Regras de Negócio de Departamentos (BR-013–BR-018)
+- [UX-002](requirements/ux/UX-002.md) — Jornadas e Fluxos de Departamentos (UX-ORG-003)
 - [NFR-001](requirements/nfr/NFR-001.md) — Requisitos Não Funcionais da Estrutura Organizacional
 - [PEN-003](requirements/pen-003-pendente.md) — Pendências e Questões Abertas da Estrutura Organizacional
 <!-- end index -->
@@ -136,3 +141,6 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 - [UX-001-C01](amendments/ux/UX-001-C01.md) — Correção: error handling silencioso no OrgFormPage — erros 5xx/400/403 não mostravam feedback, extractFieldErrors não chamada, campos faltando no CreateOrgUnitRequest
 - [UX-001-M02](amendments/ux/UX-001-M02.md) — Melhoria: Inline Edit no DetailPanel substitui FormPanel para edição — InlineEditCard, HierarchyCard, árvore visível durante edição
 - [UX-001-C02](amendments/ux/UX-001-C02.md) — Correção: Guard de edição inline — diálogo de confirmação ao sair do modo edição com alterações não salvas
+- [UX-001-C03](amendments/ux/UX-001-C03.md) — Correção: Toggle status → ReadOnlyBadge + BtnDesativar (fluxo DELETE com modal). Resolve PENDENTE-010
+- [SEC-001-M01](amendments/sec/SEC-001-M01.md) — Melhoria: Escopos RBAC para departamentos (org:dept:read, org:dept:write, org:dept:delete)
+- [SEC-002-M01](amendments/sec/SEC-002-M01.md) — Melhoria: Matriz de autorização de eventos para departamentos (4 domain events)

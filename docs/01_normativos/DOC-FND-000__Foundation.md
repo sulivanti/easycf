@@ -105,7 +105,7 @@ O Foundation define os scopes base do sistema. Todo módulo que adiciona novos s
 | `mcp:agent:read` | MOD-010 | Visualizar agentes MCP e detalhes |
 | `mcp:agent:write` | MOD-010 | Criar e editar agentes MCP |
 | `mcp:agent:revoke` | MOD-010 | Revogar agentes MCP (irreversível) |
-| `mcp:agent:phase2-enable` | MOD-010 | Habilitar Phase 2 create para agente individual |
+| `mcp:agent:phase2_enable` | MOD-010 | Habilitar Phase 2 create para agente individual |
 | `mcp:action:read` | MOD-010 | Ver catálogo de ações MCP |
 | `mcp:action:write` | MOD-010 | Criar e editar ações do catálogo MCP |
 | `mcp:log:read` | MOD-010 | Visualizar execuções MCP e logs |
@@ -349,7 +349,8 @@ Template de tabela de ameaças que TODO módulo com requisitos de segurança (SE
 
 ## CHANGELOG
 
-- v1.7.0 (2026-03-19): §2.2 — Adiciona 6 scopes MOD-010 (MCP e Automação Governada): `mcp:agent:read/write/revoke/phase2-enable`, `mcp:key:rotate`, `mcp:execution:read`. Referência: PEN-010 PENDENTE-004, Amendment DOC-FND-000-M04.
+- v1.7.1 (2026-03-31): §2.2 — Rename `mcp:agent:phase2-enable` → `mcp:agent:phase2_enable` (hífen violava regex canônica). Ref: DOC-FND-000-C01, spec-fix-scope-hyphen-rename.
+- v1.7.0 (2026-03-19): §2.2 — Adiciona 6 scopes MOD-010 (MCP e Automação Governada): `mcp:agent:read/write/revoke/phase2_enable`, `mcp:key:rotate`, `mcp:execution:read`. Referência: PEN-010 PENDENTE-004, Amendment DOC-FND-000-M04.
 - v1.6.0 (2026-03-19): §2.2 — Adiciona 7 scopes MOD-009 (Movimentos sob Aprovação): `approval:rule:read/write`, `approval:engine:evaluate`, `approval:movement:read/write`, `approval:decide`, `approval:override`. Referência: PEN-009 PEN-009-002, Amendment DOC-FND-000-M03.
 - v1.5.0 (2026-03-19): §2.2 — Adiciona 7º scope MOD-006: `process:case:reopen` (reabertura excepcional auditada). Total: 7 scopes `process:case:*`. Referência: PEN-006 PENDENTE-001. Apêndice — 4 exemplos canônicos adicionados (EX-AUTH-001, EX-PII-001, EX-SEC-001, EX-SEC-002).
 - v1.4.0 (2026-03-19): §2.2 — Adiciona 6 scopes MOD-006 (Execução de Casos): `process:case:read/write/cancel/gate_resolve/gate_waive/assign`. Referência: PEN-006 PENDENTE-004, US-MOD-006, SEC-006 §2.1.

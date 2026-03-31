@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>07-RoleForm — Referência Visual</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --blue:#2E86C1;--blue-lt:#E3F2FD;--blue-hover:#256FA0;
+  --black:#111;--bg:#F5F5F3;--white:#FFF;
+  --border:#E8E8E6;--border-lt:#F0F0EE;--ro-bg:#F8F8F6;
+  --t1:#111;--t2:#333;--t3:#555;--t4:#888;--t5:#AAA;--t6:#CCC;
+  --err:#E74C3C;--danger:#C0392B;
+  --success:#27AE60;--success-bg:#E8F8EF;--success-bd:#B5E8C9;
+  --warn:#E67E22;--warn-bg:#FFF3E0;--warn-bd:#FFE0B2;
+  --green:#1E7A42;--green-lt:#E8F8EF;
+  --ba-t:#1E7A42;--ba-bg:#E8F8EF;--ba-bd:#B5E8C9;
+  --bi-t:#6C757D;--bi-bg:#F4F4F2;--bi-bd:#E0E0DE;
+  --bb-t:#C0392B;--bb-bg:#FFEBEE;--bb-bd:#F5C6CB;
+  --bp-t:#B8860B;--bp-bg:#FFF3E0;--bp-bd:#FFE0B2;
+  --scope-bg:#F4F4F2;--scope-bd:#E0E0DE
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#888;display:flex;flex-direction:column;align-items:center;gap:80px;padding:60px 40px}
+.tag{font-size:11px;font-weight:700;color:#444;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.frame{width:1440px;height:900px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.25);flex-shrink:0;background:var(--bg)}
+
+/* Topbar */
+.topbar{height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tb-n{font-weight:800;font-size:14px;color:var(--t1)}
+.tb-s{font-weight:600;font-size:10px;color:var(--t4);letter-spacing:1.2px;text-transform:uppercase}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 8px}
+.bc{display:flex;align-items:center;gap:6px;font-size:13px}
+.bc-m{color:var(--t4)}
+.bc-x{color:var(--t6)}
+.bc-a{color:var(--t1);font-weight:700}
+.tb-r{display:flex;align-items:center;gap:16px}
+.tb-bell{position:relative;cursor:pointer}
+.tb-bell svg{width:18px;height:18px;stroke:var(--t4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tb-dot{position:absolute;top:-2px;right:-2px;width:7px;height:7px;background:var(--err);border-radius:50%;border:1.5px solid var(--white)}
+.tb-emp{font-size:12px;font-weight:500;color:var(--t3)}
+
+/* Sidebar */
+.lay{display:flex;flex:1;overflow:hidden}
+.sb{width:240px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-sec{padding:24px 16px 0}
+.sb-sec+.sb-sec{padding-top:20px}
+.sb-cat{font-weight:700;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--t5);margin-bottom:8px;padding:0 12px}
+.sb-items{display:flex;flex-direction:column;gap:2px}
+.sb-i{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;text-decoration:none}
+.sb-i:hover{background:#f8f8f6}
+.sb-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sb-i.on{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.sb-u{margin-top:auto;border-top:1px solid var(--border);padding:16px;display:flex;align-items:center;gap:10px}
+.sb-av{width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-un{font-size:12px;font-weight:700;color:var(--t1)}
+.sb-ue{font-size:11px;color:var(--t4)}
+
+/* ContentArea */
+.ct{flex:1;padding:32px;overflow-y:auto}
+
+/* BackLink */
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--blue);cursor:pointer;text-decoration:none;margin-bottom:16px}
+.back-link svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.back-link:hover{text-decoration:underline}
+
+/* PageHeader */
+.ph{display:flex;justify-content:space-between;align-items:flex-start}
+.ph-t{font-weight:800;font-size:28px;line-height:34px;letter-spacing:-1px;color:var(--t1)}
+.ph-d{font-size:14px;color:var(--t4);margin-top:4px}
+.ph-title-row{display:flex;align-items:center;gap:12px}
+
+/* StatusBadge */
+.bd{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.bd-a{color:var(--ba-t);background:var(--ba-bg);border:1px solid var(--ba-bd)}
+.bd-i{color:var(--bi-t);background:var(--bi-bg);border:1px solid var(--bi-bd)}
+
+/* FormCard */
+.form-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:32px;margin-top:24px;max-width:720px}
+
+/* Form fields */
+.f-label{font-weight:700;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--t2);margin-bottom:8px}
+.f-input{width:100%;height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--border);font-family:inherit;font-size:14px;color:var(--t1);background:var(--white);outline:none}
+.f-input::placeholder{color:var(--t6)}
+.f-input:focus{border-color:var(--blue)}
+.f-textarea{width:100%;min-height:80px;padding:12px 14px;border-radius:10px;border:1px solid var(--border);font-family:inherit;font-size:14px;color:var(--t1);background:var(--white);outline:none;resize:vertical;line-height:1.5}
+.f-textarea::placeholder{color:var(--t6)}
+.f-textarea:focus{border-color:var(--blue)}
+.f-group{margin-top:20px}
+.f-group:first-child{margin-top:0}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;gap:10px;margin-top:20px}
+.toggle-track{width:40px;height:22px;border-radius:11px;background:var(--blue);position:relative;cursor:pointer;flex-shrink:0}
+.toggle-track.off{background:var(--border)}
+.toggle-thumb{width:18px;height:18px;border-radius:50%;background:var(--white);position:absolute;top:2px;right:2px;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+.toggle-track.off .toggle-thumb{right:auto;left:2px}
+.toggle-label{font-size:13px;font-weight:500;color:var(--t2)}
+
+/* Separator */
+.sep{width:100%;height:1px;background:var(--border);margin:28px 0}
+
+/* Section header */
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.sec-label{font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--t4)}
+.sec-count{font-size:12px;font-weight:500;color:var(--t4)}
+
+/* Scope chips */
+.scope-grid{display:flex;flex-wrap:wrap;gap:8px}
+.scope-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:6px;background:var(--scope-bg);border:1px solid var(--scope-bd);font-size:12px;font-weight:500;color:var(--t3);cursor:default}
+.scope-chip-x{font-size:12px;font-weight:600;color:var(--t4);cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%}
+.scope-chip-x:hover{color:var(--t1);background:rgba(0,0,0,0.06)}
+
+/* Add scope row */
+.add-scope-row{display:flex;gap:12px;margin-top:16px}
+.add-scope-row input{flex:1;height:42px;padding:0 14px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:13px;color:var(--t1);background:var(--white);outline:none}
+.add-scope-row input::placeholder{color:var(--t6)}
+.btn-add{display:inline-flex;align-items:center;gap:6px;padding:0 16px;height:42px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer;flex-shrink:0}
+.btn-add svg{width:16px;height:16px;stroke:var(--t3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.btn-add:hover{border-color:var(--blue);color:var(--blue)}
+.btn-add:hover svg{stroke:var(--blue)}
+
+/* InfoBox */
+.info-box{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;background:#F0F8FF;border-radius:8px;margin-top:16px}
+.info-box svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:1px}
+.info-box span{font-size:13px;color:var(--blue);line-height:1.5}
+
+/* Form footer */
+.form-footer{display:flex;align-items:center;gap:12px}
+.btn-sv{display:inline-flex;align-items:center;justify-content:center;padding:0 24px;height:44px;border-radius:8px;border:none;background:var(--blue);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.btn-sv:hover{background:var(--blue-hover)}
+.btn-c{display:inline-flex;align-items:center;justify-content:center;padding:0 20px;height:44px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+.btn-c:hover{background:#FAFAF8}
+
+/* Empty state */
+.empty-scopes{padding:32px;text-align:center;border:2px dashed var(--border);border-radius:10px;margin-bottom:16px}
+.empty-scopes-icon{width:40px;height:40px;border-radius:50%;background:var(--scope-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.empty-scopes-icon svg{width:20px;height:20px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.empty-scopes-text{font-size:13px;color:var(--t4);line-height:1.5}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ FRAME 1: EDITAR PERFIL ═══════════ -->
+<div class="tag">FRAME 1 — EDITAR PERFIL (07-RoleForm-Edit)</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc">
+        <span class="bc-m">Administração</span>
+        <span class="bc-x">›</span>
+        <span class="bc-m">Perfis e Permissões</span>
+        <span class="bc-x">›</span>
+        <span class="bc-a">Editar</span>
+      </nav>
+    </div>
+    <div class="tb-r">
+      <div class="tb-bell">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="tb-dot"></div>
+      </div>
+      <span class="tb-emp">Empresa: A1 Engenharia</span>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec">
+        <div class="sb-cat">ADMINISTRAÇÃO</div>
+        <div class="sb-items">
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Dashboard
+          </a>
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Usuários
+          </a>
+          <a class="sb-i on" href="#">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Perfis e Permissões
+          </a>
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+            Empresas
+          </a>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-cat">PROCESSOS</div>
+        <div class="sb-items">
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+            Solicitações
+          </a>
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            Aprovações
+          </a>
+        </div>
+      </div>
+      <div class="sb-u">
+        <div class="sb-av">AE</div>
+        <div><div class="sb-un">Administrador ECF</div><div class="sb-ue">admin@a1.com.br</div></div>
+      </div>
+    </aside>
+    <main class="ct">
+      <a class="back-link" href="#">
+        <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        Voltar para lista
+      </a>
+      <div class="ph">
+        <div>
+          <div class="ph-title-row">
+            <div class="ph-t">Editar Perfil</div>
+            <span class="bd bd-a">ATIVO</span>
+          </div>
+          <div class="ph-d">Altere as propriedades e permissões deste perfil.</div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <!-- Section: Basic Info -->
+        <div class="f-group">
+          <div class="f-label">NOME</div>
+          <input class="f-input" type="text" value="Super Administrador"/>
+        </div>
+        <div class="f-group">
+          <div class="f-label">DESCRIÇÃO</div>
+          <textarea class="f-textarea">Acesso total a todos os módulos do sistema. Perfil destinado a administradores com controle completo.</textarea>
+        </div>
+        <div class="toggle-row">
+          <div class="f-label" style="margin-bottom:0">STATUS</div>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          <span class="toggle-label">Ativo</span>
+        </div>
+
+        <div class="sep"></div>
+
+        <!-- Section: Scopes -->
+        <div class="sec-header">
+          <div class="sec-label">ESCOPOS E PERMISSÕES</div>
+          <div class="sec-count">24 escopos atribuídos</div>
+        </div>
+        <div class="scope-grid">
+          <div class="scope-chip"><span>admin:backoffice:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>admin:backoffice:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>case:instance:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>case:instance:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>integration:service:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>integration:service:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>mcp:agent:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>mcp:agent:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>movement:approval:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>movement:approval:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>movement:rule:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>movement:rule:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>org:unit:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>org:unit:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>params:routine:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>params:routine:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>process:cycle:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>process:cycle:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>tenants:tenant:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>tenants:tenant:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>users:role:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>users:role:write</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>users:user:read</span><span class="scope-chip-x">×</span></div>
+          <div class="scope-chip"><span>users:user:write</span><span class="scope-chip-x">×</span></div>
+        </div>
+
+        <div class="add-scope-row">
+          <input type="text" placeholder="domínio:entidade:ação"/>
+          <button class="btn-add">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            Adicionar
+          </button>
+        </div>
+
+        <div class="info-box">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span>Os escopos definem quais ações este perfil pode executar no sistema. Utilize o formato <strong>domínio:entidade:ação</strong> (ex: users:user:read).</span>
+        </div>
+
+        <div class="sep"></div>
+
+        <!-- Footer -->
+        <div class="form-footer">
+          <button class="btn-sv">Salvar Alterações</button>
+          <button class="btn-c">Cancelar</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════ FRAME 2: NOVO PERFIL ═══════════ -->
+<div class="tag">FRAME 2 — NOVO PERFIL (07-RoleForm-Create)</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc">
+        <span class="bc-m">Administração</span>
+        <span class="bc-x">›</span>
+        <span class="bc-m">Perfis e Permissões</span>
+        <span class="bc-x">›</span>
+        <span class="bc-a">Novo</span>
+      </nav>
+    </div>
+    <div class="tb-r">
+      <div class="tb-bell">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="tb-dot"></div>
+      </div>
+      <span class="tb-emp">Empresa: A1 Engenharia</span>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec">
+        <div class="sb-cat">ADMINISTRAÇÃO</div>
+        <div class="sb-items">
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Dashboard
+          </a>
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Usuários
+          </a>
+          <a class="sb-i on" href="#">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Perfis e Permissões
+          </a>
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+            Empresas
+          </a>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-cat">PROCESSOS</div>
+        <div class="sb-items">
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+            Solicitações
+          </a>
+          <a class="sb-i" href="#">
+            <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            Aprovações
+          </a>
+        </div>
+      </div>
+      <div class="sb-u">
+        <div class="sb-av">AE</div>
+        <div><div class="sb-un">Administrador ECF</div><div class="sb-ue">admin@a1.com.br</div></div>
+      </div>
+    </aside>
+    <main class="ct">
+      <a class="back-link" href="#">
+        <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        Voltar para lista
+      </a>
+      <div class="ph">
+        <div>
+          <div class="ph-title-row">
+            <div class="ph-t">Novo Perfil</div>
+          </div>
+          <div class="ph-d">Defina o nome, descrição e permissões do novo perfil.</div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <!-- Section: Basic Info -->
+        <div class="f-group">
+          <div class="f-label">NOME</div>
+          <input class="f-input" type="text" placeholder="Nome do perfil"/>
+        </div>
+        <div class="f-group">
+          <div class="f-label">DESCRIÇÃO</div>
+          <textarea class="f-textarea" placeholder="Descreva as responsabilidades e o nível de acesso deste perfil..."></textarea>
+        </div>
+
+        <div class="sep"></div>
+
+        <!-- Section: Scopes -->
+        <div class="sec-header">
+          <div class="sec-label">ESCOPOS E PERMISSÕES</div>
+          <div class="sec-count">0 escopos atribuídos</div>
+        </div>
+
+        <div class="empty-scopes">
+          <div class="empty-scopes-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="empty-scopes-text">Nenhum escopo adicionado ainda.<br/>Utilize o campo abaixo para adicionar permissões a este perfil.</div>
+        </div>
+
+        <div class="add-scope-row">
+          <input type="text" placeholder="domínio:entidade:ação"/>
+          <button class="btn-add">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            Adicionar
+          </button>
+        </div>
+
+        <div class="info-box">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span>Os escopos definem quais ações este perfil pode executar no sistema. Utilize o formato <strong>domínio:entidade:ação</strong> (ex: users:user:read).</span>
+        </div>
+
+        <div class="sep"></div>
+
+        <!-- Footer -->
+        <div class="form-footer">
+          <button class="btn-sv">Criar Perfil</button>
+          <button class="btn-c">Cancelar</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

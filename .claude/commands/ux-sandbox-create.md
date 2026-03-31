@@ -256,31 +256,19 @@ E PARE aqui sem executar.
 
 ---
 
-## PASSO 7 — Verificar criacao
-
-### 7.1 — Search
+## PASSO 7 — Verificar criacao (leve)
 
 Para cada frame top-level criado, chamar `mcp__penpot__search_object`:
 - `file_id`: `73c70309-a5e2-8120-8007-c7820d832ea2`
 - `query`: nome do frame
 
-Confirmar que todos os frames existem.
-
-### 7.2 — Screenshot
-
-Para cada page/variante, chamar `mcp__penpot__export_object`:
-- `file_id`: sandbox file ID
-- `object_id`: ID do frame top-level
-- `format`: `png`
-- `scale`: `2`
-
-Exibir screenshots ao usuario para validacao visual.
+Confirmar que todos os frames existem. **NAO chamar export_object aqui** — screenshots sao opcionais no PASSO 9.
 
 ---
 
 ## PASSO 8 — Relatorio
 
-Emita no chat:
+Emita no chat **IMEDIATAMENTE** apos verificacao leve (PASSO 7):
 
 ```
 ## ux-sandbox-create — Resultado
@@ -301,10 +289,28 @@ Emita no chat:
 - Divergencias spec/HTML: {N}
 
 ### Proximos passos
-- Valide visualmente os screenshots acima
+- Para screenshots: `/penpot render {frame_name} --project test`
 - Se ajustes necessarios: `/ux-sandbox-fix {SPEC_NUMBER}`
 - Se layout OK: `/ux-apply-layout {SPEC_NUMBER}`
 ```
+
+---
+
+## PASSO 9 — Screenshots opcionais (pos-relatorio)
+
+**Este passo so executa se o relatorio ja foi emitido com sucesso.**
+
+Para cada page/variante, tentar chamar `mcp__penpot__export_object`:
+- `file_id`: sandbox file ID
+- `object_id`: ID do frame top-level
+- `format`: `png`
+- `scale`: `2`
+
+**Tratamento de timeout:** Se `export_object` falhar com timeout ou erro:
+- NAO travar — emitir aviso: "Screenshot de '{frame_name}' falhou (timeout). Use `/penpot render {frame_name}` para tentar novamente."
+- Continuar com proximo frame (nao abortar)
+
+Exibir screenshots obtidos ao usuario para validacao visual.
 
 ---
 

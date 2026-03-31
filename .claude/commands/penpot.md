@@ -199,6 +199,10 @@ Use `mcp__penpot__export_object` com:
 
 Exiba a imagem retornada ao usuário. Se SVG, salve em `/tmp/penpot-export-<nome>.svg`.
 
+**Tratamento de timeout:** Se `export_object` falhar com timeout (máx 120s via `PENPOT_EXPORT_TIMEOUT`):
+- Emitir aviso: "Export timeout: o servidor Penpot não respondeu dentro do limite de 120s. Tente novamente ou aumente PENPOT_EXPORT_TIMEOUT."
+- NAO travar o fluxo — emitir relatório parcial informando a falha.
+
 ---
 
 ## PASSO 7 — `create-frame` (Write)

@@ -177,6 +177,27 @@ async function syncSuperAdminPermissions(db: ReturnType<typeof drizzle>) {
     return;
   }
 
+  // Fix scopes com nomes antigos (ex: hífens → underscores) — FR-000-C10
+  const RENAMES: Record<string, string> = {
+    'mcp:agent:phase2-enable': 'mcp:agent:phase2_enable',
+  };
+
+  for (const [oldScope, newScope] of Object.entries(RENAMES)) {
+    const [existing] = await db
+      .select({ id: rolePermissions.id })
+      .from(rolePermissions)
+      .where(eq(rolePermissions.scope, oldScope))
+      .limit(1);
+
+    if (existing) {
+      await db
+        .update(rolePermissions)
+        .set({ scope: newScope })
+        .where(eq(rolePermissions.scope, oldScope));
+      console.log(`Scope renomeado: ${oldScope} → ${newScope}`);
+    }
+  }
+
   // Role existe — busca permissões atuais e calcula diff
   const existingPerms = await db
     .select({ scope: rolePermissions.scope })

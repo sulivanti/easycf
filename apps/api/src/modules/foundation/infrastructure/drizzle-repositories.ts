@@ -564,13 +564,25 @@ export class DrizzleRoleRepository implements RoleRepository {
     row: typeof roles.$inferSelect,
     perms: (typeof rolePermissions.$inferSelect)[],
   ): RoleProps {
+    // FR-000-C12: resilient scope loading — skip invalid scopes with warning
+    const validScopes: Scope[] = [];
+    for (const p of perms) {
+      try {
+        validScopes.push(Scope.create(p.scope));
+      } catch {
+        console.warn(
+          `[RoleRepository] Scope inválido ignorado: "${p.scope}" (role: ${row.codigo}). Execute migration para corrigir.`,
+        );
+      }
+    }
+
     return {
       id: row.id,
       codigo: row.codigo,
       name: row.name,
       description: row.description,
       status: row.status as RoleProps['status'],
-      scopes: perms.map((p) => Scope.create(p.scope)),
+      scopes: validScopes,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
       deletedAt: row.deletedAt,

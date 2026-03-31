@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.25.7 | 2026-03-31 | merge-amendment | Merge FR-000-C12 + DATA-000-C04: fallback resiliente no mapToRole (try/catch + WARNING) + migration SQL renomeia scopes com hífens + CHECK constraint canônico preservado. FR-000 v0.12.2, DATA-000 v0.6.3. Ref: spec-fix-scope-hyphen-persistent-regression. |
+| 1.25.6 | 2026-03-31 | create-amendment | Amendments FR-000-C12 + DATA-000-C04: fix persistente scope com hífen — migration SQL + fallback resiliente no repository. Ref: spec-fix-scope-hyphen-persistent-regression. |
 | 1.25.3 | 2026-03-31 | codegen | Codegen UX-000-M04+FR-000-M05+INT-000-M04: 3 agentes (APP, API, WEB), 13 arquivos (2 modificados backend + 1 OpenAPI + 2 types + 5 componentes criados + 2 rotas criadas + 1 page reescrita). RoleFormPage 720px, ScopeChip/Grid, AddScopeRow, InfoBox, BackLink, toggle status no PUT. |
 | 1.25.2 | 2026-03-31 | merge-amendment | Merge FR-000-C11: validação Scope.create() no seed + remoção normalização + teste consistência. Base FR-000 v0.12.1. Ref: spec-scope-pipeline-definitive-fix. |
 | 1.25.1 | 2026-03-31 | create-amendment | Amendment FR-000-C11: correção definitiva pipeline scopes — validação Scope.create() no seed antes de INSERT, remoção normalização band-aid no VO, teste consistência seed↔VO no CI. Fecha 7 fixes recorrentes (C01/C05/C08/C09/C10/DATA-C03/normalização). Ref: spec-scope-pipeline-definitive-fix. |

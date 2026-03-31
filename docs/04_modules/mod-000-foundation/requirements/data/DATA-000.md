@@ -7,6 +7,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-15 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-15 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
+> | 0.6.3  | 2026-03-31 | merge-amendment | Merge DATA-000-C04: migration SQL para renomear scopes com hífens em role_permissions (REPLACE '-' → '_'). CHECK constraint canônico (sem hífens) preservado. Ref: spec-fix-scope-hyphen-persistent-regression. |
 > | 0.6.2  | 2026-03-30 | merge-amendment | Merge DATA-000-C03: CHECK constraint role_permissions_scope_check atualizado para aceitar hífens — regex `[a-z0-9_]` → `[a-z0-9_-]`. Necessário para scope `mcp:agent:phase2-enable` (DOC-FND-000 §2.2). |
 > | 0.6.1  | 2026-03-25 | merge-amendment | Merge DATA-000-C02: regra SYSTEM_TENANT_ID para eventos pré-auth em domain_events §8 + null coercion em campos opcionais. Ref: spec-fix-domain-events-tenant-id. |
 > | 0.6.0  | 2026-03-25 | merge-amendment | Merge DATA-000-M01: nova coluna invite_token_created_at na tabela users (derivado de FR-000-M01). Viabiliza cálculo invite_token_expired no UserDetail. |
@@ -117,7 +118,11 @@ Toda entidade principal do Foundation DEVE conter:
 |---|---|---|---|---|
 | `id` | uuid | NOT NULL | PK | |
 | `role_id` | uuid | NOT NULL | FK→roles.id ON DELETE RESTRICT | |
-| `scope` | varchar(100) | NOT NULL | CHECK(regex ^[a-z][a-z0-9_-]*(:[a-z][a-z0-9_-]*){1,2}$) | BR-005, DOC-FND-000 §2.1 |
+| `scope` | varchar(100) | NOT NULL | CHECK(regex ^[a-z][a-z0-9_]*(:[a-z][a-z0-9_]*){1,2}$) | BR-005, DOC-FND-000 §2.1 |
+
+> **Migration de dados legados (DATA-000-C04):** Uma migration SQL DEVE renomear todos os scopes com hífens: `UPDATE role_permissions SET scope = REPLACE(scope, '-', '_') WHERE scope LIKE '%-%'`. A migration é idempotente (safe to run N times). Roda automaticamente via Drizzle Kit em deploy. O seed RENAMES (`seed-admin.ts`) é mantido como fallback secundário para cenários de restore de backup.
+>
+> **Ref:** DATA-000-C04. spec-fix-scope-hyphen-persistent-regression.
 
 **Índices:** `UNIQUE(role_id, scope)` — sem duplicatas de escopo por role
 

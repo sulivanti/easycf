@@ -169,6 +169,8 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [FR-000-M05](amendments/fr/FR-000-M05.md) — Melhoria: campo `status` opcional no PUT /api/v1/roles/:id (FR-007) para suportar toggle ATIVO/INATIVO do formulário de roles (derivado de UX-000-M04)
 - [INT-000-M04](amendments/int/INT-000-M04.md) — Melhoria: campo `status` no schema `UpdateRoleRequest` do OpenAPI v1.yaml (derivado de FR-000-M05)
 - [FR-000-C11](amendments/fr/FR-000-C11.md) — Correção definitiva: validação Scope.create() no seed antes de INSERT + remoção normalização band-aid + teste consistência CI. Ref: spec-scope-pipeline-definitive-fix
+- [FR-000-C12](amendments/fr/FR-000-C12.md) — Correção: mapToRole crasha com DomainValidationError ao ler scopes legados com hífens do banco. Fallback resiliente com warning. Ref: spec-fix-scope-hyphen-persistent-regression
+- [DATA-000-C04](amendments/data/DATA-000-C04.md) — Correção: migration SQL para renomear scopes com hífens na tabela role_permissions. Ref: spec-fix-scope-hyphen-persistent-regression
 <!-- end amendments-index -->
 
 > **Nota:** 8 amendments de documentos normativos foram migrados para `docs/01_normativos/amendments/{DOC-ID}/` em 2026-03-25. Normativos são transversais e não pertencem a nenhum módulo específico. Ver: DOC-PADRAO-001-C01, DOC-PADRAO-001-M01, DOC-PADRAO-004-M01, DOC-PADRAO-005-C01, DOC-UX-011-M01, DOC-UX-011-M02, DOC-UX-012-M02, DOC-GNP-00-M01.

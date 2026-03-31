@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>10-OrgDetail-InlineEdit — Referência Visual</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --blue:#2E86C1;--blue-lt:#E3F2FD;--blue-hover:#256FA0;
+  --bg:#F5F5F3;--white:#FFF;--border:#E8E8E6;--border-lt:#F0F0EE;--ro-bg:#F8F8F6;
+  --t1:#111;--t2:#333;--t3:#555;--t4:#888;--t5:#AAA;--t6:#CCC;
+  --err:#E74C3C;--warn:#E67E22;--success:#27AE60;
+  --success-bg:#E8F8EF;--success-bd:#B5E8C9;
+  --ba-t:#1E7A42;--ba-bg:#E8F8EF;--ba-bd:#B5E8C9;
+  --bi-t:#6C757D;--bi-bg:#F4F4F2;--bi-bd:#E0E0DE;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#888;display:flex;flex-direction:column;align-items:center;gap:80px;padding:60px 40px}
+.tag{font-size:11px;font-weight:700;color:#444;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.frame{width:1440px;height:900px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.25);flex-shrink:0;background:var(--bg)}
+
+/* Topbar */
+.topbar{height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tb-n{font-weight:800;font-size:14px;color:var(--t1)}
+.tb-s{font-weight:600;font-size:10px;color:var(--t4);letter-spacing:1.2px;text-transform:uppercase}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 8px}
+.bc{display:flex;align-items:center;gap:6px;font-size:13px}
+.bc-m{color:var(--t4)}.bc-x{color:var(--t6)}.bc-a{color:var(--t1);font-weight:700}
+.tb-r{display:flex;align-items:center;gap:12px}
+.tb-un{font-size:12px;font-weight:700;color:var(--t1);text-align:right}
+.tb-ue{font-size:10px;color:var(--t4);text-align:right}
+.tb-av{width:40px;height:40px;border-radius:50%;background:#F0F0EE;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--t3)}
+
+/* Sidebar */
+.lay{display:flex;flex:1;overflow:hidden}
+.sb{width:240px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-sec{padding:24px 16px 0}.sb-sec+.sb-sec{padding-top:20px}
+.sb-cat{font-weight:700;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--t5);margin-bottom:8px;padding:0 12px}
+.sb-items{display:flex;flex-direction:column;gap:2px}
+.sb-i{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;text-decoration:none}
+.sb-i:hover{background:#f8f8f6}
+.sb-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sb-i.on{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.sb-foot{margin-top:auto;padding:16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0}
+.sb-foot-txt{font-size:12px;color:var(--t4)}
+
+/* Split Panel */
+.split{display:flex;flex:1;overflow:hidden}
+
+/* Tree Panel */
+.tree-panel{width:380px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;padding:24px;overflow-y:auto}
+.tp-title{font-weight:800;font-size:18px;color:var(--t1)}
+.tp-desc{font-size:13px;color:var(--t4);margin-top:4px}
+.tp-search{position:relative;margin-top:16px}
+.tp-search input{width:100%;height:40px;padding:0 14px 0 38px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:13px;color:var(--t1);outline:none}
+.tp-search input::placeholder{color:var(--t6)}
+.tp-search svg{position:absolute;left:12px;top:12px;width:16px;height:16px;stroke:var(--t6);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* Tree nodes */
+.tree{margin-top:16px}
+.tree-root{display:flex;align-items:center;gap:8px;padding:4px 0}
+.tree-root svg{width:16px;height:16px;stroke:var(--t4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tree-root-name{font-size:14px;font-weight:700;color:var(--t1)}
+.tree-root-dot{width:10px;height:10px;border-radius:50%;background:var(--blue);flex-shrink:0}
+.tree-children{margin-left:24px;margin-top:4px}
+.tree-node{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;cursor:pointer;margin-top:2px}
+.tree-node.selected{background:var(--blue-lt)}
+.tree-node svg{width:16px;height:16px;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tree-node.selected svg{stroke:var(--blue)}
+.tree-node.selected .tn-name{color:var(--blue);font-weight:700}
+.tn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tn-dot.n2{background:var(--blue)}
+.tn-dot.n3{background:var(--t4)}
+.tn-name{font-size:13px;font-weight:500;color:var(--t3)}
+.tn-chevron{width:12px;height:12px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tree-node.selected .tn-chevron{stroke:var(--blue)}
+.tree-sub{margin-left:28px;margin-top:2px}
+.tree-leaf{display:flex;align-items:center;gap:10px;padding:6px 12px;margin-top:2px}
+.tree-leaf-dot{width:6px;height:6px;border-radius:50%;background:var(--t5);flex-shrink:0}
+.tree-leaf-name{font-size:13px;color:var(--t4)}
+
+/* Detail Panel */
+.detail-panel{flex:1;background:var(--bg);padding:24px;overflow-y:auto}
+
+/* Detail Header */
+.dh{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:20px;display:flex;align-items:center;justify-content:space-between}
+.dh-left{display:flex;align-items:center;gap:16px}
+.dh-icon{width:48px;height:48px;border-radius:10px;background:var(--ro-bg);display:flex;align-items:center;justify-content:center}
+.dh-icon svg{width:24px;height:24px;stroke:var(--t4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.dh-name{font-weight:800;font-size:22px;color:var(--t1)}
+.dh-meta{display:flex;align-items:center;gap:8px;margin-top:4px}
+.badge-active{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--ba-t);background:var(--ba-bg);border:1px solid var(--ba-bd)}
+.dh-code{font-size:12px;color:var(--t4)}
+.dh-right{display:flex;gap:12px}
+.btn-sec{display:inline-flex;align-items:center;gap:6px;padding:0 16px;height:40px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+.btn-sec svg{width:16px;height:16px;stroke:var(--t3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.btn-pri{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;border:none;background:var(--blue);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.btn-pri:hover{background:var(--blue-hover)}
+.btn-pri.disabled{opacity:0.5;cursor:not-allowed}
+
+/* Cards */
+.card{background:var(--white);border-radius:12px;border:1px solid var(--border);margin-top:20px;overflow:hidden}
+.card-hdr{padding:14px 24px;background:var(--ro-bg);display:flex;align-items:center;justify-content:space-between}
+.card-hdr-label{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--t4)}
+.card-hdr.editing{background:var(--blue-lt)}
+.card-hdr.editing .card-hdr-label{color:var(--blue)}
+.card-hdr.editing svg{width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-right:6px}
+.card-body{padding:20px 24px}
+
+/* ReadOnly Fields */
+.ro-row{display:flex;gap:16px;margin-top:16px}
+.ro-row:first-child{margin-top:0}
+.ro-field{flex:1}
+.ro-field.w2{flex:2}
+.ro-label{font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--t4);margin-bottom:6px}
+.ro-value{padding:10px 14px;border-radius:8px;background:var(--ro-bg);border:1px solid var(--border-lt);font-size:14px;font-weight:500;color:var(--t1);min-height:42px;display:flex;align-items:center}
+.ro-value.with-lock{position:relative;padding-right:38px}
+.ro-value .lock-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* Edit Fields */
+.ed-row{display:flex;gap:16px;margin-top:16px}
+.ed-row:first-child{margin-top:0}
+.ed-field{flex:1;display:flex;flex-direction:column}
+.ed-field.w2{flex:2}
+.ed-field.full{flex:1 1 100%}
+.ed-label{font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--t4);margin-bottom:6px}
+.ed-label .req{color:var(--err);margin-left:2px}
+.ed-input{width:100%;height:42px;padding:10px 14px;border-radius:8px;border:2px solid var(--blue);background:var(--white);font-family:inherit;font-size:14px;font-weight:500;color:var(--t1);outline:none}
+.ed-input::placeholder{color:var(--t6)}
+.ed-input.err{border-color:var(--err)}
+.ed-error{font-size:11px;font-weight:500;color:var(--err);margin-top:4px}
+
+/* Tags */
+.tags-header{display:flex;justify-content:space-between;align-items:center}
+.tags-link{font-size:12px;font-weight:600;color:var(--blue);text-decoration:none}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.dtag{padding:8px 16px;border-radius:6px;border:1px solid var(--border);font-size:13px;font-weight:500;color:var(--t2);cursor:pointer}
+.dtag:hover{background:#FAFAF8}
+.dtag-add{padding:8px 16px;border-radius:6px;border:1px dashed var(--t6);font-size:13px;color:var(--t4);cursor:pointer}
+.dtag-add:hover{border-color:var(--blue);color:var(--blue)}
+
+/* Metric Cards */
+.metrics-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.mc-blue{background:var(--blue);border-radius:16px;padding:24px;position:relative;overflow:hidden;min-height:140px}
+.mc-blue .mc-label{color:rgba(255,255,255,0.8);font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.mc-blue-val{font-weight:800;font-size:36px;color:#fff;margin-top:8px}
+.mc-blue-sub{font-size:11px;color:rgba(255,255,255,0.65);margin-top:8px}
+.mc-blue-deco{position:absolute;right:-20px;bottom:-20px;width:120px;height:120px;opacity:0.08}
+.mc-blue-deco circle{fill:#fff}
+.mc-white{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:24px}
+.mc-white .mc-label{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--t4)}
+.mc-white-val{font-weight:800;font-size:36px;color:var(--t1);margin-top:8px}
+.progress-wrap{margin-top:12px}
+.progress-bar{width:100%;height:6px;border-radius:3px;background:var(--border)}
+.progress-fill{height:100%;border-radius:3px;background:var(--blue)}
+.progress-lbl{display:flex;justify-content:flex-end;margin-top:4px;font-size:11px;color:var(--t4)}
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- FRAME 1 — Estado Visualização (View Mode)                     -->
+<!-- ============================================================ -->
+<div class="tag">Frame 1 — Estado Visualização (View Mode)</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Estrutura Organizacional</span></nav>
+    </div>
+    <div class="tb-r">
+      <div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Departamentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg>Modelagem</a>
+      </div></div>
+      <div class="sb-foot"><div class="sb-dot"></div><span class="sb-foot-txt">Servidor Online</span></div>
+    </aside>
+
+    <div class="split">
+      <!-- TREE PANEL -->
+      <div class="tree-panel">
+        <div class="tp-title">Estrutura de Unidades</div>
+        <div class="tp-desc">Navegue pela hierarquia do grupo</div>
+        <div class="tp-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input placeholder="Buscar unidade ou depto..."/>
+        </div>
+        <div class="tree">
+          <div class="tree-root">
+            <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+            <span class="tree-root-name">Grupo A1</span>
+          </div>
+          <div class="tree-children">
+            <!-- A1 Engenharia — selected, expanded -->
+            <div class="tree-node selected">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              <div class="tn-dot n2"></div>
+              <span class="tn-name">A1 Engenharia</span>
+            </div>
+            <div class="tree-sub">
+              <div class="tree-leaf"><div class="tree-leaf-dot"></div><span class="tree-leaf-name">Filial SP</span></div>
+              <div class="tree-leaf"><div class="tree-leaf-dot"></div><span class="tree-leaf-name">Filial RJ</span></div>
+            </div>
+            <!-- A1 Industrial — collapsed -->
+            <div class="tree-node">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              <div class="tn-dot n2"></div>
+              <span class="tn-name">A1 Industrial</span>
+            </div>
+            <!-- A1 Agro — collapsed -->
+            <div class="tree-node">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              <div class="tn-dot n2"></div>
+              <span class="tn-name">A1 Agro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL PANEL -->
+      <div class="detail-panel">
+        <!-- Header -->
+        <div class="dh">
+          <div class="dh-left">
+            <div class="dh-icon"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg></div>
+            <div>
+              <div class="dh-name">A1 Engenharia</div>
+              <div class="dh-meta"><span class="badge-active">ATIVO</span><span class="dh-code">A1-ENG</span></div>
+            </div>
+          </div>
+          <div class="dh-right">
+            <button class="btn-sec"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Editar Dados</button>
+            <button class="btn-pri">+ Nova Subdivisão</button>
+          </div>
+        </div>
+
+        <!-- Dados Cadastrais -->
+        <div class="card">
+          <div class="card-hdr"><span class="card-hdr-label">Dados cadastrais</span></div>
+          <div class="card-body">
+            <div class="ro-row">
+              <div class="ro-field"><div class="ro-label">CNPJ</div><div class="ro-value">12.345.678/0001-90</div></div>
+              <div class="ro-field w2"><div class="ro-label">Razão Social</div><div class="ro-value">A1 Engenharia Ltda</div></div>
+            </div>
+            <div class="ro-row">
+              <div class="ro-field"><div class="ro-label">Filial</div><div class="ro-value">Matriz</div></div>
+              <div class="ro-field"><div class="ro-label">Responsável</div><div class="ro-value">Carlos Mendes</div></div>
+            </div>
+            <div class="ro-row">
+              <div class="ro-field"><div class="ro-label">Telefone</div><div class="ro-value">(11) 3456-7890</div></div>
+              <div class="ro-field"><div class="ro-label">E-mail</div><div class="ro-value">contato@a1eng.com.br</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Departamentos Vinculados -->
+        <div class="card">
+          <div class="card-hdr">
+            <span class="card-hdr-label">Departamentos vinculados</span>
+            <a class="tags-link">Ver todos (3)</a>
+          </div>
+          <div class="card-body">
+            <div class="tags-wrap">
+              <span class="dtag">Diretoria</span>
+              <span class="dtag">Operações</span>
+              <span class="dtag">Tecnologia</span>
+              <span class="dtag-add">+ Novo Departamento</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="metrics-row">
+          <div class="mc-blue">
+            <div class="mc-label">Colaboradores totais</div>
+            <div class="mc-blue-val">247</div>
+            <div class="mc-blue-sub">+12 este mês</div>
+            <svg class="mc-blue-deco" viewBox="0 0 120 120"><circle cx="40" cy="60" r="35"/><circle cx="80" cy="60" r="35"/></svg>
+          </div>
+          <div class="mc-white">
+            <div class="mc-label">Projetos em execução</div>
+            <div class="mc-white-val">8</div>
+            <div class="progress-wrap">
+              <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+              <div class="progress-lbl">75% Meta</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- FRAME 2 — Estado Inline Edit                                  -->
+<!-- ============================================================ -->
+<div class="tag">Frame 2 — Estado Inline Edit</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Estrutura Organizacional</span></nav>
+    </div>
+    <div class="tb-r">
+      <div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Departamentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg>Modelagem</a>
+      </div></div>
+      <div class="sb-foot"><div class="sb-dot"></div><span class="sb-foot-txt">Servidor Online</span></div>
+    </aside>
+
+    <div class="split">
+      <!-- TREE PANEL -->
+      <div class="tree-panel">
+        <div class="tp-title">Estrutura de Unidades</div>
+        <div class="tp-desc">Navegue pela hierarquia do grupo</div>
+        <div class="tp-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input placeholder="Buscar unidade ou depto..."/>
+        </div>
+        <div class="tree">
+          <div class="tree-root">
+            <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+            <span class="tree-root-name">Grupo A1</span>
+          </div>
+          <div class="tree-children">
+            <div class="tree-node selected">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              <div class="tn-dot n2"></div>
+              <span class="tn-name">A1 Engenharia</span>
+            </div>
+            <div class="tree-sub">
+              <div class="tree-leaf"><div class="tree-leaf-dot"></div><span class="tree-leaf-name">Filial SP</span></div>
+              <div class="tree-leaf"><div class="tree-leaf-dot"></div><span class="tree-leaf-name">Filial RJ</span></div>
+            </div>
+            <div class="tree-node">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              <div class="tn-dot n2"></div>
+              <span class="tn-name">A1 Industrial</span>
+            </div>
+            <div class="tree-node">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              <div class="tn-dot n2"></div>
+              <span class="tn-name">A1 Agro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL PANEL -->
+      <div class="detail-panel">
+        <!-- Header — Edit mode buttons -->
+        <div class="dh">
+          <div class="dh-left">
+            <div class="dh-icon"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg></div>
+            <div>
+              <div class="dh-name">A1 Engenharia</div>
+              <div class="dh-meta"><span class="badge-active">ATIVO</span><span class="dh-code">A1-ENG</span></div>
+            </div>
+          </div>
+          <div class="dh-right">
+            <button class="btn-sec">Cancelar</button>
+            <button class="btn-pri">&#10003; Salvar Alterações</button>
+          </div>
+        </div>
+
+        <!-- Dados Cadastrais — EDITANDO -->
+        <div class="card">
+          <div class="card-hdr editing">
+            <span class="card-hdr-label" style="display:flex;align-items:center">
+              <svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+              Dados cadastrais — editando
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="ed-row">
+              <div class="ed-field full">
+                <div class="ed-label">Nome da Subdivisão <span class="req">*</span></div>
+                <input class="ed-input" value="A1 Engenharia"/>
+              </div>
+            </div>
+            <div class="ed-row">
+              <div class="ed-field">
+                <div class="ed-label">CNPJ</div>
+                <input class="ed-input" value="12.345.678/0001-90"/>
+              </div>
+              <div class="ed-field w2">
+                <div class="ed-label">Razão Social</div>
+                <input class="ed-input" value="A1 Engenharia Ltda"/>
+              </div>
+            </div>
+            <div class="ed-row">
+              <div class="ed-field">
+                <div class="ed-label">Filial</div>
+                <input class="ed-input" value="Matriz"/>
+              </div>
+              <div class="ed-field">
+                <div class="ed-label">Responsável</div>
+                <input class="ed-input" value="Carlos Mendes"/>
+              </div>
+            </div>
+            <div class="ed-row">
+              <div class="ed-field">
+                <div class="ed-label">Telefone</div>
+                <input class="ed-input" value="(11) 3456-7890"/>
+              </div>
+              <div class="ed-field">
+                <div class="ed-label">E-mail</div>
+                <input class="ed-input" value="contato@a1eng.com.br"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hierarquia (always read-only) -->
+        <div class="card">
+          <div class="card-hdr"><span class="card-hdr-label">Hierarquia</span></div>
+          <div class="card-body">
+            <div class="ro-row">
+              <div class="ro-field">
+                <div class="ro-label">Unidade Pai</div>
+                <div class="ro-value with-lock">Grupo A1<svg class="lock-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+              </div>
+              <div class="ro-field">
+                <div class="ro-label">Nível</div>
+                <div class="ro-value with-lock">N2 — Empresa<svg class="lock-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Departamentos Vinculados -->
+        <div class="card">
+          <div class="card-hdr">
+            <span class="card-hdr-label">Departamentos vinculados</span>
+            <a class="tags-link">Ver todos (3)</a>
+          </div>
+          <div class="card-body">
+            <div class="tags-wrap">
+              <span class="dtag">Diretoria</span>
+              <span class="dtag">Operações</span>
+              <span class="dtag">Tecnologia</span>
+              <span class="dtag-add">+ Novo Departamento</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="metrics-row">
+          <div class="mc-blue">
+            <div class="mc-label">Colaboradores totais</div>
+            <div class="mc-blue-val">247</div>
+            <div class="mc-blue-sub">+12 este mês</div>
+            <svg class="mc-blue-deco" viewBox="0 0 120 120"><circle cx="40" cy="60" r="35"/><circle cx="80" cy="60" r="35"/></svg>
+          </div>
+          <div class="mc-white">
+            <div class="mc-label">Projetos em execução</div>
+            <div class="mc-white-val">8</div>
+            <div class="progress-wrap">
+              <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+              <div class="progress-lbl">75% Meta</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- FRAME 3 — Inline Edit com Validação                           -->
+<!-- ============================================================ -->
+<div class="tag">Frame 3 — Inline Edit com Validação</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Estrutura Organizacional</span></nav>
+    </div>
+    <div class="tb-r">
+      <div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Departamentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg>Modelagem</a>
+      </div></div>
+      <div class="sb-foot"><div class="sb-dot"></div><span class="sb-foot-txt">Servidor Online</span></div>
+    </aside>
+
+    <div class="split">
+      <!-- TREE PANEL -->
+      <div class="tree-panel">
+        <div class="tp-title">Estrutura de Unidades</div>
+        <div class="tp-desc">Navegue pela hierarquia do grupo</div>
+        <div class="tp-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input placeholder="Buscar unidade ou depto..."/>
+        </div>
+        <div class="tree">
+          <div class="tree-root">
+            <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+            <span class="tree-root-name">Grupo A1</span>
+          </div>
+          <div class="tree-children">
+            <div class="tree-node selected">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              <div class="tn-dot n2"></div>
+              <span class="tn-name">A1 Engenharia</span>
+            </div>
+            <div class="tree-sub">
+              <div class="tree-leaf"><div class="tree-leaf-dot"></div><span class="tree-leaf-name">Filial SP</span></div>
+              <div class="tree-leaf"><div class="tree-leaf-dot"></div><span class="tree-leaf-name">Filial RJ</span></div>
+            </div>
+            <div class="tree-node">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              <div class="tn-dot n2"></div>
+              <span class="tn-name">A1 Industrial</span>
+            </div>
+            <div class="tree-node">
+              <svg class="tn-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              <div class="tn-dot n2"></div>
+              <span class="tn-name">A1 Agro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL PANEL -->
+      <div class="detail-panel">
+        <!-- Header — Edit mode with disabled save -->
+        <div class="dh">
+          <div class="dh-left">
+            <div class="dh-icon"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg></div>
+            <div>
+              <div class="dh-name">A1 Engenharia</div>
+              <div class="dh-meta"><span class="badge-active">ATIVO</span><span class="dh-code">A1-ENG</span></div>
+            </div>
+          </div>
+          <div class="dh-right">
+            <button class="btn-sec">Cancelar</button>
+            <button class="btn-pri disabled" style="pointer-events:none">&#10003; Salvar Alterações</button>
+          </div>
+        </div>
+
+        <!-- Dados Cadastrais — EDITANDO com erros -->
+        <div class="card">
+          <div class="card-hdr editing">
+            <span class="card-hdr-label" style="display:flex;align-items:center">
+              <svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+              Dados cadastrais — editando
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="ed-row">
+              <div class="ed-field full">
+                <div class="ed-label">Nome da Subdivisão <span class="req">*</span></div>
+                <input class="ed-input err" value="" placeholder="Digite o nome da subdivisão"/>
+                <div class="ed-error">Campo obrigatório</div>
+              </div>
+            </div>
+            <div class="ed-row">
+              <div class="ed-field">
+                <div class="ed-label">CNPJ</div>
+                <input class="ed-input" value="12.345.678/0001-90"/>
+              </div>
+              <div class="ed-field w2">
+                <div class="ed-label">Razão Social</div>
+                <input class="ed-input" value="A1 Engenharia Ltda"/>
+              </div>
+            </div>
+            <div class="ed-row">
+              <div class="ed-field">
+                <div class="ed-label">Filial</div>
+                <input class="ed-input" value="Matriz"/>
+              </div>
+              <div class="ed-field">
+                <div class="ed-label">Responsável</div>
+                <input class="ed-input" value="Carlos Mendes"/>
+              </div>
+            </div>
+            <div class="ed-row">
+              <div class="ed-field">
+                <div class="ed-label">Telefone</div>
+                <input class="ed-input" value="(11) 3456-7890"/>
+              </div>
+              <div class="ed-field">
+                <div class="ed-label">E-mail</div>
+                <input class="ed-input err" value="contato@"/>
+                <div class="ed-error">E-mail inválido</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hierarquia (always read-only) -->
+        <div class="card">
+          <div class="card-hdr"><span class="card-hdr-label">Hierarquia</span></div>
+          <div class="card-body">
+            <div class="ro-row">
+              <div class="ro-field">
+                <div class="ro-label">Unidade Pai</div>
+                <div class="ro-value with-lock">Grupo A1<svg class="lock-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+              </div>
+              <div class="ro-field">
+                <div class="ro-label">Nível</div>
+                <div class="ro-value with-lock">N2 — Empresa<svg class="lock-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Departamentos Vinculados -->
+        <div class="card">
+          <div class="card-hdr">
+            <span class="card-hdr-label">Departamentos vinculados</span>
+            <a class="tags-link">Ver todos (3)</a>
+          </div>
+          <div class="card-body">
+            <div class="tags-wrap">
+              <span class="dtag">Diretoria</span>
+              <span class="dtag">Operações</span>
+              <span class="dtag">Tecnologia</span>
+              <span class="dtag-add">+ Novo Departamento</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="metrics-row">
+          <div class="mc-blue">
+            <div class="mc-label">Colaboradores totais</div>
+            <div class="mc-blue-val">247</div>
+            <div class="mc-blue-sub">+12 este mês</div>
+            <svg class="mc-blue-deco" viewBox="0 0 120 120"><circle cx="40" cy="60" r="35"/><circle cx="80" cy="60" r="35"/></svg>
+          </div>
+          <div class="mc-white">
+            <div class="mc-label">Projetos em execução</div>
+            <div class="mc-white-val">8</div>
+            <div class="progress-wrap">
+              <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+              <div class="progress-lbl">75% Meta</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

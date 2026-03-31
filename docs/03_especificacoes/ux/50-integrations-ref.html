@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>50-Integrations — Referência Visual MOD-008</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+<style>
+:root{--blue:#2E86C1;--blue-lt:#E3F2FD;--black:#111;--bg:#F5F5F3;--white:#FFF;--border:#E8E8E6;--border-lt:#F0F0EE;--t1:#111;--t2:#333;--t3:#555;--t4:#888;--t5:#AAA;--t6:#CCC;--err:#E74C3C;--danger:#C0392B;--green:#27AE60;--green-t:#1E7A42;--green-lt:#E8F8EF;--green-bd:#B5E8C9;--amber-t:#B8860B;--amber-bg:#FFF3E0;--amber-bd:#FFE0B2;--red-lt:#FFEBEE;--red-bd:#F5C6CB;--font:'Plus Jakarta Sans',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:#888;display:flex;flex-direction:column;align-items:center;gap:80px;padding:60px 40px}
+.tag{font-size:11px;font-weight:700;color:#444;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.frame{width:1440px;height:900px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.25);flex-shrink:0;background:var(--bg)}
+
+/* TOPBAR */
+.topbar{height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tb-n{font-weight:800;font-size:14px;color:var(--t1)}.tb-s{font-weight:600;font-size:10px;color:var(--t4);letter-spacing:1.2px;text-transform:uppercase}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 8px}
+.bc{display:flex;align-items:center;gap:6px;font-size:13px}.bc-m{color:var(--t4)}.bc-x{color:var(--t6)}.bc-a{color:var(--t1);font-weight:700}
+.tb-r{display:flex;align-items:center;gap:12px}
+.tb-emp{font-size:12px;font-weight:500;color:var(--t3)}
+.tb-av{width:28px;height:28px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}
+.lay{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sb{width:240px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-sec{padding:24px 16px 0}.sb-sec+.sb-sec{padding-top:20px}
+.sb-cat{font-weight:700;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--t5);margin-bottom:8px;padding:0 12px}
+.sb-items{display:flex;flex-direction:column;gap:2px}
+.sb-i{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;text-decoration:none}
+.sb-i:hover{background:#f8f8f6}
+.sb-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sb-i.on{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.sb-ft{margin-top:auto;border-top:1px solid var(--border);padding:16px;display:flex;align-items:center;gap:8px}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.sb-ft-t{font-size:12px;color:var(--t4)}
+
+/* BADGES */
+.bd{display:inline-flex;padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;line-height:1.4}
+.bd-draft{color:var(--amber-t);background:var(--amber-bg);border:1px solid var(--amber-bd)}
+.bd-pub{color:var(--green-t);background:var(--green-lt);border:1px solid var(--green-bd)}
+.bd-success{color:var(--green-t);background:var(--green-lt);border:1px solid var(--green-bd)}
+.bd-failed{color:var(--danger);background:var(--red-lt);border:1px solid var(--red-bd)}
+.bd-dlq{color:#fff;background:var(--danger);border:1px solid var(--danger)}
+.bd-queued{color:var(--t4);background:#F5F5F3;border:1px solid var(--border)}
+.bd-running{color:var(--blue);background:var(--blue-lt);border:1px solid #90CAF9;animation:pulse-badge 2s infinite}
+@keyframes pulse-badge{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* SPLIT LAYOUT */
+.split{display:flex;flex:1;overflow:hidden}
+.routine-list{width:280px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.rl-header{height:48px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
+.rl-header span{font-size:13px;font-weight:700;color:var(--t1)}
+.rl-add{width:24px;height:24px;border-radius:6px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--white);font-size:16px;color:var(--blue);font-weight:400}
+.rl-search{margin:12px;height:36px;border-radius:6px;border:1px solid var(--border);padding:0 12px 0 32px;font-family:var(--font);font-size:12px;color:var(--t1);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23CCC' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") 10px center no-repeat;width:calc(100% - 24px)}
+.rl-search::placeholder{color:var(--t6)}
+.rl-item{padding:12px 16px;border-bottom:1px solid var(--border-lt);cursor:pointer}
+.rl-item:hover{background:#F8F8F6}
+.rl-item.active{background:var(--blue-lt);border-left:3px solid var(--blue)}
+.rl-item-top{display:flex;justify-content:space-between;align-items:center}
+.rl-item-name{font-size:13px;font-weight:600;color:var(--t1)}
+.rl-item.active .rl-item-name{color:var(--blue)}
+.rl-item-sub{font-size:11px;color:var(--t4);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* EDITOR PANE */
+.editor{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.editor-header{height:64px;background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.eh-left{display:flex;align-items:center;gap:12px}
+.eh-name{font-size:18px;font-weight:700;color:var(--t1)}
+.eh-right{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:0 16px;height:36px;border-radius:8px;border:none;font-family:var(--font);font-weight:600;font-size:13px;cursor:pointer}
+.btn-sec{background:var(--white);border:1px solid var(--border);color:var(--t3)}
+.btn-pri{background:var(--blue);color:#fff;font-weight:700}
+.btn-out{background:transparent;border:1px solid var(--blue);color:var(--blue)}
+.btn-danger{background:var(--err);color:#fff;font-weight:700}
+
+/* TAB BAR */
+.tab-bar{height:44px;background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:24px;flex-shrink:0}
+.tab{display:flex;align-items:center;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;border-bottom:2px solid transparent;padding:0 4px}
+.tab.on{color:var(--blue);font-weight:700;border-bottom-color:var(--blue)}
+
+/* EDITOR BODY */
+.editor-body{flex:1;overflow-y:auto;padding:20px}
+.field-group{display:flex;gap:16px}
+.field{display:flex;flex-direction:column;flex:1}
+.field.w160{flex:none;width:160px}.field.w200{flex:none;width:200px}
+.field-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:6px}
+.field-input{height:42px;border-radius:8px;border:1px solid var(--border);padding:0 14px;font-family:var(--font);font-size:14px;color:var(--t1);background:var(--white)}
+.field-input::placeholder{color:var(--t6)}
+.field-hint{font-size:11px;color:var(--t4);margin-top:4px}
+.field-select{height:42px;border-radius:8px;border:1px solid var(--border);padding:0 14px;font-family:var(--font);font-size:14px;color:var(--t1);background:var(--white);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.mt16{margin-top:16px}.mt24{margin-top:24px}.mt8{margin-top:8px}
+
+/* MAPPING COLUMNS */
+.mapping-area{display:flex;gap:0;align-items:stretch;margin-top:16px}
+.map-col{flex:1;background:var(--white);border-radius:8px;border:1px solid var(--border)}
+.map-col-header{height:40px;background:#FAFAFA;border-radius:8px 8px 0 0;padding:0 16px;display:flex;align-items:center;border-bottom:1px solid var(--border-lt);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t4)}
+.map-item{padding:10px 16px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t1)}
+.map-grip{color:var(--t6);cursor:grab;font-size:14px;line-height:1}
+.map-type{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:4px}
+.map-type-field{color:var(--blue);background:var(--blue-lt)}
+.map-type-fixed{color:#8E44AD;background:#F3E5F5}
+.map-type-derived{color:#E67E22;background:#FFF3E0}
+.map-req{font-size:9px;font-weight:600;color:var(--danger);background:var(--red-lt);padding:1px 6px;border-radius:4px}
+.map-connector{width:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:52px;flex-shrink:0}
+.map-arrow{color:var(--blue);font-size:18px;font-weight:700}
+.transform-row{margin-top:4px;background:#F8F8F6;border-radius:6px;padding:6px 12px;font-size:11px;display:flex;gap:8px;align-items:center}
+.transform-label{color:var(--t4);font-weight:600}
+.transform-expr{color:var(--t3);font-family:monospace;font-size:12px}
+
+/* PARAMS TABLE */
+.params-table{background:var(--white);border-radius:8px;border:1px solid var(--border);margin-top:16px}
+.pt-header{height:40px;background:#FAFAFA;border-radius:8px 8px 0 0;padding:0 16px;display:flex;align-items:center;border-bottom:1px solid var(--border-lt)}
+.pt-th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t4)}
+.pt-row{height:48px;padding:0 16px;display:flex;align-items:center;border-bottom:1px solid var(--border-lt)}
+.pt-row:last-child{border-bottom:none}
+.pt-c1{width:200px;font-size:13px;font-weight:600;color:var(--t1)}
+.pt-c2{width:180px}
+.pt-c3{flex:1;font-size:13px;color:var(--t4)}
+.pt-c3 code{font-family:monospace;font-size:12px;color:var(--t3)}
+.pt-c4{width:60px;text-align:center;color:var(--t4);cursor:pointer;font-size:16px}
+.pt-c4:hover{color:var(--err)}
+.pt-sensitive{letter-spacing:2px}
+
+/* METRIC CARDS */
+.metrics{display:flex;gap:16px;margin-top:20px}
+.metric-card{flex:1;background:var(--white);border-radius:12px;border:1px solid var(--border);padding:20px}
+.metric-card.dlq-alert{background:var(--red-lt);border-color:var(--red-bd)}
+.mc-label{font-size:12px;font-weight:500;color:var(--t4)}
+.mc-value{font-size:28px;font-weight:800;color:var(--t1);margin-top:4px}
+.mc-value.green{color:var(--green-t)}
+.mc-value.red{color:var(--danger)}
+.mc-bar{width:100%;height:4px;border-radius:2px;background:var(--border);margin-top:8px}
+.mc-bar-fill{height:4px;border-radius:2px;background:var(--green)}
+.mc-sub{font-size:10px;font-weight:600;color:var(--danger);margin-top:4px}
+
+/* CONTENT */
+.ct{flex:1;padding:24px;overflow-y:auto;display:flex;flex-direction:column}
+.ph{display:flex;justify-content:space-between;align-items:flex-start}
+.ph-t{font-weight:800;font-size:24px;letter-spacing:-.5px;color:var(--t1)}
+.ph-d{font-size:13px;color:var(--t4);margin-top:4px}
+.ph-refresh{font-size:12px;font-weight:500;color:var(--blue);animation:pulse-badge 2s infinite}
+
+/* FILTERS */
+.filters{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;align-items:center}
+.f-select{height:36px;border-radius:6px;border:1px solid var(--border);padding:0 12px;font-family:var(--font);font-size:12px;color:var(--t2);background:var(--white);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.f-input{height:36px;border-radius:6px;border:1px solid var(--border);padding:0 12px;font-family:var(--font);font-size:12px;color:var(--t1);background:var(--white)}
+.f-input::placeholder{color:var(--t6)}
+.f-btn{height:36px;border-radius:6px;border:1px solid var(--border);padding:0 12px;font-family:var(--font);font-size:12px;font-weight:600;color:var(--t3);background:var(--white);cursor:pointer}
+
+/* LOG TABLE */
+.log-table{background:var(--white);border-radius:12px;border:1px solid var(--border);margin-top:16px;overflow:hidden;flex:1;display:flex;flex-direction:column}
+.lt-header{height:44px;background:#FAFAFA;border-bottom:1px solid var(--border-lt);padding:0 20px;display:flex;align-items:center;flex-shrink:0}
+.lt-th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t4)}
+.lt-body{flex:1;overflow-y:auto}
+.lt-row{height:52px;padding:0 20px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;cursor:pointer}
+.lt-row:hover{background:#F8F8F6}
+.lt-row:last-child{border-bottom:none}
+.lt-c1{width:100px}.lt-c2{width:200px;font-size:13px;font-weight:500;color:var(--t1)}.lt-c3{width:140px;font-size:12px;color:var(--t4)}.lt-c4{width:100px;font-size:12px;color:var(--t4)}.lt-c5{width:80px;font-size:12px;color:var(--t4)}.lt-c6{width:70px;font-size:12px;font-weight:600}.lt-c7{width:80px;text-align:center;color:var(--t4);font-size:14px}
+.lt-c6.ok{color:var(--green-t)}.lt-c6.err{color:var(--danger)}
+.lt-footer{height:52px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border-lt);flex-shrink:0}
+.lt-footer-info{font-size:12px;color:var(--t4)}
+.lt-footer-btn{font-size:13px;font-weight:600;color:var(--blue);cursor:pointer;background:none;border:none;font-family:var(--font)}
+
+/* DETAIL PANEL */
+.detail-panel{width:480px;background:var(--white);border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.dp-header{height:56px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
+.dp-header-t{font-size:16px;font-weight:700;color:var(--t1)}
+.dp-close{font-size:20px;color:var(--t4);cursor:pointer;background:none;border:none;line-height:1}
+.dp-body{flex:1;overflow-y:auto;padding:20px}
+.dp-section{margin-bottom:20px}
+.dp-sec-title{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:8px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.dp-sec-title svg{width:12px;height:12px;stroke:var(--t4);fill:none;stroke-width:2;transition:transform .2s}
+.dp-row{display:flex;gap:8px;font-size:13px;margin-bottom:4px}
+.dp-row-label{color:var(--t4);min-width:100px}
+.dp-row-value{color:var(--t1);font-weight:500}
+.dp-row-link{color:var(--blue);font-weight:600;cursor:pointer;text-decoration:none}
+.dp-row-mono{font-family:monospace;font-size:12px;color:var(--t2)}
+.dp-method{font-size:13px;font-weight:600;color:var(--t2);background:#F8F8F6;border-radius:6px;padding:8px 12px;font-family:monospace}
+.dp-json{background:#F8F8F6;border-radius:6px;border:1px solid var(--border);padding:12px;font-family:monospace;font-size:12px;color:var(--t2);max-height:180px;overflow-y:auto;margin-top:8px;white-space:pre;line-height:1.5}
+.dp-masked{color:var(--danger);font-family:monospace;font-size:12px}
+.dp-error-box{background:var(--red-lt);border-radius:6px;padding:12px;font-size:13px;color:var(--t2)}
+.dp-attempt{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border-lt);font-size:12px}
+.dp-attempt:last-child{border-bottom:none}
+.dp-attempt-n{font-weight:600;color:var(--t2)}
+.dp-attempt-date{color:var(--t4)}
+.dp-attempt-link{color:var(--blue);font-weight:600;cursor:pointer}
+.dp-footer{height:56px;padding:0 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;flex-shrink:0}
+
+/* MODAL */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;z-index:60}
+.modal-card{width:480px;border-radius:12px;background:var(--white);box-shadow:0 8px 32px rgba(0,0,0,.12);padding:24px;text-align:center}
+.modal-icon{width:48px;height:48px;border-radius:50%;background:var(--red-lt);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.modal-icon svg{width:24px;height:24px;stroke:var(--err);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.modal-title{font-size:18px;font-weight:700;color:var(--t1)}
+.modal-msg{font-size:13px;color:var(--t3);margin-top:8px}
+.modal-field{margin-top:16px;text-align:left}
+.modal-field label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);display:block;margin-bottom:6px}
+.modal-field textarea{width:100%;height:80px;border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-family:var(--font);font-size:14px;color:var(--t1);resize:vertical}
+.modal-field textarea::placeholder{color:var(--t6)}
+.modal-btns{margin-top:24px;display:flex;justify-content:center;gap:12px}
+.modal-btn-cancel{height:40px;border-radius:8px;border:1px solid var(--border);padding:0 20px;background:var(--white);font-family:var(--font);font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+.modal-btn-danger{height:40px;border-radius:8px;border:none;padding:0 20px;background:var(--err);font-family:var(--font);font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+
+/* PROD WARNING */
+.prod-warning{background:var(--red-lt);border:1px solid var(--red-bd);border-radius:8px;padding:12px 20px;margin-bottom:16px;font-size:13px;font-weight:600;color:var(--danger);display:flex;align-items:center;gap:8px}
+
+/* SECTION HEADER */
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.sec-title{font-size:16px;font-weight:700;color:var(--t1)}
+</style>
+</head>
+<body>
+
+<!-- ═══ FRAME 1: Editor de Rotinas — Tab Configuração HTTP ═══ -->
+<div class="tag">Frame 1 — Editor de Rotinas (Tab Configuração HTTP) — 1440×900</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Integração</span><span class="bc-x">›</span><span class="bc-a">Protheus</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">A1 Engenharia</span>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Movimentos Controlados</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 1 0-8 8"/><circle cx="12" cy="12" r="2"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="split">
+      <!-- ROUTINE LIST -->
+      <div class="routine-list">
+        <div class="rl-header"><span>Rotinas</span><div class="rl-add">+</div></div>
+        <input class="rl-search" placeholder="Buscar rotina..."/>
+        <div class="rl-item active">
+          <div class="rl-item-top">
+            <span class="rl-item-name">CTB-001</span>
+            <span class="bd bd-draft">DRAFT</span>
+          </div>
+          <div class="rl-item-sub">Protheus HML → /WSRESTPV001</div>
+        </div>
+        <div class="rl-item">
+          <div class="rl-item-top">
+            <span class="rl-item-name">FIN-002</span>
+            <span class="bd bd-pub">PUBLISHED</span>
+          </div>
+          <div class="rl-item-sub">Protheus PROD → /WSFINPV001</div>
+        </div>
+        <div class="rl-item">
+          <div class="rl-item-top">
+            <span class="rl-item-name">EST-003</span>
+            <span class="bd bd-draft">DRAFT</span>
+          </div>
+          <div class="rl-item-sub">Protheus HML → /WSESTRPV001</div>
+        </div>
+        <div class="rl-item">
+          <div class="rl-item-top">
+            <span class="rl-item-name">COM-004</span>
+            <span class="bd bd-pub">PUBLISHED</span>
+          </div>
+          <div class="rl-item-sub">Protheus PROD → /WSCOMPV001</div>
+        </div>
+        <div class="rl-item">
+          <div class="rl-item-top">
+            <span class="rl-item-name">RH-005</span>
+            <span class="bd bd-draft">DRAFT</span>
+          </div>
+          <div class="rl-item-sub">Protheus HML → /WSRH001</div>
+        </div>
+      </div>
+      <!-- EDITOR -->
+      <div class="editor">
+        <div class="editor-header">
+          <div class="eh-left">
+            <span class="eh-name">CTB-001 — Lançamento Contábil</span>
+            <span class="bd bd-draft">DRAFT</span>
+          </div>
+          <div class="eh-right">
+            <button class="btn btn-sec">Testar HML</button>
+            <button class="btn btn-pri">Publicar</button>
+            <button class="btn btn-out">Nova Versão</button>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab on">Configuração HTTP</div>
+          <div class="tab">Mapeamentos de Campo</div>
+          <div class="tab">Parâmetros</div>
+        </div>
+        <div class="editor-body">
+          <div class="field-group">
+            <div class="field">
+              <div class="field-label">Serviço de Destino</div>
+              <select class="field-select">
+                <option>PROTHEUS-HML (Homologação)</option>
+                <option>PROTHEUS-PROD (Produção)</option>
+              </select>
+            </div>
+            <div class="field w160">
+              <div class="field-label">Método HTTP</div>
+              <select class="field-select">
+                <option>POST</option>
+                <option>GET</option>
+                <option>PUT</option>
+                <option>PATCH</option>
+                <option>DELETE</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt16">
+            <div class="field-label">Endpoint Template</div>
+            <input class="field-input" style="width:100%" placeholder="/WSRESTPV001/{recurso}" value="/WSRESTPV001/MATA410"/>
+            <div class="field-hint">Preview: /WSRESTPV001/MATA410 — variáveis entre {} resolvidas em runtime</div>
+          </div>
+          <div class="field-group mt16">
+            <div class="field w200">
+              <div class="field-label">Timeout (ms)</div>
+              <input class="field-input" placeholder="Padrão do serviço: 30000ms"/>
+            </div>
+            <div class="field w160">
+              <div class="field-label">Retry Max</div>
+              <input class="field-input" type="number" value="3"/>
+            </div>
+            <div class="field w200">
+              <div class="field-label">Retry Backoff (ms)</div>
+              <input class="field-input" value="1000"/>
+              <div class="field-hint">Dobra a cada tentativa</div>
+            </div>
+          </div>
+          <div class="mt16">
+            <div class="field-label">Disparar Quando</div>
+            <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+              <span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:var(--blue-lt);color:var(--blue);font-size:12px;font-weight:600">case.stage_transitioned <span style="cursor:pointer;margin-left:4px;font-size:14px;opacity:.6">×</span></span>
+              <span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:var(--blue-lt);color:var(--blue);font-size:12px;font-weight:600">case.completed <span style="cursor:pointer;margin-left:4px;font-size:14px;opacity:.6">×</span></span>
+            </div>
+          </div>
+          <div class="mt24">
+            <button class="btn btn-pri" style="height:40px;padding:0 20px">Salvar configuração</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ FRAME 2: Editor de Rotinas — Tab Mapeamentos ═══ -->
+<div class="tag">Frame 2 — Editor de Rotinas (Tab Mapeamentos de Campo) — 1440×900</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Integração</span><span class="bc-x">›</span><span class="bc-a">Protheus</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">A1 Engenharia</span>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Movimentos Controlados</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 1 0-8 8"/><circle cx="12" cy="12" r="2"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="split">
+      <div class="routine-list">
+        <div class="rl-header"><span>Rotinas</span><div class="rl-add">+</div></div>
+        <input class="rl-search" placeholder="Buscar rotina..."/>
+        <div class="rl-item active">
+          <div class="rl-item-top"><span class="rl-item-name">CTB-001</span><span class="bd bd-draft">DRAFT</span></div>
+          <div class="rl-item-sub">Protheus HML → /WSRESTPV001</div>
+        </div>
+        <div class="rl-item">
+          <div class="rl-item-top"><span class="rl-item-name">FIN-002</span><span class="bd bd-pub">PUBLISHED</span></div>
+          <div class="rl-item-sub">Protheus PROD → /WSFINPV001</div>
+        </div>
+        <div class="rl-item">
+          <div class="rl-item-top"><span class="rl-item-name">EST-003</span><span class="bd bd-draft">DRAFT</span></div>
+          <div class="rl-item-sub">Protheus HML → /WSESTRPV001</div>
+        </div>
+      </div>
+      <div class="editor">
+        <div class="editor-header">
+          <div class="eh-left">
+            <span class="eh-name">CTB-001 — Lançamento Contábil</span>
+            <span class="bd bd-draft">DRAFT</span>
+          </div>
+          <div class="eh-right">
+            <button class="btn btn-sec">Testar HML</button>
+            <button class="btn btn-pri">Publicar</button>
+            <button class="btn btn-out">Nova Versão</button>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab">Configuração HTTP</div>
+          <div class="tab on">Mapeamentos de Campo</div>
+          <div class="tab">Parâmetros</div>
+        </div>
+        <div class="editor-body">
+          <div class="sec-header">
+            <span class="sec-title">Mapeamentos de Campo</span>
+            <button class="btn btn-sec">+ Adicionar Mapeamento</button>
+          </div>
+          <div class="mapping-area">
+            <div class="map-col">
+              <div class="map-col-header">Campos Origem</div>
+              <div class="map-item"><span class="map-grip">⠿</span><span class="map-type map-type-field">FIELD</span>caso.numero_processo</div>
+              <div class="map-item"><span class="map-grip">⠿</span><span class="map-type map-type-field">FIELD</span>caso.valor_total</div>
+              <div class="map-item"><span class="map-grip">⠿</span><span class="map-type map-type-fixed">FIXED</span><span style="color:var(--t4);font-style:italic">valor literal</span></div>
+              <div class="map-item"><span class="map-grip">⠿</span><span class="map-type map-type-derived">DERIVED</span>tenant.cnpj</div>
+              <div class="map-item"><span class="map-grip">⠿</span><span class="map-type map-type-field">FIELD</span>caso.data_abertura</div>
+            </div>
+            <div class="map-connector">
+              <div class="map-arrow">→</div>
+              <div class="map-arrow">→</div>
+              <div class="map-arrow">→</div>
+              <div class="map-arrow">→</div>
+              <div class="map-arrow">→</div>
+            </div>
+            <div class="map-col">
+              <div class="map-col-header">Campos Destino</div>
+              <div class="map-item">CT1_FILIAL <span class="map-req">req.</span></div>
+              <div class="map-item">CT1_VALOR <span class="map-req">req.</span></div>
+              <div class="map-item">CT1_EMPRESA</div>
+              <div class="map-item">CT1_CGC <span class="map-req">req.</span></div>
+              <div class="map-item">CT1_DATA</div>
+            </div>
+          </div>
+          <div class="transform-row mt8">
+            <span class="transform-label">Transformação (linha 1):</span>
+            <span class="transform-expr">UPPER(value)</span>
+          </div>
+          <div class="transform-row mt8">
+            <span class="transform-label">Transformação (linha 2):</span>
+            <span class="transform-expr">FORMAT_CURRENCY(value, "BRL")</span>
+          </div>
+          <div class="transform-row mt8">
+            <span class="transform-label">Transformação (linha 5):</span>
+            <span class="transform-expr">FORMAT_DATE(value, "YYYYMMDD")</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ FRAME 3: Monitor de Integrações ═══ -->
+<div class="tag">Frame 3 — Monitor de Integrações — 1440×900</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Integração</span><span class="bc-x">›</span><span class="bc-a">Monitor</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">A1 Engenharia</span>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Movimentos Controlados</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 1 0-8 8"/><circle cx="12" cy="12" r="2"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main style="flex:1;display:flex;overflow:hidden">
+      <div class="ct" style="flex:1">
+        <div class="ph">
+          <div>
+            <div class="ph-t">Monitor de Integrações</div>
+            <div class="ph-d">Acompanhe chamadas e reprocesse itens em DLQ</div>
+          </div>
+          <span class="ph-refresh">Atualizando...</span>
+        </div>
+        <div class="metrics">
+          <div class="metric-card">
+            <div class="mc-label">Taxa de Sucesso</div>
+            <div class="mc-value green">98.5%</div>
+            <div class="mc-bar"><div class="mc-bar-fill" style="width:98.5%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="mc-label">Total (24h)</div>
+            <div class="mc-value">1.247</div>
+          </div>
+          <div class="metric-card dlq-alert">
+            <div class="mc-label">Em DLQ</div>
+            <div class="mc-value red">3</div>
+            <div class="mc-sub">requer atenção</div>
+          </div>
+          <div class="metric-card">
+            <div class="mc-label">Latência Média</div>
+            <div class="mc-value">340ms</div>
+          </div>
+        </div>
+        <div class="filters">
+          <select class="f-select" style="width:200px"><option>Todas as rotinas</option></select>
+          <select class="f-select" style="width:160px"><option>Todos os status</option><option>QUEUED</option><option>RUNNING</option><option>SUCCESS</option><option>FAILED</option><option>DLQ</option></select>
+          <select class="f-select" style="width:180px"><option>Todos os serviços</option></select>
+          <input class="f-input" style="width:240px" placeholder="Correlation ID"/>
+          <input class="f-input" type="date" style="width:140px"/>
+          <input class="f-input" type="date" style="width:140px"/>
+          <button class="f-btn">Limpar</button>
+        </div>
+        <div class="log-table">
+          <div class="lt-header">
+            <div class="lt-th lt-c1">STATUS</div>
+            <div class="lt-th lt-c2">ROTINA</div>
+            <div class="lt-th lt-c3">TIMESTAMP</div>
+            <div class="lt-th lt-c4">DURAÇÃO</div>
+            <div class="lt-th lt-c5">RETRY</div>
+            <div class="lt-th lt-c6">HTTP</div>
+            <div class="lt-th lt-c7">AÇÕES</div>
+          </div>
+          <div class="lt-body">
+            <div class="lt-row">
+              <div class="lt-c1"><span class="bd bd-success">SUCCESS</span></div>
+              <div class="lt-c2">CTB-001 v3</div>
+              <div class="lt-c3">há 5min</div>
+              <div class="lt-c4">340ms</div>
+              <div class="lt-c5">1 de 3</div>
+              <div class="lt-c6 ok">200</div>
+              <div class="lt-c7">›</div>
+            </div>
+            <div class="lt-row">
+              <div class="lt-c1"><span class="bd bd-success">SUCCESS</span></div>
+              <div class="lt-c2">FIN-002 v1</div>
+              <div class="lt-c3">há 12min</div>
+              <div class="lt-c4">520ms</div>
+              <div class="lt-c5">1 de 3</div>
+              <div class="lt-c6 ok">200</div>
+              <div class="lt-c7">›</div>
+            </div>
+            <div class="lt-row">
+              <div class="lt-c1"><span class="bd bd-running">RUNNING</span></div>
+              <div class="lt-c2">CTB-001 v3</div>
+              <div class="lt-c3">há 1min</div>
+              <div class="lt-c4">—</div>
+              <div class="lt-c5">1 de 3</div>
+              <div class="lt-c6" style="color:var(--t4)">—</div>
+              <div class="lt-c7">›</div>
+            </div>
+            <div class="lt-row" style="background:#FFF8F8">
+              <div class="lt-c1"><span class="bd bd-dlq">DLQ</span></div>
+              <div class="lt-c2">FIN-002 v1</div>
+              <div class="lt-c3">há 2h</div>
+              <div class="lt-c4" style="color:var(--err)">15230ms</div>
+              <div class="lt-c5" style="color:var(--err)">3 de 3</div>
+              <div class="lt-c6 err">503</div>
+              <div class="lt-c7">›</div>
+            </div>
+            <div class="lt-row">
+              <div class="lt-c1"><span class="bd bd-failed">FAILED</span></div>
+              <div class="lt-c2">EST-003 v2</div>
+              <div class="lt-c3">há 3h</div>
+              <div class="lt-c4" style="color:var(--err)">8120ms</div>
+              <div class="lt-c5" style="color:var(--err)">2 de 3</div>
+              <div class="lt-c6 err">500</div>
+              <div class="lt-c7">›</div>
+            </div>
+            <div class="lt-row">
+              <div class="lt-c1"><span class="bd bd-success">SUCCESS</span></div>
+              <div class="lt-c2">COM-004 v1</div>
+              <div class="lt-c3">há 4h</div>
+              <div class="lt-c4">290ms</div>
+              <div class="lt-c5">1 de 3</div>
+              <div class="lt-c6 ok">200</div>
+              <div class="lt-c7">›</div>
+            </div>
+            <div class="lt-row">
+              <div class="lt-c1"><span class="bd bd-queued">QUEUED</span></div>
+              <div class="lt-c2">CTB-001 v3</div>
+              <div class="lt-c3">agora</div>
+              <div class="lt-c4">—</div>
+              <div class="lt-c5">—</div>
+              <div class="lt-c6" style="color:var(--t4)">—</div>
+              <div class="lt-c7">›</div>
+            </div>
+          </div>
+          <div class="lt-footer">
+            <span class="lt-footer-info">Exibindo 7 de 1.247 chamadas</span>
+            <button class="lt-footer-btn">Carregar mais</button>
+          </div>
+        </div>
+      </div>
+      <!-- DETAIL PANEL (row expanded) -->
+      <div class="detail-panel">
+        <div class="dp-header">
+          <span class="dp-header-t">Detalhes da Chamada</span>
+          <button class="dp-close">×</button>
+        </div>
+        <div class="dp-body">
+          <div class="dp-section">
+            <div class="dp-sec-title"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Resumo</div>
+            <div class="dp-row"><span class="dp-row-label">Rotina:</span><span class="dp-row-value">FIN-002 v1</span></div>
+            <div class="dp-row"><span class="dp-row-label">Serviço:</span><span class="dp-row-value">PROTHEUS-PROD</span></div>
+            <div class="dp-row"><span class="dp-row-label">Status:</span><span class="bd bd-dlq" style="font-size:9px;padding:2px 6px">DLQ</span></div>
+            <div class="dp-row"><span class="dp-row-label">Correlation ID:</span><span class="dp-row-mono">a1b2c3d4</span></div>
+            <div class="dp-row"><span class="dp-row-label">Caso:</span><a class="dp-row-link">/casos/456</a></div>
+            <div class="dp-row"><span class="dp-row-label">Tentativa:</span><span class="dp-row-value">3 de 3</span></div>
+          </div>
+          <div class="dp-section">
+            <div class="dp-sec-title"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Request</div>
+            <div class="dp-method">POST /WSFINPV001/FINA050</div>
+            <div style="margin-top:8px;font-size:12px">
+              <span class="dp-masked">Authorization: ***</span>
+              <div style="font-size:10px;color:var(--t4);margin-top:2px">Dado sensível mascarado por política de segurança.</div>
+            </div>
+            <div style="margin-top:4px;font-size:12px;font-family:monospace;color:var(--t2)">Content-Type: application/json</div>
+            <div class="dp-json">{
+  "CT1_FILIAL": "01",
+  "CT1_VALOR": 15420.50,
+  "CT1_EMPRESA": "A1ENG",
+  "CT1_CGC": "***",
+  "CT1_DATA": "20260331"
+}</div>
+          </div>
+          <div class="dp-section">
+            <div class="dp-sec-title"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Response <span class="bd bd-failed" style="font-size:9px;padding:2px 6px;margin-left:8px">503</span></div>
+            <div class="dp-json">{
+  "error": "Service Unavailable",
+  "message": "PROTHEUS server timeout",
+  "correlationId": "a1b2c3d4"
+}</div>
+          </div>
+          <div class="dp-section">
+            <div class="dp-sec-title" style="color:var(--danger)"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Erro</div>
+            <div class="dp-error-box">Connection timeout after 30000ms. Server PROTHEUS-PROD did not respond. All 3 retry attempts exhausted.</div>
+          </div>
+          <div class="dp-section">
+            <div class="dp-sec-title"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Histórico de Tentativas</div>
+            <div class="dp-attempt"><span class="dp-attempt-n">Tentativa 1</span><span class="bd bd-failed" style="font-size:8px;padding:1px 5px">FAILED</span><span class="dp-attempt-date">31 mar, 10:15</span><a class="dp-attempt-link">Ver</a></div>
+            <div class="dp-attempt"><span class="dp-attempt-n">Tentativa 2</span><span class="bd bd-failed" style="font-size:8px;padding:1px 5px">FAILED</span><span class="dp-attempt-date">31 mar, 10:16</span><a class="dp-attempt-link">Ver</a></div>
+            <div class="dp-attempt"><span class="dp-attempt-n">Tentativa 3</span><span class="bd bd-dlq" style="font-size:8px;padding:1px 5px">DLQ</span><span class="dp-attempt-date">31 mar, 10:18</span><span style="font-size:12px;color:var(--t4)">(atual)</span></div>
+          </div>
+        </div>
+        <div class="dp-footer">
+          <button class="btn btn-danger" style="height:36px">Reprocessar</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ FRAME 4: Modal DLQ Reprocessar ═══ -->
+<div class="tag">Frame 4 — Monitor com Modal "Reprocessar item?" — 1440×900</div>
+<div class="frame" style="position:relative">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Integração</span><span class="bc-x">›</span><span class="bc-a">Monitor</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">A1 Engenharia</span>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Movimentos Controlados</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 1 0-8 8"/><circle cx="12" cy="12" r="2"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct" style="flex:1;opacity:.6">
+      <div class="ph">
+        <div>
+          <div class="ph-t">Monitor de Integrações</div>
+          <div class="ph-d">Acompanhe chamadas e reprocesse itens em DLQ</div>
+        </div>
+      </div>
+      <div class="metrics">
+        <div class="metric-card">
+          <div class="mc-label">Taxa de Sucesso</div>
+          <div class="mc-value green">98.5%</div>
+          <div class="mc-bar"><div class="mc-bar-fill" style="width:98.5%"></div></div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-label">Total (24h)</div>
+          <div class="mc-value">1.247</div>
+        </div>
+        <div class="metric-card dlq-alert">
+          <div class="mc-label">Em DLQ</div>
+          <div class="mc-value red">3</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-label">Latência Média</div>
+          <div class="mc-value">340ms</div>
+        </div>
+      </div>
+      <div class="log-table" style="margin-top:36px">
+        <div class="lt-header">
+          <div class="lt-th lt-c1">STATUS</div>
+          <div class="lt-th lt-c2">ROTINA</div>
+          <div class="lt-th lt-c3">TIMESTAMP</div>
+          <div class="lt-th lt-c4">DURAÇÃO</div>
+          <div class="lt-th lt-c5">RETRY</div>
+          <div class="lt-th lt-c6">HTTP</div>
+          <div class="lt-th lt-c7">AÇÕES</div>
+        </div>
+        <div class="lt-body">
+          <div class="lt-row"><div class="lt-c1"><span class="bd bd-success">SUCCESS</span></div><div class="lt-c2">CTB-001 v3</div><div class="lt-c3">há 5min</div><div class="lt-c4">340ms</div><div class="lt-c5">1 de 3</div><div class="lt-c6 ok">200</div><div class="lt-c7">›</div></div>
+          <div class="lt-row" style="background:#FFF8F8"><div class="lt-c1"><span class="bd bd-dlq">DLQ</span></div><div class="lt-c2">FIN-002 v1</div><div class="lt-c3">há 2h</div><div class="lt-c4" style="color:var(--err)">15230ms</div><div class="lt-c5" style="color:var(--err)">3 de 3</div><div class="lt-c6 err">503</div><div class="lt-c7">›</div></div>
+          <div class="lt-row"><div class="lt-c1"><span class="bd bd-success">SUCCESS</span></div><div class="lt-c2">COM-004 v1</div><div class="lt-c3">há 4h</div><div class="lt-c4">290ms</div><div class="lt-c5">1 de 3</div><div class="lt-c6 ok">200</div><div class="lt-c7">›</div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- MODAL OVERLAY -->
+  <div class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="modal-title">Reprocessar chamada?</div>
+      <div class="modal-msg">Será criada uma nova tentativa. O log original será preservado.</div>
+      <div class="modal-field">
+        <label>MOTIVO</label>
+        <textarea placeholder="Descreva o motivo do reprocessamento (mín. 10 caracteres)"></textarea>
+      </div>
+      <div class="modal-btns">
+        <button class="modal-btn-cancel">Cancelar</button>
+        <button class="modal-btn-danger">Reprocessar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

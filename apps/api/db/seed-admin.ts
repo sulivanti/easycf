@@ -2,7 +2,7 @@
  * Seed script — cria admin inicial + tenant + role com todas as permissões.
  *
  * Uso:
- *   npx tsx db/seed-admin.ts
+ *   pnpm -F @easycode/api db:seed
  *   (ou via Docker: docker compose exec api npx tsx db/seed-admin.ts)
  *
  * Variáveis de ambiente:
@@ -10,7 +10,30 @@
  *   ADMIN_EMAIL      — email do admin (default: admin@ecf.local)
  *   ADMIN_PASSWORD   — senha do admin (default: Admin@ECF2026!)
  *   ADMIN_NAME       — nome completo (default: Administrador ECF)
+ *
+ * O script carrega automaticamente ../../.env (raiz do monorepo) quando
+ * DATABASE_URL não está definida no ambiente (ex: execução local sem Docker).
  */
+
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// Auto-load .env from monorepo root when DATABASE_URL is not set
+if (!process.env.DATABASE_URL) {
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const envPath = resolve(__dirname, '../../.env');
+  if (existsSync(envPath)) {
+    for (const line of readFileSync(envPath, 'utf8').split('\n')) {
+      const match = line.match(/^\s*([^#=\s]+)\s*=\s*(.*)$/);
+      if (match) {
+        const key = match[1]!.trim();
+        const val = match[2]!.trim().replace(/^["']|["']$/g, '');
+        if (!process.env[key]) process.env[key] = val;
+      }
+    }
+  }
+}
 
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';

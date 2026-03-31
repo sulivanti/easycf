@@ -5,12 +5,32 @@
  * Idempotente: verifica se já existe org unit com nivel=1 antes de criar.
  *
  * Uso:
- *   npx tsx db/fix-seed-org-unit.ts
+ *   pnpm -F @easycode/api db:fix-org-unit
  *   (ou via Docker: docker compose exec api npx tsx db/fix-seed-org-unit.ts)
  *
  * Variáveis de ambiente:
  *   DATABASE_URL — conexão PostgreSQL (obrigatória)
  */
+
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// Auto-load .env from monorepo root when DATABASE_URL is not set
+if (!process.env.DATABASE_URL) {
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const envPath = resolve(__dirname, '../../.env');
+  if (existsSync(envPath)) {
+    for (const line of readFileSync(envPath, 'utf8').split('\n')) {
+      const match = line.match(/^\s*([^#=\s]+)\s*=\s*(.*)$/);
+      if (match) {
+        const key = match[1]!.trim();
+        const val = match[2]!.trim().replace(/^["']|["']$/g, '');
+        if (!process.env[key]) process.env[key] = val;
+      }
+    }
+  }
+}
 
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';

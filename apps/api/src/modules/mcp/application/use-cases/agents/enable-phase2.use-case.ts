@@ -3,7 +3,7 @@
  *
  * Use Case: EnablePhase2
  * POST /api/v1/admin/mcp-agents/:id/enable-phase2
- * Scope: mcp:agent:write + mcp:agent:phase2-enable
+ * Scope: mcp:agent:write + mcp:agent:phase2_enable
  *
  * Enables Phase 2 create capability per-agent (BR-003).
  * Requires reason (min 10 chars), agent must be ACTIVE.

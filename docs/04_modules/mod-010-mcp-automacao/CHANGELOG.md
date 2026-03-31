@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.2.2 | 2026-03-31 | merge-amendment | Merge FR-010-C01: rename scope `phase2-enable` → `phase2_enable` em FR-010 (6 ocorrências) + PEN-010 (5 ocorrências). Base FR-010 bumped para v0.2.1. Ref: spec-fix-scope-hyphen-rename. |
+| 1.2.1 | 2026-03-31 | create-amendment | Amendment FR-010-C01: rename scope `mcp:agent:phase2-enable` → `mcp:agent:phase2_enable` em FR-010 (6 ocorrências), PEN-010 (5 ocorrências) e enable-phase2.use-case.ts. Hífen viola regex canônica. Ref: spec-fix-scope-hyphen-rename. |
 | 1.2.0 | 2026-03-24 | validate-all | Revalidação completa: Lint 0 erros (PENDENTE-008 resolvida), Format 5 warnings (cross-module PEN-000/PENDENTE-018), Arquitetura PASS (DomainError+type+statusHint, react-query, Pattern A), QA PASS, Manifests 2/2 PASS, OpenAPI PASS (14 ops), Drizzle PASS (5 tabelas), Endpoints PASS (4 routes, 14 endpoints). 0 bloqueadores, 0 violações críticas. |
 | 1.1.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. QA: PASS. Manifests: 2/2 PASS. OpenAPI: PASS. Drizzle: PASS. Endpoints: PASS. Codegen completo (DB+CORE+APP+API+WEB). 0 bloqueadores, 0 violações. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |

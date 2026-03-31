@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.20.2 | 2026-03-31 | merge-amendment | Merge FR-000-C10: rename scope `phase2-enable` → `phase2_enable` em FR-007. Base FR-000 bumped para v0.11.2. Ref: spec-fix-scope-hyphen-rename. |
+| 1.20.1 | 2026-03-31 | create-amendment | Amendment FR-000-C10: rename scope `mcp:agent:phase2-enable` → `mcp:agent:phase2_enable` no seed + reverter CHECK constraint à regex canônica. Desfaz workaround DATA-000-C03. Ref: spec-fix-scope-hyphen-rename. |
 | 1.20.0 | 2026-03-31 | merge-amendment | Merge SEC-000-M02: regra SEC-SEED-PROD-001 em §8.1 — seeds DEVEM recusar credenciais default em produção (`process.exit(1)`). Base SEC-000 bumped para v0.6.0. Ref: FR-000-C09. |
 | 1.19.0 | 2026-03-31 | create-amendment | Amendment SEC-000-M02: nova regra SEC-SEED-PROD-001 — seeds DEVEM recusar credenciais default quando `NODE_ENV=production`. Guard fail-safe com `process.exit(1)`. Aplica-se a todos os seeds que criam credenciais. Ref: FR-000-C09. |
 | 1.18.6 | 2026-03-30 | merge-amendment | Merge DATA-000-C03: CHECK constraint role_permissions_scope_check regex `[a-z0-9_]` → `[a-z0-9_-]` para aceitar hífens (ex: `mcp:agent:phase2-enable`). Base DATA-000 bumped para v0.6.2. Ref: FR-000-C09. |

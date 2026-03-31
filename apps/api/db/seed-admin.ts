@@ -140,7 +140,7 @@ const SCOPES = [
   'mcp:agent:read',
   'mcp:agent:write',
   'mcp:agent:revoke',
-  'mcp:agent:phase2-enable',
+  'mcp:agent:phase2_enable',
   'mcp:action:read',
   'mcp:action:write',
   'mcp:log:read',

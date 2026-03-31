@@ -12,6 +12,8 @@ Documentos normativos não pertencem a módulos — este CHANGELOG substitui o P
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 0.27.2 | 2026-03-31 | merge-amendment | Merge DOC-FND-000-C01: rename `mcp:agent:phase2-enable` → `phase2_enable` no catálogo §2.2. DOC-FND-000 v1.7.1. |
+| 0.27.1 | 2026-03-31 | create-amendment | DOC-FND-000-C01: rename scope `mcp:agent:phase2-enable` → `mcp:agent:phase2_enable` no catálogo §2.2. Hífen viola regex canônica do VO Scope. Ref: spec-fix-scope-hyphen-rename. |
 | 0.27.0 | 2026-03-29 | merge-amendment | Merge DOC-UX-013-M07: nova §3.4 tokens semânticos shadcn/ui (17 variáveis CSS) + PASSO 4A no app-scaffold. DOC-UX-013 v1.9.0. |
 | 0.26.0 | 2026-03-29 | create-amendment | Criação DOC-UX-013-M07: nova §3.4 tokens semânticos shadcn/ui (17 variáveis CSS obrigatórias) + PASSO 4A no app-scaffold. Fix: componentes shared/ui invisíveis sem esses tokens. |
 | 0.25.0 | 2026-03-27 | merge-amendment | Merge batch DOC-UX-013-M03+M04+M05: 12 componentes customizados ECF em §4.2/§4.4. DOC-UX-013 v1.6.0. Form(5), Data(5), Feedback(2). |

@@ -335,6 +335,14 @@ Detalhes completos em [DATA-010](requirements/data/DATA-010.md).
 
 ---
 
+## 8. Amendments
+
+<!-- start amendments-index -->
+- [FR-010-C01](amendments/fr/FR-010-C01.md) — Correção: rename scope `phase2-enable` → `phase2_enable` em FR-010 + PEN-010 + use case. Ref: spec-fix-scope-hyphen-rename
+<!-- end amendments-index -->
+
+---
+
 ## 10. Metadados do item (MOD-010)
 
 - **estado_item:** READY

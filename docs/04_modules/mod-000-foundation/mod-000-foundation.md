@@ -164,6 +164,7 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [FR-000-C09](amendments/fr/FR-000-C09.md) — Correção: seed-admin.ts abortava quando admin já existe, impedindo sync de novos scopes na role super-admin. Nova função syncSuperAdminPermissions com diff aditivo
 - [DATA-000-C03](amendments/data/DATA-000-C03.md) — Correção: CHECK constraint role_permissions_scope_check rejeitava hífens — scope mcp:agent:phase2-enable falhava no INSERT. Regex atualizada para aceitar [a-z0-9_-]
 - [SEC-000-M02](amendments/sec/SEC-000-M02.md) — Melhoria: regra SEC-SEED-PROD-001 — proibição de credenciais default em seeds quando NODE_ENV=production
+- [FR-000-C10](amendments/fr/FR-000-C10.md) — Correção: rename scope `phase2-enable` → `phase2_enable` no seed + reverter CHECK constraint à regex canônica. Ref: spec-fix-scope-hyphen-rename
 <!-- end amendments-index -->
 
 > **Nota:** 8 amendments de documentos normativos foram migrados para `docs/01_normativos/amendments/{DOC-ID}/` em 2026-03-25. Normativos são transversais e não pertencem a nenhum módulo específico. Ver: DOC-PADRAO-001-C01, DOC-PADRAO-001-M01, DOC-PADRAO-004-M01, DOC-PADRAO-005-C01, DOC-UX-011-M01, DOC-UX-011-M02, DOC-UX-012-M02, DOC-GNP-00-M01.

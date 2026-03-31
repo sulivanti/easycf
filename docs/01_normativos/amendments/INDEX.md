@@ -25,3 +25,4 @@
 | [DOC-UX-013-M05](DOC-UX-013/DOC-UX-013-M05.md) | DOC-UX-013 | M | MERGED | 2026-03-27 | Componentes Feedback: ConfirmationModal, PageHeader |
 | [PKG-COD-001-M01](PKG-COD-001/PKG-COD-001-M01.md) | PKG-COD-001 | M | MERGED | 2026-03-28 | Ingestão de screen manifest e blueprint DOC-UX-014 em §3.5 AGN-COD-WEB |
 | [DOC-UX-013-M07](DOC-UX-013/DOC-UX-013-M07.md) | DOC-UX-013 | M | MERGED | 2026-03-29 | Nova §3.4 tokens semânticos shadcn/ui + PASSO 4A no app-scaffold |
+| [DOC-FND-000-C01](DOC-FND-000/DOC-FND-000-C01.md) | DOC-FND-000 | C | MERGED | 2026-03-31 | Rename scope `phase2-enable` → `phase2_enable` no catálogo §2.2 |

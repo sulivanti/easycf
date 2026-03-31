@@ -75,13 +75,13 @@ Sem definicao concreta, a implementacao da Phase 2 ficara ambigua. O dev pode im
 ### Opcoes
 
 **Opcao A — Flag via PATCH com validacao de owner:**
-Habilitar `phase2_create_enabled` via `PATCH /admin/mcp-agents/:id` com campo `phase2_create_enabled: true`. Validacao: o admin que faz o PATCH DEVE ser o `owner_user_id` do agente OU ter scope especifico `mcp:agent:phase2-enable`. Evento `mcp.agent.scopes_updated` (EVT-003) emitido com detalhe da habilitacao.
+Habilitar `phase2_create_enabled` via `PATCH /admin/mcp-agents/:id` com campo `phase2_create_enabled: true`. Validacao: o admin que faz o PATCH DEVE ser o `owner_user_id` do agente OU ter scope especifico `mcp:agent:phase2_enable`. Evento `mcp.agent.scopes_updated` (EVT-003) emitido com detalhe da habilitacao.
 
 - Pros: Simples, reutiliza endpoint existente, auditoria via EVT-003
 - Contras: Mistura configuracao de seguranca com edicao geral; risco de habilitacao acidental
 
 **Opcao B — Endpoint dedicado com confirmacao:**
-Criar `POST /admin/mcp-agents/:id/enable-phase2` com body `{ "reason": "motivo" }`. Scope requerido: `mcp:agent:write` + `mcp:agent:phase2-enable`. Resposta inclui confirmacao explicita. Evento dedicado `mcp.agent.phase2_enabled`.
+Criar `POST /admin/mcp-agents/:id/enable-phase2` com body `{ "reason": "motivo" }`. Scope requerido: `mcp:agent:write` + `mcp:agent:phase2_enable`. Resposta inclui confirmacao explicita. Evento dedicado `mcp.agent.phase2_enabled`.
 
 - Pros: Separacao clara, auditoria dedicada, impossivel habilitar acidentalmente
 - Contras: Endpoint adicional, scope adicional a registrar no Foundation
@@ -98,7 +98,7 @@ Opcao B — a habilitacao de Phase 2 e uma decisao de seguranca que merece fluxo
 
 ### Resolucao
 
-> **Decisao:** Opcao B — Endpoint dedicado `POST /admin/mcp-agents/:id/enable-phase2` com body `{ "reason": "motivo" }`. Scope requerido: `mcp:agent:write` + `mcp:agent:phase2-enable`. Evento dedicado `mcp.agent.phase2_enabled`.
+> **Decisao:** Opcao B — Endpoint dedicado `POST /admin/mcp-agents/:id/enable-phase2` com body `{ "reason": "motivo" }`. Scope requerido: `mcp:agent:write` + `mcp:agent:phase2_enable`. Evento dedicado `mcp.agent.phase2_enabled`.
 > **Decidido por:** Marcos Sulivan em 2026-03-19
 > **Justificativa:** A habilitacao de Phase 2 e uma decisao de seguranca que merece fluxo separado, similar a separacao de `mcp:agent:revoke` de `mcp:agent:write`. Separacao clara, auditoria dedicada, impossivel habilitar acidentalmente.
 > **Artefato de saida:** FR-010 (novo FR-010 — endpoint Phase 2 enable)
@@ -273,7 +273,7 @@ Opcao B com mitigacao: criar o amendment via `/create-amendment MOD-000` com os 
 
 > **Decisao:** Opcao B — Amendment criado pelo time Foundation via `/create-amendment MOD-000`. Ownership correto do catalogo de scopes.
 > **Decidido por:** Marcos Sulivan em 2026-03-19
-> **Justificativa:** Ownership correto do catalogo centralizado. Amendment DOC-FND-000-M04 criado imediatamente para nao bloquear calendario. 6 scopes `mcp:*` registrados: `mcp:agent:read`, `mcp:agent:write`, `mcp:agent:revoke`, `mcp:agent:phase2-enable`, `mcp:key:rotate`, `mcp:execution:read`.
+> **Justificativa:** Ownership correto do catalogo centralizado. Amendment DOC-FND-000-M04 criado imediatamente para nao bloquear calendario. 6 scopes `mcp:*` registrados: `mcp:agent:read`, `mcp:agent:write`, `mcp:agent:revoke`, `mcp:agent:phase2_enable`, `mcp:key:rotate`, `mcp:execution:read`.
 > **Artefato de saida:** DOC-FND-000-M04 amendment (6 scopes mcp:*). DOC-FND-000 v1.6.0 → v1.7.0.
 > **Implementado em:** DOC-FND-000 §2.2, DOC-FND-000-M04
 
@@ -418,7 +418,7 @@ Opcao A — alinhar com Foundation. Se servico de e-mail nao existir ainda, regi
 
 ### Questao
 
-O Amendment DOC-FND-000-M04 (PENDENTE-004) registrou 6 scopes MCP no catálogo canônico: `mcp:agent:read/write/revoke`, `mcp:agent:phase2-enable`, `mcp:key:rotate`, `mcp:execution:read`. Porém, os manifests UX-MCP-001 e UX-MCP-002 usam scopes **diferentes** dos registrados:
+O Amendment DOC-FND-000-M04 (PENDENTE-004) registrou 6 scopes MCP no catálogo canônico: `mcp:agent:read/write/revoke`, `mcp:agent:phase2_enable`, `mcp:key:rotate`, `mcp:execution:read`. Porém, os manifests UX-MCP-001 e UX-MCP-002 usam scopes **diferentes** dos registrados:
 
 | No Catálogo | No Manifest | Usado em |
 |---|---|---|

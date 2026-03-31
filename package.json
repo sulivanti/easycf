@@ -1,42 +1,6 @@
 {
-    "name": "@easycf/monorepo",
-    "version": "0.19.1",
-    "private": true,
-    "description": "The Enterprise-Grade Agnostic Code Framework",
-    "scripts": {
-        "release": "node .agents/scripts/release.mjs patch",
-        "release:minor": "node .agents/scripts/release.mjs minor",
-        "release:major": "node .agents/scripts/release.mjs major",
-        "commit": "node .agents/scripts/git-semantic-commit.js",
-        "sync:private": "powershell .agents/scripts/git-sync-private.ps1",
-        "sync:public": "powershell .agents/scripts/git-sync-public.ps1",
-        "lint:docs": "node .agents/scripts/lint-docs.js",
-        "lint:markdown": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\" \"#.gemini/**\" \"#tmp/**\"",
-        "validate:manifests": "node .agents/scripts/validate-manifests.js",
-        "qa:all": "npm run lint:docs && npm run lint:markdown && npm run validate:manifests",
-        "lint": "eslint apps/",
-        "lint:fix": "eslint apps/ --fix",
-        "format": "prettier --write \"apps/**/*.{ts,tsx,json}\"",
-        "format:check": "prettier --check \"apps/**/*.{ts,tsx,json}\"",
-        "test:api:unit": "pnpm -C apps/api vitest run test/**/domain/** test/**/application/** test/**/presentation/**",
-        "test:api:integration": "pnpm -C apps/api vitest run test/**/integration/**",
-        "test:web": "pnpm -C apps/web vitest run"
-    },
-    "devDependencies": {
-        "@eslint/js": "^9.39.4",
-        "ajv": "^8.18.0",
-        "eslint": "^9.0.0",
-        "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-react": "^7.37.5",
-        "eslint-plugin-react-hooks": "^7.0.1",
-        "js-yaml": "^4.1.1",
-        "markdownlint-cli2": "^0.21.0",
-        "prettier": "^3.8.1",
-        "typescript": "^5.4.0",
-        "typescript-eslint": "^8.57.2"
-    },
-    "packageManager": "pnpm@9.0.0",
-    "engines": {
-        "node": ">=20.0.0"
-    }
+  "name": "{{project_name}}",
+  "version": "1.0.0",
+  "description": "Projeto baseado no EasyCodeFramework — documentação, governança e automação por agentes",
+  "private": true
 }

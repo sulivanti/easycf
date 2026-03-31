@@ -64,15 +64,16 @@ Chamar `mcp__penpot__get_object_tree`:
 
 Guardar como `CURRENT_TREE`.
 
-### 1.2 — Screenshot "antes"
+### 1.2 — Screenshot "antes" (opcional)
 
-Chamar `mcp__penpot__export_object`:
+Screenshot "antes" so e capturado se a flag `--screenshot` estiver presente nos $ARGUMENTS.
+Se presente, chamar `mcp__penpot__export_object`:
 - `file_id`: sandbox file ID
 - `object_id`: `FRAME_ID`
 - `format`: `png`
 - `scale`: `2`
 
-Exibir screenshot "ANTES" ao usuario.
+Se falhar com timeout → avisar e continuar sem screenshot.
 
 ---
 
@@ -188,16 +189,11 @@ Enviar via `update-file` com transit body padrao. Incrementar `REVN` apos cada b
 Chamar `mcp__penpot__get_object_tree` novamente com `depth=-1`.
 Confirmar que as correcoes foram aplicadas comparando com valores alvos.
 
-### 5.2 — Screenshot "depois"
-
-Chamar `mcp__penpot__export_object` com mesmo frame.
-Exibir screenshot "DEPOIS" ao usuario.
-
 ---
 
 ## PASSO 6 — Relatorio
 
-Emita no chat:
+Emita no chat **IMEDIATAMENTE** apos verificacao da arvore (PASSO 5.1). NAO depender de screenshots.
 
 ```
 ## ux-sandbox-fix — Resultado
@@ -212,19 +208,28 @@ Emita no chat:
 |---|--------|-------------|-------|--------|--------|
 | 1 | {obj}  | {prop}      | {old} | {new}  | OK     |
 
-### Screenshots
-- **Antes:** (imagem acima)
-- **Depois:** (imagem acima)
-
 ### Metricas
 - Correcoes planejadas: {N}
 - Correcoes aplicadas: {N}
 - Falhas: {N}
 
 ### Proximos passos
+- Para screenshots comparativos: `/penpot render {frame_name} --project test`
 - Se mais ajustes: `/ux-sandbox-fix {SPEC_NUMBER} {descricao}`
 - Se layout validado: `/ux-apply-layout {SPEC_NUMBER}`
 ```
+
+---
+
+## PASSO 7 — Screenshots comparativos (opcional, pos-relatorio)
+
+**Este passo so executa se o relatorio ja foi emitido E a flag `--screenshot` estiver presente.**
+
+Chamar `mcp__penpot__export_object` com o frame corrigido.
+
+**Tratamento de timeout:** Se `export_object` falhar:
+- NAO travar — emitir aviso: "Screenshot falhou (timeout). Use `/penpot render {frame_name}` para tentar novamente."
+- O relatorio ja foi emitido, entao nenhuma informacao e perdida.
 
 ---
 

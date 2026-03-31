@@ -1,11 +1,12 @@
 /**
- * @contract UX-001, UX-001-M01 D1/D3, FR-002, DOC-UX-010
+ * @contract UX-001, UX-001-M01 D1/D3, UX-001-C02, FR-002, DOC-UX-010
  * Page: Organizational Tree (UX-ORG-001)
  * Route: /organizacao
  *
  * Layout: split-panel (TreePanel 380px + DetailPanel flex).
  * FormPanel inline 480px replaces tree when open — route does NOT change.
  * States: loading (skeleton), empty, empty_search, error, loaded.
+ * Edit guard (UX-001-C02): confirmation dialog when navigating away with unsaved changes.
  * Tailwind CSS v4 + shared UI.
  */
 
@@ -51,9 +52,13 @@ interface ConfirmState {
   onConfirm: () => void;
 }
 
-type FormPanelState =
-  | { open: false }
-  | { open: true; mode: 'create'; parentId?: string };
+type FormPanelState = { open: false } | { open: true; mode: 'create'; parentId?: string };
+
+/** UX-001-C02: edit guard state */
+interface EditGuardState {
+  open: boolean;
+  pendingAction: (() => void) | null;
+}
 
 const DEACTIVATE_INITIAL: DeactivateState = {
   open: false,
@@ -71,6 +76,8 @@ const CONFIRM_INITIAL: ConfirmState = {
   onConfirm: () => {},
 };
 
+const EDIT_GUARD_INITIAL: EditGuardState = { open: false, pendingAction: null };
+
 export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps) {
   const { data: tree, isLoading, isError, error, refetch } = useOrgTree();
   const deleteMutation = useDeleteOrgUnit();
@@ -85,6 +92,11 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
   const [deactivate, setDeactivate] = useState<DeactivateState>(DEACTIVATE_INITIAL);
   const [confirm, setConfirm] = useState<ConfirmState>(CONFIRM_INITIAL);
 
+  // UX-001-C02: elevated editing state from DetailPanel
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+  const [editGuard, setEditGuard] = useState<EditGuardState>(EDIT_GUARD_INITIAL);
+
   // Detail query — returns raw DTO, transformed to DetailVM here
   const { data: detailDTO, isLoading: detailLoading } = useOrgUnitDetail(selectedId);
   const detailVM = useMemo(() => (detailDTO ? toDetailVM(detailDTO) : null), [detailDTO]);
@@ -94,22 +106,55 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
   const closeConfirm = useCallback(() => setConfirm(CONFIRM_INITIAL), []);
   const hasWrite = canWriteOrgUnit(userScopes);
 
+  // UX-001-C02: guard helper — intercepts actions when editing with unsaved changes
+  const guardedAction = useCallback(
+    (action: () => void) => {
+      if (isEditing && isDirty) {
+        setEditGuard({ open: true, pendingAction: action });
+        return;
+      }
+      if (isEditing) {
+        setIsEditing(false);
+      }
+      action();
+    },
+    [isEditing, isDirty],
+  );
+
   // ── Handlers ────────────────────────────────────────────────
 
-  const handleSelect = useCallback((id: string) => {
-    setSelectedId(id);
-  }, []);
+  const handleSelect = useCallback(
+    (id: string) => {
+      guardedAction(() => {
+        setIsEditing(false);
+        setSelectedId(id);
+      });
+    },
+    [guardedAction],
+  );
 
-  const handleOpenCreate = useCallback((parentId?: string) => {
-    setFormPanel({ open: true, mode: 'create', parentId });
-  }, []);
+  const handleOpenCreate = useCallback(
+    (parentId?: string) => {
+      guardedAction(() => {
+        setIsEditing(false);
+        setFormPanel({ open: true, mode: 'create', parentId });
+      });
+    },
+    [guardedAction],
+  );
 
   // UX-001-M02: edit is now inline in DetailPanel, not FormPanel
-  const handleOpenEdit = useCallback((id: string) => {
-    setSelectedId(id);
-    setFormPanel({ open: false });
-    setRequestEdit(true);
-  }, []);
+  const handleOpenEdit = useCallback(
+    (id: string) => {
+      guardedAction(() => {
+        setIsEditing(false);
+        setSelectedId(id);
+        setFormPanel({ open: false });
+        setRequestEdit(true);
+      });
+    },
+    [guardedAction],
+  );
 
   const handleEditHandled = useCallback(() => {
     setRequestEdit(false);
@@ -334,6 +379,9 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
           requestEdit={requestEdit}
           onEditHandled={handleEditHandled}
           onCreateChild={handleOpenCreate}
+          isEditing={isEditing}
+          onEditingChange={setIsEditing}
+          onDirtyChange={setIsDirty}
         />
       </div>
 
@@ -358,6 +406,23 @@ export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps)
         confirmLabel={confirm.confirmLabel}
         cancelLabel={COPY.modal.cancel}
         onConfirm={confirm.onConfirm}
+      />
+
+      {/* UX-001-C02: Edit guard confirmation modal */}
+      <ConfirmationModal
+        open={editGuard.open}
+        onOpenChange={(open) => !open && setEditGuard(EDIT_GUARD_INITIAL)}
+        title={COPY.modal.editGuardTitle}
+        description={COPY.modal.editGuardBody}
+        variant="default"
+        confirmLabel={COPY.modal.editGuardConfirm}
+        cancelLabel={COPY.modal.editGuardCancel}
+        onConfirm={() => {
+          const action = editGuard.pendingAction;
+          setEditGuard(EDIT_GUARD_INITIAL);
+          setIsEditing(false);
+          action?.();
+        }}
       />
     </div>
   );

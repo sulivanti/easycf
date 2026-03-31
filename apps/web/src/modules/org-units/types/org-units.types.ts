@@ -486,6 +486,10 @@ export const COPY = {
       `Desvincular tenant '${tenantCodigo}' de '${orgUnitNome}'?`,
     unlinkConfirm: 'Desvincular',
     cancel: 'Cancelar',
+    editGuardTitle: 'Edição em andamento',
+    editGuardBody: 'Você possui alterações não salvas. Deseja cancelar a edição?',
+    editGuardCancel: 'Continuar Editando',
+    editGuardConfirm: 'Cancelar Edição',
   },
 } as const;
 

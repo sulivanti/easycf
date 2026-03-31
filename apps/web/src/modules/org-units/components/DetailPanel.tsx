@@ -1,11 +1,12 @@
 /**
- * @contract UX-001-M01 D2, UX-001-M02, FR-006, DATA-001-M01
+ * @contract UX-001-M01 D2, UX-001-M02, UX-001-C02, FR-006, DATA-001-M01
  * DetailPanel — painel direito do split-panel com header, dados cadastrais,
  * departamentos (PENDENTE-008) e métricas (PENDENTE-009).
  * Suporta inline edit (UX-001-M02): campos viram inputs in-place ao clicar "Editar Dados".
+ * Guard de edição (UX-001-C02): isEditing/isDirty elevados para parent via props.
  */
 
-import { useState, useCallback, useEffect, type ChangeEvent } from 'react';
+import { useState, useCallback, useEffect, useMemo, type ChangeEvent } from 'react';
 import { BuildingIcon, PlusIcon, PencilIcon, CheckIcon, XIcon } from 'lucide-react';
 import { Button } from '@shared/ui/button.js';
 import { Badge } from '@shared/ui/badge.js';
@@ -28,6 +29,10 @@ export interface DetailPanelProps {
   requestEdit?: boolean;
   onEditHandled?: () => void;
   onCreateChild: (parentId: string) => void;
+  /** UX-001-C02: elevated editing state */
+  isEditing: boolean;
+  onEditingChange: (editing: boolean) => void;
+  onDirtyChange: (dirty: boolean) => void;
 }
 
 interface EditFormState {
@@ -59,11 +64,13 @@ export function DetailPanel({
   requestEdit,
   onEditHandled,
   onCreateChild,
+  isEditing,
+  onEditingChange,
+  onDirtyChange,
 }: DetailPanelProps) {
   const hasWrite = canWriteOrgUnit(userScopes);
   const updateMutation = useUpdateOrgUnit();
 
-  const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState<EditFormState>({
     nome: '',
     cnpj: '',
@@ -74,24 +81,37 @@ export function DetailPanel({
     email_contato: '',
   });
 
+  // UX-001-C02: compute dirty state and notify parent
+  const isDirty = useMemo(() => {
+    if (!detail || !isEditing) return false;
+    const original = detailToForm(detail);
+    return Object.keys(original).some(
+      (key) => form[key as keyof EditFormState] !== original[key as keyof EditFormState],
+    );
+  }, [form, detail, isEditing]);
+
+  useEffect(() => {
+    onDirtyChange(isDirty);
+  }, [isDirty, onDirtyChange]);
+
   // When tree context menu triggers edit, start inline editing
   useEffect(() => {
     if (requestEdit && detail && hasWrite) {
       setForm(detailToForm(detail));
-      setIsEditing(true);
+      onEditingChange(true);
       onEditHandled?.();
     }
-  }, [requestEdit, detail, hasWrite, onEditHandled]);
+  }, [requestEdit, detail, hasWrite, onEditHandled, onEditingChange]);
 
   const handleStartEdit = useCallback(() => {
     if (!detail) return;
     setForm(detailToForm(detail));
-    setIsEditing(true);
-  }, [detail]);
+    onEditingChange(true);
+  }, [detail, onEditingChange]);
 
   const handleCancel = useCallback(() => {
-    setIsEditing(false);
-  }, []);
+    onEditingChange(false);
+  }, [onEditingChange]);
 
   const handleChange = useCallback((field: keyof EditFormState) => {
     return (e: ChangeEvent<HTMLInputElement>) => {
@@ -125,17 +145,15 @@ export function DetailPanel({
       {
         onSuccess: () => {
           toast.success(COPY.toast.updateSuccess(detail.codigo, form.nome.trim()));
-          setIsEditing(false);
+          onEditingChange(false);
         },
         onError: (error) => {
-          const message = error instanceof ApiError
-            ? error.message
-            : COPY.error.networkError;
+          const message = error instanceof ApiError ? error.message : COPY.error.networkError;
           toast.error(message);
         },
       },
     );
-  }, [detail, form, updateMutation]);
+  }, [detail, form, updateMutation, onEditingChange]);
 
   // Loading skeleton
   if (isLoading) {
@@ -170,9 +188,8 @@ export function DetailPanel({
   }
 
   // Derive parent name from breadcrumb
-  const parentName = detail.breadcrumb.length > 0
-    ? detail.breadcrumb[detail.breadcrumb.length - 1].nome
-    : null;
+  const parentName =
+    detail.breadcrumb.length > 0 ? detail.breadcrumb[detail.breadcrumb.length - 1].nome : null;
   const levelLabel = `${detail.levelInfo.shortLabel} — ${detail.levelInfo.label}`;
 
   return (
@@ -230,12 +247,7 @@ export function DetailPanel({
               </>
             ) : (
               <>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleStartEdit}
-                  className="gap-1.5"
-                >
+                <Button variant="outline" size="sm" onClick={handleStartEdit} className="gap-1.5">
                   <PencilIcon className="size-3.5" />
                   Editar Dados
                 </Button>
@@ -271,16 +283,50 @@ export function DetailPanel({
               />
             </div>
             <div className="grid grid-cols-3 gap-4">
-              <EditInput label="CNPJ" value={form.cnpj} onChange={handleChange('cnpj')} maxLength={18} placeholder="00.000.000/0000-00" />
-              <EditInput label="Razão Social" value={form.razao_social} onChange={handleChange('razao_social')} maxLength={300} className="col-span-2" />
+              <EditInput
+                label="CNPJ"
+                value={form.cnpj}
+                onChange={handleChange('cnpj')}
+                maxLength={18}
+                placeholder="00.000.000/0000-00"
+              />
+              <EditInput
+                label="Razão Social"
+                value={form.razao_social}
+                onChange={handleChange('razao_social')}
+                maxLength={300}
+                className="col-span-2"
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <EditInput label="Filial" value={form.filial} onChange={handleChange('filial')} maxLength={100} />
-              <EditInput label="Responsável" value={form.responsavel} onChange={handleChange('responsavel')} maxLength={200} />
+              <EditInput
+                label="Filial"
+                value={form.filial}
+                onChange={handleChange('filial')}
+                maxLength={100}
+              />
+              <EditInput
+                label="Responsável"
+                value={form.responsavel}
+                onChange={handleChange('responsavel')}
+                maxLength={200}
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <EditInput label="Telefone" value={form.telefone} onChange={handleChange('telefone')} maxLength={20} placeholder="(00) 00000-0000" />
-              <EditInput label="E-mail" value={form.email_contato} onChange={handleChange('email_contato')} maxLength={254} placeholder="contato@empresa.com" />
+              <EditInput
+                label="Telefone"
+                value={form.telefone}
+                onChange={handleChange('telefone')}
+                maxLength={20}
+                placeholder="(00) 00000-0000"
+              />
+              <EditInput
+                label="E-mail"
+                value={form.email_contato}
+                onChange={handleChange('email_contato')}
+                maxLength={254}
+                placeholder="contato@empresa.com"
+              />
             </div>
           </div>
         ) : (
@@ -296,12 +342,7 @@ export function DetailPanel({
       </InlineEditCard>
 
       {/* Hierarquia card — visible only in edit mode (UX-001-M02) */}
-      {isEditing && (
-        <HierarchyCard
-          parentName={parentName}
-          levelLabel={levelLabel}
-        />
-      )}
+      {isEditing && <HierarchyCard parentName={parentName} levelLabel={levelLabel} />}
 
       {/* Departamentos placeholder — PENDENTE-008 */}
       <div className="rounded-xl border border-a1-border bg-white p-6">

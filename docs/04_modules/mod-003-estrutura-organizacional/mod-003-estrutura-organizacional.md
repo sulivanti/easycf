@@ -135,3 +135,4 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 - [INT-001-C01](amendments/int/INT-001-C01.md) — Correção: GET /tree envia camelCase sem mapear para snake_case do schema Zod
 - [UX-001-C01](amendments/ux/UX-001-C01.md) — Correção: error handling silencioso no OrgFormPage — erros 5xx/400/403 não mostravam feedback, extractFieldErrors não chamada, campos faltando no CreateOrgUnitRequest
 - [UX-001-M02](amendments/ux/UX-001-M02.md) — Melhoria: Inline Edit no DetailPanel substitui FormPanel para edição — InlineEditCard, HierarchyCard, árvore visível durante edição
+- [UX-001-C02](amendments/ux/UX-001-C02.md) — Correção: Guard de edição inline — diálogo de confirmação ao sair do modo edição com alterações não salvas

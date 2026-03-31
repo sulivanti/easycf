@@ -117,6 +117,61 @@ const SCOPES = [
   'mcp:log:read',
 ];
 
+async function syncSuperAdminPermissions(db: ReturnType<typeof drizzle>) {
+  // Busca role super-admin
+  const [superAdminRole] = await db
+    .select()
+    .from(roles)
+    .where(eq(roles.codigo, 'super-admin'))
+    .limit(1);
+
+  if (!superAdminRole) {
+    // Role não existe — cria role + todas as permissões
+    const roleId = randomUUID();
+    console.log('Role super-admin não encontrada. Criando...');
+    await db.insert(roles).values({
+      id: roleId,
+      codigo: 'super-admin',
+      name: 'Super Administrador',
+      description: 'Acesso total a todos os módulos',
+      status: 'ACTIVE',
+    });
+
+    await db.insert(rolePermissions).values(
+      SCOPES.map((scope) => ({
+        id: randomUUID(),
+        roleId,
+        scope,
+      })),
+    );
+    console.log(`Criadas ${SCOPES.length} permissões para role super-admin.`);
+    return;
+  }
+
+  // Role existe — busca permissões atuais e calcula diff
+  const existingPerms = await db
+    .select({ scope: rolePermissions.scope })
+    .from(rolePermissions)
+    .where(eq(rolePermissions.roleId, superAdminRole.id));
+
+  const existingScopes = new Set(existingPerms.map((p) => p.scope));
+  const missingScopes = SCOPES.filter((s) => !existingScopes.has(s));
+
+  if (missingScopes.length === 0) {
+    console.log('Todas as permissões já estão sincronizadas.');
+    return;
+  }
+
+  await db.insert(rolePermissions).values(
+    missingScopes.map((scope) => ({
+      id: randomUUID(),
+      roleId: superAdminRole.id,
+      scope,
+    })),
+  );
+  console.log(`Sincronizados ${missingScopes.length} novos scopes para super-admin: ${missingScopes.join(', ')}`);
+}
+
 async function seed() {
   const sql = postgres(DATABASE_URL!);
   const db = drizzle(sql);
@@ -124,7 +179,8 @@ async function seed() {
   // Check if admin already exists
   const existing = await db.select().from(users).where(eq(users.email, ADMIN_EMAIL)).limit(1);
   if (existing.length > 0) {
-    console.log(`Admin "${ADMIN_EMAIL}" já existe. Pulando seed.`);
+    console.log(`Admin "${ADMIN_EMAIL}" já existe. Sincronizando permissões...`);
+    await syncSuperAdminPermissions(db);
     await sql.end();
     return;
   }

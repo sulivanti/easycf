@@ -152,7 +152,9 @@ Funcionalidade: Épico Estrutura Organizacional MOD-003
 US-MOD-003  (este arquivo) ← Épico / Governança / Índice
   ├── US-MOD-003-F01  ← API Core — CRUD + Tree Query + Vinculação N5
   ├── US-MOD-003-F02  ← Árvore Organizacional (UX-ORG-001)
-  └── US-MOD-003-F03  ← Formulário de Nó Organizacional (UX-ORG-002)
+  ├── US-MOD-003-F03  ← Formulário de Nó Organizacional (UX-ORG-002)
+  ├── US-MOD-003-F04  ← Restore de Unidade Organizacional
+  └── US-MOD-003-F05  ← CRUD de Departamentos (Full-Stack)
 ```
 
 | Sub-História | Tema | Tipo | Status |
@@ -160,6 +162,8 @@ US-MOD-003  (este arquivo) ← Épico / Governança / Índice
 | US-MOD-003-F01 | API: CRUD + tree query + vinculação tenant | **Backend** | `READY` |
 | US-MOD-003-F02 | Tela de Árvore Organizacional | **UX** | `READY` |
 | US-MOD-003-F03 | Formulário de Criação/Edição de Nó | **UX** | `READY` |
+| US-MOD-003-F04 | Restore de Unidade Organizacional | **Backend + UX** | `READY` |
+| US-MOD-003-F05 | CRUD de Departamentos (Fase 1) | **Full-Stack** | `READY` |
 
 ---
 
@@ -248,6 +252,7 @@ Os seguintes escopos devem ser adicionados ao catálogo de permissões via amend
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0.0 | 2026-03-15 | arquitetura | Criação do zero. Decisão N5=tenant documentada, modelo de dados, endpoints, escopos, features F01–F03. |
+| 1.2.0 | 2026-03-31 | arquitetura | Adição de F04 (Restore) e F05 (CRUD Departamentos) na tabela de sub-histórias. F05 é full-stack com 6 endpoints, tela UX-ORG-003, 4 domain events. Ref: PENDENTE-008 → DECIDIDA. |
 | 1.1.0 | 2026-03-16 | Marcos Sulivan | Decisões técnicas 2026-03-15: volume árvore ajustado de 500 para ~100 nós, cache Redis removido (query ao vivo), owner atualizado. |
 
 ---

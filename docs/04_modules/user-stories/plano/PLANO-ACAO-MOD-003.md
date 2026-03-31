@@ -16,7 +16,7 @@
 | Scaffold (forge-module) | CONCLUIDO | mod-003-estrutura-organizacional/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Todos os agentes confirmados, v0.3.0, 6 pendentes resolvidas |
 | Codegen (6 agentes) | CONCLUIDO (2026-03-25 re-run) | 6/6 agentes done (DB, CORE, APP, API, WEB, VAL). 36 arquivos. Re-run: +infrastructure/schema.ts, FKs corrigidas, barrel fix, OpenAPI mod-003 spec |
-| PENDENTEs | 0 abertas | 7 total: 4 RESOLVIDA (001, 003, 005, 007) + 3 IMPLEMENTADA (002, 004, 006) |
+| PENDENTEs | 1 aberta | 10 total: 1 RESOLVIDA (007) + 7 IMPLEMENTADA (001, 002, 003, 004, 005, 006, 010) + 1 DECIDIDA (008) + 1 ABERTA (009) |
 | ADRs | 4 READY (proposed) | Nivel 2 requer minimo 3 — atendido (ADR-001 N5=Tenant, ADR-002 CTE Recursivo, ADR-003 Cross-Tenant, ADR-004 Idempotency-Key) |
 | Amendments | 3 criados | FR-001-C01 (constraint catch), US-MOD-003-M01 (F04 no epico), US-MOD-003-F01-M01 (org.unit_restored) |
 | Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
@@ -303,10 +303,11 @@ Os 3 amendments ja existentes foram criados pre-READY (durante enriquecimento). 
 ```
 16   /manage-pendentes list PEN-003
                            Estado atual MOD-003:
-                             PEN-003: 7 itens total
-                               4 RESOLVIDA (001, 003, 005, 007)
-                               3 IMPLEMENTADA (002, 004, 006)
-                               0 ABERTA
+                             PEN-003: 10 itens total
+                               3 RESOLVIDA (001, 003, 005, 007)
+                               5 IMPLEMENTADA (002, 004, 006, 010)
+                               1 DECIDIDA (008)
+                               1 ABERTA (009)
                              SLA: nenhum vencido
 ```
 
@@ -319,6 +320,9 @@ Os 3 amendments ja existentes foram criados pre-READY (durante enriquecimento). 
 | 5 | PENDENTE-005 | RESOLVIDA | MEDIA | Constraint catch 23505 → 409 | FR-001-C01 |
 | 6 | PENDENTE-006 | IMPLEMENTADA | MEDIA | Opcao A — Corrigir UX-001 (RBAC) | UX-001 v0.2.1 |
 | 7 | PENDENTE-007 | RESOLVIDA | MEDIA | Auto-resolvida — lint 0 erros pos-codegen | N/A (erros eliminados) |
+| 8 | PENDENTE-008 | DECIDIDA | MEDIA | Opcao A — Entidade independente primeiro (CRUD Departamentos Fase 1) | FR-002, DATA-002, BR-002, SEC-001-M01, SEC-002-M01, UX-002 |
+| 9 | PENDENTE-009 | ABERTA | BAIXA | Adiar — depende MOD-002 + MOD-005 | — |
+| 10 | PENDENTE-010 | IMPLEMENTADA | MEDIA | Opcao B — Manter soft delete, toggle visual → DELETE com modal | UX-001-C03 |
 
 > Detalhes completos: requirements/pen-003-pendente.md
 

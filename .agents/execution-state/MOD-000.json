@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-000",
   "module_path": "docs/04_modules/mod-000-foundation/",
-  "last_updated": "2026-03-24T18:00:00.000Z",
+  "last_updated": "2026-03-30T22:15:00.000Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -31,8 +31,14 @@
       },
       "AGN-COD-APP": {
         "status": "done",
-        "completed_at": "2026-03-23T16:00:00.000Z",
+        "completed_at": "2026-03-30T22:15:00.000Z",
+        "re_codegen": "FR-000-C08: RefreshTokenUseCase re-busca scopes/tenantId do banco + DI wiring + 11 testes",
         "files_generated": 17,
+        "files_modified_c08": [
+          "apps/api/src/modules/foundation/application/use-cases/auth/refresh-token.use-case.ts",
+          "apps/api/src/plugins/di.ts",
+          "apps/api/test/foundation/application/use-cases/refresh-token.use-case.test.ts"
+        ],
         "files": []
       },
       "AGN-COD-API": {

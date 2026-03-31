@@ -36,6 +36,9 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.17.3 | 2026-03-30 | codegen | Codegen FR-000-C08: 1 agente (AGN-COD-APP), 2 arquivos modificados + 1 atualizado. RefreshTokenUseCase re-busca scopes/tenantId do banco, DI wiring atualizado, 11 testes passando. |
+| 1.17.2 | 2026-03-30 | merge-amendment | Merge FR-000-C08: re-resolução de scopes e tenantId no FR-003 Done Funcional + 4 cenários Gherkin. Base FR-000 bumped para v0.10.1. Ref: spec-refresh-token-scopes-fix. |
+| 1.17.1 | 2026-03-30 | create-amendment | Amendment FR-000-C08: RefreshTokenUseCase gera JWT sem scopes/tenantId — refresh token não contém esses campos e use case copiava do payload vazio. Fix: re-buscar scopes (via RoleRepo + cache 300s) e tenantId (via TenantUserRepo) do banco a cada refresh. Resolve 403 "Permissão insuficiente" após ~15min. Ref: spec-refresh-token-scopes-fix. |
 | 1.17.0 | 2026-03-30 | merge-amendment | Merge batch: FR-000-M03 (novo FR-023 Smart Session Keep-Alive + anotação consumo automático FR-003, FR-000 v0.10.0), UX-000-M03 (nova jornada UX-010 Sessão Mantida por Atividade, UX-000 v0.6.0). Ambos selados MERGED. Ref: spec-smart-session-keepalive. |
 | 1.16.0 | 2026-03-30 | create-amendment | Amendment UX-000-M03: nova jornada UX-010 (Sessão Mantida por Atividade). Documenta experiência keep-alive transparente, cenários de retorno pós-inatividade e relação com UX-000-C01. Ref: spec-smart-session-keepalive, FR-000-M03. |
 | 1.15.0 | 2026-03-30 | create-amendment | Amendment FR-000-M03: novo FR-020 (Smart Session Keep-Alive) — refresh proativo por atividade, interceptor 401 com retry/mutex, idle timeout 30min configurável. 2 novos hooks (useActivityTracker, useSessionKeepAlive) + modificação dos 2 HTTP clients. Zero alterações backend. Ref: spec-smart-session-keepalive. |

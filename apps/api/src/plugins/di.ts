@@ -376,7 +376,15 @@ async function diPluginImpl(app: FastifyInstance): Promise<void> {
     roleRepo,
   );
   const logoutUseCase = new LogoutUseCase(sessionRepo, eventRepo);
-  const refreshTokenUseCase = new RefreshTokenUseCase(sessionRepo, eventRepo, uow, tokenService);
+  const refreshTokenUseCase = new RefreshTokenUseCase(
+    sessionRepo,
+    eventRepo,
+    uow,
+    tokenService,
+    tenantUserRepo,
+    roleRepo,
+    cache,
+  );
   const getProfileUseCase = new GetProfileUseCase(
     userRepo,
     tenantUserRepo,

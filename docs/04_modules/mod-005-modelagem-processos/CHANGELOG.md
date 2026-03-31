@@ -36,6 +36,8 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.5.0 | 2026-03-30 | merge-amendment | Merge UX-005-M02 em UX-005.md (v0.5.0): 4 componentes dialog (GateDialog, RoleLinkDialog, TransitionDialog, DeleteConfirmModal), 9 cenários de erro, §3.6 Props/Dados, §3.7 Hooks Frontend (7 hooks + 4 BRs) |
+| 1.4.0 | 2026-03-30 | create-amendment | Melhoria: UX-005-M02 — CRUD interativo para Gates, Papéis e Transições no StageConfigPanel (UX-PROC-002 §3). Hooks backend já existem (FR-007, FR-009, FR-010), falta UI. Ref: BR-001, BR-007, BR-008, BR-012 |
 | 1.3.5 | 2026-03-30 | merge-amendment | Merge INT-005-C01 em INT-005.md (v0.4.1): nota de implementação POST macro-stages — param :cid deve usar Zod schema (cidParam) |
 | 1.3.4 | 2026-03-30 | create-amendment | Correção: INT-005-C01 — POST /cycles/:cid/macro-stages retorna 400 por params schema JSON literal em vez de Zod. Ref: spec-fix-macro-stages-params-schema-mismatch |
 | 1.3.3 | 2026-03-30 | merge-amendment | Merge UX-005-C01 em UX-005.md (v0.4.1): 3 variantes empty no §2.2, 3 cenários de erro no §2.4, 4 COPY no §2.6, canCreate/blockReason/error + onError + await invalidate no §2.7 |

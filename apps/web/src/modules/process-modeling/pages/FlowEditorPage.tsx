@@ -352,6 +352,7 @@ function FlowEditorPageInner({ cycleId, userScopes }: FlowEditorPageProps) {
         {selectedStage && (
           <StageConfigPanel
             stage={selectedStage}
+            allStages={flow.macro_stages.flatMap((ms) => ms.stages)}
             readonly={readonly}
             onClose={() => setSelectedStageId(null)}
           />

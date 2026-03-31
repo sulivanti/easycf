@@ -7,6 +7,7 @@
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-15 | arquitetura | Baseline Inicial (forge-module) |
 > | 0.2.0  | 2026-03-15 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) |
+> | 0.6.2  | 2026-03-30 | merge-amendment | Merge DATA-000-C03: CHECK constraint role_permissions_scope_check atualizado para aceitar hífens — regex `[a-z0-9_]` → `[a-z0-9_-]`. Necessário para scope `mcp:agent:phase2-enable` (DOC-FND-000 §2.2). |
 > | 0.6.1  | 2026-03-25 | merge-amendment | Merge DATA-000-C02: regra SYSTEM_TENANT_ID para eventos pré-auth em domain_events §8 + null coercion em campos opcionais. Ref: spec-fix-domain-events-tenant-id. |
 > | 0.6.0  | 2026-03-25 | merge-amendment | Merge DATA-000-M01: nova coluna invite_token_created_at na tabela users (derivado de FR-000-M01). Viabiliza cálculo invite_token_expired no UserDetail. |
 > | 0.5.0  | 2026-03-18 | usuário     | Nota chave amigável tenant_users: concatenação userId+tenantCode em runtime (PENDENTE-003 opção A) |
@@ -116,7 +117,7 @@ Toda entidade principal do Foundation DEVE conter:
 |---|---|---|---|---|
 | `id` | uuid | NOT NULL | PK | |
 | `role_id` | uuid | NOT NULL | FK→roles.id ON DELETE RESTRICT | |
-| `scope` | varchar(100) | NOT NULL | CHECK(regex ^[a-z][a-z0-9_]*(:[a-z][a-z0-9_]*){1,2}$) | BR-005, DOC-FND-000 §2.1 |
+| `scope` | varchar(100) | NOT NULL | CHECK(regex ^[a-z][a-z0-9_-]*(:[a-z][a-z0-9_-]*){1,2}$) | BR-005, DOC-FND-000 §2.1 |
 
 **Índices:** `UNIQUE(role_id, scope)` — sem duplicatas de escopo por role
 
@@ -190,7 +191,7 @@ erDiagram
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-25
+- **data_ultima_revisao:** 2026-03-30
 - **rastreia_para:** US-MOD-000, US-MOD-000-F01, US-MOD-000-F05, US-MOD-000-F06, US-MOD-000-F07, US-MOD-000-F09, FR-000, BR-000, SEC-000, DOC-FND-000, DOC-ARC-003
 - **referencias_exemplos:** DOC-FND-000 §1-§3 (contratos auth/RBAC/events), DOC-ARC-003 §1-§4 (rastreabilidade)
 - **evidencias:** Extraído de US-MOD-000-F01, F05, F06, F07, F09

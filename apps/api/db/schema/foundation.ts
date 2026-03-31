@@ -146,7 +146,7 @@ export const rolePermissions = pgTable(
     uniqueIndex('role_permissions_role_scope_idx').on(table.roleId, table.scope),
     check(
       'role_permissions_scope_check',
-      sql`${table.scope} ~ '^[a-z][a-z0-9_]*(:[a-z][a-z0-9_]*){1,2}$'`,
+      sql`${table.scope} ~ '^[a-z][a-z0-9_-]*(:[a-z][a-z0-9_-]*){1,2}$'`,
     ),
   ],
 );

@@ -161,6 +161,9 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [FR-000-C08](amendments/fr/FR-000-C08.md) — Correção: RefreshTokenUseCase gera JWT sem scopes/tenantId — re-fetch do banco a cada refresh (resolve 403 após ~15min)
 - [FR-000-M04](amendments/fr/FR-000-M04.md) — Melhoria: detecção de desconexão (visibilitychange, cross-tab sync, refetchOnReconnect) + novo FR-024 (Cross-Tab Logout Sync). Ref: spec-session-disconnect-detection
 - [UX-000-M03](amendments/ux/UX-000-M03.md) — Melhoria: nova jornada UX-010 (Sessão Mantida por Atividade) — keep-alive transparente, cenários retorno pós-inatividade. Ref: spec-smart-session-keepalive, FR-000-M03
+- [FR-000-C09](amendments/fr/FR-000-C09.md) — Correção: seed-admin.ts abortava quando admin já existe, impedindo sync de novos scopes na role super-admin. Nova função syncSuperAdminPermissions com diff aditivo
+- [DATA-000-C03](amendments/data/DATA-000-C03.md) — Correção: CHECK constraint role_permissions_scope_check rejeitava hífens — scope mcp:agent:phase2-enable falhava no INSERT. Regex atualizada para aceitar [a-z0-9_-]
+- [SEC-000-M02](amendments/sec/SEC-000-M02.md) — Melhoria: regra SEC-SEED-PROD-001 — proibição de credenciais default em seeds quando NODE_ENV=production
 <!-- end amendments-index -->
 
 > **Nota:** 8 amendments de documentos normativos foram migrados para `docs/01_normativos/amendments/{DOC-ID}/` em 2026-03-25. Normativos são transversais e não pertencem a nenhum módulo específico. Ver: DOC-PADRAO-001-C01, DOC-PADRAO-001-M01, DOC-PADRAO-004-M01, DOC-PADRAO-005-C01, DOC-UX-011-M01, DOC-UX-011-M02, DOC-UX-012-M02, DOC-GNP-00-M01.

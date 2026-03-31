@@ -61,6 +61,12 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'admin@ecf.local';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? 'Admin@ECF2026!';
 const ADMIN_NAME = process.env.ADMIN_NAME ?? 'Administrador ECF';
 
+// Fail-safe: não permitir credenciais default em produção
+if (ADMIN_PASSWORD === 'Admin@ECF2026!' && process.env.NODE_ENV === 'production') {
+  console.error('❌ ADMIN_PASSWORD default não é permitido em produção. Defina a variável de ambiente.');
+  process.exit(1);
+}
+
 /**
  * Scopes do catálogo canônico DOC-FND-000 §2.2.
  * DEVE ser mantido em sincronia com o catálogo — ver FR-000-C01, DOC-PADRAO-001-C01.

@@ -159,6 +159,7 @@ Módulo base sem dependências de outros módulos. Todos os demais módulos depe
 - [DATA-003-M01](amendments/data/DATA-003-M01.md) — 2 novos domain events no catálogo: user.password_reset, user.invite_cancelled (derivado de FR-000-M02)
 - [FR-000-M03](amendments/fr/FR-000-M03.md) — Melhoria: novo FR-020 (Smart Session Keep-Alive) — refresh proativo por atividade, interceptor 401 com retry/mutex, idle timeout 30min. Ref: spec-smart-session-keepalive
 - [FR-000-C08](amendments/fr/FR-000-C08.md) — Correção: RefreshTokenUseCase gera JWT sem scopes/tenantId — re-fetch do banco a cada refresh (resolve 403 após ~15min)
+- [FR-000-M04](amendments/fr/FR-000-M04.md) — Melhoria: detecção de desconexão (visibilitychange, cross-tab sync, refetchOnReconnect) + novo FR-024 (Cross-Tab Logout Sync). Ref: spec-session-disconnect-detection
 - [UX-000-M03](amendments/ux/UX-000-M03.md) — Melhoria: nova jornada UX-010 (Sessão Mantida por Atividade) — keep-alive transparente, cenários retorno pós-inatividade. Ref: spec-smart-session-keepalive, FR-000-M03
 <!-- end amendments-index -->
 

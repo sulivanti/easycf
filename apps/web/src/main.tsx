@@ -10,6 +10,7 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 1000 * 60,
       retry: 1,
+      refetchOnReconnect: true,
     },
   },
 });

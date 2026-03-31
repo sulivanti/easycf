@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-000",
   "module_path": "docs/04_modules/mod-000-foundation/",
-  "last_updated": "2026-03-30T22:15:00.000Z",
+  "last_updated": "2026-03-30T22:30:00.000Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -49,8 +49,8 @@
       },
       "AGN-COD-WEB": {
         "status": "done",
-        "completed_at": "2026-03-24T18:00:00.000Z",
-        "re_codegen": "Fase 3 — migrated hooks to @tanstack/react-query, pages to @shared/ui + Tailwind, router.navigate()",
+        "completed_at": "2026-03-30T22:30:00.000Z",
+        "re_codegen": "FR-000-M04: visibilitychange + forceLogout em useSessionKeepAlive, useCrossTabSync criado, AppShell montagem, refetchOnReconnect + refetchOnWindowFocus",
         "files_generated": 25,
         "files": [
           "apps/web/src/modules/foundation/types/common.types.ts",

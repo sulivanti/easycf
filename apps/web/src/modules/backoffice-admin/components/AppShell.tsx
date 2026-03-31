@@ -36,6 +36,7 @@ import { toast } from 'sonner';
 import { Skeleton } from '@shared/ui/skeleton';
 import { useAuthMe } from '../hooks/use-auth-me';
 import { useSessionKeepAlive } from '@modules/foundation/hooks/useSessionKeepAlive';
+import { useCrossTabSync } from '@modules/foundation/hooks/useCrossTabSync';
 import { filterSidebarByScopes } from './sidebar-config';
 import { ProfileWidget } from './ProfileWidget';
 import { ApiError } from '../api/api-client';
@@ -312,6 +313,8 @@ export function AppShell({ children }: Props) {
 
   // FR-023: Smart Session Keep-Alive — proactive refresh based on activity
   useSessionKeepAlive();
+  // FR-024: Cross-tab logout synchronization via storage event
+  useCrossTabSync();
 
   useEffect(() => {
     if (error instanceof ApiError && error.status === 401) {

@@ -36,6 +36,9 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.18.2 | 2026-03-30 | codegen | Codegen FR-000-M04: 1 agente (AGN-COD-WEB), 4 arquivos modificados + 1 criado. useSessionKeepAlive com visibilitychange/forceLogout, useCrossTabSync criado, AppShell montagem, QueryClient refetchOnReconnect, useAuthMe refetchOnWindowFocus. |
+| 1.18.1 | 2026-03-30 | merge-amendment | Merge FR-000-M04: visibilitychange + forceLogout em FR-023, novo FR-024 (Cross-Tab Logout Sync), refetchOnReconnect + refetchOnWindowFocus. Base FR-000 bumped para v0.11.0. Ref: spec-session-disconnect-detection. |
+| 1.18.0 | 2026-03-30 | create-amendment | Amendment FR-000-M04: detecção de desconexão — visibilitychange no keep-alive, forceLogout em token expirado, novo FR-024 (Cross-Tab Logout Sync via storage event), refetchOnReconnect/refetchOnWindowFocus. 5 arquivos afetados. Ref: spec-session-disconnect-detection. |
 | 1.17.3 | 2026-03-30 | codegen | Codegen FR-000-C08: 1 agente (AGN-COD-APP), 2 arquivos modificados + 1 atualizado. RefreshTokenUseCase re-busca scopes/tenantId do banco, DI wiring atualizado, 11 testes passando. |
 | 1.17.2 | 2026-03-30 | merge-amendment | Merge FR-000-C08: re-resolução de scopes e tenantId no FR-003 Done Funcional + 4 cenários Gherkin. Base FR-000 bumped para v0.10.1. Ref: spec-refresh-token-scopes-fix. |
 | 1.17.1 | 2026-03-30 | create-amendment | Amendment FR-000-C08: RefreshTokenUseCase gera JWT sem scopes/tenantId — refresh token não contém esses campos e use case copiava do payload vazio. Fix: re-buscar scopes (via RoleRepo + cache 300s) e tenantId (via TenantUserRepo) do banco a cada refresh. Resolve 403 "Permissão insuficiente" após ~15min. Ref: spec-refresh-token-scopes-fix. |

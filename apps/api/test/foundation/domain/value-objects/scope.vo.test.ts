@@ -66,6 +66,11 @@ describe('Scope value object (BR-005)', () => {
       expect(() => Scope.create('users:user:read!')).toThrow(DomainValidationError);
     });
 
+    it('rejects hyphens in scope segments (FR-000-C11)', () => {
+      expect(() => Scope.create('mcp:agent:phase2-enable')).toThrow(DomainValidationError);
+      expect(() => Scope.create('users:user:read-all')).toThrow(DomainValidationError);
+    });
+
     it('rejects scope exceeding 100 chars', () => {
       const long = 'a'.repeat(50) + ':' + 'b'.repeat(50);
       expect(() => Scope.create(long)).toThrow(DomainValidationError);
@@ -83,6 +88,16 @@ describe('Scope value object (BR-005)', () => {
       const a = Scope.create('users:user:read');
       const b = Scope.create('users:user:write');
       expect(a.equals(b)).toBe(false);
+    });
+  });
+
+  describe('seed SCOPES consistency (FR-000-C11)', () => {
+    it('all SCOPES in scopes-catalog pass Scope.create() validation', async () => {
+      const { SCOPES } = await import('../../../../db/scopes-catalog.js');
+      expect(SCOPES.length).toBeGreaterThan(0);
+      for (const s of SCOPES) {
+        expect(() => Scope.create(s)).not.toThrow();
+      }
     });
   });
 

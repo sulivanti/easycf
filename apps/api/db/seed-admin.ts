@@ -67,84 +67,25 @@ if (ADMIN_PASSWORD === 'Admin@ECF2026!' && process.env.NODE_ENV === 'production'
   process.exit(1);
 }
 
-/**
- * Scopes do catálogo canônico DOC-FND-000 §2.2.
- * DEVE ser mantido em sincronia com o catálogo — ver FR-000-C01, DOC-PADRAO-001-C01.
- */
-const SCOPES = [
-  // ── MOD-000 Foundation ──
-  'users:user:read',
-  'users:user:write',
-  'users:user:delete',
-  'users:user:import',
-  'users:user:export',
-  'users:user:comment',
-  'users:role:read',
-  'users:role:write',
-  'tenants:branch:read',
-  'tenants:branch:write',
-  'system:audit:read',
-  'system:audit:sensitive',
-  'storage:file:upload',
-  'storage:file:read',
-  // ── MOD-003 Estrutura Organizacional ──
-  'org:unit:read',
-  'org:unit:write',
-  'org:unit:delete',
-  // ── MOD-004 Identidade Avançada ──
-  'identity:org_scope:read',
-  'identity:org_scope:write',
-  'identity:share:read',
-  'identity:share:write',
-  'identity:share:revoke',
-  'identity:share:authorize',
-  'identity:delegation:read',
-  'identity:delegation:write',
-  // ── MOD-005 Modelagem de Processos ──
-  'process:cycle:read',
-  'process:cycle:write',
-  'process:cycle:publish',
-  'process:cycle:delete',
-  // ── MOD-006 Execução de Casos (DOC-FND-000-M01, M02) ──
-  'process:case:read',
-  'process:case:write',
-  'process:case:cancel',
-  'process:case:gate_resolve',
-  'process:case:gate_waive',
-  'process:case:assign',
-  'process:case:reopen',
-  // ── MOD-007 Parametrização Contextual ──
-  'param:framer:read',
-  'param:framer:write',
-  'param:framer:delete',
-  'param:routine:read',
-  'param:routine:write',
-  'param:routine:publish',
-  'param:engine:evaluate',
-  // ── MOD-008 Integração Protheus ──
-  'integration:service:read',
-  'integration:service:write',
-  'integration:routine:write',
-  'integration:execute',
-  'integration:log:read',
-  'integration:log:reprocess',
-  // ── MOD-009 Movimentos sob Aprovação (DOC-FND-000-M03) ──
-  'approval:rule:read',
-  'approval:rule:write',
-  'approval:engine:evaluate',
-  'approval:movement:read',
-  'approval:movement:write',
-  'approval:decide',
-  'approval:override',
-  // ── MOD-010 MCP e Automação (DOC-FND-000-M04) ──
-  'mcp:agent:read',
-  'mcp:agent:write',
-  'mcp:agent:revoke',
-  'mcp:agent:phase2_enable',
-  'mcp:action:read',
-  'mcp:action:write',
-  'mcp:log:read',
-];
+import { SCOPES } from './scopes-catalog.js';
+
+// FR-000-C11: Validar todos os scopes contra o VO antes de qualquer DB operation
+import { Scope } from '../src/modules/foundation/domain/value-objects/scope.vo.js';
+
+const invalidScopes: string[] = [];
+for (const s of SCOPES) {
+  try {
+    Scope.create(s);
+  } catch {
+    invalidScopes.push(s);
+  }
+}
+if (invalidScopes.length > 0) {
+  console.error(`❌ ${invalidScopes.length} scope(s) inválido(s) no seed:`);
+  invalidScopes.forEach((s) => console.error(`   - "${s}"`));
+  console.error('Corrija no array SCOPES antes de executar o seed.');
+  process.exit(1);
+}
 
 async function syncSuperAdminPermissions(db: ReturnType<typeof drizzle>) {
   // Busca role super-admin

@@ -22,8 +22,7 @@ export class Scope {
   }
 
   static create(raw: string): Scope {
-    // Normalize: convert hyphens to underscores for legacy scopes (FR-000-C10)
-    const trimmed = raw.trim().replace(/-/g, '_');
+    const trimmed = raw.trim();
 
     if (trimmed.length === 0) {
       throw new DomainValidationError('Scope é obrigatório.');

@@ -1,11 +1,11 @@
 /**
- * @contract UX-CASE-001, FR-010, FR-002, FR-003, FR-004, FR-005, FR-006, FR-008
+ * @contract UX-CASE-001, UX-006-M01, FR-010, FR-002, FR-003, FR-004, FR-005, FR-006, FR-008
  *
- * Case Panel — Detail screen with 4 tabs:
- * 1. Overview (header + progress bar + transition buttons)
- * 2. Gates (resolution/waive per type)
- * 3. Assignments (assign/reassign)
- * 4. Timeline (interleaved history + comment)
+ * Case Panel — Detail screen (UX-006-M01 layout):
+ * - HeaderCard: CaseCode + StatusBadge + Suspender/Cancelar buttons + StageBreadcrumb
+ * - ProgressBar: segmented bar for completed/current/future stages
+ * - 3 tabs: Gates, Atribuições, Histórico
+ * - TransitionButton: outside tabs, below tab content
  *
  * Tailwind CSS v4 + shared UI components + Dialog for confirmations.
  */
@@ -41,6 +41,7 @@ import { useGates, useResolveGate, useWaiveGate } from '../../hooks/use-gates.js
 import { useAssignments, useAssignResponsible } from '../../hooks/use-assignments.js';
 import { CaseStatusBadge } from '../../components/CaseStatusBadge.js';
 import { GateCard } from '../../components/GateCard.js';
+import { ProgressBar } from '../../components/ProgressBar.js';
 import { TimelineFeed } from '../../components/TimelineFeed.js';
 import type {
   CaseDetail,
@@ -54,11 +55,11 @@ interface CasePanelPageProps {
   userScopes?: readonly string[];
 }
 
-type TabId = 'overview' | 'gates' | 'assignments' | 'timeline';
+type TabId = 'gates' | 'assignments' | 'timeline';
 
 export function CasePanelPage({ caseId, userScopes = [] }: CasePanelPageProps) {
   const { data: caseData, isLoading, error } = useCaseDetail(caseId);
-  const [activeTab, setActiveTab] = useState<TabId>('overview');
+  const [activeTab, setActiveTab] = useState<TabId>('gates');
 
   if (isLoading) return <PanelSkeleton />;
   if (error) return <ErrorState error={error} />;
@@ -68,119 +69,56 @@ export function CasePanelPage({ caseId, userScopes = [] }: CasePanelPageProps) {
 
   return (
     <div className="flex flex-col gap-0">
-      <CaseHeader caseData={caseData} />
+      {/* HeaderCard — consolidated from old Overview tab */}
+      <HeaderCard caseData={caseData} caseId={caseId} userScopes={userScopes} readonly={readonly} />
+
+      {/* ProgressBar — segmented stages between header and tabs */}
+      {caseData.available_transitions && caseData.available_transitions.length > 0 && (
+        <div className="px-6">
+          <StageBreadcrumb caseData={caseData} />
+        </div>
+      )}
+      <div className="px-6">
+        <ProgressBar
+          stages={buildStageList(caseData)}
+          currentStageId={caseData.current_stage_id}
+        />
+      </div>
+
+      {/* 3-tab bar: Gates, Atribuições, Histórico */}
       <TabBar activeTab={activeTab} onChange={setActiveTab} />
       <div className="p-6">
-        {activeTab === 'overview' && (
-          <OverviewTab
-            caseData={caseData}
-            readonly={readonly}
-            caseId={caseId}
-            userScopes={userScopes}
-          />
-        )}
         {activeTab === 'gates' && <GatesTab caseId={caseId} readonly={readonly} />}
         {activeTab === 'assignments' && (
           <AssignmentsTab caseId={caseId} readonly={readonly} userScopes={userScopes} />
         )}
         {activeTab === 'timeline' && <TimelineTab caseId={caseId} readonly={readonly} />}
       </div>
+
+      {/* TransitionButton — outside tabs, at the bottom */}
+      {!readonly && (
+        <TransitionBar caseData={caseData} caseId={caseId} />
+      )}
     </div>
   );
 }
 
-// ── Header ───────────────────────────────────────────────────────────────────
+// ── HeaderCard (UX-006-M01) ──────────────────────────────────────────────────
 
-function CaseHeader({ caseData }: { caseData: CaseDetail }) {
-  return (
-    <header className="px-6 pt-6 pb-3 flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h1 className="font-display text-lg font-extrabold tracking-[-0.4px] text-a1-text-primary font-mono">
-            {caseData.codigo}
-          </h1>
-          <CaseStatusBadge status={caseData.status} />
-        </div>
-        <div className="flex items-center gap-4 text-sm text-a1-text-auxiliary">
-          <span>Aberto em: {new Date(caseData.opened_at).toLocaleDateString('pt-BR')}</span>
-          {caseData.object_type && <span>Objeto: {caseData.object_type}</span>}
-        </div>
-      </div>
-      {caseData.status === 'ON_HOLD' && (
-        <div className="rounded-md bg-yellow-50 border border-yellow-200 px-3 py-2 text-sm text-yellow-800">
-          Caso em espera — transições e gates bloqueados.
-        </div>
-      )}
-      {caseData.status === 'CANCELLED' && caseData.cancellation_reason && (
-        <div className="rounded-md bg-a1-bg border border-a1-border px-3 py-2 text-sm text-a1-text-auxiliary">
-          Cancelado: {caseData.cancellation_reason}
-        </div>
-      )}
-    </header>
-  );
-}
-
-// ── Tab Bar ──────────────────────────────────────────────────────────────────
-
-const TABS: Array<{ id: TabId; label: string }> = [
-  { id: 'overview', label: 'Visão Geral' },
-  { id: 'gates', label: 'Gates' },
-  { id: 'assignments', label: 'Responsáveis' },
-  { id: 'timeline', label: 'Histórico' },
-];
-
-function TabBar({ activeTab, onChange }: { activeTab: TabId; onChange: (t: TabId) => void }) {
-  return (
-    <nav className="flex border-b border-a1-border px-6">
-      {TABS.map((t) => (
-        <button
-          key={t.id}
-          className={`
-            px-4 py-2 text-sm font-medium border-b-2 transition-colors
-            ${
-              activeTab === t.id
-                ? 'border-primary-600 text-primary-600'
-                : 'border-transparent text-a1-text-auxiliary hover:text-a1-text-secondary'
-            }
-          `}
-          onClick={() => onChange(t.id)}
-        >
-          {t.label}
-        </button>
-      ))}
-    </nav>
-  );
-}
-
-// ── Overview Tab ─────────────────────────────────────────────────────────────
-
-function OverviewTab({
+function HeaderCard({
   caseData,
-  readonly,
   caseId,
   userScopes,
+  readonly,
 }: {
   caseData: CaseDetail;
-  readonly: boolean;
   caseId: string;
   userScopes: readonly string[];
+  readonly: boolean;
 }) {
-  const transition = useTransitionStage(caseId);
   const control = useControlCase(caseId);
   const [cancelOpen, setCancelOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
-
-  const pendingGates = caseData.current_stage_gates.filter((g) => g.status === 'PENDING');
-  const allGatesCleared = pendingGates.length === 0;
-  const transitions = caseData.available_transitions ?? [];
-
-  const handleTransition = useCallback(
-    async (t: AvailableTransition) => {
-      await transition.mutateAsync({ target_stage_id: t.target_stage_id });
-      toast.success(COPY.transition_success(t.target_stage_name));
-    },
-    [transition],
-  );
 
   const handleHold = useCallback(async () => {
     await control.mutateAsync({ action: 'hold' });
@@ -200,88 +138,29 @@ function OverviewTab({
   }, [control, cancelReason]);
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Gates summary */}
-      <section>
-        <h3 className="text-sm font-semibold text-a1-text-secondary mb-2">
-          Gates do Estágio Atual
-        </h3>
-        {pendingGates.length > 0 ? (
-          <p className="text-sm text-yellow-700">
-            {pendingGates.length} gate(s) pendente(s) — transição bloqueada.
-          </p>
-        ) : (
-          <p className="text-sm text-green-700">Todos os gates resolvidos.</p>
-        )}
-      </section>
-
-      {/* Transitions */}
-      {!readonly && (
-        <TooltipProvider>
-          <section>
-            <h3 className="text-sm font-semibold text-a1-text-secondary mb-2">
-              Transições Disponíveis
-            </h3>
-            {transitions.length === 0 ? (
-              <EmptyState title="Nenhuma transição disponível." />
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {transitions.map((t) => {
-                  const blocked = !allGatesCleared;
-                  return (
-                    <Tooltip key={t.transition_id}>
-                      <TooltipTrigger asChild>
-                        <span>
-                          <Button
-                            size="sm"
-                            disabled={blocked || transition.isPending}
-                            onClick={() => handleTransition(t)}
-                          >
-                            {t.target_stage_name}
-                            {t.evidence_required && ' *'}
-                          </Button>
-                        </span>
-                      </TooltipTrigger>
-                      {blocked && (
-                        <TooltipContent>
-                          {pendingGates.map((g) => g.gate_name ?? g.gate_id).join(', ')} pendente(s)
-                        </TooltipContent>
-                      )}
-                    </Tooltip>
-                  );
-                })}
-              </div>
-            )}
-          </section>
-        </TooltipProvider>
-      )}
-
-      {/* Case controls */}
-      {!readonly && (
-        <section className="flex gap-2 border-t pt-4">
-          {caseData.status === 'OPEN' && (
-            <>
+    <header className="px-6 pt-6 pb-3 flex flex-col gap-3">
+      {/* TopRow: CaseCode + StatusBadge left | Suspender + Cancelar right */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <h1 className="text-xl font-bold tracking-[-0.4px] text-a1-text-primary font-mono">
+            {caseData.codigo}
+          </h1>
+          <CaseStatusBadge status={caseData.status} />
+        </div>
+        {!readonly && (
+          <div className="flex items-center gap-2">
+            {caseData.status === 'OPEN' && (
               <Button variant="outline" size="sm" onClick={handleHold} disabled={control.isPending}>
                 Suspender
               </Button>
-              {userScopes.includes('process:case:cancel') && (
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => setCancelOpen(true)}
-                  disabled={control.isPending}
-                >
-                  Cancelar
-                </Button>
-              )}
-            </>
-          )}
-          {caseData.status === 'ON_HOLD' && (
-            <>
+            )}
+            {caseData.status === 'ON_HOLD' && (
               <Button size="sm" onClick={handleResume} disabled={control.isPending}>
                 Retomar
               </Button>
-              {userScopes.includes('process:case:cancel') && (
+            )}
+            {(caseData.status === 'OPEN' || caseData.status === 'ON_HOLD') &&
+              userScopes.includes('process:case:cancel') && (
                 <Button
                   variant="destructive"
                   size="sm"
@@ -291,14 +170,25 @@ function OverviewTab({
                   Cancelar
                 </Button>
               )}
-            </>
-          )}
-        </section>
+          </div>
+        )}
+      </div>
+
+      {/* Status banners */}
+      {caseData.status === 'ON_HOLD' && (
+        <div className="rounded-md bg-yellow-50 border border-yellow-200 px-3 py-2 text-sm text-yellow-800">
+          Caso em espera — transições e gates bloqueados.
+        </div>
+      )}
+      {caseData.status === 'CANCELLED' && caseData.cancellation_reason && (
+        <div className="rounded-md bg-a1-bg border border-a1-border px-3 py-2 text-sm text-a1-text-auxiliary">
+          Cancelado: {caseData.cancellation_reason}
+        </div>
       )}
 
-      {/* Errors */}
-      {(transition.error || control.error) && (
-        <p className="text-sm text-danger-600">{(transition.error ?? control.error)?.message}</p>
+      {/* Control errors */}
+      {control.error && (
+        <p className="text-sm text-danger-600">{control.error.message}</p>
       )}
 
       {/* Cancel confirmation dialog */}
@@ -333,7 +223,163 @@ function OverviewTab({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </header>
+  );
+}
+
+// ── StageBreadcrumb (UX-006-M01) ────────────────────────────────────────────
+
+function StageBreadcrumb({ caseData }: { caseData: CaseDetail }) {
+  const stages = buildStageList(caseData);
+  const currentIdx = stages.findIndex((s) => s.id === caseData.current_stage_id);
+
+  return (
+    <nav className="flex items-center gap-1 text-sm flex-wrap">
+      {stages.map((stage, idx) => {
+        const state = idx < currentIdx ? 'completed' : idx === currentIdx ? 'current' : 'future';
+        return (
+          <span key={stage.id} className="flex items-center gap-1">
+            {idx > 0 && (
+              <span className="text-a1-text-auxiliary mx-1" aria-hidden="true">›</span>
+            )}
+            <span
+              className={`
+                ${state === 'completed' ? 'text-green-700 font-medium' : ''}
+                ${state === 'current' ? 'text-blue-700 font-semibold' : ''}
+                ${state === 'future' ? 'text-a1-text-auxiliary' : ''}
+              `}
+            >
+              {stage.name}
+            </span>
+          </span>
+        );
+      })}
+    </nav>
+  );
+}
+
+/**
+ * Build ordered stage list from available data in CaseDetail.
+ * Uses available_transitions to infer next stages from the current one.
+ * Returns at minimum the current stage.
+ */
+function buildStageList(caseData: CaseDetail): Array<{ id: string; name: string }> {
+  const stages: Array<{ id: string; name: string }> = [];
+
+  // Current stage is always included (fallback name to ID if not available)
+  stages.push({
+    id: caseData.current_stage_id,
+    name: caseData.current_stage_id,
+  });
+
+  // Forward stages from available_transitions
+  if (caseData.available_transitions) {
+    for (const t of caseData.available_transitions) {
+      if (!stages.find((s) => s.id === t.target_stage_id)) {
+        stages.push({ id: t.target_stage_id, name: t.target_stage_name });
+      }
+    }
+  }
+
+  return stages;
+}
+
+// ── Tab Bar ──────────────────────────────────────────────────────────────────
+
+const TABS: Array<{ id: TabId; label: string }> = [
+  { id: 'gates', label: 'Gates' },
+  { id: 'assignments', label: 'Atribuições' },
+  { id: 'timeline', label: 'Histórico' },
+];
+
+function TabBar({ activeTab, onChange }: { activeTab: TabId; onChange: (t: TabId) => void }) {
+  return (
+    <nav className="flex border-b border-a1-border px-6">
+      {TABS.map((t) => (
+        <button
+          key={t.id}
+          className={`
+            px-4 py-2 text-sm font-medium border-b-2 transition-colors
+            ${
+              activeTab === t.id
+                ? 'border-primary-600 text-primary-600'
+                : 'border-transparent text-a1-text-auxiliary hover:text-a1-text-secondary'
+            }
+          `}
+          onClick={() => onChange(t.id)}
+        >
+          {t.label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+// ── TransitionBar (UX-006-M01: outside tabs, below tab content) ─────────────
+
+function TransitionBar({ caseData, caseId }: { caseData: CaseDetail; caseId: string }) {
+  const transition = useTransitionStage(caseId);
+
+  const pendingGates = caseData.current_stage_gates.filter((g) => g.status === 'PENDING');
+  const allGatesCleared = pendingGates.length === 0;
+  const transitions = caseData.available_transitions ?? [];
+
+  const handleTransition = useCallback(
+    async (t: AvailableTransition) => {
+      await transition.mutateAsync({ target_stage_id: t.target_stage_id });
+      toast.success(COPY.transition_success(t.target_stage_name));
+    },
+    [transition],
+  );
+
+  if (transitions.length === 0) return null;
+
+  return (
+    <TooltipProvider>
+      <div className="px-6 pb-6 pt-2 border-t border-a1-border">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {!allGatesCleared && (
+              <p className="text-sm text-yellow-700">
+                {pendingGates.length} gate(s) pendente(s) — transição bloqueada.
+              </p>
+            )}
+            {allGatesCleared && (
+              <p className="text-sm text-green-700">Todos os gates resolvidos.</p>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {transitions.map((t) => {
+              const blocked = !allGatesCleared;
+              return (
+                <Tooltip key={t.transition_id}>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button
+                        size="sm"
+                        disabled={blocked || transition.isPending}
+                        onClick={() => handleTransition(t)}
+                      >
+                        {t.target_stage_name}
+                        {t.evidence_required && ' *'}
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  {blocked && (
+                    <TooltipContent>
+                      {pendingGates.map((g) => g.gate_name ?? g.gate_id).join(', ')} pendente(s)
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              );
+            })}
+          </div>
+        </div>
+        {transition.error && (
+          <p className="text-sm text-danger-600 mt-2">{transition.error.message}</p>
+        )}
+      </div>
+    </TooltipProvider>
   );
 }
 

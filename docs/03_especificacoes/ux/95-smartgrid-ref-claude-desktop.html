@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>95-SmartGrid — Referência Visual (MOD-011)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+<style>
+:root{--blue:#2E86C1;--blue-lt:#E3F2FD;--black:#111;--bg:#F5F5F3;--white:#FFF;--border:#E8E8E6;--border-lt:#F0F0EE;--t1:#111;--t2:#333;--t3:#555;--t4:#888;--t5:#AAA;--t6:#CCC;--err:#E74C3C;--danger:#C0392B;--green:#27AE60;--green-dk:#1E7A42;--green-lt:#E8F8EF;--green-bd:#B5E8C9;--warn:#F39C12;--warn-lt:#FFF8E1;--warn-dk:#E67E22;--red-lt:#FFEBEE;--red-bd:#F5C6CB}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#888;display:flex;flex-direction:column;align-items:center;gap:80px;padding:60px 40px}
+.tag{font-size:11px;font-weight:700;color:#444;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.frame{width:1440px;height:900px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.25);flex-shrink:0;background:var(--bg)}
+
+/* TOPBAR */
+.topbar{height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tb-n{font-weight:800;font-size:14px;color:var(--t1)}.tb-s{font-weight:600;font-size:10px;color:var(--t4);letter-spacing:1.2px;text-transform:uppercase}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 8px}
+.bc{display:flex;align-items:center;gap:6px;font-size:13px}.bc-m{color:var(--t4)}.bc-x{color:var(--t6)}.bc-a{color:var(--t1);font-weight:700}
+.tb-r{display:flex;align-items:center;gap:16px}
+.tb-emp{font-size:12px;font-weight:500;color:var(--t3)}
+
+/* SIDEBAR */
+.sb{width:240px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-sec{padding:20px 16px 0}
+.sb-cat{font-weight:700;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--t5);margin-bottom:8px;padding:0 12px}
+.sb-items{display:flex;flex-direction:column;gap:2px}
+.sb-i{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;text-decoration:none}
+.sb-i:hover{background:#f8f8f6}
+.sb-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sb-i.on{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.sb-ft{margin-top:auto;padding:16px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border)}
+.sb-dot{width:8px;height:8px;background:var(--green);border-radius:50%;flex-shrink:0}
+.sb-ft-t{font-size:12px;color:var(--t4)}
+
+.lay{display:flex;flex:1;overflow:hidden}
+
+/* CONTENT */
+.ct{flex:1;padding:24px;overflow-y:auto;background:var(--bg)}
+.ph{display:flex;justify-content:space-between;align-items:flex-start}
+.ph-t{font-weight:800;font-size:24px;color:var(--t1)}
+.ph-d{font-size:13px;color:var(--t4);margin-top:4px}
+
+/* BUTTONS */
+.btn-p{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;background:var(--blue);border:none;color:#fff;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.btn-s{display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-weight:600;font-size:12px;color:var(--t3);cursor:pointer}
+.btn-text{display:inline-flex;align-items:center;gap:4px;padding:0 14px;height:36px;border-radius:8px;border:none;background:transparent;font-family:inherit;font-weight:700;font-size:12px;color:var(--blue);cursor:pointer}
+.btn-danger{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;background:var(--err);border:none;color:#fff;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.btn-disabled{background:var(--border)!important;color:var(--t6)!important;cursor:not-allowed!important}
+.btn-ghost{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-weight:600;font-size:13px;color:var(--t3);cursor:pointer}
+
+/* TOOLBAR */
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.toolbar-l{display:flex;gap:8px;align-items:center}
+.toolbar-r{font-size:12px;color:var(--t4)}
+
+/* GRID */
+.grid-card{background:var(--white);border-radius:12px;border:1px solid var(--border);margin-top:12px;overflow:hidden}
+.grid-hdr{display:flex;align-items:center;height:44px;background:#FAFAFA;border-bottom:1px solid var(--border-lt);padding:0 16px;gap:0}
+.grid-hdr span{font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--t4)}
+.grid-row{display:flex;align-items:center;height:48px;border-bottom:1px solid var(--border-lt);padding:0 16px;gap:0;position:relative}
+.grid-row:last-child{border-bottom:none}
+.grid-row .cell{font-size:13px;font-weight:500;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Row status indicators */
+.row-valid{border-left:3px solid var(--green)}
+.row-warn{border-left:3px solid var(--warn)}
+.row-error{border-left:3px solid var(--err)}
+
+/* Cell states */
+.cell-warn{background:var(--warn-lt);color:var(--warn-dk);padding:4px 8px;border-radius:4px}
+.cell-error{background:var(--red-lt);color:var(--err);padding:4px 8px;border-radius:4px}
+
+/* Column widths */
+.col-ck{width:36px;flex-shrink:0}
+.col-st{width:40px;flex-shrink:0;text-align:center;font-size:14px}
+.col-code{width:120px;flex-shrink:0}
+.col-desc{flex:1;min-width:0}
+.col-val{width:100px;flex-shrink:0;text-align:right}
+.col-qty{width:100px;flex-shrink:0;text-align:right}
+.col-type{width:120px;flex-shrink:0}
+.col-dept{width:140px;flex-shrink:0}
+
+.ck{width:18px;height:18px;border-radius:4px;border:1px solid var(--border);background:var(--white);appearance:none;cursor:pointer;flex-shrink:0}
+.ck:checked{background:var(--blue);border-color:var(--blue)}
+
+/* GRID FOOTER */
+.grid-footer{display:flex;justify-content:space-between;align-items:center;height:52px;padding:0 16px;background:#FAFAFA;border-top:1px solid var(--border-lt)}
+.grid-footer-count{font-size:13px;font-weight:500;color:var(--t3)}
+
+/* FORM LAYOUT */
+.form-layout{display:flex;gap:24px;margin-top:16px}
+.form-card{flex:1;background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px}
+.form-title{font-size:18px;font-weight:700;color:var(--t1)}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.field{display:flex;flex-direction:column}
+.field-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:6px}
+.field-input{height:42px;border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-family:inherit;font-size:14px;font-weight:500;color:var(--t1);background:var(--white)}
+.field-readonly{height:42px;border-radius:8px;border:1px solid var(--border-lt);padding:10px 14px;font-family:inherit;font-size:14px;font-weight:500;color:var(--t4);background:#F8F8F6;display:flex;align-items:center;justify-content:space-between}
+.lock-icon{color:var(--t6);font-size:14px}
+
+/* METADATA SIDEBAR */
+.meta-sidebar{width:280px;background:var(--white);border-radius:12px;border:1px solid var(--border);padding:20px;flex-shrink:0}
+.meta-title{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:16px}
+.meta-item{margin-bottom:16px}
+.meta-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4)}
+.meta-value{font-size:12px;font-weight:400;color:var(--t3);margin-top:4px}
+.badge-active{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--green-dk);background:var(--green-lt);margin-top:4px}
+
+/* VALIDATION RESULTS */
+.val-panel{margin-top:20px;border-radius:8px;border:1px solid var(--border);padding:16px}
+.val-title{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:12px}
+.val-row{display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;background:var(--warn-lt);font-size:12px;font-weight:500;color:var(--warn-dk)}
+.val-summary{margin-top:8px;font-size:12px;color:var(--t4)}
+
+/* TOP ACTIONS */
+.top-actions{display:flex;justify-content:space-between;align-items:center}
+.btn-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer;border:none;background:transparent;font-family:inherit}
+
+/* FORM FOOTER */
+.form-footer{margin-top:20px;display:flex;justify-content:flex-end;gap:12px}
+
+/* DELETE GRID COLUMNS */
+.col-del-st{width:60px;flex-shrink:0;text-align:center;font-size:14px}
+.col-del-code{width:120px;flex-shrink:0}
+.col-del-desc{flex:1;min-width:0}
+.col-del-res{width:200px;flex-shrink:0}
+.result-ok{font-size:12px;font-weight:500;color:var(--green-dk)}
+.result-blocked{font-size:12px;font-weight:500;color:var(--err)}
+
+/* SPLIT CONFIRMATION */
+.confirm-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;z-index:10}
+.confirm-card{width:720px;background:var(--white);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);overflow:hidden}
+.confirm-header{padding:20px 24px;border-bottom:1px solid var(--border);font-size:18px;font-weight:700;color:var(--t1)}
+.split-view{display:flex;min-height:280px}
+.split-blocked{flex:1;padding:20px;background:var(--red-lt)}
+.split-ready{flex:1;padding:20px;background:var(--green-lt)}
+.split-title-red{font-size:14px;font-weight:700;color:var(--err);margin-bottom:12px}
+.split-title-green{font-size:14px;font-weight:700;color:var(--green);margin-bottom:12px}
+.split-item{padding:12px;border-radius:8px;background:var(--white);margin-bottom:8px}
+.split-item-blocked{border:1px solid var(--red-bd)}
+.split-item-ready{border:1px solid var(--green-bd)}
+.split-item-name{font-size:13px;font-weight:600;color:var(--t1)}
+.split-item-reason{font-size:12px;color:var(--err);margin-top:4px}
+.confirm-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:12px}
+
+/* FEEDBACK CARD */
+.feedback-card{width:480px;background:var(--white);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);padding:24px}
+.feedback-title{font-size:18px;font-weight:700;color:var(--t1);margin-bottom:16px}
+.feedback-success{padding:12px;border-radius:8px;background:var(--green-lt);font-size:14px;font-weight:600;color:var(--green-dk);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.feedback-fail{padding:12px;border-radius:8px;background:var(--red-lt);font-size:14px;font-weight:600;color:var(--err);display:flex;flex-direction:column;gap:4px}
+.feedback-fail-title{display:flex;align-items:center;gap:8px}
+.feedback-fail-item{font-size:12px;font-weight:400;color:var(--t4);margin-left:22px}
+.feedback-close{margin-top:20px;display:flex;justify-content:center}
+
+/* TOOLTIP */
+.tooltip{position:relative}
+.tooltip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--t2);color:#fff;font-size:11px;font-weight:500;padding:6px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;z-index:20;opacity:0}
+.tooltip:hover::after{opacity:1}
+
+/* SKELETON */
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.sk{background:var(--border);border-radius:4px;animation:pulse 1.5s ease-in-out infinite}
+.sk-circle{border-radius:50%}
+
+/* EMPTY STATE */
+.empty{display:flex;flex-direction:column;align-items:center;padding:60px;text-align:center}
+.empty-icon{width:120px;height:120px;stroke:var(--t6);fill:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round}
+.empty-title{font-size:16px;font-weight:600;color:var(--t4);margin-top:16px}
+.empty-desc{font-size:13px;font-weight:400;color:var(--t5);margin-top:4px}
+
+/* ERROR STATE */
+.error-state{display:flex;flex-direction:column;align-items:center;padding:40px;text-align:center}
+.error-icon{width:48px;height:48px;stroke:var(--err);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.error-msg{font-size:14px;font-weight:500;color:var(--t4);margin-top:12px}
+
+/* MODAL STYLES */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;z-index:60}
+.modal-card{background:var(--white);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);padding:24px}
+.modal-title{font-size:18px;font-weight:700;color:var(--t1)}
+.modal-msg{font-size:13px;font-weight:400;color:var(--t3);margin-top:8px;text-align:center}
+.modal-btns{display:flex;justify-content:center;gap:12px;margin-top:24px}
+.modal-warn-icon{width:48px;height:48px;border-radius:50%;background:#FFF3E0;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.modal-warn-icon svg{width:24px;height:24px;stroke:var(--warn-dk);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.btn-outline-blue{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;border:1px solid var(--blue);background:var(--white);font-family:inherit;font-weight:600;font-size:13px;color:var(--blue);cursor:pointer}
+
+/* DROPZONE */
+.dropzone{margin-top:16px;width:100%;height:160px;border-radius:8px;border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.dropzone-icon{width:48px;height:48px;stroke:var(--t6);fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.dropzone-text{font-size:13px;font-weight:500;color:var(--t4)}
+.dropzone-hint{font-size:11px;font-weight:400;color:var(--t6)}
+.schema-ok{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;font-weight:500;color:var(--green-dk)}
+.modal-footer{display:flex;justify-content:flex-end;gap:12px;margin-top:24px}
+
+/* LOCK ICON (SVG) */
+.lock-svg{width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- ═══ FRAME 1: Grade de Inclusão em Massa (UX-SGR-001) ═══ -->
+<div class="tag">Frame 1 — Grade de Inclusão em Massa (UX-SGR-001) — 1440×900</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-a">SmartGrid</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct">
+      <div class="ph">
+        <div>
+          <div class="ph-t">Grade de Inclusão em Massa</div>
+          <div class="ph-d">Operação: Inclusão de Materiais — MOD-007</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-s">⬇ Import JSON</button>
+          <button class="btn-s">⬆ Export JSON</button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar-l">
+          <button class="btn-text">+ Nova Linha</button>
+          <button class="btn-s">Ações em Lote ▾</button>
+        </div>
+        <div class="toolbar-r">8 linhas</div>
+      </div>
+
+      <div class="grid-card">
+        <div class="grid-hdr">
+          <span class="col-ck"><input type="checkbox" class="ck"/></span>
+          <span class="col-st"></span>
+          <span class="col-code">Código</span>
+          <span class="col-desc">Descrição</span>
+          <span class="col-val">Valor</span>
+          <span class="col-qty">Qtd</span>
+          <span class="col-type">Tipo</span>
+          <span class="col-dept">Departamento</span>
+        </div>
+
+        <!-- Row 1: Valid -->
+        <div class="grid-row row-valid">
+          <span class="col-ck"><input type="checkbox" class="ck"/></span>
+          <span class="col-st" title="Linha válida">✅</span>
+          <span class="col-code cell">MAT-001</span>
+          <span class="col-desc cell">Aço carbono SAE 1020</span>
+          <span class="col-val cell">R$ 45,00</span>
+          <span class="col-qty cell">100</span>
+          <span class="col-type cell">Matéria-prima</span>
+          <span class="col-dept cell">Produção</span>
+        </div>
+
+        <!-- Row 2: Valid -->
+        <div class="grid-row row-valid">
+          <span class="col-ck"><input type="checkbox" class="ck"/></span>
+          <span class="col-st" title="Linha válida">✅</span>
+          <span class="col-code cell">MAT-002</span>
+          <span class="col-desc cell">Parafuso M8 inox</span>
+          <span class="col-val cell">R$ 2,50</span>
+          <span class="col-qty cell">500</span>
+          <span class="col-type cell">Componente</span>
+          <span class="col-dept cell">Montagem</span>
+        </div>
+
+        <!-- Row 3: Valid -->
+        <div class="grid-row row-valid">
+          <span class="col-ck"><input type="checkbox" class="ck"/></span>
+          <span class="col-st" title="Linha válida">✅</span>
+          <span class="col-code cell">MAT-003</span>
+          <span class="col-desc cell">Tinta epóxi branca</span>
+          <span class="col-val cell">R$ 120,00</span>
+          <span class="col-qty cell">20</span>
+          <span class="col-type cell">Insumo</span>
+          <span class="col-dept cell">Acabamento</span>
+        </div>
+
+        <!-- Row 4: Warning -->
+        <div class="grid-row row-warn">
+          <span class="col-ck"><input type="checkbox" class="ck"/></span>
+          <span class="col-st" title="Linha com alerta">⚠️</span>
+          <span class="col-code cell">MAT-004</span>
+          <span class="col-desc cell">Solda MIG arame 1.0mm</span>
+          <span class="col-val cell"><span class="cell-warn">R$ 0,50</span></span>
+          <span class="col-qty cell">200</span>
+          <span class="col-type cell">Consumível</span>
+          <span class="col-dept cell">Soldagem</span>
+        </div>
+
+        <!-- Row 5: Warning -->
+        <div class="grid-row row-warn">
+          <span class="col-ck"><input type="checkbox" class="ck"/></span>
+          <span class="col-st" title="Linha com alerta">⚠️</span>
+          <span class="col-code cell">MAT-005</span>
+          <span class="col-desc cell">Óleo lubrificante ISO 68</span>
+          <span class="col-val cell"><span class="cell-warn">R$ 0,80</span></span>
+          <span class="col-qty cell">50</span>
+          <span class="col-type cell">Insumo</span>
+          <span class="col-dept cell">Manutenção</span>
+        </div>
+
+        <!-- Row 6: Error -->
+        <div class="grid-row row-error">
+          <span class="col-ck"><input type="checkbox" class="ck"/></span>
+          <span class="col-st" title="Linha com erro bloqueante">❌</span>
+          <span class="col-code cell">MAT-006</span>
+          <span class="col-desc cell tooltip" data-tip="Descrição é obrigatória"><span class="cell-error" style="min-width:80px;display:inline-block">&nbsp;</span></span>
+          <span class="col-val cell">R$ 35,00</span>
+          <span class="col-qty cell">75</span>
+          <span class="col-type cell">Componente</span>
+          <span class="col-dept cell">Produção</span>
+        </div>
+
+        <!-- Row 7: Valid -->
+        <div class="grid-row row-valid">
+          <span class="col-ck"><input type="checkbox" class="ck"/></span>
+          <span class="col-st" title="Linha válida">✅</span>
+          <span class="col-code cell">MAT-007</span>
+          <span class="col-desc cell">Disco de corte 7"</span>
+          <span class="col-val cell">R$ 8,90</span>
+          <span class="col-qty cell">150</span>
+          <span class="col-type cell">Consumível</span>
+          <span class="col-dept cell">Usinagem</span>
+        </div>
+
+        <!-- Row 8: Valid -->
+        <div class="grid-row row-valid">
+          <span class="col-ck"><input type="checkbox" class="ck"/></span>
+          <span class="col-st" title="Linha válida">✅</span>
+          <span class="col-code cell">MAT-008</span>
+          <span class="col-desc cell">Chapa alumínio 2mm</span>
+          <span class="col-val cell">R$ 180,00</span>
+          <span class="col-qty cell">30</span>
+          <span class="col-type cell">Matéria-prima</span>
+          <span class="col-dept cell">Caldeiraria</span>
+        </div>
+
+        <div class="grid-footer">
+          <span class="grid-footer-count">6 de 8 linhas válidas</span>
+          <button class="btn-p btn-disabled" disabled>Submeter Lote</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 2: Formulário de Alteração (UX-SGR-002) ═══ -->
+<div class="tag">Frame 2 — Formulário de Alteração (UX-SGR-002) — 1440×900</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-m">SmartGrid</span><span class="bc-x">›</span><span class="bc-a">Alterar Registro</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct">
+      <div class="top-actions">
+        <button class="btn-back">← Voltar</button>
+        <button class="btn-p" style="height:36px;font-size:12px">Validar</button>
+      </div>
+
+      <div class="form-layout">
+        <div class="form-card">
+          <div class="form-title">Alterar Registro — MAT-004</div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label class="field-label">Código</label>
+              <div class="field-readonly">MAT-004 <svg class="lock-svg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            </div>
+            <div class="field">
+              <label class="field-label">Descrição</label>
+              <input class="field-input" value="Solda MIG arame 1.0mm"/>
+            </div>
+            <div class="field">
+              <label class="field-label">Valor</label>
+              <input class="field-input" value="R$ 0,50"/>
+            </div>
+            <div class="field">
+              <label class="field-label">Quantidade</label>
+              <input class="field-input" value="200"/>
+            </div>
+            <div class="field">
+              <label class="field-label">Tipo</label>
+              <div class="field-readonly">Consumível <svg class="lock-svg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            </div>
+            <div class="field">
+              <label class="field-label">Departamento</label>
+              <select class="field-input" style="cursor:pointer">
+                <option>Soldagem</option>
+                <option>Produção</option>
+                <option>Montagem</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="val-panel">
+            <div class="val-title">Resultados da Validação</div>
+            <div class="val-row">⚠️ Campo 'Valor' abaixo do mínimo recomendado (R$ 1,00).</div>
+            <div class="val-summary">1 alerta · 0 erros bloqueantes</div>
+          </div>
+
+          <div class="form-footer">
+            <button class="btn-ghost">Cancelar</button>
+            <button class="btn-p">Salvar</button>
+          </div>
+        </div>
+
+        <div class="meta-sidebar">
+          <div class="meta-title">Metadata</div>
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="badge-active">ATIVO</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Criado em</div>
+            <div class="meta-value">30 mar 2026, 14:32</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Atualizado em</div>
+            <div class="meta-value">31 mar 2026, 09:15</div>
+          </div>
+          <div class="meta-item" style="margin-bottom:0">
+            <div class="meta-label">Enquadrador</div>
+            <div class="meta-value">Motor MOD-007 v2.1</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 3: Grade de Exclusão com Confirmação (UX-SGR-003) ═══ -->
+<div class="tag">Frame 3 — Grade de Exclusão com Confirmação (UX-SGR-003) — 1440×900</div>
+<div class="frame" style="position:relative">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-m">SmartGrid</span><span class="bc-x">›</span><span class="bc-a">Exclusão em Massa</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay" style="position:relative">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct" style="position:relative">
+      <div class="ph">
+        <div>
+          <div class="ph-t">Exclusão em Massa</div>
+          <div class="ph-d">5 registros selecionados</div>
+        </div>
+      </div>
+
+      <div class="grid-card" style="margin-top:16px">
+        <div class="grid-hdr">
+          <span class="col-del-st"></span>
+          <span class="col-del-code">Código</span>
+          <span class="col-del-desc">Descrição</span>
+          <span class="col-del-res">Resultado</span>
+        </div>
+        <div class="grid-row">
+          <span class="col-del-st">✅</span>
+          <span class="col-del-code cell">MAT-001</span>
+          <span class="col-del-desc cell">Aço carbono SAE 1020</span>
+          <span class="col-del-res result-ok">Pode ser excluído</span>
+        </div>
+        <div class="grid-row">
+          <span class="col-del-st">✅</span>
+          <span class="col-del-code cell">MAT-002</span>
+          <span class="col-del-desc cell">Parafuso M8 inox</span>
+          <span class="col-del-res result-ok">Pode ser excluído</span>
+        </div>
+        <div class="grid-row">
+          <span class="col-del-st">❌</span>
+          <span class="col-del-code cell">MAT-004</span>
+          <span class="col-del-desc cell">Solda MIG arame 1.0mm</span>
+          <span class="col-del-res result-blocked">Possui movimentos pendentes</span>
+        </div>
+        <div class="grid-row">
+          <span class="col-del-st">✅</span>
+          <span class="col-del-code cell">MAT-007</span>
+          <span class="col-del-desc cell">Disco de corte 7"</span>
+          <span class="col-del-res result-ok">Pode ser excluído</span>
+        </div>
+        <div class="grid-row">
+          <span class="col-del-st">❌</span>
+          <span class="col-del-code cell">MAT-008</span>
+          <span class="col-del-desc cell">Chapa alumínio 2mm</span>
+          <span class="col-del-res result-blocked">Vinculado a caso ativo</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Split Confirmation Overlay -->
+    <div class="confirm-overlay">
+      <div class="confirm-card">
+        <div class="confirm-header">Confirmação de Exclusão</div>
+        <div class="split-view">
+          <div class="split-blocked">
+            <div class="split-title-red">Não podem ser excluídos (2)</div>
+            <div class="split-item split-item-blocked">
+              <div class="split-item-name">MAT-004 — Solda MIG arame 1.0mm</div>
+              <div class="split-item-reason">Possui movimentos pendentes de aprovação</div>
+            </div>
+            <div class="split-item split-item-blocked">
+              <div class="split-item-name">MAT-008 — Chapa alumínio 2mm</div>
+              <div class="split-item-reason">Vinculado a caso ativo (CAS-0042)</div>
+            </div>
+          </div>
+          <div class="split-ready">
+            <div class="split-title-green">Prontos para exclusão (3)</div>
+            <div class="split-item split-item-ready">
+              <div class="split-item-name">MAT-001 — Aço carbono SAE 1020</div>
+            </div>
+            <div class="split-item split-item-ready">
+              <div class="split-item-name">MAT-002 — Parafuso M8 inox</div>
+            </div>
+            <div class="split-item split-item-ready">
+              <div class="split-item-name">MAT-007 — Disco de corte 7"</div>
+            </div>
+          </div>
+        </div>
+        <div class="confirm-footer">
+          <button class="btn-ghost">Cancelar</button>
+          <button class="btn-danger">Excluir 3 registros</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 4: Resultado da Exclusão ═══ -->
+<div class="tag">Frame 4 — Resultado da Exclusão (DeleteResultFeedback) — 1440×900</div>
+<div class="frame" style="position:relative">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-m">SmartGrid</span><span class="bc-x">›</span><span class="bc-a">Exclusão em Massa</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay" style="position:relative">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct" style="position:relative">
+      <div class="ph">
+        <div>
+          <div class="ph-t">Exclusão em Massa</div>
+          <div class="ph-d">Resultado do processamento</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Feedback Overlay -->
+    <div class="confirm-overlay">
+      <div class="feedback-card">
+        <div class="feedback-title">Resultado da Exclusão</div>
+        <div class="feedback-success">
+          <span>✅</span> 3 registros excluídos com sucesso
+        </div>
+        <div class="feedback-fail">
+          <div class="feedback-fail-title"><span>❌</span> 2 registros não excluídos</div>
+          <div class="feedback-fail-item">MAT-004 — Possui movimentos pendentes de aprovação</div>
+          <div class="feedback-fail-item">MAT-008 — Vinculado a caso ativo (CAS-0042)</div>
+        </div>
+        <div class="feedback-close">
+          <button class="btn-ghost">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 5: Modal — Confirmação de Saída (CloseConfirmationModal) ═══ -->
+<div class="tag">Frame 5 — CloseConfirmationModal — 1440×900</div>
+<div class="frame" style="position:relative">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-a">SmartGrid</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay" style="position:relative">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct" style="filter:blur(1px);opacity:.6">
+      <div class="ph">
+        <div>
+          <div class="ph-t">Grade de Inclusão em Massa</div>
+          <div class="ph-d">Operação: Inclusão de Materiais — MOD-007</div>
+        </div>
+      </div>
+      <div class="grid-card" style="margin-top:24px;height:300px"></div>
+    </main>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay">
+      <div class="modal-card" style="width:420px;text-align:center">
+        <div class="modal-warn-icon">
+          <svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+        </div>
+        <div class="modal-title" style="margin-top:16px">Alterações não salvas</div>
+        <div class="modal-msg">Existem alterações não salvas na grade. Deseja sair sem exportar?</div>
+        <div class="modal-btns">
+          <button class="btn-ghost">Cancelar</button>
+          <button class="btn-outline-blue">Exportar e sair</button>
+          <button class="btn-danger">Sair sem exportar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 6: Modal — Import JSON (ImportJsonModal) ═══ -->
+<div class="tag">Frame 6 — ImportJsonModal — 1440×900</div>
+<div class="frame" style="position:relative">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-a">SmartGrid</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay" style="position:relative">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct" style="filter:blur(1px);opacity:.6">
+      <div class="ph">
+        <div>
+          <div class="ph-t">Grade de Inclusão em Massa</div>
+          <div class="ph-d">Operação: Inclusão de Materiais — MOD-007</div>
+        </div>
+      </div>
+      <div class="grid-card" style="margin-top:24px;height:300px"></div>
+    </main>
+
+    <!-- Import JSON Modal -->
+    <div class="modal-overlay">
+      <div class="modal-card" style="width:520px">
+        <div class="modal-title">Importar JSON</div>
+        <div class="dropzone">
+          <svg class="dropzone-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div class="dropzone-text">Arraste um arquivo ou clique para selecionar</div>
+          <div class="dropzone-hint">.json (máx. 500 linhas)</div>
+        </div>
+        <div class="schema-ok">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#1E7A42;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+          Schema válido — 12 linhas detectadas
+        </div>
+        <div class="modal-footer">
+          <button class="btn-ghost">Cancelar</button>
+          <button class="btn-p">Importar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 7: Loading Skeleton — Grade (UX-SGR-001) ═══ -->
+<div class="tag">Frame 7 — Loading Skeleton — Grade (UX-SGR-001) — 1440×900</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-a">SmartGrid</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct">
+      <div class="ph">
+        <div>
+          <div class="ph-t">Grade de Inclusão em Massa</div>
+          <div class="ph-d">Operação: Inclusão de Materiais — MOD-007</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-s" disabled style="opacity:.5">⬇ Import JSON</button>
+          <button class="btn-s" disabled style="opacity:.5">⬆ Export JSON</button>
+        </div>
+      </div>
+      <div class="grid-card" style="margin-top:24px">
+        <div class="grid-hdr">
+          <span class="col-ck"><div class="sk" style="width:18px;height:18px;border-radius:4px"></div></span>
+          <span class="col-st"></span>
+          <span class="col-code">Código</span>
+          <span class="col-desc">Descrição</span>
+          <span class="col-val">Valor</span>
+          <span class="col-qty">Qtd</span>
+          <span class="col-type">Tipo</span>
+          <span class="col-dept">Departamento</span>
+        </div>
+        <!-- Skeleton Row 1 -->
+        <div class="grid-row" style="border-left:3px solid transparent">
+          <span class="col-ck"><div class="sk" style="width:18px;height:18px;border-radius:4px"></div></span>
+          <span class="col-st"><div class="sk sk-circle" style="width:14px;height:14px;margin:auto"></div></span>
+          <span class="col-code"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-desc"><div class="sk" style="width:180px;height:14px"></div></span>
+          <span class="col-val"><div class="sk" style="width:60px;height:14px;margin-left:auto"></div></span>
+          <span class="col-qty"><div class="sk" style="width:50px;height:14px;margin-left:auto"></div></span>
+          <span class="col-type"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-dept"><div class="sk" style="width:100px;height:14px"></div></span>
+        </div>
+        <!-- Skeleton Row 2 -->
+        <div class="grid-row" style="border-left:3px solid transparent">
+          <span class="col-ck"><div class="sk" style="width:18px;height:18px;border-radius:4px"></div></span>
+          <span class="col-st"><div class="sk sk-circle" style="width:14px;height:14px;margin:auto"></div></span>
+          <span class="col-code"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-desc"><div class="sk" style="width:140px;height:14px"></div></span>
+          <span class="col-val"><div class="sk" style="width:60px;height:14px;margin-left:auto"></div></span>
+          <span class="col-qty"><div class="sk" style="width:50px;height:14px;margin-left:auto"></div></span>
+          <span class="col-type"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-dept"><div class="sk" style="width:100px;height:14px"></div></span>
+        </div>
+        <!-- Skeleton Row 3 -->
+        <div class="grid-row" style="border-left:3px solid transparent">
+          <span class="col-ck"><div class="sk" style="width:18px;height:18px;border-radius:4px"></div></span>
+          <span class="col-st"><div class="sk sk-circle" style="width:14px;height:14px;margin:auto"></div></span>
+          <span class="col-code"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-desc"><div class="sk" style="width:200px;height:14px"></div></span>
+          <span class="col-val"><div class="sk" style="width:60px;height:14px;margin-left:auto"></div></span>
+          <span class="col-qty"><div class="sk" style="width:50px;height:14px;margin-left:auto"></div></span>
+          <span class="col-type"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-dept"><div class="sk" style="width:100px;height:14px"></div></span>
+        </div>
+        <!-- Skeleton Row 4 -->
+        <div class="grid-row" style="border-left:3px solid transparent">
+          <span class="col-ck"><div class="sk" style="width:18px;height:18px;border-radius:4px"></div></span>
+          <span class="col-st"><div class="sk sk-circle" style="width:14px;height:14px;margin:auto"></div></span>
+          <span class="col-code"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-desc"><div class="sk" style="width:160px;height:14px"></div></span>
+          <span class="col-val"><div class="sk" style="width:60px;height:14px;margin-left:auto"></div></span>
+          <span class="col-qty"><div class="sk" style="width:50px;height:14px;margin-left:auto"></div></span>
+          <span class="col-type"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-dept"><div class="sk" style="width:100px;height:14px"></div></span>
+        </div>
+        <!-- Skeleton Row 5 -->
+        <div class="grid-row" style="border-left:3px solid transparent">
+          <span class="col-ck"><div class="sk" style="width:18px;height:18px;border-radius:4px"></div></span>
+          <span class="col-st"><div class="sk sk-circle" style="width:14px;height:14px;margin:auto"></div></span>
+          <span class="col-code"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-desc"><div class="sk" style="width:120px;height:14px"></div></span>
+          <span class="col-val"><div class="sk" style="width:60px;height:14px;margin-left:auto"></div></span>
+          <span class="col-qty"><div class="sk" style="width:50px;height:14px;margin-left:auto"></div></span>
+          <span class="col-type"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-dept"><div class="sk" style="width:100px;height:14px"></div></span>
+        </div>
+        <!-- Skeleton Row 6 -->
+        <div class="grid-row" style="border-left:3px solid transparent;border-bottom:none">
+          <span class="col-ck"><div class="sk" style="width:18px;height:18px;border-radius:4px"></div></span>
+          <span class="col-st"><div class="sk sk-circle" style="width:14px;height:14px;margin:auto"></div></span>
+          <span class="col-code"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-desc"><div class="sk" style="width:170px;height:14px"></div></span>
+          <span class="col-val"><div class="sk" style="width:60px;height:14px;margin-left:auto"></div></span>
+          <span class="col-qty"><div class="sk" style="width:50px;height:14px;margin-left:auto"></div></span>
+          <span class="col-type"><div class="sk" style="width:80px;height:14px"></div></span>
+          <span class="col-dept"><div class="sk" style="width:100px;height:14px"></div></span>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 8: Loading Skeleton — Formulário (UX-SGR-002) ═══ -->
+<div class="tag">Frame 8 — Loading Skeleton — Formulário (UX-SGR-002) — 1440×900</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-m">SmartGrid</span><span class="bc-x">›</span><span class="bc-a">Alterar Registro</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct">
+      <div class="top-actions">
+        <button class="btn-back" disabled style="opacity:.5">← Voltar</button>
+        <div class="sk" style="width:72px;height:36px;border-radius:8px"></div>
+      </div>
+      <div class="form-layout">
+        <div class="form-card">
+          <!-- Title skeleton -->
+          <div class="sk" style="width:200px;height:20px;border-radius:4px"></div>
+          <!-- Field grid skeleton -->
+          <div class="field-grid">
+            <div class="field"><div class="sk" style="width:60px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:100%;height:42px;border-radius:8px"></div></div>
+            <div class="field"><div class="sk" style="width:80px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:100%;height:42px;border-radius:8px"></div></div>
+            <div class="field"><div class="sk" style="width:50px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:100%;height:42px;border-radius:8px"></div></div>
+            <div class="field"><div class="sk" style="width:90px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:100%;height:42px;border-radius:8px"></div></div>
+            <div class="field"><div class="sk" style="width:40px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:100%;height:42px;border-radius:8px"></div></div>
+            <div class="field"><div class="sk" style="width:110px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:100%;height:42px;border-radius:8px"></div></div>
+          </div>
+        </div>
+        <div class="meta-sidebar">
+          <div class="sk" style="width:80px;height:14px;margin-bottom:16px"></div>
+          <div style="margin-bottom:16px"><div class="sk" style="width:50px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:60px;height:22px;border-radius:4px"></div></div>
+          <div style="margin-bottom:16px"><div class="sk" style="width:70px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:130px;height:12px"></div></div>
+          <div style="margin-bottom:16px"><div class="sk" style="width:90px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:130px;height:12px"></div></div>
+          <div><div class="sk" style="width:85px;height:10px;margin-bottom:6px"></div><div class="sk" style="width:130px;height:12px"></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 9: Empty State (UX-SGR-001) ═══ -->
+<div class="tag">Frame 9 — Empty State — Grade sem linhas (UX-SGR-001) — 1440×900</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-a">SmartGrid</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct">
+      <div class="ph">
+        <div>
+          <div class="ph-t">Grade de Inclusão em Massa</div>
+          <div class="ph-d">Operação: Inclusão de Materiais — MOD-007</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-s">⬇ Import JSON</button>
+          <button class="btn-s">⬆ Export JSON</button>
+        </div>
+      </div>
+      <div class="grid-card" style="margin-top:24px">
+        <div class="empty">
+          <svg class="empty-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          <div class="empty-title">Nenhuma linha adicionada.</div>
+          <div class="empty-desc">Clique em "Adicionar linha" para começar.</div>
+          <button class="btn-p" style="margin-top:16px">+ Adicionar primeira linha</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 10: Error State ═══ -->
+<div class="tag">Frame 10 — Error State — Falha ao carregar operação — 1440×900</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Ferramentas</span><span class="bc-x">›</span><span class="bc-a">SmartGrid</span></nav>
+    </div>
+    <div class="tb-r">
+      <span class="tb-emp">Admin ECF · A1 Engenharia</span>
+      <div style="width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Estrutura Org.</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Modelagem</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Casos</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parametrização</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Protheus</a>
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M2 12h20"/><path d="M12 2v20"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Ferramentas</div><div class="sb-items">
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>SmartGrid</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct">
+      <div class="grid-card" style="margin-top:0">
+        <div class="error-state">
+          <svg class="error-icon" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+          <div class="error-msg">Não foi possível carregar a configuração da Operação.</div>
+          <button class="btn-s" style="margin-top:12px">Tentar novamente</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

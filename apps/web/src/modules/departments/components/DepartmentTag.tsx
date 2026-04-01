@@ -27,10 +27,7 @@ export function DepartmentTag({ nome, cor }: DepartmentTagProps) {
         borderColor: `${cor}4D`, // 30% opacity
       }}
     >
-      <span
-        className="h-2 w-2 rounded-full"
-        style={{ backgroundColor: cor }}
-      />
+      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: cor }} />
       {nome}
     </span>
   );

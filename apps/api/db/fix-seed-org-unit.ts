@@ -50,14 +50,12 @@ async function fix() {
   const db = drizzle(sql);
 
   // Verificar se já existe org unit N1
-  const existingN1 = await db
-    .select()
-    .from(orgUnits)
-    .where(eq(orgUnits.nivel, 1))
-    .limit(1);
+  const existingN1 = await db.select().from(orgUnits).where(eq(orgUnits.nivel, 1)).limit(1);
 
   if (existingN1.length > 0) {
-    console.log(`Org unit N1 já existe: "${existingN1[0].nome}" (${existingN1[0].codigo}). Pulando.`);
+    console.log(
+      `Org unit N1 já existe: "${existingN1[0].nome}" (${existingN1[0].codigo}). Pulando.`,
+    );
     await sql.end();
     return;
   }
@@ -72,11 +70,7 @@ async function fix() {
   const tenant = existingTenants[0];
 
   // Buscar admin user (primeiro user ativo) para created_by
-  const existingUsers = await db
-    .select()
-    .from(users)
-    .where(eq(users.status, 'ACTIVE'))
-    .limit(1);
+  const existingUsers = await db.select().from(users).where(eq(users.status, 'ACTIVE')).limit(1);
 
   if (existingUsers.length === 0) {
     console.error('Nenhum usuário ativo encontrado. Execute seed-admin.ts primeiro.');

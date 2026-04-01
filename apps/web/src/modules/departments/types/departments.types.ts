@@ -89,7 +89,8 @@ export const DEPT_COPY = {
   error_generic: 'Erro interno. Tente novamente.',
   error_network: 'Erro de conexão. Verifique sua internet.',
   error_forbidden: 'Você não tem permissão para esta ação.',
-  confirm_deactivate: 'Deseja desativar o departamento **{nome}**? Ele poderá ser restaurado posteriormente.',
+  confirm_deactivate:
+    'Deseja desativar o departamento **{nome}**? Ele poderá ser restaurado posteriormente.',
 } as const;
 
 // ── Color helpers ───────────────────────────────────────────

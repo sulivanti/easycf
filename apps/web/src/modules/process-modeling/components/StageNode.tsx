@@ -9,7 +9,6 @@
 import { memo } from 'react';
 import type { NodeProps } from 'reactflow';
 import { Handle, Position } from 'reactflow';
-import { Badge } from '../../../shared/ui/index.js';
 import type { FlowStageItem } from '../types/process-modeling.types.js';
 
 export interface StageNodeData {
@@ -28,48 +27,45 @@ function StageNodeComponent({ data, selected }: NodeProps<StageNodeData>) {
   return (
     <div
       onDoubleClick={handleDoubleClick}
-      className={`
-        rounded-lg border px-3 py-2 min-w-[140px] shadow-sm
-        ${selected ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-300'}
-        ${readonly ? 'bg-gray-50 cursor-default' : 'bg-white cursor-grab'}
-      `}
+      className={[
+        'w-[180px] min-h-[72px] rounded-xl shadow-sm',
+        selected
+          ? 'border-2 border-[#1A5F8B]'
+          : 'border border-[#2E86C1]',
+        readonly
+          ? 'bg-white/70 opacity-70 cursor-default'
+          : 'bg-white cursor-grab',
+      ].join(' ')}
     >
       <Handle type="target" position={Position.Left} />
       <Handle type="source" position={Position.Right} />
 
       {/* Stage name */}
-      <div className="font-semibold text-sm mb-1">{stage.nome}</div>
+      <div className="px-3 pt-3 pb-1 text-[13px] font-semibold text-[#111111] leading-tight truncate">
+        {stage.nome}
+      </div>
 
       {/* Badges row */}
-      <div className="flex gap-1 flex-wrap">
+      <div className="flex gap-1 flex-wrap px-3 pb-2">
         {stage.is_initial && (
-          <Badge variant="default" className="text-[10px] px-1.5 py-0">
+          <span className="text-[9px] font-bold text-[#888888] bg-[#F5F5F3] rounded px-1.5 py-0.5 leading-none">
             ⚑ Inicial
-          </Badge>
+          </span>
         )}
         {stage.is_terminal && (
-          <Badge
-            variant="outline"
-            className="text-[10px] px-1.5 py-0 border-amber-300 text-amber-700 bg-amber-50"
-          >
+          <span className="text-[9px] font-bold text-[#888888] bg-[#F5F5F3] rounded px-1.5 py-0.5 leading-none">
             ⊠ Terminal
-          </Badge>
+          </span>
         )}
         {stage.gates.length > 0 && (
-          <Badge
-            variant="secondary"
-            className="text-[10px] px-1.5 py-0 bg-purple-100 text-purple-700"
-          >
+          <span className="text-[9px] font-bold text-[#888888] bg-[#F5F5F3] rounded px-1.5 py-0.5 leading-none">
             {stage.gates.length} gate{stage.gates.length > 1 ? 's' : ''}
-          </Badge>
+          </span>
         )}
         {stage.roles.length > 0 && (
-          <Badge
-            variant="secondary"
-            className="text-[10px] px-1.5 py-0 bg-green-100 text-green-700"
-          >
-            {stage.roles.length} papel{stage.roles.length > 1 ? 'éis' : ''}
-          </Badge>
+          <span className="text-[9px] font-bold text-[#888888] bg-[#F5F5F3] rounded px-1.5 py-0.5 leading-none">
+            {stage.roles.length} {stage.roles.length > 1 ? 'papéis' : 'papel'}
+          </span>
         )}
       </div>
     </div>

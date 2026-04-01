@@ -63,7 +63,9 @@ const ADMIN_NAME = process.env.ADMIN_NAME ?? 'Administrador ECF';
 
 // Fail-safe: não permitir credenciais default em produção
 if (ADMIN_PASSWORD === 'Admin@ECF2026!' && process.env.NODE_ENV === 'production') {
-  console.error('❌ ADMIN_PASSWORD default não é permitido em produção. Defina a variável de ambiente.');
+  console.error(
+    '❌ ADMIN_PASSWORD default não é permitido em produção. Defina a variável de ambiente.',
+  );
   process.exit(1);
 }
 
@@ -160,7 +162,9 @@ async function syncSuperAdminPermissions(db: ReturnType<typeof drizzle>) {
       scope,
     })),
   );
-  console.log(`Sincronizados ${missingScopes.length} novos scopes para super-admin: ${missingScopes.join(', ')}`);
+  console.log(
+    `Sincronizados ${missingScopes.length} novos scopes para super-admin: ${missingScopes.join(', ')}`,
+  );
 }
 
 async function seed() {

@@ -25,10 +25,10 @@ flowchart TD
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
     style E5  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E6  fill:#F39C12,color:#fff,stroke:#D68910
 ```
 
-*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
+*O módulo está na **Etapa 6 — Adendos Futuros (Amendments). UX-011-M01 MERGED.**
 
 ---
 
@@ -36,6 +36,9 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.3.0 | 2026-04-01 | validate-all | Validação Fase 3 pós-codegen v2 aprovada. Lint: PASS (0 erros). Arquitetura: PASS (Pattern A, React Query). Promotion: PASS (5/5 features READY). Manifests: 3/3 PASS. OpenAPI/Drizzle/Endpoints: N/A (Level 0). 0 bloqueadores, 0 violações, 0 avisos. |
+| 1.2.0 | 2026-04-01 | codegen | Codegen v2: AGN-COD-WEB executado, 8 arquivos atualizados. BulkInsertPage (GridFooter, toolbar, border-left status), RecordEditPage (+MetadataSidebar, ValidationResults, LockIcon, 2-col grid), BulkDeletePage (4-col grid, split-view), DeleteConfirmationPanel/ResultFeedback refinados, SmartDataGrid (border-left, cell states) |
+| 1.1.0 | 2026-04-01 | merge-amendment | Merge UX-011-M01: UX-011 bumped para v0.3.0 — layouts pixel-perfect para 3 views (BulkInsert com GridFooter/toolbar, RecordEdit com MetadataSidebar/ValidationResultsPanel, BulkDelete com split-view), ImportJsonModal, ReadOnlyField, row status indicators, responsividade |
 | 1.0.2 | 2026-03-24 | validate-all | Validação completa: lint 0 erros (4 warnings corrigidos), format 0 erros (10 arquivos formatados), QA PASS, Manifests 3/3 PASS. PENDENTE-010 IMPLEMENTADA. Arquitetura Pattern A confirmada (react-query em todos hooks). |
 | 1.0.1 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. QA: PASS (0 bloqueadores MOD-011). Manifests: 3/3 PASS. OpenAPI: N/A. Drizzle: N/A. Endpoints: N/A. |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Ciclo de estabilidade avança para Etapa 5. |

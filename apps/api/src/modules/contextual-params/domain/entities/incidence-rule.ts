@@ -12,6 +12,7 @@ export interface IncidenceRuleProps {
   framerId: string;
   targetObjectId: string;
   conditionExpr: string | null;
+  incidenceType: 'OBR' | 'OPC' | 'AUTO';
   validFrom: Date;
   validUntil: Date | null;
   status: 'ACTIVE' | 'INACTIVE';
@@ -37,6 +38,9 @@ export class IncidenceRule {
   }
   get conditionExpr() {
     return this.props.conditionExpr;
+  }
+  get incidenceType() {
+    return this.props.incidenceType;
   }
   get validFrom() {
     return this.props.validFrom;

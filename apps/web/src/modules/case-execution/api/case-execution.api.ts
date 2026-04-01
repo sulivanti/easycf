@@ -15,6 +15,7 @@ import type {
   TransitionResult,
   PaginatedResponse,
   CaseListFilters,
+  CreateCaseRequest,
 } from '../types/case-execution.types.js';
 
 const BASE = '/api/v1/cases';
@@ -53,6 +54,8 @@ export function listCases(
   if (params.object_id) qs.set('object_id', params.object_id);
   if (params.assigned_to_me) qs.set('assigned_to_me', 'true');
   if (params.search) qs.set('search', params.search);
+  if (params.opened_after) qs.set('opened_after', params.opened_after);
+  if (params.opened_before) qs.set('opened_before', params.opened_before);
   if (params.cursor) qs.set('cursor', params.cursor);
   if (params.limit) qs.set('limit', String(params.limit));
   return apiFetch(`${BASE}?${qs}`, { signal });
@@ -62,12 +65,7 @@ export function getCaseDetails(caseId: string, signal?: AbortSignal): Promise<Ca
   return apiFetch(`${BASE}/${caseId}`, { signal });
 }
 
-export function openCase(body: {
-  cycle_id: string;
-  object_type?: string;
-  object_id?: string;
-  org_unit_id?: string;
-}): Promise<CaseDetail> {
+export function openCase(body: CreateCaseRequest): Promise<CaseDetail> {
   return apiFetch(BASE, {
     method: 'POST',
     body: JSON.stringify(body),

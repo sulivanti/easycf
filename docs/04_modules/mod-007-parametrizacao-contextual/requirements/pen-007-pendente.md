@@ -5,6 +5,9 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 1.7.0  | 2026-04-01 | manage-pendentes | PENDENTE-012→IMPLEMENTADA(C) — manter status quo, sem precedência por tipo, reavaliar em v2 |
+| 1.6.0  | 2026-04-01 | manage-pendentes | PENDENTE-012→DECIDIDA(C) — Opção C: não implementar precedência OBR/OPC/AUTO, motor continua por restrictiveness |
+| 1.5.0  | 2026-04-01 | manage-pendentes | PENDENTE-012 criada — BR-004 precedência OBR/OPC/AUTO na resolução de conflitos |
 > | 1.4.0  | 2026-03-24 | manage-pendentes | PENDENTE-011→IMPLEMENTADA — 6 errors estendem DomainError, error-handler usa instanceof |
 | 1.3.0  | 2026-03-24 | manage-pendentes | PENDENTE-011→DECIDIDA(A) — refatorar domain errors para estender DomainError |
 | 1.2.0  | 2026-03-24 | manage-pendentes | PENDENTE-010→DECIDIDA(A)+IMPLEMENTADA — lint corrigido em fed0682 |
@@ -24,9 +27,9 @@
 
 - **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-24
+- **data_ultima_revisao:** 2026-04-01
 - **rastreia_para:** US-MOD-007, BR-007, FR-007, INT-007, DATA-007, SEC-007, NFR-007, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005, ADR-006, DOC-PADRAO-002
-- **evidencias:** ~~PENDENTE-010 (12 ocorrências lint codegen — web/contextual-params: 12)~~ ✅ IMPLEMENTADA, ~~PENDENTE-011 (domain errors não estendem DomainError — 6 errors em param-errors.ts)~~ ✅ IMPLEMENTADA
+- **evidencias:** ~~PENDENTE-010 (12 ocorrências lint codegen — web/contextual-params: 12)~~ ✅ IMPLEMENTADA, ~~PENDENTE-011 (domain errors não estendem DomainError — 6 errors em param-errors.ts)~~ ✅ IMPLEMENTADA, ~~PENDENTE-012 (BR-004 precedência OBR/OPC/AUTO — Opção C: manter status quo)~~ ✅ IMPLEMENTADA
 
 ---
 
@@ -446,3 +449,70 @@ Opção A — refatorar para alinhar com padrão canônico. Escopo pequeno (6 er
 > **Justificativa:** Alinhamento com padrão canônico (DOC-GNP-00). Escopo pequeno (6 errors + error-handler por módulo). Compatível com middleware centralizado futuro (instanceof DomainError). Opção B (aceitar divergência) descartada — risco arquitetural acumulado em 2 módulos. Deve ser feito junto com MOD-006 para consistência.
 > **Artefato de saída:** param-errors.ts (6 errors → DomainError), error-handler.ts (instanceof DomainError). MOD-006 já refatorado previamente.
 > **Implementado em:** 2026-03-24
+
+---
+
+## PENDENTE-012 — BR-004: Precedência entre tipos de incidência (OBR/OPC/AUTO) na resolução de conflitos
+
+- **status:** IMPLEMENTADA
+- **severidade:** MÉDIA
+- **domínio:** BIZ
+- **tipo:** DEC-BIZ
+- **origem:** REVIEW
+- **criado_em:** 2026-04-01
+- **criado_por:** manage-pendentes
+- **decidido_em:** 2026-04-01
+- **decidido_por:** Marcos Sulivan
+- **opcao_escolhida:** C
+- **justificativa_decisao:** Safety net já funciona por restrictiveness. Não há cenários reais de empate por tipo identificados. Reavaliar Opção A para v2 se necessário.
+- **modulo:** MOD-007
+- **rastreia_para:** BR-007, BR-004, DATA-007-M01, FR-007-M01
+- **tags:** precedencia, incidence-type, obr, opc, auto, conflict-resolution
+- **sla_data:** —
+- **dependencias:** []
+
+### Questão
+
+BR-004 (safety net runtime) pode precisar definir se `incidence_type` (OBR/OPC/AUTO) deve ser considerado na resolução de conflitos. Atualmente o motor resolve conflitos por `restrictiveness` (mais restritivo vence), mas não considera o tipo de incidência como fator de desempate. A questão é: deve existir uma regra de precedência entre tipos de incidência (OBR > OPC > AUTO) quando dois resultados têm o mesmo nível de restritiveness?
+
+### Impacto
+
+F03 (motor de avaliação — runtime conflict resolution). Se dois `routine_items` com `restrictiveness` igual mas `incidence_type` diferente (ex: OBR e AUTO) se aplicam ao mesmo campo, o motor hoje não tem critério de desempate baseado em tipo. O resultado é determinístico (por ordem de inserção ou ID), mas pode não refletir a intenção de negócio.
+
+### Opções
+
+**Opção A — Precedência fixa OBR > OPC > AUTO:**
+Motor usa `incidence_type` como segundo critério de desempate após `restrictiveness`. Ordem: OBR (obrigatório) > OPC (opcional) > AUTO (automático).
+
+- Prós: Semântica clara — obrigatório sempre vence opcional; consistente com expectativa de negócio
+- Contras: Regra implícita — administrador não pode alterar a ordem de precedência
+
+**Opção B — Precedência configurável por enquadrador:**
+Adicionar campo `type_precedence_weight` em `incidence_rules` ou configuração do enquadrador. Administrador define pesos.
+
+- Prós: Máxima flexibilidade; cada contexto organizacional pode ter regras diferentes
+- Contras: Complexidade adicional; mais um campo para administrador configurar; aumenta superfície de erro
+
+**Opção C — Não implementar (manter status quo):**
+Motor continua resolvendo conflitos apenas por `restrictiveness`. Empate é resolvido por ordem determinística (ID ou insertion order). Documentar limitação.
+
+- Prós: Zero esforço; motor já funciona; simplicidade
+- Contras: Pode não refletir intenção de negócio em cenários de empate
+
+### Recomendação
+
+Opção C para v1 (não bloqueia — safety net já funciona por restrictiveness). Reavaliar Opção A para v2 se cenários reais de empate por tipo forem identificados em produção. A Opção B é over-engineering nesta fase.
+
+### Ação Sugerida (se aplicável)
+
+| Skill | Propósito | Quando executar |
+|---|---|---|
+| N/A | Decisão de negócio — aguardar validação com stakeholders sobre cenários reais de empate | Quando v2 do motor for planejado |
+
+### Resolução
+
+> **Decisão:** Opção C — Não implementar (manter status quo)
+> **Decidido por:** Marcos Sulivan em 2026-04-01
+> **Justificativa:** Safety net de BR-004 já resolve conflitos por restrictiveness. Não existem cenários reais de empate por tipo de incidência identificados até o momento. Implementar precedência fixa (Opção A) ou configurável (Opção B) seria over-engineering nesta fase. Documentar como limitação conhecida e reavaliar para v2 se cenários de empate forem identificados em produção.
+> **Artefato de saída:** Nenhum (decisão de não-ação documentada)
+> **Implementado em:** 2026-04-01

@@ -161,9 +161,7 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
             onSuccess(result.id);
           },
           onError: (error) => {
-            const message = error instanceof ApiError
-              ? error.message
-              : COPY.error.networkError;
+            const message = error instanceof ApiError ? error.message : COPY.error.networkError;
             toast.error(message);
           },
         });
@@ -186,9 +184,7 @@ export function OrgFormPage({ mode, editId, parentId, onSuccess, onCancel }: Org
               onSuccess(editId);
             },
             onError: (error) => {
-              const message = error instanceof ApiError
-                ? error.message
-                : COPY.error.networkError;
+              const message = error instanceof ApiError ? error.message : COPY.error.networkError;
               toast.error(message);
             },
           },

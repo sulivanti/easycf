@@ -136,6 +136,7 @@ export const createIncidenceRuleBody = z.object({
   framer_id: z.string().uuid(),
   target_object_id: z.string().uuid(),
   condition_expr: z.string().optional(),
+  incidence_type: z.enum(['OBR', 'OPC', 'AUTO']).default('OBR'),
   valid_from: z.string(),
   valid_until: z.string().optional(),
 });
@@ -143,6 +144,7 @@ export const createIncidenceRuleBody = z.object({
 export const updateIncidenceRuleBody = z.object({
   valid_from: z.string().optional(),
   valid_until: z.string().nullable().optional(),
+  incidence_type: z.enum(['OBR', 'OPC', 'AUTO']).optional(),
   status: z.enum(['ACTIVE', 'INACTIVE']).optional(),
 });
 
@@ -151,6 +153,7 @@ export const incidenceRuleResponse = z.object({
   framer_id: z.string().uuid(),
   target_object_id: z.string().uuid(),
   condition_expr: z.string().nullable(),
+  incidence_type: z.enum(['OBR', 'OPC', 'AUTO']),
   valid_from: z.string(),
   valid_until: z.string().nullable(),
   status: z.enum(['ACTIVE', 'INACTIVE']),
@@ -162,6 +165,7 @@ export const incidenceRuleListItem = z.object({
   id: z.string().uuid(),
   framer_id: z.string().uuid(),
   target_object_id: z.string().uuid(),
+  incidence_type: z.enum(['OBR', 'OPC', 'AUTO']),
   status: z.enum(['ACTIVE', 'INACTIVE']),
   valid_from: z.string(),
   valid_until: z.string().nullable(),
@@ -173,6 +177,7 @@ export const incidenceRuleListQuery = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   framer_id: z.string().uuid().optional(),
   target_object_id: z.string().uuid().optional(),
+  incidence_type: z.enum(['OBR', 'OPC', 'AUTO']).optional(),
   status: z.enum(['ACTIVE', 'INACTIVE']).optional(),
 });
 
@@ -404,6 +409,7 @@ export const evaluateResponse = z.object({
       routine_id: z.string().uuid(),
       codigo: z.string(),
       version: z.number().int(),
+      incidence_type: z.enum(['OBR', 'OPC', 'AUTO']),
     }),
   ),
   dry_run: z.boolean(),

@@ -27,14 +27,13 @@ export function InlineEditCard({ title, isEditing, children }: InlineEditCardPro
           style={{ color: isEditing ? '#2E86C1' : '#888888' }}
         >
           {isEditing && <PencilIcon className="size-3.5" />}
-          {title}{isEditing ? ' — EDITANDO' : ''}
+          {title}
+          {isEditing ? ' — EDITANDO' : ''}
         </h3>
       </div>
 
       {/* Body */}
-      <div className="px-6 py-5">
-        {children}
-      </div>
+      <div className="px-6 py-5">{children}</div>
     </div>
   );
 }

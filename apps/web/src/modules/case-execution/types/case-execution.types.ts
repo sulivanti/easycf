@@ -7,6 +7,7 @@
 // ── Enums / Unions ──────────────────────────────────────────────────────────
 
 export type CaseStatus = 'OPEN' | 'COMPLETED' | 'CANCELLED' | 'ON_HOLD';
+export type CasePriority = 'NORMAL' | 'HIGH' | 'URGENT';
 export type GateResolutionStatus = 'PENDING' | 'RESOLVED' | 'WAIVED' | 'REJECTED';
 export type GateDecision = 'APPROVED' | 'REJECTED' | 'WAIVED';
 export type GateType = 'APPROVAL' | 'DOCUMENT' | 'CHECKLIST';
@@ -30,12 +31,14 @@ export interface CaseListItem {
   current_stage_id: string;
   current_stage_name?: string;
   status: CaseStatus;
+  priority: CasePriority;
   object_type: string | null;
   object_id: string | null;
   org_unit_id: string | null;
   opened_by: string;
   opened_at: string;
   pending_gates_count: number;
+  primary_assignee_name: string | null;
 }
 
 export interface CaseDetail {
@@ -45,6 +48,8 @@ export interface CaseDetail {
   cycle_version_id: string;
   current_stage_id: string;
   status: CaseStatus;
+  description: string | null;
+  priority: CasePriority;
   object_type: string | null;
   object_id: string | null;
   org_unit_id: string | null;
@@ -146,6 +151,18 @@ export interface PaginatedResponse<T> {
   meta: { next_cursor: string | null; has_more: boolean };
 }
 
+// ── Request Bodies ──────────────────────────────────────────────────────────
+
+export interface CreateCaseRequest {
+  cycle_id: string;
+  object_type?: string;
+  object_id?: string;
+  org_unit_id?: string;
+  description?: string;
+  priority?: CasePriority;
+  notes?: string;
+}
+
 // ── Filters ─────────────────────────────────────────────────────────────────
 
 export interface CaseListFilters {
@@ -154,6 +171,8 @@ export interface CaseListFilters {
   stage_id?: string;
   object_id?: string;
   assigned_to_me?: boolean;
+  opened_after?: string;
+  opened_before?: string;
   search?: string;
   cursor?: string;
   limit?: number;
@@ -162,6 +181,24 @@ export interface CaseListFilters {
 // ── UI Metadata ─────────────────────────────────────────────────────────────
 
 export type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
+
+/** Display status includes IN_PROGRESS (derived on frontend when case OPEN + past initial stage) */
+export type CaseDisplayStatus = CaseStatus | 'IN_PROGRESS';
+
+export interface StatusStyle {
+  label: string;
+  color: string;
+  bg: string;
+  border: string;
+}
+
+export const STATUS_STYLE: Record<CaseDisplayStatus, StatusStyle> = {
+  OPEN:        { label: 'Aberto',        color: '#2E86C1', bg: '#E3F2FD', border: '1px solid #B5D4F0' },
+  IN_PROGRESS: { label: 'Em Andamento',  color: '#B8860B', bg: '#FFF3E0', border: '1px solid #FFE0B2' },
+  COMPLETED:   { label: 'Concluído',     color: '#1E7A42', bg: '#E8F8EF', border: '1px solid #B5E8C9' },
+  CANCELLED:   { label: 'Cancelado',     color: '#888888', bg: '#F5F5F3', border: '1px solid #E8E8E6' },
+  ON_HOLD:     { label: 'Em Espera',     color: '#E67E22', bg: '#FFF3E0', border: '1px solid #FFE0B2' },
+};
 
 export const STATUS_META: Record<CaseStatus, { label: string; variant: BadgeVariant }> = {
   OPEN: { label: 'Aberto', variant: 'default' },

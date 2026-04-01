@@ -33,6 +33,8 @@ import { StatusBadge } from '@shared/ui/status-badge';
 import { EmptyState } from '@shared/ui/empty-state';
 import { useCallLogsList, useCallLogDetail, useReprocessCall } from '../hooks/use-call-logs.js';
 import { useCallLogMetrics } from '../hooks/use-metrics.js';
+import { useIntegrationRoutines } from '../hooks/use-routines.js';
+import { useServicesList } from '../hooks/use-services.js';
 import { canReadLogs, canReprocessDlq } from '../types/permissions.js';
 import { COPY, httpStatusClass, relativeTime } from '../types/view-model.js';
 import { MonitorHeader } from '../components/MonitorHeader.js';
@@ -92,17 +94,32 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
     if (periodStart) f.period_start = periodStart;
     if (periodEnd) f.period_end = periodEnd;
     return f;
-  }, [activeTab, statusFilter, correlationFilter, routineFilter, serviceFilter, periodStart, periodEnd]);
+  }, [
+    activeTab,
+    statusFilter,
+    correlationFilter,
+    routineFilter,
+    serviceFilter,
+    periodStart,
+    periodEnd,
+  ]);
 
   const logsQuery = useCallLogsList(filters);
   const detailQuery = useCallLogDetail(selectedLogId);
   const metricsQuery = useCallLogMetrics();
   const reprocessMut = useReprocessCall();
+  const routinesQuery = useIntegrationRoutines();
+  const servicesQuery = useServicesList();
 
   const logs = logsQuery.data?.data ?? [];
   const hasMore = logsQuery.data?.has_more ?? false;
   const totalCount = metricsQuery.data?.total ?? 0;
-  const hasActiveRealtime = !!(metricsQuery.data && (metricsQuery.data.running > 0 || metricsQuery.data.queued > 0));
+  const routineOptions = routinesQuery.data?.data ?? [];
+  const serviceOptions = servicesQuery.data?.data ?? [];
+  const hasActiveRealtime = !!(
+    metricsQuery.data &&
+    (metricsQuery.data.running > 0 || metricsQuery.data.queued > 0)
+  );
 
   function handleReprocess() {
     if (!reprocessLogId || reprocessReason.trim().length < 10) return;
@@ -170,49 +187,65 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
       {/* Filters (all tab) */}
       {activeTab === 'all' && (
         <FilterBar className="mb-4">
+          <select
+            value={routineFilter}
+            onChange={(e) => setRoutineFilter(e.target.value)}
+            className="h-9 w-[200px] rounded-md border border-[#E8E8E6] bg-background px-3 text-xs"
+          >
+            <option value="">Todas as rotinas</option>
+            {routineOptions.map((r) => (
+              <option key={r.routine_id} value={r.routine_id}>
+                {r.nome}
+              </option>
+            ))}
+          </select>
           <Select
             options={STATUS_OPTIONS}
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as CallLogStatus | '')}
           />
           <select
-            value={routineFilter}
-            onChange={(e) => setRoutineFilter(e.target.value)}
-            className="h-9 w-[200px] rounded-md border border-input bg-background px-3 text-sm"
-          >
-            <option value="">Todas as rotinas</option>
-          </select>
-          <select
             value={serviceFilter}
             onChange={(e) => setServiceFilter(e.target.value)}
-            className="h-9 w-[180px] rounded-md border border-input bg-background px-3 text-sm"
+            className="h-9 w-[180px] rounded-md border border-[#E8E8E6] bg-background px-3 text-xs"
           >
             <option value="">Todos os serviços</option>
+            {serviceOptions.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.nome}
+              </option>
+            ))}
           </select>
-          <input
-            type="date"
-            value={periodStart}
-            onChange={(e) => setPeriodStart(e.target.value)}
-            placeholder="De"
-            className="h-9 w-[140px] rounded-md border border-input bg-background px-3 text-sm"
-          />
-          <input
-            type="date"
-            value={periodEnd}
-            onChange={(e) => setPeriodEnd(e.target.value)}
-            placeholder="Até"
-            className="h-9 w-[140px] rounded-md border border-input bg-background px-3 text-sm"
-          />
           <SearchBar
-            className="max-w-xs"
+            className="max-w-[240px]"
             value={correlationFilter}
             onChange={setCorrelationFilter}
             placeholder="Correlation ID"
           />
-          {(statusFilter || correlationFilter || routineFilter || serviceFilter || periodStart || periodEnd) && (
-            <Button
-              variant="ghost"
-              size="sm"
+          <div className="flex items-center gap-2">
+            <input
+              type="date"
+              value={periodStart}
+              onChange={(e) => setPeriodStart(e.target.value)}
+              placeholder="De"
+              className="h-9 w-[140px] rounded-md border border-[#E8E8E6] bg-background px-3 text-xs"
+            />
+            <input
+              type="date"
+              value={periodEnd}
+              onChange={(e) => setPeriodEnd(e.target.value)}
+              placeholder="Até"
+              className="h-9 w-[140px] rounded-md border border-[#E8E8E6] bg-background px-3 text-xs"
+            />
+          </div>
+          {(statusFilter ||
+            correlationFilter ||
+            routineFilter ||
+            serviceFilter ||
+            periodStart ||
+            periodEnd) && (
+            <button
+              type="button"
               onClick={() => {
                 setStatusFilter('');
                 setCorrelationFilter('');
@@ -221,9 +254,10 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
                 setPeriodStart('');
                 setPeriodEnd('');
               }}
+              className="h-9 rounded-md border border-[#E8E8E6] bg-white px-3 text-xs font-semibold text-[#555]"
             >
               Limpar
-            </Button>
+            </button>
           )}
         </FilterBar>
       )}
@@ -311,20 +345,20 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
                   ))}
                 </TableBody>
               </Table>
-              <div className="flex items-center justify-between border-t border-a1-border px-4 py-3">
-                <span className="text-xs text-muted-foreground">
+              <div className="flex h-[52px] items-center justify-between border-t border-[#F0F0EE] px-5">
+                <span className="text-xs text-[#888888]">
                   Exibindo {logs.length} de {totalCount} chamadas
                 </span>
                 {hasMore && (
-                  <Button
-                    variant="outline"
-                    size="sm"
+                  <button
+                    type="button"
                     onClick={() => {
                       /* loadMore via cursor */
                     }}
+                    className="text-[13px] font-semibold text-[#2E86C1] hover:underline"
                   >
                     Carregar mais
-                  </Button>
+                  </button>
                 )}
               </div>
             </div>
@@ -333,30 +367,41 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
 
         {/* Split-view detail */}
         {selectedLogId && (
-          <div className="w-[480px] shrink-0 border-l border-border pl-4">
-            <div className="flex items-center justify-between pb-3">
+          <div className="flex w-[480px] shrink-0 flex-col border-l border-[#E8E8E6] bg-white shadow-[-4px_0_24px_rgba(0,0,0,0.08)]">
+            {/* Detail Header */}
+            <div className="flex h-14 items-center justify-between border-b border-[#E8E8E6] px-5">
               <h3 className="text-base font-bold text-[#111]">Detalhes da Chamada</h3>
               <button
                 type="button"
                 onClick={() => setSelectedLogId(null)}
-                className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-accent"
+                className="flex h-[18px] w-[18px] items-center justify-center text-[#888] hover:text-[#333]"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg
+                  className="h-[18px] w-[18px]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <LogDetailPanel
-              log={detailQuery.data}
-              isLoading={detailQuery.isLoading}
-              onSelectLog={setSelectedLogId}
-            />
 
-            {/* Reprocess button in detail */}
+            {/* Detail Body */}
+            <div className="flex-1 overflow-y-auto p-5">
+              <LogDetailPanel
+                log={detailQuery.data}
+                isLoading={detailQuery.isLoading}
+                onSelectLog={setSelectedLogId}
+              />
+            </div>
+
+            {/* Detail Footer */}
             {detailQuery.data?.status === 'DLQ' && canReprocessDlq(userScopes) && (
-              <div className="mt-4 border-t border-border pt-4">
+              <div className="flex h-14 items-center justify-end border-t border-[#E8E8E6] px-5">
                 <Button
-                  className="w-full bg-[#E74C3C] text-white hover:bg-[#C0392B]"
+                  className="h-9 rounded-lg bg-[#E74C3C] px-4 text-[13px] font-bold text-white hover:bg-[#C0392B]"
                   onClick={() => setReprocessLogId(detailQuery.data!.id)}
                 >
                   Reprocessar

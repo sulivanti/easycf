@@ -120,32 +120,48 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
   return (
     <div className="flex h-full">
       {/* Left: Routines list */}
-      <div className="w-80 shrink-0 overflow-y-auto border-r border-border">
+      <div className="w-[280px] shrink-0 overflow-y-auto border-r border-[#E8E8E6] bg-white">
         {/* List header */}
-        <div className="flex h-12 items-center justify-between border-b border-border px-4">
+        <div className="flex h-12 items-center justify-between border-b border-[#E8E8E6] px-4">
           <span className="text-[13px] font-bold text-[#111]">Rotinas</span>
           <button
             type="button"
             className="flex h-6 w-6 items-center justify-center rounded-md border border-[#E8E8E6]"
           >
-            <svg className="h-4 w-4 text-[#2E86C1]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg
+              className="h-4 w-4 text-[#2E86C1]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
             </svg>
           </button>
         </div>
 
         {/* Search input */}
-        <div className="px-3 py-3">
+        <div className="p-3">
           <div className="relative">
-            <svg className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#888]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#CCC]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Buscar rotina..."
-              className="h-9 w-full rounded-md border border-[#E8E8E6] bg-background pl-8 pr-3 text-sm placeholder:text-[#888]"
+              className="h-9 w-full rounded-md border border-[#E8E8E6] bg-background pl-8 pr-3 text-xs placeholder:text-[#CCC]"
             />
           </div>
         </div>
@@ -162,60 +178,46 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
           <EmptyState title={COPY.empty_routines} />
         )}
 
-        <div className="space-y-1 px-2">
+        <div>
           {filteredRoutines.map((r) => (
             <button
               key={r.routine_id}
               type="button"
               onClick={() => selectRoutine(r)}
-              className={`w-full rounded-md px-3 py-2.5 text-left transition-colors ${
+              className={`w-full border-b border-[#F0F0EE] px-4 py-3 text-left transition-colors ${
                 selectedId === r.routine_id
                   ? 'border-l-[3px] border-l-[#2E86C1] bg-[#E3F2FD]'
-                  : 'hover:bg-accent/50'
+                  : 'hover:bg-[#F8F8F6]'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className={`text-sm font-medium ${selectedId === r.routine_id ? 'text-[#2E86C1]' : ''}`}>
+                <span
+                  className={`truncate text-[13px] font-semibold ${
+                    selectedId === r.routine_id ? 'text-[#2E86C1]' : 'text-[#111]'
+                  }`}
+                >
                   {r.nome}
                 </span>
                 <StatusBadge status={ROUTINE_STATUS_MAP[r.status]}>{r.status}</StatusBadge>
               </div>
-              <div className="mt-0.5 flex items-center gap-2 text-xs text-a1-text-auxiliary">
-                <span>v{r.version}</span>
-                {r.service_name && (
-                  <>
-                    <span>·</span>
-                    <span>{r.service_name}</span>
-                    {r.service_environment && (
-                      <StatusBadge
-                        status={ENV_STATUS_MAP[r.service_environment]}
-                        className="text-[10px]"
-                      >
-                        {r.service_environment}
-                      </StatusBadge>
-                    )}
-                  </>
-                )}
-                <span>·</span>
-                <span>{r.mappings_count} mapeamentos</span>
-              </div>
+              <p className="mt-0.5 truncate text-[11px] text-[#888888]">
+                {r.service_environment ?? ''} {r.service_name ? `→ ${r.service_name}` : ''}
+              </p>
             </button>
           ))}
         </div>
       </div>
 
       {/* Right: Editor */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex flex-1 flex-col overflow-hidden">
         {!selectedId ? (
           <EmptyState title="Selecione uma rotina para editar." className="mt-20" />
         ) : (
           <>
             {/* Content header */}
-            <div className="flex h-16 items-center justify-between border-b border-border bg-white px-6">
+            <div className="flex h-16 items-center justify-between border-b border-[#E8E8E6] bg-white px-6">
               <div className="flex items-center gap-3">
-                <h2 className="text-lg font-bold text-[#111]">
-                  {selectedRoutine?.nome ?? ''}
-                </h2>
+                <h2 className="text-lg font-bold text-[#111]">{selectedRoutine?.nome ?? ''}</h2>
                 {selectedRoutine && (
                   <StatusBadge status={ROUTINE_STATUS_MAP[selectedRoutine.status]}>
                     {selectedRoutine.status}
@@ -225,12 +227,16 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
               <div className="flex items-center gap-2">
                 {!readonly && canWriteRoutine(userScopes) && (
                   <>
-                    <Button size="sm" variant="outline">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-9 rounded-lg border-[#E8E8E6] bg-white text-[13px] font-semibold text-[#555]"
+                    >
                       Testar HML
                     </Button>
                     <Button
                       size="sm"
-                      className="bg-[#2E86C1] text-white hover:bg-[#2874a6]"
+                      className="h-9 rounded-lg bg-[#2E86C1] text-[13px] font-bold text-white hover:bg-[#2874a6]"
                       onClick={handlePublish}
                       disabled={publishMut.isPending}
                     >
@@ -242,7 +248,7 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="border-[#2E86C1] text-[#2E86C1]"
+                    className="h-9 rounded-lg border-[#2E86C1] bg-transparent text-[13px] font-semibold text-[#2E86C1]"
                     onClick={() => setShowForkDialog(true)}
                   >
                     Nova Versão
@@ -253,22 +259,22 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
 
             {/* Readonly banner */}
             {readonly && (
-              <div className="mx-6 mt-4 flex items-center rounded-md border border-[#90CAF9] bg-[#E3F2FD] px-4 py-3 text-sm text-[#2E86C1]">
+              <div className="mx-5 mt-4 flex items-center rounded-lg border border-[#90CAF9] bg-[#E3F2FD] px-5 py-3 text-[13px] font-medium text-[#2E86C1]">
                 <span>{COPY.readonly_banner}</span>
               </div>
             )}
 
             {/* Tabs */}
-            <div className="mx-6 mt-4 mb-5 flex border-b border-border">
+            <div className="flex h-11 gap-6 border-b border-[#E8E8E6] bg-white px-5">
               {(Object.keys(TAB_LABELS) as EditorTab[]).map((tab) => (
                 <button
                   key={tab}
                   type="button"
                   onClick={() => setActiveTab(tab)}
-                  className={`border-b-2 px-5 py-2.5 text-sm transition-colors ${
+                  className={`border-b-2 text-[13px] transition-colors ${
                     activeTab === tab
                       ? 'border-[#2E86C1] font-bold text-[#2E86C1]'
-                      : 'border-transparent text-[#888888] hover:text-foreground'
+                      : 'border-transparent font-medium text-[#888888] hover:text-foreground'
                   }`}
                 >
                   {TAB_LABELS[tab]}
@@ -277,29 +283,29 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
             </div>
 
             {/* Tab content */}
-            <div className="px-6">
-            {activeTab === 'http' && (
-              <HttpConfigTab
-                routineId={selectedId}
-                services={services}
-                readonly={readonly}
-                userScopes={userScopes}
-              />
-            )}
-            {activeTab === 'mappings' && (
-              <FieldMappingsTab
-                routineId={selectedId}
-                readonly={readonly}
-                userScopes={userScopes}
-              />
-            )}
-            {activeTab === 'params' && (
-              <IntegrationParamsTab
-                routineId={selectedId}
-                readonly={readonly}
-                userScopes={userScopes}
-              />
-            )}
+            <div className="flex-1 overflow-y-auto bg-[#F5F5F3] p-5">
+              {activeTab === 'http' && (
+                <HttpConfigTab
+                  routineId={selectedId}
+                  services={services}
+                  readonly={readonly}
+                  userScopes={userScopes}
+                />
+              )}
+              {activeTab === 'mappings' && (
+                <FieldMappingsTab
+                  routineId={selectedId}
+                  readonly={readonly}
+                  userScopes={userScopes}
+                />
+              )}
+              {activeTab === 'params' && (
+                <IntegrationParamsTab
+                  routineId={selectedId}
+                  readonly={readonly}
+                  userScopes={userScopes}
+                />
+              )}
             </div>
           </>
         )}
@@ -309,8 +315,12 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
       <Dialog open={showForkDialog} onOpenChange={setShowForkDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{COPY.confirm_fork_title}</DialogTitle>
-            <DialogDescription>{COPY.confirm_fork_body}</DialogDescription>
+            <DialogTitle className="text-lg font-bold text-[#111]">
+              {COPY.confirm_fork_title}
+            </DialogTitle>
+            <DialogDescription className="text-[13px] text-[#555]">
+              {COPY.confirm_fork_body}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-2 py-2">
             <Label>Motivo da mudança (mín. 10 caracteres)</Label>
@@ -319,7 +329,7 @@ export function RoutineEditorPage({ userScopes }: RoutineEditorPageProps) {
               onChange={(e) => setForkReason(e.target.value)}
               rows={3}
               placeholder="Descreva o motivo (mín. 10 caracteres)"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              className="h-20 w-full rounded-lg border border-[#E8E8E6] bg-background px-3.5 py-2.5 text-sm"
             />
             {forkReason.trim().length > 0 && forkReason.trim().length < 10 && (
               <p className="text-xs text-red-600">{COPY.error_reason_too_short}</p>

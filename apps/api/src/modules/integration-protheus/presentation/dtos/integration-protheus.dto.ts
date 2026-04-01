@@ -292,6 +292,6 @@ export const metricsResponse = z.object({
   running: z.number().int(),
   queued: z.number().int(),
   success_rate: z.number(),
-  /** @contract FR-008-M01 — Average latency in ms, integer, nullable */
-  avg_latency_ms: z.number().int().nullable(),
+  /** @contract FR-008-M01 — Average latency in ms, integer, 0 if no data */
+  avg_latency_ms: z.number().int(),
 });

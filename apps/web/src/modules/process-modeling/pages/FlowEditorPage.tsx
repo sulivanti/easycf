@@ -1,5 +1,5 @@
 /**
- * @contract UX-005 §2 (UX-PROC-001), UX-005-C01, FR-011, FR-012, FR-013
+ * @contract UX-005 §2 (UX-PROC-001), UX-005-C01, UX-005-M03, FR-011, FR-012, FR-013
  * @contract spec-cycle-editor-empty-canvas-first-stage
  * @contract spec-fix-cycle-editor-empty-canvas-feedback
  *
@@ -62,28 +62,9 @@ import {
 
 const nodeTypes = { stageNode: StageNode };
 
-// Swimlane colors (up to 8 macro-stages)
-const _SWIMLANE_COLORS = [
-  'bg-blue-50',
-  'bg-green-50',
-  'bg-yellow-50',
-  'bg-pink-50',
-  'bg-purple-50',
-  'bg-orange-50',
-  'bg-emerald-50',
-  'bg-fuchsia-50',
-];
-
-const SWIMLANE_HEX = [
-  '#eff6ff',
-  '#f0fdf4',
-  '#fefce8',
-  '#fdf2f8',
-  '#f5f3ff',
-  '#fff7ed',
-  '#ecfdf5',
-  '#faf5ff',
-];
+// Swimlane alternating backgrounds (spec 70 — D3)
+// Even indices: #F0F7FF (blue tint), Odd indices: #FFF8F0 (orange tint)
+const SWIMLANE_HEX = ['#F0F7FF', '#FFF8F0'];
 
 interface FlowEditorPageProps {
   cycleId: string;
@@ -228,97 +209,184 @@ function FlowEditorPageInner({ cycleId, userScopes }: FlowEditorPageProps) {
 
   return (
     <div className="-m-6 flex h-[calc(100vh-52px)] flex-col">
-      {/* Header bar — A1 */}
-      <div className="flex shrink-0 items-center justify-between border-b border-a1-border bg-white px-6 py-3">
+      {/* TopToolbar — spec 70 D1: h:56, bg white, border-bottom #E8E8E6 */}
+      <div
+        className="flex shrink-0 items-center justify-between bg-white px-6"
+        style={{ height: 56, borderBottom: '1px solid #E8E8E6' }}
+      >
         <div className="flex items-center gap-3">
-          <span className="font-display text-[15px] font-bold text-a1-text-primary">
+          <span className="font-display text-[18px] font-bold" style={{ color: '#111111' }}>
             {flow.cycle.nome}
           </span>
-          <span className="font-display text-[11px] text-a1-text-hint">v{flow.cycle.version}</span>
+          {/* StatusBadge — 3 variants with exact spec 70 colors */}
           <span
-            className={`rounded-full px-2.5 py-0.5 font-display text-[10px] font-bold ${
+            className="rounded-full px-2.5 py-0.5 font-display text-[10px] font-bold uppercase"
+            style={
               flow.cycle.status === 'PUBLISHED'
-                ? 'bg-success-500/10 text-success-600'
+                ? { color: '#1E7A42', backgroundColor: '#E8F8EF', border: '1px solid #B5E8C9' }
                 : flow.cycle.status === 'DEPRECATED'
-                  ? 'bg-danger-500/10 text-danger-600'
-                  : 'bg-primary-600/10 text-primary-600'
-            }`}
+                  ? { color: '#888888', backgroundColor: '#F5F5F3', border: '1px solid #E8E8E6' }
+                  : { color: '#B8860B', backgroundColor: '#FFF3E0', border: '1px solid #FFE0B2' }
+            }
           >
             {flow.cycle.status}
           </span>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          {/* BtnSave — secondary: r:8, border #E8E8E6, h:36 */}
+          {isCycleEditable(flow.cycle.status) && (
+            <button
+              type="button"
+              className="flex items-center justify-center rounded-lg text-[13px] font-semibold"
+              style={{
+                height: 36,
+                padding: '0 16px',
+                border: '1px solid #E8E8E6',
+                color: '#555555',
+                backgroundColor: '#FFFFFF',
+              }}
+            >
+              Salvar
+            </button>
+          )}
+          {/* BtnPublish — primary: r:8, fill #2E86C1, h:36 */}
           {canShowPublish(userScopes, flow.cycle.status) && (
-            <Button size="sm" onClick={() => setPublishOpen(true)}>
+            <button
+              type="button"
+              className="flex items-center justify-center rounded-lg text-[13px] font-bold text-white"
+              style={{
+                height: 36,
+                padding: '0 16px',
+                backgroundColor: '#2E86C1',
+                border: 'none',
+              }}
+              onClick={() => setPublishOpen(true)}
+            >
               Publicar
-            </Button>
+            </button>
           )}
-          {canShowFork(userScopes, flow.cycle.status) && (
-            <Button size="sm" variant="outline" onClick={handleFork} disabled={forking}>
-              {forking ? 'Criando...' : 'Nova versão'}
-            </Button>
-          )}
-          {canShowDeprecate(userScopes, flow.cycle.status) && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="ghost">
-                  ···
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+          {/* BtnOverflow — secondary: r:8, border #E8E8E6, w:36 h:36 */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                className="flex items-center justify-center rounded-lg text-[16px] font-semibold"
+                style={{
+                  width: 36,
+                  height: 36,
+                  border: '1px solid #E8E8E6',
+                  color: '#555555',
+                  backgroundColor: '#FFFFFF',
+                }}
+              >
+                ...
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Histórico</DropdownMenuItem>
+              {canShowFork(userScopes, flow.cycle.status) && (
+                <DropdownMenuItem onClick={handleFork} disabled={forking}>
+                  {forking ? 'Criando...' : 'Nova versão (Fork)'}
+                </DropdownMenuItem>
+              )}
+              {canShowDeprecate(userScopes, flow.cycle.status) && (
                 <DropdownMenuItem onClick={() => setDeprecateOpen(true)}>
                   Deprecar ciclo
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      {/* Readonly / Deprecated banners */}
+      {/* ReadonlyBanner — spec 70 D6: h:44, bg #E3F2FD, centered, Fork button inline */}
       {flow.cycle.status === 'PUBLISHED' && (
-        <div className="px-4 py-1.5 bg-amber-50 text-amber-800 text-xs">{COPY.readonly_banner}</div>
+        <div
+          className="flex shrink-0 items-center justify-center gap-3"
+          style={{ height: 44, backgroundColor: '#E3F2FD' }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2E86C1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+          <span className="text-[13px] font-medium" style={{ color: '#2E86C1' }}>
+            Este ciclo está publicado. Crie um Fork para editar.
+          </span>
+          {canShowFork(userScopes, flow.cycle.status) && (
+            <button
+              type="button"
+              className="text-[12px] font-bold"
+              style={{
+                height: 28,
+                padding: '0 12px',
+                borderRadius: 6,
+                border: '1px solid #2E86C1',
+                color: '#2E86C1',
+                backgroundColor: 'transparent',
+              }}
+              onClick={handleFork}
+              disabled={forking}
+            >
+              Fork
+            </button>
+          )}
+        </div>
       )}
       {flow.cycle.status === 'DEPRECATED' && (
-        <div className="px-4 py-1.5 bg-status-error-bg text-danger-600 text-xs">
-          {COPY.deprecated_banner}
+        <div
+          className="flex shrink-0 items-center justify-center gap-3"
+          style={{ height: 44, backgroundColor: '#F5F5F3' }}
+        >
+          <span className="text-[13px] font-medium" style={{ color: '#888888' }}>
+            {COPY.deprecated_banner}
+          </span>
         </div>
       )}
 
       {/* Canvas */}
       <div className="flex-1 relative">
         {isEmpty ? (
+          /* EmptyCanvasState — spec 70 D6: centered, 400x200, border 2px dashed #CCC, rounded-xl */
           <div
-            className={`flex flex-col items-center justify-center gap-3 h-full text-a1-text-auxiliary ${canCreate ? 'cursor-pointer' : 'cursor-default'}`}
+            className="flex h-full items-center justify-center"
             onDoubleClick={canCreate ? handleCanvasDoubleClick : undefined}
           >
-            {creatingStage ? (
-              <Spinner />
-            ) : (
-              <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="48"
-                  height="48"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="opacity-40"
-                >
-                  <rect x="3" y="3" width="7" height="7" rx="1" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" />
-                  <line x1="10" y1="6.5" x2="14" y2="6.5" />
-                  <line x1="6.5" y1="10" x2="6.5" y2="14" />
-                </svg>
-                <span className="text-sm">
-                  {canCreate ? COPY.empty_canvas : (blockReason ?? COPY.empty_canvas)}
-                </span>
-              </>
-            )}
+            <div
+              className={`flex flex-col items-center justify-center gap-4 rounded-xl ${canCreate ? 'cursor-pointer' : 'cursor-default'}`}
+              style={{
+                width: 400,
+                height: 200,
+                border: '2px dashed #CCCCCC',
+              }}
+            >
+              {creatingStage ? (
+                <Spinner />
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#CCCCCC"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                    <line x1="10" y1="6.5" x2="14" y2="6.5" />
+                    <line x1="6.5" y1="10" x2="6.5" y2="14" />
+                  </svg>
+                  <span className="text-[16px] font-semibold" style={{ color: '#888888' }}>
+                    {canCreate ? COPY.empty_canvas : (blockReason ?? COPY.empty_canvas)}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
         ) : (
           <ReactFlow
@@ -334,8 +402,36 @@ function FlowEditorPageInner({ cycleId, userScopes }: FlowEditorPageProps) {
             fitView
           >
             <Background />
-            <Controls />
-            {totalNodes > 15 && <MiniMap />}
+            {/* ZoomControls — spec 70 D5: absolute bottom-4 left-4, 36x36 buttons */}
+            <Controls
+              showInteractive={false}
+              style={{
+                position: 'absolute',
+                bottom: 16,
+                left: 16,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 4,
+              }}
+              className="[&>button]:!w-9 [&>button]:!h-9 [&>button]:!rounded-lg [&>button]:!bg-white [&>button]:!border [&>button]:!border-[#E8E8E6]"
+            />
+            {/* MiniMap — spec 70 D5: absolute bottom-4 right-4, 120x80 */}
+            {totalNodes > 15 && (
+              <MiniMap
+                style={{
+                  position: 'absolute',
+                  bottom: 16,
+                  right: 16,
+                  width: 120,
+                  height: 80,
+                  borderRadius: 8,
+                  border: '1px solid #E8E8E6',
+                  backgroundColor: '#FAFAFA',
+                  overflow: 'hidden',
+                }}
+                maskColor="rgba(46,134,193,0.1)"
+              />
+            )}
           </ReactFlow>
         )}
 
@@ -403,7 +499,8 @@ function buildFlowElements(
   const edges: Edge[] = [];
 
   flow.macro_stages.forEach((ms, msIndex) => {
-    const swimlaneColor = SWIMLANE_HEX[msIndex % SWIMLANE_HEX.length];
+    // Spec 70 D3: Even=#F0F7FF (blue), Odd=#FFF8F0 (orange)
+    const swimlaneColor = SWIMLANE_HEX[msIndex % 2];
 
     ms.stages.forEach((stage) => {
       nodes.push({
@@ -417,19 +514,22 @@ function buildFlowElements(
           stage,
           readonly,
           onConfigOpen,
+          swimlaneColor,
         },
         style: { background: swimlaneColor },
       });
 
+      // Spec 70 D4: TransitionEdge stroke #888888, gate_required #F39C12
       stage.transitions_out.forEach((t) => {
         edges.push({
           id: t.id,
           source: stage.id,
           target: t.to_stage_id,
           label: t.nome,
+          labelStyle: { fontSize: 11, fontWeight: 400, fill: '#888888' },
           style: {
-            stroke: t.gate_required ? '#f97316' : '#9ca3af',
-            strokeWidth: t.gate_required ? 2 : 1,
+            stroke: t.gate_required ? '#F39C12' : '#888888',
+            strokeWidth: 1.5,
           },
           animated: t.gate_required,
         });

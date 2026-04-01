@@ -12,13 +12,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Skeleton } from '@shared/ui/skeleton';
 import { Button } from '@shared/ui/button';
-import { PageHeader } from '@shared/ui/page-header';
-import type { GridColumn, ValidationItem } from '../types/smartgrid.types';
+import type { GridColumn, ValidationItem, RecordMetadata } from '../types/smartgrid.types';
 import { COPY } from '../types/smartgrid.types';
 import { evaluateSingle, mapResponseToEditColumns } from '../api/smartgrid.api';
 import { useSaveChanges } from '../hooks/use-save';
 import { BlockedRecordMessage } from '../components/BlockedRecordMessage';
 import { SmartEditForm } from '../components/SmartEditForm';
+import { MetadataSidebar } from '../components/MetadataSidebar';
 
 type ScreenState = 'loading' | 'blocked' | 'editing' | 'error';
 
@@ -26,8 +26,10 @@ interface RecordEditPageProps {
   readonly framerId: string;
   readonly objectType: string;
   readonly recordId: string;
+  readonly recordCode?: string;
   readonly currentRecordState: Record<string, unknown>;
   readonly targetEndpoint: string;
+  readonly metadata?: RecordMetadata;
   readonly onNavigateBack: () => void;
 }
 
@@ -36,8 +38,10 @@ export function RecordEditPage({
   framerId,
   objectType,
   recordId,
+  recordCode,
   currentRecordState,
   targetEndpoint,
+  metadata,
   onNavigateBack,
 }: RecordEditPageProps) {
   const saveChangesMutation = useSaveChanges();
@@ -158,24 +162,52 @@ export function RecordEditPage({
     return <BlockedRecordMessage blockingReason={blockingReason} onNavigateBack={onNavigateBack} />;
   }
 
+  const displayCode = recordCode ?? (currentRecordState['codigo'] as string | undefined) ?? recordId;
+
   return (
-    <div>
-      <div className="border-b border-a1-border px-4 py-3">
-        <PageHeader title="Alterar registro" description={`ID: ${recordId}`} />
+    <div className="bg-[#F5F5F3] p-6">
+      {/* TopActions: Voltar à esquerda, Validar à direita */}
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={onNavigateBack}
+          className="flex items-center gap-1.5 border-0 bg-transparent text-[13px] font-semibold text-[#555555] hover:text-[#333333]"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M19 12H5" />
+            <path d="m12 19-7-7 7-7" />
+          </svg>
+          Voltar
+        </button>
+        <Button
+          onClick={() => handleValidate(currentRecordState)}
+          disabled={validateLoading}
+          className="h-9 rounded-lg bg-[#2E86C1] px-3.5 text-xs font-bold text-white hover:bg-[#2574A9]"
+        >
+          {validateLoading ? 'Validando...' : 'Validar'}
+        </Button>
       </div>
 
-      <SmartEditForm
-        columns={columns}
-        initialValues={currentRecordState}
-        blockedFields={blockedFields}
-        validationErrors={validationErrors}
-        validateLoading={validateLoading}
-        saveLoading={saveChangesMutation.isPending}
-        saveEnabled={saveEnabled}
-        onValidate={handleValidate}
-        onSave={handleSave}
-        onCancel={onNavigateBack}
-      />
+      {/* FormLayout: FormCard (flex:1) + MetadataSidebar (w-72) */}
+      <div className="mt-4 flex gap-6">
+        <div className="min-w-0 flex-1">
+          <SmartEditForm
+            columns={columns}
+            initialValues={currentRecordState}
+            blockedFields={blockedFields}
+            validationErrors={validationErrors}
+            validateLoading={validateLoading}
+            saveLoading={saveChangesMutation.isPending}
+            saveEnabled={saveEnabled}
+            recordCode={displayCode}
+            onValidate={handleValidate}
+            onSave={handleSave}
+            onCancel={onNavigateBack}
+          />
+        </div>
+
+        <MetadataSidebar metadata={metadata} />
+      </div>
     </div>
   );
 }

@@ -17,6 +17,7 @@ export interface UpdateIncidenceRuleInput {
   readonly id: string;
   readonly validFrom?: Date;
   readonly validUntil?: Date | null;
+  readonly incidenceType?: 'OBR' | 'OPC' | 'AUTO';
   readonly status?: 'ACTIVE' | 'INACTIVE';
   readonly tenantId: string;
   readonly createdBy: string;
@@ -46,6 +47,7 @@ export class UpdateIncidenceRuleUseCase {
 
     if (input.validFrom !== undefined) updatedProps.validFrom = input.validFrom;
     if (input.validUntil !== undefined) updatedProps.validUntil = input.validUntil;
+    if (input.incidenceType !== undefined) updatedProps.incidenceType = input.incidenceType;
     if (input.status !== undefined) updatedProps.status = input.status;
 
     const updated = await this.uow.transaction(async (tx) => {

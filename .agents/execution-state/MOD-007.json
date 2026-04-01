@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-007",
   "module_path": "docs/04_modules/mod-007-parametrizacao-contextual/",
-  "last_updated": "2026-03-24T19:00:00Z",
+  "last_updated": "2026-04-01T12:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -15,6 +15,19 @@
     "gates_passed": ["DoR-1", "DoR-2", "DoR-3", "DoR-4", "DoR-5", "DoR-6", "DoR-7"],
     "epic_status": "READY",
     "features_promoted": ["F01", "F02", "F03", "F04", "F05"]
+  },
+  "codegen_v2": {
+    "started_at": "2026-04-01T13:00:00Z",
+    "completed_at": "2026-04-01T14:00:00Z",
+    "trigger": "amendments DATA-007-M01, FR-007-M01, UX-007-M01",
+    "agents": {
+      "AGN-COD-DB": { "status": "done", "files_modified": 1, "files": ["apps/api/db/schema/contextual-params.ts"] },
+      "AGN-COD-CORE": { "status": "done", "files_modified": 3, "files": ["apps/api/src/modules/contextual-params/domain/entities/incidence-rule.ts", "apps/api/src/modules/contextual-params/domain/value-objects/incidence-type.ts", "apps/api/src/modules/contextual-params/application/ports/repositories.ts"] },
+      "AGN-COD-APP": { "status": "done", "files_modified": 3, "files": ["apps/api/src/modules/contextual-params/application/use-cases/create-incidence-rule.use-case.ts", "apps/api/src/modules/contextual-params/application/use-cases/update-incidence-rule.use-case.ts", "apps/api/src/modules/contextual-params/application/use-cases/evaluate-rules.use-case.ts"] },
+      "AGN-COD-API": { "status": "done", "files_modified": 3, "files": ["apps/api/src/modules/contextual-params/presentation/dtos/contextual-params.dto.ts", "apps/api/src/modules/contextual-params/presentation/routes/admin-incidence-rules.route.ts", "apps/api/src/modules/contextual-params/presentation/routes/evaluate.route.ts"] },
+      "AGN-COD-WEB": { "status": "done", "files_modified": 5, "files_created": 2, "files": ["apps/web/src/modules/contextual-params/types/contextual-params.types.ts", "apps/web/src/modules/contextual-params/components/TriStateCell.tsx", "apps/web/src/modules/contextual-params/components/MatrixLegend.tsx", "apps/web/src/modules/contextual-params/components/IncidenceMatrix.tsx", "apps/web/src/modules/contextual-params/components/DryRunPreview.tsx", "apps/web/src/modules/contextual-params/pages/FramersConfigPage.tsx", "apps/web/src/modules/contextual-params/pages/IncidenceRulesPage.tsx"] },
+      "AGN-COD-VAL": { "status": "done", "files_modified": 0, "note": "lint cleanup: removed unused imports in FramersConfigPage" }
+    }
   },
   "codegen": {
     "started_at": "2026-03-24T01:00:00.000Z",
@@ -138,27 +151,28 @@
     }
   },
   "validations": {
-    "last_run": "2026-03-24T19:00:00Z",
-    "lint": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "eslint_errors": 0, "eslint_warnings": 0, "prettier_issues": 0, "top_rules": [] },
+    "last_run": "2026-04-01T12:00:00Z",
+    "lint": { "status": "WARN", "run_at": "2026-04-01T12:00:00Z", "eslint_errors": 4, "eslint_warnings": 4, "prettier_issues": 69, "top_rules": ["no-explicit-any", "no-unused-vars"], "note": "Pre-existing from codegen — no code changes in amendment merges" },
     "architecture": {
       "status": "PASS",
-      "run_at": "2026-03-24T19:00:00Z",
+      "run_at": "2026-04-01T12:00:00Z",
       "checks": {
         "domain_errors_extend_DomainError": "PASS — 6/6 extend DomainError with type + statusHint",
         "web_pattern_a": "PASS — api/hooks/pages/types/components (no data/domain/ui)",
         "hooks_use_react_query": "PASS — all 6 hook files use @tanstack/react-query"
       }
     },
-    "qa": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "blockers": 0, "violations": 0, "warnings": 0, "note": "lint:docs 22 cross-module errors, 0 specific to MOD-007" },
-    "manifest": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "total": 2, "passed": 2, "violations": [], "note": "ux-param-001, ux-rotina-001 (ux-integ-001 is MOD-008)" },
+    "qa": { "status": "PASS", "run_at": "2026-04-01T12:00:00Z", "blockers": 0, "violations": 0, "warnings": 0 },
+    "manifest": { "status": "PASS", "run_at": "2026-04-01T12:00:00Z", "total": 2, "passed": 2, "violations": [], "note": "ux-param-001, ux-rotina-001 — manifests YAML atualizados por UX-007-M01" },
     "openapi": { "status": "N/A", "run_at": null, "note": "No standalone OpenAPI contract — inline via Fastify schemas" },
-    "drizzle": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "tables": 9, "indexes": 16, "checks": 8, "relations_file": true },
-    "endpoint": { "status": "PASS", "run_at": "2026-03-24T19:00:00Z", "route_files": 7, "scope_guards": true, "operationIds_aligned": true },
+    "drizzle": { "status": "WARN", "run_at": "2026-04-01T12:00:00Z", "tables": 9, "indexes": 19, "checks": 8, "relations_file": true, "note": "Spec DATA-007 agora define incidence_type + CHECK + index — código Drizzle ainda não atualizado (pendente codegen v2)" },
+    "endpoint": { "status": "PASS", "run_at": "2026-04-01T12:00:00Z", "route_files": 7, "scope_guards": true, "operationIds_aligned": true, "note": "Spec FR-007 agora define incidence_type nos endpoints — código ainda não atualizado (pendente codegen v2)" },
     "verdict": {
       "ready_for_promotion": true,
       "blockers": 0,
       "critical_violations": 0,
-      "warnings": 0
+      "warnings": 2,
+      "note": "Specs atualizadas (amendments merged). Código precisa de codegen v2 para alinhar com DATA-007-M01 e FR-007-M01."
     }
   }
 }

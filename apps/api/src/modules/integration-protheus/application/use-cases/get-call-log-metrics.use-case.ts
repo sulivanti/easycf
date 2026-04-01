@@ -22,7 +22,7 @@ export interface CallLogMetricsOutput {
   readonly queued: number;
   readonly successRate: number;
   /** Average latency in ms over the period, rounded integer (FR-008-M01) */
-  readonly avgLatencyMs: number | null;
+  readonly avgLatencyMs: number;
 }
 
 export class GetCallLogMetricsUseCase {
@@ -30,16 +30,8 @@ export class GetCallLogMetricsUseCase {
 
   async execute(input: GetCallLogMetricsInput): Promise<CallLogMetricsOutput> {
     const [counts, avgDuration] = await Promise.all([
-      this.callLogRepo.countByStatus(
-        input.tenantId,
-        input.periodStart,
-        input.periodEnd,
-      ),
-      this.callLogRepo.avgDurationMs(
-        input.tenantId,
-        input.periodStart,
-        input.periodEnd,
-      ),
+      this.callLogRepo.countByStatus(input.tenantId, input.periodStart, input.periodEnd),
+      this.callLogRepo.avgDurationMs(input.tenantId, input.periodStart, input.periodEnd),
     ]);
 
     const success = counts['SUCCESS'] ?? 0;
@@ -58,7 +50,7 @@ export class GetCallLogMetricsUseCase {
       running,
       queued,
       successRate: total > 0 ? Math.round((success / total) * 1000) / 10 : 0,
-      avgLatencyMs: avgDuration !== null ? Math.round(avgDuration) : null,
+      avgLatencyMs: avgDuration !== null ? Math.round(avgDuration) : 0,
     };
   }
 }

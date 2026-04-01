@@ -71,8 +71,8 @@ export interface OrgUnitRepository {
   /** @contract FR-001 — Count active nodes (for soft limit warning) */
   countActive(tx?: TransactionContext): Promise<number>;
 
-  /** @contract FR-002 — Full tree query via CTE recursivo */
-  getTree(tx?: TransactionContext): Promise<readonly OrgUnitTreeNode[]>;
+  /** @contract FR-002, FR-001-C05 — Full tree query via CTE recursivo */
+  getTree(includeInactive?: boolean, tx?: TransactionContext): Promise<readonly OrgUnitTreeNode[]>;
 
   /** @contract FR-001 — Ancestors for breadcrumb (ordered root → parent) */
   getAncestors(id: string, tx?: TransactionContext): Promise<readonly AncestorNode[]>;

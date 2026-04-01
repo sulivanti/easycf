@@ -130,19 +130,21 @@
     }
   },
   "validations": {
-    "last_run": "2026-03-24T22:30:00Z",
-    "lint": { "status": "PASS", "run_at": "2026-03-24T22:30:00Z", "eslint_errors": 0, "eslint_warnings": 0, "prettier_issues": 0, "top_rules": [] },
-    "qa": { "status": "WARN", "run_at": "2026-03-24T22:30:00Z", "blockers": 0, "violations": 0, "warnings": 6, "notes": "4 implicit-any TS errors + 2 ReactFlow JSX type mismatches — infra-level (missing deps/tsconfig), not module logic" },
-    "manifest": { "status": "PASS", "run_at": "2026-03-24T22:30:00Z", "total": 2, "passed": 2, "violations": [] },
-    "openapi": { "status": "WARN", "run_at": "2026-03-24T22:30:00Z", "notes": "All FR endpoints present in v1.yaml except POST /cycles/{id}/deprecate (route exists in code but missing from OAS spec)" },
-    "drizzle": { "status": "PASS", "run_at": "2026-03-24T22:30:00Z", "tables": 7, "indexes": 23, "relations": 7, "violations": 0, "notes": "7/7 tables. All FK RESTRICT. Minor: parentCycleId lacks DB-level FK, status/gate_type use text() vs varchar(20). Non-blocking." },
-    "endpoint": { "status": "PASS", "run_at": "2026-03-24T22:30:00Z", "routes_total": 27, "routes_wired": 27, "violations": [], "notes": "All 5 previous violations resolved. 3 new BAIXA/MEDIA findings: V-N01 spec drift FR-004, V-N02 handler null fabrication, V-N03 fabricated timestamps." },
-    "architectural": { "status": "PASS", "run_at": "2026-03-24T22:30:00Z", "violations": [], "notes": "4/4 DomainError classes extend DomainError with type+statusHint. Web Pattern A confirmed (api/hooks/pages/types/components). React Query in all 5 hooks." },
+    "last_run": "2026-04-01T16:00:00Z",
+    "lint": { "status": "PASS", "run_at": "2026-04-01T16:00:00Z", "eslint_errors": 0, "eslint_warnings": 0, "prettier_issues": 0, "top_rules": [] },
+    "architecture": { "status": "PASS", "run_at": "2026-04-01T16:00:00Z", "checks": { "domain_errors": "PASS — 4/4 DomainError with type+statusHint", "web_pattern_a": "PASS — api/hooks/pages/types/components", "hooks_react_query": "PASS — 6/6 hooks use @tanstack/react-query" } },
+    "promotion_consistency": { "status": "PASS", "run_at": "2026-04-01T16:00:00Z", "note": "READY, 4/4 features READY, epic READY. F05 sem arquivo (nota)" },
+    "temporal_integrity": { "status": "PASS", "run_at": "2026-04-01T16:00:00Z", "note": "WEB incremental pós-VAL (nota)" },
+    "qa": { "status": "PASS", "run_at": "2026-04-01T16:00:00Z", "blockers": 0, "violations": 0, "warnings": 0 },
+    "manifest": { "status": "PASS", "run_at": "2026-04-01T16:00:00Z", "total": 2, "passed": 2, "violations": [] },
+    "openapi": { "status": "PASS", "run_at": "2026-04-01T16:00:00Z", "endpoints": 27 },
+    "drizzle": { "status": "PASS", "run_at": "2026-04-01T16:00:00Z", "tables": 7, "indexes": 18, "checks": 3 },
+    "endpoint": { "status": "PASS", "run_at": "2026-04-01T16:00:00Z", "endpoints_found": 27, "endpoints_expected": 27, "violations": [] },
     "verdict": {
       "ready_for_promotion": true,
       "blockers": 0,
       "critical_violations": 0,
-      "warnings": 5
+      "warnings": 2
     }
   }
 }

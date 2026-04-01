@@ -453,9 +453,17 @@ export async function accessDelegationsRoutes(app: FastifyInstance): Promise<voi
         return {
           id: d.id,
           delegator_id: d.delegatorId,
-          delegator: { id: d.delegatorId, name: delegator?.name ?? d.delegatorId, email: delegator?.email ?? '' },
+          delegator: {
+            id: d.delegatorId,
+            name: delegator?.name ?? d.delegatorId,
+            email: delegator?.email ?? '',
+          },
           delegatee_id: d.delegateeId,
-          delegatee: { id: d.delegateeId, name: delegatee?.name ?? d.delegateeId, email: delegatee?.email ?? '' },
+          delegatee: {
+            id: d.delegateeId,
+            name: delegatee?.name ?? d.delegateeId,
+            email: delegatee?.email ?? '',
+          },
           role_id: d.roleId,
           org_unit_id: d.orgUnitId,
           delegated_scopes: d.delegatedScopes,

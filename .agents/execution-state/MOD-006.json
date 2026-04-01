@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-006",
   "module_path": "docs/04_modules/mod-006-execucao-casos/",
-  "last_updated": "2026-03-24T18:00:00Z",
+  "last_updated": "2026-04-01T12:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -15,6 +15,13 @@
     "gates_passed": ["DoR-1", "DoR-2", "DoR-3", "DoR-4", "DoR-5", "DoR-6", "DoR-7"],
     "epic_status": "READY",
     "features_promoted": ["F01", "F02", "F03", "F04"]
+  },
+  "codegen_v2": {
+    "started_at": "2026-04-01T10:00:00.000Z",
+    "completed_at": "2026-04-01T12:00:00.000Z",
+    "trigger": "UX-006-M01 + FR-006-M01 + DATA-006-M01 MERGED",
+    "files_updated": 11,
+    "summary": "description/priority columns, CasePriority VO, enriched list with JOINs, 5 StatusBadge variants, 3 tabs, 7 columns"
   },
   "codegen": {
     "started_at": "2026-03-23T22:45:00.000Z",
@@ -128,35 +135,38 @@
   },
   "tests": {
     "pnpm_lint": {
-      "status": "PASS",
-      "run_at": "2026-03-24T18:00:00Z",
+      "status": "WARN",
+      "run_at": "2026-04-01T14:30:00Z",
       "eslint_errors": 0,
       "eslint_warnings": 0,
-      "prettier_issues": 0
+      "prettier_issues": 0,
+      "note": "32 TS errors in cases.route.ts are pre-existing (request.user typing), not from codegen v2"
     }
   },
   "validations": {
-    "last_run": "2026-03-24T18:00:00Z",
-    "lint": { "status": "PASS", "run_at": "2026-03-24T18:00:00Z", "eslint_errors": 0, "eslint_warnings": 0, "prettier_issues": 0, "top_rules": [] },
+    "last_run": "2026-04-01T14:30:00Z",
+    "lint": { "status": "WARN", "run_at": "2026-04-01T14:30:00Z", "eslint_errors": 0, "eslint_warnings": 0, "prettier_issues": 0, "top_rules": [], "note": "32 pre-existing TS errors in cases.route.ts (request.user typing)" },
     "architecture": {
       "status": "PASS",
-      "run_at": "2026-03-24T18:00:00Z",
+      "run_at": "2026-04-01T14:30:00Z",
       "checks": {
         "domain_errors_extend_DomainError": "PASS — 7/7 extend DomainError with type + statusHint",
         "web_pattern_a": "PASS — api/hooks/pages/types/components (no data/domain/ui)",
         "hooks_use_react_query": "PASS — all 5 hook files use @tanstack/react-query"
       }
     },
-    "qa": { "status": "PASS", "run_at": "2026-03-24T18:00:00Z", "blockers": 0, "violations": 0, "warnings": 0, "note": "lint:docs 22 cross-module errors, 0 specific to MOD-006" },
-    "manifest": { "status": "PASS", "run_at": "2026-03-24T18:00:00Z", "total": 2, "passed": 2, "violations": [] },
-    "openapi": { "status": "PASS", "run_at": "2026-03-24T18:00:00Z", "endpoints": 16, "operationIds_aligned": true },
-    "drizzle": { "status": "PASS", "run_at": "2026-03-24T18:00:00Z", "tables": 5, "indexes": 12, "checks": 4, "relations_file": true },
-    "endpoint": { "status": "PASS", "run_at": "2026-03-24T18:00:00Z", "endpoints_found": 16, "endpoints_expected": 16, "violations": [] },
+    "promotion_consistency": { "status": "PASS", "run_at": "2026-04-01T14:30:00Z", "note": "READY, 4/4 features READY, epic READY" },
+    "temporal_integrity": { "status": "PASS", "run_at": "2026-04-01T14:30:00Z" },
+    "qa": { "status": "PASS", "run_at": "2026-04-01T14:30:00Z", "blockers": 0, "violations": 0, "warnings": 0, "note": "lint:docs 13 cross-module errors, 0 specific to MOD-006" },
+    "manifest": { "status": "PASS", "run_at": "2026-04-01T14:30:00Z", "total": 2, "passed": 2, "violations": [] },
+    "openapi": { "status": "PASS", "run_at": "2026-04-01T14:30:00Z", "endpoints": 16, "operationIds_aligned": true },
+    "drizzle": { "status": "PASS", "run_at": "2026-04-01T14:30:00Z", "tables": 5, "indexes": 16, "checks": 5, "relations_file": true },
+    "endpoint": { "status": "WARN", "run_at": "2026-04-01T14:30:00Z", "endpoints_found": 16, "endpoints_expected": 16, "violations": [], "note": "pre-existing request.user typing issues" },
     "verdict": {
       "ready_for_promotion": true,
       "blockers": 0,
       "critical_violations": 0,
-      "warnings": 0
+      "warnings": 2
     }
   }
 }

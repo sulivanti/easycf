@@ -24,7 +24,11 @@ import {
 } from '../hooks/use-incidence-rules.js';
 import { useFramersList } from '../hooks/use-framers.js';
 import { useTargetObjects } from '../hooks/use-target-objects.js';
-import type { FramerStatus, IncidenceRuleListFilters } from '../types/contextual-params.types.js';
+import type {
+  FramerStatus,
+  IncidenceType,
+  IncidenceRuleListFilters,
+} from '../types/contextual-params.types.js';
 
 const STATUS_MAP: Record<FramerStatus, 'success' | 'neutral'> = {
   ACTIVE: 'success',
@@ -191,18 +195,21 @@ function CreateRuleDialog({
   onSubmit: (data: {
     framer_id: string;
     target_object_id: string;
+    incidence_type: IncidenceType;
     valid_from: string;
     valid_until?: string;
   }) => Promise<void>;
 }) {
   const [framerId, setFramerId] = useState('');
   const [targetId, setTargetId] = useState('');
+  const [incidenceType, setIncidenceType] = useState<IncidenceType>('OBR');
   const [validFrom, setValidFrom] = useState(new Date().toISOString().slice(0, 10));
   const [validUntil, setValidUntil] = useState('');
 
   function reset() {
     setFramerId('');
     setTargetId('');
+    setIncidenceType('OBR');
     setValidFrom(new Date().toISOString().slice(0, 10));
     setValidUntil('');
     onClose();
@@ -214,6 +221,7 @@ function CreateRuleDialog({
       await onSubmit({
         framer_id: framerId,
         target_object_id: targetId,
+        incidence_type: incidenceType,
         valid_from: validFrom,
         valid_until: validUntil || undefined,
       });
@@ -250,6 +258,21 @@ function CreateRuleDialog({
               onChange={(e) => setTargetId(e.target.value)}
               placeholder="Selecione..."
               options={targets.map((t) => ({ value: t.id, label: t.nome }))}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="ir-type">Tipo de incidência</Label>
+            <Select
+              id="ir-type"
+              required
+              value={incidenceType}
+              onChange={(e) => setIncidenceType(e.target.value as IncidenceType)}
+              placeholder="Selecione..."
+              options={[
+                { value: 'OBR', label: 'Obrigatório (OBR)' },
+                { value: 'OPC', label: 'Opcional (OPC)' },
+                { value: 'AUTO', label: 'Auto-apply (AUTO)' },
+              ]}
             />
           </div>
           <div className="space-y-2">

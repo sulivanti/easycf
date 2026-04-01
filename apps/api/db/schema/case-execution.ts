@@ -71,6 +71,11 @@ export const caseInstances = pgTable(
     completedAt: timestamp('completed_at', { withTimezone: true }),
     cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
     cancellationReason: text('cancellation_reason'),
+    description: text('description'),
+    priority: text('priority')
+      .notNull()
+      .default('NORMAL')
+      .$type<'NORMAL' | 'HIGH' | 'URGENT'>(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
@@ -79,6 +84,12 @@ export const caseInstances = pgTable(
     check(
       'case_instances_status_check',
       sql`${table.status} IN ('OPEN', 'COMPLETED', 'CANCELLED', 'ON_HOLD')`,
+    ),
+
+    // Priority enum check (DATA-006-M01)
+    check(
+      'case_instances_priority_check',
+      sql`${table.priority} IN ('NORMAL', 'HIGH', 'URGENT')`,
     ),
 
     // UNIQUE codigo — identificador amigável (BR-010)

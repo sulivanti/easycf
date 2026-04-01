@@ -59,6 +59,7 @@ export interface EvaluateRulesOutput {
     routineId: string;
     codigo: string;
     version: number;
+    incidenceType: 'OBR' | 'OPC' | 'AUTO';
   }[];
   readonly dryRun: boolean;
 }
@@ -97,6 +98,12 @@ export class EvaluateRulesUseCase {
 
     const ruleIds = activeRules.map((r) => r.id);
 
+    // Build ruleId → incidenceType map for later propagation to applied_routines
+    const ruleIncidenceTypeMap = new Map<string, 'OBR' | 'OPC' | 'AUTO'>();
+    for (const rule of activeRules) {
+      ruleIncidenceTypeMap.set(rule.id, rule.incidenceType);
+    }
+
     // ------ Step 2: Find PUBLISHED routines linked to those rules ------
     const routineLinks = await this.linkRepo.findPublishedRoutineIdsByRuleIds(ruleIds);
 
@@ -104,10 +111,25 @@ export class EvaluateRulesUseCase {
       return emptyResult(isDryRun);
     }
 
+    // Build routineId → incidenceType map (use the most restrictive type if multiple rules)
+    // Priority: OBR > AUTO > OPC
+    const routineIncidenceTypeMap = new Map<string, 'OBR' | 'OPC' | 'AUTO'>();
+    const incidenceTypePriority: Record<string, number> = { OBR: 3, AUTO: 2, OPC: 1 };
+    for (const link of routineLinks) {
+      const ruleType = ruleIncidenceTypeMap.get(link.incidenceRuleId) ?? 'OBR';
+      const current = routineIncidenceTypeMap.get(link.routineId);
+      if (!current || incidenceTypePriority[ruleType] > incidenceTypePriority[current]) {
+        routineIncidenceTypeMap.set(link.routineId, ruleType);
+      }
+    }
+
     const uniqueRoutineIds = [...new Set(routineLinks.map((l) => l.routineId))];
 
     // Load routine metadata
-    const routineMap = new Map<string, { id: string; codigo: string; version: number }>();
+    const routineMap = new Map<
+      string,
+      { id: string; codigo: string; version: number; incidenceType: 'OBR' | 'OPC' | 'AUTO' }
+    >();
     for (const routineId of uniqueRoutineIds) {
       const r = await this.routineRepo.findById(input.tenantId, routineId);
       // BR-012: skip DEPRECATED routines
@@ -116,6 +138,7 @@ export class EvaluateRulesUseCase {
           id: r.id,
           codigo: r.codigo,
           version: r.version,
+          incidenceType: routineIncidenceTypeMap.get(routineId) ?? 'OBR',
         });
       }
     }
@@ -203,7 +226,10 @@ function emptyResult(dryRun: boolean): EvaluateRulesOutput {
 
 function buildResponse(
   resolved: ResolvedFieldEffect[],
-  routineMap: Map<string, { id: string; codigo: string; version: number }>,
+  routineMap: Map<
+    string,
+    { id: string; codigo: string; version: number; incidenceType: 'OBR' | 'OPC' | 'AUTO' }
+  >,
   dryRun: boolean,
 ): EvaluateRulesOutput {
   const visibleFields: string[] = [];
@@ -261,7 +287,12 @@ function buildResponse(
 
   const appliedRoutines = [...appliedRoutineIds]
     .map((rid) => routineMap.get(rid))
-    .filter(Boolean) as { id: string; codigo: string; version: number }[];
+    .filter(Boolean) as {
+    id: string;
+    codigo: string;
+    version: number;
+    incidenceType: 'OBR' | 'OPC' | 'AUTO';
+  }[];
 
   return {
     visibleFields,
@@ -276,6 +307,7 @@ function buildResponse(
       routineId: r.id,
       codigo: r.codigo,
       version: r.version,
+      incidenceType: r.incidenceType,
     })),
     dryRun,
   };

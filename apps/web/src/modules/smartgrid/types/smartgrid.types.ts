@@ -164,6 +164,15 @@ export interface RecordEditRouteParams {
   readonly id: string;
 }
 
+/** @contract UX-SGR-002 — metadata sidebar data */
+export interface RecordMetadata {
+  readonly status?: string;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  readonly framerId?: string;
+  readonly framerLabel?: string;
+}
+
 export interface BulkDeleteRouteParams {
   readonly modulo: string;
   readonly rotina: string;
@@ -225,6 +234,18 @@ export const STATUS_ROW_BG: Record<RowValidationStatus, string> = {
   warning: 'bg-amber-50',
   blocked: 'bg-red-50',
 };
+
+/** Status → border-left inline style color (3px solid) — @contract UX-011-M01 D9 */
+export const STATUS_BORDER_LEFT_COLOR: Record<RowValidationStatus, string> = {
+  neutral: 'transparent',
+  valid: '#27AE60',
+  warning: '#F39C12',
+  blocked: '#E74C3C',
+};
+
+/** Status → cell background class for alert/error cells — @contract UX-011-M01 D1 */
+export const CELL_ALERT_BG = 'bg-amber-50';
+export const CELL_ERROR_BG = 'bg-red-50';
 
 // ---------------------------------------------------------------------------
 // Copy strings (pt-BR) — centralized for i18n readiness

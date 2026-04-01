@@ -1,5 +1,5 @@
 /**
- * @contract UX-005 §3 (UX-PROC-002), UX-005-M02, FR-006, FR-007, FR-008, FR-009, FR-010, FR-013
+ * @contract UX-005 §3 (UX-PROC-002), UX-005-M02, UX-005-M03 §D7–D11, FR-006, FR-007, FR-008, FR-009, FR-010, FR-013
  *
  * Stage configuration side panel with 4 tabs:
  * - Info: name, description, is_initial, is_terminal (auto-save debounce 800ms)
@@ -19,7 +19,6 @@ import { useState, useEffect, useRef, useCallback, useMemo, startTransition } fr
 import { toast } from 'sonner';
 import {
   Button,
-  Badge,
   Input,
   Label,
   Select,
@@ -45,11 +44,7 @@ import {
   useDeleteTransition,
 } from '../hooks/use-stage-config.js';
 import { useProcessRoles } from '../hooks/use-process-roles.js';
-import type {
-  FlowStageItem,
-  FlowGateItem,
-  GateType,
-} from '../types/process-modeling.types.js';
+import type { FlowStageItem, FlowGateItem, GateType } from '../types/process-modeling.types.js';
 import { COPY, GATE_TYPE_META } from '../types/process-modeling.types.js';
 
 type TabId = 'info' | 'gates' | 'roles' | 'transitions';
@@ -82,34 +77,42 @@ export function StageConfigPanel({ stage, allStages, readonly, onClose }: StageC
   ];
 
   return (
-    <div className="fixed right-0 top-0 bottom-0 w-[400px] bg-white border-l border-gray-200 flex flex-col z-50 shadow-[-4px_0_12px_rgba(0,0,0,0.08)]">
-      {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
-        <div>
-          <div className="font-bold text-sm">
-            {stage.codigo} — {stage.nome}
-          </div>
+    <div className="fixed right-0 top-0 bottom-0 w-[480px] bg-white flex flex-col z-40 shadow-[-4px_0_24px_rgba(0,0,0,0.08)]">
+      {/* Header — UX-005-M03 §D7 */}
+      <div className="h-16 min-h-16 px-6 border-b flex justify-between items-center" style={{ borderColor: '#E8E8E6' }}>
+        <div className="text-[16px] font-bold text-[#111111] truncate">
+          {stage.codigo} — {stage.nome}
+        </div>
+        <div className="flex items-center gap-3 shrink-0">
+          {/* AutoSaveIndicator — 3 states */}
           {saveStatus !== 'idle' && (
             <span
-              className={`text-[11px] ${
-                saveStatus === 'error'
-                  ? 'text-red-600'
-                  : saveStatus === 'saving'
-                    ? 'text-gray-400'
-                    : 'text-green-600'
+              className={`text-[11px] font-medium ${
+                saveStatus === 'saving'
+                  ? 'text-[#888888] animate-pulse'
+                  : saveStatus === 'saved'
+                    ? 'text-[#27AE60]'
+                    : 'text-[#E74C3C]'
               }`}
             >
               {saveStatus === 'saving'
                 ? COPY.auto_save_saving
                 : saveStatus === 'saved'
-                  ? COPY.auto_save_saved
+                  ? (<>{COPY.auto_save_saved} <span className="inline-block ml-0.5">✓</span></>)
                   : COPY.auto_save_error}
             </span>
           )}
+          <button
+            onClick={onClose}
+            className="w-5 h-5 flex items-center justify-center bg-transparent border-none cursor-pointer text-[#888888] hover:text-[#333333] transition-colors"
+            aria-label="Fechar"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <line x1="5" y1="5" x2="15" y2="15" />
+              <line x1="15" y1="5" x2="5" y2="15" />
+            </svg>
+          </button>
         </div>
-        <Button variant="ghost" size="sm" onClick={onClose} className="text-lg leading-none">
-          ×
-        </Button>
       </div>
 
       {/* Readonly banner */}
@@ -119,28 +122,26 @@ export function StageConfigPanel({ stage, allStages, readonly, onClose }: StageC
         </div>
       )}
 
-      {/* Tabs */}
-      <div className="flex border-b border-gray-200">
+      {/* TabBar — UX-005-M03 §D7 */}
+      <div className="flex h-11 min-h-11 px-6 border-b" style={{ borderColor: '#E8E8E6' }}>
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`
-              flex-1 py-2 text-xs border-b-2 bg-transparent cursor-pointer
-              ${
-                activeTab === tab.id
-                  ? 'border-blue-500 font-semibold text-blue-700'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }
-            `}
+            className="bg-transparent border-none cursor-pointer px-4 py-3 text-[13px] font-semibold border-b-2 transition-colors"
+            style={
+              activeTab === tab.id
+                ? { color: '#2E86C1', borderBottomColor: '#2E86C1' }
+                : { color: '#888888', borderBottomColor: 'transparent' }
+            }
           >
             {tab.label}
           </button>
         ))}
       </div>
 
-      {/* Tab content */}
-      <div className="flex-1 overflow-auto p-4">
+      {/* PanelBody — UX-005-M03 §D7 */}
+      <div className="flex-1 overflow-auto p-6">
         {activeTab === 'info' && (
           <InfoTab stage={stage} readonly={readonly} onSaveStatusChange={setSaveStatus} />
         )}
@@ -290,9 +291,8 @@ function GatesTab({ stage, readonly }: { stage: FlowStageItem; readonly: boolean
         });
         toast.success('Gate atualizado.');
       } else {
-        const nextOrdem = stage.gates.length > 0
-          ? Math.max(...stage.gates.map((g) => g.ordem)) + 1
-          : 1;
+        const nextOrdem =
+          stage.gates.length > 0 ? Math.max(...stage.gates.map((g) => g.ordem)) + 1 : 1;
         await createGate.mutateAsync({
           stageId: stage.id,
           data: {
@@ -343,32 +343,38 @@ function GatesTab({ stage, readonly }: { stage: FlowStageItem; readonly: boolean
             return (
               <li
                 key={gate.id}
-                className="flex items-center gap-2 px-2 py-1.5 border border-gray-200 rounded-md text-sm"
+                className="flex items-center gap-2 rounded-lg text-[13px]"
+                style={{ border: '1px solid #E8E8E6', padding: '12px 16px' }}
               >
-                <Badge variant={meta.variant} className="text-[10px] px-1.5 py-0 shrink-0">
-                  {meta.label}
-                </Badge>
-                <span className="flex-1 truncate">{gate.nome}</span>
+                {/* DragHandle — UX-005-M03 §D9 */}
+                <span className="shrink-0 cursor-grab flex flex-col gap-[3px] opacity-40" aria-hidden>
+                  <span className="flex gap-[3px]"><span className="w-[3px] h-[3px] rounded-full bg-[#CCC]" /><span className="w-[3px] h-[3px] rounded-full bg-[#CCC]" /></span>
+                  <span className="flex gap-[3px]"><span className="w-[3px] h-[3px] rounded-full bg-[#CCC]" /><span className="w-[3px] h-[3px] rounded-full bg-[#CCC]" /></span>
+                  <span className="flex gap-[3px]"><span className="w-[3px] h-[3px] rounded-full bg-[#CCC]" /><span className="w-[3px] h-[3px] rounded-full bg-[#CCC]" /></span>
+                </span>
+                <span className="flex-1 truncate text-[#111111]">{gate.nome}</span>
+                {/* GateTypeBadge — UX-005-M03 §D9 */}
                 <span
-                  className={`text-[11px] ${gate.required ? 'text-red-700' : 'text-gray-400'}`}
+                  className="shrink-0 text-[10px] font-bold uppercase rounded px-2 py-[2px]"
+                  style={{ color: meta.textColor, backgroundColor: meta.bgColor }}
                 >
-                  {gate.required ? 'Obrigatório' : 'Opcional'}
+                  {meta.label}
                 </span>
                 {!readonly && (
                   <>
                     <button
                       onClick={() => openEdit(gate)}
-                      className="text-gray-400 hover:text-blue-600 text-xs bg-transparent border-none cursor-pointer"
+                      className="text-[#888888] hover:text-[#2E86C1] bg-transparent border-none cursor-pointer p-0"
                       title="Editar"
                     >
-                      &#9998;
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M10 2l2 2-7 7H3v-2l7-7z"/></svg>
                     </button>
                     <button
                       onClick={() => setDeleteTarget(gate)}
-                      className="text-gray-400 hover:text-red-600 text-xs bg-transparent border-none cursor-pointer"
+                      className="text-[#888888] hover:text-[#E74C3C] bg-transparent border-none cursor-pointer p-0"
                       title="Excluir"
                     >
-                      &#10005;
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2"><line x1="3" y1="3" x2="11" y2="11"/><line x1="11" y1="3" x2="3" y2="11"/></svg>
                     </button>
                   </>
                 )}
@@ -422,9 +428,7 @@ function GatesTab({ stage, readonly }: { stage: FlowStageItem; readonly: boolean
               />
               Obrigatório
               {form.gate_type === 'INFORMATIVE' && (
-                <span className="text-[10px] text-gray-400 ml-1">
-                  ({COPY.tooltip_informative})
-                </span>
+                <span className="text-[10px] text-gray-400 ml-1">({COPY.tooltip_informative})</span>
               )}
             </label>
           </div>
@@ -479,8 +483,16 @@ function RolesTab({
   allRoles: Array<{ id: string; codigo: string; nome: string; can_approve: boolean }>;
 }) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [unlinkTarget, setUnlinkTarget] = useState<{ id: string; role_id: string; nome: string } | null>(null);
-  const [form, setForm] = useState<RoleFormState>({ role_id: '', required: false, max_assignees: '' });
+  const [unlinkTarget, setUnlinkTarget] = useState<{
+    id: string;
+    role_id: string;
+    nome: string;
+  } | null>(null);
+  const [form, setForm] = useState<RoleFormState>({
+    role_id: '',
+    required: false,
+    max_assignees: '',
+  });
 
   const linkRole = useLinkStageRole();
   const unlinkRole = useUnlinkStageRole();
@@ -551,39 +563,34 @@ function RolesTab({
             return (
               <li
                 key={roleLink.id}
-                className="flex items-center gap-2 px-2 py-1.5 border border-gray-200 rounded-md text-sm"
+                className="flex items-center gap-2 rounded-lg text-[13px]"
+                style={{ border: '1px solid #E8E8E6', padding: '12px 16px' }}
               >
-                <span className="flex-1 truncate">
+                <span className="flex-1 truncate text-[#111111] flex items-center gap-2">
                   {roleName}
+                  {/* CanApproveBadge — UX-005-M03 §D10 */}
                   {role?.can_approve && (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Badge variant="default" className="ml-1.5 text-[10px] px-1.5 py-0">
-                            Poder decisório
-                          </Badge>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Este papel possui poder de aprovação</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <span
+                      className="shrink-0 text-[10px] font-bold rounded px-2 py-[2px]"
+                      style={{ color: '#2E86C1', backgroundColor: '#E3F2FD' }}
+                    >
+                      Com poder decisório
+                    </span>
                   )}
-                </span>
-                <span
-                  className={`text-[11px] ${roleLink.required ? 'text-red-700' : 'text-gray-400'}`}
-                >
-                  {roleLink.required ? 'Obrigatório' : 'Opcional'}
                 </span>
                 {!readonly && (
                   <button
                     onClick={() =>
-                      setUnlinkTarget({ id: roleLink.id, role_id: roleLink.role_id, nome: roleName })
+                      setUnlinkTarget({
+                        id: roleLink.id,
+                        role_id: roleLink.role_id,
+                        nome: roleName,
+                      })
                     }
-                    className="text-gray-400 hover:text-red-600 text-xs bg-transparent border-none cursor-pointer"
+                    className="text-[#888888] hover:text-[#E74C3C] bg-transparent border-none cursor-pointer p-0"
                     title="Desvincular"
                   >
-                    &#10005;
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2"><line x1="3" y1="3" x2="11" y2="11"/><line x1="11" y1="3" x2="3" y2="11"/></svg>
                   </button>
                 )}
               </li>
@@ -602,7 +609,10 @@ function RolesTab({
             <div>
               <Label className="text-xs font-semibold">Papel *</Label>
               <Select
-                options={availableRoles.map((r) => ({ value: r.id, label: `${r.codigo} — ${r.nome}` }))}
+                options={availableRoles.map((r) => ({
+                  value: r.id,
+                  label: `${r.codigo} — ${r.nome}`,
+                }))}
                 value={form.role_id}
                 onChange={(e) => setForm((f) => ({ ...f, role_id: e.target.value }))}
                 placeholder="Selecione um papel"
@@ -736,10 +746,11 @@ function TransitionsTab({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
+      {/* Saída — UX-005-M03 §D11 */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-semibold">Saída</h4>
+          <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#888888]">Saída</h4>
           {!readonly && (
             <Button
               size="sm"
@@ -754,36 +765,78 @@ function TransitionsTab({
         {stage.transitions_out.length === 0 ? (
           <p className="text-gray-400 text-sm">{COPY.empty_transitions_out}</p>
         ) : (
-          <ul className="flex flex-col gap-1.5">
+          <ul className="flex flex-col gap-2">
             {stage.transitions_out.map((t) => (
               <li
                 key={t.id}
-                className="flex items-center gap-2 px-2 py-1.5 border border-gray-200 rounded-md text-sm"
+                className="flex items-center gap-2 rounded-lg text-[13px]"
+                style={{ border: '1px solid #E8E8E6', padding: '12px 16px' }}
               >
-                <span className="flex-1 truncate">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#888888" strokeWidth="1.2" className="shrink-0"><path d="M2 7h10M9 4l3 3-3 3"/></svg>
+                <span className="flex-1 truncate text-[#111111]">
                   {t.nome} → <span className="font-semibold">{t.to_stage_codigo}</span>
                 </span>
+                {/* GateRequiredBadge — UX-005-M03 §D11 */}
                 {t.gate_required && (
-                  <Badge
-                    variant="outline"
-                    className="text-[10px] px-1.5 py-0 border-orange-300 text-orange-700 bg-orange-50"
+                  <span
+                    className="shrink-0 text-[10px] font-bold rounded px-2 py-[2px]"
+                    style={{ color: '#F39C12', backgroundColor: '#FFF3E0' }}
                   >
                     Requer gate
-                  </Badge>
+                  </span>
                 )}
                 {!readonly && (
                   <button
                     onClick={() => setDeleteTarget({ id: t.id, nome: t.nome })}
-                    className="text-gray-400 hover:text-red-600 text-xs bg-transparent border-none cursor-pointer"
+                    className="text-[#888888] hover:text-[#E74C3C] bg-transparent border-none cursor-pointer p-0"
                     title="Excluir"
                   >
-                    &#10005;
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2"><line x1="3" y1="3" x2="11" y2="11"/><line x1="11" y1="3" x2="3" y2="11"/></svg>
                   </button>
                 )}
               </li>
             ))}
           </ul>
         )}
+      </div>
+
+      {/* Entrada (readonly) — UX-005-M03 §D11 */}
+      <div>
+        <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#888888] mb-2">Entrada</h4>
+        {(() => {
+          const inbound = allStages
+            .flatMap((s) =>
+              s.transitions_out
+                .filter((t) => t.to_stage_id === stage.id)
+                .map((t) => ({ ...t, from_codigo: s.codigo })),
+            );
+          return inbound.length === 0 ? (
+            <p className="text-gray-400 text-sm">Nenhuma transição de entrada.</p>
+          ) : (
+            <ul className="flex flex-col gap-2">
+              {inbound.map((t) => (
+                <TooltipProvider key={t.id}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <li
+                        className="flex items-center gap-2 rounded-lg text-[13px]"
+                        style={{ border: '1px solid #F0F0EE', backgroundColor: '#FAFAFA', padding: '12px 16px' }}
+                      >
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#CCCCCC" strokeWidth="1.2" className="shrink-0"><path d="M12 7H2M5 4l-3 3 3 3"/></svg>
+                        <span className="flex-1 truncate text-[#888888]">
+                          {t.nome} ← <span className="font-semibold">{t.from_codigo}</span>
+                        </span>
+                      </li>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{COPY.tooltip_entrada_readonly}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
+            </ul>
+          );
+        })()}
       </div>
 
       {/* Create Dialog */}

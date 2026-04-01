@@ -10,10 +10,10 @@ import { toTreeNodeVM } from '../types/org-units.types.js';
 
 export const ORG_TREE_KEY = ['org-units', 'tree'] as const;
 
-export function useOrgTree() {
+export function useOrgTree(includeInactive = false) {
   return useQuery({
-    queryKey: [...ORG_TREE_KEY],
-    queryFn: ({ signal }) => fetchOrgTree(signal),
+    queryKey: [...ORG_TREE_KEY, { includeInactive }],
+    queryFn: ({ signal }) => fetchOrgTree(includeInactive, signal),
     select: (data) => data.tree.map(toTreeNodeVM),
   });
 }

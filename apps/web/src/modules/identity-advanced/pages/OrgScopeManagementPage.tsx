@@ -47,7 +47,9 @@ export function OrgScopeManagementPage({ userScopes }: OrgScopeManagementPagePro
   // ── Filters ───────────────────────────────────────────────
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<'PRIMARY' | 'SECONDARY' | undefined>(undefined);
-  const [filterStatus, setFilterStatus] = useState<'ACTIVE' | 'INACTIVE' | 'EXPIRED' | undefined>(undefined);
+  const [filterStatus, setFilterStatus] = useState<'ACTIVE' | 'INACTIVE' | 'EXPIRED' | undefined>(
+    undefined,
+  );
   const [cursor, setCursor] = useState<string | undefined>(undefined);
 
   const filters: OrgScopesGroupedFilters = {
@@ -135,7 +137,8 @@ export function OrgScopeManagementPage({ userScopes }: OrgScopeManagementPagePro
   }
 
   const canSubmitAdd =
-    orgUnitId.trim() && targetUserId.trim() &&
+    orgUnitId.trim() &&
+    targetUserId.trim() &&
     (!validUntil || isValidFutureDate(validUntil)) &&
     !createScope.isPending;
 

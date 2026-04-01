@@ -95,13 +95,13 @@ const CONFIRM_INITIAL: ConfirmState = {
 const EDIT_GUARD_INITIAL: EditGuardState = { open: false, pendingAction: null };
 
 export function OrgTreePage({ userScopes, onNavigateHistory }: OrgTreePageProps) {
-  const { data: tree, isLoading, isError, error, refetch } = useOrgTree();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showInactive, setShowInactive] = useState(false);
+
+  const { data: tree, isLoading, isError, error, refetch } = useOrgTree(showInactive);
   const deleteMutation = useDeleteOrgUnit();
   const restoreMutation = useRestoreOrgUnit();
   const unlinkMutation = useUnlinkTenant();
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showInactive, setShowInactive] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [formPanel, setFormPanel] = useState<FormPanelState>({ open: false });
   const [requestEdit, setRequestEdit] = useState(false);

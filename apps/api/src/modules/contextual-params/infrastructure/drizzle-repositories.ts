@@ -332,6 +332,7 @@ export class DrizzleIncidenceRuleRepository implements IncidenceRuleRepository {
     params: PaginationParams & {
       framerId?: string;
       targetObjectId?: string;
+      incidenceType?: 'OBR' | 'OPC' | 'AUTO';
       status?: 'ACTIVE' | 'INACTIVE';
     },
     tx?: TransactionContext,
@@ -342,6 +343,8 @@ export class DrizzleIncidenceRuleRepository implements IncidenceRuleRepository {
     if (params.framerId) conditions.push(eq(incidenceRules.framerId, params.framerId));
     if (params.targetObjectId)
       conditions.push(eq(incidenceRules.targetObjectId, params.targetObjectId));
+    if (params.incidenceType)
+      conditions.push(eq(incidenceRules.incidenceType, params.incidenceType));
     if (params.status) conditions.push(eq(incidenceRules.status, params.status));
 
     const rows = await c
@@ -401,6 +404,7 @@ export class DrizzleIncidenceRuleRepository implements IncidenceRuleRepository {
       .update(incidenceRules)
       .set({
         conditionExpr: record.conditionExpr,
+        incidenceType: record.incidenceType,
         validFrom: record.validFrom,
         validUntil: record.validUntil,
         status: record.status,
@@ -442,6 +446,7 @@ export class DrizzleIncidenceRuleRepository implements IncidenceRuleRepository {
       framerId: row.framerId,
       targetObjectId: row.targetObjectId,
       conditionExpr: row.conditionExpr,
+      incidenceType: row.incidenceType ?? 'OBR',
       validFrom: row.validFrom,
       validUntil: row.validUntil,
       status: row.status,

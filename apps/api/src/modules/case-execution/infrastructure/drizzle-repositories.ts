@@ -14,9 +14,11 @@ import {
 import type {
   CaseInstanceRepository,
   CaseInstanceRow,
+  CaseListItem,
   CaseListFilter,
   CaseListResult,
 } from '../application/ports/case-instance.repository.js';
+import { processCycles, processStages } from '../../../../db/schema/process-modeling.js';
 import type {
   StageHistoryRepository,
   StageHistoryRow,
@@ -32,6 +34,7 @@ import type {
 import type {
   CaseEventRepository,
   CaseEventRow,
+  CreateCaseEventInput,
 } from '../application/ports/case-event.repository.js';
 import type {
   DelegationCheckerPort,
@@ -112,6 +115,10 @@ export class DrizzleCaseInstanceRepository implements CaseInstanceRepository {
     if (filter.objectId) conditions.push(eq(caseInstances.objectId, filter.objectId));
     if (filter.search)
       conditions.push(sql`${caseInstances.codigo} ILIKE ${'%' + filter.search + '%'}`);
+    if (filter.openedAfter)
+      conditions.push(sql`${caseInstances.openedAt} >= ${filter.openedAfter}`);
+    if (filter.openedBefore)
+      conditions.push(sql`${caseInstances.openedAt} <= ${filter.openedBefore}`);
 
     // myResponsibility filter: subquery on active assignments
     if (filter.myResponsibility) {
@@ -125,17 +132,44 @@ export class DrizzleCaseInstanceRepository implements CaseInstanceRepository {
     }
 
     const rows = await this.db
-      .select()
+      .select({
+        caseInstance: caseInstances,
+        cycleName: processCycles.nome,
+        stageName: processStages.nome,
+        pendingGatesCount: sql<number>`(
+          SELECT count(*)::int FROM ${gateInstances}
+          WHERE ${gateInstances.caseId} = ${caseInstances.id}
+            AND ${gateInstances.status} = 'PENDING'
+        )`,
+        primaryAssigneeName: sql<string | null>`(
+          SELECT u."name" FROM ${caseAssignments} ca
+          INNER JOIN "users" u ON u.id = ca.user_id
+          WHERE ca.case_id = ${caseInstances.id}
+            AND ca.stage_id = ${caseInstances.currentStageId}
+            AND ca.is_active = true
+          LIMIT 1
+        )`,
+      })
       .from(caseInstances)
+      .leftJoin(processCycles, eq(processCycles.id, caseInstances.cycleId))
+      .leftJoin(processStages, eq(processStages.id, caseInstances.currentStageId))
       .where(and(...conditions))
       .orderBy(desc(caseInstances.openedAt))
       .limit(limit);
 
     const hasMore = rows.length > filter.limit;
     const data = rows.slice(0, filter.limit);
+    const items: CaseListItem[] = data.map((r) => ({
+      ...this.toDomain(r.caseInstance),
+      cycleName: r.cycleName ?? '',
+      currentStageName: r.stageName ?? '',
+      pendingGatesCount: r.pendingGatesCount ?? 0,
+      primaryAssigneeName: r.primaryAssigneeName,
+    }));
+
     return {
-      items: data.map((r) => this.toDomain(r)),
-      nextCursor: hasMore ? data[data.length - 1].id : null,
+      items,
+      nextCursor: hasMore ? data[data.length - 1].caseInstance.id : null,
       hasMore,
     };
   }
@@ -161,6 +195,8 @@ export class DrizzleCaseInstanceRepository implements CaseInstanceRepository {
       objectType: row.objectType,
       objectId: row.objectId,
       orgUnitId: row.orgUnitId,
+      description: row.description,
+      priority: row.priority ?? 'NORMAL',
       tenantId: row.tenantId,
       openedBy: row.openedBy,
       openedAt: row.openedAt,
@@ -441,10 +477,10 @@ export class DrizzleCaseAssignmentRepository implements CaseAssignmentRepository
 export class DrizzleCaseEventRepository implements CaseEventRepository {
   constructor(private db: Conn) {}
 
-  async create(data: Omit<CaseEventRow, 'id'>): Promise<CaseEventRow> {
+  async create(data: CreateCaseEventInput): Promise<CaseEventRow> {
     const [row] = await this.db
       .insert(caseEvents)
-      .values({ ...data, id: crypto.randomUUID() })
+      .values({ ...data, id: crypto.randomUUID(), createdAt: data.createdAt ?? new Date() })
       .returning();
     return this.toDomain(row);
   }

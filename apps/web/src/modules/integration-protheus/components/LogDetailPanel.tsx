@@ -40,6 +40,12 @@ export function LogDetailPanel({ log, isLoading, onSelectLog }: LogDetailPanelPr
       {/* Summary section */}
       <CollapsibleSection title="Resumo" defaultOpen>
         <div className="space-y-3">
+          {log.routine_name && (
+            <div>
+              <p className="text-xs text-muted-foreground">Rotina</p>
+              <p className="text-[13px]">{log.routine_name}</p>
+            </div>
+          )}
           <div>
             <p className="text-xs text-muted-foreground">Status</p>
             <Badge className={STATUS_BADGE[log.status]}>{log.status}</Badge>
@@ -50,91 +56,99 @@ export function LogDetailPanel({ log, isLoading, onSelectLog }: LogDetailPanelPr
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Tentativa</p>
-            <p className="text-sm">
+            <p className="text-[13px]">
               {log.attempt_number} de {log.retry_max}
             </p>
           </div>
           {log.response_status && (
             <div>
               <p className="text-xs text-muted-foreground">HTTP Status</p>
-              <p className={`text-sm ${httpStatusClass(log.response_status)}`}>{log.response_status}</p>
+              <p className={`text-[13px] ${httpStatusClass(log.response_status)}`}>
+                {log.response_status}
+              </p>
             </div>
           )}
           {log.duration_ms != null && (
             <div>
               <p className="text-xs text-muted-foreground">Duração</p>
-              <p className="text-sm">{log.duration_ms}ms</p>
+              <p className="text-[13px]">{log.duration_ms}ms</p>
             </div>
           )}
           {log.case_id && (
-            <a
-              href={`/casos/${log.case_id}`}
-              className="inline-block text-sm text-blue-600 hover:underline"
-            >
-              {COPY.link_view_case}
-            </a>
+            <div>
+              <p className="text-xs text-muted-foreground">Caso</p>
+              <a
+                href={`/casos/${log.case_id}`}
+                className="text-[13px] font-semibold text-[#2E86C1] hover:underline"
+              >
+                {COPY.link_view_case}
+              </a>
+            </div>
           )}
         </div>
       </CollapsibleSection>
 
-      {/* Error */}
-      {log.error_message && (
+      {/* Error — only for FAILED/DLQ */}
+      {log.error_message && (log.status === 'FAILED' || log.status === 'DLQ') && (
         <CollapsibleSection title="Erro" defaultOpen titleColor="#C0392B">
-          <pre className="max-h-40 overflow-auto whitespace-pre-wrap rounded bg-red-50 p-3 text-xs text-red-800">
+          <div className="rounded-md bg-[#FFEBEE] p-3 text-[13px] text-[#333]">
             {log.error_message}
-          </pre>
+          </div>
         </CollapsibleSection>
       )}
 
-      {/* Request payload */}
-      {log.request_payload && (
-        <CollapsibleSection title="Request Payload">
-          <JSONViewer data={log.request_payload} maxHeight={200} />
+      {/* Request */}
+      {(log.request_payload || log.request_headers) && (
+        <CollapsibleSection title="Request" defaultOpen>
+          <div className="space-y-2">
+            {log.request_headers && (
+              <TooltipProvider>
+                <pre className="max-h-48 overflow-auto rounded-md border border-[#E8E8E6] bg-[#F8F8F6] p-3 font-mono text-xs">
+                  {Object.entries(log.request_headers).map(([k, v]) => (
+                    <div key={k}>
+                      <span className="font-semibold">{k}:</span>{' '}
+                      {v === '***' ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="text-[#C0392B]">***</span>
+                          </TooltipTrigger>
+                          <TooltipContent>{COPY.sensitive_masked_tooltip}</TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        <span className="text-[#333]">{String(v)}</span>
+                      )}
+                    </div>
+                  ))}
+                </pre>
+              </TooltipProvider>
+            )}
+            {log.request_payload && <JSONViewer data={log.request_payload} maxHeight={200} />}
+          </div>
         </CollapsibleSection>
       )}
 
-      {/* Request headers */}
-      {log.request_headers && (
-        <CollapsibleSection title="Request Headers">
-          <TooltipProvider>
-            <pre className="max-h-48 overflow-auto rounded-md border border-[#E8E8E6] bg-[#F8F8F6] p-3 text-xs">
-              {Object.entries(log.request_headers).map(([k, v]) => (
-                <div key={k}>
-                  <span className="font-semibold">{k}:</span>{' '}
-                  {v === '***' ? (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="text-muted-foreground">***</span>
-                      </TooltipTrigger>
-                      <TooltipContent>{COPY.sensitive_masked_tooltip}</TooltipContent>
-                    </Tooltip>
-                  ) : (
-                    String(v)
-                  )}
-                </div>
-              ))}
-            </pre>
-          </TooltipProvider>
-        </CollapsibleSection>
-      )}
-
-      {/* Response body */}
+      {/* Response */}
       {log.response_body && (
-        <CollapsibleSection title="Response Body">
+        <CollapsibleSection title="Response" defaultOpen>
+          {log.response_status && (
+            <Badge className={`mb-2 ${httpStatusClass(log.response_status)}`}>
+              {log.response_status}
+            </Badge>
+          )}
           <JSONViewer data={log.response_body} maxHeight={200} />
         </CollapsibleSection>
       )}
 
-      {/* Chain: parent log */}
+      {/* Histórico de Tentativas */}
       {log.parent_log_id && (
-        <CollapsibleSection title="Cadeia de Reprocessamento" defaultOpen>
-          <div>
-            <p className="text-xs text-muted-foreground">Log anterior</p>
+        <CollapsibleSection title="Histórico de Tentativas">
+          <div className="flex items-center gap-2 border-b border-[#F0F0EE] py-2">
+            <span className="text-xs font-semibold text-[#333]">Log anterior</span>
             <button
               onClick={() => onSelectLog(log.parent_log_id!)}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-xs font-semibold text-[#2E86C1] hover:underline"
             >
-              {log.parent_log_id.slice(0, 12)}...
+              Ver
             </button>
           </div>
         </CollapsibleSection>

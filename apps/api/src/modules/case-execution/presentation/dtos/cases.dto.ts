@@ -17,6 +17,8 @@ import { z } from 'zod';
 
 export const caseStatusSchema = z.enum(['OPEN', 'COMPLETED', 'CANCELLED', 'ON_HOLD']);
 
+export const casePrioritySchema = z.enum(['NORMAL', 'HIGH', 'URGENT']);
+
 export const gateResolutionStatusSchema = z.enum(['PENDING', 'RESOLVED', 'WAIVED', 'REJECTED']);
 
 export const gateDecisionSchema = z.enum(['APPROVED', 'REJECTED', 'WAIVED']);
@@ -80,6 +82,9 @@ export const openCaseBody = z.object({
   object_type: z.string().max(100).optional(),
   object_id: z.string().uuid().optional(),
   org_unit_id: z.string().uuid().optional(),
+  description: z.string().max(500).optional(),
+  priority: casePrioritySchema.optional().default('NORMAL'),
+  notes: z.string().max(1000).optional(),
 });
 
 export const openCaseResponse = z.object({
@@ -89,6 +94,8 @@ export const openCaseResponse = z.object({
   cycle_version_id: z.string().uuid(),
   current_stage_id: z.string().uuid(),
   status: caseStatusSchema,
+  description: z.string().nullable(),
+  priority: casePrioritySchema,
   object_type: z.string().nullable(),
   object_id: z.string().uuid().nullable(),
   org_unit_id: z.string().uuid().nullable(),
@@ -282,8 +289,9 @@ export const caseListItem = z.object({
   cycle_name: z.string(),
   current_stage_name: z.string(),
   status: caseStatusSchema,
+  priority: casePrioritySchema,
+  primary_assignee_name: z.string().nullable(),
   pending_gates_count: z.number().int(),
-  my_role: z.string().nullable(),
   opened_at: z.string(),
 });
 
@@ -302,6 +310,8 @@ export const caseDetailResponse = z.object({
   cycle_version_id: z.string().uuid(),
   current_stage_id: z.string().uuid(),
   status: caseStatusSchema,
+  description: z.string().nullable(),
+  priority: casePrioritySchema,
   object_type: z.string().nullable(),
   object_id: z.string().uuid().nullable(),
   org_unit_id: z.string().uuid().nullable(),

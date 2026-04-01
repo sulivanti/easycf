@@ -6,11 +6,7 @@
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  updateDepartment,
-  deleteDepartment,
-  restoreDepartment,
-} from '../api/departments.api.js';
+import { updateDepartment, deleteDepartment, restoreDepartment } from '../api/departments.api.js';
 import { DEPARTMENTS_LIST_KEY } from './use-departments-list.js';
 import { DEPARTMENT_DETAIL_KEY } from './use-department-detail.js';
 import type { UpdateDepartmentRequest } from '../types/departments.types.js';

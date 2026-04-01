@@ -54,10 +54,7 @@ export const departments = pgTable(
     check('departments_status_check', sql`${table.status} IN ('ACTIVE', 'INACTIVE')`),
 
     // CHECK: cor hex format #RRGGBB (BR-017, DATA-002)
-    check(
-      'departments_cor_check',
-      sql`${table.cor} IS NULL OR ${table.cor} ~ '^#[0-9A-Fa-f]{6}$'`,
-    ),
+    check('departments_cor_check', sql`${table.cor} IS NULL OR ${table.cor} ~ '^#[0-9A-Fa-f]{6}$'`),
 
     // UNIQUE(tenant_id, codigo) partial — active only (DATA-002, BR-013)
     uniqueIndex('idx_departments_tenant_codigo')

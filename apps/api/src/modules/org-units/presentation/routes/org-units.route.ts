@@ -27,6 +27,8 @@ import {
   orgUnitsListQuery,
   orgUnitListItem,
   orgUnitTreeResponse,
+  orgUnitTreeQuery,
+  genericMessageResponse,
   linkTenantBody,
   linkTenantResponse,
   orgUnitTenantParams,
@@ -130,17 +132,20 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
     },
   });
 
-  // GET /org-units/tree — Tree query (FR-002)
-  app.get('/tree', {
+  // GET /org-units/tree — Tree query (FR-002, FR-001-C05)
+  app.get<{ Querystring: { include_inactive: boolean } }>('/tree', {
     onRequest: [app.verifySession, app.requireScope('org:unit:read')],
     schema: {
+      querystring: orgUnitTreeQuery,
       tags: ['org-units'],
       operationId: 'org_units_tree',
       response: { 200: orgUnitTreeResponse },
     },
     handler: async (request, reply) => {
       try {
-        const result = await request.dipiContainer.getOrgUnitTreeUseCase.execute();
+        const result = await request.dipiContainer.getOrgUnitTreeUseCase.execute({
+          includeInactive: request.query.include_inactive,
+        });
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         function mapTreeNode(node: Record<string, any>): Record<string, any> {
@@ -268,16 +273,14 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
     },
   );
 
-  // DELETE /org-units/:id — Soft delete (FR-001, BR-005)
+  // DELETE /org-units/:id — Soft delete (FR-001, BR-005, FR-001-C05)
   app.delete<{ Params: z.infer<typeof uuidParam> }>('/:id', {
     onRequest: [app.verifySession, app.requireScope('org:unit:delete')],
     schema: {
       params: uuidParam,
       tags: ['org-units'],
       operationId: 'org_units_delete',
-      response: {
-        200: { type: 'object' as const, properties: { message: { type: 'string' as const } } },
-      },
+      response: { 200: genericMessageResponse },
     },
     handler: async (request, reply) => {
       const correlationId = (request.headers['x-correlation-id'] as string) ?? request.id;
@@ -294,16 +297,14 @@ export async function orgUnitsRoutes(app: FastifyInstance): Promise<void> {
 
   // ---- Restore (FR-004) ---------------------------------------------------
 
-  // PATCH /org-units/:id/restore
+  // PATCH /org-units/:id/restore (FR-001-C05)
   app.patch<{ Params: z.infer<typeof uuidParam> }>('/:id/restore', {
     onRequest: [app.verifySession, app.requireScope('org:unit:write')],
     schema: {
       params: uuidParam,
       tags: ['org-units'],
       operationId: 'org_units_restore',
-      response: {
-        200: { type: 'object' as const, properties: { message: { type: 'string' as const } } },
-      },
+      response: { 200: genericMessageResponse },
     },
     handler: async (request, reply) => {
       const correlationId = (request.headers['x-correlation-id'] as string) ?? request.id;

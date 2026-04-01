@@ -29,10 +29,10 @@ export function CollapsibleSection({
         className="flex w-full items-center gap-1.5 py-1"
       >
         <svg
-          className="h-4 w-4 shrink-0 transition-transform duration-200"
+          className="h-3 w-3 shrink-0 transition-transform duration-200"
           style={{
             transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
-            color: titleColor,
+            color: '#888888',
           }}
           fill="none"
           viewBox="0 0 24 24"
@@ -41,14 +41,16 @@ export function CollapsibleSection({
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
-        <span
-          className="text-sm font-bold"
-          style={{ color: titleColor }}
-        >
+        <span className="text-sm font-bold" style={{ color: titleColor }}>
           {title}
         </span>
       </button>
-      {isOpen && <div className="pl-5.5 pt-1">{children}</div>}
+      <div
+        className="overflow-hidden transition-all duration-200"
+        style={{ maxHeight: isOpen ? '2000px' : '0px', opacity: isOpen ? 1 : 0 }}
+      >
+        <div className="pl-5 pt-1">{children}</div>
+      </div>
     </div>
   );
 }

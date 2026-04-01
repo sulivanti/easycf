@@ -1,9 +1,9 @@
 # Procedimento — Plano de Acao MOD-003 Estrutura Organizacional
 
-> **Versao:** 6.1.0 | **Data:** 2026-03-25 | **Owner:** Marcos Sulivan
-> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.1.0) | **Features:** 4/4 READY
+> **Versao:** 6.2.0 | **Data:** 2026-04-01 | **Owner:** Marcos Sulivan
+> **Estado atual do modulo:** READY (v1.0.0) | **Epico:** READY (v1.1.0) | **Features:** 5/5 READY
 >
-> Fases 0-5 concluidas + codegen re-run (FKs cross-module, infrastructure/schema.ts, barrel fix, OpenAPI spec). Proximo passo: `pnpm install` + `pnpm test`.
+> Fases 0-5 concluidas. PENDENTE-008 (Departamentos) implementada — artefatos FR-002, DATA-002, BR-002, SEC-001-M01, SEC-002-M01, UX-002 criados. 15 amendments no pipeline. Proximo passo: `pnpm install` + `pnpm test`.
 
 ---
 
@@ -12,14 +12,14 @@
 | Item | Estado | Detalhe |
 |------|--------|---------|
 | Epico US-MOD-003 | READY (v1.1.0) | DoR completo, 4 features vinculadas, hierarquia 5 niveis |
-| Features F01-F04 | 4/4 READY | F01 (API Core CRUD + Tree), F02 (Arvore UX), F03 (Formulario UX), F04 (Restore) — todas READY |
+| Features F01-F05 | 5/5 READY | F01 (API Core CRUD + Tree), F02 (Arvore UX), F03 (Formulario UX), F04 (Restore), F05 (CRUD Departamentos) — todas READY |
 | Scaffold (forge-module) | CONCLUIDO | mod-003-estrutura-organizacional/ com estrutura completa |
 | Enriquecimento (11 agentes) | CONCLUIDO | Todos os agentes confirmados, v0.3.0, 6 pendentes resolvidas |
 | Codegen (6 agentes) | CONCLUIDO (2026-03-25 re-run) | 6/6 agentes done (DB, CORE, APP, API, WEB, VAL). 36 arquivos. Re-run: +infrastructure/schema.ts, FKs corrigidas, barrel fix, OpenAPI mod-003 spec |
-| PENDENTEs | 1 aberta | 10 total: 1 RESOLVIDA (007) + 7 IMPLEMENTADA (001, 002, 003, 004, 005, 006, 010) + 1 DECIDIDA (008) + 1 ABERTA (009) |
+| PENDENTEs | 1 aberta | 10 total: 1 RESOLVIDA (007) + 8 IMPLEMENTADA (001, 002, 003, 004, 005, 006, 008, 010) + 1 ABERTA (009) |
 | ADRs | 4 READY (proposed) | Nivel 2 requer minimo 3 — atendido (ADR-001 N5=Tenant, ADR-002 CTE Recursivo, ADR-003 Cross-Tenant, ADR-004 Idempotency-Key) |
-| Amendments | 3 criados | FR-001-C01 (constraint catch), US-MOD-003-M01 (F04 no epico), US-MOD-003-F01-M01 (org.unit_restored) |
-| Requirements | 10/10 existem | BR(1), FR(1), DATA(2), INT(1), SEC(2), UX(1), NFR(1), PEN(1) |
+| Amendments | 15 criados (3 pre-READY + 12 pos-READY) | Pre: FR-001-C01, US-MOD-003-M01, US-MOD-003-F01-M01. Pos: FR-001-C02/C03/C05, FR-001-M01, UX-001-M01/M02/C01-C05, DATA-001-M01, INT-001-C01, SEC-001-M01, SEC-002-M01 |
+| Requirements | 14/14 existem | BR(2), FR(2), DATA(3), INT(1), SEC(2), UX(2), NFR(1), PEN(1) |
 | CHANGELOG | v1.2.0 | Ultima entrada 2026-03-25 (codegen re-run: FKs, infrastructure/schema, barrel, OpenAPI) |
 | Screen Manifests | 2/2 existem | ux-org-001.org-tree.yaml, ux-org-002.org-form.yaml |
 | Dependencias | 1 upstream (MOD-000 READY) | Consome tenants (F07), catalogo de escopos (F12), auth, domain_events |
@@ -304,9 +304,8 @@ Os 3 amendments ja existentes foram criados pre-READY (durante enriquecimento). 
 16   /manage-pendentes list PEN-003
                            Estado atual MOD-003:
                              PEN-003: 10 itens total
-                               3 RESOLVIDA (001, 003, 005, 007)
-                               5 IMPLEMENTADA (002, 004, 006, 010)
-                               1 DECIDIDA (008)
+                               1 RESOLVIDA (007)
+                               8 IMPLEMENTADA (001, 002, 003, 004, 005, 006, 008, 010)
                                1 ABERTA (009)
                              SLA: nenhum vencido
 ```
@@ -320,7 +319,7 @@ Os 3 amendments ja existentes foram criados pre-READY (durante enriquecimento). 
 | 5 | PENDENTE-005 | RESOLVIDA | MEDIA | Constraint catch 23505 → 409 | FR-001-C01 |
 | 6 | PENDENTE-006 | IMPLEMENTADA | MEDIA | Opcao A — Corrigir UX-001 (RBAC) | UX-001 v0.2.1 |
 | 7 | PENDENTE-007 | RESOLVIDA | MEDIA | Auto-resolvida — lint 0 erros pos-codegen | N/A (erros eliminados) |
-| 8 | PENDENTE-008 | DECIDIDA | MEDIA | Opcao A — Entidade independente primeiro (CRUD Departamentos Fase 1) | FR-002, DATA-002, BR-002, SEC-001-M01, SEC-002-M01, UX-002 |
+| 8 | PENDENTE-008 | IMPLEMENTADA | MEDIA | Opcao A — Entidade independente primeiro (CRUD Departamentos Fase 1) | FR-002, DATA-002, BR-002, SEC-001-M01, SEC-002-M01, UX-002 |
 | 9 | PENDENTE-009 | ABERTA | BAIXA | Adiar — depende MOD-002 + MOD-005 | — |
 | 10 | PENDENTE-010 | IMPLEMENTADA | MEDIA | Opcao B — Manter soft delete, toggle visual → DELETE com modal | UX-001-C03 |
 
@@ -412,6 +411,7 @@ MOD-003 e referencia canonica de pertencimento para todos os modulos.
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 6.2.0 | 2026-04-01 | Atualizacao: PENDENTE-008 → IMPLEMENTADA (Departamentos CRUD Fase 1). Features 4→5 (F05 adicionada). Amendments 3→15 (12 pos-READY). Requirements 10→14. Contagens de pendentes atualizadas (9/10 resolvidas, 1 ABERTA). |
 | 6.1.0 | 2026-03-25 | Atualizacao: codegen re-run (3 batches). DB: FKs cross-module (createdBy→users.id, parentId self-ref), status→varchar(20), infrastructure/schema.ts criado. APP: barrel export desambiguado (CreateOrgUnitInput). API: OpenAPI spec mod-003-org-units.yaml (9 paths). CORE+WEB: ja completos, sem alteracoes. VAL: 9 checks ✅. Execution state atualizado. |
 | 6.0.0 | 2026-03-24 | Atualizacao: /validate-all pos-codegen CONCLUIDO — 7 validadores PASS, veredicto APROVADO. PENDENTE-007 → RESOLVIDA (lint 0 erros). Fase 3 re-executada com resultados completos. Checklist pos-codegen atualizado. |
 | 5.0.0 | 2026-03-23 | Atualizacao: Fase 5 CONCLUIDA (codegen 31 arquivos em 3 batches, 6/6 agentes done), rastreio COD atualizado com timestamps e contagem real, validacao cruzada VAL (11 ✅ 1 ⚠️), checklist pos-codegen atualizado, resumo visual reflete estado pos-codegen |

@@ -103,10 +103,8 @@ export async function departmentsRoutes(app: FastifyInstance): Promise<void> {
 
       return reply.send({
         data: result.data,
-        pagination: {
-          next_cursor: result.nextCursor,
-          has_more: result.hasMore,
-        },
+        next_cursor: result.nextCursor ?? null,
+        has_more: result.hasMore,
       });
     },
   });

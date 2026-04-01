@@ -1,10 +1,10 @@
 /**
- * @contract UX-PARAM-001, FR-001, FR-002, FR-003, FR-004, DOC-UX-010
+ * @contract UX-007-M01, UX-PARAM-001, FR-001, FR-002, FR-003, FR-004, DOC-UX-010
  * Page: Configurador de Enquadradores e Regras de Incidencia
  * Route: /parametrizacao/enquadradores
  *
+ * Layout: 3-panel simultaneo (FramersList 280px | TargetObjects flex:1 | IncidenceMatrix flex:1).
  * States: loading (skeleton), empty, error, loaded.
- * 3 panels: Enquadradores, Objetos-Alvo, Regras de Incidencia (matrix).
  */
 
 import { useState, useCallback } from 'react';
@@ -12,18 +12,13 @@ import { toast } from 'sonner';
 import {
   Button,
   Skeleton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
   ConfirmationModal,
   PageHeader,
+  Spinner,
 } from '@shared/ui';
 import { Select } from '@shared/ui/select';
 import { StatusBadge } from '@shared/ui/status-badge';
@@ -40,16 +35,18 @@ import { useTargetObjects } from '../hooks/use-target-objects.js';
 import {
   useIncidenceRules,
   useCreateIncidenceRule,
+  useUpdateIncidenceRule,
   useLinkRoutine,
   useUnlinkRoutine,
 } from '../hooks/use-incidence-rules.js';
+import { useRoutinesList } from '../hooks/use-routines.js';
 import { useEvaluateEngine } from '../hooks/use-evaluate.js';
 import type {
   FramerListItemDTO,
   FramerStatus,
   CreateFramerRequest,
   UpdateFramerRequest,
-  CreateIncidenceRuleRequest,
+  IncidenceType,
   FramerListFilters,
   IncidenceRuleListFilters,
 } from '../types/contextual-params.types.js';
@@ -62,8 +59,7 @@ import {
 import { COPY, isExpiringSoon } from '../types/view-model.js';
 import { FramerDrawer } from '../components/FramerDrawer.js';
 import { IncidenceMatrix } from '../components/IncidenceMatrix.js';
-
-type Panel = 'framers' | 'objects' | 'incidence';
+import { DryRunPreview } from '../components/DryRunPreview.js';
 
 interface DrawerState {
   open: boolean;
@@ -84,27 +80,30 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
   const framerTypesQuery = useFramerTypes();
   const targetObjectsQuery = useTargetObjects();
   const rulesQuery = useIncidenceRules(ruleFilters);
+  const routinesQuery = useRoutinesList({ status: 'PUBLISHED' });
 
   const createFramerMut = useCreateFramer();
   const updateFramerMut = useUpdateFramer();
   const deleteFramerMut = useDeleteFramer();
   const createRuleMut = useCreateIncidenceRule();
+  const updateRuleMut = useUpdateIncidenceRule();
   const linkRoutineMut = useLinkRoutine();
   const unlinkRoutineMut = useUnlinkRoutine();
   const evaluateMut = useEvaluateEngine();
 
-  const [activePanel, setActivePanel] = useState<Panel>('framers');
   const [drawer, setDrawer] = useState<DrawerState>({ open: false, mode: 'create' });
   const [statusFilter, setStatusFilter] = useState<FramerStatus | ''>('');
   const [deactivateTarget, setDeactivateTarget] = useState<FramerListItemDTO | null>(null);
+  const [showDryRun, setShowDryRun] = useState(false);
 
   const canWrite = canWriteFramers(userScopes);
-  const canDelete = canDeleteFramers(userScopes);
+  const _canDelete = canDeleteFramers(userScopes);
 
   const framers = framersQuery.data?.data ?? [];
   const framerTypes = framerTypesQuery.data?.data ?? [];
   const targetObjects = targetObjectsQuery.data?.data ?? [];
   const rules = rulesQuery.data?.data ?? [];
+  const routines = routinesQuery.data?.data ?? [];
 
   // -- Handlers --
 
@@ -141,9 +140,14 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
   }, [deactivateTarget, deleteFramerMut]);
 
   const handleCreateRule = useCallback(
-    async (data: CreateIncidenceRuleRequest) => {
+    async (framerId: string, routineId: string, incidenceType: IncidenceType) => {
       try {
-        await createRuleMut.mutateAsync(data);
+        await createRuleMut.mutateAsync({
+          framer_id: framerId,
+          target_object_id: routineId,
+          incidence_type: incidenceType,
+          valid_from: new Date().toISOString(),
+        });
       } catch (err) {
         toast.error(err instanceof Error ? err.message : COPY.error_unique_incidence);
       }
@@ -151,7 +155,29 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
     [createRuleMut],
   );
 
-  const handleLinkRoutine = useCallback(
+  const handleUpdateRuleType = useCallback(
+    async (ruleId: string, incidenceType: IncidenceType) => {
+      try {
+        await updateRuleMut.mutateAsync({ id: ruleId, data: { incidence_type: incidenceType } });
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : COPY.error_generic);
+      }
+    },
+    [updateRuleMut],
+  );
+
+  const handleRemoveRule = useCallback(
+    async (ruleId: string) => {
+      try {
+        await updateRuleMut.mutateAsync({ id: ruleId, data: { status: 'INACTIVE' } });
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : COPY.error_generic);
+      }
+    },
+    [updateRuleMut],
+  );
+
+  const _handleLinkRoutine = useCallback(
     async (ruleId: string, routineId: string) => {
       try {
         await linkRoutineMut.mutateAsync({ ruleId, routineId });
@@ -162,7 +188,7 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
     [linkRoutineMut],
   );
 
-  const handleUnlinkRoutine = useCallback(
+  const _handleUnlinkRoutine = useCallback(
     async (ruleId: string, routineId: string) => {
       try {
         await unlinkRoutineMut.mutateAsync({ ruleId, routineId });
@@ -173,27 +199,31 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
     [unlinkRoutineMut],
   );
 
-  const handlePreviewEvaluate = useCallback(
-    async (objectType: string, framerId: string) => {
-      try {
-        await evaluateMut.mutateAsync({
-          object_type: objectType,
-          context: [{ framer_id: framerId }],
-          dry_run: true,
-        });
-      } catch {
-        toast.error(COPY.error_simulate);
-      }
-    },
-    [evaluateMut],
-  );
+  const handleDryRun = useCallback(async () => {
+    const activeFramers = framers.filter((f) => f.status === 'ACTIVE');
+    if (activeFramers.length === 0) {
+      toast.error('Nenhum enquadrador ativo para simular.');
+      return;
+    }
+    try {
+      await evaluateMut.mutateAsync({
+        object_type: targetObjects[0]?.codigo ?? '',
+        context: activeFramers.map((f) => ({ framer_id: f.id })),
+        dry_run: true,
+      });
+      setShowDryRun(true);
+    } catch {
+      toast.error(COPY.error_simulate);
+    }
+  }, [framers, targetObjects, evaluateMut]);
 
   // -- Loading --
   const isLoading =
     framersQuery.isLoading ||
     framerTypesQuery.isLoading ||
     targetObjectsQuery.isLoading ||
-    rulesQuery.isLoading;
+    rulesQuery.isLoading ||
+    routinesQuery.isLoading;
 
   if (isLoading) {
     return (
@@ -207,7 +237,11 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
 
   // -- Error --
   const firstError =
-    framersQuery.error || framerTypesQuery.error || targetObjectsQuery.error || rulesQuery.error;
+    framersQuery.error ||
+    framerTypesQuery.error ||
+    targetObjectsQuery.error ||
+    rulesQuery.error ||
+    routinesQuery.error;
   if (firstError) {
     return (
       <div className="p-6" role="alert">
@@ -224,6 +258,7 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
             framerTypesQuery.refetch();
             targetObjectsQuery.refetch();
             rulesQuery.refetch();
+            routinesQuery.refetch();
           }}
         >
           {COPY.btn_retry}
@@ -232,50 +267,40 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
     );
   }
 
-  const PANELS: { key: Panel; label: string }[] = [
-    { key: 'framers', label: 'Enquadradores' },
-    { key: 'objects', label: 'Objetos-Alvo' },
-    { key: 'incidence', label: 'Regras de Incidencia' },
-  ];
-
   return (
     <div className="p-6">
       {/* Header */}
       <PageHeader
         title="Parametrizacao Contextual"
         actions={
-          canWrite ? (
-            <Button onClick={() => setDrawer({ open: true, mode: 'create' })}>
-              Novo enquadrador
-            </Button>
-          ) : undefined
+          <div className="flex items-center gap-2">
+            {canEvaluateEngine(userScopes) && (
+              <Button variant="outline" onClick={handleDryRun} disabled={evaluateMut.isPending}>
+                {evaluateMut.isPending ? (
+                  <>
+                    <Spinner className="mr-2 h-4 w-4" /> Simulando...
+                  </>
+                ) : (
+                  'Simular Dry-Run'
+                )}
+              </Button>
+            )}
+            {canWrite && (
+              <Button onClick={() => setDrawer({ open: true, mode: 'create' })}>
+                Novo enquadrador
+              </Button>
+            )}
+          </div>
         }
       />
 
-      {/* Panel tabs */}
-      <div className="flex gap-1 mb-6 border-b border-a1-border" role="tablist">
-        {PANELS.map((panel) => (
-          <button
-            key={panel.key}
-            role="tab"
-            type="button"
-            aria-selected={activePanel === panel.key}
-            onClick={() => setActivePanel(panel.key)}
-            className={`px-4 py-2 text-sm font-medium transition-colors -mb-px ${
-              activePanel === panel.key
-                ? 'border-b-2 border-primary-600 text-primary-600'
-                : 'text-a1-text-auxiliary hover:text-a1-text-secondary'
-            }`}
-          >
-            {panel.label}
-          </button>
-        ))}
-      </div>
+      {/* 3-panel simultaneous layout */}
+      <div className="flex gap-4 mt-6">
+        {/* Left panel: Framers list (280px) */}
+        <div className="w-[280px] flex-shrink-0">
+          <h3 className="text-sm font-semibold mb-3 text-a1-text-secondary">Enquadradores</h3>
 
-      {/* Panel: Enquadradores */}
-      {activePanel === 'framers' && (
-        <div>
-          <FilterBar className="mb-4">
+          <FilterBar className="mb-3">
             <Select
               value={statusFilter}
               onChange={(e) => {
@@ -295,131 +320,115 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
           {framers.length === 0 ? (
             <EmptyState title={COPY.empty_framers} />
           ) : (
-            <div className="rounded-lg border border-a1-border bg-white">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Codigo</TableHead>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Tipo</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Valido ate</TableHead>
-                    {(canWrite || canDelete) && <TableHead>Acoes</TableHead>}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {framers.map((f) => {
-                    const typeName =
-                      framerTypes.find((t) => t.id === f.framer_type_id)?.nome ?? '—';
-                    const expiring = isExpiringSoon(f.valid_until);
+            <div className="space-y-1 overflow-y-auto max-h-[calc(100vh-240px)]">
+              {framers.map((f) => {
+                const typeName = framerTypes.find((t) => t.id === f.framer_type_id)?.nome ?? '';
+                const expiring = isExpiringSoon(f.valid_until);
 
-                    return (
-                      <TableRow key={f.id}>
-                        <TableCell className="font-mono">{f.codigo}</TableCell>
-                        <TableCell>{f.nome}</TableCell>
-                        <TableCell>{typeName}</TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-1.5">
-                            <StatusBadge status={f.status === 'ACTIVE' ? 'success' : 'neutral'}>
-                              {f.status}
-                            </StatusBadge>
-                            {expiring && (
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <StatusBadge status="warning">Expirando</StatusBadge>
-                                  </TooltipTrigger>
-                                  <TooltipContent>{COPY.tooltip_expirando}</TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {f.valid_until ? new Date(f.valid_until).toLocaleDateString() : '—'}
-                        </TableCell>
-                        {(canWrite || canDelete) && (
-                          <TableCell>
-                            <div className="flex gap-1">
-                              {canWrite && (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() =>
-                                    setDrawer({
-                                      open: true,
-                                      mode: 'edit',
-                                      framerId: f.id,
-                                      framer: f,
-                                    })
-                                  }
-                                >
-                                  Editar
-                                </Button>
-                              )}
-                              {canDeactivateFramer(userScopes, f.status) && (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-danger-600"
-                                  onClick={() => setDeactivateTarget(f)}
-                                >
-                                  Inativar
-                                </Button>
-                              )}
-                            </div>
-                          </TableCell>
+                return (
+                  <div
+                    key={f.id}
+                    className="border border-a1-border rounded-lg p-2.5 hover:bg-a1-bg transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-sm font-semibold">{f.codigo}</span>
+                      <div className="flex items-center gap-1">
+                        <StatusBadge status={f.status === 'ACTIVE' ? 'success' : 'neutral'}>
+                          {f.status}
+                        </StatusBadge>
+                        {expiring && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <StatusBadge status="warning">Exp</StatusBadge>
+                              </TooltipTrigger>
+                              <TooltipContent>{COPY.tooltip_expirando}</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         )}
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                      </div>
+                    </div>
+                    <div className="text-xs text-a1-text-auxiliary mt-0.5">{f.nome}</div>
+                    {typeName && (
+                      <div className="text-xs text-a1-text-auxiliary mt-0.5">{typeName}</div>
+                    )}
+                    <div className="flex gap-1 mt-1.5">
+                      {canWrite && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 text-xs px-2"
+                          onClick={() =>
+                            setDrawer({
+                              open: true,
+                              mode: 'edit',
+                              framerId: f.id,
+                              framer: f,
+                            })
+                          }
+                        >
+                          Editar
+                        </Button>
+                      )}
+                      {canDeactivateFramer(userScopes, f.status) && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 text-xs px-2 text-danger-600"
+                          onClick={() => setDeactivateTarget(f)}
+                        >
+                          Inativar
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
-      )}
 
-      {/* Panel: Objetos-Alvo */}
-      {activePanel === 'objects' && (
-        <div>
+        {/* Center panel: Target Objects (flex:1) */}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-sm font-semibold mb-3 text-a1-text-secondary">Objetos-Alvo</h3>
+
           {targetObjects.length === 0 ? (
             <EmptyState title="Nenhum objeto-alvo cadastrado." />
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-1.5 overflow-y-auto max-h-[calc(100vh-240px)]">
               {targetObjects.map((obj) => (
                 <div
                   key={obj.id}
-                  className="border border-a1-border rounded-lg p-3 hover:bg-a1-bg transition-colors"
+                  className="border border-a1-border rounded-lg p-2.5 hover:bg-a1-bg transition-colors"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="font-medium">{obj.nome}</span>
-                    <span className="text-xs text-a1-text-auxiliary">{obj.modulo_ecf ?? '—'}</span>
+                    <span className="font-medium text-sm">{obj.nome}</span>
+                    <span className="text-xs text-a1-text-auxiliary">{obj.modulo_ecf ?? ''}</span>
                   </div>
-                  <div className="text-sm text-a1-text-auxiliary font-mono">{obj.codigo}</div>
+                  <div className="text-xs text-a1-text-auxiliary font-mono">{obj.codigo}</div>
                 </div>
               ))}
             </div>
           )}
         </div>
-      )}
 
-      {/* Panel: Regras de Incidencia (Matrix) */}
-      {activePanel === 'incidence' && (
-        <IncidenceMatrix
-          framers={framers.filter((f) => f.status === 'ACTIVE')}
-          targetObjects={targetObjects}
-          rules={rules}
-          canWrite={canWrite}
-          canEvaluate={canEvaluateEngine(userScopes)}
-          onCreateRule={handleCreateRule}
-          onLinkRoutine={handleLinkRoutine}
-          onUnlinkRoutine={handleUnlinkRoutine}
-          onPreview={handlePreviewEvaluate}
-          previewResult={evaluateMut.data ?? null}
-          previewLoading={evaluateMut.isPending}
-        />
-      )}
+        {/* Right panel: Incidence Matrix (flex:1) */}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-sm font-semibold mb-3 text-a1-text-secondary">
+            Matriz de Incidencia
+          </h3>
+
+          <IncidenceMatrix
+            framers={framers.filter((f) => f.status === 'ACTIVE')}
+            routines={routines}
+            rules={rules}
+            canWrite={canWrite}
+            onCreateRule={handleCreateRule}
+            onUpdateRuleType={handleUpdateRuleType}
+            onRemoveRule={handleRemoveRule}
+          />
+        </div>
+      </div>
 
       {/* Framer Drawer */}
       <FramerDrawer
@@ -444,6 +453,13 @@ export function FramersConfigPage({ userScopes }: FramersConfigPageProps) {
         confirmLabel="Inativar"
         onConfirm={handleDeactivateConfirm}
         isLoading={deleteFramerMut.isPending}
+      />
+
+      {/* Dry-Run Modal */}
+      <DryRunPreview
+        open={showDryRun && !!evaluateMut.data}
+        onOpenChange={setShowDryRun}
+        result={evaluateMut.data ?? null}
       />
     </div>
   );

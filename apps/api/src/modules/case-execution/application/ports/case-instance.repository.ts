@@ -6,6 +6,7 @@
  */
 
 import type { CaseStatus } from '../../domain/value-objects/case-status.js';
+import type { CasePriority } from '../../domain/value-objects/case-priority.js';
 
 export interface CaseInstanceRow {
   id: string;
@@ -17,6 +18,8 @@ export interface CaseInstanceRow {
   objectType: string | null;
   objectId: string | null;
   orgUnitId: string | null;
+  description: string | null;
+  priority: CasePriority;
   tenantId: string;
   openedBy: string;
   openedAt: Date;
@@ -27,6 +30,13 @@ export interface CaseInstanceRow {
   updatedAt: Date;
 }
 
+export interface CaseListItem extends CaseInstanceRow {
+  cycleName: string;
+  currentStageName: string;
+  pendingGatesCount: number;
+  primaryAssigneeName: string | null;
+}
+
 export interface CaseListFilter {
   tenantId: string;
   cycleId?: string;
@@ -35,12 +45,14 @@ export interface CaseListFilter {
   objectId?: string;
   myResponsibility?: { userId: string };
   search?: string;
+  openedAfter?: string;
+  openedBefore?: string;
   cursor?: string;
   limit: number;
 }
 
 export interface CaseListResult {
-  items: CaseInstanceRow[];
+  items: CaseListItem[];
   nextCursor: string | null;
   hasMore: boolean;
 }

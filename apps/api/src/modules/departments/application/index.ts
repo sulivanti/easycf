@@ -5,10 +5,7 @@
  */
 
 // Ports
-export type {
-  DepartmentRepository,
-  DepartmentListFilters,
-} from './ports/repositories.js';
+export type { DepartmentRepository, DepartmentListFilters } from './ports/repositories.js';
 
 // Use Cases — CRUD
 export { CreateDepartmentUseCase } from './use-cases/create-department.use-case.js';

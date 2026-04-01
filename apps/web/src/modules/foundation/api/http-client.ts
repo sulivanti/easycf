@@ -113,7 +113,9 @@ async function waitForRefresh(): Promise<boolean> {
   }
 
   let resolve: () => void;
-  refreshPromise = new Promise<void>((r) => { resolve = r; });
+  refreshPromise = new Promise<void>((r) => {
+    resolve = r;
+  });
 
   const ok = await attemptRefresh();
   refreshPromise = null;

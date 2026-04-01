@@ -25,10 +25,10 @@ flowchart TD
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
     style E5  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E6  fill:#F39C12,color:#fff,stroke:#D68910
 ```
 
-*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
+*O módulo está na **Etapa 6 — Adendos Futuros (Amendments). UX-006-M01 + DATA-006-M01 + FR-006-M01 MERGED.**
 
 ---
 
@@ -36,6 +36,11 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 2.2.0 | 2026-04-01 | validate-all | Validação Fase 3 pós-codegen v2 aprovada. Lint: WARN (0 novos, 32 pré-existentes em cases.route.ts). Arquitetura: PASS (7/7 DomainError, Pattern A, React Query). QA: PASS. Manifests: 2/2 PASS. OpenAPI: PASS (16 endpoints). Drizzle: PASS (5 tabelas, 16 indexes, 5 checks). Endpoints: 16/16. 0 bloqueadores, 0 violações críticas, 2 avisos. |
+| 2.1.0 | 2026-04-01 | codegen | Codegen v2: 6 agentes executados, 11 arquivos atualizados. DB (+description/priority), CORE (+CasePriority VO), APP (open-case aceita description/priority/notes, list-cases com JOINs enriched), API (DTOs +casePriority +primary_assignee_name), WEB (7 colunas, 3 abas, StatusBadge 5 variantes, PendingBadge, Toggle filtros). VAL: 0 erros novos |
+| 2.0.0 | 2026-04-01 | merge-amendment | Merge FR-006-M01: FR-006 bumped para v0.5.0 — FR-001 aceita description/priority/notes, FR-009 retorna primary_assignee_name + opened_at, FR-010 inclui description e priority |
+| 1.9.0 | 2026-04-01 | merge-amendment | Merge DATA-006-M01: DATA-006 bumped para v0.4.0 — colunas description (text) e priority (enum NORMAL/HIGH/URGENT) em case_instances. VO CasePriority adicionado |
+| 1.8.0 | 2026-04-01 | merge-amendment | Merge UX-006-M01: UX-006 bumped para v0.3.0 — tabela 7 colunas, 6 filtros, 3 abas (Overview no header), drawer 4 campos, StatusBadge 5 variantes, PendingBadge, componentes refinados (GateCard, AssignmentCard, Timeline, modais), responsividade 4 breakpoints |
 | 1.7.1 | 2026-03-30 | merge-amendment | Merge INT-006-C01: 4 handlers mapeamento camelCase→snake_case (transition, resolve/waive gate, update assignment). Seção §8 adicionada ao INT-006. Base bumped para v0.5.1. |
 | 1.7.0 | 2026-03-25 | merge-amendment | Merge INT-006-M01: nova seção §7 Email Queue — Convenções BullMQ/Redis (fila `mod-006:email`, singleton, removeOnComplete, db1, health check). INT-006 bumped para v0.5.0. Derivado de DOC-PADRAO-002-M01. |
 | 1.6.0 | 2026-03-24 | validate-all | Validação Fase 3 aprovada — pronto para merge. Lint: PASS (0 errors/warnings). Format: PASS. Arquitetura: PASS (7/7 DomainError, Pattern A, React Query). QA: PASS. Manifests: 2/2 PASS. OpenAPI: PASS (16/16). Drizzle: PASS (5 tabelas). Endpoints: PASS (16/16). 0 bloqueadores, 0 violações críticas, 0 avisos. |

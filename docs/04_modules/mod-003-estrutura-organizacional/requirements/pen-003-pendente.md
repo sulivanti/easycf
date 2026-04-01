@@ -5,7 +5,8 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
-> | 1.2.0  | 2026-03-31 | manage-pendentes | PENDENTE-010 → IMPLEMENTADA — Opção B (manter soft delete, toggle visual dispara DELETE com modal). Artefato: UX-001-C03. |
+> | 1.3.0  | 2026-04-01 | manage-pendentes | PENDENTE-008 → IMPLEMENTADA — Opção A (entidade independente primeiro, Fase 1 CRUD puro). Artefatos: FR-002, DATA-002, BR-002, SEC-001-M01, SEC-002-M01, UX-002. |
+| 1.2.0  | 2026-03-31 | manage-pendentes | PENDENTE-010 → IMPLEMENTADA — Opção B (manter soft delete, toggle visual dispara DELETE com modal). Artefato: UX-001-C03. |
 > | 1.1.0  | 2026-03-31 | manage-pendentes | PENDENTE-010 → DECIDIDA — Opção B (manter soft delete com modal de confirmação, toggle visual apenas) |
 > | 1.0.0  | 2026-03-24 | validate-all  | Re-validação pós-codegen: PENDENTE-007 → RESOLVIDA (lint agora passa), 0 violações novas |
 > | 0.9.0  | 2026-03-24 | validate-all  | Adição PENDENTE-007 — erros lint codegen (12 ocorrências) |
@@ -407,9 +408,9 @@ Opção A — Correção incremental em 3 fases, consistente com a decisão já 
 
 ---
 
-## ~~PENDENTE-008~~ — ✅ DECIDIDA: Departamentos Vinculados (Tags no DetailPanel)
+## ~~PENDENTE-008~~ — ✅ IMPLEMENTADA: Departamentos Vinculados (Tags no DetailPanel)
 
-- **status:** DECIDIDA
+- **status:** IMPLEMENTADA
 - **severidade:** MEDIA
 - **dominio:** UX/DATA
 - **tipo:** LACUNA
@@ -547,7 +548,7 @@ Opcao B — manter soft delete com modal de confirmacao. O toggle visual serve c
 
 - **estado_item:** READY
 - **owner:** arquitetura
-- **data_ultima_revisao:** 2026-03-31
+- **data_ultima_revisao:** 2026-04-01
 - **rastreia_para:** US-MOD-003, FR-001, FR-002, FR-004, BR-008, BR-009, DATA-001, DATA-002, BR-002, NFR-001, UX-001, UX-002, ADR-003, ADR-004, SEC-002, SEC-001-M01, SEC-002-M01, DATA-003, INT-001, DOC-PADRAO-002, UX-001-M01
 - **referencias_exemplos:** EX-CI-007
-- **evidencias:** 10 pendentes total: 1 RESOLVIDA (007) + 7 IMPLEMENTADA (001, 002, 003, 004, 005, 006, 010) + 1 DECIDIDA (008) + 1 ABERTA (009).
+- **evidencias:** 10 pendentes total: 1 RESOLVIDA (007) + 8 IMPLEMENTADA (001, 002, 003, 004, 005, 006, 008, 010) + 1 ABERTA (009).

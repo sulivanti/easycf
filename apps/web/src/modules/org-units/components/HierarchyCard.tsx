@@ -23,16 +23,8 @@ export function HierarchyCard({ parentName, levelLabel }: HierarchyCardProps) {
 
       {/* Body */}
       <div className="grid grid-cols-2 gap-4 px-6 py-5">
-        <ReadOnlyField
-          label="Unidade Pai"
-          value={parentName ?? '(Raiz)'}
-          showLock
-        />
-        <ReadOnlyField
-          label="Nível"
-          value={levelLabel}
-          showLock
-        />
+        <ReadOnlyField label="Unidade Pai" value={parentName ?? '(Raiz)'} showLock />
+        <ReadOnlyField label="Nível" value={levelLabel} showLock />
       </div>
     </div>
   );

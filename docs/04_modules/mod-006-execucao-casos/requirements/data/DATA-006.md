@@ -5,6 +5,7 @@
 >
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
+> | 0.4.0  | 2026-04-01 | merge-amendment | Merge DATA-006-M01: colunas description (text, nullable) e priority (varchar(10), NOT NULL DEFAULT 'NORMAL', CHECK IN NORMAL/HIGH/URGENT) em case_instances. VO CasePriority adicionado |
 > | 0.3.0  | 2026-03-19 | manage-pendentes | REOPENED target_stage_id no payload + transição §5.1 atualizada. Ref PEN-006/PENDENTE-005 |
 > | 0.2.0  | 2026-03-19 | AGN-DEV-04  | Enriquecimento DATA — constraints detalhados, value objects, invariantes, migração, relacionamentos cross-module |
 > | 0.1.0  | 2026-03-18 | arquitetura | Baseline Inicial (forge-module) |
@@ -64,11 +65,14 @@ case_instances          → O CASO em si (status geral, datas, objeto de negóci
 | `cancelled_at` | timestamptz | nullable | Preenchido quando status→CANCELLED |
 | `cancellation_reason` | text | nullable | Obrigatório quando status→CANCELLED (BR-011) |
 | `created_at` | timestamptz | NOT NULL DEFAULT now() | |
+| `description` | text | nullable | Descrição do caso informada na abertura |
+| `priority` | varchar(10) | NOT NULL DEFAULT 'NORMAL' CHECK(priority IN ('NORMAL','HIGH','URGENT')) | Prioridade do caso (campo informativo) |
 | `updated_at` | timestamptz | NOT NULL DEFAULT now() | Atualizado via trigger ou application |
 
 **Constraints:**
 
 - CHECK: `status IN ('OPEN','COMPLETED','CANCELLED','ON_HOLD')`
+- CHECK: `priority IN ('NORMAL','HIGH','URGENT')`
 - CHECK: `cancelled_at IS NOT NULL` quando `status = 'CANCELLED'` (enforced via application — BR-011)
 - CHECK: `cancellation_reason IS NOT NULL` quando `status = 'CANCELLED'` (enforced via application)
 
@@ -84,6 +88,7 @@ case_instances          → O CASO em si (status geral, datas, objeto de negóci
 **Value Objects associados:**
 
 - `CaseStatus`: OPEN | COMPLETED | CANCELLED | ON_HOLD — com transições válidas (BR-012)
+- `CasePriority`: NORMAL | HIGH | URGENT — campo informativo, sem regra de negócio associada
 
 ### 2.2 `stage_history` — Histórico de Estágio (Append-only)
 
@@ -309,7 +314,7 @@ PENDING ──► WAIVED (dispensa — BR-014)
 
 - **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-006, US-MOD-006-F01, US-MOD-006-F02, BR-006, FR-006, DOC-ARC-001, DOC-FND-000, MOD-005, MOD-004, MOD-003
+- **data_ultima_revisao:** 2026-04-01
+- **rastreia_para:** US-MOD-006, US-MOD-006-F01, US-MOD-006-F02, BR-006, FR-006, DOC-ARC-001, DOC-FND-000, MOD-005, MOD-004, MOD-003, UX-006-M01
 - **referencias_exemplos:** EX-DATA-001
 - **evidencias:** N/A

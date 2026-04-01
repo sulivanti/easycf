@@ -187,6 +187,7 @@ apps/api/src/modules/parametrization/  # MOD-007 — amendment F01
 - [UX-011](requirements/ux/UX-011.md) — Jornadas e Fluxos do SmartGrid
 - [NFR-011](requirements/nfr/NFR-011.md) — Requisitos Não Funcionais do SmartGrid
 - [PEN-011](requirements/pen-011-pendente.md) — Questões Abertas do SmartGrid
+- [UX-011-M01](amendments/ux/UX-011-M01.md) — Melhoria: Alinhar UX com spec 95-smartgrid (grade editavel, formulario, exclusao, modais, ReadOnlyField)
 <!-- end index -->
 
 ## 7. Decisões (ADR)

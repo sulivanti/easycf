@@ -105,7 +105,8 @@ export function OrgScopeTable({
           {data.map((item) => {
             const initials = getInitials(item.user.name);
             const visibleSecondary = item.secondary_scopes.slice(0, 2);
-            const overflow = item.total_scopes - (item.primary_scope ? 1 : 0) - visibleSecondary.length;
+            const overflow =
+              item.total_scopes - (item.primary_scope ? 1 : 0) - visibleSecondary.length;
 
             return (
               <TableRow
@@ -127,20 +128,13 @@ export function OrgScopeTable({
                 </TableCell>
                 <TableCell>
                   {item.primary_scope && (
-                    <ScopePill
-                      name={item.primary_scope.org_unit.nome}
-                      type="PRIMARY"
-                    />
+                    <ScopePill name={item.primary_scope.org_unit.nome} type="PRIMARY" />
                   )}
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-wrap gap-1.5">
                     {visibleSecondary.map((s) => (
-                      <ScopePill
-                        key={s.id}
-                        name={s.org_unit.nome}
-                        type="SECONDARY"
-                      />
+                      <ScopePill key={s.id} name={s.org_unit.nome} type="SECONDARY" />
                     ))}
                     {overflow > 0 && <ScopePill name="" overflow={overflow} />}
                   </div>

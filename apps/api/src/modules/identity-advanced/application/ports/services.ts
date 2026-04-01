@@ -54,5 +54,8 @@ export interface UserLookupPort {
   getOrgUnitInfo(orgUnitId: string, tx?: TransactionContext): Promise<OrgUnitInfo | null>;
 
   /** @contract FR-001-M01 D1-D2 — Batch resolve user summaries (name+email) by IDs */
-  getUserSummaries(userIds: readonly string[], tx?: TransactionContext): Promise<ReadonlyMap<string, UserSummary>>;
+  getUserSummaries(
+    userIds: readonly string[],
+    tx?: TransactionContext,
+  ): Promise<ReadonlyMap<string, UserSummary>>;
 }

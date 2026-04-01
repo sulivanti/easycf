@@ -174,6 +174,24 @@ export const linkTenantResponse = z.object({
 });
 
 // ---------------------------------------------------------------------------
+// Generic message response (FR-001-C05 — Zod schema for DELETE/restore)
+// ---------------------------------------------------------------------------
+export const genericMessageResponse = z.object({
+  message: z.string(),
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/v1/org-units/tree querystring (FR-001-C05)
+// ---------------------------------------------------------------------------
+export const orgUnitTreeQuery = z.object({
+  include_inactive: z
+    .enum(['true', 'false'])
+    .optional()
+    .default('false')
+    .transform((v) => v === 'true'),
+});
+
+// ---------------------------------------------------------------------------
 // Param helpers
 // ---------------------------------------------------------------------------
 export const orgUnitTenantParams = z.object({

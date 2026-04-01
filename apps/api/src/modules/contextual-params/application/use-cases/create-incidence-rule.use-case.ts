@@ -25,6 +25,7 @@ export interface CreateIncidenceRuleInput {
   readonly framerId: string;
   readonly targetObjectId: string;
   readonly conditionExpr?: string;
+  readonly incidenceType?: 'OBR' | 'OPC' | 'AUTO';
   readonly validFrom: Date;
   readonly validUntil?: Date;
   readonly tenantId: string;
@@ -104,6 +105,7 @@ export class CreateIncidenceRuleUseCase {
       framerId: input.framerId,
       targetObjectId: input.targetObjectId,
       conditionExpr: input.conditionExpr ?? null,
+      incidenceType: input.incidenceType ?? 'OBR',
       validFrom: input.validFrom,
       validUntil,
       status: 'ACTIVE',

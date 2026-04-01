@@ -15,12 +15,17 @@ import {
   createCaseExecutionEvent,
   CASE_EXECUTION_EVENT_TYPES,
 } from '../../domain/domain-events/case-events.js';
+import type { CasePriority } from '../../domain/value-objects/case-priority.js';
+import type { CaseEventRepository } from '../ports/case-event.repository.js';
 
 export interface OpenCaseInput {
   cycleId: string;
   objectType?: string;
   objectId?: string;
   orgUnitId?: string;
+  description?: string;
+  priority?: CasePriority;
+  notes?: string;
   tenantId: string;
   userId: string;
   correlationId: string;
@@ -44,6 +49,7 @@ export class OpenCaseUseCase {
     private readonly caseRepo: CaseInstanceRepository,
     private readonly stageHistoryRepo: StageHistoryRepository,
     private readonly gateInstanceRepo: GateInstanceRepository,
+    private readonly caseEventRepo: CaseEventRepository,
     private readonly getCycleInfo: (cycleId: string) => Promise<CycleInfo | null>,
     private readonly emitEvent: (
       event: ReturnType<typeof createCaseExecutionEvent>,
@@ -71,6 +77,8 @@ export class OpenCaseUseCase {
       objectType: input.objectType ?? null,
       objectId: input.objectId ?? null,
       orgUnitId: input.orgUnitId ?? null,
+      description: input.description ?? null,
+      priority: input.priority ?? 'NORMAL',
       tenantId: input.tenantId,
       openedBy: input.userId,
       openedAt: new Date(),
@@ -91,7 +99,20 @@ export class OpenCaseUseCase {
       evidence: null,
     });
 
-    // 5. Auto-create gate_instances for initial stage (FR-001)
+    // 5. Record initial notes as COMMENT event (FR-006-M01 §A2)
+    if (input.notes) {
+      await this.caseEventRepo.create({
+        caseId: caseInstance.id,
+        eventType: 'COMMENT',
+        descricao: input.notes,
+        createdBy: input.userId,
+        stageId: cycle.initialStageId,
+        metadata: { source: 'open_case_notes' },
+      });
+    }
+
+    // 6. Auto-create gate_instances for initial stage (FR-001)
+    // (note: step numbers shifted after adding notes recording above)
     if (cycle.initialStageGates.length > 0) {
       await this.gateInstanceRepo.createMany(
         cycle.initialStageGates.map((g) => ({

@@ -28,7 +28,7 @@ flowchart TD
     style E6  fill:#F39C12,color:#fff,stroke:#E67E22
 ```
 
-*O módulo está na **Etapa 6** — Adendos Futuros (Amendments). UX-008-M01 em andamento.*
+*O módulo está na **Etapa 6** — Adendos Futuros (Amendments). Codegen v2 concluído (UX-008-M01 + FR-008-M01 implementados).*
 
 ---
 
@@ -45,6 +45,7 @@ flowchart TD
 | 0.6.0 | 2026-03-19 | arquitetura | PENDENTE-001 implementada — Opção B (tabela simples + trigger migração 10M). Alerta `call_logs.count > 5M` adicionado ao NFR-008 §6.5. Env var `INTEGRATION_CONCURRENCY` já limita throughput. PEN-008 v0.8.0. |
 | 0.7.0 | 2026-03-19 | arquitetura | PENDENTE-002 implementada — Opção A (retenção 6 meses hot storage + archive S3 com anonimização PII). Original purgado após 6 meses; metadados (id, status, correlation_id, duration_ms) permanecem no PostgreSQL. PEN-008 v0.9.0. |
 | 1.1.0 | 2026-03-23 | codegen | Codegen concluído: 6 agentes executados, 35 arquivos gerados. Camadas: DB, CORE, APP (12 use cases), API (15 endpoints, OpenAPI), WEB (2 telas UX). |
+| 1.8.0 | 2026-04-01 | codegen | Codegen v2 (amendments UX-008-M01 + FR-008-M01): 3 agentes (API 4 arq, WEB 8 arq, VAL 0). avg_latency_ms corrigido null→0 (FR-008-M01 compliance). Layout UX spec 50 aplicado: MonitorHeader 4 cards com progress bar e DLQ condicional, RoutineEditorPage ListHeader+SearchInput+active style, FilterBar com selects Rotina/Servico/DateRange, LogDetailPanel 480px com CollapsibleSections, badge styles com cores hex spec. |
 | 1.7.0 | 2026-03-31 | merge-amendment | Merge UX-008-M01: layout Penpot aplicado ao UX-008 — §4 Spec Visual Penpot, content header, busca em lista, ReadonlyBanner azul, 4 MetricCards, AutoRefreshIndicator, CollapsibleSection, JSONViewer, detail panel 480px, badges com cores spec. UX-008 bumped para v0.3.0. |
 | 1.6.1 | 2026-03-31 | merge-amendment | Merge FR-008-M01: avg_latency_ms adicionado ao done funcional e Gherkin de FR-011. FR-008 bumped para v0.3.0. Derivado de UX-008-M01. |
 | 1.6.0 | 2026-03-31 | create-amendment | Amendments UX-008-M01 + FR-008-M01 criados para alinhar layout React com designs Penpot (50-IntegrationEditor + 50-IntegrationMonitor). |

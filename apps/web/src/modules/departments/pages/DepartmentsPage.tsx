@@ -7,13 +7,21 @@
 import { useState, useCallback } from 'react';
 import { useDepartmentsList } from '../hooks/use-departments-list.js';
 import { useCreateDepartment } from '../hooks/use-create-department.js';
-import { useUpdateDepartment, useDeleteDepartment, useRestoreDepartment } from '../hooks/use-department-actions.js';
+import {
+  useUpdateDepartment,
+  useDeleteDepartment,
+  useRestoreDepartment,
+} from '../hooks/use-department-actions.js';
 import { useDepartmentDetail } from '../hooks/use-department-detail.js';
 import { DepartmentDrawer } from '../components/DepartmentDrawer.js';
 import { DepartmentTag } from '../components/DepartmentTag.js';
 import { DeactivateModal } from '../components/DeactivateModal.js';
 import { getStatusBadge, DEPT_COPY } from '../types/departments.types.js';
-import type { DepartmentFilters, CreateDepartmentRequest, UpdateDepartmentRequest } from '../types/departments.types.js';
+import type {
+  DepartmentFilters,
+  CreateDepartmentRequest,
+  UpdateDepartmentRequest,
+} from '../types/departments.types.js';
 
 // ── Toast stub (uses Foundation toast system) ───────────────
 function useToast() {
@@ -39,7 +47,9 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
   const [search, setSearch] = useState('');
   const [showInactive, setShowInactive] = useState(false);
   const [drawer, setDrawer] = useState<DrawerState>({ open: false });
-  const [deactivateTarget, setDeactivateTarget] = useState<{ id: string; nome: string } | null>(null);
+  const [deactivateTarget, setDeactivateTarget] = useState<{ id: string; nome: string } | null>(
+    null,
+  );
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   // ── Filters ───────────────────────────────────────────────
@@ -60,38 +70,44 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
   const restoreMutation = useRestoreDepartment();
 
   // ── Handlers ──────────────────────────────────────────────
-  const handleCreate = useCallback((data: CreateDepartmentRequest) => {
-    setFieldErrors({});
-    createMutation.mutate(data, {
-      onSuccess: () => {
-        toast.success(DEPT_COPY.create_success);
-        setDrawer({ open: false });
-        createMutation.regenerateKey();
-      },
-      onError: (err: any) => {
-        if (err?.status === 409) {
-          setFieldErrors({ codigo: DEPT_COPY.conflict_codigo.replace('{codigo}', data.codigo) });
-        } else {
-          toast.error(DEPT_COPY.error_generic);
-        }
-      },
-    });
-  }, [createMutation, toast]);
-
-  const handleUpdate = useCallback((data: UpdateDepartmentRequest) => {
-    if (!editId) return;
-    setFieldErrors({});
-    updateMutation.mutate(
-      { id: editId, data },
-      {
+  const handleCreate = useCallback(
+    (data: CreateDepartmentRequest) => {
+      setFieldErrors({});
+      createMutation.mutate(data, {
         onSuccess: () => {
-          toast.success(DEPT_COPY.update_success);
+          toast.success(DEPT_COPY.create_success);
           setDrawer({ open: false });
+          createMutation.regenerateKey();
         },
-        onError: () => toast.error(DEPT_COPY.error_generic),
-      },
-    );
-  }, [editId, updateMutation, toast]);
+        onError: (err: any) => {
+          if (err?.status === 409) {
+            setFieldErrors({ codigo: DEPT_COPY.conflict_codigo.replace('{codigo}', data.codigo) });
+          } else {
+            toast.error(DEPT_COPY.error_generic);
+          }
+        },
+      });
+    },
+    [createMutation, toast],
+  );
+
+  const handleUpdate = useCallback(
+    (data: UpdateDepartmentRequest) => {
+      if (!editId) return;
+      setFieldErrors({});
+      updateMutation.mutate(
+        { id: editId, data },
+        {
+          onSuccess: () => {
+            toast.success(DEPT_COPY.update_success);
+            setDrawer({ open: false });
+          },
+          onError: () => toast.error(DEPT_COPY.error_generic),
+        },
+      );
+    },
+    [editId, updateMutation, toast],
+  );
 
   const handleDeactivate = useCallback(() => {
     if (!deactivateTarget) return;
@@ -104,18 +120,21 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
     });
   }, [deactivateTarget, deleteMutation, toast]);
 
-  const handleRestore = useCallback((id: string) => {
-    restoreMutation.mutate(id, {
-      onSuccess: () => toast.success(DEPT_COPY.restore_success),
-      onError: (err: any) => {
-        if (err?.status === 422) {
-          toast.error('Departamento já está ativo.');
-        } else {
-          toast.error(DEPT_COPY.error_generic);
-        }
-      },
-    });
-  }, [restoreMutation, toast]);
+  const handleRestore = useCallback(
+    (id: string) => {
+      restoreMutation.mutate(id, {
+        onSuccess: () => toast.success(DEPT_COPY.restore_success),
+        onError: (err: any) => {
+          if (err?.status === 422) {
+            toast.error('Departamento já está ativo.');
+          } else {
+            toast.error(DEPT_COPY.error_generic);
+          }
+        },
+      });
+    },
+    [restoreMutation, toast],
+  );
 
   // ── Permissions ───────────────────────────────────────────
   const canWrite = userScopes.includes('org:dept:write');
@@ -135,7 +154,10 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
         {canWrite && (
           <button
             type="button"
-            onClick={() => { setFieldErrors({}); setDrawer({ open: true, mode: 'create' }); }}
+            onClick={() => {
+              setFieldErrors({});
+              setDrawer({ open: true, mode: 'create' });
+            }}
             className="h-10 rounded-lg bg-[#2E86C1] px-5 text-[13px] font-bold text-white hover:bg-[#2574A9]"
           >
             + Novo Departamento
@@ -146,8 +168,18 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
       {/* Toolbar */}
       <div className="mt-5 flex items-center justify-between">
         <div className="relative">
-          <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#CCC]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          <svg
+            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#CCC]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
           <input
             type="text"
@@ -188,8 +220,14 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
         ) : isError ? (
           /* Error State */
           <div className="flex flex-col items-center p-10">
-            <p className="text-sm font-medium text-[#888]">Não foi possível carregar os departamentos.</p>
-            <button type="button" onClick={() => refetch()} className="mt-3 text-[13px] font-semibold text-[#555] border border-[#E8E8E6] rounded-lg px-4 h-10 hover:bg-[#F8F8F6]">
+            <p className="text-sm font-medium text-[#888]">
+              Não foi possível carregar os departamentos.
+            </p>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="mt-3 text-[13px] font-semibold text-[#555] border border-[#E8E8E6] rounded-lg px-4 h-10 hover:bg-[#F8F8F6]"
+            >
               Tentar novamente
             </button>
           </div>
@@ -200,7 +238,11 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
               {search ? DEPT_COPY.empty_search.replace('{search}', search) : DEPT_COPY.empty_state}
             </p>
             {search ? (
-              <button type="button" onClick={() => setSearch('')} className="mt-1 text-[13px] font-semibold text-[#2E86C1]">
+              <button
+                type="button"
+                onClick={() => setSearch('')}
+                className="mt-1 text-[13px] font-semibold text-[#2E86C1]"
+              >
                 Limpar filtros
               </button>
             ) : canWrite ? (
@@ -218,25 +260,43 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
           <table className="w-full">
             <thead>
               <tr className="h-11 border-b border-[#F0F0EE] bg-[#FAFAFA]">
-                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">Código</th>
-                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">Nome</th>
-                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">Cor</th>
-                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">Status</th>
-                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">Criado em</th>
-                <th className="px-5 text-center text-[10px] font-bold uppercase tracking-wider text-[#888]">Ações</th>
+                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">
+                  Código
+                </th>
+                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">
+                  Nome
+                </th>
+                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">
+                  Cor
+                </th>
+                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">
+                  Status
+                </th>
+                <th className="px-5 text-left text-[10px] font-bold uppercase tracking-wider text-[#888]">
+                  Criado em
+                </th>
+                <th className="px-5 text-center text-[10px] font-bold uppercase tracking-wider text-[#888]">
+                  Ações
+                </th>
               </tr>
             </thead>
             <tbody>
               {items.map((dept) => {
                 const badge = getStatusBadge(dept.status as 'ACTIVE' | 'INACTIVE');
                 return (
-                  <tr key={dept.id} className="h-[52px] border-b border-[#F0F0EE] hover:bg-[#F8F8F6]">
+                  <tr
+                    key={dept.id}
+                    className="h-[52px] border-b border-[#F0F0EE] hover:bg-[#F8F8F6]"
+                  >
                     <td className="px-5 text-[13px] font-semibold text-[#333]">{dept.codigo}</td>
                     <td className="px-5 text-[13px] font-medium text-[#111]">{dept.nome}</td>
                     <td className="px-5">
                       {dept.cor ? (
                         <div className="flex items-center gap-1.5">
-                          <span className="h-4 w-4 rounded-full" style={{ backgroundColor: dept.cor }} />
+                          <span
+                            className="h-4 w-4 rounded-full"
+                            style={{ backgroundColor: dept.cor }}
+                          />
                           <span className="text-[11px] text-[#888]">{dept.cor}</span>
                         </div>
                       ) : (
@@ -244,24 +304,43 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
                       )}
                     </td>
                     <td className="px-5">
-                      <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold uppercase ${badge.color} ${badge.bg} border ${badge.border}`}>
+                      <span
+                        className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold uppercase ${badge.color} ${badge.bg} border ${badge.border}`}
+                      >
                         {badge.label}
                       </span>
                     </td>
                     <td className="px-5 text-xs text-[#888]">
-                      {new Date(dept.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      {new Date(dept.created_at).toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
                     </td>
                     <td className="px-5">
                       <div className="flex items-center justify-center gap-2">
                         {canWrite && dept.status === 'ACTIVE' && (
                           <button
                             type="button"
-                            onClick={() => { setFieldErrors({}); setDrawer({ open: true, mode: 'edit', departmentId: dept.id }); }}
+                            onClick={() => {
+                              setFieldErrors({});
+                              setDrawer({ open: true, mode: 'edit', departmentId: dept.id });
+                            }}
                             className="text-[#888] hover:text-[#2E86C1]"
                             aria-label="Editar"
                           >
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            <svg
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                              />
                             </svg>
                           </button>
                         )}
@@ -272,8 +351,18 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
                             className="text-[#888] hover:text-[#E74C3C]"
                             aria-label="Desativar"
                           >
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            <svg
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
                             </svg>
                           </button>
                         )}
@@ -284,8 +373,18 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
                             className="text-[#888] hover:text-[#27AE60]"
                             aria-label="Restaurar"
                           >
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                            <svg
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                              />
                             </svg>
                           </button>
                         )}
@@ -301,7 +400,10 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
         {/* Pagination */}
         {listData?.has_more && (
           <div className="flex justify-center border-t border-[#F0F0EE] py-3">
-            <button type="button" className="text-[13px] font-semibold text-[#2E86C1] hover:underline">
+            <button
+              type="button"
+              className="text-[13px] font-semibold text-[#2E86C1] hover:underline"
+            >
               Carregar mais
             </button>
           </div>
@@ -312,7 +414,7 @@ export function DepartmentsPage({ userScopes }: DepartmentsPageProps) {
       {drawer.open && (
         <DepartmentDrawer
           mode={drawer.mode}
-          department={drawer.mode === 'edit' ? editDepartment ?? null : null}
+          department={drawer.mode === 'edit' ? (editDepartment ?? null) : null}
           onClose={() => setDrawer({ open: false })}
           onSubmitCreate={handleCreate}
           onSubmitUpdate={handleUpdate}

@@ -64,6 +64,7 @@ export async function evaluateRoutes(app: FastifyInstance): Promise<void> {
           routine_id: r.routineId,
           codigo: r.codigo,
           version: r.version,
+          incidence_type: r.incidenceType,
         })),
         dry_run: result.dryRun,
       });

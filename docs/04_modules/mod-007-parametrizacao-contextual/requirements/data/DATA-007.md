@@ -6,6 +6,7 @@
 > | Versão | Data       | Responsável | Status/Integração |
 > |--------|------------|-------------|-------------------|
 > | 0.1.0  | 2026-03-19 | arquitetura | Baseline Inicial (forge-module) |
+> | 1.1.0  | 2026-04-01 | merge-amendment | Merge DATA-007-M01: campo incidence_type (OBR/OPC/AUTO) em incidence_rules (E-005) + CHECK + index |
 > | 0.3.0  | 2026-03-20 | AGN-DEV-04  | Re-enriquecimento DATA Batch 2 — BR-013 ref, dry_run flag, tenant_config hint, data_ultima_revisao atualizada |
 > | 0.2.0  | 2026-03-19 | AGN-DEV-04  | Enriquecimento DATA (enrich-agent) — entidades detalhadas, constraints, indexes, migration notes, FK map |
 
@@ -13,8 +14,8 @@
 
 - **estado_item:** READY
 - **owner:** Marcos Sulivan
-- **data_ultima_revisao:** 2026-03-23
-- **rastreia_para:** US-MOD-007, US-MOD-007-F01, US-MOD-007-F02, US-MOD-007-F03, BR-007, BR-013, FR-007, SEC-007, DATA-003
+- **data_ultima_revisao:** 2026-04-01
+- **rastreia_para:** US-MOD-007, US-MOD-007-F01, US-MOD-007-F02, US-MOD-007-F03, BR-007, BR-013, FR-007, SEC-007, DATA-003, DATA-007-M01, UX-007-M01
 - **referencias_exemplos:** EX-DEV-001 (Envelope DATA)
 - **evidencias:** N/A
 
@@ -181,6 +182,7 @@ Regras de incidencia que vinculam enquadradores a objetos-alvo. UNIQUE constrain
 | `condition_expr` | text | — | NAO | Expressao futura (JSON rule engine v2 — PENDENTE-001) |
 | `valid_from` | timestamptz | NOT NULL | SIM | Inicio da vigencia |
 | `valid_until` | timestamptz | — | NAO | Fim da vigencia |
+| `incidence_type` | varchar(10) | NOT NULL DEFAULT 'OBR' | SIM | Tipo de incidencia: OBR (obrigatorio), OPC (opcional), AUTO (auto-apply). Ref: UX-007-M01 |
 | `status` | varchar(20) | NOT NULL DEFAULT 'ACTIVE' | SIM | ACTIVE ou INACTIVE |
 | `tenant_id` | uuid | NOT NULL | SIM | Isolamento multi-tenant |
 | `created_by` | uuid | FK users(id) | SIM | Usuario que criou |
@@ -195,6 +197,7 @@ Regras de incidencia que vinculam enquadradores a objetos-alvo. UNIQUE constrain
 - FK: `target_object_id` -> `target_objects(id)`
 - FK: `created_by` -> `users(id)` (MOD-000)
 - CHECK: `status IN ('ACTIVE', 'INACTIVE')`
+- CHECK: `incidence_type IN ('OBR', 'OPC', 'AUTO')`
 - CHECK: `valid_until IS NULL OR valid_until > valid_from`
 
 **Nota:** Campo `priority` foi **removido** (BR-011). Resolucao de conflitos e feita exclusivamente por restritividade no runtime (BR-004).
@@ -204,6 +207,7 @@ Regras de incidencia que vinculam enquadradores a objetos-alvo. UNIQUE constrain
 - `idx_incidence_tenant_framer_object` UNIQUE (tenant_id, framer_id, target_object_id)
 - `idx_incidence_status_vigencia` (status, valid_from, valid_until) WHERE status = 'ACTIVE'
 - `idx_incidence_framer` (framer_id) — join no motor
+- `idx_incidence_type` (incidence_type) — filtro por tipo na matriz UI
 - `idx_incidence_tenant` (tenant_id)
 
 ---
@@ -385,8 +389,8 @@ Historico de versionamento de rotinas. Registra cada fork com justificativa obri
 | Total de FKs intra-modulo | 10 |
 | Total de FKs inter-modulo (Foundation) | 6 |
 | Total de UNIQUE constraints | 7 |
-| Total de CHECK constraints | 7 |
-| Total de indexes recomendados | 18 |
+| Total de CHECK constraints | 8 |
+| Total de indexes recomendados | 19 |
 
 ---
 

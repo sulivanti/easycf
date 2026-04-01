@@ -316,6 +316,9 @@ apps/web/src/modules/contextual-params/
 - [UX-007](requirements/ux/UX-007.md) — Jornadas e Fluxos da Parametrização Contextual
 - [NFR-007](requirements/nfr/NFR-007.md) — Requisitos Não Funcionais da Parametrização Contextual
 - [PEN-007](requirements/pen-007-pendente.md) — Questões Abertas da Parametrização Contextual
+- [UX-007-M01](amendments/ux/UX-007-M01.md) — Melhoria: Alinhar UX com spec 90-parametrization v2 (matriz tri-state OBR/OPC/AUTO, 3-panel layout, DryRun modal)
+- [DATA-007-M01](amendments/data/DATA-007-M01.md) — Melhoria: Adicionar incidence_type (OBR/OPC/AUTO) em incidence_rules — derivado de UX-007-M01
+- [FR-007-M01](amendments/fr/FR-007-M01.md) — Melhoria: Adicionar incidence_type nos endpoints incidence-rules e evaluate — derivado de UX-007-M01
 <!-- end index -->
 
 ## 10. Decisões (ADR)

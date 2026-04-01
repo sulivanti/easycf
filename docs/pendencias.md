@@ -114,6 +114,7 @@
 - [x] **Motor de avaliacao — cache Redis** *(RESOLVIDA — decisao MOD-011 PEND-SGR-02 #4, 2026-03-15)*
 - [x] **blocking_validations bloqueiam transicoes do MOD-006** *(RESOLVIDA — 2026-03-15)*
 - [x] **Resolucao de conflito por prioridade** *(RESOLVIDA — 2026-03-15)*
+- [ ] **PENDENTE-012 — BR-004: Precedência OBR/OPC/AUTO na resolução de conflitos** *(ABERTA — 2026-04-01, origem: REVIEW de DATA-007-M01 e FR-007-M01, severidade MÉDIA)*
 
 ### Decisao — Cache Redis removido do motor
 
@@ -334,13 +335,13 @@ Condicoes para liberacao:
 | MOD-004 | 3 | ✅ Todas resolvidas |
 | MOD-005 | 2 | ✅ Todas resolvidas |
 | MOD-006 | 3 | ✅ Todas resolvidas |
-| MOD-007 | 3 | ✅ Todas resolvidas |
+| MOD-007 | 4 | ⚠️ 1 pendente (PENDENTE-012) |
 | MOD-008 | 3 | ✅ Todas resolvidas |
 | MOD-009 | 4 | ✅ Todas resolvidas |
 | MOD-010 | 4 | ✅ Todas resolvidas |
 | MOD-011 | 5 | ✅ Todas resolvidas (sessao anterior) |
 
-**Unico item pendente em todos os modulos:** aprovacao formal do owner Marcos Sulivan — gate de processo antes do scaffold de cada modulo.
+**1 pendência técnica aberta:** MOD-007 PENDENTE-012 (BR-004 — precedência OBR/OPC/AUTO na resolução de conflitos, severidade MÉDIA, não bloqueia v1). Demais módulos com todas as pendências resolvidas. Aprovação formal do owner Marcos Sulivan permanece como gate de processo antes do scaffold.
 
 ---
 

@@ -35,6 +35,7 @@ export async function adminIncidenceRulesRoutes(app: FastifyInstance): Promise<v
         limit: request.query.limit,
         framerId: request.query.framer_id,
         targetObjectId: request.query.target_object_id,
+        incidenceType: request.query.incidence_type,
         status: request.query.status,
       });
 
@@ -43,6 +44,7 @@ export async function adminIncidenceRulesRoutes(app: FastifyInstance): Promise<v
         id: r.id,
         framer_id: r.framerId,
         target_object_id: r.targetObjectId,
+        incidence_type: r.incidenceType,
         status: r.status,
         valid_from: r.validFrom.toISOString(),
         valid_until: r.validUntil?.toISOString() ?? null,
@@ -71,6 +73,7 @@ export async function adminIncidenceRulesRoutes(app: FastifyInstance): Promise<v
         framerId: request.body.framer_id,
         targetObjectId: request.body.target_object_id,
         conditionExpr: request.body.condition_expr,
+        incidenceType: request.body.incidence_type,
         validFrom: new Date(request.body.valid_from),
         validUntil: request.body.valid_until ? new Date(request.body.valid_until) : undefined,
         tenantId: request.session.tenantId,
@@ -106,6 +109,7 @@ export async function adminIncidenceRulesRoutes(app: FastifyInstance): Promise<v
                 ? new Date(request.body.valid_until)
                 : null
               : undefined,
+          incidenceType: request.body.incidence_type,
           status: request.body.status,
           tenantId: request.session.tenantId,
           createdBy: request.session.userId,

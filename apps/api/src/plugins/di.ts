@@ -72,6 +72,19 @@ import { LinkTenantUseCase } from '../modules/org-units/application/use-cases/li
 import { UnlinkTenantUseCase } from '../modules/org-units/application/use-cases/unlink-tenant.use-case.js';
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// MOD-003 Departments — Infrastructure + Use Cases
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import { DrizzleDepartmentRepository } from '../modules/departments/infrastructure/drizzle-repositories.js';
+
+import { CreateDepartmentUseCase } from '../modules/departments/application/use-cases/create-department.use-case.js';
+import { UpdateDepartmentUseCase } from '../modules/departments/application/use-cases/update-department.use-case.js';
+import { DeleteDepartmentUseCase } from '../modules/departments/application/use-cases/delete-department.use-case.js';
+import { RestoreDepartmentUseCase } from '../modules/departments/application/use-cases/restore-department.use-case.js';
+import { GetDepartmentUseCase } from '../modules/departments/application/use-cases/get-department.use-case.js';
+import { ListDepartmentsUseCase } from '../modules/departments/application/use-cases/list-departments.use-case.js';
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // MOD-004 Identity-Advanced — Infrastructure + Use Cases
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -454,6 +467,25 @@ async function diPluginImpl(app: FastifyInstance): Promise<void> {
     idempotency,
   );
   const unlinkTenantUseCase = new UnlinkTenantUseCase(orgUnitRepo, orgUnitLinkRepo, eventRepo, uow);
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 4b. MOD-003 Departments — Repositories + Use Cases
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const deptRepo = new DrizzleDepartmentRepository(db);
+
+  const createDepartmentUseCase = new CreateDepartmentUseCase(
+    deptRepo,
+    eventRepo,
+    uow,
+    hashUtil,
+    idempotency,
+  );
+  const updateDepartmentUseCase = new UpdateDepartmentUseCase(deptRepo, eventRepo, uow);
+  const deleteDepartmentUseCase = new DeleteDepartmentUseCase(deptRepo, eventRepo, uow);
+  const restoreDepartmentUseCase = new RestoreDepartmentUseCase(deptRepo, eventRepo, uow);
+  const getDepartmentUseCase = new GetDepartmentUseCase(deptRepo);
+  const listDepartmentsUseCase = new ListDepartmentsUseCase(deptRepo);
 
   // ─────────────────────────────────────────────────────────────────────────
   // 5. MOD-004 Identity-Advanced — Repositories + Use Cases
@@ -1237,6 +1269,14 @@ async function diPluginImpl(app: FastifyInstance): Promise<void> {
     getOrgUnitTreeUseCase,
     linkTenantUseCase,
     unlinkTenantUseCase,
+
+    // MOD-003 Departments
+    createDepartmentUseCase,
+    updateDepartmentUseCase,
+    deleteDepartmentUseCase,
+    restoreDepartmentUseCase,
+    getDepartmentUseCase,
+    listDepartmentsUseCase,
 
     // MOD-004 Identity-Advanced
     createOrgScopeUseCase,

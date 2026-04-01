@@ -33,7 +33,9 @@ export async function fetchDepartments(
   signal?: AbortSignal,
 ): Promise<PaginatedResponse<DepartmentListItemDTO>> {
   const query = buildFilterQuery(filters);
-  return httpClient.get<PaginatedResponse<DepartmentListItemDTO>>(`/departments${query}`, { signal });
+  return httpClient.get<PaginatedResponse<DepartmentListItemDTO>>(`/departments${query}`, {
+    signal,
+  });
 }
 
 // ── Detail ──────────────────────────────────────────────────

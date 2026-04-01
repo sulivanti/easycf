@@ -73,6 +73,6 @@ export class InvalidCorFormatError extends DomainError {
   readonly statusHint = 422;
 
   constructor() {
-    super("Formato de cor inválido. Use o formato #RRGGBB.");
+    super('Formato de cor inválido. Use o formato #RRGGBB.');
   }
 }

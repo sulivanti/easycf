@@ -72,9 +72,7 @@ export function RevokeModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col items-center text-center">
-          <div
-            className={`flex h-12 w-12 items-center justify-center rounded-full ${v.iconBg}`}
-          >
+          <div className={`flex h-12 w-12 items-center justify-center rounded-full ${v.iconBg}`}>
             <AlertTriangle className={`h-6 w-6 ${v.iconColor}`} />
           </div>
 

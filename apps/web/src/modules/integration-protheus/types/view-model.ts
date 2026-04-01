@@ -65,11 +65,11 @@ export const COPY = {
 // Badge classes (Tailwind v4)
 // ---------------------------------------------------------------------------
 export const STATUS_BADGE: Record<CallLogStatus, string> = {
-  QUEUED: 'bg-blue-100 text-blue-800',
-  RUNNING: 'bg-amber-100 text-amber-800 animate-pulse',
-  SUCCESS: 'bg-emerald-100 text-emerald-800',
-  FAILED: 'bg-red-100 text-red-800',
-  DLQ: 'bg-pink-100 text-pink-900',
+  QUEUED: 'border border-[#E8E8E6] bg-[#F5F5F3] text-[#888888]',
+  RUNNING: 'border border-[#90CAF9] bg-[#E3F2FD] text-[#2E86C1] animate-pulse',
+  SUCCESS: 'border border-[#B5E8C9] bg-[#E8F8EF] text-[#1E7A42]',
+  FAILED: 'border border-[#F5C6CB] bg-[#FFEBEE] text-[#C0392B]',
+  DLQ: 'border border-[#C0392B] bg-[#C0392B] text-white',
   REPROCESSED: 'bg-indigo-100 text-indigo-800',
 };
 
@@ -95,8 +95,8 @@ export const PARAM_TYPE_BADGE: Record<ParamType, string> = {
 };
 
 export const ROUTINE_STATUS_BADGE: Record<RoutineStatus, string> = {
-  DRAFT: 'bg-amber-100 text-amber-800',
-  PUBLISHED: 'bg-emerald-100 text-emerald-800',
+  DRAFT: 'border border-[#FFE0B2] bg-[#FFF3E0] text-[#B8860B]',
+  PUBLISHED: 'border border-[#B5E8C9] bg-[#E8F8EF] text-[#1E7A42]',
   DEPRECATED: 'bg-gray-100 text-gray-500',
 };
 

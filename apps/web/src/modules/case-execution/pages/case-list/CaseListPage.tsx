@@ -1,5 +1,5 @@
 /**
- * @contract UX-CASE-002, FR-009, FR-001
+ * @contract UX-CASE-002, UX-006-M01, FR-009, FR-001
  *
  * Case listing page with filters, cursor-based pagination,
  * new case drawer, and pending gates badge.
@@ -8,6 +8,7 @@
  */
 
 import { useState, useCallback, useEffect } from 'react';
+import { Plus } from 'lucide-react';
 import {
   Button,
   Skeleton,
@@ -19,6 +20,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  Toggle,
   Drawer,
   DrawerClose,
   DrawerContent,
@@ -27,16 +29,11 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
 } from '../../../../shared/ui/index.js';
 import { PageHeader } from '../../../../shared/ui/page-header.js';
 import { SearchBar } from '../../../../shared/ui/search-bar.js';
 import { FilterBar } from '../../../../shared/ui/filter-bar.js';
 import { Select } from '../../../../shared/ui/select.js';
-import { StatusBadge } from '../../../../shared/ui/status-badge.js';
 import { EmptyState } from '../../../../shared/ui/empty-state.js';
 import { useCaseList, useOpenCase } from '../../hooks/use-cases.js';
 import { CaseStatusBadge } from '../../components/CaseStatusBadge.js';
@@ -109,18 +106,24 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
       {/* Page Header — A1 */}
       <PageHeader
         title={`Casos${items.length > 0 ? ` (${items.length})` : ''}`}
-        description="Acompanhamento de instâncias de processos em execução"
+        description="Gerencie os casos de execução do seu tenant"
         actions={canWrite ? <NewCaseDrawer onCreated={onSelectCase} /> : undefined}
       />
 
       <div className="p-6">
         {/* Filters */}
         <FilterBar className="mb-4">
-          <SearchBar
-            value={searchInput}
-            onChange={setSearchInput}
-            placeholder="Buscar por código..."
-            className="w-64"
+          <Select
+            value={filters.cycle_id ?? ''}
+            onChange={(e) =>
+              setFilters((f) => ({
+                ...f,
+                cycle_id: e.target.value || undefined,
+                cursor: undefined,
+              }))
+            }
+            placeholder="Todos os ciclos"
+            options={[]}
           />
           <Select
             value={filters.status ?? ''}
@@ -139,21 +142,65 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
               { value: 'CANCELLED', label: 'Cancelado' },
             ]}
           />
-          <label className="flex items-center gap-2 font-display text-[13px] text-a1-text-auxiliary">
-            <input
-              type="checkbox"
-              checked={filters.assigned_to_me ?? false}
+          <Select
+            value={filters.stage_id ?? ''}
+            onChange={(e) =>
+              setFilters((f) => ({
+                ...f,
+                stage_id: e.target.value || undefined,
+                cursor: undefined,
+              }))
+            }
+            placeholder="Todos os estágios"
+            options={[]}
+          />
+          <Toggle
+            checked={filters.assigned_to_me ?? false}
+            onChange={(checked) =>
+              setFilters((f) => ({
+                ...f,
+                assigned_to_me: checked || undefined,
+                cursor: undefined,
+              }))
+            }
+            label="Minha responsabilidade"
+            size="sm"
+          />
+          <div className="flex items-center gap-2">
+            <Input
+              type="date"
+              value={filters.opened_after ?? ''}
               onChange={(e) =>
                 setFilters((f) => ({
                   ...f,
-                  assigned_to_me: e.target.checked || undefined,
+                  opened_after: e.target.value || undefined,
                   cursor: undefined,
                 }))
               }
-              className="accent-primary-600 rounded"
+              className="w-36 text-sm"
+              placeholder="De"
             />
-            Minha responsabilidade
-          </label>
+            <span className="text-a1-text-auxiliary text-xs">até</span>
+            <Input
+              type="date"
+              value={filters.opened_before ?? ''}
+              onChange={(e) =>
+                setFilters((f) => ({
+                  ...f,
+                  opened_before: e.target.value || undefined,
+                  cursor: undefined,
+                }))
+              }
+              className="w-36 text-sm"
+              placeholder="Até"
+            />
+          </div>
+          <SearchBar
+            value={searchInput}
+            onChange={setSearchInput}
+            placeholder="Buscar por código..."
+            className="w-64"
+          />
         </FilterBar>
 
         {/* Table */}
@@ -165,34 +212,39 @@ export function CaseListPage({ onSelectCase, userScopes = [] }: CaseListPageProp
             }
           />
         ) : (
-          <TooltipProvider>
-            <div className="rounded-lg border border-a1-border bg-white">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Código</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Estágio</TableHead>
-                    <TableHead>Gates Pendentes</TableHead>
-                    <TableHead>Aberto em</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {items.map((c) => (
-                    <CaseRow key={c.id} caseItem={c} onSelect={() => onSelectCase(c.id)} />
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </TooltipProvider>
+          <div className="rounded-lg border border-a1-border bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Ciclo</TableHead>
+                  <TableHead>Estágio Atual</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Responsável</TableHead>
+                  <TableHead>Criado em</TableHead>
+                  <TableHead>Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {items.map((c) => (
+                  <CaseRow key={c.id} caseItem={c} onSelect={() => onSelectCase(c.id)} />
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
 
         {/* Load more */}
         {hasMore && (
           <div className="text-center mt-4">
-            <Button variant="outline" size="sm" onClick={handleLoadMore} disabled={isLoading}>
+            <button
+              type="button"
+              onClick={handleLoadMore}
+              disabled={isLoading}
+              className="text-sm text-primary-600 hover:text-primary-700 hover:underline disabled:opacity-50 disabled:no-underline font-medium"
+            >
               {isLoading ? 'Carregando...' : 'Carregar mais'}
-            </Button>
+            </button>
           </div>
         )}
       </div>
@@ -206,28 +258,32 @@ function CaseRow({ caseItem, onSelect }: { caseItem: CaseListItem; onSelect: () 
   return (
     <TableRow className="cursor-pointer hover:bg-a1-bg" onClick={onSelect}>
       <TableCell className="font-mono text-sm">{caseItem.codigo}</TableCell>
-      <TableCell>
-        <CaseStatusBadge status={caseItem.status} />
+      <TableCell className="text-sm">
+        {caseItem.cycle_name ?? caseItem.cycle_id}
       </TableCell>
       <TableCell className="text-sm">
         {caseItem.current_stage_name ?? caseItem.current_stage_id}
       </TableCell>
       <TableCell>
-        {caseItem.pending_gates_count > 0 ? (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <StatusBadge status="error" className="cursor-pointer">
-                {caseItem.pending_gates_count}
-              </StatusBadge>
-            </TooltipTrigger>
-            <TooltipContent>Clique para ver gates pendentes</TooltipContent>
-          </Tooltip>
-        ) : (
-          <span className="text-a1-text-auxiliary">—</span>
-        )}
+        <div className="flex items-center gap-2">
+          <CaseStatusBadge status={caseItem.status} />
+          {caseItem.pending_gates_count > 0 && (
+            <span className="inline-flex items-center justify-center size-5 text-[11px] font-bold bg-red-500 text-white rounded-full">
+              {caseItem.pending_gates_count}
+            </span>
+          )}
+        </div>
+      </TableCell>
+      <TableCell className="text-sm">
+        {caseItem.primary_assignee_name ?? <span className="text-a1-text-auxiliary">—</span>}
       </TableCell>
       <TableCell className="text-sm text-a1-text-auxiliary">
         {new Date(caseItem.opened_at).toLocaleDateString('pt-BR')}
+      </TableCell>
+      <TableCell>
+        <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); onSelect(); }}>
+          Ver
+        </Button>
       </TableCell>
     </TableRow>
   );
@@ -258,7 +314,10 @@ function NewCaseDrawer({ onCreated }: { onCreated: (caseId: string) => void }) {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button size="sm">Novo Caso</Button>
+        <Button size="sm">
+          <Plus className="size-4 mr-1" />
+          Novo Caso
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>

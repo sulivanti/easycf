@@ -24,7 +24,7 @@ import {
 import { useOperationConfig } from '../hooks/use-operation-config';
 import { useBatchEvaluate } from '../hooks/use-evaluate';
 import { useSaveBatch } from '../hooks/use-save';
-import { isSaveEnabled, isAddLineDisabled, resetRowsToNeutral } from '../hooks/use-grid-rules';
+import { isSaveEnabled, isAddLineDisabled, resetRowsToNeutral, countByStatus } from '../hooks/use-grid-rules';
 import { SmartGridHeader } from '../components/SmartGridHeader';
 import { MassActionToolbar } from '../components/MassActionToolbar';
 import { SmartDataGrid } from '../components/SmartDataGrid';
@@ -240,8 +240,13 @@ export function BulkInsertPage({
     );
   }
 
+  const counts = countByStatus(rows);
+  const hasBlockingErrors = counts.blocked > 0;
+  const submitEnabled = isSaveEnabled(rows) && !saveBatchMutation.isPending && !validating;
+
   return (
-    <div>
+    <div className="p-6" style={{ backgroundColor: '#F5F5F3', minHeight: '100%' }}>
+      {/* PageHeader — UX-011-M01 D1 */}
       <SmartGridHeader
         operationName={operationName}
         rows={rows}
@@ -249,18 +254,40 @@ export function BulkInsertPage({
         saving={saveBatchMutation.isPending}
         onImportJson={handleImportJson}
         onExportJson={handleExportJson}
-        onValidateAll={handleValidateAll}
-        onSave={handleSave}
       />
 
-      <MassActionToolbar
-        selectedRowIds={selectedRowIds}
-        columns={columns}
-        onApplyValue={handleApplyValue}
-        onClearColumn={handleClearColumn}
-        onDuplicate={handleDuplicate}
-      />
+      {/* Toolbar — UX-011-M01 D1: "+ Nova Linha" (text link blue) + "Acoes em Lote" dropdown */}
+      <div className="mt-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleAddLine}
+            disabled={isAddLineDisabled(rows.length, MAX_ROWS)}
+            className="h-9 rounded-lg bg-transparent px-3.5 text-xs font-bold disabled:opacity-50"
+            style={{ color: '#2E86C1', border: 'none' }}
+          >
+            + Nova Linha
+          </button>
+          {isAddLineDisabled(rows.length, MAX_ROWS) && (
+            <span className="text-xs text-amber-500">{COPY.limitReached(MAX_ROWS)}</span>
+          )}
 
+          {/* Acoes em Lote: renders the MassActionToolbar inline when rows are selected */}
+          <MassActionToolbar
+            selectedRowIds={selectedRowIds}
+            columns={columns}
+            onApplyValue={handleApplyValue}
+            onClearColumn={handleClearColumn}
+            onDuplicate={handleDuplicate}
+          />
+        </div>
+
+        <span className="text-xs font-normal" style={{ color: '#888888' }}>
+          {rows.length} linhas
+        </span>
+      </div>
+
+      {/* Grid area */}
       {rows.length === 0 ? (
         <EmptyState
           title="Nenhuma linha adicionada"
@@ -272,20 +299,45 @@ export function BulkInsertPage({
           }
         />
       ) : (
-        <SmartDataGrid
-          columns={columns}
-          rows={rows}
-          selectedRowIds={selectedRowIds}
-          onToggleSelect={handleToggleSelect}
-          onToggleSelectAll={handleToggleSelectAll}
-          onCellChange={handleCellChange}
-          onAddLine={handleAddLine}
-          onRemoveSelected={handleRemoveSelected}
-          addLineDisabled={isAddLineDisabled(rows.length, MAX_ROWS)}
-          addLineDisabledMessage={
-            isAddLineDisabled(rows.length, MAX_ROWS) ? COPY.limitReached(MAX_ROWS) : undefined
-          }
-        />
+        <>
+          <SmartDataGrid
+            columns={columns}
+            rows={rows}
+            selectedRowIds={selectedRowIds}
+            onToggleSelect={handleToggleSelect}
+            onToggleSelectAll={handleToggleSelectAll}
+            onCellChange={handleCellChange}
+          />
+
+          {/* GridFooter — UX-011-M01 D1: "{X} de {Y} linhas validas" + "Submeter Lote" */}
+          <div
+            className="flex items-center justify-between rounded-b-xl border border-t-0 px-4"
+            style={{
+              height: 52,
+              backgroundColor: '#FAFAFA',
+              borderColor: '#E8E8E6',
+              borderTopColor: '#F0F0EE',
+            }}
+          >
+            <span className="text-[13px] font-medium" style={{ color: '#555555' }}>
+              {counts.valid} de {rows.length} linhas válidas
+            </span>
+
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={!submitEnabled}
+              className="h-10 rounded-lg px-5 text-[13px] font-bold text-white"
+              style={{
+                backgroundColor: submitEnabled ? '#2E86C1' : '#E8E8E6',
+                color: submitEnabled ? '#FFFFFF' : '#CCCCCC',
+                cursor: submitEnabled ? 'pointer' : 'not-allowed',
+              }}
+            >
+              {saveBatchMutation.isPending ? 'Submetendo...' : 'Submeter Lote'}
+            </button>
+          </div>
+        </>
       )}
 
       <CloseConfirmationModal

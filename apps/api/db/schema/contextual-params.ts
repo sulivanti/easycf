@@ -162,6 +162,7 @@ export const incidenceRules = pgTable(
       .notNull()
       .references(() => targetObjects.id, { onDelete: 'restrict' }),
     conditionExpr: text('condition_expr'),
+    incidenceType: text('incidence_type').notNull().default('OBR').$type<'OBR' | 'OPC' | 'AUTO'>(),
     validFrom: timestamp('valid_from', { withTimezone: true }).notNull(),
     validUntil: timestamp('valid_until', { withTimezone: true }),
     status: text('status').notNull().default('ACTIVE').$type<'ACTIVE' | 'INACTIVE'>(),
@@ -184,8 +185,10 @@ export const incidenceRules = pgTable(
       .on(table.status, table.validFrom, table.validUntil)
       .where(sql`${table.status} = 'ACTIVE'`),
     index('idx_incidence_framer').on(table.framerId),
+    index('idx_incidence_type').on(table.incidenceType),
     index('idx_incidence_tenant').on(table.tenantId),
     check('incidence_rules_status_check', sql`${table.status} IN ('ACTIVE', 'INACTIVE')`),
+    check('incidence_rules_type_check', sql`${table.incidenceType} IN ('OBR', 'OPC', 'AUTO')`),
     check(
       'incidence_rules_vigencia_check',
       sql`${table.validUntil} IS NULL OR ${table.validUntil} > ${table.validFrom}`,

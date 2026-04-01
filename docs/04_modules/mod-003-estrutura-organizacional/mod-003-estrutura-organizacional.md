@@ -145,3 +145,6 @@ Módulo full-stack com endpoints próprios (`/api/v1/org-units`) e telas própri
 - [SEC-001-M01](amendments/sec/SEC-001-M01.md) — Melhoria: Escopos RBAC para departamentos (org:dept:read, org:dept:write, org:dept:delete)
 - [SEC-002-M01](amendments/sec/SEC-002-M01.md) — Melhoria: Matriz de autorização de eventos para departamentos (4 domain events)
 - [UX-001-C04](amendments/ux/UX-001-C04.md) — Correção: "Vincular tenant" em N4 redireciona para edição inline em vez de abrir LinkTenantModal. Implementa modal de vinculação conforme UX-ORG-001
+- [FR-001-C05](amendments/fr/FR-001-C05.md) — Correção: response schema JSON literal causa safeParse error em DELETE e restore + tree endpoint não retorna inativos
+- [UX-001-C05](amendments/ux/UX-001-C05.md) — Correção: checkbox "Mostrar inativos" sem efeito — conectar API client/hook/page ao query param include_inactive
+- [FR-002-C01](amendments/fr/FR-002-C01.md) — Correção: departmentsRoutes não registrado em src/index.ts + response shape lista departments (pagination wrapper → flat)

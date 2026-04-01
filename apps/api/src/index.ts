@@ -32,8 +32,9 @@ import {
   foundationErrorHandler,
 } from './modules/foundation/index.js';
 
-// — Route plugins: MOD-003 Org Units —
+// — Route plugins: MOD-003 Org Units + Departments —
 import { orgUnitsRoutes } from './modules/org-units/index.js';
+import { departmentsRoutes } from './modules/departments/presentation/index.js';
 
 // — Route plugins: MOD-004 Identity Advanced —
 import {
@@ -133,6 +134,9 @@ await app.register(infoRoute, { prefix: '/api/v1' });
 
 // MOD-003 Org Units — relative paths
 await app.register(orgUnitsRoutes, { prefix: '/api/v1/org-units' });
+
+// MOD-003 Departments — relative paths
+await app.register(departmentsRoutes, { prefix: '/api/v1/departments' });
 
 // MOD-004 Identity Advanced — relative paths
 await app.register(adminOrgScopesRoutes, { prefix: '/api/v1/admin/users' });

@@ -16,10 +16,11 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 const DEFAULT_EVENTS = ['click', 'keydown', 'scroll', 'touchstart', 'mousemove'];
 const DEFAULT_THROTTLE_MS = 30_000;
 const DEFAULT_STORAGE_KEY = 'ecf_last_activity';
-const DEFAULT_IDLE_TIMEOUT_MS = Number(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (import.meta as any).env?.VITE_SESSION_IDLE_TIMEOUT_MS,
-) || 1_800_000; // 30 min
+const DEFAULT_IDLE_TIMEOUT_MS =
+  Number(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (import.meta as any).env?.VITE_SESSION_IDLE_TIMEOUT_MS,
+  ) || 1_800_000; // 30 min
 
 export interface UseActivityTrackerOptions {
   events?: string[];
@@ -46,9 +47,7 @@ function readStoredTimestamp(key: string): number {
   return Date.now();
 }
 
-export function useActivityTracker(
-  options?: UseActivityTrackerOptions,
-): UseActivityTrackerReturn {
+export function useActivityTracker(options?: UseActivityTrackerOptions): UseActivityTrackerReturn {
   const events = options?.events ?? DEFAULT_EVENTS;
   const throttleMs = options?.throttleMs ?? DEFAULT_THROTTLE_MS;
   const storageKey = options?.storageKey ?? DEFAULT_STORAGE_KEY;

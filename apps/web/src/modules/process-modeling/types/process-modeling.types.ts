@@ -385,16 +385,16 @@ export function canShowDelete(userScopes: readonly string[], status: CycleStatus
 }
 
 // ---------------------------------------------------------------------------
-// Gate type display metadata
+// Gate type display metadata (UX-005-M03 §D9, §D12)
 // ---------------------------------------------------------------------------
 export const GATE_TYPE_META: Record<
   GateType,
-  { label: string; variant: 'default' | 'secondary' | 'outline' | 'destructive' }
+  { label: string; variant: 'default' | 'secondary' | 'outline' | 'destructive'; textColor: string; bgColor: string }
 > = {
-  APPROVAL: { label: 'Aprovação', variant: 'default' },
-  DOCUMENT: { label: 'Documento', variant: 'secondary' },
-  CHECKLIST: { label: 'Checklist', variant: 'outline' },
-  INFORMATIVE: { label: 'Informativo', variant: 'secondary' },
+  APPROVAL: { label: 'Aprovação', variant: 'default', textColor: '#2E86C1', bgColor: '#E3F2FD' },
+  DOCUMENT: { label: 'Documento', variant: 'secondary', textColor: '#27AE60', bgColor: '#E8F8EF' },
+  CHECKLIST: { label: 'Checklist', variant: 'outline', textColor: '#8E44AD', bgColor: '#F3E5F5' },
+  INFORMATIVE: { label: 'Informativo', variant: 'secondary', textColor: '#888888', bgColor: '#F5F5F3' },
 };
 
 export const STATUS_META: Record<

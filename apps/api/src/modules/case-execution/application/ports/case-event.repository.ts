@@ -17,7 +17,11 @@ export interface CaseEventRow {
   stageId: string;
 }
 
+export type CreateCaseEventInput = Omit<CaseEventRow, 'id' | 'createdAt'> & {
+  createdAt?: Date;
+};
+
 export interface CaseEventRepository {
-  create(data: Omit<CaseEventRow, 'id'>): Promise<CaseEventRow>;
+  create(data: CreateCaseEventInput): Promise<CaseEventRow>;
   findByCaseId(caseId: string): Promise<CaseEventRow[]>;
 }

@@ -48,9 +48,7 @@ export function ScopePill({ name, type, overflow, onClick, className }: ScopePil
         <span
           className={cn(
             'rounded px-1.5 py-0.5 text-[10px] font-bold uppercase',
-            isPrimary
-              ? 'bg-[#2E86C1] text-white'
-              : 'bg-[#F5F5F3] text-[#555555]',
+            isPrimary ? 'bg-[#2E86C1] text-white' : 'bg-[#F5F5F3] text-[#555555]',
           )}
         >
           {type}

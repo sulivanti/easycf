@@ -33,9 +33,13 @@ function buildFilterQuery(filters: OrgUnitFilters): string {
 
 // ── Tree ────────────────────────────────────────────────────
 
-/** @contract FR-002 — GET /org-units/tree */
-export async function fetchOrgTree(signal?: AbortSignal): Promise<OrgUnitTreeResponseDTO> {
-  return httpClient.get<OrgUnitTreeResponseDTO>('/org-units/tree', { signal });
+/** @contract FR-002, FR-001-C05 — GET /org-units/tree */
+export async function fetchOrgTree(
+  includeInactive = false,
+  signal?: AbortSignal,
+): Promise<OrgUnitTreeResponseDTO> {
+  const query = includeInactive ? '?include_inactive=true' : '';
+  return httpClient.get<OrgUnitTreeResponseDTO>(`/org-units/tree${query}`, { signal });
 }
 
 // ── Flat list ───────────────────────────────────────────────

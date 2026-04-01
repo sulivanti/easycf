@@ -465,7 +465,13 @@ export const COPY = {
 // ── Avatar initials helper (FR-001-M01) ─────────────────────
 
 export function getInitials(name: string): string {
-  return name.split(' ').filter(Boolean).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
 }
 
 // ── Field error extraction (RFC 9457) ──────────────────────

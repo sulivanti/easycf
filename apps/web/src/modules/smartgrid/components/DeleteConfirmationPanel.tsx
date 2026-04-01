@@ -1,7 +1,7 @@
 /**
- * @contract UX-SGR-003, BR-009
- * Split view: allowed records (green) vs blocked records (red with reason).
- * Buttons: "Cancel" / "Confirm delete ({X} records)".
+ * @contract UX-SGR-003, BR-009, UX-011-M01 §D4
+ * Split-view overlay: blocked records (red) vs ready records (green).
+ * Card width 720px, rounded-xl. Buttons: "Cancelar" / "Excluir {N} registros".
  */
 
 import { Button } from '@shared/ui/button';
@@ -16,7 +16,7 @@ interface DeleteConfirmationPanelProps {
   readonly onCancel: () => void;
 }
 
-/** @contract UX-SGR-003 — delete-confirmation-panel component */
+/** @contract UX-SGR-003, UX-011-M01 §D4 — split-view confirmation panel */
 export function DeleteConfirmationPanel({
   results,
   deleting,
@@ -28,61 +28,79 @@ export function DeleteConfirmationPanel({
   const confirmEnabled = isDeleteConfirmEnabled(results) && !deleting;
 
   return (
-    <div className="p-4">
-      <h3 className="mt-0 text-lg font-semibold">Resultado da verificação</h3>
-
-      <p className="text-sm text-muted-foreground">
-        {allowed.length} liberado(s) para exclusão · {blocked.length} bloqueado(s)
-      </p>
-
-      {allowed.length > 0 && (
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-green-600">Liberados</h4>
-          <ul className="list-none p-0">
-            {allowed.map((r) => (
-              <li
-                key={r.record_id}
-                className="mb-1 border-l-3 border-green-500 bg-green-50 px-3 py-1.5 text-sm"
-              >
-                ✅ {r.display_label}
-              </li>
-            ))}
-          </ul>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+      <div className="w-[720px] overflow-hidden rounded-xl bg-white shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
+        {/* Header */}
+        <div className="border-b border-[#E8E8E6] px-6 py-5">
+          <h3 className="m-0 text-lg font-bold text-[#111111]">Confirmação de Exclusão</h3>
         </div>
-      )}
 
-      {blocked.length > 0 && (
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-destructive">Bloqueados</h4>
-          <ul className="list-none p-0">
+        {/* Split view */}
+        <div className="flex min-h-[300px]">
+          {/* Blocked panel (red) */}
+          <div className="flex-1 border-r border-[#F0F0EE] bg-[#FFEBEE] p-5">
+            <h4 className="mb-3 text-sm font-bold text-[#E74C3C]">
+              Não podem ser excluídos ({blocked.length})
+            </h4>
+            {blocked.length === 0 && (
+              <p className="text-xs text-[#888888]">Nenhum registro bloqueado.</p>
+            )}
             {blocked.map((r) => (
-              <li
+              <div
                 key={r.record_id}
-                className="mb-1 border-l-3 border-destructive bg-red-50 px-3 py-1.5 text-sm"
+                className="mb-2 rounded-lg border border-[#F5C6CB] bg-white p-3"
               >
-                ❌ {r.display_label}
+                <p className="m-0 text-[13px] font-semibold text-[#111111]">
+                  {r.display_label}
+                </p>
                 {r.blocking_reason && (
-                  <span className="ml-2 text-muted-foreground">— {r.blocking_reason}</span>
+                  <p className="m-0 mt-1 text-xs text-[#E74C3C]">{r.blocking_reason}</p>
                 )}
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
+
+          {/* Ready panel (green) */}
+          <div className="flex-1 bg-[#E8F8EF] p-5">
+            <h4 className="mb-3 text-sm font-bold text-[#27AE60]">
+              Prontos para exclusão ({allowed.length})
+            </h4>
+            {allowed.length === 0 && (
+              <p role="alert" className="text-xs font-semibold text-[#E74C3C]">
+                {COPY.allBlocked}
+              </p>
+            )}
+            {allowed.map((r) => (
+              <div
+                key={r.record_id}
+                className="mb-2 rounded-lg border border-[#B5E8C9] bg-white p-3"
+              >
+                <p className="m-0 text-[13px] font-semibold text-[#111111]">
+                  {r.display_label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      )}
 
-      {allowed.length === 0 && (
-        <p role="alert" className="font-semibold text-destructive">
-          {COPY.allBlocked}
-        </p>
-      )}
-
-      <div className="mt-4 flex justify-end gap-2">
-        <Button variant="outline" onClick={onCancel} disabled={deleting}>
-          Cancelar
-        </Button>
-        <Button variant="destructive" onClick={onConfirmDelete} disabled={!confirmEnabled}>
-          {deleting ? 'Excluindo...' : `Confirmar exclusão (${allowed.length} registros)`}
-        </Button>
+        {/* Footer */}
+        <div className="flex justify-end gap-3 border-t border-[#E8E8E6] px-6 py-4">
+          <Button
+            variant="outline"
+            onClick={onCancel}
+            disabled={deleting}
+            className="h-10 rounded-lg border-[#E8E8E6] px-5 text-[13px] font-semibold text-[#555555]"
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={onConfirmDelete}
+            disabled={!confirmEnabled}
+            className="h-10 rounded-lg bg-[#E74C3C] px-5 text-[13px] font-bold text-white hover:bg-[#D44333] disabled:cursor-not-allowed disabled:bg-[#E8E8E6] disabled:text-[#CCCCCC]"
+          >
+            {deleting ? 'Excluindo…' : `Excluir ${allowed.length} registros`}
+          </Button>
+        </div>
       </div>
     </div>
   );

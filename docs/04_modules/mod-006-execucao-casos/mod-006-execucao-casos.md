@@ -280,6 +280,7 @@ apps/web/src/modules/case-execution/
 - [NFR-006](requirements/nfr/NFR-006.md) — Requisitos Não Funcionais da Execução de Casos
 - [PEN-006](requirements/pen-006-pendente.md) — Questões Abertas da Execução de Casos
 - [INT-006-C01](amendments/int/INT-006-C01.md) — Correção: 4 endpoints enviam camelCase sem mapear para snake_case dos schemas Zod
+- [UX-006-M01](amendments/ux/UX-006-M01.md) — Melhoria: Alinhar UX com spec 80-case-execution (filtros, tabela 7 cols, 3 abas, drawer, badges, responsividade)
 <!-- end index -->
 
 ## 10. Decisões (ADR)

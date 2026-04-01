@@ -166,14 +166,10 @@ export function SharesDelegationsPanelPage({
   // ── Dynamic header button ─────────────────────────────────
   function renderHeaderAction() {
     if (activeTab === 'shares' && hasShareWrite) {
-      return (
-        <Button onClick={() => setShareDrawerOpen(true)}>+ Novo Compartilhamento</Button>
-      );
+      return <Button onClick={() => setShareDrawerOpen(true)}>+ Novo Compartilhamento</Button>;
     }
     if (activeTab === 'delegations') {
-      return (
-        <Button onClick={() => setDelegationDrawerOpen(true)}>+ Nova Delegação</Button>
-      );
+      return <Button onClick={() => setDelegationDrawerOpen(true)}>+ Nova Delegação</Button>;
     }
     return null;
   }
@@ -381,10 +377,7 @@ export function SharesDelegationsPanelPage({
                     </TableHeader>
                     <TableBody>
                       {delegations.data.given.map((d) => (
-                        <TableRow
-                          key={d.id}
-                          className={d.status !== 'ACTIVE' ? 'opacity-60' : ''}
-                        >
+                        <TableRow key={d.id} className={d.status !== 'ACTIVE' ? 'opacity-60' : ''}>
                           <TableCell>{renderAvatar(d.delegatee.name)}</TableCell>
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
@@ -395,9 +388,7 @@ export function SharesDelegationsPanelPage({
                               ))}
                             </div>
                           </TableCell>
-                          <TableCell>
-                            {renderExpirationBadge(d.valid_until, d.status)}
-                          </TableCell>
+                          <TableCell>{renderExpirationBadge(d.valid_until, d.status)}</TableCell>
                           <TableCell className="max-w-[200px] truncate text-[13px] text-[#555555]">
                             {d.reason}
                           </TableCell>
@@ -465,9 +456,7 @@ export function SharesDelegationsPanelPage({
                                 ))}
                               </div>
                             </TableCell>
-                            <TableCell>
-                              {renderExpirationBadge(d.valid_until, d.status)}
-                            </TableCell>
+                            <TableCell>{renderExpirationBadge(d.valid_until, d.status)}</TableCell>
                             <TableCell className="max-w-[200px] truncate text-[13px] text-[#555555]">
                               {d.reason}
                             </TableCell>
@@ -496,9 +485,7 @@ export function SharesDelegationsPanelPage({
 
           {/* Compartilhamentos Recebidos */}
           <div className="flex flex-col gap-3">
-            <h3 className="mb-3 text-base font-bold text-[#111111]">
-              Compartilhamentos Recebidos
-            </h3>
+            <h3 className="mb-3 text-base font-bold text-[#111111]">Compartilhamentos Recebidos</h3>
             {myShared.isLoading && renderLoadingSkeleton()}
             {myShared.isError && renderError(() => myShared.refetch())}
             {myShared.data && myShared.data.length === 0 && (
@@ -523,9 +510,7 @@ export function SharesDelegationsPanelPage({
                       <TableCell>{renderAvatar(share.grantor.name)}</TableCell>
                       <TableCell>
                         <span className="font-medium">{share.resource_type}</span>
-                        <span className="ml-1 text-a1-text-auxiliary">
-                          / {share.resource_id}
-                        </span>
+                        <span className="ml-1 text-a1-text-auxiliary">/ {share.resource_id}</span>
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">
@@ -568,10 +553,7 @@ export function SharesDelegationsPanelPage({
                   {delegations.data.received.map((d) => {
                     const status = getStatusBadge(d.status);
                     return (
-                      <TableRow
-                        key={d.id}
-                        className={d.status !== 'ACTIVE' ? 'opacity-60' : ''}
-                      >
+                      <TableRow key={d.id} className={d.status !== 'ACTIVE' ? 'opacity-60' : ''}>
                         <TableCell>{renderAvatar(d.delegator.name)}</TableCell>
                         <TableCell>
                           <div className="flex flex-wrap gap-1">
@@ -582,9 +564,7 @@ export function SharesDelegationsPanelPage({
                             ))}
                           </div>
                         </TableCell>
-                        <TableCell>
-                          {renderExpirationBadge(d.valid_until, d.status)}
-                        </TableCell>
+                        <TableCell>{renderExpirationBadge(d.valid_until, d.status)}</TableCell>
                         <TableCell>
                           <StatusBadge status={toStatus(status.variant)}>
                             {status.label}

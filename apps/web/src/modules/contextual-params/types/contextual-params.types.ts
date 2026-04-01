@@ -11,6 +11,7 @@ export type FramerStatus = 'ACTIVE' | 'INACTIVE';
 export type RoutineStatus = 'DRAFT' | 'PUBLISHED' | 'DEPRECATED';
 export type RoutineType = 'BEHAVIOR' | 'INTEGRATION';
 export type FieldType = 'TEXT' | 'NUMBER' | 'DATE' | 'SELECT' | 'BOOLEAN' | 'FILE';
+export type IncidenceType = 'OBR' | 'OPC' | 'AUTO';
 
 export type ItemType =
   | 'FIELD_VISIBILITY'
@@ -158,6 +159,7 @@ export interface IncidenceRuleListItemDTO {
   id: string;
   framer_id: string;
   target_object_id: string;
+  incidence_type: IncidenceType;
   status: FramerStatus;
   valid_from: string;
   valid_until: string | null;
@@ -168,6 +170,7 @@ export interface IncidenceRuleResponseDTO {
   id: string;
   framer_id: string;
   target_object_id: string;
+  incidence_type: IncidenceType;
   condition_expr: string | null;
   valid_from: string;
   valid_until: string | null;
@@ -179,12 +182,14 @@ export interface IncidenceRuleResponseDTO {
 export interface CreateIncidenceRuleRequest {
   framer_id: string;
   target_object_id: string;
+  incidence_type: IncidenceType;
   condition_expr?: string;
   valid_from: string;
   valid_until?: string;
 }
 
 export interface UpdateIncidenceRuleRequest {
+  incidence_type?: IncidenceType;
   valid_from?: string;
   valid_until?: string | null;
   status?: FramerStatus;
@@ -366,6 +371,11 @@ export interface EvaluateResponseDTO {
   domain_restrictions: { field_id: string; allowed_values: unknown }[];
   validations: { field_id: string; message: string | null }[];
   blocking_validations: string[];
-  applied_routines: { routine_id: string; codigo: string; version: number }[];
+  applied_routines: {
+    routine_id: string;
+    codigo: string;
+    version: number;
+    incidence_type: IncidenceType;
+  }[];
   dry_run: boolean;
 }

@@ -209,6 +209,7 @@ export interface IncidenceRuleRepository {
     params: PaginationParams & {
       framerId?: string;
       targetObjectId?: string;
+      incidenceType?: 'OBR' | 'OPC' | 'AUTO';
       status?: 'ACTIVE' | 'INACTIVE';
     },
     tx?: TransactionContext,

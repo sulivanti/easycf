@@ -12,11 +12,15 @@ export interface GetOrgUnitTreeOutput {
   readonly tree: readonly OrgUnitTreeNode[];
 }
 
+export interface GetOrgUnitTreeInput {
+  readonly includeInactive?: boolean;
+}
+
 export class GetOrgUnitTreeUseCase {
   constructor(private readonly orgUnitRepo: OrgUnitRepository) {}
 
-  async execute(): Promise<GetOrgUnitTreeOutput> {
-    const tree = await this.orgUnitRepo.getTree();
+  async execute(input?: GetOrgUnitTreeInput): Promise<GetOrgUnitTreeOutput> {
+    const tree = await this.orgUnitRepo.getTree(input?.includeInactive);
     return { tree };
   }
 }

@@ -90,14 +90,22 @@ export class DrizzleOrgUnitRepository implements OrgUnitRepository {
     return result?.count ?? 0;
   }
 
-  async getTree(tx?: TransactionContext): Promise<readonly OrgUnitTreeNode[]> {
+  async getTree(
+    includeInactive = false,
+    tx?: TransactionContext,
+  ): Promise<readonly OrgUnitTreeNode[]> {
     const c = conn(this.db, tx);
 
-    // Fetch all active org units
+    // FR-001-C05: conditionally include inactive units
+    const conditions = [isNull(orgUnits.deletedAt)];
+    if (!includeInactive) {
+      conditions.push(eq(orgUnits.status, 'ACTIVE'));
+    }
+
     const allUnits = await c
       .select()
       .from(orgUnits)
-      .where(and(eq(orgUnits.status, 'ACTIVE'), isNull(orgUnits.deletedAt)))
+      .where(and(...conditions))
       .orderBy(orgUnits.nivel, orgUnits.nome);
 
     // Fetch all active tenant links

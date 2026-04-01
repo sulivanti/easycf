@@ -3,7 +3,7 @@
  * Pill de escopo organizacional com variantes PRIMARY/SECONDARY/OVERFLOW.
  */
 
-import { cn } from '@shared/ui';
+import { cn } from '@shared/lib/utils';
 
 export interface ScopePillProps {
   name: string;

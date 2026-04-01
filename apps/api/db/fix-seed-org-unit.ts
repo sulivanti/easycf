@@ -1,8 +1,9 @@
 /**
- * Fix script — cria org unit N1 raiz e vincula ao tenant existente.
+ * Fix script — cria hierarquia org unit N1→N2→N3→N4 e vincula tenant ao N4.
  *
  * Para ambientes onde o seed-admin.ts já rodou sem a org unit.
  * Idempotente: verifica se já existe org unit com nivel=1 antes de criar.
+ * BR-006: Tenant vinculado exclusivamente ao N4.
  *
  * Uso:
  *   pnpm -F @easycode/api db:fix-org-unit
@@ -84,25 +85,61 @@ async function fix() {
   }
   const adminUser = existingUsers[0];
 
-  // Criar org unit N1 raiz
-  const orgUnitId = randomUUID();
-  console.log('Criando org unit N1 raiz...');
-  await db.insert(orgUnits).values({
-    id: orgUnitId,
-    codigo: 'GRUPO-A1',
-    nome: 'Grupo A1',
-    descricao: 'Unidade organizacional raiz',
-    nivel: 1,
-    parentId: null,
-    status: 'ACTIVE',
-    createdBy: adminUser.id,
-  });
+  // BR-006: Criar hierarquia completa N1→N2→N3→N4 e vincular tenant ao N4
+  console.log('Criando hierarquia organizacional N1→N2→N3→N4...');
+  const n1Id = randomUUID();
+  const n2Id = randomUUID();
+  const n3Id = randomUUID();
+  const n4Id = randomUUID();
 
-  // Vincular tenant à org unit
-  console.log(`Vinculando tenant "${tenant.name}" à org unit N1...`);
+  await db.insert(orgUnits).values([
+    {
+      id: n1Id,
+      codigo: 'GRUPO-A1',
+      nome: 'Grupo A1',
+      descricao: 'Grupo corporativo raiz',
+      nivel: 1,
+      parentId: null,
+      status: 'ACTIVE',
+      createdBy: adminUser.id,
+    },
+    {
+      id: n2Id,
+      codigo: 'UNIDADE-A1',
+      nome: 'Unidade A1',
+      descricao: 'Unidade regional',
+      nivel: 2,
+      parentId: n1Id,
+      status: 'ACTIVE',
+      createdBy: adminUser.id,
+    },
+    {
+      id: n3Id,
+      codigo: 'MACRO-A1',
+      nome: 'Macroárea A1',
+      descricao: 'Macroárea operacional',
+      nivel: 3,
+      parentId: n2Id,
+      status: 'ACTIVE',
+      createdBy: adminUser.id,
+    },
+    {
+      id: n4Id,
+      codigo: 'SUB-A1',
+      nome: 'Subunidade A1',
+      descricao: 'Subunidade organizacional',
+      nivel: 4,
+      parentId: n3Id,
+      status: 'ACTIVE',
+      createdBy: adminUser.id,
+    },
+  ]);
+
+  // Vincular tenant ao N4 (BR-006)
+  console.log(`Vinculando tenant "${tenant.name}" à org unit N4 (BR-006)...`);
   await db.insert(orgUnitTenantLinks).values({
     id: randomUUID(),
-    orgUnitId,
+    orgUnitId: n4Id,
     tenantId: tenant.id,
     createdBy: adminUser.id,
   });
@@ -111,8 +148,8 @@ async function fix() {
 
   console.log('');
   console.log('Fix concluído com sucesso!');
-  console.log(`  Org Unit: Grupo A1 (GRUPO-A1) — N1 raiz`);
-  console.log(`  Tenant:   ${tenant.name} (${tenant.codigo})`);
+  console.log(`  Org Unit: GRUPO-A1 → UNIDADE-A1 → MACRO-A1 → SUB-A1 (N1→N4)`);
+  console.log(`  Tenant:   ${tenant.name} (${tenant.codigo}) vinculado ao N4`);
 }
 
 fix().catch((err) => {

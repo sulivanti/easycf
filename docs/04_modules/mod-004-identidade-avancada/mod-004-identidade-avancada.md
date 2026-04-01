@@ -206,12 +206,14 @@ apps/web/src/modules/identity-advanced/
 <!-- start index -->
 - [BR-001](requirements/br/BR-001.md) — Regras de Negócio da Identidade Avançada
 - [FR-001](requirements/fr/FR-001.md) — Requisitos Funcionais da Identidade Avançada
+  - [FR-001-M01](amendments/fr/FR-001-M01.md) — Expandir respostas com nomes de usuarios, novo endpoint admin_org_scopes_list, autocomplete
 - [DATA-001](requirements/data/DATA-001.md) — Modelo de Dados da Identidade Avançada
 - [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events da Identidade Avançada
 - [INT-001](requirements/int/INT-001.md) — Integrações e Contratos da Identidade Avançada
 - [SEC-001](requirements/sec/SEC-001.md) — Segurança e Compliance da Identidade Avançada
 - [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos da Identidade Avançada
 - [UX-001](requirements/ux/UX-001.md) — Jornadas e Fluxos da Identidade Avançada
+  - [UX-001-M01](amendments/ux/UX-001-M01.md) — Alinhamento layout Penpot (40-Identity) — tabela full-width, ScopePill, TreeSelector, TabBar, Banner, Drawers 480px, Modais warning
 - [NFR-001](requirements/nfr/NFR-001.md) — Requisitos Não Funcionais da Identidade Avançada
 - [PEN-004](requirements/pen-004-pendente.md) — Questões Abertas da Identidade Avançada
 <!-- end index -->

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>60-MCP-Agents — Referência Visual (4 Frames)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+<style>
+:root{--blue:#2E86C1;--blue-lt:#E3F2FD;--black:#111;--bg:#F5F5F3;--white:#FFF;--border:#E8E8E6;--border-lt:#F0F0EE;--t1:#111;--t2:#333;--t3:#555;--t4:#888;--t5:#AAA;--t6:#CCC;--err:#E74C3C;--danger:#C0392B;--green:#27AE60;--green-t:#1E7A42;--green-bg:#E8F8EF;--green-bd:#B5E8C9;--amber:#F39C12;--amber-t:#B8860B;--amber-bg:#FFF3E0;--amber-bd:#FFE0B2;--red-bg:#FFEBEE;--red-bd:#F5C6CB;--grey-t:#6C757D;--grey-bg:#F4F4F2;--grey-bd:#E0E0DE}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#888;display:flex;flex-direction:column;align-items:center;gap:80px;padding:60px 40px}
+.tag{font-size:11px;font-weight:700;color:#444;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.frame{width:1440px;height:900px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.25);flex-shrink:0;background:var(--bg)}
+
+/* TOPBAR */
+.topbar{height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tb-n{font-weight:800;font-size:14px;color:var(--t1)}.tb-s{font-weight:600;font-size:10px;color:var(--t4);letter-spacing:1.2px;text-transform:uppercase}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 8px}
+.bc{display:flex;align-items:center;gap:6px;font-size:13px}.bc-m{color:var(--t4)}.bc-x{color:var(--t6)}.bc-a{color:var(--t1);font-weight:700}
+.tb-r{display:flex;align-items:center;gap:12px}
+.tb-av{width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.tb-info{font-size:12px}.tb-name{font-weight:600;color:var(--t2)}.tb-org{color:var(--t4)}
+.lay{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sb{width:240px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-sec{padding:24px 16px 0}.sb-sec+.sb-sec{padding-top:20px}
+.sb-cat{font-weight:700;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--t5);margin-bottom:8px;padding:0 12px}
+.sb-items{display:flex;flex-direction:column;gap:2px}
+.sb-i{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;text-decoration:none}
+.sb-i:hover{background:#f8f8f6}
+.sb-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sb-i.on{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.sb-ft{margin-top:auto;border-top:1px solid var(--border);padding:16px;display:flex;align-items:center;gap:8px}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.sb-ft-t{font-size:12px;color:var(--t4)}
+
+/* CONTENT */
+.ct{flex:1;padding:24px;overflow-y:auto;overflow-x:hidden}
+.ph{display:flex;justify-content:space-between;align-items:flex-start}
+.ph-t{font-weight:800;font-size:24px;color:var(--t1)}
+.ph-d{font-size:13px;color:var(--t4);margin-top:4px}
+.btn-p{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;background:var(--blue);border:none;color:#fff;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.btn-s{display:inline-flex;align-items:center;gap:6px;padding:0 16px;height:36px;border-radius:8px;border:1px solid var(--blue);background:transparent;color:var(--blue);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer}
+
+/* TABS */
+.tabs{display:flex;gap:0;margin-top:20px;border-bottom:2px solid var(--border)}
+.tab{padding:10px 20px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab.on{color:var(--blue);font-weight:700;border-bottom-color:var(--blue)}
+
+/* SEARCH & FILTERS */
+.toolbar{display:flex;align-items:center;gap:12px;margin-top:16px}
+.si{position:relative;flex-shrink:0}
+.si input{width:280px;height:40px;padding:0 14px 0 38px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:13px;color:var(--t1);background:#fff;outline:none}
+.si input::placeholder{color:var(--t6)}
+.si>svg{position:absolute;left:12px;top:11px;width:18px;height:18px;stroke:var(--t6);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.fl-s{display:flex;align-items:center;gap:6px;padding:0 12px;height:40px;border-radius:8px;border:1px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--t2);cursor:pointer}
+.fl-s svg{width:14px;height:14px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* TABLE */
+.tbl{margin-top:16px;background:#fff;border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.th-r{display:flex;padding:0 20px;height:44px;align-items:center;background:#FAFAFA;border-bottom:1px solid var(--border-lt)}
+.th{font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--t4)}
+.tr{display:flex;align-items:center;padding:0 20px;height:52px;border-bottom:1px solid var(--border-lt);cursor:pointer}
+.tr:last-child{border-bottom:none}
+.tr:hover{background:#F8F8F6}
+.tr.revoked{opacity:.5}
+.tr.escalation{border-left:3px solid var(--err)}
+.td{font-size:13px;color:var(--t3)}
+.td-b{font-weight:600;color:var(--t2)}
+.td-m{font-size:12px;color:var(--t4);font-family:'Courier New',monospace}
+.td-sm{font-size:12px;color:var(--t4)}
+
+/* BADGES */
+.bd{display:inline-flex;padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.bd-active{color:var(--green-t);background:var(--green-bg);border:1px solid var(--green-bd)}
+.bd-revoked{color:var(--danger);background:var(--red-bg);border:1px solid var(--red-bd)}
+.bd-success{color:var(--green-t);background:var(--green-bg);border:1px solid var(--green-bd)}
+.bd-blocked{color:var(--danger);background:var(--red-bg);border:1px solid var(--red-bd)}
+.bd-pending{color:var(--amber-t);background:var(--amber-bg);border:1px solid var(--amber-bd)}
+.bd-event{color:var(--grey-t);background:var(--grey-bg);border:1px solid var(--grey-bd)}
+.bd-direct{color:var(--green-t);background:var(--green-bg);border:1px solid var(--green-bd)}
+.bd-controlled{color:var(--amber-t);background:var(--amber-bg);border:1px solid var(--amber-bd)}
+.bd-escalation{color:#fff;background:var(--err);border:1px solid var(--danger);border-radius:10px;font-size:10px;padding:2px 8px}
+
+/* 3-PANEL */
+.panels{display:flex;gap:16px;margin-top:16px;flex:1}
+.panel{background:#fff;border-radius:12px;border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column}
+.panel-h{padding:12px 16px;font-weight:700;font-size:12px;color:var(--t2);border-bottom:1px solid var(--border-lt);background:#FAFAFA;text-transform:uppercase;letter-spacing:.5px;display:flex;justify-content:space-between;align-items:center}
+.panel-b{flex:1;overflow-y:auto;padding:0}
+
+/* ACTION CARDS */
+.act-grid{display:grid;grid-template-columns:1fr;gap:8px;padding:12px}
+.act-card{border:1px solid var(--border);border-radius:8px;padding:12px;cursor:pointer}
+.act-card:hover{background:#F8F8F6}
+.act-top{display:flex;justify-content:space-between;align-items:center}
+.act-code{font-size:11px;font-weight:600;color:var(--t2);font-family:'Courier New',monospace}
+.act-name{font-size:13px;font-weight:600;color:var(--t1);margin-top:4px}
+.act-desc{font-size:11px;color:var(--t4);margin-top:2px}
+.scope-chip{display:inline-flex;font-size:9px;font-weight:500;color:var(--t3);background:var(--bg);border-radius:4px;padding:2px 6px;margin-top:6px;margin-right:4px}
+
+/* PERMISSIONS MATRIX */
+.matrix{width:100%;border-collapse:collapse}
+.matrix th{font-size:9px;font-weight:600;color:var(--t4);text-transform:uppercase;padding:6px 4px;text-align:center;background:#F8F8F6;border-bottom:1px solid var(--border-lt)}
+.matrix th.agent-h{text-align:left;padding-left:12px;width:160px;font-size:11px}
+.matrix th.rot{writing-mode:vertical-lr;transform:rotate(180deg);height:80px;font-size:9px;white-space:nowrap;width:50px}
+.matrix td{text-align:center;padding:8px 4px;border-bottom:1px solid var(--border-lt);font-size:12px}
+.matrix td.agent-c{text-align:left;padding-left:12px;font-weight:600;color:var(--t2);font-size:12px}
+.matrix .cb{width:16px;height:16px;accent-color:var(--blue);cursor:pointer}
+.matrix tr.disabled{opacity:.4}
+.matrix tr.disabled .cb{pointer-events:none}
+
+/* METRIC CARDS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px}
+.metric{background:#fff;border-radius:12px;border:1px solid var(--border);padding:20px}
+.metric-l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--t4)}
+.metric-v{font-size:28px;font-weight:800;color:var(--t1);margin-top:4px}
+.metric-v.green{color:var(--green)}
+.metric-v.amber{color:var(--amber)}
+.metric-v.red{color:var(--err)}
+.metric-bar{height:4px;border-radius:2px;background:var(--border-lt);margin-top:8px;overflow:hidden}
+.metric-fill{height:100%;border-radius:2px}
+
+/* SPLIT VIEW */
+.split{display:flex;gap:0;margin-top:16px;flex:1}
+.split-main{flex:1;background:#fff;border-radius:12px 0 0 12px;border:1px solid var(--border);overflow:hidden}
+.split-detail{width:40%;background:#fff;border-radius:0 12px 12px 0;border:1px solid var(--border);border-left:none;overflow-y:auto}
+.detail-h{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.detail-h-t{font-size:16px;font-weight:700;color:var(--t1)}
+.detail-close{width:18px;height:18px;stroke:var(--t4);fill:none;stroke-width:2;cursor:pointer}
+.detail-b{padding:20px}
+.detail-sec{margin-top:16px}
+.detail-sec:first-child{margin-top:0}
+.detail-sec-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:8px}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.detail-label{font-size:11px;color:var(--t4)}
+.detail-val{font-size:13px;color:var(--t2);font-weight:500}
+.detail-val-mono{font-size:12px;color:var(--t2);font-family:'Courier New',monospace}
+.detail-copy{display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.detail-copy svg{width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:1.6}
+
+/* ESCALATION ALERT */
+.esc-alert{background:var(--red-bg);border:1px solid var(--red-bd);border-radius:8px;padding:12px 16px;margin-bottom:16px}
+.esc-alert-t{font-size:11px;font-weight:700;color:var(--danger);text-transform:uppercase;letter-spacing:.5px}
+.esc-alert-d{font-size:12px;color:var(--danger);margin-top:4px}
+
+/* JSON VIEWER */
+.json-viewer{background:#F8F8F6;border-radius:8px;padding:12px;font-family:'Courier New',monospace;font-size:12px;color:var(--t2);line-height:1.6;white-space:pre;overflow-x:auto}
+.json-masked{color:var(--t6)}
+
+/* ACCORDION */
+.acc-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:8px 0}
+.acc-header svg{width:14px;height:14px;stroke:var(--t4);fill:none;stroke-width:2}
+.acc-body{margin-top:8px}
+
+/* MODAL OVERLAY */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);z-index:50;display:flex;align-items:center;justify-content:center}
+.modal-card{width:520px;border-radius:12px;background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.12);padding:24px}
+.modal-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.modal-icon.warn{background:var(--amber-bg)}
+.modal-icon.warn svg{stroke:var(--amber);width:24px;height:24px;fill:none;stroke-width:1.6}
+.modal-title{font-size:18px;font-weight:700;color:var(--t1);text-align:center;margin-top:16px}
+.modal-warn{font-size:13px;font-weight:600;color:var(--err);text-align:center;margin-top:8px}
+.apikey-field{margin-top:16px;background:#F8F8F6;border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border)}
+.apikey-val{font-size:14px;font-weight:500;color:var(--t1);font-family:'Courier New',monospace}
+.btn-copy{padding:6px 12px;border-radius:6px;border:1px solid var(--blue);background:transparent;color:var(--blue);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.chk-row{margin-top:16px;display:flex;align-items:center;gap:8px}
+.chk-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue)}
+.chk-row label{font-size:13px;font-weight:500;color:var(--t2)}
+.btn-close-modal{margin-top:20px;width:100%;height:40px;border-radius:8px;border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.btn-close-modal.disabled{background:var(--border);color:var(--t6);cursor:not-allowed}
+.btn-close-modal.enabled{background:var(--blue);color:#fff}
+
+/* TABLE FOOTER */
+.tbl-ft{padding:14px 20px;text-align:center;border-top:1px solid var(--border-lt)}
+.tbl-ft a{font-size:13px;font-weight:600;color:var(--blue);text-decoration:none;cursor:pointer}
+
+/* ACTION ICONS */
+.act-icons{display:flex;gap:8px;justify-content:center}
+.act-icons svg{width:16px;height:16px;stroke:var(--t4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;cursor:pointer}
+.act-icons svg:hover{stroke:var(--blue)}
+
+/* STATUS badge large */
+.bd-lg{font-size:14px;padding:6px 16px;border-radius:6px}
+</style>
+</head>
+<body>
+
+<!-- ═══ FRAME 1: Gestão de Agentes (3-panel) ═══ -->
+<div class="tag">Frame 1 — Gestão de Agentes (3-panel layout) — UX-MCP-001 (1440×900)</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Integração</span><span class="bc-x">›</span><span class="bc-a">MCP Agentes</span></nav>
+    </div>
+    <div class="tb-r">
+      <div class="tb-info"><span class="tb-name">Admin ECF</span> <span class="tb-org">/ A1 Engenharia</span></div>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos Controlados</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Protheus</a>
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/><circle cx="12" cy="15" r="2"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct">
+      <div class="ph">
+        <div><div class="ph-t">MCP Agentes</div><div class="ph-d">Gerencie agentes MCP, ações e permissões</div></div>
+        <button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Criar Agente</button>
+      </div>
+      <div class="tabs">
+        <div class="tab on">Agentes</div>
+        <div class="tab">Catálogo de Ações</div>
+        <div class="tab">Permissões</div>
+      </div>
+      <div class="panels" style="height:620px">
+        <!-- LEFT: Agent List -->
+        <div class="panel" style="flex:1.2">
+          <div class="panel-h"><span>Agentes</span><span style="font-size:11px;font-weight:500;color:var(--t4)">4 agentes</span></div>
+          <div class="panel-b">
+            <div style="padding:12px 16px">
+              <div class="si"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="Buscar agente..." style="width:100%"/></div>
+            </div>
+            <table style="width:100%;border-collapse:collapse">
+              <thead><tr style="height:36px;background:#FAFAFA;border-bottom:1px solid var(--border-lt)">
+                <th style="text-align:left;padding:0 16px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t4)">Código</th>
+                <th style="text-align:left;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t4)">Nome</th>
+                <th style="text-align:left;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t4)">Status</th>
+                <th style="text-align:left;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t4)">API Key</th>
+              </tr></thead>
+              <tbody>
+                <tr style="height:44px;border-bottom:1px solid var(--border-lt);background:#E3F2FD20">
+                  <td style="padding:0 16px;font-size:12px;font-weight:600;color:var(--t2)">AGENT-01</td>
+                  <td style="font-size:12px;color:var(--t1)">Agente Comercial</td>
+                  <td><span class="bd bd-active">ACTIVE</span></td>
+                  <td style="font-size:11px;color:var(--t4);font-family:'Courier New',monospace">sk-...a3f4</td>
+                </tr>
+                <tr style="height:44px;border-bottom:1px solid var(--border-lt)">
+                  <td style="padding:0 16px;font-size:12px;font-weight:600;color:var(--t2)">AGENT-02</td>
+                  <td style="font-size:12px;color:var(--t1)">Agente Financeiro</td>
+                  <td><span class="bd bd-active">ACTIVE</span></td>
+                  <td style="font-size:11px;color:var(--t4);font-family:'Courier New',monospace">sk-...b7e2</td>
+                </tr>
+                <tr style="height:44px;border-bottom:1px solid var(--border-lt)">
+                  <td style="padding:0 16px;font-size:12px;font-weight:600;color:var(--t2)">AGENT-03</td>
+                  <td style="font-size:12px;color:var(--t1)">Agente RH</td>
+                  <td><span class="bd bd-active">ACTIVE</span></td>
+                  <td style="font-size:11px;color:var(--t4);font-family:'Courier New',monospace">sk-...c9d1</td>
+                </tr>
+                <tr style="height:44px;opacity:.5">
+                  <td style="padding:0 16px;font-size:12px;font-weight:600;color:var(--t2)">AGENT-04</td>
+                  <td style="font-size:12px;color:var(--t1)">Agente Legacy</td>
+                  <td><span class="bd bd-revoked">REVOGADO</span></td>
+                  <td style="font-size:11px;color:var(--t4);font-family:'Courier New',monospace">sk-...d0f8</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CENTER: Action Catalog -->
+        <div class="panel" style="flex:1">
+          <div class="panel-h"><span>Catálogo de Ações</span>
+            <button class="btn-s" style="height:28px;font-size:11px;padding:0 10px">+ Nova Ação</button>
+          </div>
+          <div class="panel-b" style="padding:0">
+            <div style="padding:8px 12px">
+              <div class="fl-s" style="width:100%;height:32px;font-size:11px"><span>Todas as Políticas</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>
+            </div>
+            <div class="act-grid">
+              <div class="act-card">
+                <div class="act-top"><span class="act-code">process:case:create</span><span class="bd bd-direct" style="font-size:9px;padding:2px 6px">DIRECT</span></div>
+                <div class="act-name">Criar Processo</div>
+                <div class="act-desc">Cria um novo processo no sistema</div>
+                <div><span class="scope-chip">process:case:write</span></div>
+              </div>
+              <div class="act-card">
+                <div class="act-top"><span class="act-code">process:case:read</span><span class="bd bd-direct" style="font-size:9px;padding:2px 6px">DIRECT</span></div>
+                <div class="act-name">Consultar Processo</div>
+                <div class="act-desc">Consulta dados de processos</div>
+                <div><span class="scope-chip">process:case:read</span></div>
+              </div>
+              <div class="act-card">
+                <div class="act-top"><span class="act-code">approval:movement:create</span><span class="bd bd-controlled" style="font-size:9px;padding:2px 6px">CONTROLLED</span></div>
+                <div class="act-name">Solicitar Aprovação</div>
+                <div class="act-desc">Cria movimento controlado</div>
+                <div><span class="scope-chip">approval:write</span></div>
+              </div>
+              <div class="act-card">
+                <div class="act-top"><span class="act-code">org:unit:read</span><span class="bd bd-direct" style="font-size:9px;padding:2px 6px">DIRECT</span></div>
+                <div class="act-name">Consultar Org</div>
+                <div class="act-desc">Lê unidades organizacionais</div>
+                <div><span class="scope-chip">org:read</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Permissions Matrix -->
+        <div class="panel" style="flex:1.1">
+          <div class="panel-h"><span>Permissões</span><span style="font-size:11px;font-weight:500;color:var(--t4)">Agente × Ação</span></div>
+          <div class="panel-b" style="padding:8px">
+            <table class="matrix">
+              <thead>
+                <tr>
+                  <th class="agent-h">Agente</th>
+                  <th class="rot">process:case:create</th>
+                  <th class="rot">process:case:read</th>
+                  <th class="rot">approval:movement:create</th>
+                  <th class="rot">org:unit:read</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="agent-c">AGENT-01</td>
+                  <td><input type="checkbox" class="cb" checked></td>
+                  <td><input type="checkbox" class="cb" checked></td>
+                  <td><input type="checkbox" class="cb"></td>
+                  <td><input type="checkbox" class="cb" checked></td>
+                </tr>
+                <tr>
+                  <td class="agent-c">AGENT-02</td>
+                  <td><input type="checkbox" class="cb"></td>
+                  <td><input type="checkbox" class="cb" checked></td>
+                  <td><input type="checkbox" class="cb" checked></td>
+                  <td><input type="checkbox" class="cb"></td>
+                </tr>
+                <tr>
+                  <td class="agent-c">AGENT-03</td>
+                  <td><input type="checkbox" class="cb" checked></td>
+                  <td><input type="checkbox" class="cb" checked></td>
+                  <td><input type="checkbox" class="cb" checked></td>
+                  <td><input type="checkbox" class="cb" checked></td>
+                </tr>
+                <tr class="disabled">
+                  <td class="agent-c">AGENT-04</td>
+                  <td><input type="checkbox" class="cb" disabled></td>
+                  <td><input type="checkbox" class="cb" disabled></td>
+                  <td><input type="checkbox" class="cb" disabled></td>
+                  <td><input type="checkbox" class="cb" disabled></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ FRAME 2: Modal API Key ═══ -->
+<div class="tag">Frame 2 — Modal API Key (após criar agente) — UX-MCP-001 (1440×900)</div>
+<div class="frame" style="position:relative">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Integração</span><span class="bc-x">›</span><span class="bc-a">MCP Agentes</span></nav>
+    </div>
+    <div class="tb-r">
+      <div class="tb-info"><span class="tb-name">Admin ECF</span> <span class="tb-org">/ A1 Engenharia</span></div>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos Controlados</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Protheus</a>
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/><circle cx="12" cy="15" r="2"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct" style="filter:blur(1px);opacity:.6">
+      <div class="ph">
+        <div><div class="ph-t">MCP Agentes</div><div class="ph-d">Gerencie agentes MCP, ações e permissões</div></div>
+        <button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Criar Agente</button>
+      </div>
+      <div class="tabs">
+        <div class="tab on">Agentes</div>
+        <div class="tab">Catálogo de Ações</div>
+        <div class="tab">Permissões</div>
+      </div>
+    </main>
+  </div>
+  <!-- MODAL OVERLAY -->
+  <div class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon warn">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      </div>
+      <div class="modal-title">Chave de API Gerada</div>
+      <div class="modal-warn">Esta chave será exibida apenas uma vez. Copie-a agora.</div>
+      <div class="apikey-field">
+        <span class="apikey-val">sk-mcp-a1b2c3d4e5f6g7h8i9j0k1l2m3n4****</span>
+        <button class="btn-copy">Copiar</button>
+      </div>
+      <div class="chk-row">
+        <input type="checkbox" id="chk-copy"/>
+        <label for="chk-copy">Copiei e armazenei a chave com segurança</label>
+      </div>
+      <button class="btn-close-modal disabled">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FRAME 3: Monitor de Execuções ═══ -->
+<div class="tag">Frame 3 — Monitor de Execuções MCP — UX-MCP-002 (1440×900)</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Integração</span><span class="bc-x">›</span><span class="bc-a">Monitor MCP</span></nav>
+    </div>
+    <div class="tb-r">
+      <div class="tb-info"><span class="tb-name">Admin ECF</span> <span class="tb-org">/ A1 Engenharia</span></div>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos Controlados</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Protheus</a>
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/><circle cx="12" cy="15" r="2"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct">
+      <div class="ph">
+        <div><div class="ph-t">Monitor de Execuções MCP</div><div class="ph-d">Acompanhe em tempo real as execuções dos agentes</div></div>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-l">Total (24h)</div>
+          <div class="metric-v">1.247</div>
+        </div>
+        <div class="metric">
+          <div class="metric-l">Taxa de Sucesso</div>
+          <div class="metric-v amber">94.2%</div>
+          <div class="metric-bar"><div class="metric-fill" style="width:94.2%;background:var(--amber)"></div></div>
+        </div>
+        <div class="metric">
+          <div class="metric-l">Pendentes</div>
+          <div class="metric-v amber">12</div>
+        </div>
+        <div class="metric">
+          <div class="metric-l">Bloqueados</div>
+          <div class="metric-v red" style="display:flex;align-items:center;gap:8px">3 <span class="bd-escalation" style="font-size:10px">2 Escaladas</span></div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="si"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="Buscar por correlation ID..."/></div>
+        <div class="fl-s"><span>Todos Agentes</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>
+        <div class="fl-s"><span>Todas Ações</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>
+        <div class="fl-s"><span>Todos Status</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>
+      </div>
+      <div class="tbl">
+        <div class="th-r">
+          <div class="th" style="width:100px">Agente</div>
+          <div class="th" style="width:160px">Ação</div>
+          <div class="th" style="width:120px">Status</div>
+          <div class="th" style="width:150px">Início</div>
+          <div class="th" style="width:80px">Duração</div>
+          <div class="th" style="flex:1">Resultado</div>
+        </div>
+        <div class="tr">
+          <div class="td-b" style="width:100px">AGENT-01</div>
+          <div class="td-m" style="width:160px">process:case:create</div>
+          <div style="width:120px"><span class="bd bd-success">Sucesso</span></div>
+          <div class="td-sm" style="width:150px">31/03/2026 14:32:01</div>
+          <div class="td-sm" style="width:80px">245ms</div>
+          <div class="td-sm" style="flex:1">Processo criado: PROC-0042</div>
+        </div>
+        <div class="tr">
+          <div class="td-b" style="width:100px">AGENT-02</div>
+          <div class="td-m" style="width:160px">approval:movement:create</div>
+          <div style="width:120px"><span class="bd bd-pending">Pendente</span></div>
+          <div class="td-sm" style="width:150px">31/03/2026 14:30:18</div>
+          <div class="td-sm" style="width:80px">—</div>
+          <div class="td-sm" style="flex:1">Aguardando aprovação MOV-0087</div>
+        </div>
+        <div class="tr escalation">
+          <div class="td-b" style="width:100px">AGENT-03</div>
+          <div class="td-m" style="width:160px">org:unit:delete</div>
+          <div style="width:120px"><span class="bd bd-blocked">Bloqueado</span> <span class="bd-escalation">Escalada</span></div>
+          <div class="td-sm" style="width:150px">31/03/2026 14:28:55</div>
+          <div class="td-sm" style="width:80px">12ms</div>
+          <div class="td-sm" style="flex:1;color:var(--err);font-weight:500">Escopo bloqueado: org:unit:delete</div>
+        </div>
+        <div class="tr">
+          <div class="td-b" style="width:100px">AGENT-01</div>
+          <div class="td-m" style="width:160px">process:case:read</div>
+          <div style="width:120px"><span class="bd bd-success">Sucesso</span></div>
+          <div class="td-sm" style="width:150px">31/03/2026 14:25:03</div>
+          <div class="td-sm" style="width:80px">89ms</div>
+          <div class="td-sm" style="flex:1">12 registros retornados</div>
+        </div>
+        <div class="tr">
+          <div class="td-b" style="width:100px">AGENT-02</div>
+          <div class="td-m" style="width:160px">process:case:create</div>
+          <div style="width:120px"><span class="bd bd-success">Sucesso</span></div>
+          <div class="td-sm" style="width:150px">31/03/2026 14:22:47</div>
+          <div class="td-sm" style="width:80px">312ms</div>
+          <div class="td-sm" style="flex:1">Processo criado: PROC-0041</div>
+        </div>
+        <div class="tr">
+          <div class="td-b" style="width:100px">AGENT-01</div>
+          <div class="td-m" style="width:160px">org:unit:read</div>
+          <div style="width:120px"><span class="bd bd-success">Sucesso</span></div>
+          <div class="td-sm" style="width:150px">31/03/2026 14:18:11</div>
+          <div class="td-sm" style="width:80px">67ms</div>
+          <div class="td-sm" style="flex:1">5 unidades retornadas</div>
+        </div>
+        <div class="tbl-ft"><a>Carregar mais</a></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ FRAME 4: Detalhe de Execução (split-view) ═══ -->
+<div class="tag">Frame 4 — Detalhe de Execução (split-view) — UX-MCP-002 (1440×900)</div>
+<div class="frame">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">A1</div>
+      <div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div>
+      <div class="tb-sep"></div>
+      <nav class="bc"><span class="bc-m">Integração</span><span class="bc-x">›</span><span class="bc-a">Monitor MCP</span></nav>
+    </div>
+    <div class="tb-r">
+      <div class="tb-info"><span class="tb-name">Admin ECF</span> <span class="tb-org">/ A1 Engenharia</span></div>
+      <div class="tb-av">AE</div>
+    </div>
+  </header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos Controlados</a>
+      </div></div>
+      <div class="sb-sec"><div class="sb-cat">Integração</div><div class="sb-items">
+        <a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Protheus</a>
+        <a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/><circle cx="12" cy="15" r="2"/></svg>MCP Agentes</a>
+      </div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div>
+    </aside>
+    <main class="ct" style="display:flex;flex-direction:column">
+      <div class="ph">
+        <div><div class="ph-t">Monitor de Execuções MCP</div><div class="ph-d">Acompanhe em tempo real as execuções dos agentes</div></div>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-l">Total (24h)</div>
+          <div class="metric-v">1.247</div>
+        </div>
+        <div class="metric">
+          <div class="metric-l">Taxa de Sucesso</div>
+          <div class="metric-v amber">94.2%</div>
+          <div class="metric-bar"><div class="metric-fill" style="width:94.2%;background:var(--amber)"></div></div>
+        </div>
+        <div class="metric">
+          <div class="metric-l">Pendentes</div>
+          <div class="metric-v amber">12</div>
+        </div>
+        <div class="metric">
+          <div class="metric-l">Bloqueados</div>
+          <div class="metric-v red" style="display:flex;align-items:center;gap:8px">3 <span class="bd-escalation" style="font-size:10px">2 Escaladas</span></div>
+        </div>
+      </div>
+      <!-- SPLIT VIEW -->
+      <div class="split" style="margin-top:16px;flex:1;min-height:0">
+        <!-- TABLE (left) -->
+        <div class="split-main">
+          <div class="th-r">
+            <div class="th" style="width:90px">Agente</div>
+            <div class="th" style="width:140px">Ação</div>
+            <div class="th" style="width:100px">Status</div>
+            <div class="th" style="width:130px">Início</div>
+            <div class="th" style="width:60px">Duração</div>
+            <div class="th" style="flex:1">Resultado</div>
+          </div>
+          <div class="tr" style="background:#E3F2FD20">
+            <div class="td-b" style="width:90px;font-size:12px">AGENT-01</div>
+            <div class="td-m" style="width:140px;font-size:11px">process:case:create</div>
+            <div style="width:100px"><span class="bd bd-success" style="font-size:9px">Sucesso</span></div>
+            <div class="td-sm" style="width:130px;font-size:11px">31/03 14:32:01</div>
+            <div class="td-sm" style="width:60px;font-size:11px">245ms</div>
+            <div class="td-sm" style="flex:1;font-size:11px">PROC-0042</div>
+          </div>
+          <div class="tr">
+            <div class="td-b" style="width:90px;font-size:12px">AGENT-02</div>
+            <div class="td-m" style="width:140px;font-size:11px">approval:movement</div>
+            <div style="width:100px"><span class="bd bd-pending" style="font-size:9px">Pendente</span></div>
+            <div class="td-sm" style="width:130px;font-size:11px">31/03 14:30:18</div>
+            <div class="td-sm" style="width:60px;font-size:11px">—</div>
+            <div class="td-sm" style="flex:1;font-size:11px">MOV-0087</div>
+          </div>
+          <div class="tr escalation">
+            <div class="td-b" style="width:90px;font-size:12px">AGENT-03</div>
+            <div class="td-m" style="width:140px;font-size:11px">org:unit:delete</div>
+            <div style="width:100px"><span class="bd bd-blocked" style="font-size:9px">Bloqueado</span></div>
+            <div class="td-sm" style="width:130px;font-size:11px">31/03 14:28:55</div>
+            <div class="td-sm" style="width:60px;font-size:11px">12ms</div>
+            <div class="td-sm" style="flex:1;font-size:11px;color:var(--err)">Escalada</div>
+          </div>
+          <div class="tr">
+            <div class="td-b" style="width:90px;font-size:12px">AGENT-01</div>
+            <div class="td-m" style="width:140px;font-size:11px">process:case:read</div>
+            <div style="width:100px"><span class="bd bd-success" style="font-size:9px">Sucesso</span></div>
+            <div class="td-sm" style="width:130px;font-size:11px">31/03 14:25:03</div>
+            <div class="td-sm" style="width:60px;font-size:11px">89ms</div>
+            <div class="td-sm" style="flex:1;font-size:11px">12 registros</div>
+          </div>
+          <div class="tbl-ft"><a>Carregar mais</a></div>
+        </div>
+        <!-- DETAIL PANEL (right) -->
+        <div class="split-detail">
+          <div class="detail-h">
+            <span class="detail-h-t">Detalhe da Execução</span>
+            <svg class="detail-close" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="detail-b">
+            <!-- Status badge grande -->
+            <div style="margin-bottom:16px"><span class="bd bd-success bd-lg">Sucesso</span></div>
+
+            <!-- Seção Agente -->
+            <div class="detail-sec">
+              <div class="detail-sec-t">Agente</div>
+              <div class="detail-row"><span class="detail-label">Código</span><span class="detail-val">AGENT-01</span></div>
+              <div class="detail-row"><span class="detail-label">Nome</span><span class="detail-val">Agente Comercial</span></div>
+              <div class="detail-row"><span class="detail-label">Owner</span><span class="detail-val">marcos.silva@a1.com.br</span></div>
+            </div>
+
+            <!-- Seção Ação -->
+            <div class="detail-sec">
+              <div class="detail-sec-t">Ação</div>
+              <div class="detail-row"><span class="detail-label">Código</span><span class="detail-val-mono">process:case:create</span></div>
+              <div class="detail-row"><span class="detail-label">Política</span><span class="bd bd-direct" style="font-size:9px;padding:2px 6px">DIRECT</span></div>
+              <div class="detail-row"><span class="detail-label">Tipo</span><span class="detail-val">write</span></div>
+            </div>
+
+            <!-- Seção Execução -->
+            <div class="detail-sec">
+              <div class="detail-sec-t">Execução</div>
+              <div class="detail-row">
+                <span class="detail-label">Correlation ID</span>
+                <span class="detail-copy"><span class="detail-val-mono" style="font-size:11px">corr-8f3a2b1c...</span><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+              </div>
+              <div class="detail-row"><span class="detail-label">Início</span><span class="detail-val">31/03/2026 14:32:01</span></div>
+              <div class="detail-row"><span class="detail-label">Duração</span><span class="detail-val">245ms</span></div>
+              <div class="detail-row"><span class="detail-label">Status</span><span class="bd bd-success" style="font-size:9px;padding:2px 6px">SUCESSO</span></div>
+            </div>
+
+            <!-- Seção Payload -->
+            <div class="detail-sec">
+              <div class="detail-sec-t">Payload</div>
+              <div style="margin-top:4px">
+                <div class="acc-header">
+                  <span style="font-size:12px;font-weight:600;color:var(--t2)">Request</span>
+                  <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div class="acc-body">
+                  <div class="json-viewer">{
+  "case_type": "standard",
+  "title": "Novo contrato #42",
+  "api_key": "<span class="json-masked">***</span>",
+  "requester": "marcos.silva"
+}</div>
+                </div>
+              </div>
+              <div style="margin-top:8px">
+                <div class="acc-header">
+                  <span style="font-size:12px;font-weight:600;color:var(--t2)">Response</span>
+                  <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div class="acc-body">
+                  <div class="json-viewer">{
+  "id": "PROC-0042",
+  "status": "created",
+  "created_at": "2026-03-31T14:32:01Z",
+  "token": "<span class="json-masked">***</span>"
+}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

@@ -31,6 +31,29 @@ export interface OrgScopeWithBreadcrumb extends UserOrgScopeProps {
 // ---------------------------------------------------------------------------
 // OrgScopeRepository
 // ---------------------------------------------------------------------------
+/** @contract FR-001-M01 D4 — Filters for grouped org scopes listing */
+export interface OrgScopesGroupedFilters {
+  readonly q?: string;
+  readonly scopeType?: 'PRIMARY' | 'SECONDARY';
+  readonly status?: 'ACTIVE' | 'INACTIVE' | 'EXPIRED';
+}
+
+/** @contract FR-001-M01 D4 — A single scope entry within a grouped result */
+export interface GroupedScopeEntry {
+  readonly id: string;
+  readonly orgUnit: OrgUnitBreadcrumb & { readonly breadcrumb: string };
+  readonly status: string;
+  readonly validUntil: Date | null;
+}
+
+/** @contract FR-001-M01 D4 — User with grouped org scopes */
+export interface UserOrgScopesGrouped {
+  readonly userId: string;
+  readonly primaryScope: GroupedScopeEntry | null;
+  readonly secondaryScopes: readonly GroupedScopeEntry[];
+  readonly totalScopes: number;
+}
+
 export interface OrgScopeRepository {
   findById(id: string, tx?: TransactionContext): Promise<UserOrgScopeProps | null>;
 
@@ -40,6 +63,14 @@ export interface OrgScopeRepository {
     userId: string,
     tx?: TransactionContext,
   ): Promise<readonly OrgScopeWithBreadcrumb[]>;
+
+  /** @contract FR-001-M01 D4 — List users with grouped scopes, search, filters, pagination */
+  listGrouped(
+    tenantId: string,
+    filters: OrgScopesGroupedFilters,
+    params: PaginationParams,
+    tx?: TransactionContext,
+  ): Promise<PaginatedResult<UserOrgScopesGrouped>>;
 
   /** @contract BR-001.2 — Count active PRIMARY scopes for a user */
   countActivePrimary(userId: string, tx?: TransactionContext): Promise<number>;

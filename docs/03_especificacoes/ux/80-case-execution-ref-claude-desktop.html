@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>80-Case-Execution — Referência Visual MOD-006</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+<style>
+:root{--blue:#2E86C1;--blue-lt:#E3F2FD;--black:#111;--bg:#F5F5F3;--white:#FFF;--border:#E8E8E6;--border-lt:#F0F0EE;--ro-bg:#F8F8F6;--t1:#111;--t2:#333;--t3:#555;--t4:#888;--t5:#AAA;--t6:#CCC;--err:#E74C3C;--danger:#C0392B;--success:#27AE60;--success-bg:#E8F8EF;--success-bd:#B5E8C9;--warn:#E67E22;--warn-bg:#FFF3E0;--warn-bd:#FFE0B2;--green:#1E7A42;--green-lt:#E8F8EF;--green-bd:#B5E8C9;--amber-t:#B8860B;--amber-bg:#FFF3E0;--amber-bd:#FFE0B2;--gray-t:#888;--gray-bg:#F5F5F3;--gray-bd:#E8E8E6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#888;display:flex;flex-direction:column;align-items:center;gap:80px;padding:60px 40px}
+.tag{font-size:11px;font-weight:700;color:#444;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.frame{width:1440px;height:900px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.25);flex-shrink:0;background:var(--bg)}
+.topbar{height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tb-n{font-weight:800;font-size:14px;color:var(--t1)}.tb-s{font-weight:600;font-size:10px;color:var(--t4);letter-spacing:1.2px;text-transform:uppercase}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 8px}
+.bc{display:flex;align-items:center;gap:6px;font-size:13px}.bc-m{color:var(--t4)}.bc-x{color:var(--t6)}.bc-a{color:var(--t1);font-weight:700}
+.tb-r{display:flex;align-items:center;gap:12px}
+.tb-un{font-size:12px;font-weight:700;color:var(--t1);text-align:right}
+.tb-ue{font-size:10px;color:var(--t4);text-align:right}
+.tb-av{width:40px;height:40px;border-radius:50%;background:#F0F0EE;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--t3)}
+.lay{display:flex;flex:1;overflow:hidden}
+.sb{width:240px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-sec{padding:24px 16px 0}.sb-sec+.sb-sec{padding-top:20px}
+.sb-cat{font-weight:700;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--t5);margin-bottom:8px;padding:0 12px}
+.sb-items{display:flex;flex-direction:column;gap:2px}
+.sb-i{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;text-decoration:none}
+.sb-i:hover{background:#f8f8f6}
+.sb-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sb-i.on{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.sb-ft{margin-top:auto;border-top:1px solid var(--border);padding:16px;display:flex;align-items:center;gap:8px}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0}
+.sb-ft-t{font-size:12px;color:var(--t4)}
+.ct{flex:1;padding:24px;overflow-y:auto}
+.ph{display:flex;justify-content:space-between;align-items:flex-start}
+.ph-t{font-weight:800;font-size:24px;color:var(--t1)}
+.ph-d{font-size:13px;color:var(--t4);margin-top:4px}
+.btn-p{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;background:var(--blue);border:none;color:#fff;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.btn-p svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn-s{display:inline-flex;align-items:center;padding:0 16px;height:36px;border-radius:8px;border:1px solid var(--border);background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:var(--t3);cursor:pointer}
+.btn-d{display:inline-flex;align-items:center;padding:0 16px;height:36px;border-radius:8px;border:1px solid var(--err);background:transparent;font-family:inherit;font-size:12px;font-weight:600;color:var(--err);cursor:pointer}
+.filters{display:flex;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap}
+.f-sel{height:40px;padding:0 12px;border-radius:8px;border:1px solid var(--border);background:#fff;font-family:inherit;font-size:12px;font-weight:500;color:var(--t2);cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.toggle-wrap{display:flex;align-items:center;gap:8px}
+.toggle{width:36px;height:20px;border-radius:10px;background:var(--border);position:relative;cursor:pointer;border:none}
+.toggle.on{background:var(--blue)}
+.toggle::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left .2s}
+.toggle.on::after{left:18px}
+.toggle-lbl{font-size:12px;font-weight:500;color:var(--t3)}
+.si{position:relative}
+.si input{width:200px;height:40px;padding:0 12px 0 36px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:12px;color:var(--t1);background:#fff;outline:none}
+.si input::placeholder{color:var(--t6)}
+.si>svg{position:absolute;left:10px;top:11px;width:16px;height:16px;stroke:var(--t6);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tbl{margin-top:16px;background:#fff;border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.th-r{display:flex;padding:0 20px;height:44px;align-items:center;background:#FAFAFA;border-bottom:1px solid var(--border-lt)}
+.th{font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--t4)}
+.tr{display:flex;align-items:center;padding:0 20px;height:52px;border-bottom:1px solid var(--border-lt)}
+.tr:last-child{border-bottom:none}
+.tr:hover{background:#F8F8F6}
+.c1{width:140px}.c2{width:160px}.c3{width:160px}.c4{width:130px}.c5{width:150px}.c6{width:120px}.c7{width:80px;display:flex;align-items:center;justify-content:center;gap:8px}
+.td{font-size:13px;color:var(--t3)}.td-code{font-weight:600;color:var(--t2);font-family:'Plus Jakarta Sans',monospace;cursor:pointer}
+.td-name{font-weight:500;color:var(--t1)}
+.tf{height:52px;display:flex;align-items:center;justify-content:center;border-top:1px solid var(--border-lt)}
+.tf a{font-size:13px;font-weight:600;color:var(--blue);text-decoration:none;cursor:pointer}
+.bd{display:inline-flex;padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.bd-open{color:var(--blue);background:var(--blue-lt);border:1px solid #B5D4F0}
+.bd-ip{color:var(--amber-t);background:var(--amber-bg);border:1px solid var(--amber-bd)}
+.bd-done{color:var(--green);background:var(--green-lt);border:1px solid var(--green-bd)}
+.bd-cancel{color:var(--gray-t);background:var(--gray-bg);border:1px solid var(--gray-bd)}
+.bd-hold{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-bd)}
+.bd-pending{color:var(--amber-t);background:var(--amber-bg);border:1px solid var(--amber-bd)}
+.bd-resolved{color:var(--green);background:var(--green-lt);border:1px solid var(--green-bd)}
+.bd-waived{color:var(--gray-t);background:var(--gray-bg);border:1px solid var(--gray-bd)}
+.bd-rejected{color:var(--danger);background:#FFEBEE;border:1px solid #F5C6CB}
+.pending-badge{min-width:20px;height:20px;border-radius:10px;background:var(--err);color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
+.eye-icon{width:16px;height:16px;stroke:var(--t4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;cursor:pointer}
+.eye-icon:hover{stroke:var(--blue)}
+.header-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:20px 24px}
+.hc-top{display:flex;justify-content:space-between;align-items:center}
+.hc-left{display:flex;align-items:center;gap:12px}
+.hc-code{font-size:20px;font-weight:700;font-family:'Plus Jakarta Sans',monospace;color:var(--t1)}
+.hc-right{display:flex;gap:8px}
+.stage-bc{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px}
+.stage-bc .done{color:var(--t4);font-weight:500}
+.stage-bc .current{color:var(--t1);font-weight:700;text-decoration:underline;text-decoration-color:var(--blue);text-underline-offset:4px}
+.stage-bc .future{color:var(--t5);font-weight:500}
+.stage-bc .chev{color:var(--t6)}
+.prog{display:flex;height:8px;border-radius:4px;overflow:hidden;margin-top:16px;gap:2px}
+.prog-seg{flex:1;border-radius:4px}
+.prog-done{background:var(--success)}
+.prog-cur{background:var(--blue)}
+.prog-fut{background:var(--border)}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-top:20px}
+.tab{padding:12px 20px;font-size:13px;font-weight:600;color:var(--t4);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.on{color:var(--blue);font-weight:700;border-bottom-color:var(--blue)}
+.gates{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.gate{background:#fff;border-radius:10px;border:1px solid var(--border);padding:16px 20px}
+.gate-hdr{display:flex;justify-content:space-between;align-items:center}
+.gate-left{display:flex;flex-direction:column}
+.gate-name{font-size:14px;font-weight:600;color:var(--t1)}
+.gate-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-top:2px}
+.gate-actions{display:flex;gap:8px;margin-top:12px}
+.gate-btn{height:36px;padding:0 16px;border-radius:8px;border:none;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center}
+.gate-btn-p{background:var(--blue);color:#fff}
+.gate-btn-s{background:#fff;border:1px solid var(--border);color:var(--t3);font-weight:600}
+.check-items{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.check-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500}
+.check-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue)}
+.check-item.done{color:var(--t1)}
+.check-item.pending{color:var(--t4)}
+.trans-bar{display:flex;justify-content:flex-end;margin-top:20px}
+.trans-btn{height:44px;padding:0 24px;border-radius:8px;border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;position:relative}
+.trans-btn.enabled{background:var(--blue);color:#fff}
+.trans-btn.disabled{background:var(--border);color:var(--t5);cursor:not-allowed}
+.tooltip{position:absolute;bottom:calc(100% + 8px);right:0;background:var(--t2);color:#fff;font-size:11px;font-weight:400;padding:6px 10px;border-radius:4px;white-space:nowrap;pointer-events:none}
+.tooltip::after{content:'';position:absolute;top:100%;right:16px;border:5px solid transparent;border-top-color:var(--t2)}
+.assign-list{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.assign-card{background:#fff;border-radius:10px;border:1px solid var(--border);padding:16px 20px}
+.assign-card.unassigned{border-left:3px solid var(--err)}
+.assign-role{font-size:14px;font-weight:600;color:var(--t1)}
+.assign-person{display:flex;align-items:center;gap:8px;margin-top:6px}
+.assign-av{width:28px;height:28px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.assign-name{font-size:13px;font-weight:500;color:var(--t2)}
+.assign-action{font-size:12px;font-weight:600;color:var(--blue);cursor:pointer;margin-top:8px;display:inline-block}
+.assign-warn{font-size:12px;font-weight:500;color:var(--err);margin-top:4px}
+.assign-action-primary{font-size:12px;font-weight:700;color:var(--blue);cursor:pointer;margin-top:8px;display:inline-block}
+.timeline{display:flex;flex-direction:column;margin-top:16px}
+.tl-item{display:flex;gap:16px;padding-bottom:20px;position:relative}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;width:12px;flex-shrink:0}
+.tl-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.tl-dot-blue{background:var(--blue)}
+.tl-dot-green{background:var(--success)}
+.tl-dot-gray{background:var(--t6)}
+.tl-line{width:2px;flex:1;background:var(--border);margin-top:4px}
+.tl-content{flex:1}
+.tl-title{font-size:13px;font-weight:600;color:var(--t1)}
+.tl-meta{font-size:11px;font-weight:400;color:var(--t4);margin-top:2px}
+.tl-desc{font-size:12px;font-weight:400;color:var(--t3);margin-top:4px}
+.drawer-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.3);z-index:50;display:flex;justify-content:flex-end}
+.drawer{width:480px;height:100%;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,0.08);display:flex;flex-direction:column}
+.dw-hdr{height:64px;border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dw-title{font-size:18px;font-weight:700;color:var(--t1)}
+.dw-close{width:20px;height:20px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;cursor:pointer}
+.dw-body{flex:1;overflow-y:auto;padding:24px}
+.dw-field{margin-top:16px}.dw-field:first-child{margin-top:0}
+.dw-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:6px}
+.dw-input{width:100%;height:42px;border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-family:inherit;font-size:14px;font-weight:500;color:var(--t1);outline:none}
+.dw-input::placeholder{color:var(--t6)}
+.dw-textarea{width:100%;height:100px;border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-family:inherit;font-size:14px;font-weight:500;color:var(--t1);resize:vertical;outline:none}
+.dw-textarea::placeholder{color:var(--t6)}
+.dw-textarea.sm{height:80px}
+.radio-group{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.radio-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer}
+.radio-item input[type=radio]{width:16px;height:16px;accent-color:var(--blue)}
+.radio-item.urgent{color:var(--err)}
+.dw-ft{height:72px;border-top:1px solid var(--border);padding:16px 24px;display:flex;justify-content:flex-end;gap:12px;align-items:center;flex-shrink:0}
+.dw-btn-c{height:40px;padding:0 20px;border-radius:8px;border:1px solid var(--border);background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+.dw-btn-p{height:40px;padding:0 20px;border-radius:8px;border:none;background:var(--blue);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.3);z-index:60;display:flex;align-items:center;justify-content:center}
+.modal-card{width:420px;background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);padding:24px;display:flex;flex-direction:column;align-items:center}
+.modal-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.modal-icon.warning{background:var(--warn-bg)}
+.modal-icon.warning svg{width:24px;height:24px;stroke:var(--warn);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.modal-title{font-size:18px;font-weight:700;color:var(--t1);margin-top:16px;text-align:center}
+.modal-msg{font-size:13px;font-weight:400;color:var(--t3);margin-top:8px;text-align:center;line-height:1.5}
+.modal-msg strong{font-weight:600;color:var(--t1)}
+.modal-field{width:100%;margin-top:16px}
+.modal-field .dw-label{margin-bottom:6px}
+.modal-field textarea{width:100%;height:80px;border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-family:inherit;font-size:13px;font-weight:400;color:var(--t1);resize:vertical;outline:none}
+.modal-field textarea::placeholder{color:var(--t6)}
+.modal-counter{font-size:11px;font-weight:400;color:var(--t4);text-align:right;margin-top:4px}
+.modal-btns{display:flex;gap:12px;margin-top:24px;justify-content:center}
+.modal-btn-cancel{height:40px;padding:0 20px;border-radius:8px;border:1px solid var(--border);background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+.modal-btn-danger{height:40px;padding:0 20px;border-radius:8px;border:none;background:var(--err);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.modal-btn-primary{height:40px;padding:0 20px;border-radius:8px;border:none;background:var(--blue);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- ═══ FRAME 1 — Listagem de Casos ═══ -->
+<div class="tag">Frame 1 — Listagem de Casos (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Processos</span><span class="bc-x">›</span><span class="bc-a">Casos</span></nav></div><div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>Modelagem</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>Casos</a></div></div><div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div></aside>
+    <main class="ct">
+      <div class="ph"><div><div class="ph-t">Casos</div><div class="ph-d">Gerencie os casos de execução do seu tenant</div></div><button class="btn-p"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg> Novo Caso</button></div>
+      <div class="filters"><select class="f-sel" style="width:200px"><option>Ciclo: Todos</option><option>Onboarding v2.1</option><option>Compliance 2026</option></select><select class="f-sel" style="width:160px"><option>Status: Todos</option><option>Aberto</option><option>Em Andamento</option><option>Concluído</option><option>Cancelado</option><option>Em Espera</option></select><select class="f-sel" style="width:180px"><option>Estágio: Todos</option><option>Abertura</option><option>Revisão</option><option>Aprovação N2</option></select><div class="toggle-wrap"><button class="toggle"></button><span class="toggle-lbl">Minha responsabilidade</span></div><select class="f-sel" style="width:200px"><option>Período</option></select><div class="si"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="Buscar por código..."/></div></div>
+      <div class="tbl">
+        <div class="th-r"><div class="th c1">CÓDIGO</div><div class="th c2">CICLO</div><div class="th c3">ESTÁGIO ATUAL</div><div class="th c4">STATUS</div><div class="th c5">RESPONSÁVEL</div><div class="th c6">CRIADO EM</div><div class="th c7">AÇÕES</div></div>
+        <div class="tr"><div class="c1 td td-code">CASO-2026-0042</div><div class="c2 td td-name">Onboarding v2.1</div><div class="c3 td td-name">Revisão</div><div class="c4"><span class="bd bd-ip">EM ANDAMENTO</span></div><div class="c5 td td-name">Ana Oliveira</div><div class="c6 td" style="font-size:12px;color:var(--t4)">30 mar 2026</div><div class="c7"><svg class="eye-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="pending-badge">3</span></div></div>
+        <div class="tr"><div class="c1 td td-code">CASO-2026-0041</div><div class="c2 td td-name">Compliance 2026</div><div class="c3 td td-name">Aprovação N2</div><div class="c4"><span class="bd bd-ip">EM ANDAMENTO</span></div><div class="c5 td td-name">Marcos Silva</div><div class="c6 td" style="font-size:12px;color:var(--t4)">28 mar 2026</div><div class="c7"><svg class="eye-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="pending-badge">1</span></div></div>
+        <div class="tr"><div class="c1 td td-code">CASO-2026-0040</div><div class="c2 td td-name">Onboarding v2.1</div><div class="c3 td td-name">Encerramento</div><div class="c4"><span class="bd bd-done">CONCLUÍDO</span></div><div class="c5 td td-name">Julia Lima</div><div class="c6 td" style="font-size:12px;color:var(--t4)">25 mar 2026</div><div class="c7"><svg class="eye-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+        <div class="tr"><div class="c1 td td-code">CASO-2026-0039</div><div class="c2 td td-name">Compliance 2026</div><div class="c3 td td-name">Abertura</div><div class="c4"><span class="bd bd-open">ABERTO</span></div><div class="c5 td td-name">Pedro Mendes</div><div class="c6 td" style="font-size:12px;color:var(--t4)">22 mar 2026</div><div class="c7"><svg class="eye-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+        <div class="tr"><div class="c1 td td-code">CASO-2026-0038</div><div class="c2 td td-name">Onboarding v2.1</div><div class="c3 td td-name">Revisão</div><div class="c4"><span class="bd bd-cancel">CANCELADO</span></div><div class="c5 td td-name">Ana Oliveira</div><div class="c6 td" style="font-size:12px;color:var(--t4)">20 mar 2026</div><div class="c7"><svg class="eye-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+        <div class="tr"><div class="c1 td td-code">CASO-2026-0037</div><div class="c2 td td-name">Auditoria Q1</div><div class="c3 td td-name">Abertura</div><div class="c4"><span class="bd bd-hold">EM ESPERA</span></div><div class="c5 td td-name">Carlos Ferreira</div><div class="c6 td" style="font-size:12px;color:var(--t4)">18 mar 2026</div><div class="c7"><svg class="eye-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+        <div class="tf"><a>Carregar mais</a></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ FRAME 2 — Tab Gates ═══ -->
+<div class="tag">Frame 2 — Painel do Caso · Tab Gates (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Processos</span><span class="bc-x">›</span><span class="bc-m">Casos</span><span class="bc-x">›</span><span class="bc-a">CASO-2026-0042</span></nav></div><div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>Modelagem</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>Casos</a></div></div><div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div></aside>
+    <main class="ct">
+      <div class="header-card"><div class="hc-top"><div class="hc-left"><span class="hc-code">CASO-2026-0042</span><span class="bd bd-ip">EM ANDAMENTO</span></div><div class="hc-right"><button class="btn-s">Suspender</button><button class="btn-d">Cancelar</button></div></div><div class="stage-bc"><span class="done">Abertura</span><span class="chev">›</span><span class="current">Revisão</span><span class="chev">›</span><span class="future">Aprovação N2</span></div></div>
+      <div class="prog"><div class="prog-seg prog-done"></div><div class="prog-seg prog-cur"></div><div class="prog-seg prog-fut"></div></div>
+      <div class="tabs"><div class="tab on">Gates</div><div class="tab">Atribuições</div><div class="tab">Timeline</div></div>
+      <div class="gates">
+        <div class="gate"><div class="gate-hdr"><div class="gate-left"><span class="gate-name">Documentação Completa</span><span class="gate-type">DOCUMENT</span></div><span class="bd bd-resolved">RESOLVIDO</span></div></div>
+        <div class="gate"><div class="gate-hdr"><div class="gate-left"><span class="gate-name">Aprovação do Gestor</span><span class="gate-type">APPROVAL</span></div><span class="bd bd-pending">PENDENTE</span></div><div class="gate-actions"><button class="gate-btn gate-btn-p">Resolver</button><button class="gate-btn gate-btn-s">Dispensar</button></div></div>
+        <div class="gate"><div class="gate-hdr"><div class="gate-left"><span class="gate-name">Checklist de Conformidade</span><span class="gate-type">CHECKLIST</span></div><span class="bd bd-pending">PENDENTE</span></div><div class="check-items"><label class="check-item done"><input type="checkbox" checked disabled/> Formulário preenchido</label><label class="check-item done"><input type="checkbox" checked disabled/> Documentos digitalizados</label><label class="check-item done"><input type="checkbox" checked disabled/> Assinaturas coletadas</label><label class="check-item pending"><input type="checkbox" disabled/> Validação técnica</label><label class="check-item pending"><input type="checkbox" disabled/> Aprovação financeira</label></div></div>
+      </div>
+      <div class="trans-bar"><button class="trans-btn disabled">Avançar para Aprovação N2<div class="tooltip">Resolva todos os gates pendentes</div></button></div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ FRAME 3 — Tab Atribuições ═══ -->
+<div class="tag">Frame 3 — Painel do Caso · Tab Atribuições (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Processos</span><span class="bc-x">›</span><span class="bc-m">Casos</span><span class="bc-x">›</span><span class="bc-a">CASO-2026-0042</span></nav></div><div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>Modelagem</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>Casos</a></div></div><div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div></aside>
+    <main class="ct">
+      <div class="header-card"><div class="hc-top"><div class="hc-left"><span class="hc-code">CASO-2026-0042</span><span class="bd bd-ip">EM ANDAMENTO</span></div><div class="hc-right"><button class="btn-s">Suspender</button><button class="btn-d">Cancelar</button></div></div><div class="stage-bc"><span class="done">Abertura</span><span class="chev">›</span><span class="current">Revisão</span><span class="chev">›</span><span class="future">Aprovação N2</span></div></div>
+      <div class="prog"><div class="prog-seg prog-done"></div><div class="prog-seg prog-cur"></div><div class="prog-seg prog-fut"></div></div>
+      <div class="tabs"><div class="tab">Gates</div><div class="tab on">Atribuições</div><div class="tab">Timeline</div></div>
+      <div class="assign-list">
+        <div class="assign-card"><div class="assign-role">Revisor Técnico</div><div class="assign-person"><div class="assign-av">AO</div><span class="assign-name">Ana Oliveira</span></div><span class="assign-action">Reatribuir</span></div>
+        <div class="assign-card unassigned"><div class="assign-role">Aprovador N2</div><div class="assign-warn">Obrigatório — não atribuído</div><span class="assign-action-primary">Atribuir</span></div>
+        <div class="assign-card"><div class="assign-role">Analista de Conformidade</div><div class="assign-person"><div class="assign-av">MS</div><span class="assign-name">Marcos Silva</span></div><span class="assign-action">Reatribuir</span></div>
+      </div>
+      <div class="trans-bar"><button class="trans-btn disabled">Avançar para Aprovação N2<div class="tooltip">Resolva todos os gates pendentes</div></button></div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ FRAME 4 — Tab Timeline ═══ -->
+<div class="tag">Frame 4 — Painel do Caso · Tab Timeline (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Processos</span><span class="bc-x">›</span><span class="bc-m">Casos</span><span class="bc-x">›</span><span class="bc-a">CASO-2026-0042</span></nav></div><div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Estrutura Org.</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>Modelagem</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>Casos</a></div></div><div class="sb-sec"><div class="sb-cat">Aprovação</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>Movimentos</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div></aside>
+    <main class="ct">
+      <div class="header-card"><div class="hc-top"><div class="hc-left"><span class="hc-code">CASO-2026-0042</span><span class="bd bd-ip">EM ANDAMENTO</span></div><div class="hc-right"><button class="btn-s">Suspender</button><button class="btn-d">Cancelar</button></div></div><div class="stage-bc"><span class="done">Abertura</span><span class="chev">›</span><span class="current">Revisão</span><span class="chev">›</span><span class="future">Aprovação N2</span></div></div>
+      <div class="prog"><div class="prog-seg prog-done"></div><div class="prog-seg prog-cur"></div><div class="prog-seg prog-fut"></div></div>
+      <div class="tabs"><div class="tab">Gates</div><div class="tab">Atribuições</div><div class="tab on">Timeline</div></div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot-col"><div class="tl-dot tl-dot-blue"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-title">Caso criado</div><div class="tl-meta">30 mar 2026 — 09:15 · Pedro Mendes</div><div class="tl-desc">Caso aberto a partir do ciclo Onboarding v2.1</div></div></div>
+        <div class="tl-item"><div class="tl-dot-col"><div class="tl-dot tl-dot-green"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-title">Transição para "Revisão"</div><div class="tl-meta">30 mar 2026 — 10:02 · Ana Oliveira</div><div class="tl-desc">Estágio alterado de Abertura para Revisão</div></div></div>
+        <div class="tl-item"><div class="tl-dot-col"><div class="tl-dot tl-dot-green"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-title">Gate "Documentação" resolvido</div><div class="tl-meta">30 mar 2026 — 14:30 · Ana Oliveira</div><div class="tl-desc">Todos os documentos foram verificados e validados</div></div></div>
+        <div class="tl-item"><div class="tl-dot-col"><div class="tl-dot tl-dot-gray"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-title">Evidência anexada</div><div class="tl-meta">31 mar 2026 — 08:45 · Ana Oliveira</div><div class="tl-desc">Arquivo: relatorio_tecnico_v3.pdf (2.4 MB)</div></div></div>
+        <div class="tl-item"><div class="tl-dot-col"><div class="tl-dot tl-dot-gray"></div></div><div class="tl-content"><div class="tl-title">Observação do gestor</div><div class="tl-meta">31 mar 2026 — 09:10 · Marcos Silva</div><div class="tl-desc">"Verificar se o item 4.2 do checklist atende à norma ISO 9001."</div></div></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ FRAME 5 — Drawer Novo Caso ═══ -->
+<div class="tag">Frame 5 — Drawer "Novo Caso" (1440×900)</div>
+<div class="frame" style="position:relative">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Processos</span><span class="bc-x">›</span><span class="bc-a">Casos</span></nav></div><div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay" style="position:relative">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>Casos</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div></aside>
+    <main class="ct" style="opacity:.5">
+      <div class="ph"><div><div class="ph-t">Casos</div><div class="ph-d">Gerencie os casos de execução do seu tenant</div></div><button class="btn-p"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg> Novo Caso</button></div>
+      <div class="tbl" style="margin-top:20px"><div class="th-r"><div class="th c1">CÓDIGO</div><div class="th c2">CICLO</div><div class="th c3">ESTÁGIO ATUAL</div><div class="th c4">STATUS</div><div class="th c5">RESPONSÁVEL</div><div class="th c6">CRIADO EM</div><div class="th c7">AÇÕES</div></div>
+      <div class="tr"><div class="c1 td td-code">CASO-2026-0042</div><div class="c2 td td-name">Onboarding v2.1</div><div class="c3 td td-name">Revisão</div><div class="c4"><span class="bd bd-ip">EM ANDAMENTO</span></div><div class="c5 td td-name">Ana Oliveira</div><div class="c6 td" style="font-size:12px;color:var(--t4)">30 mar 2026</div><div class="c7"><svg class="eye-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div></div></div>
+    </main>
+    <div class="drawer-overlay"><div class="drawer">
+      <div class="dw-hdr"><span class="dw-title">Novo Caso</span><svg class="dw-close" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></div>
+      <div class="dw-body">
+        <div class="dw-field"><div class="dw-label">Ciclo</div><select class="dw-input" style="appearance:auto;-webkit-appearance:auto;cursor:pointer"><option value="">Selecione um ciclo publicado...</option><option>Onboarding v2.1 (PUBLICADO)</option><option>Compliance 2026 (PUBLICADO)</option><option>Auditoria Interna Q2 (PUBLICADO)</option></select></div>
+        <div class="dw-field"><div class="dw-label">Descrição</div><textarea class="dw-textarea" placeholder="Descreva o objetivo deste caso..."></textarea></div>
+        <div class="dw-field"><div class="dw-label">Prioridade</div><div class="radio-group"><label class="radio-item"><input type="radio" name="priority" checked/> Normal</label><label class="radio-item"><input type="radio" name="priority"/> Alta</label><label class="radio-item urgent"><input type="radio" name="priority"/> Urgente</label></div></div>
+        <div class="dw-field"><div class="dw-label">Observações iniciais</div><textarea class="dw-textarea sm" placeholder="Observações opcionais..."></textarea></div>
+      </div>
+      <div class="dw-ft"><button class="dw-btn-c">Cancelar</button><button class="dw-btn-p">Abrir Caso</button></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ FRAME 6 — Modal Cancelar Caso ═══ -->
+<div class="tag">Frame 6 — Modal "Cancelar Caso" (1440×900)</div>
+<div class="frame" style="position:relative">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Processos</span><span class="bc-x">›</span><span class="bc-m">Casos</span><span class="bc-x">›</span><span class="bc-a">CASO-2026-0042</span></nav></div><div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay" style="position:relative">
+    <aside class="sb" style="opacity:.5"><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>Casos</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div></aside>
+    <main class="ct" style="opacity:.5"><div class="header-card"><div class="hc-top"><div class="hc-left"><span class="hc-code">CASO-2026-0042</span><span class="bd bd-ip">EM ANDAMENTO</span></div></div></div></main>
+    <div class="modal-overlay"><div class="modal-card">
+      <div class="modal-icon warning"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+      <div class="modal-title">Cancelar caso?</div>
+      <div class="modal-msg">Deseja cancelar o caso <strong>CASO-2026-0042</strong>? Esta ação não pode ser desfeita.</div>
+      <div class="modal-btns"><button class="modal-btn-cancel">Voltar</button><button class="modal-btn-danger">Cancelar Caso</button></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ FRAME 7 — Modal Dispensar Gate ═══ -->
+<div class="tag">Frame 7 — Modal "Dispensar Gate" (1440×900)</div>
+<div class="frame" style="position:relative">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Processos</span><span class="bc-x">›</span><span class="bc-m">Casos</span><span class="bc-x">›</span><span class="bc-a">CASO-2026-0042</span></nav></div><div class="tb-r"><div><div class="tb-un">Admin ECF</div><div class="tb-ue">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay" style="position:relative">
+    <aside class="sb" style="opacity:.5"><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>Casos</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-t">Servidor Online</span></div></aside>
+    <main class="ct" style="opacity:.5"><div class="header-card"><div class="hc-top"><div class="hc-left"><span class="hc-code">CASO-2026-0042</span><span class="bd bd-ip">EM ANDAMENTO</span></div></div></div></main>
+    <div class="modal-overlay"><div class="modal-card">
+      <div class="modal-icon warning"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
+      <div class="modal-title">Dispensar gate?</div>
+      <div class="modal-msg">Deseja dispensar o gate <strong>Aprovação do Gestor</strong>? Informe o motivo abaixo.</div>
+      <div class="modal-field"><div class="dw-label">Motivo da dispensa</div><textarea placeholder="Descreva o motivo da dispensa (mín. 20 caracteres)..."></textarea><div class="modal-counter">0 / 20 mín.</div></div>
+      <div class="modal-btns"><button class="modal-btn-cancel">Voltar</button><button class="modal-btn-primary">Dispensar Gate</button></div>
+    </div></div>
+  </div>
+</div>
+
+</body>
+</html>

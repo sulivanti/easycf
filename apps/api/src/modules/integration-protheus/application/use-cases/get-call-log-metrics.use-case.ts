@@ -1,5 +1,5 @@
 /**
- * @contract FR-011, UX-008
+ * @contract FR-011, UX-008, FR-008-M01
  *
  * Use Case: Get call log metrics for the monitoring dashboard.
  * - Total calls, success rate, DLQ count for a given period
@@ -21,17 +21,26 @@ export interface CallLogMetricsOutput {
   readonly running: number;
   readonly queued: number;
   readonly successRate: number;
+  /** Average latency in ms over the period, rounded integer (FR-008-M01) */
+  readonly avgLatencyMs: number | null;
 }
 
 export class GetCallLogMetricsUseCase {
   constructor(private readonly callLogRepo: CallLogRepository) {}
 
   async execute(input: GetCallLogMetricsInput): Promise<CallLogMetricsOutput> {
-    const counts = await this.callLogRepo.countByStatus(
-      input.tenantId,
-      input.periodStart,
-      input.periodEnd,
-    );
+    const [counts, avgDuration] = await Promise.all([
+      this.callLogRepo.countByStatus(
+        input.tenantId,
+        input.periodStart,
+        input.periodEnd,
+      ),
+      this.callLogRepo.avgDurationMs(
+        input.tenantId,
+        input.periodStart,
+        input.periodEnd,
+      ),
+    ]);
 
     const success = counts['SUCCESS'] ?? 0;
     const failed = counts['FAILED'] ?? 0;
@@ -49,6 +58,7 @@ export class GetCallLogMetricsUseCase {
       running,
       queued,
       successRate: total > 0 ? Math.round((success / total) * 1000) / 10 : 0,
+      avgLatencyMs: avgDuration !== null ? Math.round(avgDuration) : null,
     };
   }
 }

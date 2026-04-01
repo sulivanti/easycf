@@ -1,8 +1,8 @@
 /**
- * @contract FR-001.1, FR-001.2, FR-001.3, EX-OAS-001, SEC-001
+ * @contract FR-001.1, FR-001.2, FR-001.3, FR-001-M01, EX-OAS-001, SEC-001
  *
  * Zod schemas for identity-advanced endpoints (MOD-004).
- * 11 endpoints across 3 features: org-scopes, access-shares, access-delegations.
+ * 12 endpoints across 3 features: org-scopes, access-shares, access-delegations.
  */
 
 import { z } from 'zod';
@@ -69,6 +69,40 @@ export const orgScopeListItem = z.object({
 
 export const orgScopeListResponse = z.array(orgScopeListItem);
 
+// GET /api/v1/admin/org-scopes — Grouped listing (FR-001-M01 D4)
+export const orgScopesGroupedQuery = z.object({
+  q: z.string().optional(),
+  scope_type: z.enum(['PRIMARY', 'SECONDARY']).optional(),
+  status: z.enum(['ACTIVE', 'INACTIVE', 'EXPIRED']).optional(),
+  cursor: z.string().optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+
+/** @contract FR-001-M01 — User summary for expanded responses */
+export const userSummarySchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  email: z.string(),
+});
+
+export const orgScopeOrgUnitWithBreadcrumb = orgScopeOrgUnit.extend({
+  breadcrumb: z.string(),
+});
+
+export const scopeDetailSchema = z.object({
+  id: z.string().uuid(),
+  org_unit: orgScopeOrgUnitWithBreadcrumb,
+  status: z.string(),
+  valid_until: z.string().nullable(),
+});
+
+export const orgScopesGroupedItem = z.object({
+  user: userSummarySchema,
+  primary_scope: scopeDetailSchema.nullable(),
+  secondary_scopes: z.array(scopeDetailSchema),
+  total_scopes: z.number().int(),
+});
+
 // ============================================================================
 // F02 — Access Shares (access_shares)
 // ============================================================================
@@ -107,7 +141,9 @@ export const accessSharesListQuery = z.object({
 export const accessShareListItem = z.object({
   id: z.string().uuid(),
   grantor_id: z.string().uuid(),
+  grantor: userSummarySchema,
   grantee_id: z.string().uuid(),
+  grantee: userSummarySchema,
   resource_type: z.string(),
   resource_id: z.string().uuid(),
   allowed_actions: z.array(z.string()),
@@ -148,7 +184,9 @@ export const createAccessDelegationResponse = z.object({
 export const delegationListItem = z.object({
   id: z.string().uuid(),
   delegator_id: z.string().uuid(),
+  delegator: userSummarySchema,
   delegatee_id: z.string().uuid(),
+  delegatee: userSummarySchema,
   role_id: z.string().uuid().nullable(),
   org_unit_id: z.string().uuid().nullable(),
   delegated_scopes: z.array(z.string()),

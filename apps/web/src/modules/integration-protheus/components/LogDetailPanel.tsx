@@ -1,7 +1,8 @@
 /**
- * @contract UX-008 §3.3, FR-009
+ * @contract UX-008 §3.3, FR-009, UX-008-M01 §7
  *
  * Split-view detail panel: Summary, Request, Response, Error, Reprocess chain.
+ * Uses CollapsibleSection and JSONViewer for payload display.
  */
 
 import {
@@ -13,6 +14,8 @@ import {
   TooltipTrigger,
 } from '@shared/ui';
 import { STATUS_BADGE, httpStatusClass, COPY } from '../types/view-model.js';
+import { CollapsibleSection } from './CollapsibleSection.js';
+import { JSONViewer } from './JSONViewer.js';
 import type { CallLogDetailDTO } from '../types/integration-protheus.types.js';
 
 interface LogDetailPanelProps {
@@ -34,80 +37,67 @@ export function LogDetailPanel({ log, isLoading, onSelectLog }: LogDetailPanelPr
 
   return (
     <div className="space-y-4 overflow-y-auto">
-      <h3 className="text-base font-semibold">Detalhe</h3>
-
-      {/* Status */}
-      <div>
-        <p className="text-xs text-muted-foreground">Status</p>
-        <Badge className={STATUS_BADGE[log.status]}>{log.status}</Badge>
-      </div>
-
-      {/* Correlation ID */}
-      <div>
-        <p className="text-xs text-muted-foreground">Correlation ID</p>
-        <p className="font-mono text-xs">{log.correlation_id}</p>
-      </div>
-
-      {/* Attempt */}
-      <div>
-        <p className="text-xs text-muted-foreground">Tentativa</p>
-        <p className="text-sm">
-          {log.attempt_number} de {log.retry_max}
-        </p>
-      </div>
-
-      {/* HTTP Status */}
-      {log.response_status && (
-        <div>
-          <p className="text-xs text-muted-foreground">HTTP Status</p>
-          <p className={`text-sm ${httpStatusClass(log.response_status)}`}>{log.response_status}</p>
+      {/* Summary section */}
+      <CollapsibleSection title="Resumo" defaultOpen>
+        <div className="space-y-3">
+          <div>
+            <p className="text-xs text-muted-foreground">Status</p>
+            <Badge className={STATUS_BADGE[log.status]}>{log.status}</Badge>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Correlation ID</p>
+            <p className="font-mono text-xs">{log.correlation_id}</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Tentativa</p>
+            <p className="text-sm">
+              {log.attempt_number} de {log.retry_max}
+            </p>
+          </div>
+          {log.response_status && (
+            <div>
+              <p className="text-xs text-muted-foreground">HTTP Status</p>
+              <p className={`text-sm ${httpStatusClass(log.response_status)}`}>{log.response_status}</p>
+            </div>
+          )}
+          {log.duration_ms != null && (
+            <div>
+              <p className="text-xs text-muted-foreground">Duração</p>
+              <p className="text-sm">{log.duration_ms}ms</p>
+            </div>
+          )}
+          {log.case_id && (
+            <a
+              href={`/casos/${log.case_id}`}
+              className="inline-block text-sm text-blue-600 hover:underline"
+            >
+              {COPY.link_view_case}
+            </a>
+          )}
         </div>
-      )}
-
-      {/* Duration */}
-      {log.duration_ms != null && (
-        <div>
-          <p className="text-xs text-muted-foreground">Duração</p>
-          <p className="text-sm">{log.duration_ms}ms</p>
-        </div>
-      )}
-
-      {/* Link to case */}
-      {log.case_id && (
-        <a
-          href={`/casos/${log.case_id}`}
-          className="inline-block text-sm text-blue-600 hover:underline"
-        >
-          {COPY.link_view_case}
-        </a>
-      )}
+      </CollapsibleSection>
 
       {/* Error */}
       {log.error_message && (
-        <details open>
-          <summary className="cursor-pointer text-sm font-medium text-red-700">Erro</summary>
-          <pre className="mt-1 max-h-40 overflow-auto whitespace-pre-wrap rounded bg-red-50 p-3 text-xs text-red-800">
+        <CollapsibleSection title="Erro" defaultOpen titleColor="#C0392B">
+          <pre className="max-h-40 overflow-auto whitespace-pre-wrap rounded bg-red-50 p-3 text-xs text-red-800">
             {log.error_message}
           </pre>
-        </details>
+        </CollapsibleSection>
       )}
 
       {/* Request payload */}
       {log.request_payload && (
-        <details>
-          <summary className="cursor-pointer text-sm font-medium">Request Payload</summary>
-          <pre className="mt-1 max-h-48 overflow-auto rounded bg-muted p-3 text-xs">
-            {JSON.stringify(log.request_payload, null, 2)}
-          </pre>
-        </details>
+        <CollapsibleSection title="Request Payload">
+          <JSONViewer data={log.request_payload} maxHeight={200} />
+        </CollapsibleSection>
       )}
 
       {/* Request headers */}
       {log.request_headers && (
-        <details>
-          <summary className="cursor-pointer text-sm font-medium">Request Headers</summary>
+        <CollapsibleSection title="Request Headers">
           <TooltipProvider>
-            <pre className="mt-1 max-h-48 overflow-auto rounded bg-muted p-3 text-xs">
+            <pre className="max-h-48 overflow-auto rounded-md border border-[#E8E8E6] bg-[#F8F8F6] p-3 text-xs">
               {Object.entries(log.request_headers).map(([k, v]) => (
                 <div key={k}>
                   <span className="font-semibold">{k}:</span>{' '}
@@ -125,30 +115,29 @@ export function LogDetailPanel({ log, isLoading, onSelectLog }: LogDetailPanelPr
               ))}
             </pre>
           </TooltipProvider>
-        </details>
+        </CollapsibleSection>
       )}
 
       {/* Response body */}
       {log.response_body && (
-        <details>
-          <summary className="cursor-pointer text-sm font-medium">Response Body</summary>
-          <pre className="mt-1 max-h-48 overflow-auto rounded bg-muted p-3 text-xs">
-            {JSON.stringify(log.response_body, null, 2)}
-          </pre>
-        </details>
+        <CollapsibleSection title="Response Body">
+          <JSONViewer data={log.response_body} maxHeight={200} />
+        </CollapsibleSection>
       )}
 
       {/* Chain: parent log */}
       {log.parent_log_id && (
-        <div>
-          <p className="text-xs text-muted-foreground">Log anterior (reprocessamento)</p>
-          <button
-            onClick={() => onSelectLog(log.parent_log_id!)}
-            className="text-sm text-blue-600 hover:underline"
-          >
-            {log.parent_log_id.slice(0, 12)}...
-          </button>
-        </div>
+        <CollapsibleSection title="Cadeia de Reprocessamento" defaultOpen>
+          <div>
+            <p className="text-xs text-muted-foreground">Log anterior</p>
+            <button
+              onClick={() => onSelectLog(log.parent_log_id!)}
+              className="text-sm text-blue-600 hover:underline"
+            >
+              {log.parent_log_id.slice(0, 12)}...
+            </button>
+          </div>
+        </CollapsibleSection>
       )}
 
       {/* Reprocess info */}

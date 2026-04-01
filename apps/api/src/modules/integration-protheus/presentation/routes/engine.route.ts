@@ -1,14 +1,15 @@
 /**
- * @contract FR-005, FR-006, FR-007, FR-009, FR-011, SEC-008
+ * @contract FR-005, FR-006, FR-007, FR-009, FR-011, FR-008-M01, SEC-008
  *
  * Fastify routes for Integration Engine (execute, logs, reprocess, metrics).
  * Prefix: /api/v1
  *
- * 5 endpoints:
+ * 6 endpoints:
  *  - POST /integration-engine/execute          → Execute integration (FR-006)
  *  - GET  /admin/integration-logs              → List logs (FR-009)
  *  - GET  /admin/integration-logs/:id          → Log detail (FR-009)
  *  - POST /admin/integration-logs/:id/reprocess → Reprocess DLQ (FR-007)
+ *  - GET  /admin/integration-logs/metrics      → Call log metrics (FR-011, FR-008-M01)
  */
 
 import type { FastifyInstance } from 'fastify';
@@ -21,6 +22,8 @@ import {
   callLogDetailResponse,
   reprocessBody,
   reprocessResponse,
+  metricsQuery,
+  metricsResponse,
   idParam,
 } from '../dtos/integration-protheus.dto.js';
 import { paginatedResponse } from '../../../foundation/presentation/dtos/common.dto.js';
@@ -95,6 +98,42 @@ export async function engineRoutes(app: FastifyInstance): Promise<void> {
         })),
         next_cursor: result.nextCursor,
         has_more: result.hasMore,
+      });
+    },
+  });
+
+  // GET /admin/integration-logs/metrics — Metrics (FR-011, FR-008-M01)
+  app.get<{ Querystring: z.infer<typeof metricsQuery> }>('/admin/integration-logs/metrics', {
+    onRequest: [app.verifySession, app.requireScope('integration:log:read')],
+    schema: {
+      querystring: metricsQuery,
+      tags: ['integration-protheus'],
+      operationId: 'admin_integration_logs_metrics',
+      response: { 200: metricsResponse },
+    },
+    handler: async (request, reply) => {
+      const now = new Date();
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      const periodStart = request.query.period_start
+        ? new Date(request.query.period_start)
+        : thirtyDaysAgo;
+      const periodEnd = request.query.period_end ? new Date(request.query.period_end) : now;
+
+      const result = await request.dipiContainer.getCallLogMetricsUseCase.execute({
+        tenantId: request.session.tenantId,
+        periodStart,
+        periodEnd,
+      });
+
+      return reply.send({
+        total: result.total,
+        success: result.success,
+        failed: result.failed,
+        dlq: result.dlq,
+        running: result.running,
+        queued: result.queued,
+        success_rate: result.successRate,
+        avg_latency_ms: result.avgLatencyMs,
       });
     },
   });

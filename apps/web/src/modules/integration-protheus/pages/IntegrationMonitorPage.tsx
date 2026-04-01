@@ -37,6 +37,7 @@ import { canReadLogs, canReprocessDlq } from '../types/permissions.js';
 import { COPY, httpStatusClass, relativeTime } from '../types/view-model.js';
 import { MonitorHeader } from '../components/MonitorHeader.js';
 import { LogDetailPanel } from '../components/LogDetailPanel.js';
+import { AutoRefreshIndicator } from '../components/AutoRefreshIndicator.js';
 import type { CallLogStatus, CallLogListFilters } from '../types/integration-protheus.types.js';
 
 const ALL_STATUSES: CallLogStatus[] = [
@@ -76,14 +77,22 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
   const [selectedLogId, setSelectedLogId] = useState<string | null>(null);
   const [reprocessLogId, setReprocessLogId] = useState<string | null>(null);
   const [reprocessReason, setReprocessReason] = useState('');
+  const [routineFilter, setRoutineFilter] = useState('');
+  const [serviceFilter, setServiceFilter] = useState('');
+  const [periodStart, setPeriodStart] = useState('');
+  const [periodEnd, setPeriodEnd] = useState('');
 
   const filters: CallLogListFilters = useMemo(() => {
     if (activeTab === 'dlq') return { status: 'DLQ' as CallLogStatus };
     const f: CallLogListFilters = {};
     if (statusFilter) f.status = statusFilter;
     if (correlationFilter) f.correlation_id = correlationFilter;
+    if (routineFilter) f.routine_id = routineFilter;
+    if (serviceFilter) f.service_id = serviceFilter;
+    if (periodStart) f.period_start = periodStart;
+    if (periodEnd) f.period_end = periodEnd;
     return f;
-  }, [activeTab, statusFilter, correlationFilter]);
+  }, [activeTab, statusFilter, correlationFilter, routineFilter, serviceFilter, periodStart, periodEnd]);
 
   const logsQuery = useCallLogsList(filters);
   const detailQuery = useCallLogDetail(selectedLogId);
@@ -92,6 +101,8 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
 
   const logs = logsQuery.data?.data ?? [];
   const hasMore = logsQuery.data?.has_more ?? false;
+  const totalCount = metricsQuery.data?.total ?? 0;
+  const hasActiveRealtime = !!(metricsQuery.data && (metricsQuery.data.running > 0 || metricsQuery.data.queued > 0));
 
   function handleReprocess() {
     if (!reprocessLogId || reprocessReason.trim().length < 10) return;
@@ -114,10 +125,13 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
 
   return (
     <div className="p-6">
-      <PageHeader
-        title="Monitor de Integrações"
-        description="Acompanhe logs e métricas de integrações Protheus"
-      />
+      <div className="flex items-center gap-3">
+        <PageHeader
+          title="Monitor de Integrações"
+          description="Acompanhe logs e métricas de integrações Protheus"
+        />
+        <AutoRefreshIndicator isActive={hasActiveRealtime} />
+      </div>
 
       {/* Metrics */}
       <MonitorHeader metrics={metricsQuery.data} isLoading={metricsQuery.isLoading} />
@@ -161,19 +175,51 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as CallLogStatus | '')}
           />
+          <select
+            value={routineFilter}
+            onChange={(e) => setRoutineFilter(e.target.value)}
+            className="h-9 w-[200px] rounded-md border border-input bg-background px-3 text-sm"
+          >
+            <option value="">Todas as rotinas</option>
+          </select>
+          <select
+            value={serviceFilter}
+            onChange={(e) => setServiceFilter(e.target.value)}
+            className="h-9 w-[180px] rounded-md border border-input bg-background px-3 text-sm"
+          >
+            <option value="">Todos os serviços</option>
+          </select>
+          <input
+            type="date"
+            value={periodStart}
+            onChange={(e) => setPeriodStart(e.target.value)}
+            placeholder="De"
+            className="h-9 w-[140px] rounded-md border border-input bg-background px-3 text-sm"
+          />
+          <input
+            type="date"
+            value={periodEnd}
+            onChange={(e) => setPeriodEnd(e.target.value)}
+            placeholder="Até"
+            className="h-9 w-[140px] rounded-md border border-input bg-background px-3 text-sm"
+          />
           <SearchBar
             className="max-w-xs"
             value={correlationFilter}
             onChange={setCorrelationFilter}
             placeholder="Correlation ID"
           />
-          {(statusFilter || correlationFilter) && (
+          {(statusFilter || correlationFilter || routineFilter || serviceFilter || periodStart || periodEnd) && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => {
                 setStatusFilter('');
                 setCorrelationFilter('');
+                setRoutineFilter('');
+                setServiceFilter('');
+                setPeriodStart('');
+                setPeriodEnd('');
               }}
             >
               Limpar
@@ -251,8 +297,7 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
                         <TableCell className="text-right">
                           <Button
                             size="sm"
-                            variant="outline"
-                            className="text-amber-600"
+                            className="bg-[#E74C3C] text-white hover:bg-[#C0392B]"
                             onClick={(e) => {
                               e.stopPropagation();
                               setReprocessLogId(log.id);
@@ -266,27 +311,41 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
                   ))}
                 </TableBody>
               </Table>
-            </div>
-          )}
-
-          {hasMore && (
-            <div className="mt-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  /* loadMore via cursor */
-                }}
-              >
-                Carregar mais
-              </Button>
+              <div className="flex items-center justify-between border-t border-a1-border px-4 py-3">
+                <span className="text-xs text-muted-foreground">
+                  Exibindo {logs.length} de {totalCount} chamadas
+                </span>
+                {hasMore && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      /* loadMore via cursor */
+                    }}
+                  >
+                    Carregar mais
+                  </Button>
+                )}
+              </div>
             </div>
           )}
         </div>
 
         {/* Split-view detail */}
         {selectedLogId && (
-          <div className="w-96 shrink-0 border-l border-border pl-4">
+          <div className="w-[480px] shrink-0 border-l border-border pl-4">
+            <div className="flex items-center justify-between pb-3">
+              <h3 className="text-base font-bold text-[#111]">Detalhes da Chamada</h3>
+              <button
+                type="button"
+                onClick={() => setSelectedLogId(null)}
+                className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-accent"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             <LogDetailPanel
               log={detailQuery.data}
               isLoading={detailQuery.isLoading}
@@ -297,8 +356,7 @@ export function IntegrationMonitorPage({ userScopes }: IntegrationMonitorPagePro
             {detailQuery.data?.status === 'DLQ' && canReprocessDlq(userScopes) && (
               <div className="mt-4 border-t border-border pt-4">
                 <Button
-                  className="w-full"
-                  variant="outline"
+                  className="w-full bg-[#E74C3C] text-white hover:bg-[#C0392B]"
                   onClick={() => setReprocessLogId(detailQuery.data!.id)}
                 >
                   Reprocessar

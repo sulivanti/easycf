@@ -1,5 +1,5 @@
 /**
- * @contract FR-001, FR-001.1, FR-001.2, FR-001.3, INT-001
+ * @contract FR-001, FR-001.1, FR-001.2, FR-001.3, FR-001-M01, INT-001
  * MOD-004 API client — typed fetch wrappers over Foundation HTTP client.
  * All functions are plain async — hooks in hooks/ wrap them with React Query.
  */
@@ -15,6 +15,8 @@ import type {
   AccessDelegationDTO,
   CreateAccessDelegationRequest,
   DelegationsResponseDTO,
+  OrgScopesGroupedFilters,
+  PaginatedOrgScopesGroupedResponse,
 } from '../types/identity-advanced.types.js';
 import type { GenericMessage } from '../../foundation/types/common.types.js';
 
@@ -106,4 +108,23 @@ export async function createDelegation(
 /** @contract FR-001.3 — DELETE /access-delegations/:id */
 export async function revokeDelegation(id: string): Promise<GenericMessage> {
   return httpClient.delete<GenericMessage>(`/access-delegations/${id}`);
+}
+
+// ── Org Scopes Grouped (FR-001-M01) ─────────────────────────
+
+/** @contract FR-001-M01 D4 — Listagem agrupada de usuários com escopos */
+export async function fetchOrgScopesGrouped(
+  filters: OrgScopesGroupedFilters,
+): Promise<PaginatedOrgScopesGroupedResponse> {
+  const params = new URLSearchParams();
+  if (filters.q) params.set('q', filters.q);
+  if (filters.scope_type) params.set('scope_type', filters.scope_type);
+  if (filters.status) params.set('status', filters.status);
+  if (filters.cursor) params.set('cursor', filters.cursor);
+  if (filters.limit) params.set('limit', String(filters.limit));
+
+  const qs = params.toString();
+  return httpClient.get<PaginatedOrgScopesGroupedResponse>(
+    `/api/v1/admin/org-scopes${qs ? `?${qs}` : ''}`,
+  );
 }

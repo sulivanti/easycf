@@ -305,6 +305,28 @@ paths:
               schema:
                 $ref: "#/components/schemas/CallLogDetailResponse"
 
+  /admin/integration-logs/metrics:
+    get:
+      operationId: admin_integration_logs_metrics
+      tags: [integration-protheus]
+      summary: Get call log metrics (FR-011, FR-008-M01)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: period_start
+          in: query
+          schema: { type: string, format: date-time }
+        - name: period_end
+          in: query
+          schema: { type: string, format: date-time }
+      responses:
+        "200":
+          description: Call log metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetricsResponse"
+
   /admin/integration-logs/{id}/reprocess:
     post:
       operationId: admin_integration_logs_reprocess
@@ -588,7 +610,7 @@ components:
         reprocess_request_id: { type: string, format: uuid }
         status: { type: string, enum: [QUEUED] }
 
-    # --- Metrics ---
+    # --- Metrics (FR-011, FR-008-M01) ---
     MetricsResponse:
       type: object
       properties:
@@ -599,3 +621,4 @@ components:
         running: { type: integer }
         queued: { type: integer }
         success_rate: { type: number }
+        avg_latency_ms: { type: integer, nullable: true, description: "Average latency in ms (FR-008-M01)" }

@@ -39,10 +39,20 @@ export interface OrgUnitInfo {
  * Port for cross-module lookups against MOD-000 (users) and MOD-003 (org_units).
  * Prevents direct dependency on Foundation/OrgUnit repositories in use cases.
  */
+/** @contract FR-001-M01 — Resumo de usuário para respostas expandidas */
+export interface UserSummary {
+  readonly id: string;
+  readonly name: string;
+  readonly email: string;
+}
+
 export interface UserLookupPort {
   /** @contract BR-001.12 — Check that a user exists in the same tenant */
   userExistsInTenant(userId: string, tenantId: string, tx?: TransactionContext): Promise<boolean>;
 
   /** @contract BR-001.11 — Get org unit info (nivel, status) for validation */
   getOrgUnitInfo(orgUnitId: string, tx?: TransactionContext): Promise<OrgUnitInfo | null>;
+
+  /** @contract FR-001-M01 D1-D2 — Batch resolve user summaries (name+email) by IDs */
+  getUserSummaries(userIds: readonly string[], tx?: TransactionContext): Promise<ReadonlyMap<string, UserSummary>>;
 }

@@ -243,6 +243,14 @@ export interface CallLogRepository {
     periodEnd: Date,
     tx?: TransactionContext,
   ): Promise<Record<string, number>>;
+
+  /** Metrics: average duration_ms for a tenant in the given period (FR-008-M01) */
+  avgDurationMs(
+    tenantId: string,
+    periodStart: Date,
+    periodEnd: Date,
+    tx?: TransactionContext,
+  ): Promise<number | null>;
 }
 
 // ---------------------------------------------------------------------------

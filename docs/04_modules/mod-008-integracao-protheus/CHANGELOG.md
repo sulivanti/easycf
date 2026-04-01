@@ -25,10 +25,10 @@ flowchart TD
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
     style E5  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E6  fill:#F39C12,color:#fff,stroke:#E67E22
 ```
 
-*O módulo está na **Etapa 5** — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.*
+*O módulo está na **Etapa 6** — Adendos Futuros (Amendments). UX-008-M01 em andamento.*
 
 ---
 
@@ -45,6 +45,9 @@ flowchart TD
 | 0.6.0 | 2026-03-19 | arquitetura | PENDENTE-001 implementada — Opção B (tabela simples + trigger migração 10M). Alerta `call_logs.count > 5M` adicionado ao NFR-008 §6.5. Env var `INTEGRATION_CONCURRENCY` já limita throughput. PEN-008 v0.8.0. |
 | 0.7.0 | 2026-03-19 | arquitetura | PENDENTE-002 implementada — Opção A (retenção 6 meses hot storage + archive S3 com anonimização PII). Original purgado após 6 meses; metadados (id, status, correlation_id, duration_ms) permanecem no PostgreSQL. PEN-008 v0.9.0. |
 | 1.1.0 | 2026-03-23 | codegen | Codegen concluído: 6 agentes executados, 35 arquivos gerados. Camadas: DB, CORE, APP (12 use cases), API (15 endpoints, OpenAPI), WEB (2 telas UX). |
+| 1.7.0 | 2026-03-31 | merge-amendment | Merge UX-008-M01: layout Penpot aplicado ao UX-008 — §4 Spec Visual Penpot, content header, busca em lista, ReadonlyBanner azul, 4 MetricCards, AutoRefreshIndicator, CollapsibleSection, JSONViewer, detail panel 480px, badges com cores spec. UX-008 bumped para v0.3.0. |
+| 1.6.1 | 2026-03-31 | merge-amendment | Merge FR-008-M01: avg_latency_ms adicionado ao done funcional e Gherkin de FR-011. FR-008 bumped para v0.3.0. Derivado de UX-008-M01. |
+| 1.6.0 | 2026-03-31 | create-amendment | Amendments UX-008-M01 + FR-008-M01 criados para alinhar layout React com designs Penpot (50-IntegrationEditor + 50-IntegrationMonitor). |
 | 1.5.2 | 2026-03-30 | merge-amendment | Merge INT-008-C01: correção prefixo Fastify — servicesRoutes e routinesRoutes devem usar `/api/v1/admin` (não `/api/v1`). INT-008 bumped para v0.4.1. Spec: spec-fix-integration-services-route-prefix. |
 | 1.5.1 | 2026-03-25 | merge-amendment | Merge NFR-008-C01: nova §11 tipagem Drizzle — `InferInsertModel<>` obrigatório, `as any` proibido em repositories. NFR-008 bumped para v0.4.1. |
 | 1.5.0 | 2026-03-25 | merge-amendment | Merge INT-008-M01: nova seção §10 Ingest Queue — Convenções BullMQ/Redis (fila `mod-008:ingest`, singleton, removeOnComplete, db1, health check). INT-008 bumped para v0.4.0. Derivado de DOC-PADRAO-002-M01. |

@@ -550,6 +550,30 @@ export class DrizzleCallLogRepository implements CallLogRepository {
     return result;
   }
 
+  /** @contract FR-008-M01 — Average duration_ms for completed calls in the period */
+  async avgDurationMs(
+    tenantId: string,
+    periodStart: Date,
+    periodEnd: Date,
+    tx?: TransactionContext,
+  ): Promise<number | null> {
+    const c = conn(this.db, tx);
+    const [row] = await c
+      .select({
+        avg: dsql<string | null>`avg(${integrationCallLogs.durationMs})`,
+      })
+      .from(integrationCallLogs)
+      .where(
+        and(
+          eq(integrationCallLogs.tenantId, tenantId),
+          gte(integrationCallLogs.queuedAt, periodStart),
+          lte(integrationCallLogs.queuedAt, periodEnd),
+          dsql`${integrationCallLogs.durationMs} IS NOT NULL`,
+        ),
+      );
+    return row?.avg !== null && row?.avg !== undefined ? Number(row.avg) : null;
+  }
+
   private toDomain(row: Record<string, unknown>): CallLogRow {
     return {
       id: row.id,

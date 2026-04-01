@@ -1,9 +1,9 @@
 /**
- * @contract FR-001.1, FR-001.2, FR-001.3, SEC-001, EX-OAS-001, DOC-FND-000
+ * @contract FR-001.1, FR-001.2, FR-001.3, FR-001-M01, SEC-001, EX-OAS-001, DOC-FND-000
  *
  * Fastify routes for Identity Advanced (MOD-004).
  *
- * 11 endpoints:
+ * 12 endpoints:
  *  - GET    /admin/users/:id/org-scopes          → List org scopes (F01)
  *  - POST   /admin/users/:id/org-scopes          → Create org scope (F01)
  *  - DELETE /admin/users/:id/org-scopes/:scopeId  → Delete org scope (F01)
@@ -27,6 +27,8 @@ import {
   createOrgScopeBody,
   createOrgScopeResponse,
   orgScopeListResponse,
+  orgScopesGroupedQuery,
+  orgScopesGroupedItem,
   createAccessShareBody,
   createAccessShareResponse,
   accessSharesListQuery,
@@ -139,6 +141,52 @@ export async function adminOrgScopesRoutes(app: FastifyInstance): Promise<void> 
   });
 }
 
+// GET /admin/org-scopes — Grouped listing of users with org scopes (FR-001-M01 D4)
+export async function adminOrgScopesGroupedRoutes(app: FastifyInstance): Promise<void> {
+  app.get<{ Querystring: z.infer<typeof orgScopesGroupedQuery> }>('/', {
+    onRequest: [app.verifySession, app.requireScope('identity:org_scope:read')],
+    schema: {
+      querystring: orgScopesGroupedQuery,
+      tags: ['identity-advanced'],
+      operationId: 'admin_org_scopes_list',
+      response: { 200: paginatedResponse(orgScopesGroupedItem) },
+    },
+    handler: async (request, reply) => {
+      const result = await request.dipiContainer.listOrgScopesGroupedUseCase.execute({
+        tenantId: request.session.tenantId,
+        q: request.query.q,
+        scopeType: request.query.scope_type,
+        status: request.query.status,
+        cursor: request.query.cursor,
+        limit: request.query.limit,
+      });
+
+      return reply.status(200).send({
+        data: result.data.map((item) => ({
+          user: item.user,
+          primary_scope: item.primaryScope
+            ? {
+                id: item.primaryScope.id,
+                org_unit: item.primaryScope.orgUnit,
+                status: item.primaryScope.status,
+                valid_until: item.primaryScope.validUntil,
+              }
+            : null,
+          secondary_scopes: item.secondaryScopes.map((s) => ({
+            id: s.id,
+            org_unit: s.orgUnit,
+            status: s.status,
+            valid_until: s.validUntil,
+          })),
+          total_scopes: item.totalScopes,
+        })),
+        next_cursor: result.nextCursor,
+        has_more: result.hasMore,
+      });
+    },
+  });
+}
+
 export async function myOrgScopesRoutes(app: FastifyInstance): Promise<void> {
   // GET /my/org-scopes — Self-service (own user, no scope required)
   app.get('/org-scopes', {
@@ -239,7 +287,9 @@ export async function adminAccessSharesRoutes(app: FastifyInstance): Promise<voi
         data: result.data.map((s: Record<string, any>) => ({
           id: s.id,
           grantor_id: s.grantorId,
+          grantor: s.grantor,
           grantee_id: s.granteeId,
+          grantee: s.grantee,
           resource_type: s.resourceType,
           resource_id: s.resourceId,
           allowed_actions: s.allowedActions,
@@ -307,7 +357,9 @@ export async function mySharedAccessesRoutes(app: FastifyInstance): Promise<void
         result.map((s: Record<string, any>) => ({
           id: s.id,
           grantor_id: s.grantorId,
+          grantor: s.grantor,
           grantee_id: s.granteeId,
+          grantee: s.grantee,
           resource_type: s.resourceType,
           resource_id: s.resourceId,
           allowed_actions: s.allowedActions,
@@ -386,20 +438,34 @@ export async function accessDelegationsRoutes(app: FastifyInstance): Promise<voi
         request.dipiContainer.delegationRepo.listReceivedByUser(tenantId, userId),
       ]);
 
+      // Batch resolve user names (FR-001-M01 D2)
+      const userIds = new Set<string>();
+      for (const d of [...given, ...received]) {
+        userIds.add(d.delegatorId);
+        userIds.add(d.delegateeId);
+      }
+      const userMap = await request.dipiContainer.userLookup.getUserSummaries([...userIds]);
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mapItem = (d: Record<string, any>) => ({
-        id: d.id,
-        delegator_id: d.delegatorId,
-        delegatee_id: d.delegateeId,
-        role_id: d.roleId,
-        org_unit_id: d.orgUnitId,
-        delegated_scopes: d.delegatedScopes,
-        reason: d.reason,
-        valid_until: d.validUntil.toISOString(),
-        status: d.status,
-        created_at: d.createdAt.toISOString(),
-        revoked_at: d.revokedAt?.toISOString() ?? null,
-      });
+      const mapItem = (d: Record<string, any>) => {
+        const delegator = userMap.get(d.delegatorId);
+        const delegatee = userMap.get(d.delegateeId);
+        return {
+          id: d.id,
+          delegator_id: d.delegatorId,
+          delegator: { id: d.delegatorId, name: delegator?.name ?? d.delegatorId, email: delegator?.email ?? '' },
+          delegatee_id: d.delegateeId,
+          delegatee: { id: d.delegateeId, name: delegatee?.name ?? d.delegateeId, email: delegatee?.email ?? '' },
+          role_id: d.roleId,
+          org_unit_id: d.orgUnitId,
+          delegated_scopes: d.delegatedScopes,
+          reason: d.reason,
+          valid_until: d.validUntil.toISOString(),
+          status: d.status,
+          created_at: d.createdAt.toISOString(),
+          revoked_at: d.revokedAt?.toISOString() ?? null,
+        };
+      };
 
       return reply.status(200).send({
         given: given.map(mapItem),

@@ -277,8 +277,13 @@ export const reprocessResponse = z.object({
 });
 
 // ---------------------------------------------------------------------------
-// Metrics (FR-011)
+// Metrics (FR-011, FR-008-M01)
 // ---------------------------------------------------------------------------
+export const metricsQuery = z.object({
+  period_start: z.string().optional(),
+  period_end: z.string().optional(),
+});
+
 export const metricsResponse = z.object({
   total: z.number().int(),
   success: z.number().int(),
@@ -287,4 +292,6 @@ export const metricsResponse = z.object({
   running: z.number().int(),
   queued: z.number().int(),
   success_rate: z.number(),
+  /** @contract FR-008-M01 — Average latency in ms, integer, nullable */
+  avg_latency_ms: z.number().int().nullable(),
 });

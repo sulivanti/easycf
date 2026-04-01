@@ -1,5 +1,5 @@
 /**
- * @contract DATA-001, FR-001, UX-001, SEC-001, BR-001, BR-001.4, BR-001.7, BR-001.8, BR-001.9, BR-001.10
+ * @contract DATA-001, FR-001, FR-001-M01, UX-001, SEC-001, BR-001, BR-001.4, BR-001.7, BR-001.8, BR-001.9, BR-001.10
  * MOD-004 types: DTOs, view-models, permissions, copy constants, status badges, formatters.
  * Consolidates all domain logic into a single types module (Pattern A).
  */
@@ -8,6 +8,14 @@
 
 export type ScopeType = 'PRIMARY' | 'SECONDARY';
 export type GrantStatus = 'ACTIVE' | 'INACTIVE' | 'REVOKED' | 'EXPIRED';
+
+// ── User summary (FR-001-M01) ───────────────────────────────
+
+export interface UserSummaryDTO {
+  readonly id: string;
+  readonly name: string;
+  readonly email: string;
+}
 
 // ── Org Unit summary (from MOD-003) ─────────────────────────
 
@@ -39,12 +47,50 @@ export interface CreateOrgScopeRequest {
   valid_until?: string | null;
 }
 
+// ── Org Scopes Grouped (FR-001-M01) ─────────────────────────
+
+export interface ScopeDetailDTO {
+  readonly id: string;
+  readonly org_unit: {
+    readonly id: string;
+    readonly codigo: string;
+    readonly nome: string;
+    readonly nivel: number;
+    readonly breadcrumb: string;
+  };
+  readonly status: string;
+  readonly valid_until: string | null;
+}
+
+export interface OrgScopeGroupedItemDTO {
+  readonly user: UserSummaryDTO;
+  readonly primary_scope: ScopeDetailDTO | null;
+  readonly secondary_scopes: readonly ScopeDetailDTO[];
+  readonly total_scopes: number;
+}
+
+export interface PaginatedOrgScopesGroupedResponse {
+  readonly data: readonly OrgScopeGroupedItemDTO[];
+  readonly next_cursor: string | null;
+  readonly has_more: boolean;
+}
+
+export interface OrgScopesGroupedFilters {
+  readonly q?: string;
+  readonly scope_type?: 'PRIMARY' | 'SECONDARY';
+  readonly status?: 'ACTIVE' | 'INACTIVE' | 'EXPIRED';
+  readonly cursor?: string;
+  readonly limit?: number;
+}
+
 // ── Access Share DTOs ───────────────────────────────────────
 
 export interface AccessShareDTO {
   id: string;
   grantor_id: string;
   grantee_id: string;
+  readonly grantor: UserSummaryDTO;
+  readonly grantee: UserSummaryDTO;
   resource_type: string;
   resource_id: string;
   allowed_actions: string[];
@@ -81,6 +127,8 @@ export interface AccessDelegationDTO {
   id: string;
   delegator_id: string;
   delegatee_id: string;
+  readonly delegator: UserSummaryDTO;
+  readonly delegatee: UserSummaryDTO;
   delegated_scopes: string[];
   reason: string;
   status: GrantStatus;
@@ -369,6 +417,12 @@ export const COPY = {
     newShare: 'Novo Compartilhamento',
     newDelegation: 'Nova Delegação',
     retry: 'Tentar novamente',
+    searchUsers: 'Buscar por nome ou e-mail...',
+    loadMore: 'Carregar mais',
+    allTypes: 'Todos os Tipos',
+    allStatuses: 'Todos',
+    activeOnly: 'Ativos',
+    expiredOnly: 'Expirados',
   },
   validation: {
     duplicatePrimary: 'Remova a área principal atual antes de adicionar uma nova.',
@@ -407,6 +461,12 @@ export const COPY = {
     prohibitedScopeTooltip: 'Escopos de aprovação não podem ser delegados.',
   },
 } as const;
+
+// ── Avatar initials helper (FR-001-M01) ─────────────────────
+
+export function getInitials(name: string): string {
+  return name.split(' ').filter(Boolean).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
 
 // ── Field error extraction (RFC 9457) ──────────────────────
 

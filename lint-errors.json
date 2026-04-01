@@ -1,4 +1,8 @@
 [
+  "[Erro] Referência Normativa faltante em rastreia_para: 'DOC-DEV-001' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\user-stories\\features\\US-MOD-003-F05.md",
+  "[Erro] Referência Normativa faltante em rastreia_para: 'DOC-ARC-001' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\user-stories\\features\\US-MOD-003-F05.md",
+  "[Erro] Referência Normativa faltante em rastreia_para: 'DOC-ARC-002' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\user-stories\\features\\US-MOD-003-F05.md",
+  "[Erro] Referência Normativa faltante em rastreia_para: 'DOC-ARC-003' em D:\\Dev\\EasyCodeFramework\\docs\\04_modules\\user-stories\\features\\US-MOD-003-F05.md",
   "[Erro] context-map.json: skill 'codegen-agent' referencia doc 'SPEC-THEME-001' que não existe em normativos/ ou pacotes_agentes/",
   "[Erro] context-map.json: skill 'codegen-agent' referencia doc 'SCREEN-SPEC' que não existe em normativos/ ou pacotes_agentes/",
   "[Erro] context-map.json: skill 'codegen-agent' → doc 'SCREEN-SPEC' aponta para path inexistente: 'docs/03_especificacoes/ux/{screen}-spec.md'",

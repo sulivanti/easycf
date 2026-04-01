@@ -24,11 +24,11 @@ flowchart TD
     style E2  fill:#27AE60,color:#fff,stroke:#1E8449
     style E3  fill:#27AE60,color:#fff,stroke:#1E8449
     style E4  fill:#27AE60,color:#fff,stroke:#1E8449
-    style E5  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
-    style E6  fill:#95A5A6,color:#fff,stroke:#7F8C8D
+    style E5  fill:#27AE60,color:#fff,stroke:#1E8449
+    style E6  fill:#E67E22,color:#fff,stroke:#CA6F1E,font-weight:bold
 ```
 
-*O módulo está na **Etapa 5 — Selo READY (Estável Imutável). Alterações futuras via `create-amendment`.**
+*O módulo está na **Etapa 6 — Adendos Futuros (Amendments). Amendment UX-001-M01 em DRAFT.**
 
 ---
 
@@ -36,6 +36,11 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.7.0 | 2026-04-01 | codegen | Codegen v2 concluído: 6 agentes (DB no-op, CORE no-op, APP 4 arq, API 2 arq, WEB 8 arq, VAL 0). 14 arquivos gerados/atualizados. Backend: novo endpoint admin_org_scopes_list, respostas expandidas. Frontend: OrgScopeTable, ScopePill, RevokeModal, TabBar underline, seções separadas. VAL: 1 finding (OpenAPI falta admin_org_scopes_list). |
+| 1.6.0 | 2026-03-31 | merge-amendment | Merge UX-001-M01 → UX-001 v0.4.0: layout Penpot 40-Identity aplicado. OrgScopePage (tabela, ScopePill, TreeSelector, Drawer 480px, Modal warning), SharesDelegationsPage (TabBar underline, seções, Banner, RevokeModal). 4 componentes reutilizáveis, rotas /organizacao/identidade/*. |
+| 1.5.0 | 2026-03-31 | merge-amendment | Merge FR-001-M01 → FR-001 v0.4.0: novo endpoint admin_org_scopes_list, respostas expandidas com name+email em access-shares e access-delegations, 7 cenários Gherkin, 12 endpoints no resumo. |
+| 1.4.0 | 2026-03-31 | cascade-amendment | Cascade UX-001-M01: FR-001-M01 criado (expandir respostas com nomes, novo endpoint admin_org_scopes_list, autocomplete usuarios). Manifests ux-idn-001 e ux-idn-002 atualizados (rotas, componentes, changelogs). |
+| 1.3.0 | 2026-03-31 | create-amendment | Amendment UX-001-M01: alinhamento layout Penpot (40-Identity). Reestruturacao OrgScopePage (cards→tabela full-width), ScopePill, TreeSelector, TabBar underline, Banner, Drawers 480px slide-in, Modais com icone warning, estados skeleton/empty/error refinados. Rastreia 40-identity-spec.md. |
 | 1.2.0 | 2026-03-24 | validate-all | validate-all pos-codegen: lint/format PASS, 6 validadores semanticos PASS, 1 violacao arquitetural (PENDENTE-005: IdentityDomainError nao estende DomainError). PENDENTE-004 (lint codegen) pre-existente mantida. |
 | 1.1.0 | 2026-03-23 | codegen | Codegen concluído: 6 agentes executados, 37 arquivos gerados. Camadas: DB, CORE, APP, API, WEB, VAL. Validação cruzada aprovada com ressalvas menores (OpenAPI 401 responses, x-permissions self-service). |
 | 1.0.0 | 2026-03-23 | promote-module | Promoção DRAFT→READY: manifesto v1.0.0, todos os requisitos e ADRs selados. Épico + features já READY. Ciclo de estabilidade avança para Etapa 5. |

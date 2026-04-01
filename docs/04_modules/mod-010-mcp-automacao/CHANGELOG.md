@@ -36,6 +36,9 @@ flowchart TD
 
 | Versão | Data | Responsável | Descrição |
 |--------|------|-------------|-----------|
+| 1.4.1 | 2026-03-31 | codegen | Codegen parcial: AGN-COD-WEB (1 agente, 5 arquivos atualizados). Layout UX conforme UX-010-M01: tab bar A1, catálogo cards grid, drawer uppercase, metric cards progress bar, detail panel seções. TypeScript PASS, Prettier PASS. |
+| 1.4.0 | 2026-03-31 | merge-amendment | Merge UX-010-M01: layout visual Penpot incorporado em UX-010 (§2.6, §2.8, §3.6, §3.8). Tab bar A1, catálogo cards grid, drawer uppercase, metric cards progress bar, detail panel seções. UX-010 bumped para v0.3.0. |
+| 1.3.0 | 2026-03-31 | ux-apply-layout | Amendment UX-010-M01: alinhar AgentsPage e ExecutionsPage com designs Penpot (60-MCP-Agents). 12 detalhamentos (D1-D12): tab bar A1, toolbar com search, colunas tabela, catálogo em cards grid, permissões matrix estilizada, drawer com labels uppercase, ApiKeyModal e RevokeModal redesenhados, metric cards com progress bar, detail panel com seções agrupadas. 7 frames Penpot validados. |
 | 1.2.2 | 2026-03-31 | merge-amendment | Merge FR-010-C01: rename scope `phase2-enable` → `phase2_enable` em FR-010 (6 ocorrências) + PEN-010 (5 ocorrências). Base FR-010 bumped para v0.2.1. Ref: spec-fix-scope-hyphen-rename. |
 | 1.2.1 | 2026-03-31 | create-amendment | Amendment FR-010-C01: rename scope `mcp:agent:phase2-enable` → `mcp:agent:phase2_enable` em FR-010 (6 ocorrências), PEN-010 (5 ocorrências) e enable-phase2.use-case.ts. Hífen viola regex canônica. Ref: spec-fix-scope-hyphen-rename. |
 | 1.2.0 | 2026-03-24 | validate-all | Revalidação completa: Lint 0 erros (PENDENTE-008 resolvida), Format 5 warnings (cross-module PEN-000/PENDENTE-018), Arquitetura PASS (DomainError+type+statusHint, react-query, Pattern A), QA PASS, Manifests 2/2 PASS, OpenAPI PASS (14 ops), Drizzle PASS (5 tabelas), Endpoints PASS (4 routes, 14 endpoints). 0 bloqueadores, 0 violações críticas. |

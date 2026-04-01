@@ -230,23 +230,60 @@ async function seed() {
     status: 'ACTIVE',
   });
 
-  console.log('Criando org unit N1 raiz...');
-  const orgUnitId = randomUUID();
-  await db.insert(orgUnits).values({
-    id: orgUnitId,
-    codigo: 'GRUPO-A1',
-    nome: 'Grupo A1',
-    descricao: 'Unidade organizacional raiz',
-    nivel: 1,
-    parentId: null,
-    status: 'ACTIVE',
-    createdBy: adminId,
-  });
+  // BR-006: Criar hierarquia completa N1→N2→N3→N4 e vincular tenant ao N4
+  console.log('Criando hierarquia organizacional N1→N2→N3→N4...');
+  const n1Id = randomUUID();
+  const n2Id = randomUUID();
+  const n3Id = randomUUID();
+  const n4Id = randomUUID();
 
-  console.log('Vinculando tenant à org unit N1...');
+  await db.insert(orgUnits).values([
+    {
+      id: n1Id,
+      codigo: 'GRUPO-A1',
+      nome: 'Grupo A1',
+      descricao: 'Grupo corporativo raiz',
+      nivel: 1,
+      parentId: null,
+      status: 'ACTIVE',
+      createdBy: adminId,
+    },
+    {
+      id: n2Id,
+      codigo: 'UNIDADE-A1',
+      nome: 'Unidade A1',
+      descricao: 'Unidade regional',
+      nivel: 2,
+      parentId: n1Id,
+      status: 'ACTIVE',
+      createdBy: adminId,
+    },
+    {
+      id: n3Id,
+      codigo: 'MACRO-A1',
+      nome: 'Macroárea A1',
+      descricao: 'Macroárea operacional',
+      nivel: 3,
+      parentId: n2Id,
+      status: 'ACTIVE',
+      createdBy: adminId,
+    },
+    {
+      id: n4Id,
+      codigo: 'SUB-A1',
+      nome: 'Subunidade A1',
+      descricao: 'Subunidade organizacional',
+      nivel: 4,
+      parentId: n3Id,
+      status: 'ACTIVE',
+      createdBy: adminId,
+    },
+  ]);
+
+  console.log('Vinculando tenant à org unit N4 (BR-006)...');
   await db.insert(orgUnitTenantLinks).values({
     id: randomUUID(),
-    orgUnitId,
+    orgUnitId: n4Id,
     tenantId,
     createdBy: adminId,
   });
@@ -261,7 +298,7 @@ async function seed() {
   console.log(`  Senha:    ${ADMIN_PASSWORD}`);
   console.log(`  Tenant:   Tenant Padrão (tenant-default)`);
   console.log(`  Role:     Super Administrador (super-admin)`);
-  console.log(`  Org Unit: Grupo A1 (GRUPO-A1) — N1 raiz`);
+  console.log(`  Org Unit: GRUPO-A1 → UNIDADE-A1 → MACRO-A1 → SUB-A1 (N1→N4)`);
   console.log('═══════════════════════════════════════════');
   console.log('');
   console.log('⚠  Troque a senha após o primeiro login!');

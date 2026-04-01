@@ -254,6 +254,7 @@ export interface MetricsDTO {
   running: number;
   queued: number;
   success_rate: number;
+  avg_latency_ms: number | null;
 }
 
 // ---------------------------------------------------------------------------

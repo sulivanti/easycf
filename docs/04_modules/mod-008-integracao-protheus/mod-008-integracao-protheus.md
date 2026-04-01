@@ -179,14 +179,18 @@ Módulo com domínio rico: Outbox Pattern garantindo atomicidade entre transaç�
 <!-- start index -->
 - [BR-008](requirements/br/BR-008.md) — Regras de Negócio
 - [FR-008](requirements/fr/FR-008.md) — Requisitos Funcionais
+  - [FR-008-M01](amendments/fr/FR-008-M01.md) — Adicionar avg_latency_ms ao endpoint de métricas (derivado UX-008-M01)
 - [DATA-008](requirements/data/DATA-008.md) — Modelo de Dados (6 tabelas)
 - [DATA-003](requirements/data/DATA-003.md) — Catálogo de Domain Events
 - [INT-008](requirements/int/INT-008.md) — Integrações
   - [INT-008-C01](amendments/int/INT-008-C01.md) — Correção prefixo registro rotas servicesRoutes/routinesRoutes
+  - [INT-008-M01](amendments/int/INT-008-M01.md) — Convenções BullMQ/Redis para ingest queue (derivado DOC-PADRAO-002-M01)
 - [SEC-008](requirements/sec/SEC-008.md) — Segurança e Compliance
 - [SEC-002](requirements/sec/SEC-002.md) — Matriz de Autorização de Eventos
 - [UX-008](requirements/ux/UX-008.md) — Experiência do Usuário
+  - [UX-008-M01](amendments/ux/UX-008-M01.md) — Alinhar layout React com designs Penpot (50-IntegrationEditor + 50-IntegrationMonitor)
 - [NFR-008](requirements/nfr/NFR-008.md) — Requisitos Não-Funcionais
+  - [NFR-008-C01](amendments/nfr/NFR-008-C01.md) — Tipagem Drizzle InferInsertModel obrigatório, as any proibido
 - [pen-008-pendente](requirements/pen-008-pendente.md) — Questões em Aberto
 <!-- end index -->
 

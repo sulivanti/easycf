@@ -1,7 +1,7 @@
 {
   "module_id": "MOD-010",
   "module_path": "docs/04_modules/mod-010-mcp-automacao/",
-  "last_updated": "2026-03-24T23:00:00Z",
+  "last_updated": "2026-03-31T22:00:00Z",
   "scaffold": {
     "completed": true,
     "completed_at": "2026-03-23T14:00:00.000Z",
@@ -91,7 +91,7 @@
       },
       "AGN-COD-WEB": {
         "status": "done",
-        "completed_at": "2026-03-24T19:30:00Z",
+        "completed_at": "2026-03-31T22:00:00Z",
         "files_generated": 10,
         "files": [
           "apps/web/src/modules/mcp-automation/types/mcp-automation.types.ts",
@@ -105,7 +105,8 @@
           "apps/web/src/modules/mcp-automation/pages/agents/AgentsPage.tsx",
           "apps/web/src/modules/mcp-automation/pages/executions/ExecutionsPage.tsx"
         ],
-        "notes": "Full rewrite: React Query (25× useQuery/useMutation), Tailwind CSS v4 (zero inline style), shared UI (Button, Badge, Table, Dialog, Drawer, Skeleton, Tooltip, Spinner, Input, Label). 3 extracted components (ApiKeyModal, RevokeModal, ExecutionDetailPanel). Toast via sonner."
+        "notes": "UX-010-M01 layout update (2026-03-31): Tab bar A1, action cards grid, drawer uppercase labels, metric cards with progress bar, detail panel with grouped sections. 5 files updated per Penpot design spec 60-MCP-Agents. Previous: Full rewrite with React Query + Tailwind CSS v4.",
+        "last_amendment": "UX-010-M01"
       },
       "AGN-COD-VAL": {
         "status": "done",

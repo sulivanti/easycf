@@ -55,6 +55,7 @@ export const COPY = {
   metrics_label_total: 'Total (24h)',
   metrics_label_success_rate: 'Taxa de sucesso',
   metrics_label_dlq: 'DLQ',
+  metrics_label_avg_latency: 'Latência Média',
   link_view_case: 'Ver caso',
   auto_refresh_label: 'Atualizando...',
   sensitive_masked_tooltip: 'Dado sensível mascarado por política de segurança.',

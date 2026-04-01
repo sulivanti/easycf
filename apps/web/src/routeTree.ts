@@ -12,6 +12,8 @@ import { Route as authUsuariosFormRoute } from './routes/_auth.usuarios.form';
 import { Route as authUsuariosEditRoute } from './routes/_auth.usuarios.$userId';
 import { Route as authUsuariosConviteRoute } from './routes/_auth.usuarios.$userId.convite';
 import { Route as authPerfisRoute } from './routes/_auth.perfis';
+import { Route as authPerfisNovoRoute } from './routes/_auth.perfis.novo';
+import { Route as authPerfisEditRoute } from './routes/_auth.perfis.$roleId';
 import { Route as authFiliaisRoute } from './routes/_auth.filiais';
 
 // Org Units (MOD-003)
@@ -80,6 +82,8 @@ const authRouteChildren = authRoute.addChildren([
   authUsuariosEditRoute,
   authUsuariosConviteRoute,
   authPerfisRoute,
+  authPerfisNovoRoute,
+  authPerfisEditRoute,
   authFiliaisRoute,
   authOrgUnitsRoute,
   authOrgUnitsFormRoute,

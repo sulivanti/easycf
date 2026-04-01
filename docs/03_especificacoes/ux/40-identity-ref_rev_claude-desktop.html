@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>40-Identity — Referência Visual (Identidade Avançada)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --blue:#2E86C1;--blue-lt:#E3F2FD;--blue-hover:#256FA0;
+  --black:#111;--bg:#F5F5F3;--white:#FFF;--border:#E8E8E6;--border-lt:#F0F0EE;--ro-bg:#F8F8F6;
+  --t1:#111;--t2:#333;--t3:#555;--t4:#888;--t5:#AAA;--t6:#CCC;
+  --err:#E74C3C;--err-bg:#FFEBEE;--err-bd:#F5C6CB;
+  --danger:#C0392B;
+  --warn:#E67E22;--warn-bg:#FFF3E0;--warn-bd:#FFE0B2;
+  --success:#27AE60;--success-bg:#E8F8EF;--success-bd:#B5E8C9;
+  --green:#1E7A42;--green-lt:#E8F8EF;
+  --ba-t:#1E7A42;--ba-bg:#E8F8EF;--ba-bd:#B5E8C9;
+  --bi-t:#6C757D;--bi-bg:#F4F4F2;--bi-bd:#E0E0DE;
+  --bb-t:#C0392B;--bb-bg:#FFEBEE;--bb-bd:#F5C6CB;
+  --bp-t:#B8860B;--bp-bg:#FFF3E0;--bp-bd:#FFE0B2
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#888;display:flex;flex-direction:column;align-items:center;gap:80px;padding:60px 40px}
+.tag{font-size:11px;font-weight:700;color:#444;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.frame{width:1440px;height:900px;display:flex;flex-direction:column;overflow:visible;box-shadow:0 12px 60px rgba(0,0,0,.25);flex-shrink:0;background:var(--bg);position:relative}
+
+/* TOPBAR */
+.topbar{height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tb-n{font-weight:800;font-size:14px;color:var(--t1)}.tb-s{font-weight:600;font-size:10px;color:var(--t4);letter-spacing:1.2px;text-transform:uppercase}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 8px}
+.bc{display:flex;align-items:center;gap:6px;font-size:13px}.bc-m{color:var(--t4)}.bc-x{color:var(--t6)}.bc-a{color:var(--t1);font-weight:700}
+.tb-r{display:flex;align-items:center;gap:12px}
+.tb-info{text-align:right}
+.tb-user{font-size:12px;font-weight:600;color:var(--t2)}
+.tb-tenant{font-size:11px;color:var(--t4)}
+.tb-av{width:32px;height:32px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.lay{display:flex;flex:1;overflow:visible}
+
+/* SIDEBAR */
+.sb{width:240px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-sec{padding:24px 16px 0}.sb-sec+.sb-sec{padding-top:20px}
+.sb-cat{font-weight:700;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--t5);margin-bottom:8px;padding:0 12px}
+.sb-items{display:flex;flex-direction:column;gap:2px}
+.sb-i{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;text-decoration:none}
+.sb-i:hover{background:var(--ro-bg)}
+.sb-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sb-i.on{background:var(--blue-lt);color:var(--blue);font-weight:700}
+.sb-ft{margin-top:auto;border-top:1px solid var(--border);padding:16px;display:flex;align-items:center;gap:8px}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0}
+.sb-ft-txt{font-size:12px;color:var(--t4)}
+
+/* CONTENT */
+.ct{flex:1;padding:24px;overflow:visible}
+.ph{display:flex;justify-content:space-between;align-items:flex-start}
+.ph-t{font-weight:800;font-size:24px;color:var(--t1)}
+.ph-d{font-size:13px;color:var(--t4);margin-top:4px}
+.btn-p{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:40px;border-radius:8px;background:var(--blue);border:none;color:#fff;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0}
+.btn-p:hover{background:var(--blue-hover)}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-top:20px}
+.search{position:relative;flex-shrink:0}
+.search input{width:320px;height:40px;padding:0 14px 0 40px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:13px;color:var(--t1);background:var(--white);outline:none}
+.search input::placeholder{color:var(--t6)}
+.search>svg{position:absolute;left:12px;top:11px;width:18px;height:18px;stroke:var(--t6);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.filters{display:flex;gap:12px;align-items:center}
+.filter-sel{display:flex;align-items:center;gap:6px;padding:0 12px;height:36px;border-radius:6px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:12px;font-weight:500;color:var(--t2);cursor:pointer}
+.filter-sel svg{width:14px;height:14px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* TABLE */
+.tbl{margin-top:16px;background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:visible}
+.th-r{display:flex;padding:0 20px;height:44px;align-items:center;background:#FAFAFA;border-bottom:1px solid var(--border-lt)}
+.th{font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--t4)}
+.tr{display:flex;align-items:center;padding:0 20px;height:56px;border-bottom:1px solid var(--border-lt)}
+.tr:last-child{border-bottom:none}
+.tr:hover{background:var(--ro-bg)}
+.td{font-size:13px;color:var(--t2)}
+
+/* COLUMNS - View 1 */
+.v1-c1{width:220px;display:flex;align-items:center;gap:10px}
+.v1-c2{width:200px}
+.v1-c3{flex:1;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.v1-c4{width:100px}
+.v1-c5{width:80px;display:flex;justify-content:center;gap:8px}
+
+/* COLUMNS - View 2 shares */
+.v2-c1{width:200px;display:flex;align-items:center;gap:8px}
+.v2-c2{width:200px}
+.v2-c3{width:120px}
+.v2-c4{width:140px}
+.v2-c5{width:100px}
+.v2-c6{width:80px;display:flex;justify-content:center}
+
+/* COLUMNS - Delegações */
+.v3-c1{width:200px;display:flex;align-items:center;gap:8px}
+.v3-c2{flex:1;display:flex;gap:6px;flex-wrap:wrap}
+.v3-c3{width:160px}
+.v3-c4{width:160px}
+.v3-c5{width:80px;display:flex;justify-content:center}
+
+/* COLUMNS - Acessos Recebidos */
+.v4-c1{width:200px;display:flex;align-items:center;gap:8px}
+.v4-c2{width:200px}
+.v4-c3{flex:1;display:flex;gap:6px;flex-wrap:wrap}
+.v4-c4{width:140px}
+
+/* AVATAR */
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.av-blue{background:var(--blue)}
+.av-green{background:var(--success)}
+.av-purple{background:#8E44AD}
+.av-teal{background:#1ABC9C}
+.av-sm{width:28px;height:28px;font-size:10px}
+.av-info{display:flex;flex-direction:column}
+.av-name{font-size:13px;font-weight:600;color:var(--t1)}
+.av-email{font-size:12px;color:var(--t4)}
+
+/* BADGES */
+.bd{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.bd-active{color:#1E7A42;background:var(--success-bg);border:1px solid var(--success-bd)}
+.bd-inactive{color:var(--t4);background:var(--bg);border:1px solid var(--border)}
+.bd-primary{color:#fff;background:var(--blue);border:1px solid var(--blue-hover);font-size:9px;padding:1px 6px;margin-left:6px}
+.bd-warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-bd)}
+.bd-expired{color:var(--t4);background:var(--bg);border:1px solid var(--border);text-decoration:line-through}
+
+/* PILLS */
+.pill{display:inline-flex;align-items:center;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;gap:4px}
+.pill-blue{color:var(--blue);background:var(--blue-lt);border:1px solid #B8D9F2}
+.pill-gray{color:var(--t3);background:var(--bg);border:1px solid var(--border)}
+.pill-more{color:var(--t4);background:var(--bg);border:1px solid var(--border);cursor:pointer;padding:4px 8px}
+.pill-scope{font-size:10px;padding:2px 8px;color:var(--blue);background:var(--blue-lt);border:1px solid #B8D9F2;border-radius:4px;font-weight:600;display:inline-flex}
+
+/* ACTION ICONS */
+.act{display:flex;gap:8px;align-items:center;justify-content:center}
+.act-btn{width:28px;height:28px;border-radius:6px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.act-btn svg{width:16px;height:16px;stroke:var(--t4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.act-btn:hover svg{stroke:var(--blue)}
+.act-btn.danger:hover svg{stroke:var(--err)}
+
+/* TABS */
+.tab-bar{display:flex;gap:0;margin-top:20px;border-bottom:2px solid var(--border)}
+.tab-item{padding:12px 20px;font-size:13px;font-weight:500;color:var(--t4);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab-item.on{color:var(--blue);font-weight:700;border-bottom-color:var(--blue)}
+.tab-item:hover:not(.on){color:var(--t2)}
+
+/* TABLE FOOTER */
+.tbl-ft{display:flex;justify-content:center;align-items:center;height:52px;border-top:1px solid var(--border-lt)}
+.tbl-ft a{font-size:13px;font-weight:600;color:var(--blue);text-decoration:none;cursor:pointer}
+
+/* DRAWER */
+.drawer-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.3);z-index:50}
+.drawer{position:absolute;right:0;top:0;width:480px;height:100%;background:var(--white);box-shadow:-4px 0 24px rgba(0,0,0,0.08);z-index:51;display:flex;flex-direction:column}
+.dr-header{height:64px;border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dr-title{font-size:18px;font-weight:700;color:var(--t1)}
+.dr-close{width:28px;height:28px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px}
+.dr-close:hover{background:var(--ro-bg)}
+.dr-close svg{width:20px;height:20px;stroke:var(--t4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.dr-body{flex:1;overflow-y:auto;padding:24px}
+.dr-footer{height:72px;border-top:1px solid var(--border);padding:16px 24px;display:flex;justify-content:flex-end;gap:12px;align-items:center;flex-shrink:0}
+.btn-cancel{height:40px;border-radius:8px;border:1px solid var(--border);padding:0 20px;background:var(--white);font-family:inherit;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer}
+.btn-submit{height:40px;border-radius:8px;border:none;padding:0 20px;background:var(--blue);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.btn-submit:hover{background:var(--blue-hover)}
+.btn-danger{height:40px;border-radius:8px;border:none;padding:0 20px;background:var(--err);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.btn-danger:hover{background:var(--danger)}
+
+/* FORM */
+.field{margin-top:16px}.field:first-child{margin-top:0}
+.label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:6px}
+.input{width:100%;height:42px;border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-family:inherit;font-size:14px;font-weight:500;color:var(--t1);outline:none}
+.input::placeholder{color:var(--t6)}
+.input:focus{border-color:var(--blue)}
+.textarea{width:100%;height:80px;border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-family:inherit;font-size:14px;font-weight:500;color:var(--t1);outline:none;resize:vertical}
+.textarea::placeholder{color:var(--t6)}
+.select{width:100%;height:42px;border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-family:inherit;font-size:14px;font-weight:500;color:var(--t1);outline:none;background:var(--white);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m2 4 4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+
+/* RADIO */
+.radio-group{display:flex;gap:16px;margin-top:6px}
+.radio-opt{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t2)}
+.radio-circle{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.radio-circle.checked{border-color:var(--blue)}
+.radio-circle.checked::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--blue)}
+
+/* TREE SELECTOR */
+.tree{width:100%;border:1px solid var(--border);border-radius:8px;margin-top:6px;max-height:280px;overflow-y:auto;padding:8px 0}
+.tree-node{display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px}
+.tree-node:hover{background:var(--ro-bg)}
+.tree-node.selected{background:var(--blue-lt);color:var(--blue)}
+.tree-chk{width:16px;height:16px;border-radius:4px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tree-chk.checked{background:var(--blue);border-color:var(--blue)}
+.tree-chk.checked::after{content:'';width:6px;height:3px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg);margin-top:-1px}
+.tree-chevron{width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tree-chevron svg{width:12px;height:12px;stroke:var(--t4);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tree-lbl{font-weight:500;color:var(--t2)}
+.tree-n1 .tree-lbl{font-weight:700;color:var(--t1)}
+.tree-n2 .tree-lbl{font-weight:600;color:var(--t2)}
+.tree-n3 .tree-lbl{font-weight:500;color:var(--t2)}
+.tree-n4 .tree-lbl{font-weight:500;color:var(--t3)}
+
+/* BANNER */
+.banner{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:8px;font-size:12px;font-weight:500;margin-bottom:16px}
+.banner-info{background:var(--blue-lt);border:1px solid #B8D9F2;color:var(--blue)}
+.banner-warn{background:var(--warn-bg);border:1px solid var(--warn-bd);color:var(--warn)}
+.banner svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:1px}
+
+/* SECTION TITLE */
+.sec-title{font-size:16px;font-weight:700;color:var(--t1);margin-bottom:12px}
+
+/* SCOPE MULTI-SELECT */
+.scope-list{display:flex;flex-direction:column;gap:4px;margin-top:6px;border:1px solid var(--border);border-radius:8px;padding:8px}
+.scope-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t2)}
+.scope-item:hover{background:var(--ro-bg)}
+.scope-item.disabled{opacity:0.5;cursor:not-allowed}
+.scope-item.disabled:hover{background:transparent}
+
+/* DATE RANGE */
+.date-range{display:flex;gap:8px;align-items:center}
+.date-range .input{width:calc(50% - 4px)}
+.date-sep{font-size:13px;color:var(--t4)}
+
+/* MODAL */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.3);z-index:60;display:flex;align-items:center;justify-content:center}
+.modal-card{width:420px;background:var(--white);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);padding:24px;display:flex;flex-direction:column;align-items:center}
+.modal-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.modal-icon-warn{background:var(--warn-bg);color:var(--warn)}
+.modal-icon-err{background:var(--err-bg);color:var(--err)}
+.modal-title{font-size:18px;font-weight:700;color:var(--t1);margin-top:16px;text-align:center}
+.modal-msg{font-size:13px;font-weight:400;color:var(--t3);margin-top:8px;text-align:center;line-height:1.5}
+.modal-msg strong{font-weight:600;color:var(--t1)}
+.modal-btns{display:flex;gap:12px;margin-top:24px;justify-content:center}
+
+/* MULTI-SELECT CHIPS */
+.multi-sel{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:42px;align-items:center}
+.multi-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:500;color:var(--blue);background:var(--blue-lt);border:1px solid #B8D9F2}
+</style>
+</head>
+<body>
+
+<!-- ═══ FRAME 1: Escopo Organizacional (Lista) ═══ -->
+<div class="tag">Frame 1 — Escopo Organizacional (UX-IDN-001) — Lista de usuários e escopos (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Identidade Avançada</span></nav></div><div class="tb-r"><div class="tb-info"><div class="tb-user">Admin ECF</div><div class="tb-tenant">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><circle cx="6" cy="17" r="3"/><path d="M12 12l-6 2"/><circle cx="18" cy="17" r="3"/><path d="M12 12l6 2"/></svg>Estrutura Org.</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Departamentos</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Identidade Avançada</a></div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Modelagem</a></div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-txt">Servidor Online</span></div>
+    </aside>
+    <main class="ct">
+      <div class="ph"><div><div class="ph-t">Escopo Organizacional</div><div class="ph-d">Gerencie os vínculos de escopo organizacional dos usuários</div></div><button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Atribuir Escopo</button></div>
+      <div class="toolbar"><div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="Buscar por nome ou e-mail..."/></div><div class="filters"><div class="filter-sel"><span>Todos os Tipos</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div><div class="filter-sel"><span>Todos os Status</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div></div></div>
+      <div class="tbl">
+        <div class="th-r"><div class="th v1-c1">USUÁRIO</div><div class="th v1-c2">ESCOPO PRINCIPAL</div><div class="th v1-c3">ESCOPOS ADICIONAIS</div><div class="th v1-c4">STATUS</div><div class="th v1-c5">AÇÕES</div></div>
+        <div class="tr"><div class="v1-c1"><div class="av av-blue">MS</div><div class="av-info"><span class="av-name">Marcos Silva</span><span class="av-email">marcos.silva@a1.com.br</span></div></div><div class="v1-c2"><span class="pill pill-blue">Diretoria<span class="bd bd-primary">PRIMARY</span></span></div><div class="v1-c3"><span class="pill pill-gray">Engenharia</span><span class="pill pill-gray">Operações</span></div><div class="v1-c4"><span class="bd bd-active">ATIVO</span></div><div class="v1-c5 act"><button class="act-btn"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div>
+        <div class="tr"><div class="v1-c1"><div class="av av-green">AO</div><div class="av-info"><span class="av-name">Ana Oliveira</span><span class="av-email">ana.oliveira@a1.com.br</span></div></div><div class="v1-c2"><span class="pill pill-blue">Engenharia Civil<span class="bd bd-primary">PRIMARY</span></span></div><div class="v1-c3"><span class="pill pill-gray">Projetos</span><span class="pill pill-more">+1</span></div><div class="v1-c4"><span class="bd bd-active">ATIVO</span></div><div class="v1-c5 act"><button class="act-btn"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div>
+        <div class="tr"><div class="v1-c1"><div class="av av-purple">JL</div><div class="av-info"><span class="av-name">Julia Lima</span><span class="av-email">julia.lima@a1.com.br</span></div></div><div class="v1-c2"><span class="pill pill-blue">A1 Industrial<span class="bd bd-primary">PRIMARY</span></span></div><div class="v1-c3"><span style="font-size:12px;color:var(--t4);font-style:italic">Nenhum escopo adicional</span></div><div class="v1-c4"><span class="bd bd-active">ATIVO</span></div><div class="v1-c5 act"><button class="act-btn"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div>
+        <div class="tr"><div class="v1-c1"><div class="av av-teal">PM</div><div class="av-info"><span class="av-name">Pedro Mendes</span><span class="av-email">pedro.mendes@a1.com.br</span></div></div><div class="v1-c2"><span class="pill pill-blue">Produção<span class="bd bd-primary">PRIMARY</span></span></div><div class="v1-c3"><span class="pill pill-gray">Logística</span><span class="pill pill-gray">Qualidade</span><span class="pill pill-more">+2</span></div><div class="v1-c4"><span class="bd bd-warn">EXPIRA EM 3D</span></div><div class="v1-c5 act"><button class="act-btn"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div>
+        <div class="tr"><div class="v1-c1"><div class="av" style="background:#E67E22">CF</div><div class="av-info"><span class="av-name">Carlos Ferreira</span><span class="av-email">carlos.ferreira@a1.com.br</span></div></div><div class="v1-c2"><span class="pill" style="color:var(--t4);background:var(--bg);border:1px solid var(--border);text-decoration:line-through">Diretoria</span></div><div class="v1-c3"><span style="font-size:12px;color:var(--t4);font-style:italic">Nenhum escopo adicional</span></div><div class="v1-c4"><span class="bd bd-expired">EXPIRADO</span></div><div class="v1-c5 act"><button class="act-btn"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div>
+        <div class="tbl-ft"><a>Carregar mais</a></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 2: Drawer Atribuir Escopo ═══ -->
+<div class="tag">Frame 2 — Drawer Atribuir Escopo (UX-IDN-001) — Tree selector com hierarquia org (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Identidade Avançada</span></nav></div><div class="tb-r"><div class="tb-info"><div class="tb-user">Admin ECF</div><div class="tb-tenant">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb">
+      <div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div>
+      <div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><circle cx="6" cy="17" r="3"/><path d="M12 12l-6 2"/><circle cx="18" cy="17" r="3"/><path d="M12 12l6 2"/></svg>Estrutura Org.</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Departamentos</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Identidade Avançada</a></div></div>
+      <div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Modelagem</a></div></div>
+      <div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-txt">Servidor Online</span></div>
+    </aside>
+    <main class="ct" style="position:relative">
+      <div class="ph"><div><div class="ph-t">Escopo Organizacional</div><div class="ph-d">Gerencie os vínculos de escopo organizacional dos usuários</div></div><button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Atribuir Escopo</button></div>
+      <div class="toolbar"><div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="Buscar por nome ou e-mail..."/></div></div>
+      <div class="tbl" style="opacity:0.5"><div class="th-r"><div class="th v1-c1">USUÁRIO</div><div class="th v1-c2">ESCOPO PRINCIPAL</div><div class="th v1-c3">ESCOPOS ADICIONAIS</div><div class="th v1-c4">STATUS</div><div class="th v1-c5">AÇÕES</div></div><div class="tr"><div class="v1-c1"><div class="av av-blue">MS</div><div class="av-info"><span class="av-name">Marcos Silva</span><span class="av-email">marcos.silva@a1.com.br</span></div></div><div class="v1-c2"><span class="pill pill-blue">Diretoria<span class="bd bd-primary">PRIMARY</span></span></div><div class="v1-c3"><span class="pill pill-gray">Engenharia</span></div><div class="v1-c4"><span class="bd bd-active">ATIVO</span></div><div class="v1-c5 act"><button class="act-btn"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div></div>
+      <div class="drawer-overlay"></div>
+      <div class="drawer">
+        <div class="dr-header"><span class="dr-title">Atribuir Escopo Organizacional</span><button class="dr-close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+        <div class="dr-body">
+          <div class="field"><div class="label">USUÁRIO</div><input class="input" placeholder="Buscar por nome ou e-mail..." value="Ana Oliveira"/></div>
+          <div class="field"><div class="label">TIPO DE ESCOPO</div><div class="radio-group"><label class="radio-opt"><span class="radio-circle"></span>Principal (PRIMARY)</label><label class="radio-opt"><span class="radio-circle checked"></span>Secundário (SECONDARY)</label></div></div>
+          <div class="field"><div class="label">ÁREA ORGANIZACIONAL</div>
+            <div class="tree">
+              <div class="tree-node tree-n1" style="padding-left:12px"><span class="tree-chevron"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span><span class="tree-chk"></span><span class="tree-lbl">Grupo A1</span></div>
+              <div class="tree-node tree-n2" style="padding-left:36px"><span class="tree-chevron"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span><span class="tree-chk"></span><span class="tree-lbl">A1 Engenharia</span></div>
+              <div class="tree-node tree-n3 selected" style="padding-left:60px"><span class="tree-chevron" style="visibility:hidden"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span><span class="tree-chk checked"></span><span class="tree-lbl">Diretoria</span></div>
+              <div class="tree-node tree-n3" style="padding-left:60px"><span class="tree-chevron" style="visibility:hidden"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span><span class="tree-chk"></span><span class="tree-lbl">Engenharia Civil</span></div>
+              <div class="tree-node tree-n3" style="padding-left:60px"><span class="tree-chevron"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span><span class="tree-chk"></span><span class="tree-lbl">Projetos Especiais</span></div>
+              <div class="tree-node tree-n4" style="padding-left:84px"><span class="tree-chevron" style="visibility:hidden"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span><span class="tree-chk"></span><span class="tree-lbl">Infraestrutura</span></div>
+              <div class="tree-node tree-n2" style="padding-left:36px"><span class="tree-chevron"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span><span class="tree-chk"></span><span class="tree-lbl">A1 Industrial</span></div>
+              <div class="tree-node tree-n2" style="padding-left:36px"><span class="tree-chevron"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span><span class="tree-chk"></span><span class="tree-lbl">A1 Agro</span></div>
+            </div>
+          </div>
+          <div class="field"><div class="label">VÁLIDO ATÉ (OPCIONAL)</div><input class="input" type="text" placeholder="dd/mm/aaaa"/></div>
+        </div>
+        <div class="dr-footer"><button class="btn-cancel">Cancelar</button><button class="btn-submit">Vincular</button></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 3: Tab Meus Compartilhamentos ═══ -->
+<div class="tag">Frame 3 — Compartilhamentos e Delegações (UX-IDN-002) — Tab Meus Compartilhamentos (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Identidade Avançada</span></nav></div><div class="tb-r"><div class="tb-info"><div class="tb-user">Admin ECF</div><div class="tb-tenant">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><circle cx="6" cy="17" r="3"/><path d="M12 12l-6 2"/><circle cx="18" cy="17" r="3"/><path d="M12 12l6 2"/></svg>Estrutura Org.</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Departamentos</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Identidade Avançada</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Modelagem</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-txt">Servidor Online</span></div></aside>
+    <main class="ct">
+      <div class="ph"><div><div class="ph-t">Compartilhamentos e Delegações</div><div class="ph-d">Gerencie compartilhamentos de acesso e delegações de escopo</div></div><button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Novo Compartilhamento</button></div>
+      <div class="tab-bar"><div class="tab-item on">Meus Compartilhamentos</div><div class="tab-item">Minhas Delegações</div><div class="tab-item">Acessos Recebidos</div></div>
+      <div class="tbl" style="margin-top:16px">
+        <div class="th-r"><div class="th v2-c1">COMPARTILHADO COM</div><div class="th v2-c2">ESCOPO / RECURSO</div><div class="th v2-c3">TIPO</div><div class="th v2-c4">VALIDADE</div><div class="th v2-c5">STATUS</div><div class="th v2-c6">AÇÕES</div></div>
+        <div class="tr"><div class="v2-c1"><div class="av av-sm av-green">AO</div><span class="td" style="font-weight:500;color:var(--t1)">Ana Oliveira</span></div><div class="v2-c2 td">Relatórios Diretoria</div><div class="v2-c3 td" style="font-size:12px">Leitura</div><div class="v2-c4 td" style="font-size:12px;color:var(--t4)">até 15 abr 2026</div><div class="v2-c5"><span class="bd bd-active">ATIVO</span></div><div class="v2-c6 act"><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div>
+        <div class="tr"><div class="v2-c1"><div class="av av-sm av-purple">JL</div><span class="td" style="font-weight:500;color:var(--t1)">Julia Lima</span></div><div class="v2-c2 td">Dashboard Operacional</div><div class="v2-c3 td" style="font-size:12px">Leitura + Edição</div><div class="v2-c4"><span class="bd bd-warn">EXPIRA EM 3D</span></div><div class="v2-c5"><span class="bd bd-active">ATIVO</span></div><div class="v2-c6 act"><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div>
+        <div class="tr"><div class="v2-c1"><div class="av av-sm av-teal">PM</div><span class="td" style="font-weight:500;color:var(--t1)">Pedro Mendes</span></div><div class="v2-c2 td">Relatórios Produção</div><div class="v2-c3 td" style="font-size:12px">Leitura</div><div class="v2-c4 td" style="font-size:12px;color:var(--t4)">até 30 mar 2026</div><div class="v2-c5"><span class="bd bd-expired">EXPIRADO</span></div><div class="v2-c6 act"><button class="act-btn danger" style="opacity:0.4;cursor:default"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div>
+        <div class="tr"><div class="v2-c1"><div class="av av-sm" style="background:#E67E22">CF</div><span class="td" style="font-weight:500;color:var(--t1)">Carlos Ferreira</span></div><div class="v2-c2 td">Contratos Engenharia</div><div class="v2-c3 td" style="font-size:12px">Leitura</div><div class="v2-c4 td" style="font-size:12px;color:var(--t4)">até 01 jun 2026</div><div class="v2-c5"><span class="bd bd-active">ATIVO</span></div><div class="v2-c6 act"><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div>
+        <div class="tbl-ft"><a>Carregar mais</a></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 4: Drawer Nova Delegação ═══ -->
+<div class="tag">Frame 4 — Drawer Nova Delegação (UX-IDN-002) — Tab Delegações + drawer aberto (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Identidade Avançada</span></nav></div><div class="tb-r"><div class="tb-info"><div class="tb-user">Admin ECF</div><div class="tb-tenant">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><circle cx="6" cy="17" r="3"/><path d="M12 12l-6 2"/><circle cx="18" cy="17" r="3"/><path d="M12 12l6 2"/></svg>Estrutura Org.</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Departamentos</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Identidade Avançada</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Modelagem</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-txt">Servidor Online</span></div></aside>
+    <main class="ct" style="position:relative">
+      <div class="ph"><div><div class="ph-t">Compartilhamentos e Delegações</div><div class="ph-d">Gerencie compartilhamentos de acesso e delegações de escopo</div></div><button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Nova Delegação</button></div>
+      <div class="tab-bar"><div class="tab-item">Meus Compartilhamentos</div><div class="tab-item on">Minhas Delegações</div><div class="tab-item">Acessos Recebidos</div></div>
+      <div style="margin-top:20px"><div class="sec-title">Delegações Dadas</div><div class="tbl" style="opacity:0.5;margin-top:0"><div class="th-r"><div class="th v3-c1">DELEGADO</div><div class="th v3-c2">ESCOPOS</div><div class="th v3-c3">PERÍODO</div><div class="th v3-c4">MOTIVO</div><div class="th v3-c5">AÇÕES</div></div><div class="tr"><div class="v3-c1"><div class="av av-sm av-green">AO</div><span class="td" style="font-weight:500;color:var(--t1)">Ana Oliveira</span></div><div class="v3-c2"><span class="pill pill-blue" style="font-size:10px;padding:2px 8px">identity:read</span><span class="pill pill-blue" style="font-size:10px;padding:2px 8px">identity:write</span></div><div class="v3-c3 td" style="font-size:12px;color:var(--t4)">01/04 — 15/04/2026</div><div class="v3-c4 td" style="font-size:12px;color:var(--t4)">Férias do titular</div><div class="v3-c5 act"><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div></div></div>
+      <div class="drawer-overlay"></div>
+      <div class="drawer">
+        <div class="dr-header"><span class="dr-title">Nova Delegação</span><button class="dr-close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+        <div class="dr-body">
+          <div class="banner banner-info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>Os escopos delegados não podem ser re-delegados pelo beneficiário.</div>
+          <div class="field"><div class="label">DELEGADO</div><input class="input" placeholder="Buscar por nome ou e-mail..." value="Julia Lima"/></div>
+          <div class="field"><div class="label">ESCOPOS A DELEGAR</div><div class="scope-list"><label class="scope-item"><span class="tree-chk checked"></span><span>identity:read</span></label><label class="scope-item"><span class="tree-chk checked"></span><span>identity:write</span></label><label class="scope-item"><span class="tree-chk"></span><span>org:read</span></label><label class="scope-item disabled" title="Escopos de aprovação não podem ser delegados."><span class="tree-chk" style="opacity:0.4"></span><span style="text-decoration:line-through">identity:approve</span><svg style="width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-left:auto" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></label><label class="scope-item disabled" title="Escopos de execução não podem ser delegados."><span class="tree-chk" style="opacity:0.4"></span><span style="text-decoration:line-through">identity:execute</span><svg style="width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-left:auto" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></label><label class="scope-item disabled" title="Escopos de assinatura não podem ser delegados."><span class="tree-chk" style="opacity:0.4"></span><span style="text-decoration:line-through">identity:sign</span><svg style="width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-left:auto" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></label></div></div>
+          <div class="field"><div class="label">PERÍODO</div><div class="date-range"><input class="input" type="text" placeholder="Início" value="01/04/2026"/><span class="date-sep">—</span><input class="input" type="text" placeholder="Fim" value="15/04/2026"/></div></div>
+          <div class="field"><div class="label">MOTIVO</div><textarea class="textarea" placeholder="Descreva o motivo da delegação...">Férias do titular — cobertura de aprovações</textarea></div>
+        </div>
+        <div class="dr-footer"><button class="btn-cancel">Cancelar</button><button class="btn-submit">Criar Delegação</button></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 5: Tab Minhas Delegações (sem drawer) ═══ -->
+<div class="tag">Frame 5 — Tab Minhas Delegações (UX-IDN-002) — Seções Dadas + Recebidas com banner (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Identidade Avançada</span></nav></div><div class="tb-r"><div class="tb-info"><div class="tb-user">Admin ECF</div><div class="tb-tenant">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><circle cx="6" cy="17" r="3"/><path d="M12 12l-6 2"/><circle cx="18" cy="17" r="3"/><path d="M12 12l6 2"/></svg>Estrutura Org.</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Departamentos</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Identidade Avançada</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Modelagem</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-txt">Servidor Online</span></div></aside>
+    <main class="ct">
+      <div class="ph"><div><div class="ph-t">Compartilhamentos e Delegações</div><div class="ph-d">Gerencie compartilhamentos de acesso e delegações de escopo</div></div><button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Nova Delegação</button></div>
+      <div class="tab-bar"><div class="tab-item">Meus Compartilhamentos</div><div class="tab-item on">Minhas Delegações</div><div class="tab-item">Acessos Recebidos</div></div>
+      <div style="margin-top:20px"><div class="sec-title">Delegações Dadas</div><div class="tbl" style="margin-top:0"><div class="th-r"><div class="th v3-c1">DELEGADO</div><div class="th v3-c2">ESCOPOS</div><div class="th v3-c3">PERÍODO</div><div class="th v3-c4">MOTIVO</div><div class="th v3-c5">AÇÕES</div></div><div class="tr"><div class="v3-c1"><div class="av av-sm av-green">AO</div><span class="td" style="font-weight:500;color:var(--t1)">Ana Oliveira</span></div><div class="v3-c2"><span class="pill pill-blue" style="font-size:10px;padding:2px 8px">identity:read</span><span class="pill pill-blue" style="font-size:10px;padding:2px 8px">identity:write</span></div><div class="v3-c3 td" style="font-size:12px;color:var(--t4)">01/04 — 15/04/2026</div><div class="v3-c4 td" style="font-size:12px;color:var(--t4)">Férias do titular</div><div class="v3-c5 act"><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div></div></div>
+      <div style="margin-top:24px"><div class="sec-title">Delegações Recebidas</div><div class="banner banner-info" style="margin-bottom:12px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>Escopos obtidos por delegação não podem ser re-delegados.</div><div class="tbl" style="margin-top:0"><div class="th-r"><div class="th v3-c1">DELEGANTE</div><div class="th v3-c2">ESCOPOS</div><div class="th v3-c3">PERÍODO</div><div class="th v3-c4">MOTIVO</div></div><div class="tr"><div class="v3-c1"><div class="av av-sm av-purple">JL</div><span class="td" style="font-weight:500;color:var(--t1)">Julia Lima</span></div><div class="v3-c2"><span class="pill pill-blue" style="font-size:10px;padding:2px 8px">process:read</span></div><div class="v3-c3 td" style="font-size:12px;color:var(--t4)">15/03 — 30/04/2026</div><div class="v3-c4 td" style="font-size:12px;color:var(--t4)">Cobertura de projeto</div></div></div></div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 6: Tab Acessos Recebidos ═══ -->
+<div class="tag">Frame 6 — Tab Acessos Recebidos (UX-IDN-002) — Shares + Delegações recebidas (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Identidade Avançada</span></nav></div><div class="tb-r"><div class="tb-info"><div class="tb-user">Admin ECF</div><div class="tb-tenant">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><circle cx="6" cy="17" r="3"/><path d="M12 12l-6 2"/><circle cx="18" cy="17" r="3"/><path d="M12 12l6 2"/></svg>Estrutura Org.</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Departamentos</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Identidade Avançada</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Modelagem</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-txt">Servidor Online</span></div></aside>
+    <main class="ct">
+      <div class="ph"><div><div class="ph-t">Compartilhamentos e Delegações</div><div class="ph-d">Gerencie compartilhamentos de acesso e delegações de escopo</div></div></div>
+      <div class="tab-bar"><div class="tab-item">Meus Compartilhamentos</div><div class="tab-item">Minhas Delegações</div><div class="tab-item on">Acessos Recebidos</div></div>
+      <div class="banner banner-info" style="margin-top:16px;margin-bottom:0"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>Estes acessos são temporários e expiram automaticamente.</div>
+      <div style="margin-top:20px"><div class="sec-title">Compartilhamentos Recebidos</div><div class="tbl" style="margin-top:0"><div class="th-r"><div class="th v4-c1">CONCEDENTE</div><div class="th v4-c2">ESCOPO / RECURSO</div><div class="th v4-c3">AÇÕES PERMITIDAS</div><div class="th v4-c4">VÁLIDO ATÉ</div></div><div class="tr"><div class="v4-c1"><div class="av av-sm av-green">AO</div><span class="td" style="font-weight:500;color:var(--t1)">Ana Oliveira</span></div><div class="v4-c2 td">Relatórios Diretoria</div><div class="v4-c3"><span class="pill-scope">Leitura</span></div><div class="v4-c4 td" style="font-size:12px;color:var(--t4)">15 abr 2026</div></div><div class="tr"><div class="v4-c1"><div class="av av-sm" style="background:#E67E22">CF</div><span class="td" style="font-weight:500;color:var(--t1)">Carlos Ferreira</span></div><div class="v4-c2 td">Dashboard Operacional</div><div class="v4-c3"><span class="pill-scope">Leitura</span><span class="pill-scope" style="margin-left:4px">Edição</span></div><div class="v4-c4 td" style="font-size:12px;color:var(--t4)">01 jun 2026</div></div></div></div>
+      <div style="margin-top:24px"><div class="sec-title">Delegações Recebidas</div><div class="banner banner-info" style="margin-bottom:12px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>Escopos obtidos por delegação não podem ser re-delegados.</div><div class="tbl" style="margin-top:0"><div class="th-r"><div class="th v3-c1">DELEGANTE</div><div class="th v3-c2">ESCOPOS</div><div class="th v3-c3">PERÍODO</div><div class="th v3-c4">MOTIVO</div></div><div class="tr"><div class="v3-c1"><div class="av av-sm av-purple">JL</div><span class="td" style="font-weight:500;color:var(--t1)">Julia Lima</span></div><div class="v3-c2"><span class="pill pill-blue" style="font-size:10px;padding:2px 8px">process:read</span></div><div class="v3-c3 td" style="font-size:12px;color:var(--t4)">15/03 — 30/04/2026</div><div class="v3-c4 td" style="font-size:12px;color:var(--t4)">Cobertura de projeto</div></div></div></div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 7: Drawer Novo Compartilhamento ═══ -->
+<div class="tag">Frame 7 — Drawer Novo Compartilhamento (UX-IDN-002) — Tab Compartilhamentos + drawer (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Identidade Avançada</span></nav></div><div class="tb-r"><div class="tb-info"><div class="tb-user">Admin ECF</div><div class="tb-tenant">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><circle cx="6" cy="17" r="3"/><path d="M12 12l-6 2"/><circle cx="18" cy="17" r="3"/><path d="M12 12l6 2"/></svg>Estrutura Org.</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Departamentos</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Identidade Avançada</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Modelagem</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-txt">Servidor Online</span></div></aside>
+    <main class="ct" style="position:relative">
+      <div class="ph"><div><div class="ph-t">Compartilhamentos e Delegações</div><div class="ph-d">Gerencie compartilhamentos de acesso e delegações de escopo</div></div><button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Novo Compartilhamento</button></div>
+      <div class="tab-bar"><div class="tab-item on">Meus Compartilhamentos</div><div class="tab-item">Minhas Delegações</div><div class="tab-item">Acessos Recebidos</div></div>
+      <div class="tbl" style="margin-top:16px;opacity:0.5"><div class="th-r"><div class="th v2-c1">COMPARTILHADO COM</div><div class="th v2-c2">ESCOPO / RECURSO</div><div class="th v2-c3">TIPO</div><div class="th v2-c4">VALIDADE</div><div class="th v2-c5">STATUS</div><div class="th v2-c6">AÇÕES</div></div><div class="tr"><div class="v2-c1"><div class="av av-sm av-green">AO</div><span class="td" style="font-weight:500;color:var(--t1)">Ana Oliveira</span></div><div class="v2-c2 td">Relatórios Diretoria</div><div class="v2-c3 td" style="font-size:12px">Leitura</div><div class="v2-c4 td" style="font-size:12px;color:var(--t4)">até 15 abr 2026</div><div class="v2-c5"><span class="bd bd-active">ATIVO</span></div><div class="v2-c6 act"><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div></div>
+      <div class="drawer-overlay"></div>
+      <div class="drawer">
+        <div class="dr-header"><span class="dr-title">Novo Compartilhamento</span><button class="dr-close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+        <div class="dr-body">
+          <div class="field" style="margin-top:0"><div class="label">BENEFICIÁRIO</div><input class="input" placeholder="Buscar por nome ou e-mail..." value="Pedro Mendes"/></div>
+          <div class="field"><div class="label">TIPO DE RECURSO</div><select class="select"><option>Relatório</option><option>Dashboard</option><option>Documento</option></select></div>
+          <div class="field"><div class="label">RECURSO</div><input class="input" placeholder="Buscar recurso..." value="Relatórios Produção"/></div>
+          <div class="field"><div class="label">AÇÕES PERMITIDAS</div><div class="multi-sel"><span class="multi-chip">Leitura</span><span class="multi-chip">Exportação</span></div></div>
+          <div class="field"><div class="label">MOTIVO</div><textarea class="textarea" placeholder="Descreva o motivo do compartilhamento...">Necessidade de acompanhar indicadores de produção para relatório trimestral.</textarea></div>
+          <div class="field"><div class="label">AUTORIZADO POR</div><input class="input" placeholder="Buscar aprovador..."/><div style="margin-top:6px;font-size:11px;font-weight:500;color:var(--blue);display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Você possui permissão para auto-autorizar.</div></div>
+          <div class="field"><div class="label">VÁLIDO ATÉ</div><input class="input" type="text" placeholder="dd/mm/aaaa" value="30/06/2026"/></div>
+        </div>
+        <div class="dr-footer"><button class="btn-cancel">Cancelar</button><button class="btn-submit">Criar</button></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 8: Modal Revogar Compartilhamento ═══ -->
+<div class="tag">Frame 8 — Modal Revogar Compartilhamento (UX-IDN-002) — Confirmação sobre Tab Compartilhamentos (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Identidade Avançada</span></nav></div><div class="tb-r"><div class="tb-info"><div class="tb-user">Admin ECF</div><div class="tb-tenant">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><circle cx="6" cy="17" r="3"/><path d="M12 12l-6 2"/><circle cx="18" cy="17" r="3"/><path d="M12 12l6 2"/></svg>Estrutura Org.</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Departamentos</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Identidade Avançada</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Modelagem</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-txt">Servidor Online</span></div></aside>
+    <main class="ct" style="position:relative">
+      <div class="ph" style="opacity:0.5"><div><div class="ph-t">Compartilhamentos e Delegações</div><div class="ph-d">Gerencie compartilhamentos de acesso e delegações de escopo</div></div><button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Novo Compartilhamento</button></div>
+      <div class="tab-bar" style="opacity:0.5"><div class="tab-item on">Meus Compartilhamentos</div><div class="tab-item">Minhas Delegações</div><div class="tab-item">Acessos Recebidos</div></div>
+      <div class="tbl" style="margin-top:16px;opacity:0.5"><div class="th-r"><div class="th v2-c1">COMPARTILHADO COM</div><div class="th v2-c2">ESCOPO / RECURSO</div><div class="th v2-c3">TIPO</div><div class="th v2-c4">VALIDADE</div><div class="th v2-c5">STATUS</div><div class="th v2-c6">AÇÕES</div></div><div class="tr"><div class="v2-c1"><div class="av av-sm av-green">AO</div><span class="td" style="font-weight:500;color:var(--t1)">Ana Oliveira</span></div><div class="v2-c2 td">Relatórios Diretoria</div><div class="v2-c3 td" style="font-size:12px">Leitura</div><div class="v2-c4 td" style="font-size:12px;color:var(--t4)">até 15 abr 2026</div><div class="v2-c5"><span class="bd bd-active">ATIVO</span></div><div class="v2-c6 act"><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div></div>
+      <div class="modal-overlay"><div class="modal-card"><div class="modal-icon modal-icon-warn"><svg viewBox="0 0 24 24"><path d="m10.29 3.86-1.65 2.85-5.03 8.69a2 2 0 0 0 1.73 3h10.32a2 2 0 0 0 1.73-3l-5.03-8.69-1.65-2.85a1 1 0 0 0-1.73 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div><div class="modal-title">Revogar compartilhamento?</div><div class="modal-msg">Confirma revogação deste compartilhamento? O acesso de <strong>Ana Oliveira</strong> será removido imediatamente.</div><div class="modal-btns"><button class="btn-cancel">Cancelar</button><button class="btn-danger">Revogar</button></div></div></div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══ FRAME 9: Modal Remover Escopo PRIMARY ═══ -->
+<div class="tag">Frame 9 — Modal Remover Escopo PRIMARY (UX-IDN-001) — Aviso especial remoção área principal (1440×900)</div>
+<div class="frame">
+  <header class="topbar"><div class="tb-l"><div class="tb-logo">A1</div><div><div class="tb-n">Grupo A1</div><div class="tb-s">PORTAL INTERNO</div></div><div class="tb-sep"></div><nav class="bc"><span class="bc-m">Organização</span><span class="bc-x">›</span><span class="bc-a">Identidade Avançada</span></nav></div><div class="tb-r"><div class="tb-info"><div class="tb-user">Admin ECF</div><div class="tb-tenant">A1 Engenharia</div></div><div class="tb-av">AE</div></div></header>
+  <div class="lay">
+    <aside class="sb"><div class="sb-sec"><div class="sb-cat">Administração</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuários</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Perfis e Permissões</a></div></div><div class="sb-sec"><div class="sb-cat">Organização</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><circle cx="6" cy="17" r="3"/><path d="M12 12l-6 2"/><circle cx="18" cy="17" r="3"/><path d="M12 12l6 2"/></svg>Estrutura Org.</a><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Departamentos</a><a class="sb-i on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Identidade Avançada</a></div></div><div class="sb-sec"><div class="sb-cat">Processos</div><div class="sb-items"><a class="sb-i"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Modelagem</a></div></div><div class="sb-ft"><div class="sb-dot"></div><span class="sb-ft-txt">Servidor Online</span></div></aside>
+    <main class="ct" style="position:relative">
+      <div class="ph" style="opacity:0.5"><div><div class="ph-t">Escopo Organizacional</div><div class="ph-d">Gerencie os vínculos de escopo organizacional dos usuários</div></div><button class="btn-p"><span style="font-size:16px;font-weight:400;margin-right:2px">+</span> Atribuir Escopo</button></div>
+      <div class="tbl" style="margin-top:20px;opacity:0.5"><div class="th-r"><div class="th v1-c1">USUÁRIO</div><div class="th v1-c2">ESCOPO PRINCIPAL</div><div class="th v1-c3">ESCOPOS ADICIONAIS</div><div class="th v1-c4">STATUS</div><div class="th v1-c5">AÇÕES</div></div><div class="tr"><div class="v1-c1"><div class="av av-blue">MS</div><div class="av-info"><span class="av-name">Marcos Silva</span><span class="av-email">marcos.silva@a1.com.br</span></div></div><div class="v1-c2"><span class="pill pill-blue">Diretoria<span class="bd bd-primary">PRIMARY</span></span></div><div class="v1-c3"><span class="pill pill-gray">Engenharia</span></div><div class="v1-c4"><span class="bd bd-active">ATIVO</span></div><div class="v1-c5 act"><button class="act-btn"><svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="act-btn danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button></div></div></div>
+      <div class="modal-overlay"><div class="modal-card"><div class="modal-icon modal-icon-err"><svg viewBox="0 0 24 24"><path d="m10.29 3.86-1.65 2.85-5.03 8.69a2 2 0 0 0 1.73 3h10.32a2 2 0 0 0 1.73-3l-5.03-8.69-1.65-2.85a1 1 0 0 0-1.73 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div><div class="modal-title">Remover área principal?</div><div class="modal-msg">Ao remover a área principal, processos vinculados a este usuário podem perder contexto organizacional. Esta ação afeta <strong>Marcos Silva</strong>.</div><div class="modal-btns"><button class="btn-cancel">Cancelar</button><button class="btn-danger">Remover mesmo assim</button></div></div></div>
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

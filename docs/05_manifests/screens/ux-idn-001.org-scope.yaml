@@ -9,7 +9,7 @@ screen_id: "UX-IDN-001"
 name: "Gestão de Escopo Organizacional do Usuário"
 type: detail
 module: "MOD-004"
-route: "/usuarios/:id/escopo-organizacional"
+route: "/organizacao/identidade/escopos"
 auth_required: true
 pre_auth: false
 layout: shell
@@ -27,17 +27,32 @@ telemetry_defaults:
 actions:
 
   - id: load_user_org_scopes
-    label: "Carregar vínculos org do usuário"
+    label: "Carregar listagem agrupada de usuarios com escopos"
     type: view
-    operation_id: admin_user_org_scopes_list
+    operation_id: admin_org_scopes_list
     http_method: GET
-    endpoint: "/api/v1/admin/users/:id/org-scopes"
+    endpoint: "/api/v1/admin/org-scopes"
     requires_scope: ["identity:org_scope:read"]
     loading_state: skeleton
+    query_params: ["q", "scope_type", "status", "cursor", "limit"]
     error_handling:
       strategy: toast
       include_correlation_id: true
       user_message: "Não foi possível carregar os vínculos organizacionais."
+
+  - id: search_users
+    label: "Buscar usuarios para autocomplete no drawer"
+    type: view
+    operation_id: users_list
+    http_method: GET
+    endpoint: "/api/v1/users"
+    requires_scope: []
+    loading_state: none
+    query_params: ["q"]
+    error_handling:
+      strategy: silent
+      include_correlation_id: false
+      user_message: ""
 
   - id: load_org_tree_options
     label: "Carregar opções de nós org para o select"
@@ -89,36 +104,69 @@ components:
   - id: "page-header"
     name: "OrgScopePageHeader"
     description: |
-      Título: "Escopo Organizacional — {usuario.nome}"
-      Subtítulo: tenant ativo do usuário
-      Botão "Adicionar área" (visível com identity:org_scope:write)
+      Título: "Escopo Organizacional" (24px 800 #111)
+      Subtítulo: "Gerencie os vínculos de escopo organizacional dos usuários" (13px 400 #888)
+      Botão "+ Atribuir Escopo" (primary, r:8, fill #2E86C1)
     actions_used: [grant_org_scope]
 
-  - id: "current-scopes-list"
-    name: "UserOrgScopesList"
+  - id: "toolbar"
+    name: "OrgScopeToolbar"
     description: |
-      Lista de vínculos ativos. Cada card exibe:
-        - Badge PRIMARY (azul) ou SECONDARY (cinza)
-        - Breadcrumb do nó: "Grupo Alpha > Unidade SP > Macroárea Tech"
-        - Nível do nó (N1–N4) como badge pequeno
-        - Data de concessão e valid_until (se não permanente)
-        - Botão "Remover" (com modal de confirmação) se scope write presente
+      SearchBar (w:320, h:40, r:8, border #E8E8E6) — busca por nome ou email
+      FilterGroup: FilterTipo (PRIMARY/SECONDARY/Todos) + FilterStatus (Ativos/Expirados/Todos)
+    actions_used: [load_user_org_scopes]
 
-      Estado vazio: "Nenhuma área organizacional vinculada. Adicione uma área principal."
-      Skeleton durante load_user_org_scopes.
+  - id: "org-scope-table"
+    name: "OrgScopeTable"
+    description: |
+      Tabela full-width (fill #FFF, r:12, border #E8E8E6) com colunas:
+        - USUARIO: Avatar 32x32 + Nome + Email
+        - ESCOPO PRINCIPAL: ScopePill com badge PRIMARY
+        - ESCOPOS ADICIONAIS: ScopePills SECONDARY + pill '+N' overflow
+        - STATUS: Badge ATIVO/INATIVO/EXPIRADO
+        - ACOES: icone pencil (edit) + x-circle (revoke)
+      Loading: SkeletonRows 6x com circle + rects pulse
+      Empty: icone org-tree 120x120 + "Nenhum escopo atribuído." + BtnAtribuir
+      Footer: "Carregar mais" (cursor pagination)
     actions_used: [load_user_org_scopes, revoke_org_scope]
 
-  - id: "add-scope-panel"
-    name: "AddOrgScopePanel"
+  - id: "scope-pill"
+    name: "ScopePill"
     description: |
-      Painel lateral (drawer) para adicionar vínculo:
-        - Select de tipo: "Área principal (PRIMARY)" | "Área adicional (SECONDARY)"
-        - Autocomplete de nó org: busca por nome/código, exibe breadcrumb
-          Skeleton durante load_org_tree_options
-        - Campo valid_until (date picker) — opcional (vazio = permanente)
-        - Aviso se PRIMARY já existe: "Remova a área principal atual antes de adicionar uma nova."
-        - Botão "Vincular"
-    actions_used: [load_org_tree_options, grant_org_scope]
+      Componente reutilizável para exibir escopo organizacional:
+        - PRIMARY: pill bg #E3F2FD text #2E86C1 + badge bg #2E86C1 text #FFF
+        - SECONDARY: pill bg #F5F5F3 text #555 + badge cinza
+        - OVERFLOW: pill '+N' bg #F5F5F3 text #888
+    actions_used: []
+
+  - id: "org-scope-drawer"
+    name: "OrgScopeDrawer"
+    description: |
+      Drawer 480px slide-in com overlay para atribuir escopo:
+        - CampoUsuario: Autocomplete busca por nome/email (GET /users?q=)
+        - CampoTipo: RadioGroup PRIMARY/SECONDARY (radio visual, não buttons)
+          Aviso inline se PRIMARY já existe
+        - CampoAreaOrg: TreeSelector com checkboxes N1-N4 (sem N5/inativos)
+        - CampoValidade: DatePicker (datas passadas bloqueadas)
+        - Footer: Cancelar + Vincular (disabled se PRIMARY duplicado)
+    actions_used: [search_users, load_org_tree_options, grant_org_scope]
+
+  - id: "tree-selector"
+    name: "TreeSelector"
+    description: |
+      Componente reutilizável shared/ui: seletor de árvore org com checkboxes.
+      Níveis N1 (700 #111) → N2 (600 #333) → N3 (500 #333) → N4 (500 #555).
+      Indent por nível: 24px. Hover: bg #F8F8F6. Selected: bg #E3F2FD text #2E86C1.
+    actions_used: [load_org_tree_options]
+
+  - id: "remove-scope-modal"
+    name: "RemoveScopeModal"
+    description: |
+      Modal 420px com ícone warning circular:
+        - PRIMARY: ícone bg #FFEBEE, título "Remover área principal?", botão "Remover mesmo assim"
+        - SECONDARY: modal padrão "Remover escopo?"
+      Foco no Cancelar por padrão.
+    actions_used: [revoke_org_scope]
 
 navigation:
   guard: auth
@@ -129,11 +177,17 @@ notes: |
   REGRAS:
   1. Tela acessível apenas com identity:org_scope:read.
   2. PRIMARY: apenas 1 por usuário. Aviso inline se tentar criar segundo.
-  3. Nós N5 (tenant) NÃO aparecem no autocomplete — somente N1–N4.
-  4. Remoção de PRIMARY: toast de aviso "Ao remover a área principal, processos vinculados podem perder contexto."
+  3. Nós N5 (tenant) NÃO aparecem no TreeSelector — somente N1–N4.
+  4. Remoção de PRIMARY: modal warning "Ao remover a área principal, processos vinculados podem perder contexto."
   5. valid_until: se não preenchido, o vínculo é permanente (null no banco).
+  6. Rota alterada de /usuarios/:id/escopo-organizacional para /organizacao/identidade/escopos (UX-001-M01).
+  7. Layout alterado de cards para tabela full-width com avatar, search, filtros (UX-001-M01).
 
 changelog:
+  - version: "1.2.0"
+    date: "2026-03-31"
+    author: "cascade-amendment"
+    description: "Alinhamento UX-001-M01: rota /organizacao/identidade/escopos, tabela full-width, ScopePill, TreeSelector, OrgScopeDrawer 480px, RemoveScopeModal, toolbar com search+filtros, novo endpoint admin_org_scopes_list, autocomplete usuarios."
   - version: "1.0.0"
     date: "2026-03-15"
     author: "arquitetura"

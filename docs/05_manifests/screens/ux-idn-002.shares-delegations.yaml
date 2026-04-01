@@ -9,7 +9,7 @@ screen_id: "UX-IDN-002"
 name: "Painel de Compartilhamentos e Delegações"
 type: list
 module: "MOD-004"
-route: "/identidade/compartilhamentos"
+route: "/organizacao/identidade/compartilhamentos"
 auth_required: true
 pre_auth: false
 layout: shell
@@ -26,17 +26,17 @@ telemetry_defaults:
 
 panels:
   - id: "shares"
-    label: "Compartilhamentos"
+    label: "Meus Compartilhamentos"
     default: true
-    actions_scope: [load_shares, create_share, revoke_share]
+    actions_scope: [load_shares, create_share, revoke_share, search_users]
 
   - id: "delegations"
-    label: "Delegações"
+    label: "Minhas Delegações"
     default: false
-    actions_scope: [load_delegations, create_delegation, revoke_delegation]
+    actions_scope: [load_delegations, create_delegation, revoke_delegation, search_users]
 
   - id: "received"
-    label: "Recebidos por Mim"
+    label: "Acessos Recebidos"
     default: false
     actions_scope: [load_my_shared_accesses, load_my_delegations_received]
 
@@ -146,6 +146,20 @@ actions:
       include_correlation_id: true
       user_message: "Não foi possível carregar as delegações recebidas."
 
+  - id: search_users
+    label: "Buscar usuarios para autocomplete nos drawers"
+    type: view
+    operation_id: users_list
+    http_method: GET
+    endpoint: "/api/v1/users"
+    requires_scope: []
+    loading_state: none
+    query_params: ["q"]
+    error_handling:
+      strategy: silent
+      include_correlation_id: false
+      user_message: ""
+
   - id: switch_panel
     label: "Alternar entre painéis"
     type: client_only
@@ -154,65 +168,105 @@ actions:
 
 components:
 
+  - id: "tab-bar"
+    name: "TabBar"
+    description: |
+      Componente reutilizável shared/ui: barra de abas com underline.
+      Ativa: border-bottom 2px #2E86C1, text 13px 700 #2E86C1.
+      Inativa: border-bottom 2px transparent, text 13px 500 #888.
+      Navegação por teclado: Arrow keys + Enter/Space. role=tablist.
+      Tab "Meus Compartilhamentos" oculta sem scope identity:share:read.
+    actions_used: [switch_panel]
+
   - id: "shares-table"
     name: "SharesTable"
     description: |
-      Tabela de compartilhamentos (painel shares):
-      Colunas: Recurso, Solicitante, Beneficiário, Motivo (truncado), Autorizador,
-               Válido até (badge âmbar se < 7 dias), Status (ACTIVE/REVOKED/EXPIRED), Ações
-      Ação "Revogar" visível apenas com identity:share:revoke.
-      Estado vazio: "Nenhum compartilhamento ativo."
+      Tabela de compartilhamentos (tab Meus Compartilhamentos):
+      Colunas: COMPARTILHADO COM (Avatar 28x28 + Nome), ESCOPO/RECURSO, TIPO, VALIDADE, STATUS, AÇÕES
+      Grantee exibido com avatar+nome (não UUID). Respostas expandidas via FR-001-M01.
+      Badge expiração: âmbar (<=7d), vermelho ("Expira amanhã"), cinza+strikethrough (EXPIRED).
+      Ação: ícone x-circle para revogar (hover #E74C3C).
+      Empty: ícone share 80x80 + "Nenhum compartilhamento ativo." + BtnCriar.
+      Cursor pagination: "Carregar mais".
     actions_used: [load_shares, revoke_share]
 
   - id: "create-share-drawer"
     name: "CreateShareDrawer"
     description: |
-      Drawer lateral para criar compartilhamento:
-        - Autocomplete "Beneficiário" (usuário que recebe)
-        - Select "Recurso" (tipo: org_unit | tenant | processo) + autocomplete do ID
-        - Multi-select "Ações permitidas" (lista de escopos disponíveis)
-        - Campo "Motivo" (textarea, obrigatório, max 500 chars)
-        - Autocomplete "Autorizador" (usuário que aprova)
-          Se autorizador = usuário atual E usuário possui scope identity:share:authorize:
-            badge informativo "Você possui permissão para auto-autorizar."
-          Se autorizador = usuário atual E usuário NÃO possui scope identity:share:authorize:
-            AVISO inline "Sem permissão para auto-autorizar. Selecione outro aprovador."
-            Botão "Criar" disabled
-        - Date picker "Válido até" (obrigatório, mínimo amanhã)
-        - Botão "Criar compartilhamento"
-    actions_used: [create_share]
+      Drawer 480px slide-in com overlay para novo compartilhamento:
+        - CampoGrantee: Autocomplete filtrando usuarios ativos do tenant (GET /users?q=)
+        - CampoRecurso: Select resource_type
+        - CampoRecursoId: Autocomplete filtrando por resource_type
+        - CampoAcoes: MultiSelect allowed_actions
+        - CampoMotivo: Textarea (w:100%, h:80, r:8, resize vertical, obrigatório)
+        - CampoAutorizador: Autocomplete + badges condicionais ao scope identity:share:authorize
+        - CampoValidade: DatePicker (datas passadas bloqueadas)
+        - Footer: Cancelar + Criar (disabled se auto-auth sem scope)
+    actions_used: [create_share, search_users]
 
-  - id: "delegations-table"
-    name: "DelegationsTable"
+  - id: "delegations-given-section"
+    name: "DelegationsGivenSection"
     description: |
-      Tabela de delegações (painel delegations):
-      Colunas: Delegatário, Escopos delegados (chips), Válido até, Status, Ações
-      Ação "Revogar" apenas para delegações onde caller = delegator.
-      Estado vazio: "Nenhuma delegação ativa."
+      Seção "Delegações Dadas" (tab Minhas Delegações):
+      SectionTitle 16px 700 #111. Colunas: DELEGADO (Avatar+Nome), ESCOPOS (pills), PERÍODO, MOTIVO, AÇÕES.
+      Ação: revogar (x-circle) apenas para delegações onde caller=delegator.
+      Empty: "Nenhuma delegação ativa." + BtnCriar.
     actions_used: [load_delegations, revoke_delegation]
+
+  - id: "delegations-received-section"
+    name: "DelegationsReceivedSection"
+    description: |
+      Seção "Delegações Recebidas" (tab Minhas Delegações):
+      SectionTitle 16px 700 #111. Banner re-delegação ANTES da tabela (role=alert).
+      Mesma estrutura de tabela, sem coluna AÇÕES.
+    actions_used: [load_delegations]
 
   - id: "create-delegation-drawer"
     name: "CreateDelegationDrawer"
     description: |
-      Drawer lateral para criar delegação:
-        - Autocomplete "Delegar para" (usuário)
-        - Multi-select "Escopos a delegar" (apenas escopos que eu mesmo possuo)
-          Escopos com *:approve, *:execute, *:sign: exibidos mas desabilitados com tooltip
-          "Escopos de aprovação não podem ser delegados."
-        - Date picker "Válido até" (obrigatório)
-        - Campo "Motivo" (obrigatório)
-        - Aviso: "Os escopos delegados não podem ser re-delegados pelo beneficiário."
-    actions_used: [create_delegation]
+      Drawer 480px slide-in para nova delegação:
+        - Banner re-delegação proibida (role=alert, bg #E3F2FD, ANTES dos campos)
+        - CampoDelegatee: Autocomplete usuarios ativos (GET /users?q=)
+        - CampoEscopos: MultiSelect com :approve/:execute/:sign DESABILITADOS + tooltip + aria-disabled
+        - CampoPeriodo: DateRangePicker (flex gap:8px) Início + Fim
+        - CampoMotivo: Textarea (h:80, obrigatório)
+        - Footer: Cancelar + "Criar Delegação"
+    actions_used: [create_delegation, search_users]
 
-  - id: "received-panel"
-    name: "ReceivedAccessPanel"
+  - id: "received-shares-section"
+    name: "ReceivedSharesSection"
     description: |
-      Painel "Recebidos por Mim" em duas seções:
-        1. Compartilhamentos recebidos: tabela com recurso, concedente, ações, validade
-        2. Delegações recebidas: tabela com escopos, delegador, validade
-      Sem ações (somente leitura para o receptor).
-      Banner informativo: "Acesso temporário. Expira em {valid_until}."
-    actions_used: [load_my_shared_accesses, load_my_delegations_received]
+      Seção "Compartilhamentos Recebidos" (tab Acessos Recebidos):
+      Banner "Estes acessos são temporários e expiram automaticamente." (role=alert).
+      SectionTitle 16px 700 #111.
+      Colunas: CONCEDENTE (Avatar+Nome), ESCOPO/RECURSO, AÇÕES PERMITIDAS, VÁLIDO ATÉ.
+      Sem ações (somente leitura).
+    actions_used: [load_my_shared_accesses]
+
+  - id: "received-delegations-section"
+    name: "ReceivedDelegationsSection"
+    description: |
+      Seção "Delegações Recebidas" (tab Acessos Recebidos):
+      Banner re-delegação proibida. SectionTitle 16px 700 #111.
+      Mesma estrutura de tabela de delegações recebidas.
+      Sem ações (somente leitura).
+    actions_used: [load_my_delegations_received]
+
+  - id: "banner"
+    name: "Banner"
+    description: |
+      Componente reutilizável shared/ui:
+      Variante INFO: bg #E3F2FD, border #B8D9F2, text #2E86C1. role=alert.
+      Variante WARNING: bg #FFF3E0, border #FFE0B2, text #E67E22.
+    actions_used: []
+
+  - id: "revoke-modal"
+    name: "RevokeModal"
+    description: |
+      Modal 420px com ícone warning circular (48x48 bg #FFF3E0):
+      Variantes: "Revogar compartilhamento?" / "Revogar delegação?"
+      Botões: Cancelar (foco padrão) + Revogar (fill #E74C3C).
+    actions_used: [revoke_share, revoke_delegation]
 
 navigation:
   guard: auth
@@ -230,6 +284,10 @@ notes: |
      Não são removidos da listagem por 30 dias (histórico).
 
 changelog:
+  - version: "1.2.0"
+    date: "2026-03-31"
+    author: "cascade-amendment"
+    description: "Alinhamento UX-001-M01: rota /organizacao/identidade/compartilhamentos, TabBar underline, tabs renomeadas (Meus Compartilhamentos, Minhas Delegações, Acessos Recebidos), colunas reestruturadas, Avatar+Nome em vez de UUID (FR-001-M01), seções dadas/recebidas separadas, Banner e RevokeModal como componentes, autocomplete usuarios."
   - version: "1.1.0"
     date: "2026-03-17"
     author: "Marcos Sulivan"

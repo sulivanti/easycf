@@ -106,6 +106,15 @@ Usuário pede para...
     → Pergunte: "Deseja apenas commitar, ou fazer release completo com versão e push?"
 ```
 
+## ⛔ PROIBIÇÕES — Releases
+
+1. **NUNCA fazer release manual** — deletar arquivos e commitar "release: vX.Y.Z" manualmente é PROIBIDO. SEMPRE usar `pnpm run release` que opera numa pasta isolada (`dist/easycf`) sem tocar no working tree.
+2. **NUNCA deletar arquivos do repo privado para "preparar" o release público** — o script `release.mjs` copia APENAS os arquivos necessários para o template. O repo privado mantém TODOS os arquivos.
+3. **NUNCA usar `git add -A` ou `git add .` em commits de release** — isso pode incluir deleções acidentais.
+
+### Histórico de incidente
+Em v0.20.0, um release manual deletou 1.298 arquivos (incluindo o próprio `release.mjs`), destruindo o módulo Foundation inteiro e quebrando 7 módulos dependentes. O procedimento correto (`pnpm run release`) teria evitado isso completamente.
+
 ## Checklist pré-release
 
 Antes de executar o release, verifique:
@@ -113,3 +122,12 @@ Antes de executar o release, verifique:
 1. `git status` — sem mudanças não-commitadas (ou commite primeiro)
 2. `pnpm -F @easycode/api build` — build passa sem erros
 3. Branch é `main` — releases sempre partem de main
+4. `.agents/scripts/release.mjs` existe — se não existir, restaurar via git antes de prosseguir
+5. **CONFIRMAR**: vou usar `pnpm run release`, NÃO vou fazer commit manual de release
+
+## Fallback — Se `release.mjs` não existir
+
+Se o script foi deletado acidentalmente:
+1. Restaurar: `git show 3c045c6:.agents/scripts/release.mjs > .agents/scripts/release.mjs`
+2. Commitar a restauração: `git add .agents/scripts/release.mjs && git commit -m "fix: restaura release.mjs deletado acidentalmente"`
+3. Só então executar o release: `pnpm run release`

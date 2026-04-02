@@ -135,6 +135,34 @@ actions:
       include_correlation_id: true
       user_message: "Não foi possível adicionar o parâmetro."
 
+  - id: update_param
+    label: "Salvar parâmetro"
+    type: submit
+    operation_id: admin_integration_params_update
+    http_method: PATCH
+    endpoint: "/api/v1/admin/integration-params/:id"
+    requires_scope: ["integration:routine:write"]
+    loading_state: none
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível salvar o parâmetro."
+
+  - id: delete_param
+    label: "Excluir parâmetro"
+    type: submit
+    operation_id: admin_integration_params_delete
+    http_method: DELETE
+    endpoint: "/api/v1/admin/integration-params/:id"
+    requires_scope: ["integration:routine:write"]
+    loading_state: button
+    confirm: true
+    confirm_message: "Deseja excluir este parâmetro?"
+    error_handling:
+      strategy: toast
+      include_correlation_id: true
+      user_message: "Não foi possível excluir o parâmetro."
+
   - id: publish_routine
     label: "Publicar rotina de integração"
     type: submit
@@ -234,14 +262,15 @@ components:
     name: "IntegrationParamsTab"
     description: |
       Aba "Parâmetros" — lista de parâmetros técnicos:
-        Cada param: chave, tipo (badge), valor (mascarado se is_sensitive=true), botão excluir.
+        Cada param: chave, tipo (badge), valor (mascarado se is_sensitive=true), botões editar/excluir.
+        Clique no param: abre formulário inline para edição (mesmos campos do create). Botão "Salvar" (update_param). Botão "Excluir" com confirmação (delete_param).
         Formulário inline para adicionar:
           - param_key* (ex: empresa, filial)
           - Select param_type (FIXED/DERIVED_FROM_TENANT/DERIVED_FROM_CONTEXT/HEADER)
           - Input value (se FIXED) / Input derivation_expr (se DERIVED_*)
           - Toggle is_sensitive: "Valor nunca será logado"
-        PUBLISHED: readonly.
-    actions_used: [add_param]
+        PUBLISHED: readonly, botões editar/excluir ocultos.
+    actions_used: [add_param, update_param, delete_param]
 
 navigation:
   guard: auth
@@ -257,6 +286,10 @@ notes: |
   5. Credenciais de serviço: auth_config mostrado como "***" no select de destino.
 
 changelog:
+  - version: "1.1.0"
+    date: "2026-04-01"
+    author: "merge-amendment"
+    description: "Merge UX-008-M03: adicionadas actions update_param e delete_param ao params-tab (V-M01)."
   - version: "1.0.0"
     date: "2026-03-15"
     author: "arquitetura"
